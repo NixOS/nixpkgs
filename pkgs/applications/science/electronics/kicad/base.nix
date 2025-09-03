@@ -26,6 +26,7 @@
   libgcrypt,
   libgpg-error,
   ninja,
+  writableTmpDirAsHomeHook,
 
   util-linux,
   libselinux,
@@ -182,12 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withNgspice [ libngspice ]
   ++ optionals debug [ valgrind ];
 
-  # some ngspice tests attempt to write to $HOME/.cache/
-  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
-  # but failing tests still attempt to create $HOME
-  # and the newer CLI tests seem to also use $HOME...
-  HOME = "$TMP";
-
   # debug builds fail all but the python test
   doInstallCheck = !debug;
   installCheckTarget = "test";
@@ -201,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
         pytest-image-diff
       ]
     ))
+    writableTmpDirAsHomeHook
   ];
 
   dontStrip = debug;
