@@ -6,6 +6,7 @@
   intltool,
   ntfs3g,
   util-linux,
+  cryptsetup,
   mediaDir ? "/media/",
   lockDir ? "/var/lock/pmount",
   whiteList ? "/etc/pmount.allow",
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     "--with-mount-prog=${util-linux}/bin/mount"
     "--with-umount-prog=${util-linux}/bin/umount"
     "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
+    "--with-cryptsetup-prog=${cryptsetup}/bin/cryptsetup"
   ];
 
   postConfigure = ''
