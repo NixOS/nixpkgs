@@ -55,13 +55,6 @@
     "hash": "sha256-Zkp5Nzl+eQ7PPniDF7/K5II2xIG6OKC3Rhm3ZTpyILc=",
     "description": "Provides a preview for upcoming AKS features"
   },
-  "akshybrid": {
-    "pname": "akshybrid",
-    "version": "0.1.2",
-    "url": "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/akshybrid-0.1.2-py3-none-any.whl",
-    "hash": "sha256-l2fNpETEIVc7wiDgHNWKZ8MKNhdc7bposEVKPG6YOo4=",
-    "description": "Microsoft Azure Command-Line Tools HybridContainerService Extension"
-  },
   "alb": {
     "pname": "alb",
     "version": "2.0.1",

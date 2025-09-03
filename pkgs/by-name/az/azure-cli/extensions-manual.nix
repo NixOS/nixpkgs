@@ -151,6 +151,7 @@
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions
   adp = throw "The 'adp' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8038
+  akshybrid = throw "The 'akshybrid' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/8955
   azurestackhci = throw "The 'azurestackhci' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8898
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26, https://github.com/Azure/azure-cli-extensions/pull/7370
   compute-diagnostic-rp = throw "The 'compute-diagnostic-rp' extension for azure-cli was deprecated upstream"; # Added 2024-11-12, https://github.com/Azure/azure-cli-extensions/pull/8240
