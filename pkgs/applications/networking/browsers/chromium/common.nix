@@ -533,6 +533,18 @@ let
       # preventing compilations of chromium with versions below their intended version, not about running the very
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "140") [
+      # Fix building with too old Rust (< 1.89)
+      # ld.lld: error: undefined symbol: __rust_no_alloc_shim_is_unstable
+      (fetchpatch {
+        name = "revert-rust-Remove__rust_no_alloc_shim_is_unstable.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6686150
+        url = "https://chromium.googlesource.com/chromium/src/+/8393b61ba876c8e1614275c97767f9b06b889f48^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-qDrqZKj8b3F0pAiPREDmcXYIEOaFoSIQOkT+lzKJglg=";
+      })
     ];
 
     postPatch =
