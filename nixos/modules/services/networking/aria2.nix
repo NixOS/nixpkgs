@@ -239,7 +239,7 @@ in
         UMask = cfg.serviceUMask;
       };
     };
-  })];
+  }); ];
 
   meta.maintainers = [ lib.maintainers.timhae ];
 }
