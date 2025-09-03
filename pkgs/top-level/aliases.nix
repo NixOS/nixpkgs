@@ -2006,6 +2006,7 @@ mapAliases {
     ];
   }; # added 2024-01-15
   pinentry_qt5 = throw "'pinentry_qt5' has been renamed to/replaced by 'pinentry-qt'"; # Converted to throw 2024-10-17
+  piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
   pivx = throw "pivx has been removed as it was marked as broken"; # Added 2024-07-15
   pivxd = throw "pivxd has been removed as it was marked as broken"; # Added 2024-07-15
 
