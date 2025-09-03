@@ -13,7 +13,6 @@ lib.extendMkDerivation {
     "sddmBuildInputs"
     "srcThemeDir"
     "configPath"
-    "configOverrides"
   ];
 
   extendDrvArgs =
@@ -42,11 +41,13 @@ lib.extendMkDerivation {
       dontConfigure = true;
       dontBuild = true;
 
+      inherit configOverrides;
+
       patchPhase =
         let
           iniFormat = formats.ini { };
           configOverridesFile = iniFormat.generate "${finalAttrs.pname}-config-overrides" {
-            General = configOverrides;
+            General = finalAttrs.configOverrides;
           };
         in
         ''
@@ -69,7 +70,7 @@ lib.extendMkDerivation {
             "${srcThemeDir}/metadata.desktop"
 
           ${lib.optionalString (
-            configOverrides != { }
+            finalAttrs.configOverrides != { }
           ) ''ln -sf ${configOverridesFile} "${srcThemeDir}/${configPath}.user"''}
 
           runHook postPatch
@@ -86,6 +87,9 @@ lib.extendMkDerivation {
 
       passthru = passthru // {
         sddmThemeDir = "${finalAttrs.finalPackage}/${themeOutPath}";
+
+        # Rebuild the theme with different `configOverrides`
+        withConfig = configOverrides: finalAttrs.finalPackage.overrideAttrs { inherit configOverrides; };
 
         # Add the dependencies this theme needs to the given sddm package
         sddmPackageWith =
