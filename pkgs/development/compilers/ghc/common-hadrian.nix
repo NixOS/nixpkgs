@@ -308,7 +308,9 @@
       # Missing ELF symbols
       ++ lib.optionals stdenv.targetPlatform.isAndroid [
         ./ghc-define-undefined-elf-st-visibility.patch
-      ];
+      ]
+
+      ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
   },
