@@ -2910,8 +2910,6 @@ assertNoAdditions {
   });
 
   perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
-    dependencies = [ gperf ];
-
     meta = old.meta // {
       maintainers = with lib.maintainers; [ fredeb ];
     };
