@@ -36,9 +36,9 @@
   },
   "aem": {
     "pname": "aem",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aem-1.0.0-py2.py3-none-any.whl",
-    "hash": "sha256-3QYsiwJ7avGM4Fg8H88shs3JKBo2cOSh0F39bTN/8vA=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aem-1.0.1-py2.py3-none-any.whl",
+    "hash": "sha256-QDkq7GjOpqZSUFXkxrL5OjJwSnGHmRH/8r6N/Amriq0=",
     "description": "Manage Azure Enhanced Monitoring Extensions for SAP"
   },
   "ai-examples": {
