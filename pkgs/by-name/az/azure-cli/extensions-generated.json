@@ -1014,6 +1014,13 @@
     "hash": "sha256-H/5FHkFlfI8ooiq+44c3HRHO3YDS5Sz8vtCtrAqRe0E=",
     "description": "Microsoft Azure Command-Line Tools Storage-blob-preview Extension"
   },
+  "storage-discovery": {
+    "pname": "storage-discovery",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_discovery-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-qa4B0qEbeg09vZRN1E4J2E5LvwbrPd2OG1V/WOhfI1o=",
+    "description": "Microsoft Azure Command-Line Tools StorageDiscovery Extension"
+  },
   "storage-mover": {
     "pname": "storage-mover",
     "version": "1.1.0",
