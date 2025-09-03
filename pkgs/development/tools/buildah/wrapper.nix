@@ -11,7 +11,7 @@
   conmon, # Container runtime monitor
   slirp4netns, # User-mode networking for unprivileged namespaces
   fuse-overlayfs, # CoW for images, much faster than default vfs
-  util-linux, # nsenter
+  util-linuxMinimal, # nsenter
   iptables,
   aardvark-dns,
   netavark,
@@ -28,7 +28,7 @@ let
       conmon
       slirp4netns
       fuse-overlayfs
-      util-linux
+      util-linuxMinimal
       iptables
     ]
     ++ extraPackages
