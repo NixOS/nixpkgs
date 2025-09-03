@@ -21,7 +21,6 @@ let
       # package dependencies
       stdenv,
       fetchFromGitHub,
-      fetchpatch,
       buildGoModule,
       makeBinaryWrapper,
       installShellFiles,
@@ -33,7 +32,6 @@ let
       runc,
       tini,
       libtool,
-      bash,
       sqlite,
       iproute2,
       docker-buildx,
