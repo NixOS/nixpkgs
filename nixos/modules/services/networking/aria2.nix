@@ -55,6 +55,10 @@ in
       [ "services" "aria2" "rpcListenPort" ]
       [ "services" "aria2" "settings" "rpc-listen-port" ]
     )
+    (lib.mkRenamedOptionModule
+      [ "programs" "aria2" "openPorts" ]
+      [ "services" "aria2" "openPorts" ]
+    )
   ];
 
   options = {
@@ -175,6 +179,14 @@ in
     };
   };
 
+  # Need to open ports for proper functioning
+  # Note: As we do not have a dedicated programs.aria2.openPorts, people may use services.aria2.openPorts even when !cfg.enable,
+  # to allow bittorrent to work with ad-hoc invocations of aria2c.
+  networking.firewall = lib.mkIf cfg.openPorts {
+    allowedUDPPortRanges = config.services.aria2.settings.listen-port;
+    allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [ config.services.aria2.settings.rpc-listen-port ];
+  };
+
   config = lib.mkIf cfg.enable {
     assertions = [
       {
@@ -186,12 +198,6 @@ in
         message = "Set the RPC secret through services.aria2.rpcSecretFile so it will not end up in the world-readable nix store.";
       }
     ];
-
-    # Need to open ports for proper functioning
-    networking.firewall = lib.mkIf cfg.openPorts {
-      allowedUDPPortRanges = config.services.aria2.settings.listen-port;
-      allowedTCPPorts = [ config.services.aria2.settings.rpc-listen-port ];
-    };
 
     users.users.aria2 = {
       group = "aria2";
