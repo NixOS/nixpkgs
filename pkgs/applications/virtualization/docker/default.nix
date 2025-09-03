@@ -1,6 +1,6 @@
 { lib, callPackage }:
 
-rec {
+let
   dockerGen =
     {
       version,
@@ -144,7 +144,7 @@ rec {
       };
 
       moby = buildGoModule (
-        lib.optionalAttrs stdenv.hostPlatform.isLinux rec {
+        lib.optionalAttrs stdenv.hostPlatform.isLinux {
           pname = "moby";
           inherit version;
 
@@ -257,17 +257,7 @@ rec {
       };
     in
     buildGoModule (
-      lib.optionalAttrs (!clientOnly) {
-        # allow overrides of docker components
-        # TODO: move packages out of the let...in into top-level to allow proper overrides
-        inherit
-          docker-runc
-          docker-containerd
-          docker-tini
-          moby
-          ;
-      }
-      // rec {
+      {
         pname = "docker";
         inherit version;
 
@@ -379,38 +369,57 @@ rec {
           inherit knownVulnerabilities;
         };
       }
+      // lib.optionalAttrs (!clientOnly) {
+        # allow overrides of docker components
+        # TODO: move packages out of the let...in into top-level to allow proper overrides
+        inherit
+          docker-runc
+          docker-containerd
+          docker-tini
+          moby
+          ;
+      }
     );
-
+in
+{
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
-  docker_25 = callPackage dockerGen rec {
-    version = "25.0.12";
-    # Upstream forgot to tag release
-    # https://github.com/docker/cli/issues/5789
-    cliRev = "43987fca488a535d810c429f75743d8c7b63bf4f";
-    cliHash = "sha256-OwufdfuUPbPtgqfPeiKrQVkOOacU2g4ommHb770gV40=";
-    mobyRev = "v${version}";
-    mobyHash = "sha256-EBOdbFP6UBK1uhXi1IzcPxYihHikuzzwMvv2NHsksYk=";
-    runcRev = "v1.2.5";
-    runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
-    containerdRev = "v1.7.27";
-    containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
-    tiniRev = "v0.19.0";
-    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
-  };
+  docker_25 =
+    let
+      version = "25.0.12";
+    in
+    callPackage dockerGen {
+      inherit version;
+      # Upstream forgot to tag release
+      # https://github.com/docker/cli/issues/5789
+      cliRev = "43987fca488a535d810c429f75743d8c7b63bf4f";
+      cliHash = "sha256-OwufdfuUPbPtgqfPeiKrQVkOOacU2g4ommHb770gV40=";
+      mobyRev = "v${version}";
+      mobyHash = "sha256-EBOdbFP6UBK1uhXi1IzcPxYihHikuzzwMvv2NHsksYk=";
+      runcRev = "v1.2.5";
+      runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
+      containerdRev = "v1.7.27";
+      containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
+      tiniRev = "v0.19.0";
+      tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+    };
 
-  docker_28 = callPackage dockerGen rec {
-    version = "28.3.3";
-    cliRev = "v${version}";
-    cliHash = "sha256-+nYpd9VGzzMPcBUfGM7V9MkrslYHDSUlE0vhTqDGc1s=";
-    mobyRev = "v${version}";
-    mobyHash = "sha256-3SWjoF4sXVuYxnENq5n6ZzPJx6BQXnyP8VXTQaaUSFA=";
-    runcRev = "v1.2.6";
-    runcHash = "sha256-XMN+YKdQOQeOLLwvdrC6Si2iAIyyHD5RgZbrOHrQE/g=";
-    containerdRev = "v1.7.27";
-    containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
-    tiniRev = "v0.19.0";
-    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
-  };
+  docker_28 =
+    let
+      version = "28.3.3";
+    in
+    callPackage dockerGen {
+      version = "28.3.3";
+      cliRev = "v${version}";
+      cliHash = "sha256-+nYpd9VGzzMPcBUfGM7V9MkrslYHDSUlE0vhTqDGc1s=";
+      mobyRev = "v${version}";
+      mobyHash = "sha256-3SWjoF4sXVuYxnENq5n6ZzPJx6BQXnyP8VXTQaaUSFA=";
+      runcRev = "v1.2.6";
+      runcHash = "sha256-XMN+YKdQOQeOLLwvdrC6Si2iAIyyHD5RgZbrOHrQE/g=";
+      containerdRev = "v1.7.27";
+      containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
+      tiniRev = "v0.19.0";
+      tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+    };
 
 }
