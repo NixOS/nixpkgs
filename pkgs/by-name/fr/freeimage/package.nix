@@ -113,7 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
-    license = "GPL";
+    license = with lib.licenses; [
+      freeimage
+      gpl2Only
+      gpl3Only
+    ];
     knownVulnerabilities = [
       "CVE-2024-31570"
       "CVE-2024-28584"
