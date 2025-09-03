@@ -2225,6 +2225,13 @@ with haskellLib;
     sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
   }) super.basic-cpuid;
 
+  # 2025-09-03 jailbreak for base >= 4.20
+  # https://github.com/brandonhamilton/ilist/issues/17
+  ilist = lib.pipe super.ilist [
+    (warnAfterVersion "0.4.0.1")
+    doJailbreak
+  ];
+
   # Allow building with language-docker >= 13 (!); waiting for 2.13 release.
   hadolint = doJailbreak (
     appendPatches [
