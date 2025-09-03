@@ -27,6 +27,7 @@ let
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ ];
   };
