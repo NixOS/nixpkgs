@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  # doc: https://github.com/ivmai/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
+  # doc: https://github.com/bdwgc/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
   enableLargeConfig ? false,
   enableMmap ? true,
   enableStatic ? false,
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "8.2.8";
 
   src = fetchFromGitHub {
-    owner = "ivmai";
+    owner = "bdwgc";
     repo = "bdwgc";
     rev = "v${finalAttrs.version}";
     hash = "sha256-UQSLK/05uPal6/m+HMz0QwXVII1leonlmtSZsXjJ+/c=";
@@ -45,15 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
       defineFlag = flag: "-D${flag}";
 
       # This stanza can be dropped when a release fixes this issue:
-      #   https://github.com/ivmai/bdwgc/issues/376
+      #   https://github.com/bdwgc/bdwgc/issues/376
       # The version is checked with == instead of versionAtLeast so we
       # don't forget to disable the fix (and if the next release does
       # not fix the problem the test failure will be a reminder to
       # extend the set of versions requiring the workaround).
       noSoftVDB = lib.optional (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8") (
         # do not use /proc primitives to track dirty bits; see:
-        # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
-        # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
+        # https://github.com/bdwgc/bdwgc/issues/479#issuecomment-1279687537
+        # https://github.com/bdwgc/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
         "NO_SOFT_VDB"
       );
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       Alternatively, the garbage collector may be used as a leak detector for
       C or C++ programs, though that is not its primary goal.
     '';
-    changelog = "https://github.com/ivmai/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://github.com/bdwgc/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
     license = "https://hboehm.info/gc/license.txt"; # non-copyleft, X11-style license
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
