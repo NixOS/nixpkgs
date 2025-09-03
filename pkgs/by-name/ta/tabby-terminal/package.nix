@@ -195,6 +195,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Terminal for a more modern age";
     homepage = "https://tabby.sh";
