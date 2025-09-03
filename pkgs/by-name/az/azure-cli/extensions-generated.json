@@ -531,13 +531,6 @@
     "hash": "sha256-rEoQ4sxkpNCBjkj/vN3+tDB91WuIdbwBwCaH1HPJ/ps=",
     "description": "Microsoft Azure Command-Line Tools AzureDedicatedHSMResourceProvider Extension"
   },
-  "hdinsightonaks": {
-    "pname": "hdinsightonaks",
-    "version": "1.0.0b3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/hdinsightonaks-1.0.0b3-py3-none-any.whl",
-    "hash": "sha256-9Um4UQe3uD/2T8+lyQpdfpAKXqLv527smx+BaJ5Yw2U=",
-    "description": "Microsoft Azure Command-Line Tools Hdinsightonaks Extension"
-  },
   "healthbot": {
     "pname": "healthbot",
     "version": "0.1.0",
