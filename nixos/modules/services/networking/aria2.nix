@@ -179,7 +179,7 @@ in
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     ({
       # Need to open ports for proper functioning
       # Note: As we do not have a dedicated programs.aria2.openPorts, people may use services.aria2.openPorts even when !cfg.enable,
