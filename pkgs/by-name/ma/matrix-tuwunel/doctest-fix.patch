@@ -1,0 +1,13 @@
+diff --git i/src/core/utils/debug.rs w/src/core/utils/debug.rs
+index 31163a54..859dd9a9 100644
+--- i/src/core/utils/debug.rs
++++ w/src/core/utils/debug.rs
+@@ -28,7 +28,7 @@ fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+ /// use tuwunel_core::utils::debug::slice_truncated;
+ ///
+ /// #[tracing::instrument(fields(foos = slice_truncated(foos, 42)))]
+-/// fn bar(foos: &[&str]);
++/// fn bar(foos: &[&str]) { }
+ /// ```
+ pub fn slice_truncated<T: fmt::Debug>(
+ 	slice: &[T],
