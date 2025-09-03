@@ -81,5 +81,6 @@ stdenv.mkDerivation rec {
     description = "Mount removable devices as normal user";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ratakor ];
   };
 }
