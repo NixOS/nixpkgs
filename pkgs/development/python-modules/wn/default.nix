@@ -3,10 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-benchmark,
   pythonOlder,
   hatchling,
   httpx,
   tomli,
+  starlette,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +30,17 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies.web = [
+    starlette
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-benchmark
+  ]
+  ++ optional-dependencies.web;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
