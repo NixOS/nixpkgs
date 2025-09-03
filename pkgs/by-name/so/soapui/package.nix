@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = "SoapUI End User License Agreement";
+    license = lib.licenses.eupl11;
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.linux; # we don't fetch the dmg yet
     mainProgram = "soapui";
