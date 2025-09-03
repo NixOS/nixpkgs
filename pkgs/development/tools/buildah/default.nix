@@ -12,8 +12,7 @@
   libapparmor,
   libselinux,
   libseccomp,
-  testers,
-  buildah,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -72,13 +71,9 @@ buildGoModule (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = buildah;
-    command = ''
-      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
-      buildah --version
-    '';
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Tool which facilitates building OCI images";
