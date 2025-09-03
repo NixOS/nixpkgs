@@ -134,6 +134,8 @@ buildGoModule {
     inherit frontend;
     updateScript = nix-update-script {
       extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
         "--subpackage"
         "frontend"
       ];
