@@ -102,7 +102,7 @@ in
       };
 
       ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
+        llvmPackages = null;
       };
 
       # Required to bootstrap 9.4.8.
@@ -130,8 +130,8 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        buildTargetLlvmPackages = null;
+        llvmPackages = null;
       };
       ghc810 = compiler.ghc8107;
       ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
@@ -144,8 +144,8 @@ in
         inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
         python3 = buildPackages.python311; # so that we don't have two of them
         inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        buildTargetLlvmPackages = null;
+        llvmPackages = null;
       };
       ghc90 = compiler.ghc902;
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
@@ -164,8 +164,8 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        buildTargetLlvmPackages = null;
+        llvmPackages = null;
       };
       ghc92 = compiler.ghc928;
       ghc947 = callPackage ../development/compilers/ghc/9.4.7.nix {

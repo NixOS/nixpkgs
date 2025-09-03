@@ -744,6 +744,7 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      broken = lib.versionOlder version "9.4" && useLLVM;
     };
 
   }
