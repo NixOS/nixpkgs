@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "hpccm";
-  version = "23.11.0";
+  version = "25.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
     tag = "v${version}";
-    hash = "sha256-uB2+1Nc+SgPzB5hJI1L6yD8gn0hGOkIZF6rejq4rYg8=";
+    hash = "sha256-WTV56HMT13ndU2bNC5gyN2Ks3bC53Ad9QhjdYz3CV+U=";
   };
 
   build-system = [ setuptools ];
