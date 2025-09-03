@@ -2900,6 +2900,13 @@ with haskellLib;
   # 2024-03-25: HSH broken because of the unix-2.8.0.0 breaking change
   HSH = appendPatches [ ./patches/HSH-unix-openFd.patch ] super.HSH;
 
+  # 2025-09-03: allow base 4.20
+  # https://github.com/phadej/aeson-optics/issues/20
+  aeson-optics = lib.pipe super.aeson-optics [
+    (warnAfterVersion "1.2.1")
+    doJailbreak
+  ];
+
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
     version = "unstable-2023-12-02";
