@@ -29,7 +29,11 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.ocaml.info/home/ocaml_sources.html";
     description = "Generic OCaml Makefile for GNU Make";
-    license = "LGPL";
+    license = with lib.licenses; [
+      lgpl21Only
+      ocamlLgplLinkingException
+      gpl3Only
+    ];
     platforms = lib.platforms.unix;
   };
 }
