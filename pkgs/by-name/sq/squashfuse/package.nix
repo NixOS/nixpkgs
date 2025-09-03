@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vasi/squashfuse";
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    license = "BSD-2-Clause";
+    license = lib.licenses.bsd2;
   };
 }
