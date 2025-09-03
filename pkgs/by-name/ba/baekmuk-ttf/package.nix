@@ -1,4 +1,8 @@
-{ stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "baekmuk-ttf";
@@ -21,6 +25,6 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Korean font";
     homepage = "http://kldp.net/projects/baekmuk/";
-    license = "BSD-like";
+    license = lib.licenses.baekmuk;
   };
 }
