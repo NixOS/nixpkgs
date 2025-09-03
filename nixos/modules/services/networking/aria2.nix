@@ -179,15 +179,16 @@ in
     };
   };
 
-  # Need to open ports for proper functioning
-  # Note: As we do not have a dedicated programs.aria2.openPorts, people may use services.aria2.openPorts even when !cfg.enable,
-  # to allow bittorrent to work with ad-hoc invocations of aria2c.
-  config.networking.firewall = lib.mkIf cfg.openPorts {
-    allowedUDPPortRanges = config.services.aria2.settings.listen-port;
-    allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [ config.services.aria2.settings.rpc-listen-port ];
-  };
-
-  config = lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    {
+      # Need to open ports for proper functioning
+      # Note: As we do not have a dedicated programs.aria2.openPorts, people may use services.aria2.openPorts even when !cfg.enable,
+      # to allow bittorrent to work with ad-hoc invocations of aria2c.
+      networking.firewall = lib.mkIf cfg.openPorts {
+        allowedUDPPortRanges = config.services.aria2.settings.listen-port;
+        allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [ config.services.aria2.settings.rpc-listen-port ];
+    }
+    lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.settings.enable-rpc;
@@ -238,7 +239,8 @@ in
         UMask = cfg.serviceUMask;
       };
     };
-  };
+  }
+  ];
 
   meta.maintainers = [ lib.maintainers.timhae ];
 }
