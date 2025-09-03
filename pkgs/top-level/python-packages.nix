@@ -9615,6 +9615,8 @@ self: super: with self; {
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
+  moyopy = callPackage ../development/python-modules/moyopy { };
+
   mozart-api = callPackage ../development/python-modules/mozart-api { };
 
   mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
