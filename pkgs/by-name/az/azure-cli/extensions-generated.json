@@ -50,9 +50,9 @@
   },
   "aks-preview": {
     "pname": "aks-preview",
-    "version": "18.0.0b15",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-18.0.0b15-py2.py3-none-any.whl",
-    "hash": "sha256-YjRPELWfLshLQHgZTa7jXS96nyYiZ7h2Gu25/wKvw7c=",
+    "version": "18.0.0b33",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-18.0.0b33-py2.py3-none-any.whl",
+    "hash": "sha256-Zkp5Nzl+eQ7PPniDF7/K5II2xIG6OKC3Rhm3ZTpyILc=",
     "description": "Provides a preview for upcoming AKS features"
   },
   "akshybrid": {
