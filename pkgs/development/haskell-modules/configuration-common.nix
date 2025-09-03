@@ -3056,6 +3056,13 @@ with haskellLib;
     })
   ];
 
+  # 2025-09-03: allow bytestring 0.12
+  # https://github.com/wangbj/hashing/issues/4
+  hashing = lib.pipe super.hashing [
+    (warnAfterVersion "0.1.1.0")
+    doJailbreak
+  ];
+
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
     (warnAfterVersion "0.0.0.4")
     # Last released in 2018
