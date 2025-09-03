@@ -638,9 +638,9 @@
   },
   "lambda-test": {
     "pname": "lambda-test",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/lambda_test-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-KnNCZsTNn4948xKiHJ6Nba3NYLHy+T5yEF55BtQ9a1Q=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/lambda_test-1.0.0-py3-none-any.whl",
+    "hash": "sha256-6C2Db8ZPDRs8QY2v1RM2cyGVIM/hwtpBAj6c9V4CXxQ=",
     "description": "Microsoft Azure Command-Line Tools LambdaTest Extension"
   },
   "log-analytics": {
