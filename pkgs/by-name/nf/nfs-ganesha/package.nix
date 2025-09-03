@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals useDbus [
     "-DUSE_DBUS=ON"
     "-DDBUS_NO_PKGCONFIG=ON"
-    "-DDBUS_LIBRARY_DIRS=${dbus.lib}/lib"
-    "-DDBUS_INCLUDE_DIRS=${dbus.dev}/include/dbus-1.0\\;${dbus.lib}/lib/dbus-1.0/include"
+    "-DDBUS_LIBRARY_DIRS=${lib.getLib dbus}/lib"
+    "-DDBUS_INCLUDE_DIRS=${lib.getDev dbus}/include/dbus-1.0\\;${lib.getLib dbus}/lib/dbus-1.0/include"
     "-DDBUS_LIBRARIES=dbus-1"
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     flex
     sphinx
   ]
-  ++ lib.optional useDbus dbus.dev;
+  ++ lib.optional useDbus dbus;
 
   buildInputs = [
     acl
