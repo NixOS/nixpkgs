@@ -75,9 +75,9 @@ let
     optionalString
     ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kicad-base";
-  version = if stable then kicadVersion else builtins.substring 0 10 src.rev;
+  version = if stable then kicadVersion else builtins.substring 0 10 finalAttrs.src.rev;
 
   src = kicadSrc;
 
@@ -93,10 +93,10 @@ stdenv.mkDerivation rec {
   # nix removes .git, so its approximated here
   postPatch = lib.optionalString (!stable || testing) ''
     substituteInPlace cmake/KiCadVersion.cmake \
-      --replace-fail "unknown" "${builtins.substring 0 10 src.rev}"
+      --replace-fail "unknown" "${builtins.substring 0 10 finalAttrs.src.rev}"
 
     substituteInPlace cmake/CreateGitVersionHeader.cmake \
-      --replace-fail "0000000000000000000000000000000000000000" "${src.rev}"
+      --replace-fail "0000000000000000000000000000000000000000" "${finalAttrs.src.rev}"
   '';
 
   preConfigure = optionalString debug ''
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     (cmakeBool "KICAD_USE_CMAKE_FINDPROTOBUF" false)
     (cmakeBool "KICAD_SCRIPTING_WXPYTHON" withScripting)
     (cmakeBool "KICAD_BUILD_I18N" withI18n)
-    (cmakeBool "KICAD_BUILD_QA_TESTS" (!doInstallCheck))
+    (cmakeBool "KICAD_BUILD_QA_TESTS" (!finalAttrs.doInstallCheck))
     (cmakeBool "KICAD_STDLIB_DEBUG" debug)
     (cmakeBool "KICAD_USE_VALGRIND" debug)
     (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
@@ -215,4 +215,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
