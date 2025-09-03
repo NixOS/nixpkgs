@@ -101,7 +101,7 @@ dependencies = [
 
 [[package]]
 name = "imagequant"
-version = "4.3.4"
+version = "4.4.0"
 dependencies = [
  "arrayvec",
  "lodepng",
@@ -113,7 +113,7 @@ dependencies = [
 
 [[package]]
 name = "imagequant-sys"
-version = "4.0.4"
+version = "4.1.0"
 dependencies = [
  "bitflags",
  "imagequant",
