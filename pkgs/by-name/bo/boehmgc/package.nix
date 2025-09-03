@@ -40,18 +40,28 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  # This stanza can be dropped when a release fixes this issue:
-  #   https://github.com/ivmai/bdwgc/issues/376
-  # The version is checked with == instead of versionAtLeast so we
-  # don't forget to disable the fix (and if the next release does
-  # not fix the problem the test failure will be a reminder to
-  # extend the set of versions requiring the workaround).
-  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8") [
-    # do not use /proc primitives to track dirty bits; see:
-    # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
-    # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
-    "CFLAGS_EXTRA=-DNO_SOFT_VDB"
-  ];
+  makeFlags =
+    let
+      defineFlag = flag: "-D${flag}";
+
+      # This stanza can be dropped when a release fixes this issue:
+      #   https://github.com/ivmai/bdwgc/issues/376
+      # The version is checked with == instead of versionAtLeast so we
+      # don't forget to disable the fix (and if the next release does
+      # not fix the problem the test failure will be a reminder to
+      # extend the set of versions requiring the workaround).
+      noSoftVDB = lib.optional (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8") (
+        # do not use /proc primitives to track dirty bits; see:
+        # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
+        # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
+        "NO_SOFT_VDB"
+      );
+
+      cflagsExtra = noSoftVDB;
+    in
+    lib.optionals (cflagsExtra != [ ]) [
+      "CFLAGS_EXTRA=${lib.concatMapStringsSep " " defineFlag cflagsExtra}"
+    ];
 
   # OpenBSD patches lld (!!!!) to inject this symbol into every linker invocation.
   # We are obviously not doing that.
