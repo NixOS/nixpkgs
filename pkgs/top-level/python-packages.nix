@@ -11137,8 +11137,6 @@ self: super: with self; {
 
   orjson = callPackage ../development/python-modules/orjson { };
 
-  orm = callPackage ../development/python-modules/orm { };
-
   ormar = callPackage ../development/python-modules/ormar { };
 
   ormsgpack = callPackage ../development/python-modules/ormsgpack { };
