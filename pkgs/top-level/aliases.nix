@@ -1232,6 +1232,8 @@ mapAliases {
   kube3d = k3d; # Added 2022-0705
   kafkacat = throw "'kafkacat' has been renamed to/replaced by 'kcat'"; # Converted to throw 2024-10-17
   kak-lsp = kakoune-lsp; # Added 2024-04-01
+  kanidm = lib.warnOnInstantiate "'kanidm' will be removed before 26.05. You must use a versioned package, e.g. 'kanidm_1_x'." kanidm_1_7; # Added 2025-09-01
+  kanidmWithSecretProvisioning = lib.warnOnInstantiate "'kanidmWithSecretProvisioning' will be removed before 26.05. You must use a versioned package, e.g. 'kanidmWithSecretProvisioning_1_x'." kanidmWithSecretProvisioning_1_7; # Added 2025-09-01
   kanidm_1_3 = throw "'kanidm_1_3' has been removed as it has reached end of life"; # Added 2025-03-10
   kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
   kanidmWithSecretProvisioning_1_4 = throw "'kanidmWithSecretProvisioning_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
@@ -1627,6 +1629,8 @@ mapAliases {
   mongodb-4_4 = throw "mongodb-4_4 has been removed, it's end of life since April 2024"; # Added 2024-04-11
   mongodb-5_0 = throw "mongodb-5_0 has been removed, it's end of life since October 2024"; # Added 2024-10-01
   mongodb-6_0 = throw "mongodb-6_0 has been removed, it's end of life since July 2025"; # Added 2025-07-23
+  moralerspace-nf = throw "moralerspace-nf has been removed, use moralerspace instead."; # Added 2025-08-30
+  moralerspace-hwnf = throw "moralerspace-hwnf has been removed, use moralerspace-hw instead."; # Added 2025-08-30
   moz-phab = mozphab; # Added 2022-08-09
   mp3info = throw "'mp3info' has been removed due to lack of maintenance upstream. Consider using 'eartag' or 'tagger' instead"; # Added 2024-09-14
   mp3splt = throw "'mp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
@@ -1902,6 +1906,12 @@ mapAliases {
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead.";
+  platformioPackages = {
+    inherit
+      platformio-core
+      platformio-chrootenv
+      ;
+  }; # Added 2025-09-04
   platypus = throw "platypus is unmaintained and has not merged Python3 support"; # Added 2025-03-20
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
