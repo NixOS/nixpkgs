@@ -119,6 +119,13 @@ lib.extendMkDerivation {
       # breaks secondary CPU bringup on at least RK3588, maybe others
       env.NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
 
+      # TODO: remove this passthru function after some time to allow for soft-deprecation
+      passthru.override =
+        overrideArgs:
+        lib.warn "Using override with buildArmTrustedFirmware is no longer supported, please use overrideAttrs instead" (
+          finalAttrs.finalPackage.overrideAttrs overrideArgs
+        );
+
       meta = {
         homepage = "https://github.com/ARM-software/arm-trusted-firmware";
         description = "Reference implementation of secure world software for ARMv8-A";
