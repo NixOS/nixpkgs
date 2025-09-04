@@ -11,17 +11,14 @@
   withFzf ? false,
   fzf,
   perl,
-
   # rbw-rofi
   withRofi ? false,
   rofi,
   xclip,
-
   # pass-import
   withPass ? false,
   pass,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
   version = "1.14.1";
@@ -53,6 +50,21 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/rbw gen-completions bash) \
       --fish <($out/bin/rbw gen-completions fish) \
       --zsh <($out/bin/rbw gen-completions zsh)
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in nushell powershell elvish fig; do
+      case "$shell" in
+        nushell)    dir=share/nushell/completions;    file=rbw.nu ;;
+        powershell) dir=share/powershell/completions; file=rbw.ps1 ;;
+        elvish)     dir=share/elvish/completions;     file=rbw.elv ;;
+        fig)        dir=share/fig/completions;        file=rbw.ts ;;
+      esac
+
+      echo "rbw: generating $shell completion..." >&2
+
+      install -d "$out/$dir"
+      echo "$($out/bin/rbw gen-completions "$shell" 2>/dev/null || true)" > "$out/$dir/$file"
+    done
   ''
   + lib.optionalString withFzf ''
     install -Dm755 -t $out/bin bin/rbw-fzf
