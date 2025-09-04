@@ -5227,6 +5227,8 @@ self: super: with self; {
 
   flake8-bugbear = callPackage ../development/python-modules/flake8-bugbear { };
 
+  flake8-builtins = callPackage ../development/python-modules/flake8-builtins { };
+
   flake8-class-newline = callPackage ../development/python-modules/flake8-class-newline { };
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
