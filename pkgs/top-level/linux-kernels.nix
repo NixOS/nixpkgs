@@ -799,7 +799,6 @@ in
       linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
       linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
-      __recurseIntoDerivationForReleaseJobs = true;
     }
     // lib.optionalAttrs config.allowAliases {
       linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";

@@ -5574,10 +5574,7 @@ with pkgs;
           haskell.packages.ghc96
         else
           haskell.packages.ghc98
-      )
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+      );
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -9490,22 +9487,18 @@ with pkgs;
     }
   );
 
-  libsForQt5 =
-    (recurseIntoAttrs (
-      import ./qt5-packages.nix {
-        inherit
-          lib
-          config
-          __splicedPackages
-          makeScopeWithSplicing'
-          generateSplicesForMkScope
-          pkgsHostTarget
-          ;
-      }
-    ))
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+  libsForQt5 = recurseIntoAttrs (
+    import ./qt5-packages.nix {
+      inherit
+        lib
+        config
+        __splicedPackages
+        makeScopeWithSplicing'
+        generateSplicesForMkScope
+        pkgsHostTarget
+        ;
+    }
+  );
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
