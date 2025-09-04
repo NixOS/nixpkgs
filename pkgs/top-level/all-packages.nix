@@ -9237,6 +9237,13 @@ with pkgs;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
+  inherit (callPackages ../development/tools/zls { })
+    zls_0_14
+    ;
+
+  # This should be kept updated to ensure the default zls version matches the default zig version.
+  zls = zls_0_14;
+
   libzint = zint-qt.override { withGUI = false; };
 
   aroccPackages = recurseIntoAttrs (callPackage ../development/compilers/arocc { });
