@@ -21,6 +21,7 @@ let
         figsoda
         moni
         _0x5a4
+        jmbaur
       ];
       platforms = lib.platforms.unix;
     };
