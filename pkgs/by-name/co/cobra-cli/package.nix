@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  installShellFiles,
   go,
 }:
 
@@ -19,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-vrtGPQzY+NImOGaSxV+Dvch+GNPfL9XfY4lfCHTGXwY=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   allowGoReference = true;
 
@@ -33,6 +37,13 @@ buildGoModule rec {
   postFixup = ''
     wrapProgram "$out/bin/cobra-cli" \
       --prefix PATH : ${go}/bin
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd cobra-cli \
+      --bash <($out/bin/cobra-cli completion bash) \
+      --fish <($out/bin/cobra-cli completion fish) \
+      --zsh <($out/bin/cobra-cli completion zsh) \
   '';
 
   meta = {
