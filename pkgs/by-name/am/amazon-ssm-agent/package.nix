@@ -2,7 +2,7 @@
   lib,
   writeShellScriptBin,
   buildGoModule,
-  makeWrapper,
+  makeBinaryWrapper,
   darwin,
   fetchFromGitHub,
   coreutils,
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
