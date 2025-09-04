@@ -13505,9 +13505,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_36;
-  };
+  whalebird = callPackage ../applications/misc/whalebird { };
 
   inherit (windowmaker) dockapps;
 
