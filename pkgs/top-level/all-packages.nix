@@ -14446,74 +14446,9 @@ with pkgs;
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
 
-  cp2k =
-    # CP2K requires all dependencies from the Grimme ecosystem to be build with
-    # CMake instead of Meson. Unfortunately most other consumers require meson
-    let
-      grimmeCmake = lib.makeScope pkgs.newScope (self: {
-        mctc-lib = pkgs.mctc-lib.override {
-          buildType = "cmake";
-          inherit (self) jonquil toml-f;
-        };
-
-        toml-f = pkgs.toml-f.override {
-          buildType = "cmake";
-          inherit (self) test-drive;
-        };
-
-        dftd4 = pkgs.dftd4.override {
-          buildType = "cmake";
-          inherit (self) mstore mctc-lib multicharge;
-        };
-
-        jonquil = pkgs.jonquil.override {
-          buildType = "cmake";
-          inherit (self) toml-f test-drive;
-        };
-
-        mstore = pkgs.mstore.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib;
-        };
-
-        multicharge = pkgs.multicharge.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib mstore;
-        };
-
-        test-drive = pkgs.test-drive.override { buildType = "cmake"; };
-
-        simple-dftd3 = pkgs.simple-dftd3.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib mstore toml-f;
-        };
-
-        tblite = pkgs.tblite.override {
-          buildType = "cmake";
-          inherit (self)
-            mctc-lib
-            mstore
-            toml-f
-            multicharge
-            dftd4
-            simple-dftd3
-            ;
-        };
-
-        sirius = pkgs.sirius.override {
-          inherit (self)
-            mctc-lib
-            toml-f
-            multicharge
-            dftd4
-            simple-dftd3
-            ;
-        };
-      });
-    in
-    grimmeCmake.callPackage ../applications/science/chemistry/cp2k/default.nix {
-      libxc = pkgs.libxc_7;
-    };
+  cp2k = callPackage ../by-name/cp/cp2k/package.nix {
+    libxc = pkgs.libxc_7;
+  };
 
   ### SCIENCE/GEOMETRY
 

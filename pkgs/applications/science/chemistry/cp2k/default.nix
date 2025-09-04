@@ -39,6 +39,12 @@
   elpa,
   cudaPackages,
   rocmPackages,
+  newScope,
+  mctc-lib,
+  jonquil,
+  multicharge,
+  mstore,
+  test-drive,
   config,
   gpuBackend ? (
     if config.cudaSupport then
@@ -60,6 +66,69 @@ assert builtins.elem gpuBackend [
   "rocm"
 ];
 
+let
+  grimmeCmake = lib.makeScope newScope (self: {
+    mctc-lib = mctc-lib.override {
+      buildType = "cmake";
+      inherit (self) jonquil toml-f;
+    };
+
+    toml-f = toml-f.override {
+      buildType = "cmake";
+      inherit (self) test-drive;
+    };
+
+    dftd4 = dftd4.override {
+      buildType = "cmake";
+      inherit (self) mstore mctc-lib multicharge;
+    };
+
+    jonquil = jonquil.override {
+      buildType = "cmake";
+      inherit (self) toml-f test-drive;
+    };
+
+    mstore = mstore.override {
+      buildType = "cmake";
+      inherit (self) mctc-lib;
+    };
+
+    multicharge = multicharge.override {
+      buildType = "cmake";
+      inherit (self) mctc-lib mstore;
+    };
+
+    test-drive = test-drive.override { buildType = "cmake"; };
+
+    simple-dftd3 = simple-dftd3.override {
+      buildType = "cmake";
+      inherit (self) mctc-lib mstore toml-f;
+    };
+
+    tblite = tblite.override {
+      buildType = "cmake";
+      inherit (self)
+        mctc-lib
+        mstore
+        toml-f
+        multicharge
+        dftd4
+        simple-dftd3
+        ;
+    };
+
+    sirius = sirius.override {
+      inherit (self)
+        mctc-lib
+        toml-f
+        multicharge
+        dftd4
+        simple-dftd3
+        ;
+    };
+  });
+
+in
 stdenv.mkDerivation rec {
   pname = "cp2k";
   version = "2025.2";
@@ -97,9 +166,6 @@ stdenv.mkDerivation rec {
     libint
     libvori
     libxc
-    dftd4
-    simple-dftd3
-    tblite
     libxsmm
     mpi
     spglib
@@ -110,14 +176,17 @@ stdenv.mkDerivation rec {
     plumed
     zlib
     hdf5-fortran
-    sirius
     spla
     spfft
     libvdwxc
     trexio
-    toml-f
     greenx
     gmp
+    grimmeCmake.dftd4
+    grimmeCmake.simple-dftd3
+    grimmeCmake.tblite
+    grimmeCmake.sirius
+    grimmeCmake.toml-f
   ]
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
