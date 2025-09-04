@@ -17,13 +17,13 @@ assert lib.asserts.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "synapse-admin-etkecc";
-  version = "0.11.1-etke46";
+  version = "0.11.1-etke47";
 
   src = fetchFromGitHub {
     owner = "etkecc";
     repo = "synapse-admin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRz4yST/Uqo2lLNKU/5vtP9pw3kLtgi3Btq5LxO2xOA=";
+    hash = "sha256-pf8g61jKj7nQXgEED3RGZiLHSvoBsYNo+M1cMsRCWnw=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
