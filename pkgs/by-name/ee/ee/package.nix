@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  nix-update-script,
-  fetchgit,
+  fetchFromGitHub,
   ncurses,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "ee";
-  version = "1.5.2";
+  version = "1.5.2-unstable-2024-06-20";
 
-  src = fetchgit {
-    url = "https://git.freebsd.org/src.git";
-    tag = "release/14.3.0";
-    outputHash = "sha256-nMhHXeoam9VtUuhhi0eoGZfcW9zZhpYQKVYbkAbfgc0=";
+  src = fetchFromGitHub {
+    owner = "freebsd";
+    repo = "freebsd-src";
+    rev = "0667538b888c1171932c6cf28b62fc19d393e119";
+    hash = "sha256-nMhHXeoam9VtUuhhi0eoGZfcW9zZhpYQKVYbkAbfgc0=";
     rootDir = "contrib/ee";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   buildInputs = [ ncurses ];
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "ee";
   };
-})
+}
