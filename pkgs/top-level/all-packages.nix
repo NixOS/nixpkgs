@@ -13435,10 +13435,6 @@ with pkgs;
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
-  x11basic = callPackage ../by-name/x1/x11basic/package.nix {
-    autoconf = buildPackages.autoconf269;
-  };
-
   x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
