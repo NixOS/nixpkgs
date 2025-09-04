@@ -8,6 +8,8 @@
   dpkg,
   webkitgtk_4_0,
   runScript ? "BitComet",
+  writeShellScript,
+  nix-update,
 }:
 
 let
@@ -93,4 +95,13 @@ buildFHSEnv {
     ln -s ${bitcomet}/share/applications $out/share/applications
     ln -s ${bitcomet}/share/icons $out/share/icons
   '';
+
+  passthru = {
+    inherit bitcomet;
+    updateScript = writeShellScript "update-bitcomet" ''
+      latestVersion=$(curl --fail --silent https://www.cometbbs.com/t/linux%E5%86%85%E6%B5%8B%E7%89%88/88604 | grep -oP 'BitComet-\K[0-9]+\.[0-9]+\.[0-9]+(?=-x86_64\.deb)' | head -n1)
+      ${lib.getExe nix-update} pkgsCross.gnu64.bitcomet.bitcomet --version $latestVersion
+      ${lib.getExe nix-update} pkgsCross.aarch64-multiplatform.bitcomet.bitcomet --version skip
+    '';
+  };
 }
