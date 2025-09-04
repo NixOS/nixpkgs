@@ -11,6 +11,7 @@
   symengine,
   fenics-ufl,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -61,6 +62,18 @@ buildPythonPackage rec {
   pytestFlags = [
     "--skip-download"
   ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
+  };
 
   meta = {
     description = "FInite element Automatic Tabulator";
