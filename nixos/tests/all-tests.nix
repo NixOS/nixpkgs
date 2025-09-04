@@ -488,10 +488,6 @@ in
     imports = [ ./envoy.nix ];
     _module.args.envoyPackage = pkgs.envoy;
   };
-  envoy-bin = runTest {
-    imports = [ ./envoy.nix ];
-    _module.args.envoyPackage = pkgs.envoy-bin;
-  };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
   eris-server = runTest ./eris-server.nix;
