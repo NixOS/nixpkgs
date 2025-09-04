@@ -107,7 +107,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputChecks = {
+  # non-glibc gettext has issues with this
+  outputChecks = lib.optionalAttrs stdenv.hostPlatform.isGnu {
     bin.disallowedRequisites = [
       bash
       bashNonInteractive
