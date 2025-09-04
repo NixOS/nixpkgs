@@ -16242,6 +16242,12 @@
     name = "Colton J. McCurdy";
     keys = [ { fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94"; } ];
   };
+  mcmah309 = {
+    email = "dillonmcmahon79@gmail.com";
+    github = "mcmah309";
+    githubId = 56412856;
+    name = "Dillon H. McMahon";
+  };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
     github = "mcmtroffaes";
