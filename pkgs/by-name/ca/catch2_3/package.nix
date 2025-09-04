@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   python3,
+  spdlog,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,10 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     python3
   ];
+
+  passthru.tests = {
+    inherit spdlog;
+  };
 
   meta = {
     description = "Modern, C++-native, test framework for unit-tests";
