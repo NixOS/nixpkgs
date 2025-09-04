@@ -10,14 +10,14 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "X11basic";
   version = "1.27";
 
   src = fetchFromGitHub {
     owner = "kollokollo";
-    repo = pname;
-    rev = version;
+    repo = "X11basic";
+    rev = finalAttrs.version;
     sha256 = "1hpxzdqnjl1fiwgs2vrjg4kxm29c7pqwk3g1m4p5pm4x33a3d1q2";
   };
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
   ];
+
   buildInputs = [
     readline
     libX11
@@ -50,12 +51,11 @@ stdenv.mkDerivation rec {
     cp -r ../examples $out/share/.
   '';
 
-  meta = with lib; {
-    homepage = "https://x11-basic.sourceforge.net/";
+  meta = {
+    homepage = "https://x11-basic.codeberg.page";
     description = "Basic interpreter and compiler with graphics capabilities";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.unix;
   };
-
-}
+})
