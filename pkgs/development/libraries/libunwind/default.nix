@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MsUReXFHlj15SgEZHOYhdSfAbSeVVl8LCi4NnUwvhpw=";
+    hash = "sha256-ed+FUPApDxNHxznXMhiTeNr8yRxRDSCyJJdIhouGNho=";
   };
 
   postPatch =
