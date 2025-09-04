@@ -12,7 +12,10 @@ let
   cfg = config.services.displayManager.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = cfg.package.override (old: {
+  sddmWithThemeDeps =
+    if cfg.themePackage == null then cfg.package else cfg.themePackage.sddmPackageWith cfg.package;
+
+  sddm = sddmWithThemeDeps.override (old: {
     extraPackages =
       old.extraPackages or [ ]
       ++ lib.optionals cfg.wayland.enable [ pkgs.qt6.qtwayland ]
@@ -72,10 +75,20 @@ let
     };
 
     Theme = {
-      Current = cfg.theme;
-      ThemeDir = "/run/current-system/sw/share/sddm/themes";
       FacesDir = "/run/current-system/sw/share/sddm/faces";
     }
+    // (
+      if cfg.themePackage == null then
+        {
+          Current = cfg.theme;
+          ThemeDir = "/run/current-system/sw/share/sddm/themes";
+        }
+      else
+        {
+          Current = ".";
+          ThemeDir = cfg.themePackage.sddmThemeDir;
+        }
+    )
     // optionalAttrs (cfg.theme == "breeze") {
       CursorTheme = "breeze_cursors";
       CursorSize = 24;
@@ -262,6 +275,14 @@ in
         description = ''
           Greeter theme to use.
         '';
+      };
+
+      themePackage = mkOption {
+        type = types.nullOr types.package;
+        default = null;
+
+        example = lib.literalExpression "pkgs.sddm-astronaut";
+        description = "The sddm theme package to use.";
       };
 
       extraPackages = mkOption {

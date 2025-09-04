@@ -7,12 +7,10 @@
   /*
     An example of how you can override the background on the NixOS logo
 
-      environment.systemPackages = [
-        (pkgs.where-is-my-sddm-theme.withConfig {
-          background = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-          backgroundMode = "none";
-        })
-      ];
+      services.displayManager.sddm.themePackage = pkgs.where-is-my-sddm-theme.withConfig {
+        background = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+        backgroundMode = "none";
+      };
   */
 
   # deprecated in favor of `.withConfig`
