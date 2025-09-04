@@ -16644,12 +16644,6 @@
     githubId = 1699466;
     name = "Michael Peyton Jones";
   };
-  michaelshmitty = {
-    name = "Michael Smith";
-    email = "shmitty@protonmail.com";
-    github = "michaelshmitty";
-    githubId = 114845;
-  };
   michaelvanstraten = {
     name = "Michael van Straten";
     email = "michael@vanstraten.de";
