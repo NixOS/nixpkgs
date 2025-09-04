@@ -28499,6 +28499,10 @@ with self;
       url = "mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.277.tar.gz";
       hash = "sha256-h8efg7aHbiBgUZZdUBnSUHxVH4GahnUAgOx+xDsuCvg=";
     };
+
+    # override default postPatch to avoid patchShebangs breaking tests
+    postPatch = "";
+
     buildInputs = [
       ClassInspector
       TestDeep
