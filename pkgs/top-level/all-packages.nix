@@ -7498,9 +7498,7 @@ with pkgs;
 
   dee = callPackage ../development/libraries/dee { };
 
-  draco = callPackage ../development/libraries/draco {
-    tinygltf = callPackage ../development/libraries/draco/tinygltf.nix { };
-  };
+  draco = callPackage ../development/libraries/draco { };
 
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
