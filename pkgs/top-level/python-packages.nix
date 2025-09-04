@@ -7229,6 +7229,8 @@ self: super: with self; {
 
   ipyxact = callPackage ../development/python-modules/ipyxact { };
 
+  ir-datasets = callPackage ../development/python-modules/ir-datasets { };
+
   irc = callPackage ../development/python-modules/irc { };
 
   ircrobots = callPackage ../development/python-modules/ircrobots { };
