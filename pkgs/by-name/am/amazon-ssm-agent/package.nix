@@ -40,14 +40,14 @@ let
     "sessionworker" = "ssm-session-worker";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amazon-ssm-agent";
   version = "3.3.2299.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8jqsAGnfn6+a+Zs9XfIyHzG/+jPO+UoSVsm0GHthq3E=";
   };
 
@@ -99,7 +99,7 @@ buildGoModule rec {
     substituteInPlace agent/rebooter/rebooter_unix.go \
       --replace-fail "/sbin/shutdown" "shutdown"
 
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
@@ -169,7 +169,7 @@ buildGoModule rec {
 
   meta = {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
-    changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
+    changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
@@ -179,4 +179,4 @@ buildGoModule rec {
       arianvp
     ];
   };
-}
+})
