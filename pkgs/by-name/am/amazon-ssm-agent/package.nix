@@ -12,9 +12,7 @@
   dmidecode,
   bashInteractive,
   nix-update-script,
-  nixosTests,
-  testers,
-  amazon-ssm-agent,
+  versionCheckHook,
 }:
 
 let
@@ -154,14 +152,11 @@ buildGoModule (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ bashInteractive ]}"
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
-    tests = {
-      inherit (nixosTests) amazon-ssm-agent;
-      version = testers.testVersion {
-        package = amazon-ssm-agent;
-        command = "amazon-ssm-agent --version";
-      };
-    };
     updateScript = nix-update-script { };
   };
 
