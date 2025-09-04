@@ -26,12 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "draco";
     rev = finalAttrs.version;
-    hash = "sha256-p0Mn4kGeBBKL7Hoz4IBgb6Go6MdkgE7WZgxAnt1tE/0=";
-    fetchSubmodules = true;
+    hash = "sha256-Y1bwBFe3bCklZN2+TBs6mhqDKQjrezMiT5zXlPFuMew=";
   };
 
   # ld: unknown option: --start-group
-  postPatch = ''
+  postPatch = lib.optional stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/draco_targets.cmake \
       --replace-fail "^Clang" "^AppleClang"
   '';
@@ -39,12 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python3
+    gtest
   ];
 
-  buildInputs = [
-    gtest
-  ]
-  ++ lib.optionals withTranscoder [
+  buildInputs = lib.optionals withTranscoder [
     eigen
     ghc_filesystem
     tinygltf
