@@ -18542,6 +18542,8 @@ self: super: with self; {
 
   travispy = callPackage ../development/python-modules/travispy { };
 
+  trec-car-tools = callPackage ../development/python-modules/trec-car-tools { };
+
   trectools = callPackage ../development/python-modules/trectools { };
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
