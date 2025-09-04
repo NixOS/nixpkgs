@@ -6,7 +6,7 @@
   libax25,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ax25-tools";
   version = "0.0.10-rc5";
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sarcasticadmin ];
     platforms = platforms.linux;
   };
-}
+})
