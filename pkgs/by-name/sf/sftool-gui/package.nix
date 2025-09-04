@@ -18,12 +18,12 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool-gui";
-  version = "1.0.2";
+  version = "1.0.3";
   src = fetchFromGitHub {
     owner = "OpenSiFli";
     repo = "sftool-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FD3eQN4Uto4q7gdyfK5KUyZJ5ZiIJeUKkqaCZRWdQNo=";
+    hash = "sha256-kjxUl9YrvTgJby+FvUbx5ugucK8NiBqzGBhTi9Zwd1s=";
   };
 
   cargoHash = "sha256-XAU3ru+TxUo99OQwcXNLJ8gzBOZUkC8UCAApz7M/QTM=";
