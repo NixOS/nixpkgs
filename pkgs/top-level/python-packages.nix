@@ -7944,6 +7944,8 @@ self: super: with self; {
 
   langchain-perplexity = callPackage ../development/python-modules/langchain-perplexity { };
 
+  langchain-qdrant = callPackage ../development/python-modules/langchain-qdrant { };
+
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
