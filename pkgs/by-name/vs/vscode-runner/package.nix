@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildDartApplication,
   kdePackages,
+  sqlite,
 }:
 
 let
@@ -26,6 +27,8 @@ buildDartApplication {
   dartEntryPoints = {
     "bin/vscode_runner" = "bin/vscode_runner.dart";
   };
+
+  buildInputs = [ sqlite ];
 
   postInstall = ''
     substituteInPlace ./package/codes.merritt.vscode_runner.service \
