@@ -12,6 +12,7 @@
   libgcrypt,
   shared-mime-info,
   libshumate,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     libchamplain
     libshumate
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";
