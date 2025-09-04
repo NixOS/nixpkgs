@@ -34,10 +34,19 @@ lib.extendMkDerivation {
     # delete hdcp.bin if either: the platform is thought to
     # not need it or unfreeIncludeHDCPBlob is false
     let
-      deleteHDCPBlobBeforeBuild = !platformCanUseHDCPBlob || !unfreeIncludeHDCPBlob;
+      deleteHDCPBlobBeforeBuild = !finalAttrs.platformCanUseHDCPBlob || !unfreeIncludeHDCPBlob;
     in
     {
-      pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
+      inherit
+        filesToInstall
+        installDir
+        platform
+        platformCanUseHDCPBlob
+        ;
+
+      pname = "arm-trusted-firmware${
+        lib.optionalString (finalAttrs.platform != null) "-${finalAttrs.platform}"
+      }";
       version = args.version or "2.13.0";
 
       src =
@@ -88,7 +97,7 @@ lib.extendMkDerivation {
         # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
         "OPENSSL_DIR=${openssl}"
       ]
-      ++ (lib.optional (platform != null) "PLAT=${platform}")
+      ++ (lib.optional (finalAttrs.platform != null) "PLAT=${finalAttrs.platform}")
       ++ args.makeFlags or [ ]
       ++ (lib.warnIf (args ? extraMakeFlags)
         "buildArmTrustedFirmware now accepts `makeFlags`, please switch from using `extraMakeFlags` to `makeFlags`"
@@ -98,8 +107,8 @@ lib.extendMkDerivation {
       installPhase = ''
         runHook preInstall
 
-        mkdir -p ${installDir}
-        cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+        mkdir -p ${finalAttrs.installDir}
+        cp ${lib.concatStringsSep " " finalAttrs.filesToInstall} ${installDir}
 
         runHook postInstall
       '';
