@@ -16,7 +16,7 @@
   websockets,
   tesserocr,
   typer,
-  rapidocr-onnxruntime,
+  rapidocr,
   onnxruntime,
   torch,
   torchvision,
@@ -81,7 +81,7 @@ buildPythonPackage rec {
       tesserocr
     ];
     rapidocr = [
-      rapidocr-onnxruntime
+      rapidocr
       onnxruntime
     ];
     cpu = [
