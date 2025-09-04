@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  automake,
-  autoconf,
+  fetchFromGitea,
+  autoreconfHook,
+  fig2dev,
   readline,
   libX11,
   bluez,
@@ -11,19 +11,28 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "X11basic";
-  version = "1.27";
+  pname = "x11basic";
+  version = "1.28-65";
 
-  src = fetchFromGitHub {
-    owner = "kollokollo";
-    repo = "X11basic";
-    rev = finalAttrs.version;
-    sha256 = "1hpxzdqnjl1fiwgs2vrjg4kxm29c7pqwk3g1m4p5pm4x33a3d1q2";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "kollo";
+    repo = "X11Basic";
+    tag = finalAttrs.version;
+    hash = "sha256-07sRUFKJ4CYMtQhRu18PElvNQN2DyKkRJUt7oIhenkA=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  postPatch = ''
+    chmod -R u+w examples/compiler
+    substituteInPlace configure.in \
+      --replace-fail "main(foo)" "int main(int foo)"
+  '';
+
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    fig2dev
   ];
 
   buildInputs = [
@@ -32,8 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     bluez
   ];
-
-  preConfigure = "cd src;autoconf";
 
   configureFlags = [
     "--with-bluetooth"
