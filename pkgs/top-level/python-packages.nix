@@ -19407,6 +19407,8 @@ self: super: with self; {
 
   unix-ar = callPackage ../development/python-modules/unix-ar { };
 
+  unlzw3 = callPackage ../development/python-modules/unlzw3 { };
+
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
