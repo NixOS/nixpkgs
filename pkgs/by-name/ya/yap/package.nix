@@ -9,6 +9,7 @@
   gmp,
   zlib,
   librdf_raptor2,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -48,6 +49,8 @@ stdenv.mkDerivation {
   #   ld: libYap.a(pl-dtoa.o):/build/yap-6.3.3/H/pl-yap.h:230: multiple definition of `ATOM_';
   #     libYap.a(pl-buffer.o):/build/yap-6.3.3/H/pl-yap.h:230: first defined here
   env.NIX_CFLAGS_COMPILE = "-fpermissive -fcommon";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     # linux 32 bit build fails.
