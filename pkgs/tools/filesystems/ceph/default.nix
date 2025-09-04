@@ -498,6 +498,11 @@ rec {
         --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
         --replace "/bin/grep" "${gnugrep}/bin/grep"
 
+      # Patch remount to use full path to mount(8), otherwise ceph-fuse fails when run
+      # from a systemd unit for example.
+      substituteInPlace src/client/fuse_ll.cc \
+        --replace-fail "mount -i -o remount" "${util-linux}/bin/mount -i -o remount"
+
       # The install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       export PYTHONPATH=$PYTHONPATH:$lib/${sitePackages}:$out/${sitePackages}
       patchShebangs src/
