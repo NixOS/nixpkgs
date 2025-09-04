@@ -370,13 +370,6 @@ buildPythonPackage rec {
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
 
-    # Workaround cmake error //include does not exist! in rocm-core-config.cmake
-    # Removing the call falls back to hip_version. Can likely be removed after ROCm 6.4 bump
-    substituteInPlace cmake/public/LoadHIP.cmake \
-      --replace-fail \
-        "find_package(rocm-core CONFIG)" \
-        ""
-
     # Use composable kernel as dependency, rather than built-in third-party
     substituteInPlace aten/src/ATen/CMakeLists.txt \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
