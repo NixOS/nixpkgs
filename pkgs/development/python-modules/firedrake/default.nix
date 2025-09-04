@@ -43,9 +43,10 @@
   mpiCheckPhaseHook,
   writableTmpDirAsHomeHook,
 
-  # passthru.tests
+  # passthru
   firedrake,
   mpich,
+  nix-update-script,
 }:
 let
   firedrakePackages = lib.makeScope newScope (self: {
@@ -172,6 +173,13 @@ buildPythonPackage rec {
   passthru = {
     # python updater script sets the wrong tag
     skipBulkUpdate = true;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
 
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       mpich = firedrake.override {
