@@ -7,7 +7,7 @@
   fetchFromGitHub,
   coreutils,
   net-tools,
-  util-linux,
+  util-linuxMinimal,
   stdenv,
   dmidecode,
   bashInteractive,
@@ -92,7 +92,7 @@ buildGoModule (finalAttrs: {
       --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-      --replace-fail '"script"' '"${util-linux}/bin/script"'
+      --replace-fail '"script"' '"${util-linuxMinimal}/bin/script"'
 
     substituteInPlace agent/rebooter/rebooter_unix.go \
       --replace-fail "/sbin/shutdown" "shutdown"
