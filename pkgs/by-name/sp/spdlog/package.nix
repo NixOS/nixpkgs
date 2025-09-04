@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9RhB4GdFjZbCIfMOWWriLAUf9DE/i/+FTXczr0pD0Vg=";
   };
 
+  postPatch = ''
+    # https://github.com/gabime/spdlog/pull/3451
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail 'COMMAND ''${test_target})' 'COMMAND ''${test_target} --order decl)'
+  '';
+
   nativeBuildInputs = [ cmake ];
   # Required to build tests, even if they aren't executed
   buildInputs = [ catch2_3 ];
