@@ -12,6 +12,8 @@ in
   options = {
     programs.yubikey-manager = {
       enable = lib.mkEnableOption "yubikey-manager";
+
+      package = lib.mkPackageOption pkgs "yubikey-manager" { };
     };
   };
 
