@@ -14,6 +14,20 @@
     "collections": 3570
   },
   {
+    "id": 1704,
+    "name": "Skyrim Special Edition",
+    "name_lower": "skyrim special edition",
+    "forum_url": "https://forums.nexusmods.com/games/6-skyrim/",
+    "nexusmods_url": "https://www.nexusmods.com/skyrimspecialedition",
+    "genre": "RPG",
+    "file_count": 645252,
+    "downloads": 8778903191,
+    "domain_name": "skyrimspecialedition",
+    "approved_date": 1477480498,
+    "mods": 115650,
+    "collections": 4780
+  },
+  {
     "id": 3174,
     "name": "Mount & Blade II: Bannerlord",
     "name_lower": "mount & blade ii: bannerlord",
