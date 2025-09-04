@@ -477,9 +477,16 @@ let
       # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
       ./patches/chromium-126-llvm-17.patch
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "140") [
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-129-rust.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "140") [
+      # Rebased variant of the patch above due to
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6665907
+      ./patches/chromium-140-rust.patch
     ]
     ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
       # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
@@ -526,24 +533,32 @@ let
       # preventing compilations of chromium with versions below their intended version, not about running the very
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "140") [
+      # Fix building with too old Rust (< 1.89)
+      # ld.lld: error: undefined symbol: __rust_no_alloc_shim_is_unstable
+      (fetchpatch {
+        name = "revert-rust-Remove__rust_no_alloc_shim_is_unstable.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6686150
+        url = "https://chromium.googlesource.com/chromium/src/+/8393b61ba876c8e1614275c97767f9b06b889f48^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-qDrqZKj8b3F0pAiPREDmcXYIEOaFoSIQOkT+lzKJglg=";
+      })
     ];
 
     postPatch =
-      lib.optionalString (!isElectron)
-        # TODO: reuse mkGnFlags for this
-        (
-          if (chromiumVersionAtLeast "136") then
-            ''
-              cp ${./files/gclient_args.gni} build/config/gclient_args.gni
-              chmod u+w build/config/gclient_args.gni
-              echo 'checkout_mutter = false' >> build/config/gclient_args.gni
-              echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
-            ''
-          else
-            ''
-              ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
-            ''
-        )
+      # TODO: reuse mkGnFlags for this
+      # TODO: reflow
+      lib.optionalString (!isElectron) ''
+        cp ${./files/gclient_args.gni} build/config/gclient_args.gni
+        chmod u+w build/config/gclient_args.gni
+        echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+        echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+      ''
+      + lib.optionalString (!isElectron && chromiumVersionAtLeast "140") ''
+        echo 'checkout_clusterfuzz_data = false' >> build/config/gclient_args.gni
+      ''
       + lib.optionalString (!isElectron) ''
 
         echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE
