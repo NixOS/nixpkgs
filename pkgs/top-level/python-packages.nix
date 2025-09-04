@@ -13190,6 +13190,8 @@ self: super: with self; {
 
   pyjnius = callPackage ../development/python-modules/pyjnius { };
 
+  pyjpegls = callPackage ../development/python-modules/pyjpegls { };
+
   pyjson5 = callPackage ../development/python-modules/pyjson5 { };
 
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
