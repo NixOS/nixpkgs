@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -10,11 +11,14 @@
   withTranscoder ? true,
   eigen,
   ghc_filesystem,
-  tinygltf,
 }:
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
+
+  # Inlined tinygltf v2.8.7. As discussed in #228937 and #239641, it is a
+  # header-only library and upgrading it to 2.8.8 breaks the draco build.
+  tinygltf = callPackage ./tinygltf.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   version = "1.5.7";
