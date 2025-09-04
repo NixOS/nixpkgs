@@ -10,7 +10,7 @@
   check,
   json_c,
   libmodulemd,
-  libsmartcols,
+  util-linux,
   sqlite,
   librepo,
   libyaml,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cppunit
     openssl
     json_c
-    libsmartcols
+    util-linux
     libyaml
     libmodulemd
     zchunk
