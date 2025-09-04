@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "3.2.1";
+  version = "4.0.0-beta.1";
 
   src = fetchFromGitHub {
     owner = "leoafarias";
     repo = "fvm";
     tag = version;
-    hash = "sha256-i7sJRBrS5qyW8uGlx+zg+wDxsxgmolTMcikHyOzv3Bs=";
+    hash = "sha256-O2VU0cXgrm+Xf85e5l31kfnUOCUI9ZuVQCVRUppqCE4=";
   };
 in
 buildDartApplication {
