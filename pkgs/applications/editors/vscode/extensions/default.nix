@@ -702,26 +702,7 @@ let
         };
       };
 
-      biomejs.biome = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "biome";
-          publisher = "biomejs";
-          version = "2025.2.72227";
-          hash = "sha256-Lj5+Vy8IbU70y6ee42cjxyz/mwpIAhWSF4KtL9OYo2Q=";
-        };
-        meta = {
-          changelog = "https://github.com/biomejs/biome-vscode/blob/main/CHANGELOG.md";
-          description = "Biome LSP extension for Visual Studio Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=biomejs.biome";
-          homepage = "https://github.com/biomejs/biome-vscode";
-          license = with lib.licenses; [
-            mit
-            # or
-            asl20
-          ];
-          maintainers = [ ];
-        };
-      };
+      biomejs.biome = callPackage ./biomejs.biome { };
 
       bmalehorn.vscode-fish = buildVscodeMarketplaceExtension {
         mktplcRef = {
