@@ -6,7 +6,7 @@
 
   # nativeBuildInputs
   cmake,
-  libsForQt5,
+  qt6,
   pkg-config,
   wrapGAppsHook3,
 
@@ -28,14 +28,16 @@
   libGL,
   libGLU,
   librealsense,
-  vtkWithQt5,
+  vtkWithQt6,
   zed-open-capture,
   hidapi,
 
   # passthru
   gitUpdater,
 }:
-
+let
+  pcl' = pcl.override { vtk = vtkWithQt6; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
   version = "0.22.1";
@@ -49,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
     wrapGAppsHook3
   ];
@@ -57,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     ## Required
     opencv
     opencv.cxxdev
-    pcl
+    pcl'
     liblapack
     xorg.libSM
     xorg.libICE
@@ -75,21 +77,18 @@ stdenv.mkDerivation (finalAttrs: {
     freenect
     libdc1394
     librealsense
-    libsForQt5.qtbase
+    qt6.qtbase
     libGL
     libGLU
-    vtkWithQt5
     zed-open-capture
     hidapi
   ];
 
   # Configure environment variables
-  NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions -I${vtkWithQt5}/include/vtk";
+  NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions";
 
   cmakeFlags = [
-    (lib.cmakeFeature "VTK_QT_VERSION" "5")
-    (lib.cmakeFeature "VTK_DIR" "${vtkWithQt5}/lib/cmake/vtk-${lib.versions.majorMinor vtkWithQt5.version}")
-    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${vtkWithQt5}/include/vtk:${pcl}/include/pcl-${lib.versions.majorMinor pcl.version}")
+    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${pcl'}/include/pcl-${lib.versions.majorMinor pcl'.version}")
   ];
 
   passthru = {
