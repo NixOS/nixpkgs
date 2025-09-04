@@ -471,6 +471,11 @@ lib.mapAttrs mkLicense (
       fullName = "Common Public License 1.0";
     };
 
+    cnri-python = {
+      spdxId = "CNRI-Python";
+      fullName = "CNRI Python License";
+    };
+
     cronyx = {
       spdxId = "Cronyx";
       fullName = "Cronyx License";
