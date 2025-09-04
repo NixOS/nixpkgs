@@ -6,23 +6,31 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HkIsflsLTQdvetgamLt6LbYxOpv1+FQ/e/PzJjKOfq4=";
+    hash = "sha256-OwoDvcGpuU2x6O3+rBJSXGS2VoeFt/oVgFWUaCUyC8E=";
   };
 
-  cargoHash = "sha256-Qh/YxNO/DtVBj6Eiloc3+Fs+dQqvAXSe+5lCer0F2zs=";
+  cargoHash = "sha256-HKW6bOkHkBINwA2tgaKHEozKzT4n54roj6W989JUoAQ=";
+
+  cargoPatches = [ ./Cargo.patch ];
 
   patches = [
     ./unbounded-shifts.patch
   ];
+
+  postPatch = ''
+    substituteInPlace clash-lib/Cargo.toml \
+      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -55,6 +63,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Custom protocol, rule based network proxy software";
