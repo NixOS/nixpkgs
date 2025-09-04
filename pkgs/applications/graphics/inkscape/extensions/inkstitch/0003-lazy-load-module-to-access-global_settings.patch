@@ -1,0 +1,490 @@
+From 87d64cbc61175a2adebd4563ac833562a4729295 Mon Sep 17 00:00:00 2001
+From: tropf <tropf@noreply.codeberg.org>
+Date: Fri, 16 May 2025 23:28:21 +0200
+Subject: [PATCH 3/4] lazy-load module to access global_settings
+
+The access to global_settings triggers a read to the home directory on
+module inclusion. During the nix build process, this home does not
+exist, and hence fails, crashing the entire build.
+
+The inclusion is moved into the function calls, such that it is only
+loaded at runtime (where a home should be available), but not at build
+time.
+
+The performance impact is considered negligible, as the loads are called
+every invocation, but will mostly hit the cache.
+
+Note to self: If this patch is missing, the cache module import will be
+the first to trigger the read. This import can be left untouched, as the
+underlying cause is defused by this patch.
+---
+ lib/gui/apply_palette.py                           | 3 ++-
+ lib/gui/edit_json/main_panel.py                    | 3 ++-
+ lib/gui/lettering/main_panel.py                    | 6 +++++-
+ lib/gui/lettering_font_sample.py                   | 4 +++-
+ lib/gui/preferences.py                             | 3 ++-
+ lib/gui/simulator/control_panel.py                 | 4 +++-
+ lib/gui/simulator/drawing_panel.py                 | 6 +++++-
+ lib/gui/simulator/simulator_preferences.py         | 5 ++++-
+ lib/gui/simulator/split_simulator_window.py        | 4 +++-
+ lib/gui/simulator/view_panel.py                    | 6 +++++-
+ lib/metadata.py                                    | 3 +--
+ lib/sew_stack/stitch_layers/stitch_layer_editor.py | 3 ++-
+ lib/utils/cache.py                                 | 6 +++---
+ 13 files changed, 40 insertions(+), 16 deletions(-)
+
+diff --git a/lib/gui/apply_palette.py b/lib/gui/apply_palette.py
+index 6bc771914..df647d082 100644
+--- a/lib/gui/apply_palette.py
++++ b/lib/gui/apply_palette.py
+@@ -8,12 +8,12 @@ import wx.adv
+ 
+ from ..i18n import _
+ from ..threads import ThreadCatalog
+-from ..utils.settings import global_settings
+ 
+ 
+ class ApplyPaletteFrame(wx.Frame):
+ 
+     def __init__(self, title, **kwargs):
++        from ..utils.settings import global_settings
+         super().__init__(None, title=title)
+ 
+         self.SetWindowStyle(wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
+@@ -99,6 +99,7 @@ class ApplyPaletteApp(wx.App):
+         app.MainLoop()
+ 
+     def set_palette(self):
++        from ..utils.settings import global_settings
+         if self.frame.palette_list.GetSelection() == -1:
+             return
+         self.palette = self.frame.palette_list.GetString(self.frame.palette_list.GetSelection())
+diff --git a/lib/gui/edit_json/main_panel.py b/lib/gui/edit_json/main_panel.py
+index bd43f523b..5eb9d4cc9 100644
+--- a/lib/gui/edit_json/main_panel.py
++++ b/lib/gui/edit_json/main_panel.py
+@@ -22,7 +22,6 @@ from ...lettering.categories import FONT_CATEGORIES
+ from ...lettering.font_variant import FontVariant
+ from ...stitch_plan import stitch_groups_to_stitch_plan
+ from ...svg.tags import SVG_PATH_TAG
+-from ...utils.settings import global_settings
+ from ...utils.threading import ExitThread, check_stop_flag
+ from .. import PreviewRenderer, WarningPanel
+ from . import HelpPanel, SettingsPanel
+@@ -33,6 +32,7 @@ LETTER_CASE = {0: '', 1: 'upper', 2: 'lower'}
+ class LetteringEditJsonPanel(wx.Panel):
+ 
+     def __init__(self, parent, simulator, layer, metadata=None, background_color='white'):
++        from ...utils.settings import global_settings
+         self.parent = parent
+         self.simulator = simulator
+         self.layer = layer
+@@ -251,6 +251,7 @@ class LetteringEditJsonPanel(wx.Panel):
+         return glyph
+ 
+     def on_font_changed(self, event=None):
++        from ...utils.settings import global_settings
+         selected_font = self.settings_panel.font_chooser.GetValue()
+         if selected_font:
+             self.font = self.fonts[selected_font]
+diff --git a/lib/gui/lettering/main_panel.py b/lib/gui/lettering/main_panel.py
+index 64312b5a1..5ed11b247 100644
+--- a/lib/gui/lettering/main_panel.py
++++ b/lib/gui/lettering/main_panel.py
+@@ -17,7 +17,6 @@ from ...lettering.categories import FONT_CATEGORIES
+ from ...stitch_plan import stitch_groups_to_stitch_plan
+ from ...svg.tags import INKSTITCH_LETTERING
+ from ...utils import DotDict, cache
+-from ...utils.settings import global_settings
+ from ...utils.threading import ExitThread, check_stop_flag
+ from .. import PresetsPanel, PreviewRenderer, info_dialog
+ from . import LetteringHelpPanel, LetteringOptionsPanel
+@@ -73,6 +72,7 @@ class LetteringPanel(wx.Panel):
+ 
+     def load_settings(self):
+         """Load the settings saved into the SVG group element"""
++        from ...utils.settings import global_settings
+ 
+         self.settings = DotDict({
+             "text": "",
+@@ -184,12 +184,14 @@ class LetteringPanel(wx.Panel):
+ 
+     @property
+     def default_font(self):
++        from ...utils.settings import global_settings
+         try:
+             return self.fonts[global_settings['last_font']]
+         except KeyError:
+             return list(self.fonts.values())[0]
+ 
+     def on_change(self, attribute, event):
++        from ...utils.settings import global_settings
+         value = event.GetEventObject().GetValue()
+         self.settings[attribute] = value
+         if attribute == "text" and self.options_panel.font_glyph_filter.GetValue() is True:
+@@ -206,6 +208,7 @@ class LetteringPanel(wx.Panel):
+         self.update_preview()
+ 
+     def on_choice_change(self, attribute, event=None):
++        from ...utils.settings import global_settings
+         value = event.GetEventObject().GetCurrentSelection()
+         self.settings[attribute] = value
+         if attribute == 'trim_option':
+@@ -215,6 +218,7 @@ class LetteringPanel(wx.Panel):
+         self.update_preview()
+ 
+     def on_font_changed(self, event=None):
++        from ...utils.settings import global_settings
+         font = self.fonts.get(self.options_panel.font_chooser.GetValue(), self.default_font)
+         self.settings.font = font.marked_custom_font_id
+         global_settings['last_font'] = font.marked_custom_font_name
+diff --git a/lib/gui/lettering_font_sample.py b/lib/gui/lettering_font_sample.py
+index e19544dce..c2f7fcaaa 100644
+--- a/lib/gui/lettering_font_sample.py
++++ b/lib/gui/lettering_font_sample.py
+@@ -13,12 +13,12 @@ from ..commands import ensure_command_symbols
+ from ..i18n import _
+ from ..lettering import get_font_list
+ from ..marker import ensure_marker_symbols
+-from ..utils.settings import global_settings
+ 
+ 
+ class FontSampleFrame(wx.Frame):
+ 
+     def __init__(self, *args, **kwargs):
++        from ..utils.settings import global_settings
+         self.layer = kwargs.pop("layer")
+         wx.Frame.__init__(self, None, wx.ID_ANY, _("Font Sampling"), *args, **kwargs)
+ 
+@@ -135,6 +135,7 @@ class FontSampleFrame(wx.Frame):
+                 self.font_chooser.Append(font.marked_custom_font_name)
+ 
+     def on_font_changed(self, event=None):
++        from ..utils.settings import global_settings
+         selected_font = self.font_chooser.GetValue()
+         if selected_font:
+             self.font = self.fonts[selected_font]
+@@ -157,6 +158,7 @@ class FontSampleFrame(wx.Frame):
+             self.color_sort_checkbox.Disable()
+ 
+     def apply(self, event):
++        from ..utils.settings import global_settings
+         # apply scale to layer and extract for later use
+         self.layer.transform.add_scale(self.scale_spinner.GetValue() / 100)
+         scale = self.layer.transform.a
+diff --git a/lib/gui/preferences.py b/lib/gui/preferences.py
+index 23dbbf0c6..13684acb9 100644
+--- a/lib/gui/preferences.py
++++ b/lib/gui/preferences.py
+@@ -7,11 +7,11 @@ import wx
+ 
+ from ..i18n import _
+ from ..utils.cache import get_stitch_plan_cache
+-from ..utils.settings import global_settings
+ 
+ 
+ class PreferencesFrame(wx.Frame):
+     def __init__(self, *args, **kwargs):
++        from ..utils.settings import global_settings
+         self.extension = kwargs.pop("extension")
+         wx.Frame.__init__(self, None, wx.ID_ANY, _("Preferences"), *args, **kwargs)
+         self.SetTitle(_("Preferences"))
+@@ -180,6 +180,7 @@ class PreferencesFrame(wx.Frame):
+         stitch_plan_cache.clear(retry=True)
+ 
+     def apply(self):
++        from ..utils.settings import global_settings
+         metadata = self.extension.get_inkstitch_metadata()
+         metadata['min_stitch_len_mm'] = self.minimum_stitch_length.GetValue()
+         metadata['collapse_len_mm'] = self.minimum_jump_stitch_length.GetValue()
+diff --git a/lib/gui/simulator/control_panel.py b/lib/gui/simulator/control_panel.py
+index 99d1f92ba..1bd9e1872 100644
+--- a/lib/gui/simulator/control_panel.py
++++ b/lib/gui/simulator/control_panel.py
+@@ -11,7 +11,6 @@ from wx.lib.intctrl import IntCtrl
+ from ...debug.debug import debug
+ from ...i18n import _
+ from ...utils import get_resource_dir
+-from ...utils.settings import global_settings
+ from . import SimulatorSlider
+ 
+ 
+@@ -21,6 +20,7 @@ class ControlPanel(wx.Panel):
+     @debug.time
+     def __init__(self, parent, *args, **kwargs):
+         """"""
++        from ...utils.settings import global_settings
+         self.parent = parent
+         self.stitch_plan = kwargs.pop('stitch_plan', None)
+         self.detach_callback = kwargs.pop('detach_callback', None)
+@@ -204,6 +204,7 @@ class ControlPanel(wx.Panel):
+         return icon.ConvertToBitmap()
+ 
+     def choose_speed(self):
++        from ...utils.settings import global_settings
+         if not global_settings['simulator_adaptive_speed']:
+             self.set_speed(global_settings['simulator_speed'])
+             return
+@@ -233,6 +234,7 @@ class ControlPanel(wx.Panel):
+             self.animation_reverse()
+ 
+     def set_speed(self, speed):
++        from ...utils.settings import global_settings
+         global_settings['simulator_speed'] = speed
+         self.speed = int(max(speed, 1))
+         self.update_speed_text()
+diff --git a/lib/gui/simulator/drawing_panel.py b/lib/gui/simulator/drawing_panel.py
+index abe6fa0fb..036a7b2a6 100644
+--- a/lib/gui/simulator/drawing_panel.py
++++ b/lib/gui/simulator/drawing_panel.py
+@@ -11,7 +11,6 @@ from numpy import split
+ from ...debug.debug import debug
+ from ...i18n import _
+ from ...svg import PIXELS_PER_MM
+-from ...utils.settings import global_settings
+ 
+ # L10N command label at bottom of simulator window
+ COMMAND_NAMES = [_("STITCH"), _("JUMP"), _("TRIM"), _("STOP"), _("COLOR CHANGE")]
+@@ -37,6 +36,7 @@ class DrawingPanel(wx.Panel):
+ 
+     def __init__(self, parent, *args, **kwargs):
+         """"""
++        from ...utils.settings import global_settings
+         self.parent = parent
+         self.stitch_plan = kwargs.pop('stitch_plan', None)
+         kwargs['style'] = wx.BORDER_SUNKEN
+@@ -269,6 +269,7 @@ class DrawingPanel(wx.Panel):
+                     canvas.StrokeLines(block)
+ 
+     def draw_needle_penetration_points(self, canvas, pen, stitches):
++        from ...utils.settings import global_settings
+         if self.view_panel.btnNpp.GetValue():
+             npp_size = global_settings['simulator_npp_size'] * PIXELS_PER_MM * self.PIXEL_DENSITY
+             npp_pen = wx.Pen(pen.GetColour(), width=int(npp_size))
+@@ -364,11 +365,13 @@ class DrawingPanel(wx.Panel):
+                 pass
+ 
+     def color_to_pen(self, color):
++        from ...utils.settings import global_settings
+         line_width = global_settings['simulator_line_width'] * PIXELS_PER_MM * self.PIXEL_DENSITY
+         background_color = self.GetBackgroundColour().GetAsString()
+         return wx.Pen(list(map(int, color.visible_on_background(background_color).rgb)), int(line_width))
+ 
+     def update_pen_size(self):
++        from ...utils.settings import global_settings
+         line_width = global_settings['simulator_line_width'] * PIXELS_PER_MM * self.PIXEL_DENSITY
+         for pen in self.pens:
+             pen.SetWidth(int(line_width))
+@@ -421,6 +424,7 @@ class DrawingPanel(wx.Panel):
+                 self.jumps.append(jumps)
+ 
+     def set_speed(self, speed):
++        from ...utils.settings import global_settings
+         self.speed = speed
+         global_settings['simulator_speed'] = speed
+ 
+diff --git a/lib/gui/simulator/simulator_preferences.py b/lib/gui/simulator/simulator_preferences.py
+index 7b72b87de..bfebc7cbe 100644
+--- a/lib/gui/simulator/simulator_preferences.py
++++ b/lib/gui/simulator/simulator_preferences.py
+@@ -6,7 +6,6 @@
+ import wx
+ 
+ from ...i18n import _
+-from ...utils.settings import global_settings
+ 
+ 
+ class SimulatorPreferenceDialog(wx.Dialog):
+@@ -14,6 +13,7 @@ class SimulatorPreferenceDialog(wx.Dialog):
+     """
+ 
+     def __init__(self, *args, **kwargs):
++        from ...utils.settings import global_settings
+         super(SimulatorPreferenceDialog, self).__init__(*args, **kwargs)
+         self.SetWindowStyle(wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
+ 
+@@ -62,18 +62,21 @@ class SimulatorPreferenceDialog(wx.Dialog):
+         self.SetSizerAndFit(sizer)
+ 
+     def on_change(self, attribute, event):
++        from ...utils.settings import global_settings
+         global_settings[attribute] = event.EventObject.GetValue()
+         if self.drawing_panel.loaded and attribute == 'simulator_line_width':
+             self.drawing_panel.update_pen_size()
+         self.drawing_panel.Refresh()
+ 
+     def on_adaptive_speed_changed(self, event=None):
++        from ...utils.settings import global_settings
+         adaptive_speed = self.adaptive_speed.GetValue()
+         global_settings['simulator_adaptive_speed'] = adaptive_speed
+         self.control_panel.choose_speed()
+         self.control_panel.Refresh()
+ 
+     def save_settings(self):
++        from ...utils.settings import global_settings
+         global_settings['simulator_line_width'] = self.line_width.GetValue()
+         global_settings['simulator_npp_size'] = self.npp_size.GetValue()
+ 
+diff --git a/lib/gui/simulator/split_simulator_window.py b/lib/gui/simulator/split_simulator_window.py
+index e4b2803e2..6513b6d3d 100644
+--- a/lib/gui/simulator/split_simulator_window.py
++++ b/lib/gui/simulator/split_simulator_window.py
+@@ -8,12 +8,12 @@ import wx
+ 
+ from ...debug.debug import debug
+ from ...utils import get_resource_dir
+-from ...utils.settings import global_settings
+ from . import SimulatorPanel, SimulatorWindow
+ 
+ 
+ class SplitSimulatorWindow(wx.Frame):
+     def __init__(self, panel_class, title, target_duration=None, **kwargs):
++        from ...utils.settings import global_settings
+         super().__init__(None, title=title)
+ 
+         self.SetWindowStyle(wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
+@@ -89,6 +89,7 @@ class SplitSimulatorWindow(wx.Frame):
+             self.detach_simulator()
+ 
+     def attach_simulator(self):
++        from ...utils.settings import global_settings
+         self.detached_simulator_frame.detach_simulator_panel()
+         self.simulator_panel.Reparent(self.splitter)
+         self.splitter.SplitVertically(self.settings_panel, self.simulator_panel)
+@@ -105,6 +106,7 @@ class SplitSimulatorWindow(wx.Frame):
+         global_settings['pop_out_simulator'] = False
+ 
+     def detach_simulator(self):
++        from ...utils.settings import global_settings
+         self.splitter.Unsplit()
+         self.detached_simulator_frame = SimulatorWindow(panel=self.simulator_panel, parent=self)
+         self.splitter.SetMinimumPaneSize(100)
+diff --git a/lib/gui/simulator/view_panel.py b/lib/gui/simulator/view_panel.py
+index e2f2618d8..abbbc49d4 100644
+--- a/lib/gui/simulator/view_panel.py
++++ b/lib/gui/simulator/view_panel.py
+@@ -9,7 +9,6 @@ from ...debug.debug import debug
+ from ...i18n import _
+ from . import SimulatorPreferenceDialog
+ from . import DesignInfoDialog
+-from ...utils.settings import global_settings
+ 
+ 
+ class ViewPanel(ScrolledPanel):
+@@ -18,6 +17,7 @@ class ViewPanel(ScrolledPanel):
+     @debug.time
+     def __init__(self, parent, detach_callback):
+         """"""
++        from ...utils.settings import global_settings
+         self.parent = parent
+         self.detach_callback = detach_callback
+         ScrolledPanel.__init__(self, parent)
+@@ -159,14 +159,17 @@ class ViewPanel(ScrolledPanel):
+         self.toggle_npp(event)
+ 
+     def toggle_npp(self, event):
++        from ...utils.settings import global_settings
+         self.drawing_panel.Refresh()
+         global_settings['npp_button_status'] = self.btnNpp.GetValue()
+ 
+     def on_cursor_button(self, event):
++        from ...utils.settings import global_settings
+         self.drawing_panel.Refresh()
+         global_settings['display_crosshair'] = self.btnCursor.GetValue()
+ 
+     def toggle_page(self, event):
++        from ...utils.settings import global_settings
+         debug.log("toggle page")
+         value = self.btnPage.GetValue()
+         self.drawing_panel.set_show_page(value)
+@@ -174,6 +177,7 @@ class ViewPanel(ScrolledPanel):
+         global_settings['toggle_page_button_status'] = value
+ 
+     def on_marker_button(self, marker_type, event):
++        from ...utils.settings import global_settings
+         value = event.GetEventObject().GetValue()
+         self.control_panel.slider.enable_marker_list(marker_type, value)
+         if marker_type == 'jump':
+diff --git a/lib/metadata.py b/lib/metadata.py
+index 837fbf008..0beaeeb7a 100644
+--- a/lib/metadata.py
++++ b/lib/metadata.py
+@@ -5,8 +5,6 @@ from collections.abc import MutableMapping
+ import inkex
+ from lxml import etree
+ 
+-from .utils.settings import DEFAULT_METADATA, global_settings
+-
+ 
+ def strip_namespace(tag):
+     """Remove xml namespace from a tag name.
+@@ -33,6 +31,7 @@ class InkStitchMetadata(MutableMapping):
+     """
+ 
+     def __init__(self, document):
++        from .utils.settings import DEFAULT_METADATA, global_settings
+         super().__init__()
+         self.document = document
+         self.metadata = document.metadata
+diff --git a/lib/sew_stack/stitch_layers/stitch_layer_editor.py b/lib/sew_stack/stitch_layers/stitch_layer_editor.py
+index eddf78675..4a5dfcf40 100644
+--- a/lib/sew_stack/stitch_layers/stitch_layer_editor.py
++++ b/lib/sew_stack/stitch_layers/stitch_layer_editor.py
+@@ -7,7 +7,6 @@ import wx.propgrid
+ from ...debug.debug import debug
+ from ...gui.windows import SimpleBox
+ from ...i18n import _
+-from ...utils.settings import global_settings
+ 
+ 
+ class CheckBoxProperty(wx.propgrid.BoolProperty):
+@@ -311,6 +310,7 @@ class StitchLayerEditor:
+             return any(property.HasFlag(wx.propgrid.PG_PROP_MODIFIED) for property in self.property_grid.Items)
+ 
+     def get_panel(self, parent):
++        from ...utils.settings import global_settings
+         if self.property_grid_panel is None:
+             self.layer_editor_panel = wx.Panel(parent, wx.ID_ANY)
+ 
+@@ -426,6 +426,7 @@ class StitchLayerEditor:
+                 self.property_grid.RefreshEditor()
+ 
+     def on_sash_position_changed(self, event):
++        from ...utils.settings import global_settings
+         global_settings['stitch_layer_editor_sash_position'] = event.GetSashPosition()
+ 
+     def show_help(self, property):
+diff --git a/lib/utils/cache.py b/lib/utils/cache.py
+index cca6296a9..6ecdf6403 100644
+--- a/lib/utils/cache.py
++++ b/lib/utils/cache.py
+@@ -10,9 +10,6 @@ import sqlite3
+ 
+ import diskcache  # type: ignore[import-untyped]
+ 
+-from lib.utils.settings import global_settings
+-
+-from .paths import get_user_dir
+ from functools import lru_cache
+ 
+ 
+@@ -25,6 +22,8 @@ __stitch_plan_cache = None
+ 
+ 
+ def get_stitch_plan_cache():
++    from .paths import get_user_dir
++    from lib.utils.settings import global_settings
+     global __stitch_plan_cache
+ 
+     if __stitch_plan_cache is None:
+@@ -51,6 +50,7 @@ def get_stitch_plan_cache():
+ 
+ 
+ def is_cache_disabled():
++    from lib.utils.settings import global_settings
+     return not global_settings['cache_size']
+ 
+ 
+-- 
+2.49.0
+
