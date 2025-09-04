@@ -44,4 +44,22 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       ln -s ${callPackage ./deps_0_14.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
     '';
   };
+
+  zls_0_15 = finalAttrs: {
+    version = "0.15.0";
+
+    src = fetchFromGitHub {
+      owner = "zigtools";
+      repo = "zls";
+      tag = finalAttrs.version;
+      fetchSubmodules = true;
+      hash = "sha256-GFzSHUljcxy7sM1PaabbkQUdUnLwpherekPWJFxXtnk=";
+    };
+
+    nativeBuildInputs = [ zig_0_15.hook ];
+
+    postPatch = ''
+      ln -s ${callPackage ./deps_0_15.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    '';
+  };
 }
