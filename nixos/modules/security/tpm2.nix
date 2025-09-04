@@ -331,8 +331,14 @@ in
 
       (lib.mkIf cfg.abrmd.enable {
         systemd.services."tpm2-abrmd" = {
-          wants = [ "tpm2-udev-trigger.service" ];
-          after = [ "tpm2-udev-trigger.service" ];
+          wants = [
+            "tpm2-udev-trigger.service"
+            "dev-tpm0.device"
+          ];
+          after = [
+            "tpm2-udev-trigger.service"
+            "dev-tpm0.device"
+          ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "dbus";
