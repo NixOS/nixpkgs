@@ -156,11 +156,11 @@ stdenv.mkDerivation rec {
     which
     makeWrapper
     pkg-config
+    gfortran
   ]
   ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
   buildInputs = [
-    gfortran
     fftw
     gsl
     libint
