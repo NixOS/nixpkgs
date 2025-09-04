@@ -5221,6 +5221,8 @@ self: super: with self; {
 
   fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
 
+  flag-embedding = callPackage ../development/python-modules/flag-embedding { };
+
   flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
