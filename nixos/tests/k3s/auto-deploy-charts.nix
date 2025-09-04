@@ -68,7 +68,7 @@ import ../make-test-python.nix (
           ];
           images = [
             # Provides the k3s Helm controller
-            k3s.airgapImages
+            k3s.airgap-images
             testImage
           ];
           autoDeployCharts = {
