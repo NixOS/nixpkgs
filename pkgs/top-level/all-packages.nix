@@ -4037,10 +4037,6 @@ with pkgs;
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
-  rtabmap = callPackage ../by-name/rt/rtabmap/package.nix {
-    pcl = pcl.override { vtk = vtkWithQt5; };
-  };
-
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
     jack = libjack2;
   };
