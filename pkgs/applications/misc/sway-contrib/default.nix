@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "0-unstable-2024-03-19";
+  version = "1.11";
   src = fetchFromGitHub {
     owner = "OctopusET";
     repo = "sway-contrib";
