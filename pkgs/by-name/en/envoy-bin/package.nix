@@ -67,6 +67,7 @@ stdenv.mkDerivation {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       adamcstephens
+      katexochen
     ];
     mainProgram = "envoy";
     platforms = [
