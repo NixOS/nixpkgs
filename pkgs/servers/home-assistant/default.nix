@@ -115,6 +115,16 @@ let
         ];
       });
 
+      livisi = super.livisi.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.25";
+        src = fetchFromGitHub {
+          owner = "planbnet";
+          repo = "livisi";
+          tag = "v${version}";
+          hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
+        };
+      });
+
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = fetchFromGitHub {
