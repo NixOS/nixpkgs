@@ -4731,6 +4731,8 @@ with pkgs;
     crystal_1_11
     crystal_1_14
     crystal_1_15
+    crystal_1_16
+    crystal_1_17
     crystal
     ;
 
@@ -5147,22 +5149,18 @@ with pkgs;
 
   haskell = recurseIntoAttrs (callPackage ./haskell-packages.nix { });
 
-  haskellPackages =
-    recurseIntoAttrs (
-      # Prefer native-bignum to avoid linking issues with gmp;
-      # TemplateHaskell doesn't work with hadrian built GHCs yet
-      # https://github.com/NixOS/nixpkgs/issues/275304
-      if stdenv.hostPlatform.isStatic then
-        haskell.packages.native-bignum.ghc94
-      # JS backend can't use gmp
-      else if stdenv.hostPlatform.isGhcjs then
-        haskell.packages.native-bignum.ghc910
-      else
-        haskell.packages.ghc910
-    )
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+  haskellPackages = recurseIntoAttrs (
+    # Prefer native-bignum to avoid linking issues with gmp;
+    # TemplateHaskell doesn't work with hadrian built GHCs yet
+    # https://github.com/NixOS/nixpkgs/issues/275304
+    if stdenv.hostPlatform.isStatic then
+      haskell.packages.native-bignum.ghc94
+    # JS backend can't use gmp
+    else if stdenv.hostPlatform.isGhcjs then
+      haskell.packages.native-bignum.ghc910
+    else
+      haskell.packages.ghc910
+  );
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -5229,9 +5227,6 @@ with pkgs;
   coreboot-toolchain = recurseIntoAttrs (
     callPackage ../development/tools/misc/coreboot-toolchain { }
   );
-
-  spicedb = callPackage ../servers/spicedb { };
-  spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tamarin-prover = (
     callPackage ../applications/science/logic/tamarin-prover {
@@ -8682,6 +8677,7 @@ with pkgs;
   magnumclient = with python313Packages; toPythonApplication python-magnumclient;
   manilaclient = with python313Packages; toPythonApplication python-manilaclient;
   mistralclient = with python313Packages; toPythonApplication python-mistralclient;
+  neutronclient = with python313Packages; toPythonApplication python-neutronclient;
   swiftclient = with python313Packages; toPythonApplication python-swiftclient;
   troveclient = with python313Packages; toPythonApplication python-troveclient;
   watcherclient = with python313Packages; toPythonApplication python-watcherclient;
@@ -8839,22 +8835,18 @@ with pkgs;
     }
   );
 
-  libsForQt5 =
-    (recurseIntoAttrs (
-      import ./qt5-packages.nix {
-        inherit
-          lib
-          config
-          __splicedPackages
-          makeScopeWithSplicing'
-          generateSplicesForMkScope
-          pkgsHostTarget
-          ;
-      }
-    ))
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+  libsForQt5 = recurseIntoAttrs (
+    import ./qt5-packages.nix {
+      inherit
+        lib
+        config
+        __splicedPackages
+        makeScopeWithSplicing'
+        generateSplicesForMkScope
+        pkgsHostTarget
+        ;
+    }
+  );
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
@@ -10488,7 +10480,8 @@ with pkgs;
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
-  libkrun-sev = libkrun.override { sevVariant = true; };
+  libkrun-sev = libkrun.override { variant = "sev"; };
+  libkrun-tdx = libkrun.override { variant = "tdx"; };
 
   linthesia = callPackage ../games/linthesia/default.nix { };
 

@@ -23,9 +23,14 @@
   gnutar,
   gnugrep,
   envoy,
+  git,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
-  wasmRuntime ? "wamr",
+  wasmRuntime ? "wasmtime",
+
+  # Allows overriding the deps hash used for building - you will likely need to
+  # set this if you have changed the 'wasmRuntime' setting.
+  depsHash ? null,
 }:
 
 let
@@ -40,12 +45,15 @@ let
   };
 
   # these need to be updated for any changes to fetchAttrs
-  depsHash =
-    {
-      x86_64-linux = "sha256-E6yUSd00ngmjaMds+9UVZLtcYhzeS8F9eSIkC1mZSps=";
-      aarch64-linux = "sha256-ivboOrV/uORKVHRL3685aopcElGvzsxgVcUmYsBwzXY=";
-    }
-    .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+  depsHash' =
+    if depsHash != null then
+      depsHash
+    else
+      {
+        x86_64-linux = "sha256-t4Xv4UGYW5YU0kmv+1rdf2JvM1BYQyNWdtpz6Cdmxm4=";
+        aarch64-linux = "sha256-aIBnNGzc0hTdlTgRyJ7eLnWvHqZ5ywhqOM+mHfH3/18=";
+      }
+      .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
 
@@ -94,7 +102,7 @@ buildBazelPackage rec {
     ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
     ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
     ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
-    ln -sf "${rustPlatform.rustLibSrc}" bazel/nix/ruststd
+    ln -sf "${rustc.unwrapped}" bazel/nix/rustcroot
     substituteInPlace bazel/dependency_imports.bzl \
       --replace-fail 'crate_universe_dependencies()' 'crate_universe_dependencies(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc")' \
       --replace-fail 'crates_repository(' 'crates_repository(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc",'
@@ -120,12 +128,13 @@ buildBazelPackage rec {
     ninja
     patchelf
     cacert
+    git
   ];
 
   buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
-    sha256 = depsHash;
+    sha256 = depsHash';
     env.CARGO_BAZEL_REPIN = true;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -239,6 +248,7 @@ buildBazelPackage rec {
     "--linkopt=-Wl,-z,noexecstack"
     "--config=gcc"
     "--verbose_failures"
+    "--incompatible_enable_cc_toolchain_resolution=true"
 
     # Force use of system Java.
     "--extra_toolchains=@local_jdk//:all"

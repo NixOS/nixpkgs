@@ -2805,6 +2805,10 @@ self: super: with self; {
 
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
+  colcon-installed-package-information =
+    callPackage ../development/python-modules/colcon-installed-package-information
+      { };
+
   colcon-library-path = callPackage ../development/python-modules/colcon-library-path { };
 
   colcon-mixin = callPackage ../development/python-modules/colcon-mixin { };
@@ -9615,6 +9619,8 @@ self: super: with self; {
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
+  moyopy = callPackage ../development/python-modules/moyopy { };
+
   mozart-api = callPackage ../development/python-modules/mozart-api { };
 
   mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
@@ -11583,7 +11589,6 @@ self: super: with self; {
 
   petsc4py = toPythonModule (
     pkgs.petsc.override {
-      python3 = python;
       python3Packages = self;
       pythonSupport = true;
     }
@@ -16820,7 +16825,6 @@ self: super: with self; {
   slepc4py = toPythonModule (
     pkgs.slepc.override {
       pythonSupport = true;
-      python3 = self.python;
       python3Packages = self;
       petsc = petsc4py;
     }

@@ -362,6 +362,7 @@
   ./programs/xwayland.nix
   ./programs/yazi.nix
   ./programs/ydotool.nix
+  ./programs/yubikey-manager.nix
   ./programs/yubikey-touch-detector.nix
   ./programs/zmap.nix
   ./programs/zoom-us.nix
@@ -1216,6 +1217,7 @@
   ./services/networking/libreswan.nix
   ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
+  ./services/networking/llama-swap.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/lokinet.nix
