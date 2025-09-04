@@ -10,6 +10,10 @@
 let
   # These are attributes in compiler that support integer-simple.
   integerSimpleIncludes = [
+    "ghc82"
+    "ghc822"
+    "ghc86"
+    "ghc865"
     "ghc88"
     "ghc884"
     "ghc810"
@@ -21,6 +25,7 @@ let
     "integer-simple"
     "native-bignum"
     # Binary GHCs
+    "ghc801Binary"
     "ghc865Binary"
     "ghc8107Binary"
     "ghc902Binary"
@@ -83,6 +88,11 @@ in
       bb = pkgsBuildBuild.haskell;
     in
     {
+      ghc801Binary = callPackage ../development/compilers/ghc/8.0.1-binary.nix {
+        # Should be llvmPackages_37(?) which has been removed from nixpkgs
+        llvmPackages = null;
+      };
+
       ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
         # Should be llvmPackages_6 which has been removed from nixpkgs
         llvmPackages = null;
@@ -108,10 +118,42 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
 
+      ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
+        bootPkgs =
+          # to my (@OPNA2608) knowledge there are no newer official binaries for this platform
+          bb.packages.ghc801Binary;
+        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+        python3 = buildPackages.python311; # so that we don't have two of them
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+      ghc82 = compiler.ghc822;
+      ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
+        bootPkgs =
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian then
+            bb.packages.ghc822
+          else
+            bb.packages.ghc865Binary;
+        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+        python3 = buildPackages.python311; # so that we don't have two of them
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+      ghc86 = compiler.ghc865;
       ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
         bootPkgs =
           # the oldest ghc with aarch64-darwin support is 8.10.5
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian then
+            bb.packages.ghc865
+          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
             bb.packages.ghc865Binary
           else
@@ -129,10 +171,7 @@ in
       ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
         bootPkgs =
           # the oldest ghc with aarch64-darwin support is 8.10.5
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
+          if stdenv.buildPlatform.isPower64 then bb.packages.ghc810 else bb.packages.ghc8107Binary;
         inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
         python3 = buildPackages.python311; # so that we don't have two of them
         inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
@@ -145,8 +184,8 @@ in
           # GHC >= 9.0 removed the armv7l bindist
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc8107Binary
-          # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          # No suitable bindists for powerpc64le, no bindist in general for powerpc64
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc902
           else
             bb.packages.ghc902Binary;
@@ -165,11 +204,8 @@ in
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
 
-          # No suitable bindists for powerpc64le
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc902
-          else
-            bb.packages.ghc902Binary;
+          # No suitable bindists for powerpc64le, no bindist in general for powerpc64
+          if stdenv.buildPlatform.isPower64 then bb.packages.ghc902 else bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -184,11 +220,8 @@ in
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
 
-          # No suitable bindists for powerpc64le
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc902
-          else
-            bb.packages.ghc902Binary;
+          # No suitable bindists for powerpc64le, no bindist in general for powerpc64
+          if stdenv.buildPlatform.isPower64 then bb.packages.ghc902 else bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -204,7 +237,7 @@ in
           # For GHC 9.2 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc928
           else
             bb.packages.ghc924Binary;
@@ -222,7 +255,7 @@ in
           # For GHC 9.2 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc928
           else
             bb.packages.ghc924Binary;
@@ -240,7 +273,7 @@ in
           # For GHC 9.2 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc928
           else
             bb.packages.ghc924Binary;
@@ -258,7 +291,7 @@ in
           # For GHC 9.2 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc928
           else
             bb.packages.ghc924Binary;
@@ -276,7 +309,7 @@ in
           # For GHC 9.2 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc928
           else
             bb.packages.ghc924Binary;
@@ -295,7 +328,7 @@ in
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
@@ -313,7 +346,7 @@ in
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
@@ -331,7 +364,7 @@ in
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
@@ -351,7 +384,7 @@ in
           else if stdenv.buildPlatform.isAarch32 then
             # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
@@ -370,7 +403,7 @@ in
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc963
           else if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
@@ -395,7 +428,7 @@ in
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc963
           else if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
@@ -448,7 +481,7 @@ in
           # No armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
             bb.packages.ghc984
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          else if stdenv.buildPlatform.isPower64 then
             bb.packages.ghc984
           else
             bb.packages.ghc984Binary;
@@ -509,6 +542,12 @@ in
     in
     {
 
+      ghc801Binary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc801Binary;
+        ghc = bh.compiler.ghc801Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
       ghc865Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc865Binary;
         ghc = bh.compiler.ghc865Binary;
@@ -545,6 +584,18 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
+      ghc822 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc822;
+        ghc = bh.compiler.ghc822;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      };
+      ghc82 = packages.ghc822;
+      ghc865 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc865;
+        ghc = bh.compiler.ghc865;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      };
+      ghc86 = packages.ghc865;
       ghc8107 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc8107;
         ghc = bh.compiler.ghc8107;

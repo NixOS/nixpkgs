@@ -1,0 +1,25 @@
+From 813f642d45fcb6be940463fef281af885cdbb417 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 11 Aug 2025 01:00:32 +0200
+Subject: [PATCH] sphinx: Fix compat with sphinx >= 4
+
+---
+ docs/users_guide/conf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/users_guide/conf.py b/docs/users_guide/conf.py
+index 3af6ac109e..afaab69f72 100644
+--- a/docs/users_guide/conf.py
++++ b/docs/users_guide/conf.py
+@@ -65,7 +65,7 @@ htmlhelp_basename = 'GHCUsersGuide'
+ latex_elements = {
+     'inputenc': '',
+     'utf8extra': '',
+-    'preamble': '''
++    'preamble': r'''
+ \usepackage{fontspec}
+ \usepackage{makeidx}
+ \setsansfont{DejaVu Sans}
+-- 
+2.50.1
+

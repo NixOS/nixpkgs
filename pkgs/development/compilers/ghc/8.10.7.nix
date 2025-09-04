@@ -374,6 +374,18 @@ stdenv.mkDerivation (
       # outside of stdenv/nixpkgs or build->build compilation in pkgsStatic.
       ./ghc-8.10-9.2-rts-package-db-libnuma-dirs.patch
     ]
+    ++ lib.optionals stdenv.hostPlatform.isBigEndian [
+      # unboxed arrays are borked on big-endian, lead to internal compiler errors
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/16998
+      (fetchpatch {
+        name = "ghc-Disable-unboxed-arrays.patch";
+        # From https://gitlab.haskell.org/ghc/ghc/-/issues/15411#note_174828
+        url = "https://gitlab.haskell.org/-/project/1/uploads/5deb133cf910e9e0ca9ad9fe53f7383a/Disable-unboxed-arrays.patch";
+        stripLen = 2;
+        extraPrefix = "libraries/containers/";
+        hash = "sha256-pe+Mlz1zP4uHUZ5MZAFcwkJBkXr7hkErrS7DAO86hg0=";
+      })
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Make Block.h compile with c++ compilers. Remove with the next release
       (fetchpatch {

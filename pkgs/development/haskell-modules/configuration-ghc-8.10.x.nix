@@ -115,6 +115,26 @@ self: super: {
   shellmet = doJailbreak super.shellmet;
   shower = doJailbreak super.shower;
 
+  # Module ‘GHC.Exts’ does not export ‘word32ToInt32#’
+  # Needs {Int,Word}32# primops, https://gitlab.haskell.org/ghc/ghc/-/commit/06982b6cc886d65aa325475ddfb4ad38c69b2d96
+  alex =
+    if pkgs.stdenv.hostPlatform.isBigEndian then
+      (overrideCabal (drv: {
+        version = "3.5.1.0";
+        sha256 = "01rax51p8p91a5jv5i56fny4lzmwgvjlxh767gh9x5gbz23gwbn9";
+      }) super.alex)
+    else
+      super.alex;
+  happy =
+    if pkgs.stdenv.hostPlatform.isBigEndian then
+      (overrideCabal (drv: {
+        version = "1.20.1.1";
+        sha256 = "06w8g3lfk2ynrfhqznhp1mnp8a5b64lj6qviixpndzf5lv2psklb";
+      }) super.happy)
+    else
+      super.happy;
+  happy-lib = if pkgs.stdenv.hostPlatform.isBigEndian then null else super.happy-lib;
+
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] (
     overrideCabal (drv: {
