@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  python3,
   python3Packages,
   arpack-mpi,
   petsc,
@@ -29,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix slepc4py install prefix
     substituteInPlace config/packages/slepc4py.py \
       --replace-fail "slepc.prefixdir,'lib'" \
-      "slepc.prefixdir,'${python3.sitePackages}'"
+      "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
   '';
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    python3
+    python3Packages.python
   ]
   ++ lib.optionals pythonSupport [
     python3Packages.setuptools

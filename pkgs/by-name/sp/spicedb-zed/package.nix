@@ -12,13 +12,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ftSgp0zxUmSTJ7lFHxFdebKrCKbsRocDkfabVpyQ5Kg=";
   };
 
   vendorHash = "sha256-2AkknaufRhv79c9WQtcW5oSwMptkR+FB+1/OJazyGSM=";
 
-  ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'" ];
+  ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.tag}'" ];
 
   preCheck = ''
     export NO_COLOR=true
@@ -34,6 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/authzed/zed/releases/tag/${src.tag}";
     description = "Command line for managing SpiceDB";
     mainProgram = "zed";
     longDescription = ''
