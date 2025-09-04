@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-PhLNS6DdCisQ8sOWm1V72UJpLZX4gVNkt1779mmMB1c=";
 
+  patches = [ ./build-fix.patch ];
+
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
       --replace-fail 'PATH=' 'PATH=${binPath}:'
