@@ -1,0 +1,60 @@
+name: Update & Rebuild Warp Terminal Package
+
+on:
+  schedule:
+    # Run every two weeks on Monday at 9:00 AM UTC
+    - cron: '0 9 */14 * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # allow pushing directly to main
+
+jobs:
+  rebuild-and-update:
+    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.actor == github.repository_owner) }}
+    runs-on: ubuntu-latest
+    env:
+      NIXPKGS_ALLOW_UNFREE: "1"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install Nix (>=2.22.1)
+      uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+        install_url: https://releases.nixos.org/nix/nix-2.22.1/install
+        extra_nix_config: |
+          experimental-features = nix-command flakes
+
+    - name: Run update.sh
+      run: |
+        cd pkgs/by-name/wa/warp-terminal
+        chmod +x update.sh
+        ./update.sh
+
+    - name: Check for changes in versions.json
+      id: git_changes
+      run: |
+        if git diff --quiet pkgs/by-name/wa/warp-terminal/versions.json; then
+          echo "update_needed=false" >> $GITHUB_OUTPUT
+        else
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Test build Warp Terminal
+      if: steps.git_changes.outputs.update_needed == 'true'
+      run: |
+        NIXPKGS_ALLOW_UNFREE=1 nix-build -E "with import <nixpkgs> {}; callPackage ./pkgs/by-name/wa/warp-terminal/package.nix {}"
+
+    - name: Commit & Push changes to main
+      if: steps.git_changes.outputs.update_needed == 'true'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add pkgs/by-name/wa/warp-terminal/versions.json
+        git commit -m "warp-terminal: automatic update"
+        git push origin HEAD:main
