@@ -13435,7 +13435,7 @@ with pkgs;
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
-  x11basic = callPackage ../development/compilers/x11basic {
+  x11basic = callPackage ../by-name/x1/x11basic/package.nix {
     autoconf = buildPackages.autoconf269;
   };
 
