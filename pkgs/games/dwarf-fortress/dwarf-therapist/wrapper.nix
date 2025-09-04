@@ -74,9 +74,10 @@ stdenv.mkDerivation {
         local orig_md5="$2"
         local patched_md5="$3"
         echo "It doesn't support DF $dfVersion out of the box, so we're doing it the hard way."
-        export NIXPKGS_DF_HOME="$(mktemp -dt dfhack.XXXXXX)"
+        export HOME="$(mktemp -dt dfhack.XXXXXX)"
+        export XDG_DATA_HOME="$HOME/.local/share"
         expect ${dfHackExpectScript}
-        local ini="$NIXPKGS_DF_HOME/therapist.ini"
+        local ini="$XDG_DATA_HOME/df_linux/therapist.ini"
         if [ -f "$ini" ]; then
           if grep -q "$patched_md5" "$ini"; then
             cp -v "$ini" "$output"
