@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     jq '.version = "${version}"' app/package.json | sponge app/package.json
+    substituteInPlace tabby-core/src/configDefaults.yaml \
+      --replace-warn 'enableAutomaticUpdates: true' 'enableAutomaticUpdates: false'
   '';
 
   buildInputs = [
