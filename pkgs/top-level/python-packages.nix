@@ -19784,6 +19784,8 @@ self: super: with self; {
 
   warc3-wet = callPackage ../development/python-modules/warc3-wet { };
 
+  warc3-wet-clueweb = callPackage ../development/python-modules/warc3-wet-clueweb { };
+
   warcio = callPackage ../development/python-modules/warcio { };
 
   ward = callPackage ../development/python-modules/ward { };
