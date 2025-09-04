@@ -2,8 +2,6 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  librime,
-  rime-data,
   nix-update-script,
 }:
 
@@ -17,28 +15,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tag = "v" + finalAttrs.version;
     hash = "sha256-tCQ2mPOw7meA7ex7e4BgVco86MNNtxsSC9L6oaVebo4=";
   };
-
-  nativeBuildInputs = [
-    librime
-  ];
-
-  buildInputs = [
-    rime-data
-  ];
-
-  dontConfigure = true;
-
-  buildPhase = ''
-    runHook preBuild
-
-    for s in *.schema.yaml; do
-        rime_deployer --compile "$s" . ${rime-data}/share/rime-data ./build
-    done
-
-    rm build/*.txt
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
