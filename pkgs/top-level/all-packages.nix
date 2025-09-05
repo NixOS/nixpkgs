@@ -4178,13 +4178,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
-  platformio =
-    if stdenv.hostPlatform.isLinux then
-      platformioPackages.platformio-chrootenv
-    else
-      platformioPackages.platformio-core;
-  platformio-core = platformioPackages.platformio-core;
+  platformio = if stdenv.hostPlatform.isLinux then platformio-chrootenv else platformio-core;
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
@@ -5574,10 +5568,7 @@ with pkgs;
           haskell.packages.ghc96
         else
           haskell.packages.ghc98
-      )
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+      );
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -8380,7 +8371,7 @@ with pkgs;
 
   #GMP ex-satellite, so better keep it near gmp
   # A GMP fork
-  gns3Packages = dontRecurseIntoAttrs (callPackage ../applications/networking/gns3 { });
+  gns3Packages = recurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
@@ -9490,22 +9481,18 @@ with pkgs;
     }
   );
 
-  libsForQt5 =
-    (recurseIntoAttrs (
-      import ./qt5-packages.nix {
-        inherit
-          lib
-          config
-          __splicedPackages
-          makeScopeWithSplicing'
-          generateSplicesForMkScope
-          pkgsHostTarget
-          ;
-      }
-    ))
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+  libsForQt5 = recurseIntoAttrs (
+    import ./qt5-packages.nix {
+      inherit
+        lib
+        config
+        __splicedPackages
+        makeScopeWithSplicing'
+        generateSplicesForMkScope
+        pkgsHostTarget
+        ;
+    }
+  );
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
@@ -10638,7 +10625,7 @@ with pkgs;
   outline = callPackage ../servers/web-apps/outline (
     lib.fix (super: {
       yarn = yarn.override { inherit (super) nodejs; };
-      nodejs = nodejs_20;
+      nodejs = nodejs_22;
     })
   );
 

@@ -3,6 +3,7 @@
   callPackage,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   platformio,
   esptool,
@@ -42,6 +43,15 @@ python.pkgs.buildPythonApplication rec {
     tag = version;
     hash = "sha256-vy/wjtl/IbdSOxAUsV4bl7VNEBTetsvIDh2V1gDHSMs=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/esphome/esphome/security/advisories/GHSA-mxh2-ccgj-8635
+      name = "CVE-2025-57808.patch";
+      url = "https://github.com/esphome/esphome/commit/2aceb56606ec8afec5f49c92e140c8050a6ccbe5.patch";
+      hash = "sha256-SLqjjQXM1ABxY0pmNCXgTVzMcsRLKszinvf/ZchacEM=";
+    })
+  ];
 
   build-systems = with python.pkgs; [
     setuptools

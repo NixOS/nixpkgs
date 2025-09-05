@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.11";
+  version = "5.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-yHoK7NGa91QEVFLeHqJo126qNg1pTE7W6LEtbCLy4sw=";
+    hash = "sha256-QWBxP728D/HQb+WLPkaXMOQtlO8b+FWcYxZyHoVcxVI=";
   };
 
   patches = [
