@@ -28644,6 +28644,12 @@
     github = "zbioe";
     githubId = 7332055;
   };
+  zdyant = {
+    name = "zDyant";
+    email = "dyant@proton.me";
+    github = "zdyant";
+    githubId = 102763838;
+  };
   zebradil = {
     email = "german.lashevich+nixpkgs@gmail.com";
     github = "zebradil";
