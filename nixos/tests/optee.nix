@@ -21,8 +21,8 @@ import ./make-test-python.nix (
           '';
         });
 
-        bios = armTrustedFirmwareQemu.override {
-          extraMakeFlags = [
+        bios = armTrustedFirmwareQemu.overrideAttrs (old: {
+          makeFlags = old.makeFlags ++ [
             "SPD=opteed"
             "BL32=${opteeQemuAarch64}/tee-header_v2.bin"
             "BL32_EXTRA1=${opteeQemuAarch64}/tee-pager_v2.bin"
@@ -36,10 +36,11 @@ import ./make-test-python.nix (
             "build/qemu/release/fip.bin"
           ];
           postInstall = ''
+            ${old.postInstall or ""}
             dd if=$out/bl1.bin of=$out/bios.bin bs=4096 conv=notrunc
             dd if=$out/fip.bin of=$out/bios.bin seek=64 bs=4096 conv=notrunc
           '';
-        };
+        });
       in
       {
         virtualisation = {
