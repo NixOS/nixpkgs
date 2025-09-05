@@ -1,21 +1,21 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGo125Module rec {
   pname = "fail2ban-dashboard";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "webishdev";
     repo = "fail2ban-dashboard";
     tag = "v${version}";
-    hash = "sha256-z1zsymP9HAd9q7wCdJJ0622kcGhI9FtuxovbWo7sKf8=";
+    hash = "sha256-MQ0gPdMcdPDtXMOULLZ1cU8HuDioGi47wmcZ2/iClug=";
   };
 
-  vendorHash = "sha256-puQ8BPuKzUXBDwr2qBvV2KclfxpSrtCTQSCfGaaxKqc=";
+  vendorHash = "sha256-HYCr0tZebhBE7jTB/ec1JZr4dT1WUsCjpdXN97r1Jes=";
 
   meta = {
     description = "Web based dashboard for fail2ban";
