@@ -14,7 +14,6 @@
   ipython,
   pytest-cov-stub,
   pytest-mock,
-  pytest-xdist,
   pytestCheckHook,
   python-dotenv,
   radon,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
     ipython
     pytest-cov-stub
     pytest-mock
-    pytest-xdist
     pytestCheckHook
     python-dotenv
     radon
