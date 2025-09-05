@@ -35,11 +35,11 @@ let
 
     # Remove bazel specific build file to make way for build directory
     # This is a problem on Darwin because of case-insensitive filesystem
-    preBuild =
-      (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    preBuild = (
+      lib.optionalString stdenv.hostPlatform.isDarwin ''
         rm ../BUILD
-      '')
-      + oa.preBuild;
+      ''
+    );
 
     env.NIX_CFLAGS_COMPILE =
       oa.env.NIX_CFLAGS_COMPILE
@@ -54,7 +54,20 @@ let
         ]
       );
 
-    vendorHash = "sha256-06MkjXl0DKFzIH/H+uT9kXsQdPq7qdZh2dlLW/YhJuk=";
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $bin/bin $dev $out/lib
+
+      mv bssl $bin/bin
+
+      mv libssl.a $out/lib
+      mv libcrypto.a $out/lib
+
+      mv ../src/include $dev
+
+      runHook postInstall
+    '';
   });
   # boring-sys expects the static libraries in build/ instead of lib/
   boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
