@@ -1,0 +1,27 @@
+From 705ba309ccebb0f505107a83542ff13d555008e0 Mon Sep 17 00:00:00 2001
+From: Stephen Huan <stephen.huan@cgdct.moe>
+Date: Mon, 24 Mar 2025 21:35:42 -0400
+Subject: [PATCH] [llvm-exegesis] Timeout if subprocess executor hangs
+
+The call to llvm_exegesis_exe nondeterministically hangs, causing
+llvm's tests to block. Introduce a timeout when this happens.
+---
+ llvm/test/tools/llvm-exegesis/lit.local.cfg | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/llvm/test/tools/llvm-exegesis/lit.local.cfg b/llvm/test/tools/llvm-exegesis/lit.local.cfg
+index a51a2d73442fa..8b7c13f5eb1b6 100644
+--- a/test/tools/llvm-exegesis/lit.local.cfg
++++ b/test/tools/llvm-exegesis/lit.local.cfg
+@@ -24,9 +24,10 @@ def can_use_perf_counters(mode, extra_options=[]):
+             + extra_options,
+             stdout=subprocess.DEVNULL,
+             stderr=subprocess.DEVNULL,
++            timeout=1,
+         )
+         return return_code == 0
+-    except OSError:
++    except (OSError, subprocess.TimeoutExpired):
+         print("could not exec llvm-exegesis")
+         return False
+ 
