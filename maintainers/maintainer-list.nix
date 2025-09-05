@@ -23909,6 +23909,11 @@
     name = "Sebastian Kowalak";
     matrix = "@scl:tchncs.de";
   };
+  skwig = {
+    name = "skwig";
+    github = "skwig";
+    githubId = 16136203;
+  };
   skyesoss = {
     name = "Skye Soss";
     matrix = "@skyesoss:matrix.org";
