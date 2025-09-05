@@ -94,6 +94,10 @@ in
           || pkgs.stdenv.hostPlatform.isAarch64;
         message = "rEFInd can only be installed on aarch64 & x86 platforms";
       }
+      {
+        assertion = pkgs.stdenv.hostPlatform.isEfi;
+        message = "rEFInd can only be installed on UEFI platforms";
+      }
     ];
 
     # Common attribute for boot loaders so only one of them can be
