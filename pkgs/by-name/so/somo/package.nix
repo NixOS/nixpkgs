@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  iana-etc,
   versionCheckHook,
   nix-update-script,
 }:
@@ -22,11 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-xlAdEo11UV1Y49D1LjxH5Oykf/RUoe1w6ZcQpGhfqkk=";
 
-  postPatch = ''
-    substituteInPlace src/services.rs \
-      --replace-fail '"/etc/services"' '"${iana-etc}/etc/services"'
-  '';
-
   nativeBuildInputs = [
     installShellFiles
   ]
@@ -34,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Avoids "couldn't find any valid shared libraries matching: ['libclang.dylib']" error on darwin in sandbox mode.
     rustPlatform.bindgenHook
   ];
+
+  # It depends on system files likely /etc/services and don't use iana-etc to respect user customized files
+  # See https://github.com/NixOS/nixpkgs/pull/439590#discussion_r2325080667 for detail
+  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd somo \
