@@ -24,7 +24,6 @@ let
 in
 {
   cudaPackages_12_6 = callPackage ../development/cuda-modules {
-    inherit (_cuda) fixups;
     manifests = selectManifests {
       cublasmp = "0.4.0";
       cuda = "12.6.3";
@@ -44,7 +43,6 @@ in
   };
 
   cudaPackages_12_8 = callPackage ../development/cuda-modules {
-    inherit (_cuda) fixups;
     manifests = selectManifests {
       cublasmp = "0.4.0";
       cuda = "12.8.1";
@@ -64,7 +62,6 @@ in
   };
 
   cudaPackages_12_9 = callPackage ../development/cuda-modules {
-    inherit (_cuda) fixups;
     manifests = selectManifests {
       cublasmp = "0.4.0";
       cuda = "12.9.1";
@@ -84,7 +81,6 @@ in
   };
 
   cudaPackages_13_0 = callPackage ../development/cuda-modules {
-    inherit (_cuda) fixups;
     manifests = selectManifests {
       cublasmp = "0.4.0";
       cuda = "13.0.0";
