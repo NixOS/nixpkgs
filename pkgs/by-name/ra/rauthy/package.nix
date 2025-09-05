@@ -12,12 +12,12 @@
 }:
 
 let
-  version = "0.30.0";
+  version = "0.31.0";
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${version}";
-    hash = "sha256-zmzo1GMy+5lUr53PhVqAdYQHMEPqBAp6M2SPocIMER0=";
+    hash = "sha256-HXGQcjXl/pWqam+Yr1zuD78uWxj+D9KLlk+xTAfB60I=";
   };
 
   frontend = buildNpmPackage {
@@ -31,7 +31,7 @@ let
       ./0002-build-svelte-files-inside-the-current-directory.patch
     ];
 
-    npmDepsHash = "sha256-Qh23e0iVZB1Iq9X9ipyrl0MTcA6yYRL6zkll8bUALqU=";
+    npmDepsHash = "sha256-5pJnAQ8vQzLknByYxuafBlXH7vKMaJR/ZPoWxbkcRyU==";
   };
 in
 rustPlatform.buildRustPackage {
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
     ./0001-enable-vendored-feature-for-utoipa-swagger-ui.patch
   ];
 
-  cargoHash = "sha256-hOBmyo4Jwmnbv1Eywepn6lJbUfonUSvDzxKOGY1yTM0=";
+  cargoHash = "sha256-cLzW7jP0gNwRnhYA7E4U36yIctOSC9wAxk0N1vqNqJM=";
 
   # TODO: remove in next version
   ROCKSDB_INCLUDE_DIR = "${rocksdb_9_10}/include";
@@ -70,6 +70,7 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     updateScript = nix-update-script { };
+    inherit (frontend);
   };
 
   meta = {
