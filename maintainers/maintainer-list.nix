@@ -16593,6 +16593,12 @@
     githubId = 96200;
     name = "Jörg Thalheim";
   };
+  michael-k-williams = {
+    name = "Michael Williams";
+    email = "michael.williams@brighter-applications.com";
+    github = "Michael-K-Williams";
+    githubId = 74472864;
+  };
   michaeladler = {
     email = "therisen06@gmail.com";
     github = "michaeladler";
