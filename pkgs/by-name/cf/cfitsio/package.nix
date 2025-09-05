@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  gitUpdater,
   cmake,
   bzip2,
   curl,
@@ -72,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir "$out/bin"
     rm "$bin/bin/smem" "$bin/bin/speed"
   '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "${finalAttrs.pname}-"; };
+  };
 
   meta = {
     homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
