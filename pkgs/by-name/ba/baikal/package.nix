@@ -3,13 +3,13 @@
   fetchFromGitHub,
   lib,
 }:
-php.buildComposerProject2 rec {
+php.buildComposerProject2 (finalAttrs: {
   pname = "baikal";
   version = "0.10.1";
   src = fetchFromGitHub {
     owner = "sabre-io";
     repo = "Baikal";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YQQwTdwfHQZdUhO5HbScj/Bl8ype7TtPI3lHjvz2k04=";
   };
   # It doesn't provide a composer.lock file, we have to generate manually.
@@ -22,4 +22,4 @@ php.buildComposerProject2 rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ wrvsrx ];
   };
-}
+})
