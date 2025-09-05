@@ -11,6 +11,7 @@ in
   options = {
     services.g810-led = {
       enable = lib.mkEnableOption "g810-led, a Linux LED controller for some Logitech G Keyboards";
+      earlySetup = lib.mkEnableOption "g810-led in early stage initrd";
 
       package = lib.mkPackageOption pkgs "g810-led" { };
 
@@ -37,6 +38,15 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.etc."g810-led/profile".text = lib.mkIf (cfg.profile != null) cfg.profile;
+
+    boot.initrd = lib.mkIf (cfg.earlySetup && cfg.profile != null) {
+      services.udev.packages = [cfg.package];
+      services.udev.binPackages = [cfg.package];
+
+      systemd.contents = {
+        "/etc/g810-led/profile".text = cfg.profile;
+      };
+    };
 
     services.udev.packages = [ cfg.package ];
   };
