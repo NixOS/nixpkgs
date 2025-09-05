@@ -40,6 +40,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "notify";
         Restart = "on-failure";
         User = "uptimed";
         Nice = 19;
