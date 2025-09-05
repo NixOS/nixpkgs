@@ -13190,6 +13190,8 @@ self: super: with self; {
 
   pyjnius = callPackage ../development/python-modules/pyjnius { };
 
+  pyjpegls = callPackage ../development/python-modules/pyjpegls { };
+
   pyjson5 = callPackage ../development/python-modules/pyjson5 { };
 
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
@@ -15586,6 +15588,8 @@ self: super: with self; {
   rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
 
   rapidgzip = callPackage ../development/python-modules/rapidgzip { inherit (pkgs) nasm; };
+
+  rapidocr = callPackage ../development/python-modules/rapidocr { };
 
   rapidocr-onnxruntime = callPackage ../development/python-modules/rapidocr-onnxruntime { };
 
