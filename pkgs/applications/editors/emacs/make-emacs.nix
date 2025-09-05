@@ -96,7 +96,8 @@
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
   withXinput2 ? withX,
   withXwidgets ?
-    (withGTK3 || withPgtk || withNS || variant == "macport")
+    !noGui
+    && (withGTK3 || withPgtk || withNS || variant == "macport")
     && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
   # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   # XXX: - Apple_SDK WebKit is compatible with Emacs.
