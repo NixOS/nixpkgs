@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "upterm";
-  version = "0.15.2";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${version}";
-    hash = "sha256-hZZAt3KTiDxQteS5InxW+uhdRuwb1GLIARKD35rOWPw=";
+    hash = "sha256-9h4Poz0hUg5/7CrF0ZzT4KrVaFlhvcorIgZbleMpV6w=";
   };
 
   vendorHash = "sha256-i92RshW5dsRE88X8bXyrj13va66cc0Yu/btpR0pvoSM=";
