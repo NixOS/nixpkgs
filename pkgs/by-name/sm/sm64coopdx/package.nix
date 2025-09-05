@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FHH3+pGowkT8asDmU9qxPNDKy4VPKlkA0X7e4gnX9KY=";
   };
 
+  patches = [ ./no-update-check.patch ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
