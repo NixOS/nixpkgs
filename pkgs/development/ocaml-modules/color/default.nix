@@ -1,30 +1,35 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   buildDunePackage,
   gg,
 }:
 
 buildDunePackage rec {
   pname = "color";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  useDune2 = true;
-  minimalOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.08";
 
-  src = fetchurl {
-    url = "https://github.com/anuragsoni/color/releases/download/${version}/color-${version}.tbz";
-    sha256 = "0wg3a36i1a7fnz5pf57qzbdghwr6dzp7nnxyrz9m9765lxsn65ph";
+  src = fetchFromGitHub {
+    owner = "anuragsoni";
+    repo = "color";
+    tag = version;
+    hash = "sha256-MuCzQsTOz31iQVrwg6WosWjj15730X6D1q6+eeApcmQ=";
   };
 
   propagatedBuildInputs = [
     gg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts between different color formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    longDescription = ''
+      Library that converts between different color formats. Right now it deals with RGB[A], HSL[A], OkLab, and Oklch formats. All those format convert to and from [Gg.Color.t]
+    '';
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/anuragsoni/color";
+    changelog = "https://github.com/anuragsoni/color/blob/${version}/CHANGES.md";
   };
 }
