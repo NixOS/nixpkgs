@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-php.buildComposerProject rec {
+php.buildComposerProject2 rec {
   pname = "baikal";
   version = "0.10.1";
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ php.buildComposerProject rec {
   };
   # It doesn't provide a composer.lock file, we have to generate manually.
   composerLock = ./composer.lock;
-  vendorHash = "sha256-R9DlgrULUJ02wBOGIdOQrcKiATSSZ/UApYODQ8485Qs=";
+  vendorHash = "sha256-dYg7cULL4gquR5EenA0lD9ZC9Ge4qNwFFDNhELKgSso=";
 
   meta = {
     description = "Lightweight CalDAV+CardDAV server that offers an extensive web interface with easy management of users, address books and calendars";
