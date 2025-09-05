@@ -51,10 +51,8 @@ in
     # Yubikey-agent expects pcsd to be running in order to function.
     services.pcscd.enable = true;
 
-    environment.extraInit = ''
-      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/yubikey-agent/yubikey-agent.sock"
-      fi
-    '';
+    environment.variables.SSH_AUTH_SOCK = builtins.addErrorContext "while setting SSH_AUTH_SOCK, did you enable another agent already?" (
+      lib.mkDefault "$XDG_RUNTIME_DIR/yubikey-agent/yubikey-agent.sock"
+    );
   };
 }
