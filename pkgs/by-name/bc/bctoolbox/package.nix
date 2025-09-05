@@ -8,14 +8,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bctoolbox";
-  version = "5.2.109";
+  version = "5.3.72";
 
   nativeBuildInputs = [
     cmake
   ];
-  buildInputs = [
+
+  propagatedBuildInputs = [
     # Made by BC
     bcunit
 
@@ -30,8 +31,8 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "bctoolbox";
-    rev = version;
-    hash = "sha256-OwwSGzMFwR2ajUUgAy7ea/Q2pWxn3DO72W7ukcjBJnU=";
+    rev = finalAttrs.version;
+    hash = "sha256-6ktcYTUGbiFIKPT7ShiGNZXStyRW+cLojCt7m5HTKO4=";
   };
 
   # Do not build static libraries
@@ -53,4 +54,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
   };
-}
+})
