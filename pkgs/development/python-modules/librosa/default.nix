@@ -134,6 +134,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/librosa/librosa";
     changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    maintainers = with lib.maintainers; [ carlthome ];
   };
 }
