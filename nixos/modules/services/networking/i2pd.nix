@@ -228,7 +228,7 @@ let
         let
           outTunOpts = [
             (sec tun.name)
-            "type = client"
+            (strOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "destination" tun.destination)
           ]
@@ -250,7 +250,7 @@ let
         let
           inTunOpts = [
             (sec tun.name)
-            "type = server"
+            (strOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "host" tun.address)
           ]
@@ -690,6 +690,11 @@ in
                   default = null;
                   description = "Connect to particular port at destination.";
                 };
+                type = mkOption {
+                  type = types.enum [ "client" "udpclient" ];
+                  default = "client";
+                  description = "Tunnel type for inbound tunnels.";
+                }
               }
               // commonTunOpts name;
               config = {
@@ -714,6 +719,11 @@ in
                   type = types.int;
                   default = 0;
                   description = "Service port. Default to the tunnel's listen port.";
+                };
+                type = mkOption {
+                  type = types.enum [ "irc" "http" "server" "udpserver" ];
+                  default = "server";
+                  description = "Tunnel type for inbound tunnels.";
                 };
                 accessList = mkOption {
                   type = listOf str;
