@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdns-scanner";
-  version = "0.22.4";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "CramBL";
     repo = "mdns-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9jteWQPI0jQFaLcWP9ZzjX0IoyqoSXDt0U8M7x8IHXk=";
+    hash = "sha256-/r2yycdNghvZPS2gJIrf3NNfuX1yICCFVmnqXVkDXVE=";
   };
 
-  cargoHash = "sha256-JtreaCQe52pgJGlYy9hc1B+mUU5x5SpKqqC2q48hDXc=";
+  cargoHash = "sha256-dPk/p4lb4TJvIM6hpbVNlCbDXjzmbP+ulYcG38idQtI=";
 
   meta = {
     homepage = "https://github.com/CramBL/mdns-scanner";
