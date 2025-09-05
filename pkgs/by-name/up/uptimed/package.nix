@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.am \
       --replace-fail '$(sysconfdir)/uptimed.conf' '/etc/uptimed/uptimed.conf'
   '';
+
+  passthru.tests.nixos = nixosTests.uptimed;
 
   meta = with lib; {
     description = "Uptime record daemon";
