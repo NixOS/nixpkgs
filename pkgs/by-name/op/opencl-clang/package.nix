@@ -7,7 +7,6 @@
   git,
   llvmPackages_15,
   spirv-llvm-translator,
-  buildWithPatches ? true,
 }:
 
 let
@@ -24,7 +23,7 @@ let
   llvmPkgs = llvmPackages_15;
   inherit (llvmPkgs) llvm;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
-  libclang = if buildWithPatches then passthru.libclang else llvmPkgs.libclang;
+  libclang = passthru.libclang;
 
   passthru = rec {
     spirv-llvm-translator = spirv-llvm-translator';
