@@ -6,6 +6,7 @@
   "Baldur's Gate 3" = 3474;
   "Cyberpunk 2077" = 3333;
   "Mount & Blade II: Bannerlord" = 3174;
+  "Skyrim Special Edition" = 1704;
   "Stardew Valley" = 1303;
   # keep-sorted end
 }
