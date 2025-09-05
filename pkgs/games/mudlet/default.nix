@@ -57,23 +57,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.17.2";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    hash = "sha256-K75frptePKfHeGQNXaX4lKsLwO6Rs6AAka6hvP8MA+k=";
+    hash = "sha256-I4RRIfHw9kZwxMlc9pvdtwPpq9EvNJU69WpGgZ+0uiw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "darwin-AppKit.patch";
-      url = "https://github.com/Mudlet/Mudlet/commit/68cdd404f81a6d16c80068c45fe0f10802f08d9e.patch";
-      hash = "sha256-74FtcjOR/lu9ohtcoup0+gUfCQRznO48zMmb97INhdY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
