@@ -3139,7 +3139,10 @@ with pkgs;
     cppSupport = false;
   };
 
-  hdf5-threadsafe = hdf5.override { threadsafe = true; };
+  hdf5-threadsafe = hdf5.override {
+    cppSupport = false;
+    threadsafe = true;
+  };
 
   heaptrack = kdePackages.callPackage ../development/tools/profiling/heaptrack { };
 
