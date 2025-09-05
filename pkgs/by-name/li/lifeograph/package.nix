@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lifeograph";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchgit {
     url = "https://git.launchpad.net/lifeograph";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VaDxmbTVx6wiFMDRYuBM5Y4oPODWPTm8QP6zpT+yBOY=";
+    hash = "sha256-Zo3bMIAao055YhhIFR8AH43lMi6T82PrcYR3Cis/yK0=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     enchant
     gtkmm4
-    libchamplain
+    (libchamplain.override { withLibsoup3 = true; })
     libshumate
   ];
 
