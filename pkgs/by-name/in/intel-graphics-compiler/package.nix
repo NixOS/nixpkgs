@@ -14,8 +14,6 @@
   spirv-tools,
   spirv-headers,
   spirv-llvm-translator,
-
-  buildWithPatches ? true,
 }:
 
 let
@@ -27,7 +25,7 @@ let
   };
 
   inherit (llvmPackages_15) lld llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPackages_15) clang libclang;
+  inherit (opencl-clang) clang libclang;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
 
   # Handholding the braindead build script
