@@ -1819,6 +1819,7 @@ mapAliases {
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
   netbox_3_7 = throw "netbox 3.7 series has been removed as it was EOL"; # Added 2025-04-23
+  netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
   netsurf = recurseIntoAttrs {
     browser = lib.warnOnInstantiate "'netsurf.browser' has been renamed to 'netsurf-browser'" netsurf-browser; # Added 2025-03-26
     buildsystem = lib.warnOnInstantiate "'netsurf.buildsystem' has been renamed to 'netsurf-buildsystem'" netsurf-buildsystem; # Added 2025-03-26
