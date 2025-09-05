@@ -111,6 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with maintainers; [ hlolli ];
     # ref. https://github.com/MeVisLab/pythonqt/issues/276
-    broken = (stdenv.hostPlatform.isDarwin && qt6Support);
+    broken = stdenv.hostPlatform.isDarwin && qt6Support;
   };
 })
