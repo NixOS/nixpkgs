@@ -929,8 +929,8 @@ rec {
       "sha256-G+Kn0K9lI24r/A+KBOE2euh+raKIystZ7uB2k9AD/Zg=";
 
   mypy-boto3-mq =
-    buildMypyBoto3Package "mq" "1.40.18"
-      "sha256-uLNYxXfiAMVzHOk0NXCer6cR3aBI+CdHCoUEANqFBUw=";
+    buildMypyBoto3Package "mq" "1.40.23"
+      "sha256-1+/fGIJPzPvAThyGy6ZiZAyIfFGtBGiBZ1ORwfTZ2Ww=";
 
   mypy-boto3-mturk =
     buildMypyBoto3Package "mturk" "1.40.20"
