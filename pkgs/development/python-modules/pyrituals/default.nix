@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyrituals";
-  version = "0.0.6";
+  version = "0.0.7";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "milanmeu";
     repo = "pyrituals";
     rev = version;
-    sha256 = "0ynjz7khp67bwxjp580w3zijxr9yn44nmnbvkxjxq9scyb2mjf6g";
+    sha256 = "sha256-nCyfwOONtpwRLFq3crRacmrWef6J3mOfKz4fvkOcb3g=";
   };
 
   nativeBuildInputs = [ setuptools ];
