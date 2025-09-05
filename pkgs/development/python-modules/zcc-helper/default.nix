@@ -27,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://bitbucket.org/mark_hannon/zcc/src/${src.rev}/CHANGELOG.md";
     description = "ZIMI ZCC helper module";
     homepage = "https://bitbucket.org/mark_hannon/zcc";
     license = lib.licenses.mit;
