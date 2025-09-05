@@ -44,6 +44,10 @@ buildPgrxExtension (finalAttrs: {
     })
     # Add feature flags needed for features not yet stabilised in rustc stable
     ./0002-add-feature-flags.diff
+    # Fix building with gcc.arch = alderlake set
+    # Backport of fix in VectorChord 0.5.1
+    # https://github.com/tensorchord/VectorChord/pull/316
+    ./0003-backport-gcc-arch-fix.diff
   ];
 
   buildInputs = lib.optionals (useSystemJemalloc) [

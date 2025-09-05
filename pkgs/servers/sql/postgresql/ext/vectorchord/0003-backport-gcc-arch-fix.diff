@@ -1,0 +1,24 @@
+diff --git a/crates/simd/cshim/x86_64.c b/crates/simd/cshim/x86_64.c
+index 8ba1357..f1b7b9e 100644
+--- a/crates/simd/cshim/x86_64.c
++++ b/crates/simd/cshim/x86_64.c
+@@ -27,7 +27,8 @@
+ typedef _Float16 f16;
+ typedef float f32;
+ 
+-__attribute__((target("arch=x86-64-v4,avx512fp16"))) float
++__attribute__((target("avx512bw,avx512cd,avx512dq,avx512vl,bmi,bmi2,lzcnt,"
++                      "movbe,popcnt,avx512fp16"))) float
+ fp16_reduce_sum_of_xy_v4fp16(f16 *restrict a, f16 *restrict b, size_t n) {
+   __m512h xy = _mm512_setzero_ph();
+   while (n >= 32) {
+@@ -47,7 +48,8 @@ fp16_reduce_sum_of_xy_v4fp16(f16 *restrict a, f16 *restrict b, size_t n) {
+   return _mm512_reduce_add_ph(xy);
+ }
+ 
+-__attribute__((target("arch=x86-64-v4,avx512fp16"))) float
++__attribute__((target("avx512bw,avx512cd,avx512dq,avx512vl,bmi,bmi2,lzcnt,"
++                      "movbe,popcnt,avx512fp16"))) float
+ fp16_reduce_sum_of_d2_v4fp16(f16 *restrict a, f16 *restrict b, size_t n) {
+   __m512h d2 = _mm512_setzero_ph();
+   while (n >= 32) {
