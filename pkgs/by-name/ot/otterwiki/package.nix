@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   python3,
 }:
 
@@ -49,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
     inherit python;
     wsgiModule = "otterwiki.server:app";
     updateScript = nix-update-script { };
+    tests.simple = nixosTests.otterwiki;
   };
 
   meta = {
