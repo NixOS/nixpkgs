@@ -48,15 +48,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # error: linker `rust-lld` not found
       !isAarch64;
 
+  # prevent $out from being propagated to $dev:
+  # the library and header files are not dependent on the binaries
+  propagatedBuildOutputs = [ ];
+
   postInstall =
     let
       inherit (stdenv.targetPlatform.rust) cargoShortTarget;
     in
     ''
-      # move libs from out to dev
-      install -d -m 0755 $dev/lib
-      install -m 0644 ''${!outputLib}/lib/* $dev/lib
-      rm -r ''${!outputLib}/lib
+      moveToOutput lib $dev
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
@@ -89,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       ereslibre
       matthewbauer
+      nekowinston
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${finalAttrs.version}/RELEASES.md";
