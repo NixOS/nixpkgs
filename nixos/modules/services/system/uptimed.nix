@@ -26,14 +26,6 @@ in
 
     environment.systemPackages = [ pkgs.uptimed ];
 
-    users.users.uptimed = {
-      description = "Uptimed daemon user";
-      home = stateDir;
-      uid = config.ids.uids.uptimed;
-      group = "uptimed";
-    };
-    users.groups.uptimed = { };
-
     systemd.services.uptimed = {
       unitConfig.Documentation = "man:uptimed(8) man:uprecords(1)";
       description = "uptimed service";
@@ -43,6 +35,7 @@ in
         Type = "notify";
         Restart = "on-failure";
         User = "uptimed";
+        DynamicUser = true;
         Nice = 19;
         IOSchedulingClass = "idle";
         PrivateTmp = "yes";
