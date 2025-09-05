@@ -1762,6 +1762,7 @@
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/garage.nix
+  ./services/web-servers/gunicorn
   ./services/web-servers/h2o/default.nix
   ./services/web-servers/hitch/default.nix
   ./services/web-servers/jboss/default.nix
