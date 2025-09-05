@@ -14,11 +14,13 @@ runCommandLocal "install-shell-files--install-completion-inference"
     echo bar > bar.zsh
     echo baz > baz.fish
     echo buzz > buzz.nu
+    echo corge > corge.elv
 
-    installShellCompletion foo.bash bar.zsh baz.fish buzz.nu
+    installShellCompletion foo.bash bar.zsh baz.fish buzz.nu corge.elv
 
     cmp foo.bash $out/share/bash-completion/completions/foo.bash
     cmp bar.zsh $out/share/zsh/site-functions/_bar
     cmp baz.fish $out/share/fish/vendor_completions.d/baz.fish
     cmp buzz.nu $out/share/nushell/vendor/autoload/buzz.nu
+    cmp corge.elv $out/share/elvish/completions/corge.elv
   ''
