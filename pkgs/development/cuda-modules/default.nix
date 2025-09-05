@@ -5,29 +5,21 @@
   pkgs,
   stdenv,
   # Manually provided arguments
-  fixups,
   manifests,
 }:
 let
   inherit (lib.attrsets)
-    attrNames
     concatMapAttrs
-    hasAttr
     listToAttrs
-    mapAttrs
     mapCartesianProduct
-    mergeAttrsList
     optionalAttrs
     ;
   inherit (lib.customisation) callPackagesWith;
   inherit (lib.filesystem) packagesFromDirectoryRecursive;
   inherit (lib.fixedPoints) composeManyExtensions extends;
-  inherit (lib.lists)
-    concatMap
-    optionals
-    ;
+  inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep versionAtLeast versionOlder;
-  inherit (lib.trivial) const importJSON;
+  inherit (lib.trivial) importJSON;
   inherit (lib.versions) major majorMinor;
   inherit (_cuda.lib)
     dropDots
@@ -65,29 +57,6 @@ let
 
   cudaPackagesFixedPoint =
     finalCudaPackages:
-    let
-      redistBuilderArgs = mergeAttrsList (
-        concatMap (
-          redistName:
-          concatMap (
-            packageName:
-            # Only add the configuration for the package from the manifest if we have a fixup for it.
-            # NOTE: Since manifests have non-package keys, this also gets rid of entries like "release_label".
-            optionals (hasAttr packageName fixups) [
-              {
-                ${packageName} = {
-                  inherit packageName redistName;
-                  release = manifests.${redistName}.${packageName};
-                  fixupFn = fixups.${packageName};
-                };
-              }
-            ]
-          ) (attrNames manifests.${redistName})
-        ) (attrNames manifests)
-      );
-
-      redistPackages = mapAttrs (const finalCudaPackages.redist-builder) redistBuilderArgs;
-    in
     {
       # NOTE:
       # It is important that _cuda is not part of the package set fixed-point. As described by
@@ -117,15 +86,42 @@ let
 
       # These must be modified through callPackage, not by overriding the scope, since we cannot
       # depend on them recursively as they are used to add top-level attributes.
-      inherit fixups manifests;
+      inherit manifests;
+
+      # Must be constructed without `callPackage` to avoid replacing the `override` attribute with that of
+      # `callPackage`'s.
+      buildRedist = import ./buildRedist {
+        inherit (pkgs)
+          _cuda
+          autoAddDriverRunpath
+          autoPatchelfHook
+          config
+          fetchurl
+          lib
+          srcOnly
+          stdenv
+          stdenvNoCC
+          ;
+        inherit (finalCudaPackages)
+          autoAddCudaCompatRunpath
+          backendStdenv
+          cudaMajorMinorVersion
+          cudaMajorVersion
+          cudaNamePrefix
+          flags
+          manifests
+          markForCudatoolkitRootHook
+          setupCudaHook
+          ;
+      };
 
       unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" (
         concatMapAttrs (
           name: drv:
-          optionalAttrs (drv.src != null) {
+          optionalAttrs (drv.src != null && drv.passthru ? redistName) {
             ${name} = drv.src;
           }
-        ) redistPackages
+        ) finalCudaPackages
       );
 
       flags =
@@ -161,20 +157,21 @@ let
 
       # Alternative versions of select packages.
       # This should be minimized as much as possible.
-      cudnn_8_9 = finalCudaPackages.redist-builder {
-        packageName = "cudnn";
-        redistName = "cudnn";
-        release =
-          let
-            manifest =
-              if finalCudaPackages.backendStdenv.hasJetsonCudaCapability then
-                ./_cuda/manifests/cudnn/redistrib_8.9.5.json
-              else
-                ./_cuda/manifests/cudnn/redistrib_8.9.7.json;
-          in
-          (importJSON manifest).cudnn;
-        fixupFn = fixups.cudnn;
-      };
+      # TODO(@connorbaker): Document overriding manifests through `overrideAttrs`.
+      # TODO(@connorbaker): OverrideAttrs is "bad" within Nixpkgs; try to find another way to override packages?
+      cudnn_8_9 = finalCudaPackages.cudnn.overrideAttrs (prevAttrs: {
+        passthru = prevAttrs.passthru // {
+          release =
+            let
+              manifest =
+                if finalCudaPackages.backendStdenv.hasJetsonCudaCapability then
+                  ./_cuda/manifests/cudnn/redistrib_8.9.5.json
+                else
+                  ./_cuda/manifests/cudnn/redistrib_8.9.7.json;
+            in
+            (importJSON manifest).cudnn;
+        };
+      });
 
       tests =
         let
@@ -218,8 +215,6 @@ let
           flags = finalCudaPackages.callPackage ./tests/flags.nix { };
         };
     }
-    # Redistributable packages
-    // redistPackages
     # CUDA version-specific packages
     // packagesFromDirectoryRecursive {
       inherit (finalCudaPackages) callPackage;
