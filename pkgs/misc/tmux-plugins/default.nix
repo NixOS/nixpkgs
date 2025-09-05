@@ -196,6 +196,27 @@ in
     };
   };
 
+  cowboy = mkTmuxPlugin {
+    pluginName = "cowboy";
+    version = "0-unstable-2021-05-11";
+    src = pkgs.fetchFromGitHub {
+      owner = "tmux-plugins";
+      repo = "tmux-cowboy";
+      rev = "75702b6d0a866769dd14f3896e9d19f7e0acd4f2";
+      hash = "sha256-KJNsdDLqT2Uzc25U4GLSB2O1SA/PThmDj9Aej5XjmJs=";
+    };
+    meta = {
+      homepage = "https://github.com/tmux-plugins/tmux-cowboy";
+      description = "Kill hanging processes fast";
+      longDescription = ''
+        Just kill that damned stale process! Send a signal to a process running inside a current pane.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ zimeg ];
+    };
+  };
+
   cpu = mkTmuxPlugin {
     pluginName = "cpu";
     version = "unstable-2023-01-06";
