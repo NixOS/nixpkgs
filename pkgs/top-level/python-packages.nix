@@ -19726,8 +19726,6 @@ self: super: with self; {
 
   vttlib = callPackage ../development/python-modules/vttlib { };
 
-  vulcan-api = callPackage ../development/python-modules/vulcan-api { };
-
   vulkan = callPackage ../development/python-modules/vulkan { };
 
   vultr = callPackage ../development/python-modules/vultr { };
