@@ -13,7 +13,7 @@ let
     [
       # Basic startup
       "${crdb}/bin/cockroach"
-      "start"
+      (if cfg.singleNode then "start-single-node" else "start")
       "--logtostderr"
       "--store=/var/lib/cockroachdb"
 
@@ -147,6 +147,12 @@ in
           `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
         '';
+      };
+
+      singleNode = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Run a single-node cluster.";
       };
 
       package = lib.mkPackageOption pkgs "cockroachdb" {
