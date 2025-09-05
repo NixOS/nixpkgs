@@ -1,21 +1,37 @@
 {
   lib,
   fetchFromGitHub,
+  buildNpmPackage,
   rustPlatform,
   rocksdb_9_10,
   pkg-config,
   perl,
   openssl,
+  jemalloc,
   nix-update-script,
 }:
 
 let
-  version = "0.29.4";
+  version = "0.30.0";
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${version}";
-    hash = "sha256-+k5t4CTVFFmWKoCdkN2t4jK/uDI+HcM6LuButdUzBa4=";
+    hash = "sha256-zmzo1GMy+5lUr53PhVqAdYQHMEPqBAp6M2SPocIMER0=";
+  };
+
+  frontend = buildNpmPackage {
+    pname = "rauthy-frontend";
+    inherit version src;
+
+    sourceRoot = "${src.name}/frontend";
+
+    patches = [
+      # otherwise permission denied error for trying to write outside of the build directory
+      ./0002-build-svelte-files-inside-the-current-directory.patch
+    ];
+
+    npmDepsHash = "sha256-Qh23e0iVZB1Iq9X9ipyrl0MTcA6yYRL6zkll8bUALqU=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -27,8 +43,9 @@ rustPlatform.buildRustPackage {
     ./0001-enable-vendored-feature-for-utoipa-swagger-ui.patch
   ];
 
-  cargoHash = "sha256-l/rByM1QxBY4mTXKtR9bKaL+xrHmLluxKOUuyR1moek=";
+  cargoHash = "sha256-hOBmyo4Jwmnbv1Eywepn6lJbUfonUSvDzxKOGY1yTM0=";
 
+  # TODO: remove in next version
   ROCKSDB_INCLUDE_DIR = "${rocksdb_9_10}/include";
   ROCKSDB_LIB_DIR = "${rocksdb_9_10}/lib";
 
@@ -36,11 +53,17 @@ rustPlatform.buildRustPackage {
     pkg-config
     perl
     rustPlatform.bindgenHook
+    jemalloc
   ];
 
   buildInputs = [
     openssl
   ];
+
+  preBuild = ''
+    cp -r ${frontend}/lib/node_modules/frontend/dist/templates/html/ templates/html
+    cp -r ${frontend}/lib/node_modules/frontend/dist/static/ static
+  '';
 
   # tests take long, require the app and a database to be running, and some of them fail
   doCheck = false;

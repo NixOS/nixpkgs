@@ -1,7 +1,7 @@
-From c0297740c3112878c28cceb2dd7d3924dff1079c Mon Sep 17 00:00:00 2001
+From b1df7476e81926fb6e2946872beb68819b6ed9ac Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
-Date: Wed, 3 Sep 2025 22:40:59 +0200
-Subject: [PATCH] enable vendored feature for utoipa-swagger-ui
+Date: Wed, 3 Sep 2025 23:15:13 +0200
+Subject: [PATCH 1/2] enable vendored feature for utoipa-swagger-ui
 
 ---
  Cargo.lock | 7 +++++++
@@ -9,10 +9,10 @@ Subject: [PATCH] enable vendored feature for utoipa-swagger-ui
  2 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/Cargo.lock b/Cargo.lock
-index 08c5aa5c..db45b6cd 100644
+index 5d69ba0b..bfcead11 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -5972,9 +5972,16 @@ dependencies = [
+@@ -5814,9 +5814,16 @@ dependencies = [
   "serde_json",
   "url",
   "utoipa",
@@ -28,12 +28,12 @@ index 08c5aa5c..db45b6cd 100644
 +
  [[package]]
  name = "uuid"
- version = "1.16.0"
+ version = "1.17.0"
 diff --git a/Cargo.toml b/Cargo.toml
-index f1ef5502..3d52117f 100644
+index dae0435e..921b965a 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -115,7 +115,7 @@ tokio = { version = "1", features = ["full"] }
+@@ -116,7 +116,7 @@ tokio = { version = "1", features = ["full"] }
  tokio-postgres = { version = "0.7.10", features = ["with-chrono-0_4"] }
  tokio-postgres-rustls = { version = "0.13", features = [] }
  utoipa = { version = "5", features = ["actix_extras", "chrono", "openapi_extensions"] }
