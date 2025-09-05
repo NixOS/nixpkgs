@@ -303,6 +303,16 @@ let
         };
       });
 
+      pytraccar = super.pytraccar.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
+        };
+      });
+
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
