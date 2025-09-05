@@ -13198,6 +13198,12 @@
     github = "katrinafyi";
     githubId = 39479354;
   };
+  katzenbiber = {
+    name = "Christopher Wrobel";
+    email = "wrobel1999@gmail.com";
+    github = "Katzenbiber";
+    githubId = 9404592;
+  };
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
