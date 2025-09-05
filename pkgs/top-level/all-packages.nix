@@ -3137,8 +3137,6 @@ with pkgs;
 
   hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
 
-  homesick = callPackage ../tools/misc/homesick { };
-
   host = bind.host;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
@@ -3168,20 +3166,6 @@ with pkgs;
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
 
   icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
-
-  inherit
-    (callPackages ../tools/filesystems/irods rec {
-      stdenv = llvmPackages_13.libcxxStdenv;
-      libcxx = llvmPackages_13.libcxx;
-      boost = boost178.override { inherit stdenv; };
-      fmt = fmt_9.override { inherit stdenv; };
-      nanodbc_llvm = nanodbc.override { inherit stdenv; };
-      avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
-      spdlog_llvm = spdlog.override { inherit stdenv fmt; };
-    })
-    irods
-    irods-icommands
-    ;
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -3357,8 +3341,6 @@ with pkgs;
   lagrange-tui = lagrange.override { enableTUI = true; };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
-
-  mailcatcher = callPackage ../development/web/mailcatcher { };
 
   maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
 
@@ -4700,7 +4682,6 @@ with pkgs;
   corretto21 = javaPackages.compiler.corretto21;
 
   inherit (callPackage ../development/compilers/crystal { })
-    crystal_1_11
     crystal_1_14
     crystal_1_15
     crystal_1_16
@@ -7125,9 +7106,7 @@ with pkgs;
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
-  sparse = callPackage ../development/tools/analysis/sparse {
-    llvm = llvm_14;
-  };
+  sparse = callPackage ../development/tools/analysis/sparse { };
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 

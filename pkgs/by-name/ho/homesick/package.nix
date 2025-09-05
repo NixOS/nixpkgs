@@ -17,7 +17,7 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "homesick";
 
-  meta = with lib; {
+  meta = {
     description = "Your home directory is your castle. Don't leave your dotfiles behind";
     longDescription = ''
       Homesick is sorta like rip, but for dotfiles. It uses git to clone a repository containing
@@ -25,12 +25,12 @@ bundlerEnv {
       place with a single command.
     '';
     homepage = "https://github.com/technicalpickles/homesick";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aaronschif
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "homesick";
   };
 }

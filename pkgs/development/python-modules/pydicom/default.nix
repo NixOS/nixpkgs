@@ -47,7 +47,7 @@ buildPythonPackage rec {
       pillow
       pyjpegls
       #pylibjpeg.optional-dependencies.openjpeg # infinite recursion
-      #pylibjpeg.optional-dependencies.rle # not in nixpkgs
+      #pylibjpeg.optional-dependencies.rle # infinite recursion
       pylibjpeg-libjpeg
       gdcm
     ];
