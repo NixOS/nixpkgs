@@ -1,0 +1,22 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
+index a982b782e1..d49b047074 100644
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
+@@ -89,13 +89,13 @@ public class BazelRuleClassProvider {
+     public boolean useStrictActionEnv;
+   }
+ 
+-  private static final PathFragment FALLBACK_SHELL = PathFragment.create("/bin/bash");
++  private static final PathFragment FALLBACK_SHELL = PathFragment.create("@defaultBash@");
+ 
+   public static final ImmutableMap<OS, PathFragment> SHELL_EXECUTABLE =
+       ImmutableMap.<OS, PathFragment>builder()
+           .put(OS.WINDOWS, PathFragment.create("c:/msys64/usr/bin/bash.exe"))
+-          .put(OS.FREEBSD, PathFragment.create("/usr/local/bin/bash"))
+-          .put(OS.OPENBSD, PathFragment.create("/usr/local/bin/bash"))
++          .put(OS.FREEBSD, PathFragment.create("@defaultBash@"))
++          .put(OS.OPENBSD, PathFragment.create("@defaultBash@"))
+           .put(OS.UNKNOWN, FALLBACK_SHELL)
+           .buildOrThrow();
+ 
+
