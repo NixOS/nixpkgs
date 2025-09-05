@@ -1,0 +1,72 @@
+From 8c7af30fe7377235037c1a385f484f201ecfe063 Mon Sep 17 00:00:00 2001
+From: tropf <tropf@users.noreply.github.com>
+Date: Tue, 26 Aug 2025 15:15:19 +0200
+Subject: [PATCH 2/2] move nextjs build into temporary directory
+
+For the build command, upstream invokes a nextjs-base build inside
+node_modules. As this is read-only in nix, the corresponding directory
+is copied into a newly-created directory in the temporary directory
+(e.g. /tmp), from where the build can successfully run.
+---
+ packages/web/cli/commands/build.ts | 38 +++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/packages/web/cli/commands/build.ts b/packages/web/cli/commands/build.ts
+index b611cd9..213e82f 100644
+--- a/packages/web/cli/commands/build.ts
++++ b/packages/web/cli/commands/build.ts
+@@ -16,6 +16,36 @@ type Deps = {
+   appConsole: AppConsole;
+ };
+ 
++const fs = require('fs');
++const os = require('os');
++
++// Helper: Recursively copy directory
++function copyDirSync(src: any, dest: any) {
++  if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
++  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
++    const srcPath = path.join(src, entry.name);
++    const destPath = path.join(dest, entry.name);
++    if (entry.isDirectory()) {
++      copyDirSync(srcPath, destPath);
++    } else {
++      fs.copyFileSync(srcPath, destPath);
++    }
++  }
++}
++
++// Helper: Recursively set writeable flag
++function setWriteableSync(target: any) {
++  const stat = fs.statSync(target);
++  if (stat.isDirectory()) {
++    fs.chmodSync(target, 0o755);
++    for (const entry of fs.readdirSync(target)) {
++      setWriteableSync(path.join(target, entry));
++    }
++  } else {
++    fs.chmodSync(target, 0o644);
++  }
++}
++
+ export async function buildCommand(
+   { appConsole }: Deps,
+   outPath: string,
+@@ -24,7 +54,13 @@ export async function buildCommand(
+   process.env.NEXT_TELEMETRY_DISABLED = "1";
+   appConsole.println("Building Log4brains...");
+ 
+-  const nextDir = getNextJsDir();
++  const oldNextDir = getNextJsDir();
++
++  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'log4brains-nextjs-'));
++  copyDirSync(oldNextDir, tmpDir);
++  setWriteableSync(tmpDir);
++  const nextDir = tmpDir;
++
+   // eslint-disable-next-line global-require,import/no-dynamic-require,@typescript-eslint/no-var-requires
+   const nextConfig = require(path.join(nextDir, "next.config.js")) as Record<
+     string,
+-- 
+2.50.1
+

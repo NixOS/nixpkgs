@@ -11,8 +11,6 @@
     with super;
     lib.mapAttrs (_: set: recurseIntoAttrs set) {
       inherit (super)
-        gns3Packages
-        platformioPackages
         rPackages
         sourceHanPackages
         ;

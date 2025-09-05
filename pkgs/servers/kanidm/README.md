@@ -24,8 +24,7 @@ For example, when upgrading from 1.4 -> 1.5
 
 ### Update default
 
-1. `sed -i 's/1_4/1_5/' pkgs/by-name/ka/kanidm/package.nix`
-1. Update `all-packages.nix` and set `kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;`
+1. Update kanidm aliases in `aliases.nix`. Should remove completely after 25.11 branch off.
 1. Create commit `kanidm: update default to 1.5.0`
 
 ### Backport to stable

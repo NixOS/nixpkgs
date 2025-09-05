@@ -34,6 +34,7 @@
   passt,
   vfkit,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -162,7 +163,11 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "--version";
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

@@ -131,42 +131,6 @@ in
 lib.makeExtensible (self: {
   inherit makeLixScope;
 
-  lix_2_90 = self.makeLixScope {
-    attrName = "lix_2_90";
-
-    lix-args = rec {
-      version = "2.90.0";
-
-      src = fetchFromGitHub {
-        owner = "lix-project";
-        repo = "lix";
-        rev = version;
-        hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
-      };
-
-      docCargoDeps = rustPlatform.fetchCargoVendor {
-        name = "lix-doc-${version}";
-        inherit src;
-        sourceRoot = "${src.name or src}/lix-doc";
-        hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
-      };
-
-      knownVulnerabilities = [
-        "Lix 2.90 is vulnerable to CVE-2025-46415 and CVE-2025-46416 and will not receive updates."
-      ];
-    };
-
-    nix-eval-jobs-args = {
-      version = "2.90.0";
-      src = fetchgit {
-        url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
-        # https://git.lix.systems/lix-project/nix-eval-jobs/commits/branch/release-2.90
-        rev = "9c23772cf25e0d891bef70b7bcb7df36239672a5";
-        hash = "sha256-oT273pDmYzzI7ACAFUOcsxtT6y34V5KF7VBSqTza7j8=";
-      };
-    };
-  };
-
   lix_2_91 = self.makeLixScope {
     attrName = "lix_2_91";
 
@@ -315,7 +279,6 @@ lib.makeExtensible (self: {
           self.${version}.lix;
     in
     lib.dontRecurseIntoAttrs {
-      lix_2_90 = mkAlias "lix_2_90";
       lix_2_91 = mkAlias "lix_2_91";
       # NOTE: Do not add new versions of Lix here.
       stable = mkAlias "stable";

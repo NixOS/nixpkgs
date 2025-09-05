@@ -15,7 +15,7 @@
   json_c,
   libmodulemd,
   librepo,
-  libsmartcols,
+  util-linux,
   libsolv,
   libxml2,
   libyaml,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     libmodulemd
     librepo
-    libsmartcols
+    util-linux
     libsolv
     libxml2
     libyaml
