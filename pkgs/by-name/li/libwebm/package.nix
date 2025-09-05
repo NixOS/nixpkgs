@@ -37,7 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^libwebm-(.+)$"
+    ];
+  };
 
   meta = {
     description = "WebM file parser";
