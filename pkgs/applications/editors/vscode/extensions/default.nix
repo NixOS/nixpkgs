@@ -1071,50 +1071,7 @@ let
         callPackage ./contextmapper.context-mapper-vscode-extension
           { };
 
-      continue.continue = buildVscodeMarketplaceExtension {
-        mktplcRef =
-          let
-            sources = {
-              "x86_64-linux" = {
-                arch = "linux-x64";
-                hash = "sha256-mm7/ITiXuSrFrAwRPVYYJ6l5b4ODyiCPv5H+WioDAWY=";
-              };
-              "x86_64-darwin" = {
-                arch = "darwin-x64";
-                hash = "sha256-ySFiSJ+6AgxECzekBIlPl2BhWJvt5Rf1DFqg6b/6PDs=";
-              };
-              "aarch64-linux" = {
-                arch = "linux-arm64";
-                hash = "sha256-zqvhlA9APWtJowCOceB52HsfU3PaAWciZWxY/QcOYgg=";
-              };
-              "aarch64-darwin" = {
-                arch = "darwin-arm64";
-                hash = "sha256-CjzAntSjbYlauVptCnqE/HpwdudoGaTMML6Fyzj48pU=";
-              };
-            };
-          in
-          {
-            name = "continue";
-            publisher = "Continue";
-            version = "1.1.49";
-          }
-          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
-        nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-        buildInputs = [ (lib.getLib stdenv.cc.cc) ];
-        meta = {
-          description = "Open-source autopilot for software development - bring the power of ChatGPT to your IDE";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
-          homepage = "https://github.com/continuedev/continue";
-          license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.raroh73 ];
-          platforms = [
-            "x86_64-linux"
-            "x86_64-darwin"
-            "aarch64-darwin"
-            "aarch64-linux"
-          ];
-        };
-      };
+      continue.continue = callPackage ./continue.continue { };
 
       coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
         mktplcRef = {
