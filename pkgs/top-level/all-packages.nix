@@ -3008,11 +3008,7 @@ with pkgs;
     isStereo = true;
   };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
-    python3 = python312;
-  };
   google-cloud-sdk-gce = google-cloud-sdk.override {
-    python3 = python312;
     with-gce = true;
   };
 
@@ -12050,7 +12046,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_30
     k3s_1_31
     k3s_1_32
     k3s_1_33

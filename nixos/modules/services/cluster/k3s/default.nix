@@ -82,6 +82,8 @@ let
         nativeBuildInputs = with pkgs; [
           kubernetes-helm
           cacert
+          # Helm requires HOME to refer to a writable dir
+          writableTmpDirAsHomeHook
         ];
       }
       ''

@@ -23,6 +23,11 @@ buildHomeAssistantComponent rec {
     zeroconf
   ];
 
+  disabledTests = [
+    # 'µg/m³' vs 'μg/m³'
+    "test_sensor_qingping"
+  ];
+
   disabledTestPaths = [
     # this test seems to be broken
     "tests/test_local.py::test_track"
