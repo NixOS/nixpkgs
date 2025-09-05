@@ -1,19 +1,16 @@
 #!/usr/bin/env nix-shell
 # When using as a callable script, passing `--argstr path some/path` overrides $PWD.
-#!nix-shell -p nix -i "nix-env -qaP --no-name --out-path --arg checkMeta true -f pkgs/top-level/release-outpaths.nix"
+#!nix-shell -p nix -i "nix-env -qaP --no-name --out-path -f ci/eval/outpaths.nix"
 
-# Vendored from:
-#   https://raw.githubusercontent.com/NixOS/ofborg/74f38efa7ef6f0e8e71ec3bfc675ae4fb57d7491/ofborg/src/outpaths.nix
 {
-  checkMeta,
   includeBroken ? true, # set this to false to exclude meta.broken packages from the output
   path ? ./../..,
 
-  # used by pkgs/top-level/release-attrnames-superset.nix
+  # used by ./attrpaths.nix
   attrNamesOnly ? false,
 
   # Set this to `null` to build for builtins.currentSystem only
-  systems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json),
 }:
 let
   lib = import (path + "/lib");
@@ -30,7 +27,7 @@ let
             allowUnfree = true;
             allowInsecurePredicate = x: true;
             allowVariants = !attrNamesOnly;
-            checkMeta = checkMeta;
+            checkMeta = true;
 
             handleEvalIssue =
               reason: errormsg:

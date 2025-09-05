@@ -1,7 +1,6 @@
 {
   lib,
 }:
-# Almost directly vendored from https://github.com/NixOS/ofborg/blob/5a4e743f192fb151915fcbe8789922fa401ecf48/ofborg/src/maintainers.nix
 {
   changedattrs,
   changedpathsjson,
