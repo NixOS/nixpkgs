@@ -12,7 +12,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  python3,
+  python312,
   openssl,
   jq,
   callPackage,
@@ -21,6 +21,7 @@
 }:
 
 let
+  python3 = python312;
   # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
   # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
   pythonCustom = python3.override {

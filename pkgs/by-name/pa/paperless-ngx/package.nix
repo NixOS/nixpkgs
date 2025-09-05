@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch,
   node-gyp,
   nodejs_20,
   nixosTests,
@@ -29,13 +28,13 @@
   xorg,
 }:
 let
-  version = "2.18.2";
+  version = "2.18.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-JaDeOiubu9VE8E/u2K9BS7GLNSTqXTcX926WhPMGd64=";
+    hash = "sha256-rr1QfTNutKO+DwEQmltxdtjuk07mT0unlYo3SMq6oEs=";
   };
 
   python = python3.override {
@@ -169,6 +168,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "filelock"
     "rapidfuzz"
     "redis"
   ];

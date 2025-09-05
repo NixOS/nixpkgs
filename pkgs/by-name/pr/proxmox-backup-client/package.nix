@@ -14,20 +14,20 @@
 
 let
   pname = "proxmox-backup-client";
-  version = "4.0.13";
+  version = "4.0.14";
 
   proxmox-backup_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-backup.git";
-    rev = "de92e3f6a26bfbcc9f8b860e983a85a434a8e3c6";
+    rev = "8b1b5f8e4d8216a0c45146b426dbfaff01ac0068";
     name = "proxmox-backup";
-    hash = "sha256-09woNnl55zGIeHkX/UdBRg0mlKjD2HraPCjferNe81I=";
+    hash = "sha256-aLiGJcCsHI4QFfMwgmQsXWabRyQ829itNsIDcaVW4FA=";
   };
 
   proxmox_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox.git";
-    rev = "84a58afe23a35454a1abbeb6c436ee49d2888d18";
+    rev = "56c4deb6309c41ff5afa5765b112be967c653857";
     name = "proxmox";
-    hash = "sha256-p4o72RFuDBpgThJ39ZkIXriUQJZtYdrj9Biyl+XQ2hc=";
+    hash = "sha256-mkGvfWWis1W8xBLb8Da/uIauPEMKPosPdZ+UcgMrvkk=";
   };
 
   proxmox-fuse_src = fetchgit {
@@ -81,7 +81,10 @@ rustPlatform.buildRustPackage {
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config.toml
 
-    # avoid some unnecessary dependendcies, stemming from greedy linkage by rustc
+    (cd ../pxar && chmod -R u+w . && patch -p1 <${./0003-decoder-fix-autoref-error-in-pointer-to-reference-co.patch})
+    (cd ../proxmox && chmod -R u+w . && patch -p1 <${./0004-pbs-api-types-crypto-fix-autoref-error-in-ptr-to-ref.patch})
+
+    # avoid some unnecessary dependencies, stemming from greedy linkage by rustc
     # see also upstream Makefile for similar workaround
     mkdir -p .dep-stubs
     echo '!<arch>' >.dep-stubs/libsystemd.a
