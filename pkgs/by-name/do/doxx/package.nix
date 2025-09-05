@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "TUI document viewer for `docx` files";
+    description = "Terminal document viewer for .docx files";
     longDescription = ''
       `doxx` is a lightning-fast, terminal-native document viewer for
       Microsoft Word files. Built with Rust for performance and
