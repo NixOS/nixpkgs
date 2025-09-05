@@ -75,12 +75,6 @@ let
       # fix not be able to find clang from PATH
       substituteInPlace cl_headers/CMakeLists.txt \
         --replace-fail " NO_DEFAULT_PATH" ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Uses linker flags that are not supported on Darwin.
-      sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
-      substituteInPlace CMakeLists.txt \
-        --replace-fail '-Wl,--no-undefined' ""
     '';
   };
 in
@@ -111,13 +105,11 @@ stdenv.mkDerivation {
 
   inherit passthru;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/intel/opencl-clang/";
     description = "Clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
-    license = licenses.ncsa;
-    maintainers = [ ];
-    platforms = platforms.all;
-    # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.ncsa;
+    maintainers = [ lib.maintainers.SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }
