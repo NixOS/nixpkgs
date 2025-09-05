@@ -6,9 +6,10 @@
   dafny,
   writeScript,
   jdk11,
-  z3,
+  z3_4_14,
   dotnetCorePackages,
-}:
+  ...
+}@args:
 
 let
   examples = fetchFromGitHub {
@@ -17,6 +18,21 @@ let
     rev = "50e451bbcd15e52e27d5bbbf66b0b4c4abbff41c";
     hash = "sha256-Ng5wve/4gQr/2hsFWUFFcTL3K2xH7dP9w8IrmvWMKyg=";
   };
+
+  dafnyZ3Version = "4.12.1";
+  dafnyZ3 =
+    if args ? "z3" then
+      args.z3
+    else
+      z3_4_14.overrideAttrs (final: {
+        version = dafnyZ3Version;
+        src = fetchFromGitHub {
+          owner = "Z3Prover";
+          repo = "z3";
+          rev = "z3-${dafnyZ3Version}";
+          hash = "sha256-7cuUf29TMpX62PwO1ab3ZuzmzlcrRjTKB1CyXnYgYus=";
+        };
+      });
 
   tests = {
     verify = runCommand "dafny-test" { } ''
@@ -83,7 +99,7 @@ buildDotnetModule rec {
   executables = [ "Dafny" ];
 
   # Help Dafny find z3
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ z3 ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ dafnyZ3 ]}" ];
 
   postFixup = ''
     ln -s "$out/bin/Dafny" "$out/bin/dafny" || true
