@@ -10,8 +10,6 @@
 let
   # These are attributes in compiler that support integer-simple.
   integerSimpleIncludes = [
-    "ghc88"
-    "ghc884"
     "ghc810"
     "ghc8107"
   ];
