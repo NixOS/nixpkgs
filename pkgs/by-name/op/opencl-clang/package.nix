@@ -10,48 +10,47 @@
 }:
 
 let
+  patchesOut = stdenv.mkDerivation {
+    pname = "opencl-clang-patches";
+    inherit version src;
+    # Clang patches assume the root is the llvm root dir
+    # but clang root in nixpkgs is the clang sub-directory
+    postPatch = ''
+      for filename in patches/clang/*.patch; do
+        substituteInPlace "$filename" \
+          --replace-fail "a/clang/" "a/" \
+          --replace-fail "b/clang/" "b/"
+      done
+    '';
+
+    installPhase = ''
+      cp -r patches/ $out
+      mkdir -p $out/clang $out/llvm
+    '';
+  };
+
   addPatches =
     component: pkg:
     pkg.overrideAttrs (oldAttrs: {
       postPatch = oldAttrs.postPatch or "" + ''
-        for p in ${passthru.patchesOut}/${component}/*; do
+        for p in ${patchesOut}/${component}/*; do
           patch -p1 -i "$p"
         done
       '';
     });
 
   llvmPkgs = llvmPackages_15;
-  inherit (llvmPkgs) llvm;
+  llvm = addPatches "llvm" llvmPkgs.llvm;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
-  libclang = passthru.libclang;
+  libclang = addPatches "clang" llvmPkgs.libclang;
 
   passthru = rec {
+    inherit llvm libclang patchesOut;
     spirv-llvm-translator = spirv-llvm-translator';
-    llvm = addPatches "llvm" llvmPkgs.llvm;
-    libclang = addPatches "clang" llvmPkgs.libclang;
 
     clang-unwrapped = libclang.out;
     clang = llvmPkgs.clang.override {
       cc = clang-unwrapped;
-    };
-
-    patchesOut = stdenv.mkDerivation {
-      pname = "opencl-clang-patches";
-      inherit version src;
-      # Clang patches assume the root is the llvm root dir
-      # but clang root in nixpkgs is the clang sub-directory
-      postPatch = ''
-        for filename in patches/clang/*.patch; do
-          substituteInPlace "$filename" \
-            --replace-fail "a/clang/" "a/" \
-            --replace-fail "b/clang/" "b/"
-        done
-      '';
-
-      installPhase = ''
-        [ -d patches ] && cp -r patches/ $out || mkdir $out
-        mkdir -p $out/clang $out/llvm
-      '';
     };
   };
 
