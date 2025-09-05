@@ -315,7 +315,7 @@ rec {
         modules = [
           configuration
           versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
+          ({modulesPath,...}: { imports = [ "${modulesPath}/image/amazon.nix" ]; })
         ];
       }).config.system.build.amazonImage
     )
