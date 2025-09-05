@@ -1,226 +1,159 @@
-import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-    lts ? true,
+let
+  cfg = config.tests.incus;
 
-    allTests ? false,
+  releases =
+    init:
+    import ../../release.nix {
+      configuration = {
+        # Building documentation makes the test unnecessarily take a longer time:
+        documentation.enable = lib.mkForce false;
 
-    appArmor ? false,
-    featureUser ? allTests,
-    initLegacy ? true,
-    initSystemd ? true,
-    instanceContainer ? allTests,
-    instanceVm ? allTests,
-    networkOvs ? allTests,
-    storageLvm ? allTests,
-    storageZfs ? allTests,
-    ...
-  }:
+        boot.initrd.systemd.enable = init == "systemd";
 
-  let
-    releases =
-      init:
-      import ../../release.nix {
-        configuration = {
-          # Building documentation makes the test unnecessarily take a longer time:
-          documentation.enable = lib.mkForce false;
+        # Arbitrary sysctl modification to ensure containers can update sysctl
+        boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+      };
+    };
 
-          boot.initrd.systemd.enable = init == "systemd";
+  images = init: {
+    container = {
+      metadata =
+        (releases init).incusContainerMeta.${pkgs.stdenv.hostPlatform.system}
+        + "/tarball/nixos-image-lxc-*-${pkgs.stdenv.hostPlatform.system}.tar.xz";
 
-          # Arbitrary sysctl modification to ensure containers can update sysctl
-          boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+      rootfs =
+        (releases init).incusContainerImage.${pkgs.stdenv.hostPlatform.system}
+        + "/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
+    };
+
+    virtual-machine = {
+      metadata =
+        (releases init).incusVirtualMachineImageMeta.${pkgs.stdenv.hostPlatform.system} + "/*/*.tar.xz";
+      disk = (releases init).incusVirtualMachineImage.${pkgs.stdenv.hostPlatform.system} + "/nixos.qcow2";
+    };
+  };
+
+  initVariants =
+    lib.optionals cfg.init.legacy [ "legacy" ] ++ lib.optionals cfg.init.systemd [ "systemd" ];
+
+  canTestVm = cfg.instance.virtual-machine && pkgs.stdenv.isLinux && pkgs.stdenv.isx86_64;
+in
+{
+  name = "incus" + lib.optionalString cfg.lts "-lts";
+
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
+  nodes.machine = {
+    virtualisation = {
+      cores = 2;
+      memorySize = 4096;
+      diskSize = 12 * 1024;
+      emptyDiskImages = [
+        # vdb for zfs
+        2048
+        # vdc for lvm
+        2048
+      ];
+
+      incus = {
+        enable = true;
+        package = if cfg.lts then pkgs.incus-lts else pkgs.incus;
+
+        preseed = {
+          networks = [
+            {
+              name = "incusbr0";
+              type = "bridge";
+              config = {
+                "ipv4.address" = "10.0.10.1/24";
+                "ipv4.nat" = "true";
+              };
+            }
+          ]
+          ++ lib.optionals cfg.network.ovs [
+            {
+              name = "ovsbr0";
+              type = "bridge";
+              config = {
+                "bridge.driver" = "openvswitch";
+                "ipv4.address" = "10.0.20.1/24";
+                "ipv4.nat" = "true";
+              };
+            }
+          ];
+          profiles = [
+            {
+              name = "default";
+              devices = {
+                eth0 = {
+                  name = "eth0";
+                  network = "incusbr0";
+                  type = "nic";
+                };
+                root = {
+                  path = "/";
+                  pool = "default";
+                  size = "35GiB";
+                  type = "disk";
+                };
+              };
+            }
+          ];
+          storage_pools = [
+            {
+              name = "default";
+              driver = "dir";
+            }
+          ];
         };
       };
 
-    images = init: {
-      container = {
-        metadata =
-          (releases init).incusContainerMeta.${pkgs.stdenv.hostPlatform.system}
-          + "/tarball/nixos-image-lxc-*-${pkgs.stdenv.hostPlatform.system}.tar.xz";
-
-        rootfs =
-          (releases init).incusContainerImage.${pkgs.stdenv.hostPlatform.system}
-          + "/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
-      };
-
-      virtual-machine = {
-        metadata =
-          (releases init).incusVirtualMachineImageMeta.${pkgs.stdenv.hostPlatform.system} + "/*/*.tar.xz";
-        disk = (releases init).incusVirtualMachineImage.${pkgs.stdenv.hostPlatform.system} + "/nixos.qcow2";
-      };
+      vswitch.enable = cfg.network.ovs;
     };
 
-    initVariants = lib.optionals initLegacy [ "legacy" ] ++ lib.optionals initSystemd [ "systemd" ];
+    boot.supportedFilesystems = lib.optionals cfg.storage.zfs [ "zfs" ];
+    boot.zfs.forceImportRoot = false;
 
-    canTestVm = instanceVm && pkgs.stdenv.isLinux && pkgs.stdenv.isx86_64;
-  in
-  {
-    name = "incus" + lib.optionalString lts "-lts";
+    environment.systemPackages = [ pkgs.parted ];
 
-    meta = {
-      maintainers = lib.teams.lxc.members;
+    networking.hostId = "01234567";
+    networking.firewall.trustedInterfaces = [ "incusbr0" ];
+
+    security.apparmor.enable = cfg.appArmor;
+    services.dbus.apparmor = (if cfg.appArmor then "enabled" else "disabled");
+
+    services.lvm = {
+      boot.thin.enable = cfg.storage.lvm;
+      dmeventd.enable = cfg.storage.lvm;
     };
 
-    nodes.machine = {
-      virtualisation = {
-        cores = 2;
-        memorySize = 2048;
-        diskSize = 12 * 1024;
-        emptyDiskImages = [
-          # vdb for zfs
-          2048
-          # vdc for lvm
-          2048
-        ];
+    networking.nftables.enable = true;
 
-        incus = {
-          enable = true;
-          package = if lts then pkgs.incus-lts else pkgs.incus;
-
-          preseed = {
-            networks = [
-              {
-                name = "incusbr0";
-                type = "bridge";
-                config = {
-                  "ipv4.address" = "10.0.10.1/24";
-                  "ipv4.nat" = "true";
-                };
-              }
-            ]
-            ++ lib.optionals networkOvs [
-              {
-                name = "ovsbr0";
-                type = "bridge";
-                config = {
-                  "bridge.driver" = "openvswitch";
-                  "ipv4.address" = "10.0.20.1/24";
-                  "ipv4.nat" = "true";
-                };
-              }
-            ];
-            profiles = [
-              {
-                name = "default";
-                devices = {
-                  eth0 = {
-                    name = "eth0";
-                    network = "incusbr0";
-                    type = "nic";
-                  };
-                  root = {
-                    path = "/";
-                    pool = "default";
-                    size = "35GiB";
-                    type = "disk";
-                  };
-                };
-              }
-            ];
-            storage_pools = [
-              {
-                name = "default";
-                driver = "dir";
-              }
-            ];
-          };
-        };
-
-        vswitch.enable = networkOvs;
-      };
-
-      boot.supportedFilesystems = lib.optionals storageZfs [ "zfs" ];
-      boot.zfs.forceImportRoot = false;
-
-      environment.systemPackages = [ pkgs.parted ];
-
-      networking.hostId = "01234567";
-      networking.firewall.trustedInterfaces = [ "incusbr0" ];
-
-      security.apparmor.enable = appArmor;
-      services.dbus.apparmor = (if appArmor then "enabled" else "disabled");
-
-      services.lvm = {
-        boot.thin.enable = storageLvm;
-        dmeventd.enable = storageLvm;
-      };
-
-      networking.nftables.enable = true;
-
-      users.users.testuser = {
-        isNormalUser = true;
-        shell = pkgs.bashInteractive;
-        group = "incus";
-        uid = 1000;
-      };
+    users.users.testuser = {
+      isNormalUser = true;
+      shell = pkgs.bashInteractive;
+      group = "incus";
+      uid = 1000;
     };
+  };
 
-    testScript = # python
-    ''
-      import json
-
-      def wait_for_instance(name: str, project: str = "default"):
-          machine.wait_until_succeeds(f"incus exec {name} --disable-stdin --force-interactive --project {project} -- /run/current-system/sw/bin/systemctl is-system-running")
-
-
-      def wait_incus_exec_success(name: str, command: str, timeout: int = 900, project: str = "default"):
-          def check_command(_) -> bool:
-              status, _ = machine.execute(f"incus exec {name} --disable-stdin --force-interactive --project {project} -- {command}")
-              return status == 0
-
-          with machine.nested(f"Waiting for successful exec: {command}"):
-            retry(check_command, timeout)
-
-
-      def set_config(name: str, config: str, restart: bool = False, unset: bool = False):
-          if restart:
-              machine.succeed(f"incus stop {name}")
-
-          if unset:
-            machine.succeed(f"incus config unset {name} {config}")
-          else:
-            machine.succeed(f"incus config set {name} {config}")
-
-          if restart:
-              machine.succeed(f"incus start {name}")
-              wait_for_instance(name)
-          else:
-              # give a moment to settle
-              machine.sleep(1)
-
-
-      def cleanup():
-          # avoid conflict between preseed and cleanup operations
-          machine.execute("systemctl kill incus-preseed.service")
-
-          instances = json.loads(machine.succeed("incus list --format json --all-projects"))
-          with subtest("Stopping all running instances"):
-              for instance in [a for a in instances if a['status'] == 'Running']:
-                  machine.execute(f"incus stop --force {instance['name']} --project {instance['project']}")
-                  machine.execute(f"incus delete --force {instance['name']} --project {instance['project']}")
-
-
-      def check_sysctl(name: str):
-          with subtest("systemd sysctl settings are applied"):
-              machine.succeed(f"incus exec {name} -- systemctl status systemd-sysctl")
-              sysctl = machine.succeed(f"incus exec {name} -- sysctl net.ipv4.ip_forward").strip().split(" ")[-1]
-              assert "1" == sysctl, f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
-
-
-      with subtest("Wait for startup"):
-          machine.wait_for_unit("incus.service")
-          machine.wait_for_unit("incus-preseed.service")
-
-
-      with subtest("Verify preseed resources created"):
-          machine.succeed("incus profile show default")
-          machine.succeed("incus network info incusbr0")
-          machine.succeed("incus storage show default")
-
-    ''
-    + lib.optionalString appArmor ''
+  testScript =
+    lib.readFile ./incus_machine.py
+    +
+      # python
+      ''
+        machine = IncusMachine(machine)
+      ''
+    + lib.optionalString cfg.appArmor ''
       with subtest("Verify AppArmor service is started without issue"):
           # restart AppArmor service since the Incus AppArmor folders are
           # created after AA service is started
@@ -228,7 +161,7 @@ import ../make-test-python.nix (
           machine.succeed("systemctl --no-pager -l status apparmor.service")
           machine.wait_for_unit("apparmor.service")
     ''
-    + lib.optionalString instanceContainer (
+    + lib.optionalString cfg.instance.container (
       lib.foldl (
         acc: variant:
         acc
@@ -245,7 +178,7 @@ import ../make-test-python.nix (
 
           with subtest("container can be launched and managed"):
               machine.succeed(f"incus launch {alias} container-{variant}1")
-              wait_for_instance(f"container-{variant}1")
+              machine.wait_for_instance(f"container-{variant}1")
 
 
           with subtest("container mounts lxcfs overlays"):
@@ -254,23 +187,23 @@ import ../make-test-python.nix (
 
 
           with subtest("container CPU limits can be managed"):
-              set_config(f"container-{variant}1", "limits.cpu 1", restart=True)
-              wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^1$'", timeout=90)
+              machine.set_instance_config(f"container-{variant}1", "limits.cpu 1", restart=True)
+              machine.wait_instance_exec_success(f"container-{variant}1", "nproc | grep '^1$'", timeout=90)
 
 
           with subtest("container CPU limits can be hotplug changed"):
-              set_config(f"container-{variant}1", "limits.cpu 2")
-              wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^2$'", timeout=90)
+              machine.set_instance_config(f"container-{variant}1", "limits.cpu 2")
+              machine.wait_instance_exec_success(f"container-{variant}1", "nproc | grep '^2$'", timeout=90)
 
 
           with subtest("container memory limits can be managed"):
-              set_config(f"container-{variant}1", "limits.memory 128MB", restart=True)
-              wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*125000 kB' /proc/meminfo", timeout=90)
+              machine.set_instance_config(f"container-{variant}1", "limits.memory 128MB", restart=True)
+              machine.wait_instance_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*125000 kB' /proc/meminfo", timeout=90)
 
 
           with subtest("container memory limits can be hotplug changed"):
-              set_config(f"container-{variant}1", "limits.memory 256MB")
-              wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*250000 kB' /proc/meminfo", timeout=90)
+              machine.set_instance_config(f"container-{variant}1", "limits.memory 256MB")
+              machine.wait_instance_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*250000 kB' /proc/meminfo", timeout=90)
 
 
           with subtest("container software tpm can be configured"):
@@ -286,25 +219,25 @@ import ../make-test-python.nix (
                   # default container is plain
                   machine.succeed(f"incus exec container-{variant}1 test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
 
-                  check_sysctl(f"container-{variant}1")
+                  machine.check_instance_sysctl(f"container-{variant}1")
 
               with subtest("lxc-container generator configures nested container"):
-                  set_config(f"container-{variant}1", "security.nesting=true", restart=True)
+                  machine.set_instance_config(f"container-{variant}1", "security.nesting=true", restart=True)
 
                   machine.fail(f"incus exec container-{variant}1 test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
                   target = machine.succeed(f"incus exec container-{variant}1 readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
                   assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
 
-                  check_sysctl(f"container-{variant}1")
+                  machine.check_instance_sysctl(f"container-{variant}1")
 
               with subtest("lxc-container generator configures privileged container"):
                   # Create a new instance for a clean state
                   machine.succeed(f"incus launch {alias} container-{variant}2")
-                  wait_for_instance(f"container-{variant}2")
+                  machine.wait_for_instance(f"container-{variant}2")
 
                   machine.succeed(f"incus exec container-{variant}2 test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
 
-                  check_sysctl(f"container-{variant}2")
+                  machine.check_instance_sysctl(f"container-{variant}2")
 
           with subtest("container supports per-instance lxcfs"):
               machine.succeed(f"incus stop container-{variant}1")
@@ -313,13 +246,13 @@ import ../make-test-python.nix (
               machine.succeed("incus config set instances.lxcfs.per_instance=true")
 
               machine.succeed(f"incus start container-{variant}1")
-              wait_for_instance(f"container-{variant}1")
+              machine.wait_for_instance(f"container-{variant}1")
               machine.succeed(f"pgrep -a lxcfs | grep 'incus/devices/container-{variant}1/lxcfs'")
 
 
           with subtest("container can successfully restart"):
               machine.succeed(f"incus restart container-{variant}1")
-              wait_for_instance(f"container-{variant}1")
+              machine.wait_for_instance(f"container-{variant}1")
 
 
           with subtest("container remains running when softDaemonRestart is enabled and service is stopped"):
@@ -337,7 +270,7 @@ import ../make-test-python.nix (
                   machine.succeed("systemctl start incus-startup.service")
 
 
-          cleanup()
+          machine.cleanup()
         ''
       ) "" initVariants
     )
@@ -366,7 +299,7 @@ import ../make-test-python.nix (
 
           with subtest("virtual-machine can be launched and become available"):
               machine.succeed(f"incus start vm-{variant}1")
-              wait_for_instance(f"vm-{variant}1")
+              machine.wait_for_instance(f"vm-{variant}1")
 
 
           with subtest("virtual-machine incus-agent is started"):
@@ -378,18 +311,18 @@ import ../make-test-python.nix (
 
 
           with subtest("virtual-machine CPU limits can be managed"):
-              set_config(f"vm-{variant}1", "limits.cpu 1", restart=True)
-              wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^1$'", timeout=90)
+              machine.set_instance_config(f"vm-{variant}1", "limits.cpu 1", restart=True)
+              machine.wait_instance_exec_success(f"vm-{variant}1", "nproc | grep '^1$'", timeout=90)
 
 
           with subtest("virtual-machine CPU limits can be hotplug changed"):
-              set_config(f"vm-{variant}1", "limits.cpu 2")
-              wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^2$'", timeout=90)
+              machine.set_instance_config(f"vm-{variant}1", "limits.cpu 2")
+              machine.wait_instance_exec_success(f"vm-{variant}1", "nproc | grep '^2$'", timeout=90)
 
 
           with subtest("virtual-machine can successfully restart"):
               machine.succeed(f"incus restart vm-{variant}1")
-              wait_for_instance(f"vm-{variant}1")
+              machine.wait_for_instance(f"vm-{variant}1")
 
 
           with subtest("virtual-machine remains running when softDaemonRestart is enabled and service is stopped"):
@@ -408,7 +341,7 @@ import ../make-test-python.nix (
                   machine.succeed("systemctl start incus-startup.service")
 
 
-          cleanup()
+          machine.cleanup()
         ''
       ) "" initVariants)
       +
@@ -419,11 +352,11 @@ import ../make-test-python.nix (
               machine.succeed("incus start csm")
 
 
-          cleanup()
+          machine.cleanup()
         ''
     )
     +
-      lib.optionalString featureUser # python
+      lib.optionalString cfg.feature.user # python
         ''
           with subtest("incus-user allows restricted access for users"):
               machine.fail("incus project show user-1000")
@@ -437,12 +370,12 @@ import ../make-test-python.nix (
           with subtest("incus-user allows users to launch instances"):
               machine.succeed("su - testuser bash -c 'incus image import ${(images "systemd").container.metadata} ${(images "systemd").container.rootfs} --alias nixos'")
               machine.succeed("su - testuser bash -c 'incus launch nixos instance2'")
-              wait_for_instance("instance2", "user-1000")
+              machine.wait_for_instance("instance2", "user-1000")
 
-          cleanup()
+          machine.cleanup()
         ''
     +
-      lib.optionalString networkOvs # python
+      lib.optionalString cfg.network.ovs # python
         ''
           with subtest("Verify openvswitch bridge"):
               machine.succeed("incus network info ovsbr0")
@@ -453,7 +386,7 @@ import ../make-test-python.nix (
         ''
 
     +
-      lib.optionalString storageZfs # python
+      lib.optionalString cfg.storage.zfs # python
         ''
           with subtest("Verify zfs pool created and usable"):
               machine.succeed(
@@ -478,7 +411,7 @@ import ../make-test-python.nix (
         ''
 
     +
-      lib.optionalString storageLvm # python
+      lib.optionalString cfg.storage.lvm # python
         ''
           with subtest("Verify lvm pool created and usable"):
               machine.succeed("incus storage create lvm_pool lvm source=/dev/vdc lvm.vg_name=incus_pool")
@@ -496,5 +429,4 @@ import ../make-test-python.nix (
               machine.succeed("incus create lvm1 --empty --storage lvm_pool")
               machine.succeed("incus list lvm1")
         '';
-  }
-)
+}
