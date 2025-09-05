@@ -682,6 +682,7 @@ in
   grub = runTest ./grub.nix;
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
+  gunicorn = runTest ./gunicorn.nix;
   gvisor = runTest ./gvisor.nix;
   h2o = import ./web-servers/h2o {
     inherit runTest;
