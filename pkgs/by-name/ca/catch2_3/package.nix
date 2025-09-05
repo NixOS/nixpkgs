@@ -4,17 +4,18 @@
   fetchFromGitHub,
   cmake,
   python3,
+  spdlog,
 }:
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     tag = "v${version}";
-    hash = "sha256-mkNdjbnSf8bprZ9QMYTlfMM4KBPH0v7njWzqUF/jk84=";
+    hash = "sha256-eeqqzHMeXLRiXzbY+ay8gJ/YDuxDj3f6+d6eXA1uZHE=";
   };
 
   postPatch = ''
@@ -54,6 +55,10 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     python3
   ];
+
+  passthru.tests = {
+    inherit spdlog;
+  };
 
   meta = {
     description = "Modern, C++-native, test framework for unit-tests";
