@@ -849,6 +849,7 @@ mapAliases ({
   vega_datasets = vega-datasets; # added 2023-11-04
   ViennaRNA = viennarna; # added 2023-08-23
   virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
+  vulcan-api = throw "vulcan-api has been removed. Their API has changed and they don't allow access from unofficial software anymore."; # added 2025-09-05
   Wand = wand; # added 2022-11-13
   wasm = throw "wasm has been removed because it no longer builds and is unmaintained"; # added 2023-05-20
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
