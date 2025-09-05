@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoreconfHook,
   nix-update-script,
-  fetchpatch,
   ncurses ? null,
 
   # Enable `termcap` (`ncurses`) support.
@@ -17,39 +16,13 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editline";
-  version = "1.17.1";
+  version = "1.17.1-unstable-2025-05-24";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
-    rev = finalAttrs.version;
-    sha256 = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
+    rev = "f735e4d1d566cac3caa4a5e248179d07f0babefd";
+    sha256 = "sha256-MUXxSmhpQd8CZdGGC6Ln9eci85E+GBhlNk28VHUvjaU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-for-home-end-in-tmux.patch";
-      url = "https://github.com/troglobit/editline/commit/265c1fb6a0b99bedb157dc7c320f2c9629136518.patch";
-      sha256 = "sha256-9fhQH0hT8BcykGzOUoT18HBtWjjoXnePSGDJQp8GH30=";
-    })
-
-    # Pending autoconf-2.72 upstream support:
-    #   https://github.com/troglobit/editline/pull/64
-    (fetchpatch {
-      name = "autoconf-2.72.patch";
-      url = "https://github.com/troglobit/editline/commit/f444a316f5178b8e20fe31e7b2d979e651da077e.patch";
-      hash = "sha256-m3jExTkPvE+ZBwHzf/A+ugzzfbLmeWYn726l7Po7f10=";
-    })
-
-    # Recognize `Alt-Left` and `Alt-Right` for navigating by words in more
-    # terminals/shells/platforms.
-    #
-    # See: https://github.com/troglobit/editline/pull/70
-    (fetchpatch {
-      name = "alt-left-alt-right-word-navigation.patch";
-      url = "https://github.com/troglobit/editline/commit/fb4d7268de024ed31ad2417f533cc0cbc2cd9b29.diff";
-      hash = "sha256-5zMsmpU5zFoffRUwFhI/vP57pEhGotcMPgn9AfI1SNg=";
-    })
-  ];
 
   configureFlags = [
     # Enable SIGSTOP (Ctrl-Z) behavior.
