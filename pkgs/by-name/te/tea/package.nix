@@ -30,6 +30,10 @@ buildGoModule rec {
     mainProgram = "tea";
   };
 
+  ldflags = [
+    "-X code.gitea.io/tea/cmd.Version=${version}"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
