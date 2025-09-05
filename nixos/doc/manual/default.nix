@@ -98,6 +98,9 @@ let
     pkgs.callPackage ../../../nixos/lib/test-driver/nixos-test-driver-docstrings.nix
       { };
 
+  # List of doucumentation files defined in meta attribute of nixos options
+  docFiles = concatMapStringsSep " " (p: "${p.value}") config.meta.doc;
+
   prepareManualFromMD = ''
     cp -r --no-preserve=all $inputs/* .
 
@@ -105,10 +108,18 @@ let
 
     substituteInPlace ./manual.md \
       --replace-fail '@NIXOS_VERSION@' "${version}"
+
+    for file in ${docFiles}; do
+      ln -s $file configuration/$(basename $file);
+    done
+
     substituteInPlace ./configuration/configuration.md \
       --replace-fail \
           '@MODULE_CHAPTERS@' \
-          ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          ${escapeShellArg (
+            concatMapStringsSep "\n" (p: builtins.baseNameOf "${p.value}") config.meta.doc
+          )}
+
     substituteInPlace ./nixos-options.md \
       --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
@@ -129,6 +140,7 @@ let
         ${systemdServiceOptions.optionsJSON}/${common.outputPath}/options.json
   '';
 
+<<<<<<< HEAD
   portableServiceOptions = buildPackages.nixosOptionsDoc {
     inherit
       (evalModules {
@@ -167,14 +179,19 @@ in
 rec {
   inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
 
+in
+rec {
+  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
+
   # Generate the NixOS manual.
-  manualHTML =
+  generateManualHTML =
+    singlePageManual:
     runCommand "nixos-manual-html"
       {
         nativeBuildInputs = [ buildPackages.nixos-render-docs ];
         inputs = sourceFilesBySuffices ./. [ ".md" ];
         meta.description = "The NixOS manual in HTML format";
-        allowedReferences = [ "out" ];
+        allowedReferences = [ "out" ] ++ (map (p: "${p.value}") config.meta.doc);
       }
       ''
         # Generate the HTML manual.
@@ -201,6 +218,7 @@ rec {
           --script ./anchor.min.js \
           --script ./anchor-use.js \
           --toc-depth 1 \
+          ${if !singlePageManual then "--into-pages" else ""} \
           --chunk-toc-depth 1 \
           ./manual.md \
           $dst/${common.indexPath}
@@ -209,8 +227,15 @@ rec {
 
         mkdir -p $out/nix-support
         echo "nix-build out $out" >> $out/nix-support/hydra-build-products
+
         echo "doc manual $dst" >> $out/nix-support/hydra-build-products
       ''; # */
+in
+rec {
+  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
+
+  manualHTML = generateManualHTML true;
+  multiPagesManualHTML = generateManualHTML false;
 
   # Alias for backward compatibility. TODO(@oxij): remove eventually.
   manual = manualHTML;
