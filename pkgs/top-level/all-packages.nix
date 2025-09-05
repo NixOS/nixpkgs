@@ -4712,7 +4712,6 @@ with pkgs;
   corretto21 = javaPackages.compiler.corretto21;
 
   inherit (callPackage ../development/compilers/crystal { })
-    crystal_1_11
     crystal_1_14
     crystal_1_15
     crystal_1_16
