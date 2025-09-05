@@ -32,12 +32,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Feature-rich pinyin schema for Rime, basic edition";
+    description = "Feature-rich pinyin schema for Rime";
     longDescription = ''
-      万象拼音基础版 is a basic quanpin and shuangpin input schema for Rime based on
+      万象拼音 is a quanpin and shuangpin input schema for Rime based on
       [万象 dictionaries and grammar models](https://github.com/amzxyz/RIME-LMDG),
       supporting traditional shuangpin as well as tonal schemata such as 自然龙 and
       龙码.
+
+      This package is built from the upstream repository snapshots, and includes
+      all the auxiliary encodings.
 
       The schema requires to work the grammar model `wanxiang-lts-zh-hans.gram`.
       However, this file is
