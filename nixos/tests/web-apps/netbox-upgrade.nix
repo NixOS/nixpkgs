@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 let
-  oldNetbox = "netbox_4_2";
-  newNetbox = "netbox_4_3";
+  oldNetbox = "netbox_4_3";
+  newNetbox = "netbox_4_4";
 
   apiVersion =
     version:
