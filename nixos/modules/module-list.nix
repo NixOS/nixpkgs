@@ -1665,6 +1665,7 @@
   ./services/web-apps/opencloud.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/openwebrx.nix
+  ./services/web-apps/otterwiki.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/part-db.nix
   ./services/web-apps/peering-manager.nix
