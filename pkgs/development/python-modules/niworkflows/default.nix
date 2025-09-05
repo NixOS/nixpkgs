@@ -102,6 +102,7 @@ buildPythonPackage rec {
     "test_GenerateCifti"
     "test_SimpleShowMaskRPT"
     "test_cifti_surfaces_plot"
+    "test_brain_extraction_wf_smoketest"
   ];
 
   disabledTestPaths = [
