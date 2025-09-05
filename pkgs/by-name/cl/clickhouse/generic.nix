@@ -89,13 +89,12 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dontCargoSetupPostUnpack = true;
-  patches = [
-    # Should not be necessary after 25.9
-    (lib.optionalString (lib.versions.majorMinor version == "25.8") (fetchpatch {
-      url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
-    }))
-  ];
+
+  # Should not be necessary after 25.9
+  patches = lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
+    url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
+    sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
+  });
 
   postPatch = ''
     patchShebangs src/ utils/
