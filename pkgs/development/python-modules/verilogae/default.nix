@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "verilogae";
-  version = "24.0.0mob-unstable-2025-07-21";
+  version = "24.0.0mob";
   pyproject = true;
 
   stdenv = llvmPackages.stdenv;
