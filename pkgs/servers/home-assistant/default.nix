@@ -282,16 +282,20 @@ let
         doCheck = false;
       });
 
-      python-roborock = super.python-roborock.overridePythonAttrs rec {
-        version = "2.18.2";
+      python-roborock =
+        (super.python-roborock.override {
+          pytest-asyncio = self.pytest-asyncio_0;
+        }).overridePythonAttrs
+          rec {
+            version = "2.18.2";
 
-        src = fetchFromGitHub {
-          owner = "Python-roborock";
-          repo = "python-roborock";
-          tag = "v${version}";
-          hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
-        };
-      };
+            src = fetchFromGitHub {
+              owner = "Python-roborock";
+              repo = "python-roborock";
+              tag = "v${version}";
+              hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
+            };
+          };
 
       python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
         version = "21.5";
