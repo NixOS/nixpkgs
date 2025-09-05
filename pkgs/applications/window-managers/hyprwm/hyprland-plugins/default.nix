@@ -31,6 +31,7 @@ let
     { hyprgrass = import ./hyprgrass.nix; }
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
+    { hyprslidr = import ./hyprslidr.nix; }
     (import ./hyprland-plugins.nix)
     (lib.optionalAttrs config.allowAliases {
       hyprscroller = throw "hyprlandPlugins.hyprscroller has been removed as the upstream project is deprecated. Consider using `hyprlandPlugins.hyprscrolling`."; # Added 2025-05-09
