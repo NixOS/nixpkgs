@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace libuptimed/urec.h \
       --replace /var/spool /var/lib
+
+    substituteInPlace Makefile.am \
+      --replace-fail '$(sysconfdir)/uptimed.conf' '/etc/uptimed/uptimed.conf'
+
+    substituteInPlace src/Makefile.am \
+      --replace-fail '$(sysconfdir)/uptimed.conf' '/etc/uptimed/uptimed.conf'
   '';
 
   meta = with lib; {
