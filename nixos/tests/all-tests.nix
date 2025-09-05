@@ -1093,7 +1093,7 @@ in
   nyxt = runTest ./nyxt.nix;
   nzbget = runTest ./nzbget.nix;
   nzbhydra2 = runTest ./nzbhydra2.nix;
-  ocis = runTest ./ocis.nix;
+  ocis = handleTest ./ocis { };
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
   obs-studio = runTest ./obs-studio.nix;
   oh-my-zsh = runTest ./oh-my-zsh.nix;
