@@ -679,7 +679,7 @@ in
       native-bignum =
         let
           nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
-            pkgs.lib.attrNames compiler
+            pkgs.lib.attrNames packages
           );
         in
         pkgs.lib.genAttrs nativeBignumGhcNames (
