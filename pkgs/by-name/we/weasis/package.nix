@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
   jdk24,
+  unzip,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -14,6 +15,7 @@ let
   platform = selectSystem {
     "x86_64-linux" = "linux-x86-64";
     "aarch64-linux" = "linux-aarch64";
+    "x86_64-darwin" = "macosx-x86-64";
     "aarch64-darwin" = "macosx-aarch64";
   };
 
@@ -29,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ lib.optional stdenv.isDarwin unzip;
 
   desktopItems = [
     (makeDesktopItem {
@@ -86,9 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       epl20
     ];
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ [
-      "aarch64-darwin"
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "Weasis";
   };
 })
