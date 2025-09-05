@@ -2,14 +2,28 @@
   lib,
   stdenv,
   applyPatches,
+  callPackage,
+  buildPackages,
+  targetPackages,
   fetchFromGitHub,
   cmake,
   git,
-  llvmPackages_15,
   spirv-llvm-translator,
 }:
 
 let
+  llvmPkgs =
+    let
+      llvmPkgs = callPackage ./llvm {
+        buildLlvmTools = buildPackages.opencl-clang.llvmPkgs.tools;
+        targetLlvmLibraries = targetPackages.opencl-clang.llvmPkgs.libraries or llvmPkgs.libraries;
+        targetLlvm = targetPackages.opencl-clang.llvmPkgs.llvm or llvmPkgs.llvm;
+        version = "15.0.7";
+        sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
+      };
+    in
+    llvmPkgs;
+
   patchesOut = stdenv.mkDerivation {
     pname = "opencl-clang-patches";
     inherit version src;
@@ -39,13 +53,17 @@ let
       '';
     });
 
-  llvmPkgs = llvmPackages_15;
-  llvm = addPatches "llvm" llvmPkgs.llvm;
+  llvm = addPatches "llvm" llvmPkgs.tools.libllvm;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
   libclang = addPatches "clang" llvmPkgs.libclang;
 
   passthru = rec {
-    inherit llvm libclang patchesOut;
+    inherit
+      llvmPkgs
+      llvm
+      libclang
+      patchesOut
+      ;
     spirv-llvm-translator = spirv-llvm-translator';
 
     clang-unwrapped = libclang.out;
