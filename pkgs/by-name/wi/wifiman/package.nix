@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wifiman.com";
     license = licenses.unfree;
     mainProgram = "wi-fiman-desktop";
-    maintainers = with maintainers; [ neverbehave ];
+    maintainers = with maintainers; [ neverbehave ruffsl ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
