@@ -13292,6 +13292,8 @@ self: super: with self; {
 
   pylibjpeg-openjpeg = callPackage ../development/python-modules/pylibjpeg-openjpeg { };
 
+  pylibjpeg-rle = callPackage ../development/python-modules/pylibjpeg-rle { };
+
   pyliblo3 = callPackage ../development/python-modules/pyliblo3 { };
 
   pylibmc = callPackage ../development/python-modules/pylibmc { };
