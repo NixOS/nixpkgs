@@ -10,8 +10,6 @@
 let
   # These are attributes in compiler that support integer-simple.
   integerSimpleIncludes = [
-    "ghc88"
-    "ghc884"
     "ghc810"
     "ghc8107"
   ];
@@ -675,7 +673,7 @@ in
       native-bignum =
         let
           nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
-            pkgs.lib.attrNames compiler
+            pkgs.lib.attrNames packages
           );
         in
         pkgs.lib.genAttrs nativeBignumGhcNames (
