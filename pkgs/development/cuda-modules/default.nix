@@ -157,8 +157,6 @@ let
 
       # Alternative versions of select packages.
       # This should be minimized as much as possible.
-      # TODO(@connorbaker): Document overriding manifests through `overrideAttrs`.
-      # TODO(@connorbaker): OverrideAttrs is "bad" within Nixpkgs; try to find another way to override packages?
       cudnn_8_9 = finalCudaPackages.cudnn.overrideAttrs (prevAttrs: {
         passthru = prevAttrs.passthru // {
           release =

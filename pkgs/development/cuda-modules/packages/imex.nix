@@ -1,5 +1,5 @@
-{ imex, zlib }:
-{
+{ buildRedist, zlib }:
+buildRedist {
   redistName = "cuda";
   pname = "imex";
 

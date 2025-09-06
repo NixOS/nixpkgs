@@ -17,7 +17,6 @@ let
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep;
 in
-
 buildRedist (
   finalAttrs:
   let

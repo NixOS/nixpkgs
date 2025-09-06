@@ -67,21 +67,6 @@ let
     assert assertMsg (output != "") "mkOutputNameVar: output name variable must not be empty";
     "output" + toUpper (substring 0 1 output) + substring 1 (stringLength output - 1) output;
 
-  # Order is important here so we use a list.
-  # NOTE: Moved out of the attribute set overlay so we can use it to add top-level attributes.
-  expectedOutputs = [
-    "out"
-    "doc"
-    "samples"
-    "python"
-    "bin"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
-
   getSupportedReleases =
     let
       desiredCudaVariant = _mkCudaVariant cudaMajorVersion;
@@ -110,13 +95,26 @@ let
           ${name} = value.${desiredCudaVariant} or value;
         }
       ) { } release;
+
+  getPreferredRelease =
+    supportedReleases:
+    supportedReleases.source or supportedReleases.linux-all or supportedReleases.${hostRedistSystem}
+      or null;
 in
 extendMkDerivation {
   constructDrv = backendStdenv.mkDerivation;
   # These attributes are moved to passthru to avoid changing derivation hashes.
   excludeDrvArgNames = [
+    # Core
     "redistName"
+    "release"
+
+    # Misc
     "brokenAssertions"
+    "platformAssertions"
+    "expectedOutputs"
+    "outputToPatterns"
+    "outputNameVarFallbacks"
   ];
   extendDrvArgs =
     finalAttrs:
@@ -124,7 +122,7 @@ extendMkDerivation {
       # Core
       redistName,
       pname,
-      release ? manifests.${finalAttrs.passthru.redistName}.${finalAttrs.pname},
+      release ? manifests.${finalAttrs.passthru.redistName}.${finalAttrs.pname} or null,
 
       # Outputs
       outputs ? [ "out" ],
@@ -149,13 +147,70 @@ extendMkDerivation {
       # Misc
       brokenAssertions ? [ ],
       platformAssertions ? [ ],
+
+      # Order is important here so we use a list.
+      expectedOutputs ? [
+        "out"
+        "doc"
+        "samples"
+        "python"
+        "bin"
+        "dev"
+        "include"
+        "lib"
+        "static"
+        "stubs"
+      ],
+
+      # Traversed in the order of the outputs speficied in outputs;
+      # entries are skipped if they don't exist in outputs.
+      # NOTE: The nil LSP gets angry if we do not parenthesize the default attrset.
+      outputToPatterns ? ({
+        bin = [ "bin" ];
+        dev = [
+          "**/*.pc"
+          "**/*.cmake"
+        ];
+        include = [ "include" ];
+        lib = [
+          "lib"
+          "lib64"
+        ];
+        static = [ "**/*.a" ];
+        samples = [ "samples" ];
+        python = [ "**/*.whl" ];
+        stubs = [
+          "stubs"
+          "lib/stubs"
+        ];
+      }),
+
+      # Defines a list of fallbacks for each potential output.
+      # The last fallback is the out output.
+      # Taken and modified from:
+      # https://github.com/NixOS/nixpkgs/blob/fe5e11faed6241aacf7220436088789287507494/pkgs/build-support/setup-hooks/multiple-outputs.sh#L45-L62
+      outputNameVarFallbacks ? ({
+        outputBin = [ "bin" ];
+        outputDev = [ "dev" ];
+        outputDoc = [ "doc" ];
+        outputInclude = [
+          "include"
+          "dev"
+        ];
+        outputLib = [ "lib" ];
+        outputOut = [ "out" ];
+        outputPython = [ "python" ];
+        outputSamples = [ "samples" ];
+        outputStatic = [ "static" ];
+        outputStubs = [ "stubs" ];
+      }),
       ...
     }:
     {
       __structuredAttrs = true;
       strictDeps = true;
 
-      inherit (finalAttrs.passthru.release) version;
+      version = lib.defaultTo "0-unsupported" finalAttrs.passthru.release.version;
 
       # Name should be prefixed by cudaNamePrefix to create more descriptive path names.
       name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
@@ -190,25 +245,19 @@ extendMkDerivation {
         ++ propagatedBuildOutputs;
 
       # src :: null | Derivation
-      src =
-        mapNullable
-          (
-            { relative_path, sha256, ... }:
-            srcOnly {
-              __structuredAttrs = true;
-              strictDeps = true;
-              stdenv = stdenvNoCC;
-              inherit (finalAttrs) pname version;
-              src = fetchurl {
-                url = mkRedistUrl finalAttrs.passthru.redistName relative_path;
-                inherit sha256;
-              };
-            }
-          )
-          (
-            finalAttrs.passthru.supportedReleases.source or finalAttrs.passthru.supportedReleases.linux-all
-              or finalAttrs.passthru.supportedReleases.${hostRedistSystem} or null
-          );
+      src = mapNullable (
+        { relative_path, sha256, ... }:
+        srcOnly {
+          __structuredAttrs = true;
+          strictDeps = true;
+          stdenv = stdenvNoCC;
+          inherit (finalAttrs) pname version;
+          src = fetchurl {
+            url = mkRedistUrl finalAttrs.passthru.redistName relative_path;
+            inherit sha256;
+          };
+        }
+      ) (getPreferredRelease finalAttrs.passthru.supportedReleases);
 
       # Required for the hook.
       inherit cudaMajorMinorVersion cudaMajorVersion;
@@ -296,7 +345,8 @@ extendMkDerivation {
         inherit redistName release;
 
         supportedReleases =
-          passthru.supportedReleases or (getSupportedReleases finalAttrs.passthru.release);
+          passthru.supportedReleases
+            or (getSupportedReleases (lib.defaultTo [ ] finalAttrs.passthru.release));
 
         supportedNixSystems =
           passthru.supportedNixSystems or (pipe finalAttrs.passthru.supportedReleases [
@@ -311,51 +361,17 @@ extendMkDerivation {
 
         # NOTE: Downstream may expand this to include other outputs, but they must remember to set the appropriate
         # outputNameVarFallbacks!
-        expectedOutputs = expectedOutputs ++ passthru.expectedOutputs or [ ];
+        inherit expectedOutputs;
 
         # Traversed in the order of the outputs speficied in outputs;
         # entries are skipped if they don't exist in outputs.
-        outputToPatterns = {
-          bin = [ "bin" ];
-          dev = [
-            "**/*.pc"
-            "**/*.cmake"
-          ];
-          include = [ "include" ];
-          lib = [
-            "lib"
-            "lib64"
-          ];
-          static = [ "**/*.a" ];
-          samples = [ "samples" ];
-          python = [ "**/*.whl" ];
-          stubs = [
-            "stubs"
-            "lib/stubs"
-          ];
-        }
-        // passthru.outputToPatterns or { };
+        inherit outputToPatterns;
 
         # Defines a list of fallbacks for each potential output.
         # The last fallback is the out output.
         # Taken and modified from:
         # https://github.com/NixOS/nixpkgs/blob/fe5e11faed6241aacf7220436088789287507494/pkgs/build-support/setup-hooks/multiple-outputs.sh#L45-L62
-        outputNameVarFallbacks = {
-          outputBin = [ "bin" ];
-          outputDev = [ "dev" ];
-          outputDoc = [ "doc" ];
-          outputInclude = [
-            "include"
-            "dev"
-          ];
-          outputLib = [ "lib" ];
-          outputOut = [ "out" ];
-          outputPython = [ "python" ];
-          outputSamples = [ "samples" ];
-          outputStatic = [ "static" ];
-          outputStubs = [ "stubs" ];
-        }
-        // passthru.outputNameVarFallbacks or { };
+        inherit outputNameVarFallbacks;
 
         # brokenAssertions :: [Attrs]
         # Used by mkMetaBroken to set `meta.broken`.

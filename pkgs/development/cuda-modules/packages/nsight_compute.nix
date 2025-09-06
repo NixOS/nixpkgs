@@ -1,14 +1,11 @@
 {
   buildRedist,
   cudaAtLeast,
-  cudaMajorMinorVersion,
   cudaOlder,
   e2fsprogs,
   elfutils,
   flags,
-  gst_all_1,
   lib,
-  libjpeg8,
   qt6,
   rdma-core,
   stdenv,
@@ -24,7 +21,7 @@ let
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-{
+buildRedist {
   redistName = "cuda";
   pname = "nsight_compute";
 
