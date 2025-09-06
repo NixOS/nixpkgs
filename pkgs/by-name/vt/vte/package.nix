@@ -23,9 +23,11 @@
   pango,
   pcre2,
   cairo,
+  fmt_11,
   fribidi,
   lz4,
   icu,
+  simdutf,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fast-float,
@@ -36,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.80.3";
+  version = "0.81.90";
 
   outputs = [
     "out"
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Lllv0/vqu3FTFmIiTnH2osN/aEQmE21ihUYnJ2709pk=";
+    hash = "sha256-kLJhqwJZf+6UH3GmV+v50OMDqsN3tIXERNhUQ1oJEyE=";
   };
 
   patches = [
@@ -57,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+
+    # Fix compilation with gcc 14
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/e297ba0507d0e7863edd411dfc5264bbc490e4f6.patch";
+      hash = "sha256-uTaeb7bLUBefgF5Uxl7Qxlcp5Uj7pqW8XiR/5rsjuTI=";
     })
   ];
 
@@ -76,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    fmt_11
     fribidi
     gnutls
     pango # duplicated with propagatedBuildInputs to support gtkVersion == null
@@ -83,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     icu
     fast-float
+    simdutf
   ]
   ++ lib.optionals systemdSupport [
     systemd
