@@ -2949,6 +2949,8 @@ self: super: with self; {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
+  crewai = callPackage ../development/python-modules/crewai { };
+
   crochet = callPackage ../development/python-modules/crochet { };
 
   crocoddyl = toPythonModule (
