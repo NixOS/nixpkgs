@@ -14,6 +14,7 @@
 
   # build-tools
   bootPkgs,
+  autoreconfHook,
   autoconf,
   automake,
   coreutils,
@@ -429,7 +430,11 @@ stdenv.mkDerivation (
         else
           ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
       )
-    ];
+    ]
+
+    ++ lib.optionals (lib.versionAtLeast version "9.4") (
+      import ./common-llvm-patches.nix { inherit lib version fetchpatch; }
+    );
 
     postPatch = "patchShebangs .";
 
@@ -595,6 +600,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [
       perl
+      autoreconfHook
       autoconf
       automake
       m4
@@ -738,6 +744,7 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      broken = lib.versionOlder version "9.4" && useLLVM;
     };
 
   }
