@@ -1120,6 +1120,93 @@ in
       '';
     };
 
+    virtualisation.credentials = mkOption {
+      description = ''
+        Credentials to pass to the VM using systemd's credential system.
+
+        Each credential is identified by its attribute name and can contain either
+        text content or binary data from a file source.
+
+        See {manpage}`systemd.exec(5)` , {manpage}`systemd-creds(1)` and https://systemd.io/CREDENTIALS/ for more
+        information about systemd credentials.
+      '';
+      default = { };
+      example = {
+        database-password = {
+          text = "my-secret-password";
+        };
+        ssl-cert = {
+          source = "./cert.pem";
+        };
+        binary-key = {
+          binary = true;
+          source = "./private.der";
+        };
+        config-file = {
+          text = ''
+            [database]
+            host=localhost
+            port=5432
+          '';
+        };
+      };
+      type = types.attrsOf (
+        lib.types.submodule (
+          { options, config, ... }:
+          {
+            options = {
+              binary = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Whether the credential contains binary data.
+
+                  When `true`, the credential is treated as binary data and appropriate
+                  handling is used during transfer and storage. When `false` (default),
+                  the credential is treated as text data.
+
+                  Binary credentials are useful for certificates, keys, or other
+                  non-text files that need to be passed to the VM.
+                '';
+              };
+              source = lib.mkOption {
+                type = lib.types.nullOr (
+                  lib.types.oneOf [
+                    lib.types.path
+                    lib.types.str
+                  ]
+                );
+                default = null;
+                description = ''
+                  Source file or derivation containing the credential data.
+                  Either points to a file path on the host system or a nix store path.
+                  Note that if this points to a nix store path that the credential
+                  will also be available in the nix store which might not be desired.
+                '';
+              };
+              text = lib.mkOption {
+                default = null;
+                type = lib.types.nullOr lib.types.str;
+                description = ''
+                  Text content of the credential.
+
+                  This is a convenient way to specify credential content inline
+                  without creating separate files. The text will be written to
+                  a file in the Nix store and used as the credential source.
+
+                  For binary data or when the credential content should come from
+                  an existing file, use `source` instead.
+                '';
+              };
+            };
+            config = {
+              source = lib.mkIf (config.text != null) (lib.mkDerivedConfig options.text (pkgs.writeText name));
+            };
+          }
+        )
+      );
+    };
+
   };
 
   config = {
@@ -1308,6 +1395,22 @@ in
         "-global"
         "driver=cfi.pflash01,property=secure,value=on"
       ])
+      (mkIf (cfg.credentials != { }) (
+        let
+          # Build SMBIOS credentials entries
+          credentialEntries = lib.mapAttrsToList (
+            name: cred:
+            let
+              credSource =
+                if cred.text != null then pkgs.writeText "credential-${name}" cred.text else cred.source;
+              credentialType = if cred.binary then "io.systemd.credential.binary" else "io.systemd.credential";
+              credentialContent = if cred.binary then "base64 -w0 '${credSource}'" else "cat '${credSource}'";
+            in
+            "-smbios type=11,path=<(echo '${credentialType}:${name}='; ${credentialContent})"
+          ) cfg.credentials;
+        in
+        credentialEntries
+      ))
     ];
 
     virtualisation.qemu.drives = mkMerge [
