@@ -11877,6 +11877,8 @@ self: super: with self; {
 
   plotpy = callPackage ../development/python-modules/plotpy { };
 
+  plover-stroke = callPackage ../development/python-modules/plover-stroke { };
+
   pluggy = callPackage ../development/python-modules/pluggy { };
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
@@ -16134,6 +16136,8 @@ self: super: with self; {
   rstr = callPackage ../development/python-modules/rstr { };
 
   rtb-data = callPackage ../development/python-modules/rtb-data { };
+
+  rtf-tokenize = callPackage ../development/python-modules/rtf-tokenize { };
 
   rtfde = callPackage ../development/python-modules/rtfde { };
 
