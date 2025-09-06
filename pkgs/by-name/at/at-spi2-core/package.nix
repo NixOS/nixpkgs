@@ -12,6 +12,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gsettings-desktop-schemas,
   makeWrapper,
+  python3,
   dbus,
   glib,
   dconf,
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     makeWrapper
+    python3
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
