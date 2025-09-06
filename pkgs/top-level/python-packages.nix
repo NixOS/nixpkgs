@@ -12851,8 +12851,6 @@ self: super: with self; {
 
   pyecharts = callPackage ../development/python-modules/pyecharts { };
 
-  pyechonest = callPackage ../development/python-modules/pyechonest { };
-
   pyeclib = callPackage ../development/python-modules/pyeclib { };
 
   pyecoforest = callPackage ../development/python-modules/pyecoforest { };
