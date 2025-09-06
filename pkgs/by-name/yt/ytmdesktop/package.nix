@@ -13,6 +13,8 @@
 
   electron,
   commandLineArgs ? "",
+
+  nix-update-script,
 }:
 
 let
@@ -20,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.9";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-uDm8jDkPwxLa+LUK8fPlJMvXInD7T7B+641YyCgYvnI=c";
+    hash = "sha256-CA3Vb7Wp4WrsWSVtIwDxnEt1pWYb73WnhyoMVKoqvOE=";
   };
 
   patches = [
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-bBd5wWr+j3HQY2+VIAATYVdCh+0tIRlLg68bx4z1+Ys=";
+    hash = "sha256-1jlnVY4KWm+w3emMkCkdwUtkqRB9ZymPPGuvgfQolrA=";
   };
 
   nativeBuildInputs = [
@@ -136,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "YouTube Music Desktop App";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";

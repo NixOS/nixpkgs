@@ -15075,8 +15075,6 @@ with pkgs;
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
 
-  nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
-
   nix-prefetch-github = with python3Packages; toPythonApplication nix-prefetch-github;
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
