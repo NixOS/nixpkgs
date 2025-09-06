@@ -8788,6 +8788,8 @@ self: super: with self; {
 
   luhn = callPackage ../development/python-modules/luhn { };
 
+  luma-core = callPackage ../development/python-modules/luma-core { };
+
   luna-soc = callPackage ../development/python-modules/luna-soc { };
 
   luna-usb = callPackage ../development/python-modules/luna-usb { };
