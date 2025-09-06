@@ -11998,6 +11998,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  oklch-color-picker-nvim = buildVimPlugin {
+    pname = "oklch-color-picker.nvim";
+    version = "2025-09-04";
+    src = fetchFromGitHub {
+      owner = "eero-lehtinen";
+      repo = "oklch-color-picker.nvim";
+      rev = "ae318113cd7d0e4988b6b059327c2778911f1187";
+      sha256 = "0xhraf89b1ppijqmg1gnwp4gvnnmf8h86n8d6s8ydgj910jvagzm";
+    };
+    meta.homepage = "https://github.com/eero-lehtinen/oklch-color-picker.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   ollama-nvim = buildVimPlugin {
     pname = "ollama.nvim";
     version = "2024-06-09";
