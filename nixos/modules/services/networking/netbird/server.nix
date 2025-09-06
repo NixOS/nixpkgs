@@ -7,6 +7,7 @@ let
     mkIf
     mkOption
     optionalAttrs
+    mkMerge
     ;
 
   inherit (lib.types) str;
@@ -26,12 +27,12 @@ in
     ./dashboard.nix
     ./management.nix
     ./signal.nix
+    ./relay.nix
+    ./proxy.nix
   ];
 
   options.services.netbird.server = {
-    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
-
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
+    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API, relay and signal service";
 
     domain = mkOption {
       type = str;
@@ -44,40 +45,52 @@ in
       dashboard = {
         domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
 
         managementServer = "https://${cfg.domain}";
       };
 
-      management = {
-        domain = mkDefault cfg.domain;
-        enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
-      }
-      // (optionalAttrs cfg.coturn.enable rec {
-        turnDomain = cfg.domain;
-        turnPort = config.services.coturn.tls-listening-port;
-        # We cannot merge a list of attrsets so we have to redefine the whole list
-        settings = {
-          TURNConfig.Turns = mkDefault [
-            {
-              Proto = "udp";
-              URI = "turn:${turnDomain}:${builtins.toString turnPort}";
-              Username = "netbird";
-              Password =
-                if (cfg.coturn.password != null) then
-                  cfg.coturn.password
-                else
-                  { _secret = cfg.coturn.passwordFile; };
-            }
-          ];
-        };
-      });
+      management = mkMerge [
+        {
+          domain = mkDefault cfg.domain;
+          enable = mkDefault cfg.enable;
+        }
+        (mkIf cfg.signal.enable {
+          settings.Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
+        })
+        (mkIf cfg.relay.enable {
+          settings.Relay = {
+            Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
+            Secret._secret = cfg.relay.authSecretFile;
+          };
+        })
+        (mkIf cfg.coturn.enable rec {
+          turnDomain = cfg.domain;
+          turnPort = config.services.coturn.listening-port;
+          # We cannot merge a list of attrsets so we have to redefine the whole list
+          settings = {
+            TURNConfig.Turns = mkDefault [
+              {
+                Proto = "udp";
+                URI = "turn:${turnDomain}:${builtins.toString turnPort}";
+                Username = "netbird";
+                Password =
+                  if (cfg.coturn.password != null) then
+                    cfg.coturn.password
+                  else
+                    { _secret = cfg.coturn.passwordFile; };
+              }
+            ];
+          };
+        })
+      ];
 
       signal = {
-        domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
+      };
+
+      relay = {
+        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.relay.port}";
+        enable = mkDefault cfg.enable;
       };
 
       coturn = {
