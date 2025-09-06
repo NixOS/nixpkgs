@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL2,
+  sdl2-compat,
   cmake,
   libGL,
   pkg-config,
@@ -34,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fails to build if not set:
   hardeningDisable = [ "format" ];
-  hardeningEnable = [ "pie" ];
 
   cmakeFlags = [
     (lib.cmakeFeature "ROMID" romID)
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL2
+    sdl2-compat
     libGL
     zlib
   ];
@@ -72,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   preConfigure = ''
-    patchShebangs --build .
+    patchShebangs --build tools/assetmgr
   '';
 
   installPhase = ''
