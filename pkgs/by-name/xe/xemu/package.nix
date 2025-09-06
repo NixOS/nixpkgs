@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.96";
+  version = "0.8.97";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-42DnlnaSWVazmct9AL1/QaVqNgYe5NCMVHRJY6axo98=";
+    hash = "sha256-t2hMuRiwgFjqOIfEF+QSQPHa2iDjkDUA1KBzyAieY9k=";
     fetchSubmodules = true;
 
     # also fetch required git submodules
@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (with python3Packages; [
     python
     pyyaml
+    distlib
   ]);
 
   buildInputs = [
