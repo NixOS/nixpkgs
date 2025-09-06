@@ -12,23 +12,60 @@ set -euo pipefail
 declare -A architectures
 declare -A versions
 declare -A hashes
+declare -a packages
 
 architectures["x86_64-linux"]="x86_64-unknown-linux-gnu"
+architectures["aarch64-linux"]="aarch64-unknown-linux-gnu"
+# NOTE: segger-jlink is not yet packaged for darwin
+# architectures["x86_64-darwin"]="x86_64-apple-darwin"
+# architectures["aarch64-darwin"]="aarch64-apple-darwin"
+
+packages=(
+    "nrfutil"
+    "nrfutil-91"
+    "nrfutil-ble-sniffer"
+    "nrfutil-completion"
+    "nrfutil-device"
+    "nrfutil-mcu-manager"
+    "nrfutil-npm"
+    "nrfutil-nrf5sdk-tools"
+    "nrfutil-sdk-manager"
+    "nrfutil-suit"
+    "nrfutil-toolchain-manager"
+    "nrfutil-trace"
+)
+
 
 BASE_URL="https://files.nordicsemi.com/artifactory/swtools/external/nrfutil"
 
-for a in ${!architectures[@]}; do
-    versions["$a"]=$(curl "$BASE_URL/index/${architectures[${a}]}/index.json" | jq -r '.packages.nrfutil.latest_version')
-    hashes["$a"]=$(narhash "$BASE_URL/packages/nrfutil/nrfutil-${architectures[${a}]}-${versions[${a}]}.tar.gz")
+for a in "${!architectures[@]}"; do
+    ARCH="${architectures["${a}"]}"
+    INDEX=$(curl "$BASE_URL/index/${ARCH}/index.json")
+    for p in "${!packages[@]}"; do
+        PKG="${packages["${p}"]}"
+
+        jq -e -r ".packages.\"${PKG}\"" <<< "$INDEX" 1>/dev/null && {
+            versions["$a-$p"]=$(jq -r ".packages.\"${PKG}\".latest_version" <<< "$INDEX")
+            hashes["$a-$p"]=$(narhash "$BASE_URL/packages/${PKG}/${PKG}-${ARCH}-${versions["$a-$p"]}.tar.gz")
+        }
+    done
 done
 
 {
     printf "{\n"
-    printf "  version = \"${versions["x86_64-linux"]}\";\n"
-    for a in ${!architectures[@]}; do
-        printf "  ${a} = {\n"
-        printf "    name = \"${architectures[${a}]}\";\n"
-        printf "    hash = \"${hashes[${a}]}\";\n"
+    for a in "${!architectures[@]}"; do
+        printf "  %s = {\n" "$a"
+        printf "    triplet = \"%s\";\n" "${architectures["${a}"]}"
+        printf "    packages = {\n"
+        for p in "${!packages[@]}"; do
+            test ${versions["$a-$p"]+_} && {
+                printf "      %s = {\n" "${packages["${p}"]}"
+                printf "        version = \"%s\";\n" "${versions["$a-$p"]}"
+                printf "        hash = \"%s\";\n" "${hashes["$a-$p"]}"
+                printf "      };\n"
+            }
+        done
+        printf "    };\n"
         printf "  };\n"
     done
     printf "}\n"
