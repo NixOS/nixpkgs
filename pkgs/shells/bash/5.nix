@@ -6,6 +6,10 @@
   updateAutotoolsGnuConfigScriptsHook,
   bison,
   util-linux,
+  coreutils,
+  libredirect,
+  glibcLocales,
+  gnused,
 
   interactive ? true,
   readline,
@@ -29,13 +33,13 @@ lib.warnIf (withDocs != null)
     bash: `.override { withDocs = true; }` is deprecated, the docs are always included.
   ''
   stdenv.mkDerivation
-  rec {
+  (fa: {
     pname = "bash${lib.optionalString interactive "-interactive"}";
-    version = "5.3${patch_suffix}";
+    version = "5.3${fa.patch_suffix}";
     patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
     src = fetchurl {
-      url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
+      url = "mirror://gnu/bash/bash-${lib.removeSuffix fa.patch_suffix fa.version}.tar.gz";
       hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
     };
 
@@ -137,8 +141,7 @@ lib.warnIf (withDocs != null)
       "SHOBJ_LIBS=-lbash"
     ];
 
-    nativeCheckInputs = [ util-linux ];
-    doCheck = false; # dependency cycle, needs to be interactive
+    doCheck = false; # Can't be enabled by default due to dependency cycle, use passthru.tests.withChecks instead
 
     postInstall = ''
       ln -s bash "$out/bin/sh"
@@ -160,6 +163,99 @@ lib.warnIf (withDocs != null)
     passthru = {
       shellPath = "/bin/bash";
       tests.static = pkgsStatic.bash;
+      tests.withChecks = fa.finalPackage.overrideAttrs (attrs: {
+        doCheck = true;
+
+        nativeCheckInputs = attrs.nativeCheckInputs or [ ] ++ [
+          util-linux
+          libredirect.hook
+          glibcLocales
+          gnused
+        ];
+
+        patches = attrs.patches or [ ] ++ [
+          # Bash tests appear to only be checked manually before each
+          # release, where a diff in the output is likely (but not
+          # necessarily) a failure
+          # This patch together with the "exit $0" sed below makes the
+          # tests fail if there's a diff, which works well enough for a
+          # bunch of them, while the rest are manually disabled for now
+          ./fail-tests.patch
+          # The run-builtins test _almost_ succeeds, only has a bit of PATH trouble
+          # and some odd terminal column mismatch
+          ./fix-builtins-tests.patch
+          # The run-invocation test _almost_ succeeds, only has a bit of PATH trouble
+          ./fix-invocation-tests.patch
+        ];
+
+        preCheck = attrs.preCheck or "" + ''
+          export HOME=$(mktemp -d)
+          export NIX_REDIRECTS=${
+            lib.concatMapAttrsStringSep ":" (name: value: "${name}=${value}") {
+              "/bin/echo" = lib.getExe' coreutils "echo";
+              "/bin/cat" = lib.getExe' coreutils "cat";
+              "/bin/rm" = lib.getExe' coreutils "rm";
+              "/usr" = "$(mktemp -d)";
+            }
+          }
+
+          # Fail if diff fails at the end of each test script
+          for check in tests/run-*; do
+            # Append "exit $?" at the very end of the file
+            sed -i '$aexit $?' "$check"
+          done
+
+          disabled_checks=(
+            # Unsets PATH and breaks, not clear
+            run-execscript
+
+            # Fails on ZFS & needs a ja_JP.SJIS locale, which glibcLocales doesn't have
+            run-intl
+
+            # These error with "echo: write error: Broken pipe"
+            run-histexpand
+            run-lastpipe
+            run-comsub
+            run-comsub2
+
+            # For some reason has an extra 'declare -x version="5.2p37"'
+            run-nameref
+
+            # These print some extra 'trap -- ''' SIGPIPE'
+            run-trap
+            run-varenv
+
+            # These rely on /dev/tty
+            run-read
+            run-test
+            run-vredir
+
+            # Might also be related to not having a tty: "Inappropriate ioctl for device"
+            run-history
+
+            # Can be enabled in 5.4
+            run-printf
+
+            # This is probably fixable without too much trouble, but just not having a hardcoded PATH in type5.sub doesn't cut it
+            # 142,143c142,147
+            # < type5.sub: line 23: mkdir: command not found
+            # < type5.sub: line 24: cd: /build/type-23722: No such file or directory
+            # ---
+            # > cat is /bin/cat
+            # > cat is aliased to `echo cat'
+            # > /bin/cat
+            # > break is a shell builtin
+            # > break is a special shell builtin
+            # > ./e
+            run-type
+
+          )
+          for check in "''${disabled_checks[@]}"; do
+            # Exit before running the test script
+            sed -i "1iecho 'Skipping test $check' >&2 && exit 0" "tests/$check"
+          done
+        '';
+      });
     };
 
     meta = with lib; {
@@ -181,7 +277,7 @@ lib.warnIf (withDocs != null)
       platforms = platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ infinisil ];
       mainProgram = "bash";
     };
-  }
+  })
