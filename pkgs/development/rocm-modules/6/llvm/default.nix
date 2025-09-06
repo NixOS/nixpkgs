@@ -111,18 +111,245 @@ let
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
   # optionally using LLVM libcxx
-  llvmPackagesRocm = llvmPackages_18.override (_old: {
-    stdenv = stdenvToBuildRocmLlvm; # old.stdenv #llvmPackagesNoBintools.libcxxStdenv;
+  llvmPackagesRocm =
+    (llvmPackages_18.override (_old: {
+      stdenv = stdenvToBuildRocmLlvm; # old.stdenv #llvmPackagesNoBintools.libcxxStdenv;
 
-    # not setting gitRelease = because that causes patch selection logic to use git patches
-    # ROCm LLVM is closer to 18 official
-    # gitRelease = {}; officialRelease = null;
-    officialRelease = { }; # Set but empty because we're overriding everything from it.
-    version = rocmLlvmVersion;
-    src = llvmSrcFixed;
-    monorepoSrc = llvmSrcFixed;
-    doCheck = false;
-  });
+      # not setting gitRelease = because that causes patch selection logic to use git patches
+      # ROCm LLVM is closer to 18 official
+      # gitRelease = {}; officialRelease = null;
+      officialRelease = { }; # Set but empty because we're overriding everything from it.
+      version = rocmLlvmVersion;
+      src = llvmSrcFixed;
+      monorepoSrc = llvmSrcFixed;
+      doCheck = false;
+    })).overrideScope
+      (
+        llvmFinal: llvmPrev: {
+          libllvm = (llvmPrev.libllvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
+            dontStrip = profilableStdenv;
+            nativeBuildInputs = old.nativeBuildInputs ++ [ removeReferencesTo ];
+            buildInputs = old.buildInputs ++ [
+              zstd
+              zlib
+            ];
+            env.NIX_BUILD_ID_STYLE = "fast";
+            postPatch = ''
+              ${old.postPatch or ""}
+              patchShebangs lib/OffloadArch/make_generated_offload_arch_h.sh
+            '';
+            LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
+            cmakeFlags =
+              (builtins.filter tablegenUsage old.cmakeFlags)
+              ++ [
+                llvmTargetsFlag
+                "-DCMAKE_BUILD_TYPE=Release"
+                "-DLLVM_ENABLE_ZSTD=FORCE_ON"
+                "-DLLVM_ENABLE_ZLIB=FORCE_ON"
+                "-DLLVM_ENABLE_THREADS=ON"
+                "-DLLVM_ENABLE_LTO=Thin"
+                "-DLLVM_USE_LINKER=lld"
+                (lib.cmakeBool "LLVM_ENABLE_LIBCXX" useLibcxx)
+                "-DCLANG_DEFAULT_CXX_STDLIB=${if useLibcxx then "libc++" else "libstdc++"}"
+              ]
+              ++ lib.optionals addGccLtoCmakeFlags [
+                "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+                "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+                "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
+              ]
+              ++ lib.optionals useLibcxx [
+                "-DLLVM_ENABLE_LTO=Thin"
+                "-DLLVM_USE_LINKER=lld"
+                "-DLLVM_ENABLE_LIBCXX=ON"
+              ];
+            preConfigure = ''
+              ${old.preConfigure or ""}
+              cmakeFlagsArray+=(
+                '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
+                '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
+              )
+            '';
+            # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
+            disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+            postFixup = ''
+              ${old.postFixup or ""}
+              remove-references-to -t "${stdenv.cc}" "$lib/lib/libLLVMSupport.a"
+              find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
+              find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+              find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+            '';
+          });
+          lld =
+            (llvmPrev.lld.override {
+              ninja = emptyDirectory;
+            }).overrideAttrs
+              (old: {
+                patches = builtins.filter (
+                  x: !(lib.strings.hasSuffix "more-openbsd-program-headers.patch" (builtins.baseNameOf x))
+                ) old.patches;
+                dontStrip = profilableStdenv;
+                nativeBuildInputs = old.nativeBuildInputs ++ [
+                  llvmPackagesNoBintools.lld
+                  removeReferencesTo
+                ];
+                buildInputs = old.buildInputs ++ [
+                  zstd
+                  zlib
+                ];
+                env.NIX_BUILD_ID_STYLE = "fast";
+                LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
+                cmakeFlags =
+                  (builtins.filter tablegenUsage old.cmakeFlags)
+                  ++ [
+                    llvmTargetsFlag
+                    "-DCMAKE_BUILD_TYPE=Release"
+                    "-DLLVM_ENABLE_ZSTD=FORCE_ON"
+                    "-DLLVM_ENABLE_ZLIB=FORCE_ON"
+                    "-DLLVM_ENABLE_THREADS=ON"
+                    "-DLLVM_ENABLE_LTO=Thin"
+                    "-DLLVM_USE_LINKER=lld"
+                    (lib.cmakeBool "LLVM_ENABLE_LIBCXX" useLibcxx)
+                    "-DCLANG_DEFAULT_CXX_STDLIB=${if useLibcxx then "libc++" else "libstdc++"}"
+                  ]
+                  ++ lib.optionals addGccLtoCmakeFlags [
+                    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+                    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+                    "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
+                  ]
+                  ++ lib.optionals useLibcxx [
+                    "-DLLVM_ENABLE_LIBCXX=ON"
+                  ];
+                # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
+                disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+                postFixup = ''
+                  ${old.postFixup or ""}
+                  find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
+                  find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+                '';
+                preConfigure = ''
+                  ${old.preConfigure or ""}
+                  cmakeFlagsArray+=(
+                    '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
+                    '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
+                  )
+                '';
+              });
+          libclang = (
+            (llvmPrev.libclang.override {
+              # llvm =
+              ninja = emptyDirectory;
+            }).overrideAttrs
+              (
+                old:
+                let
+                  filteredPatches = builtins.filter (x: !(findClangNostdlibincPatch x)) old.patches;
+                in
+                {
+                  meta.platforms = [
+                    "x86_64-linux"
+                  ];
+                  pname = "${old.pname}-rocm";
+                  patches = filteredPatches ++ [
+                    # Never add FHS include paths
+                    ./clang-bodge-ignore-systemwide-incls.diff
+                    # Prevents builds timing out if a single compiler invocation is very slow but
+                    # per-arch jobs are completing by ensuring there's terminal output
+                    ./clang-log-jobs.diff
+                    (fetchpatch {
+                      # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
+                      sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
+                      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
+                      relative = "clang";
+                    })
+                    # # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
+                    # # Once we can switch to overrideScope this can be removed
+                    (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
+                      libllvmLibdir = "${llvmFinal.llvm.lib}/lib";
+                    })
+                  ];
+                  nativeBuildInputs = old.nativeBuildInputs ++ [
+                    llvmPackagesNoBintools.lld
+                    removeReferencesTo
+                  ];
+                  buildInputs = old.buildInputs ++ [
+                    zstd
+                    zlib
+                  ];
+                  dontStrip = profilableStdenv;
+                  LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
+                  env = (old.env or { }) // {
+                    NIX_BUILD_ID_STYLE = "fast";
+                  };
+                  # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
+                  disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+                  # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
+                  __structuredAttrs = true;
+                  requiredSystemFeatures = (old.requiredSystemFeatures or [ ]) ++ [ "big-parallel" ];
+                  # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
+                  cmakeFlags =
+                    (builtins.filter tablegenUsage old.cmakeFlags)
+                    ++ [
+                      llvmTargetsFlag
+                      "-DCMAKE_BUILD_TYPE=Release"
+                      "-DLLVM_ENABLE_ZSTD=FORCE_ON"
+                      "-DLLVM_ENABLE_ZLIB=FORCE_ON"
+                      "-DLLVM_ENABLE_THREADS=ON"
+                      "-DLLVM_ENABLE_LTO=Thin"
+                      "-DLLVM_USE_LINKER=lld"
+                      (lib.cmakeBool "LLVM_ENABLE_LIBCXX" useLibcxx)
+                      "-DCLANG_DEFAULT_CXX_STDLIB=${if useLibcxx then "libc++" else "libstdc++"}"
+                    ]
+                    ++ lib.optionals addGccLtoCmakeFlags [
+                      "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+                      "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+                      "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
+                    ]
+                    ++ lib.optionals useLibcxx [
+                      "-DLLVM_ENABLE_LTO=Thin"
+                      "-DLLVM_ENABLE_LIBCXX=ON"
+                      "-DLLVM_USE_LINKER=lld"
+                      "-DCLANG_DEFAULT_RTLIB=compiler-rt"
+                    ]
+                    ++ lib.optionals (!useLibcxx) [
+                      # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
+                      "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
+                    ];
+                  postFixup = (old.postFixup or "") + ''
+                    find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+                    find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
+                    find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
+                    find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+                  '';
+                  preConfigure = (old.preConfigure or "") + ''
+                    cmakeFlagsArray+=(
+                      '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
+                      '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
+                    )
+                  '';
+                }
+              )
+          );
+          # clang-tools = llvmPackagesRocm.clang-tools.override {
+          #   inherit clang-unwrapped clang;
+          # };
+          compiler-rt-libc =
+            (llvmPrev.compiler-rt-libc.override {
+              # HACK: bug for bug compatibility to preserve 0 rebuilds
+              libllvm = llvmPackages_18.libllvm;
+            }).overrideAttrs
+              (old: {
+                patches = old.patches ++ [
+                  (fetchpatch {
+                    name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
+                    url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
+                    hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
+                    relative = "compiler-rt";
+                  })
+                ];
+              });
+          compiler-rt = llvmFinal.compiler-rt-libc;
+        }
+      );
   sysrootCompiler =
     cc: name: paths:
     let
@@ -186,219 +413,17 @@ let
     + (lib.optionalString profilableStdenv " -fno-omit-frame-pointer -momit-leaf-frame-pointer -gz -g1");
 in
 rec {
-  inherit (llvmPackagesRocm) libunwind;
-  inherit (llvmPackagesRocm) libcxx;
-  # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
-  # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
-  # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
-  llvm = (llvmPackagesRocm.llvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
-    dontStrip = profilableStdenv;
-    nativeBuildInputs = old.nativeBuildInputs ++ [ removeReferencesTo ];
-    buildInputs = old.buildInputs ++ [
-      zstd
-      zlib
-    ];
-    env.NIX_BUILD_ID_STYLE = "fast";
-    postPatch = ''
-      ${old.postPatch or ""}
-      patchShebangs lib/OffloadArch/make_generated_offload_arch_h.sh
-    '';
-    LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
-    cmakeFlags =
-      (builtins.filter tablegenUsage old.cmakeFlags)
-      ++ [
-        llvmTargetsFlag
-        "-DCMAKE_BUILD_TYPE=Release"
-        "-DLLVM_ENABLE_ZSTD=FORCE_ON"
-        "-DLLVM_ENABLE_ZLIB=FORCE_ON"
-        "-DLLVM_ENABLE_THREADS=ON"
-        "-DLLVM_ENABLE_LTO=Thin"
-        "-DLLVM_USE_LINKER=lld"
-        (lib.cmakeBool "LLVM_ENABLE_LIBCXX" useLibcxx)
-        "-DCLANG_DEFAULT_CXX_STDLIB=${if useLibcxx then "libc++" else "libstdc++"}"
-      ]
-      ++ lib.optionals addGccLtoCmakeFlags [
-        "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-        "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
-        "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
-      ]
-      ++ lib.optionals useLibcxx [
-        "-DLLVM_ENABLE_LTO=Thin"
-        "-DLLVM_USE_LINKER=lld"
-        "-DLLVM_ENABLE_LIBCXX=ON"
-      ];
-    preConfigure = ''
-      ${old.preConfigure or ""}
-      cmakeFlagsArray+=(
-        '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
-        '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
-      )
-    '';
-    # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
-    disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
-    postFixup = ''
-      ${old.postFixup or ""}
-      remove-references-to -t "${stdenv.cc}" "$lib/lib/libLLVMSupport.a"
-      find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-      find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
-      find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
-    '';
-  });
-  lld =
-    (llvmPackagesRocm.lld.override {
-      libllvm = llvm;
-      ninja = emptyDirectory;
-    }).overrideAttrs
-      (old: {
-        patches = builtins.filter (
-          x: !(lib.strings.hasSuffix "more-openbsd-program-headers.patch" (builtins.baseNameOf x))
-        ) old.patches;
-        dontStrip = profilableStdenv;
-        nativeBuildInputs = old.nativeBuildInputs ++ [
-          llvmPackagesNoBintools.lld
-          removeReferencesTo
-        ];
-        buildInputs = old.buildInputs ++ [
-          zstd
-          zlib
-        ];
-        env.NIX_BUILD_ID_STYLE = "fast";
-        LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
-        cmakeFlags =
-          (builtins.filter tablegenUsage old.cmakeFlags)
-          ++ [
-            llvmTargetsFlag
-            "-DCMAKE_BUILD_TYPE=Release"
-            "-DLLVM_ENABLE_ZSTD=FORCE_ON"
-            "-DLLVM_ENABLE_ZLIB=FORCE_ON"
-            "-DLLVM_ENABLE_THREADS=ON"
-            "-DLLVM_ENABLE_LTO=Thin"
-            "-DLLVM_USE_LINKER=lld"
-            (lib.cmakeBool "LLVM_ENABLE_LIBCXX" useLibcxx)
-            "-DCLANG_DEFAULT_CXX_STDLIB=${if useLibcxx then "libc++" else "libstdc++"}"
-          ]
-          ++ lib.optionals addGccLtoCmakeFlags [
-            "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-            "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
-            "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
-          ]
-          ++ lib.optionals useLibcxx [
-            "-DLLVM_ENABLE_LIBCXX=ON"
-          ];
-        # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
-        disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
-        postFixup = ''
-          ${old.postFixup or ""}
-          find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-          find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
-        '';
-        preConfigure = ''
-          ${old.preConfigure or ""}
-          cmakeFlagsArray+=(
-            '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
-            '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
-          )
-        '';
-      });
-  clang-unwrapped =
-    (
-      (llvmPackagesRocm.clang-unwrapped.override {
-        libllvm = llvm;
-        ninja = emptyDirectory;
-      }).overrideAttrs
-      (
-        old:
-        let
-          filteredPatches = builtins.filter (x: !(findClangNostdlibincPatch x)) old.patches;
-        in
-        {
-          meta.platforms = [
-            "x86_64-linux"
-          ];
-          pname = "${old.pname}-rocm";
-          patches = filteredPatches ++ [
-            # Never add FHS include paths
-            ./clang-bodge-ignore-systemwide-incls.diff
-            # Prevents builds timing out if a single compiler invocation is very slow but
-            # per-arch jobs are completing by ensuring there's terminal output
-            ./clang-log-jobs.diff
-            (fetchpatch {
-              # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-              sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
-              url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
-              relative = "clang";
-            })
-            # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
-            # Once we can switch to overrideScope this can be removed
-            (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${llvm.lib}/lib";
-            })
-          ];
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            llvmPackagesNoBintools.lld
-            removeReferencesTo
-          ];
-          buildInputs = old.buildInputs ++ [
-            zstd
-            zlib
-          ];
-          dontStrip = profilableStdenv;
-          LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
-          env = (old.env or { }) // {
-            NIX_BUILD_ID_STYLE = "fast";
-          };
-          # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
-          disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
-          # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
-          __structuredAttrs = true;
-          requiredSystemFeatures = (old.requiredSystemFeatures or [ ]) ++ [ "big-parallel" ];
-          # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
-          cmakeFlags =
-            (builtins.filter tablegenUsage old.cmakeFlags)
-            ++ [
-              llvmTargetsFlag
-              "-DCMAKE_BUILD_TYPE=Release"
-              "-DLLVM_ENABLE_ZSTD=FORCE_ON"
-              "-DLLVM_ENABLE_ZLIB=FORCE_ON"
-              "-DLLVM_ENABLE_THREADS=ON"
-              "-DLLVM_ENABLE_LTO=Thin"
-              "-DLLVM_USE_LINKER=lld"
-              (lib.cmakeBool "LLVM_ENABLE_LIBCXX" useLibcxx)
-              "-DCLANG_DEFAULT_CXX_STDLIB=${if useLibcxx then "libc++" else "libstdc++"}"
-            ]
-            ++ lib.optionals addGccLtoCmakeFlags [
-              "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-              "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
-              "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
-            ]
-            ++ lib.optionals useLibcxx [
-              "-DLLVM_ENABLE_LTO=Thin"
-              "-DLLVM_ENABLE_LIBCXX=ON"
-              "-DLLVM_USE_LINKER=lld"
-              "-DCLANG_DEFAULT_RTLIB=compiler-rt"
-            ]
-            ++ lib.optionals (!useLibcxx) [
-              # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
-              "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
-            ];
-          postFixup = (old.postFixup or "") + ''
-            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
-          '';
-          preConfigure = (old.preConfigure or "") + ''
-            cmakeFlagsArray+=(
-              '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
-              '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
-            )
-          '';
-        }
-      )
-    )
-    // {
-      libllvm = llvm;
-    };
+  inherit (llvmPackagesRocm)
+    llvm
+    lld
+    compiler-rt
+    compiler-rt-libc
+    bintools
+    clang-unwrapped
+    libcxx
+    libunwind
+    ;
+
   # A clang that understands standard include searching in a GNU sysroot and will put GPU libs in include path
   # in the right order
   # and expects its libc to be in the sysroot
@@ -427,25 +452,6 @@ rec {
       isClang = true;
       isGNU = false;
     };
-  clang-tools = llvmPackagesRocm.clang-tools.override {
-    inherit clang-unwrapped clang;
-  };
-  compiler-rt-libc = llvmPackagesRocm.compiler-rt-libc.overrideAttrs (old: {
-    patches = old.patches ++ [
-      (fetchpatch {
-        name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
-        url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
-        hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
-        relative = "compiler-rt";
-      })
-    ];
-  });
-  compiler-rt = compiler-rt-libc;
-  bintools = wrapBintoolsWith {
-    bintools = llvmPackagesRocm.bintools-unwrapped.override {
-      inherit lld llvm;
-    };
-  };
 
   clang = rocmcxx;
 
