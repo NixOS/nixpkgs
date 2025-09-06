@@ -10,7 +10,9 @@
 let
   inherit (lib.attrsets)
     concatMapAttrs
+    genAttrs'
     listToAttrs
+    mapAttrs
     mapCartesianProduct
     optionalAttrs
     ;
@@ -61,7 +63,7 @@ let
       redistPackages = concatMapAttrs (
         name: attr:
         optionalAttrs (attr.src or null != null && attr ? passthru.redistName) {
-          ${name} = attr.src;
+          ${name} = attr;
         }
       ) finalCudaPackages;
     in
@@ -123,12 +125,14 @@ let
           ;
       };
 
-      unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" redistPackages;
+      unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" (
+        mapAttrs (_: attr: attr.src) redistPackages
+      );
 
       installedRedistPackages = pkgs'.linkFarm "installedRedistPackages" (
         concatMapAttrs (
           name: pkg:
-          lib.genAttrs' pkg.outputs (output: {
+          genAttrs' pkg.outputs (output: {
             name = "${name}-${output}";
             value = pkg.${output};
           })
