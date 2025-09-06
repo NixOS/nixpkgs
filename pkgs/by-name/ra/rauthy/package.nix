@@ -28,6 +28,7 @@ let
     patches = [
       # otherwise permission denied error for trying to write outside of the build directory
       ./0002-build-svelte-files-inside-the-current-directory.patch
+      ./0003-fix-aarch64-segfault.patch
     ];
 
     npmDepsHash = "sha256-xxdqZ7u6cZ0XXekRaD6RcyOk+7pdh8LUKaSzawGWwHU=";
