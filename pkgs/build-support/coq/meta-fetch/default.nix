@@ -12,7 +12,7 @@ let
 
   inherit (lib)
     attrNames
-    fakeSha256
+    fakeHash
     filter
     findFirst
     head
@@ -29,6 +29,8 @@ let
     switch-if
     versionOlder
     versions
+    warn
+    warnIf
     ;
 
   inherit (lib.strings) match split;
@@ -40,7 +42,7 @@ let
       repo,
       rev,
       name ? "source",
-      sha256 ? null,
+      hash ? null, # hash set to null to fetch arbitrary Rocq versions (only used downstreams)
       artifact ? null,
       ...
     }@args:
@@ -57,7 +59,7 @@ let
               };
             }
             {
-              cond = args ? sha256;
+              cond = hash != null;
               out = {
                 ext = "zip";
                 fmt = "zip";
@@ -68,7 +70,9 @@ let
           {
             ext = "tar.gz";
             fmt = "tarball";
-            fetchfun = builtins.fetchTarball;
+            fetchfun = warn ''
+              You are using `builtins.fetchTarball` as fetcher for ${owner}/${repo}, this is deprecated and will be removed in the 26.05 release. If you are a downstream user and what a similar solution, consider using `builtins.fetchTarball` in your own source tree and pass the fetched absolute path to Rocq meta-fetch helper.
+            '' builtins.fetchTarball;
           };
     in
     with kind;
@@ -96,13 +100,23 @@ let
           out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";
         }
       ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-      fetch = x: fetchfun (if args ? sha256 then (x // { inherit sha256; }) else x);
+      # the sha256 here is only for builtins.fetchTarball backward compatibility
+      fetch =
+        x:
+        fetchfun (
+          if !(isNull hash) then
+            (x // { inherit hash; })
+          else if (isNull hash && args ? sha256) then
+            (x // { inherit sha256; })
+          else
+            x
+        );
     in
     fetch { inherit url; };
 in
 {
   fetcher ? default-fetcher,
-  location,
+  location, # contains name, owner, repo, domain, etc.
   release ? { },
   releaseRev ? (v: v),
   releaseArtifact ? (v: null),
@@ -118,9 +132,10 @@ let
   isShortVersion = x: shortVersion x != null;
   isPathString = x: isString x && match "^/.*" x != null && pathExists x;
 in
-arg:
+arg: # fetcher args
 switch arg [
   {
+    # if null, mark as broken
     case = isNull;
     out = {
       version = "broken";
@@ -129,6 +144,7 @@ switch arg [
     };
   }
   {
+    # use absolute path as source directly
     case = isPathString;
     out = {
       version = "dev";
@@ -136,14 +152,26 @@ switch arg [
     };
   }
   {
+    # (most common) use release info and pass to user defined fetcher or default fetcher
     case = pred.union isVersion isShortVersion;
     out =
       let
         v = if isVersion arg then arg else shortVersion arg;
-        given-sha256 = release.${v}.sha256 or "";
-        sha256 = if given-sha256 == "" then fakeSha256 else given-sha256;
+        hash = switch-if [
+          {
+            cond = release.${v} ? hash && release.${v}.hash != "";
+            out = release.${v}.hash;
+          }
+          {
+            cond =
+              warnIf (release.${v} ? sha256) ''
+                When building ${location.owner}/${location.repo}, Rocq's default fetcher now uses `hash` instead of `sha256` (deprecated). Support for `sha256` will be removed in 26.05 release.
+              '' release.${v}.sha256 != "";
+            out = release.${v}.sha256;
+          }
+        ] fakeHash;
         rv = release.${v} // {
-          inherit sha256;
+          inherit hash;
         };
       in
       {
@@ -160,29 +188,30 @@ switch arg [
       };
   }
   {
+    # DEPRECATED (downstream only): use builtins.fetchTarball to fetch arbitrary Rocq versions
     case = isString;
     out =
       let
         splitted = filter isString (split ":" arg);
         rev = last splitted;
-        has-owner = length splitted > 1;
+        hasOwner = length splitted > 1;
         version = "dev";
       in
       {
         inherit version;
-        src = fetcher (
-          location // { inherit rev; } // (optionalAttrs has-owner { owner = head splitted; })
-        );
+        src = fetcher (location // { inherit rev; } // (optionalAttrs hasOwner { owner = head splitted; }));
       };
   }
   {
+    # use user defined fetcher with given attrs
     case = isAttrs;
     out = {
       version = arg.version or "dev";
-      src = (arg.fetcher or fetcher) (location // (arg.location or { }));
+      src = (arg.fetcher or fetcher) (arg.location or { });
     };
   }
   {
+    # make aribitrary path available as source
     case = isPath;
     out = {
       version = "dev";
