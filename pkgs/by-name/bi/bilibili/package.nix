@@ -4,8 +4,9 @@
   fetchurl,
   electron,
   dpkg,
+  libva,
   makeWrapper,
-  commandLineArgs ? "",
+  commandLineArgs ? "--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3",
 }:
 let
   sources = import ./sources.nix;
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
     makeWrapper ${lib.getExe electron} $out/bin/bilibili \
       --argv0 "bilibili" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libva ]} \
       --add-flags "$out/opt/app.asar" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
