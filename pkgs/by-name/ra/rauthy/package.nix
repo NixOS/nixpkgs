@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildNpmPackage,
   rustPlatform,
-  rocksdb_9_10,
   pkg-config,
   perl,
   openssl,
@@ -44,10 +43,6 @@ rustPlatform.buildRustPackage {
   ];
 
   cargoHash = "sha256-+W3yEska30ynTZyiq5AYHvFC5VSIsw6kPMazvOmVWn4=";
-
-  # TODO: remove in some later version
-  ROCKSDB_INCLUDE_DIR = "${rocksdb_9_10}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb_9_10}/lib";
 
   nativeBuildInputs = [
     pkg-config
