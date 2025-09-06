@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   adwaita-icon-theme,
-  libsForQt5,
+  kdePackages,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -55,9 +55,12 @@ lib.checkListOfEnum "${pname}: color variants"
 
     propagatedBuildInputs = [
       adwaita-icon-theme
-      libsForQt5.breeze-icons
+      kdePackages.breeze-icons
       hicolor-icon-theme
     ];
+
+    # breeze-icons propagates qtbase
+    dontWrapQtApps = true;
 
     dontDropIconThemeCache = true;
 
