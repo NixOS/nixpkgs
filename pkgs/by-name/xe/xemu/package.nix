@@ -4,6 +4,7 @@
   SDL2_image,
   fetchFromGitHub,
   gettext,
+  git,
   glib,
   gtk3,
   cmake,
@@ -37,15 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t2hMuRiwgFjqOIfEF+QSQPHa2iDjkDUA1KBzyAieY9k=";
-    fetchSubmodules = true;
+    hash = "sha256-xx3f4khNV4CwtM9R2NQ2usDc/ScGEaZ3EbyDv1jaHtQ=";
 
+    nativeBuildInputs = [
+      git
+      meson
+    ];
     # also fetch required git submodules
     postFetch = ''
       cd "$out"
       export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
-      ${lib.getExe meson} subprojects download \
+      meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
         implot json keycodemapdb nv2a_vsh_cpu tomlplusplus volk xxhash || true
       find subprojects -type d -name .git -prune -execdir rm -r {} +
