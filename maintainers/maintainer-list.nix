@@ -3371,12 +3371,6 @@
     githubId = 535135;
     name = "Brennon Loveless";
   };
-  bloxx12 = {
-    email = "charlie@charlieroot.dev";
-    github = "bloxx12";
-    githubId = 75451918;
-    name = "Charlie Root";
-  };
   blusk = {
     email = "bluskript@gmail.com";
     github = "bluskript";
@@ -7918,6 +7912,11 @@
     github = "farnoy";
     githubId = 345808;
     name = "Jakub Okoński";
+  };
+  faukah = {
+    github = "faukah";
+    name = "faukah";
+    githubId = 75451918;
   };
   fauxmight = {
     email = "nix@ivories.org";
