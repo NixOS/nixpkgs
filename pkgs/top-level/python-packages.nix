@@ -2821,6 +2821,8 @@ self: super: with self; {
 
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
 
+  colcon-powershell = callPackage ../development/python-modules/colcon-powershell { };
+
   colcon-ros-domain-id-coordinator =
     callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
       { };
