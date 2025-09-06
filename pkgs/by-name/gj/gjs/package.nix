@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   lib,
   stdenv,
   meson,
@@ -11,7 +12,7 @@
   gtk4,
   atk,
   gobject-introspection,
-  spidermonkey_128,
+  spidermonkey_140,
   pango,
   cairo,
   readline,
@@ -41,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.84.2";
+  version = "1.85.90";
 
   outputs = [
     "out"
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NRQu3zRXBWNjACkew6fVg/FJaf8/rg/zD0qVseZ0AWY=";
+    hash = "sha256-tFVADxNLEs3MtPO92yPMZOqxlY0cn0hLsKQlk/t4MmU=";
   };
 
   patches = [
@@ -70,6 +71,20 @@ stdenv.mkDerivation (finalAttrs: {
     # not ok 796 Filename tests various types of path existing
     # Message: Error opening file “/build/.UGHEA3/öäü-3”: Invalid or incomplete multibyte or wide character in /build/gjs-1.84.2/build/../installed-tests/js/testGIMarshalling.js (line 2937)
     ./disable-umlaut-test.patch
+
+    # Fix gjs:JS / Package test
+    # https://gitlab.gnome.org/GNOME/gjs/-/issues/711
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gjs/-/commit/054f78c756b631c347c6f64ab5b7349331f5f420.patch";
+      hash = "sha256-gnOD+WU+JTzetnyGyGJKQZbaLX22yZuBhCmhJd2Hha8=";
+    })
+
+    # Fix gjs:Scripts / Gtk4Warnings test
+    # https://gitlab.gnome.org/GNOME/gjs/-/issues/712
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gjs/-/commit/48b00ae16d97ae213dbaef6dee8ffd56e1667a64.patch";
+      hash = "sha256-u7P/dV9mtx3AldrnbDhGGMVQ61GmD54TXFhS4FRh4yc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -90,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_128
+    spidermonkey_140
   ];
 
   nativeCheckInputs = [
