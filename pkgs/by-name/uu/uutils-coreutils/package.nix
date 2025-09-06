@@ -21,19 +21,19 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-nKKjc6Bui7k50SR7BY09dRGt3Za1Ch/E+3KiCO5KtOg=";
+    hash = "sha256-jxjg2RIZaemA6jgfdE1KX8G6c/NWumecoJMFx7dspz8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "uutils-coreutils-${finalAttrs.version}";
-    hash = "sha256-PTIypl9uqFkp6GrF7Pp40AItbWFlXT2V2x/C8L2J8S0=";
+    hash = "sha256-SFuAWzmYd1N7czUyC/7CYrCObYfoKrC5oORFxXtbwhE=";
   };
 
   patches = [
