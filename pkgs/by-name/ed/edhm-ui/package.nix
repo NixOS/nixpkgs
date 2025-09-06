@@ -87,13 +87,13 @@ stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  sourceRoot = ".";
+  sourceRoot = "edhm-ui-v3-linux-x64";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/opt/edhm-ui
-    cp -r edhm-ui-v3-linux-x64/* $out/opt/edhm-ui/
+    cp -r * $out/opt/edhm-ui/
 
     # Make the main executable... executable
     chmod +x $out/opt/edhm-ui/edhm-ui-v3
