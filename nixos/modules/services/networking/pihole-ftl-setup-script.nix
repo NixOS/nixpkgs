@@ -6,7 +6,7 @@
 }:
 
 let
-  pihole = pkgs.pihole;
+  pihole = cfg.piholePackage;
   makePayload =
     list:
     builtins.toJSON {
