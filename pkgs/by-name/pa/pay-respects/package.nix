@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       sigmasquadron
-      bloxx12
+      faukah
       ALameLlama
     ];
     mainProgram = "pay-respects";
