@@ -1,8 +1,9 @@
 {
+  cmake,
+  coreutils,
   lib,
   stdenv,
   fetchzip,
-  autoreconfHook,
   makeWrapper,
   nixosTests,
   pkg-config,
@@ -10,8 +11,8 @@
   linuxHeaders,
   openssl,
   pcre,
+  pcre2,
   perlPackages,
-  python3,
   # recommended dependencies
   withHwloc ? true,
   hwloc,
@@ -42,43 +43,29 @@
   luajit,
   withMaxmindDB ? false,
   libmaxminddb,
-  # optional features
-  enableWCCP ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.11";
+  version = "10.1.0";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-WFABr7+JsUbQagLFK0OXZ20t4QCuYrozeaV4fKO/c2s=";
+    hash = "sha256-8FQtJroMdIZvBzpT299H/5pB9+KbapZtIUvGtcuF9h4=";
   };
 
-  # NOTE: The upstream README indicates that flex is needed for some features,
-  # but it actually seems to be unnecessary as of this commit[1]. The detection
-  # logic for bison and flex is still present in the build script[2], but no
-  # other code seems to depend on it. This situation is susceptible to change
-  # though, so it's a good idea to inspect the build scripts periodically.
-  #
-  # [1]: https://github.com/apache/trafficserver/pull/5617
-  # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     makeWrapper
     pkg-config
     file
-    python3
   ]
-  ++ (with perlPackages; [
-    perl
-    ExtUtilsMakeMaker
-  ])
   ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
   buildInputs = [
     openssl
-    pcre
+    pcre.dev
+    pcre2.dev
     perlPackages.perl
   ]
   ++ lib.optional withBrotli brotli
@@ -96,52 +83,47 @@ stdenv.mkDerivation rec {
   ++ lib.optional withUnwind libunwind
   ++ lib.optional withMaxmindDB libmaxminddb;
 
-  outputs = [
-    "out"
-    "man"
+  patches = [
+    # https://github.com/apache/trafficserver/pull/12481
+    ./test-reset-root.patch
   ];
 
   postPatch = ''
     patchShebangs \
-      iocore/aio/test_AIO.sample \
+      src/iocore/aio/test_AIO.sample \
       src/traffic_via/test_traffic_via \
       src/traffic_logstats/tests \
       tools/check-unused-dependencies
+    substituteInPlace ./rc/trafficserver.service.in \
+      --replace-fail '/bin/rm' '${coreutils}/bin/rm'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace configure.ac \
+    substituteInPlace ./cmake/ConfigureTransparentProxy.cmake \
       --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # 'xcrun leaks' probably requires non-free XCode
-    substituteInPlace iocore/net/test_certlookup.cc \
+    substituteInPlace src/iocore/net/test_certlookup.cc \
       --replace-fail 'xcrun leaks' 'true'
   '';
 
-  configureFlags = [
-    "--enable-layout=NixOS"
-    "--enable-experimental-plugins"
-    (lib.enableFeature enableWCCP "wccp")
-
-    (lib.withFeatureAs withHiredis "hiredis" hiredis)
-  ];
-
-  installFlags = [
-    "pkgsysconfdir=${placeholder "out"}/etc/trafficserver"
+  cmakeFlags = [
+    "-DBUILD_EXPERIMENTAL_PLUGINS=ON"
+    "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc/trafficserver"
 
     # replace runtime directories with an install-time placeholder directory
-    "pkgcachedir=${placeholder "out"}/.install-trafficserver"
-    "pkglocalstatedir=${placeholder "out"}/.install-trafficserver"
-    "pkglogdir=${placeholder "out"}/.install-trafficserver"
-    "pkgruntimedir=${placeholder "out"}/.install-trafficserver"
+    "-DCMAKE_INSTALL_CACHEDIR=${placeholder "out"}/.install-trafficserver"
+    "-DCMAKE_INSTALL_LOCALSTATEDIR=${placeholder "out"}/.install-trafficserver"
+    "-DCMAKE_INSTALL_LOGDIR=${placeholder "out"}/.install-trafficserver"
+    "-DCMAKE_INSTALL_RUNSTATEDIR=${placeholder "out"}/.install-trafficserver"
   ];
+
+  preCheck = ''
+    export TS_ROOT=$(pwd)
+  '';
 
   postInstall = ''
     install -Dm644 rc/trafficserver.service $out/lib/systemd/system/trafficserver.service
-
-    wrapProgram $out/bin/tspush \
-      --set PERL5LIB '${with perlPackages; makePerlPath [ URI ]}' \
-      --prefix PATH : "${lib.makeBinPath [ file ]}"
 
     find "$out" -name '*.la' -delete
 
