@@ -23702,6 +23702,12 @@
     githubId = 28259;
     name = "Michael Witrant";
   };
+  sigmonsays = {
+    name = "sigmonsays";
+    email = "sigmonsays@picklerick.it";
+    github = "sigmonsays";
+    githubId = 123410;
+  };
   sikmir = {
     email = "sikmir@disroot.org";
     matrix = "@sikmir:matrix.org";
