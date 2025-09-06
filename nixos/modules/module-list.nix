@@ -713,6 +713,7 @@
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
   ./services/logging/heartbeat.nix
+  ./services/logging/packetbeat.nix
   ./services/logging/journalbeat.nix
   ./services/logging/journaldriver.nix
   ./services/logging/journalwatch.nix
