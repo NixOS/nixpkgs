@@ -4,31 +4,24 @@
 
 linkFarm "zig-packages" [
   {
-    name = "N-V-__8AABhrAQAQLLLGadghhPsdxTgBk9N9aLVOjXW3ay0V";
+    name = "diffz-0.0.1-G2tlIQrOAQCfH15jdyaLyrMgV8eGPouFhkCeYFTmJaLk";
     path = fetchzip {
-      url = "https://github.com/ziglibs/diffz/archive/ef45c00d655e5e40faf35afbbde81a1fa5ed7ffb.tar.gz";
-      hash = "sha256-5/3W0Xt9RjsvCb8Q4cdaM8dkJP7CdFro14JJLCuqASo=";
+      url = "https://github.com/ziglibs/diffz/archive/a20dd1f11b10819a6f570f98b42e1c91e3704357.tar.gz";
+      hash = "sha256-y7Ck5XZNnHxmPPWlDAqZZ2g3n67txj5/Zq04AhuW5+M=";
     };
   }
   {
-    name = "N-V-__8AAMeOlQEipHjcyu0TCftdAi9AQe7EXUDJOoVe0k-t";
+    name = "known_folders-0.0.0-Fy-PJkfRAAAVdptXWXBspIIC7EkVgLgWozU5zIk5Zgcy";
     path = fetchzip {
-      url = "https://github.com/wolfpld/tracy/archive/refs/tags/v0.11.1.tar.gz";
-      hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
+      url = "https://github.com/ziglibs/known-folders/archive/92defaee76b07487769ca352fd0ba95bc8b42a2f.tar.gz";
+      hash = "sha256-+FviMdQGeHn2ymfXjIQPxLPx3haPy5zhPJuS3Ow8m68=";
     };
   }
   {
-    name = "known_folders-0.0.0-Fy-PJtLDAADGDOwYwMkVydMSTp_aN-nfjCZw6qPQ2ECL";
+    name = "lsp_kit-0.1.0-bi_PL04yCgAxLsF0hH2a5sZKT84MGQaKXouw2jvCE8Nl";
     path = fetchzip {
-      url = "https://github.com/ziglibs/known-folders/archive/aa24df42183ad415d10bc0a33e6238c437fc0f59.tar.gz";
-      hash = "sha256-YiJ2lfG1xsGFMO6flk/BMhCqJ3kB3MnOX5fnfDEcmMY=";
-    };
-  }
-  {
-    name = "lsp_codegen-0.1.0-CMjjo0ZXCQB-rAhPYrlfzzpU0u0u2MeGvUucZ-_g32eg";
-    path = fetchzip {
-      url = "https://github.com/zigtools/zig-lsp-codegen/archive/063a98c13a2293d8654086140813bdd1de6501bc.tar.gz";
-      hash = "sha256-KzRi/a3FCS11Mryin9skkf3rFrIuoMP8+RcU0IuYNBA=";
+      url = "https://github.com/zigtools/lsp-kit/archive/576e9405b1ab22c17c0f9318feed3278aa66b0ea.tar.gz";
+      hash = "sha256-V6MSzc4Y9n6DK2cuZ62SKsvj2qeDVUxWVtbsWiRgtF4=";
     };
   }
 ]
