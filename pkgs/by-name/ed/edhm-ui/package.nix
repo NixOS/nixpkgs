@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     unzip
     makeWrapper
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -114,25 +115,30 @@ stdenv.mkDerivation rec {
     Terminal=false
     Type=Application
     Categories=Game;Utility;
+    StartupWMClass=edhm-ui-v3
     EOF
 
         # Install icon
         mkdir -p $out/share/pixmaps
         cp $out/opt/edhm-ui/resources/images/icon.png $out/share/pixmaps/edhm-ui.png
 
+        # Validate desktop entry
+        desktop-file-validate $out/share/applications/edhm-ui.desktop
+
         runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elite Dangerous HUD Mod Manager - A tool for managing HUD modifications in Elite Dangerous";
     homepage = "https://github.com/BlueMystical/EDHM_UI";
-    license = with licenses; [
-      gpl3Only # EDHM UI itself is GPL v3
-      unfree # EDHM core has custom restrictive license with all rights reserved
+    license = [
+      lib.licenses.gpl3Only # EDHM UI itself is GPL v3
+      lib.licenses.unfree # EDHM core has custom restrictive license with all rights reserved
     ];
-    maintainers = with maintainers; [ michael-k-williams ];
+    maintainers = [ lib.maintainers.michael-k-williams ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    mainProgram = "edhm-ui";
     longDescription = ''
       EDHM UI is a GPL v3 licensed user interface for managing Elite Dangerous HUD modifications.
       It includes EDHM (Elite Dangerous HUD Mod) which has a custom restrictive license.
@@ -142,7 +148,7 @@ stdenv.mkDerivation rec {
       - No modification, redistribution, or reuse without explicit permission
       - All rights reserved by original authors (Fred89210 and psychicEgg)
 
-      This is a fan-made modification for Elite Dangerous and is not affiliated with 
+      This is a fan-made modification for Elite Dangerous and is not affiliated with
       Frontier Developments plc.
     '';
   };
