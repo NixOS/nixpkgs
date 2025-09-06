@@ -209,7 +209,7 @@ hydraQuery responseType option query = do
   let customHeaderOpt =
         header
           "User-Agent"
-          "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270"
+          "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell)"
       customTimeoutOpt = responseTimeout 900_000_000 -- 15 minutes
       opts = customHeaderOpt <> customTimeoutOpt <> option
       url = foldl' (/:) (https "hydra.nixos.org") query
