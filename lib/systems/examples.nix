@@ -36,6 +36,11 @@ rec {
     };
   };
 
+  ppc32 = {
+    config = "powerpc-unknown-linux-gnu";
+    rust.rustcTarget = "powerpc-unknown-linux-gnu";
+  };
+
   sheevaplug = {
     config = "armv5tel-unknown-linux-gnueabi";
   }
