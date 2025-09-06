@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liboprf";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "stef";
     repo = "liboprf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xDE9UkHDAaA7zC6IxxEIUG7ziS1yYNLJbmVJZLJyL7U=";
+    hash = "sha256-Toja0rR0321i7L1dsB9YxrwNJwKUzuSfK5LLR3tex7U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
