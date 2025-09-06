@@ -171,35 +171,43 @@ let
         TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
     fi
 
-    ${lib.optionalString (cfg.useNixStoreImage) ''
-      echo "Creating Nix store image..."
+    ${
+      if cfg.useNixStoreImage then
+        ''
+          echo "Creating Nix store image..."
 
-      ${hostPkgs.gnutar}/bin/tar --create \
-        --absolute-names \
-        --verbatim-files-from \
-        --transform 'flags=rSh;s|/nix/store/||' \
-        --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
-        --files-from ${
-          hostPkgs.closureInfo {
-            rootPaths = [
-              config.system.build.toplevel
-              regInfo
-            ];
-          }
-        }/store-paths \
-        | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-          --quiet \
-          --force-uid=0 \
-          --force-gid=0 \
-          -L ${nixStoreFilesystemLabel} \
-          -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-          -T 0 \
-          --hard-dereference \
-          --tar=f \
-          "$TMPDIR"/store.img
+          ${hostPkgs.gnutar}/bin/tar --create \
+            --absolute-names \
+            --verbatim-files-from \
+            --transform 'flags=rSh;s|/nix/store/||' \
+            --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
+            --files-from ${
+              hostPkgs.closureInfo {
+                rootPaths = [
+                  config.system.build.toplevel
+                  regInfo
+                ];
+              }
+            }/store-paths \
+            | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
+              --quiet \
+              --force-uid=0 \
+              --force-gid=0 \
+              -L ${nixStoreFilesystemLabel} \
+              -U eb176051-bd15-49b7-9e6b-462e0b467019 \
+              -T 0 \
+              --hard-dereference \
+              --tar=f \
+              "$TMPDIR"/store.img
 
-      echo "Created Nix store image."
-    ''}
+          echo "Created Nix store image."
+        ''
+      else
+        ''
+          # Retain gcroots in the host Nix store while the VM is running.
+          export NIX_GCROOTS="${concatStringsSep ":" config.virtualisation.additionalPaths}"
+        ''
+    }
 
     # Create a directory for exchanging data with the VM.
     mkdir -p "$TMPDIR/xchg"
