@@ -96,6 +96,7 @@ rustPlatform.buildRustPackage {
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/ALCOM \
       --set APPIMAGE ALCOM
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
   passthru = {
