@@ -123,33 +123,21 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
 
-  installPhase =
-    let
-      installIcon = resolution: ''
-        install -Dm644 -T ../ui/icons/xemu_${resolution}.png \
-          $out/share/icons/hicolor/${resolution}/apps/xemu.png
-      '';
-    in
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      install -Dm755 -T qemu-system-i386 $out/bin/xemu
-    ''
-    + (lib.concatMapStringsSep "\n" installIcon [
-      "16x16"
-      "24x24"
-      "32x32"
-      "48x48"
-      "128x128"
-      "256x256"
-      "512x512"
-    ])
-    + "\n"
-    + ''
-      install -Dm644 -T ../ui/xemu.desktop $out/share/applications/xemu.desktop
+    install -Dm755 -T qemu-system-i386 $out/bin/xemu
 
-      runHook postInstall
-    '';
+    for resolution in 16x16 24x24 32x32 48x48 128x128 256x256 512x512
+    do
+      install -Dm644 -T ../ui/icons/xemu_$resolution.png \
+        $out/share/icons/hicolor/$resolution/apps/xemu.png
+    done
+
+    install -Dm644 -T ../ui/xemu.desktop $out/share/applications/xemu.desktop
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://xemu.app/";
