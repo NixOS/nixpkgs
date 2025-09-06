@@ -44,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "48.0";
+  version = "49.rc";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-G8Btr/CT7HteN+y0+S5do0dKGxugdu25FR7pZ9HDCt8=";
+    hash = "sha256-vQdduV2RbiXRhk/n0RSY8YpSiiMYDU4jotXwukRgyBY=";
   };
 
   mesonFlags = [
@@ -145,6 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
     # installed (mostly just because .passthru.tests can make use of it).
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
+
+    # Disable userdb dynamic users for now
+    substituteInPlace meson.build \
+      --replace-fail 'have_userdb = libsystemd_dep' 'have_userdb = false #'
   '';
 
   doInstallCheck = true;
