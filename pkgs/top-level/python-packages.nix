@@ -11660,6 +11660,8 @@ self: super: with self; {
 
   piccata = callPackage ../development/python-modules/piccata { };
 
+  piccolo = callPackage ../development/python-modules/piccolo { };
+
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
   pick = callPackage ../development/python-modules/pick { };
