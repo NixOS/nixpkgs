@@ -62,6 +62,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "file-roller"
+    ] "Not required for the package to function anymore, use `pkgs.file-roller` instead.")
     (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
