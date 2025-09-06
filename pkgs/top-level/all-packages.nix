@@ -6432,6 +6432,22 @@ with pkgs;
         inherit version;
         hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
       };
+
+      postPatch = ''
+        substituteInPlace lib/ansible/executor/task_executor.py \
+          --replace "[python," "["
+
+        patchShebangs --build packaging/cli-doc/build.py
+
+        SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
+        PYPROJECT=$(cat pyproject.toml)
+        if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
+          echo "setuptools replace: ''${BASH_REMATCH[0]}"
+          echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
+        else
+          exit 2
+        fi
+      '';
     })
   );
   ansible_2_16 = python3Packages.toPythonApplication (
@@ -6441,6 +6457,22 @@ with pkgs;
         inherit version;
         hash = "sha256-gCef/9mGhrrfqjLh7HhdmKbfGy/B5Al97AWXZA10ZBU=";
       };
+
+      postPatch = ''
+        substituteInPlace lib/ansible/executor/task_executor.py \
+          --replace "[python," "["
+
+        patchShebangs --build packaging/cli-doc/build.py
+
+        SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
+        PYPROJECT=$(cat pyproject.toml)
+        if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
+          echo "setuptools replace: ''${BASH_REMATCH[0]}"
+          echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
+        else
+          exit 2
+        fi
+      '';
     })
   );
 
