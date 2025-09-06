@@ -65,8 +65,11 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   passthru = {
-    # TODO: fix this not updating
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage=frontend"
+      ];
+    };
     inherit frontend;
   };
 
