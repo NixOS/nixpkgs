@@ -14426,17 +14426,7 @@ with pkgs;
 
   raxml-mpi = raxml.override { useMpi = true; };
 
-  trimmomatic = callPackage ../applications/science/biology/trimmomatic {
-    jdk = pkgs.jdk21_headless;
-    # Reduce closure size
-    jre = pkgs.jre_minimal.override {
-      modules = [
-        "java.base"
-        "java.logging"
-      ];
-      jdk = pkgs.jdk21_headless;
-    };
-  };
+  trimmomatic = callPackage ../applications/science/biology/trimmomatic { };
 
   ### SCIENCE/MACHINE LEARNING
 
