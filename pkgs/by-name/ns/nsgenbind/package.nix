@@ -4,11 +4,11 @@
   fetchurl,
   bison,
   flex,
-  buildsystem,
+  netsurf-buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-nsgenbind";
+  pname = "nsgenbind";
   version = "0.8";
 
   src = fetchurl {
@@ -21,11 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [ netsurf-buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
@@ -33,6 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generator for JavaScript bindings for netsurf browser";
     mainProgram = "nsgenbind";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
