@@ -4,6 +4,7 @@
   ocaml-crunch,
   seppo,
   lib,
+  nix-update-script,
 }:
 
 let
@@ -12,14 +13,14 @@ in
 
 ocamlPackages.buildDunePackage {
   pname = "seppo";
-  version = "0-unstable-2025-06-03";
+  version = "0-unstable-2025-07-06";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "seppo";
     repo = "seppo";
-    rev = "33ae3e9f61d596fb91d3ab1a91fc26ae80981a93";
-    hash = "sha256-tOIIfYBLcZqQzoPxAVkE8RGX0sugUmDGpxIhIZ5Wy+w=";
+    rev = "500f712be07076f70341f423e883ade576ee708c";
+    hash = "sha256-wq2QPIJ3+/udzY8TvkSyMwqTL0RnKk0nKkQ/3sd/FKQ=";
   };
 
   # Provide git sha to avoid git dependency
@@ -59,11 +60,16 @@ ocamlPackages.buildDunePackage {
     xmlm
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = {
     homepage = "https://seppo.mro.name";
     description = "Personal Social Web";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ infinidoge ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "seppo";
   };
 }
