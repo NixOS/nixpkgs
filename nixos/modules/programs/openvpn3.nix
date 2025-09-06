@@ -18,7 +18,7 @@ let
     options
     lists
     ;
-  inherit (lib.types) bool submodule ints;
+  inherit (lib.types) bool submodule ints attrsOf;
 in
 {
   options.programs.openvpn3 = {
@@ -33,7 +33,7 @@ in
             description = "Options stored in {file}`/etc/openvpn3/netcfg.json` configuration file";
             default = { };
             type = submodule {
-              freeformType = json.type;
+              freeformType = attrsOf json.type;
               options = {
                 systemd_resolved = mkOption {
                   type = bool;
@@ -57,7 +57,7 @@ in
             description = "Options stored in {file}`/etc/openvpn3/log-service.json` configuration file";
             default = { };
             type = submodule {
-              freeformType = json.type;
+              freeformType = attrsOf json.type;
               options = {
                 journald = mkOption {
                   description = "Use systemd-journald";
