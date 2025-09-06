@@ -254,6 +254,8 @@ let
 
         cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
 
+        cohttp-eio = callPackage ../development/ocaml-modules/cohttp/eio.nix { };
+
         cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
         cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
@@ -777,6 +779,8 @@ let
         hmap = callPackage ../development/ocaml-modules/hmap { };
 
         hpack = callPackage ../development/ocaml-modules/hpack { };
+
+        http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
 
         http-mirage-client = callPackage ../development/ocaml-modules/http-mirage-client { };
 
