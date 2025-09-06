@@ -370,6 +370,22 @@ let
         # Handle Android SDK and NDK versions.
         androidSdkVersion = args.androidSdkVersion or null;
         androidNdkVersion = args.androidNdkVersion or null;
+
+        zigTarget =
+          let
+            cpu = final.parsed.cpu.name;
+            os =
+              if final.isMacOS then
+                "macos" # Instead of "darwin"
+              else
+                final.parsed.kernel.name;
+            abi =
+              {
+                "unknown" = "none"; # e.g. x86_64-macos-none
+              }
+              .${final.parsed.abi.name} or final.parsed.abi.name;
+          in
+          args.zigTarget or "${cpu}-${os}-${abi}";
       }
       // (
         let
