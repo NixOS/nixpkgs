@@ -14,7 +14,7 @@
   python3Packages,
 
   boost,
-  fmt_11,
+  fmt,
   gtest,
   icu,
   spdlog,
@@ -66,10 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     gtest
     icu
-    (spdlog.override { fmt = fmt_11; })
+    spdlog
     tbb_2021
 
     finalAttrs.passthru.yaml-cpp # has merge-key support

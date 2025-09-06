@@ -23,7 +23,7 @@
   libunwind,
 
   boost,
-  fmt_11,
+  fmt,
   jemalloc,
 
   gtest,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # `folly-config.cmake` pulls these in.
     boost
-    fmt_11
+    fmt
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # jemalloc headers are required in include/folly/portability/Malloc.h
@@ -190,8 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit boost;
-    fmt = fmt_11;
+    inherit boost fmt;
 
     updateScript = nix-update-script { };
 
