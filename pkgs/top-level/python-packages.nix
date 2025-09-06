@@ -791,6 +791,8 @@ self: super: with self; {
 
   apkit = callPackage ../development/python-modules/apkit { };
 
+  apksigtool = callPackage ../development/python-modules/apksigtool { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   apollo-fpga = callPackage ../development/python-modules/apollo-fpga { };
@@ -6159,6 +6161,8 @@ self: super: with self; {
 
   google-photos-library-api = callPackage ../development/python-modules/google-photos-library-api { };
 
+  google-play-scraper = callPackage ../development/python-modules/google-play-scraper { };
+
   google-re2 = callPackage ../development/python-modules/google-re2 { };
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
@@ -6781,6 +6785,8 @@ self: super: with self; {
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   httptools = callPackage ../development/python-modules/httptools { };
+
+  http-tools = callPackage ../development/python-modules/http-tools { };
 
   httpx = callPackage ../development/python-modules/httpx { };
 
@@ -8294,6 +8300,8 @@ self: super: with self; {
   librouteros = callPackage ../development/python-modules/librouteros { };
 
   libsass = callPackage ../development/python-modules/libsass { inherit (pkgs) libsass; };
+
+  libsast = callPackage ../development/python-modules/libsast { };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
@@ -16616,6 +16624,8 @@ self: super: with self; {
   shazamio = callPackage ../development/python-modules/shazamio { };
 
   shellescape = callPackage ../development/python-modules/shellescape { };
+
+  shelljob = callPackage ../development/python-modules/shelljob { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
 
