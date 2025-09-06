@@ -11,8 +11,9 @@ stdenv.mkDerivation {
   pname = "ax25-apps";
   version = "0.0.8-rc5-unstable-2021-05-13";
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [
-    autoreconfHook
     libax25
     ncurses
   ];
