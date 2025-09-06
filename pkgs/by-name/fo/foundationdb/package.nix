@@ -28,14 +28,14 @@ let
     in
     isOdd patch;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foundationdb";
   version = "7.3.68";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "foundationdb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OaV7YyBggeX3vrnI2EYwlWdIGRHOAeP5OZN0Rmd/dnw=";
   };
 
@@ -73,6 +73,10 @@ stdenv.mkDerivation rec {
     # <https://github.com/apple/foundationdb/pull/11788>
     substituteInPlace cmake/CompileBoost.cmake \
       --replace-fail 'find_package(Boost 1.78.0 EXACT ' 'find_package(Boost '
+
+    # Fix cross compilation
+    substituteInPlace cmake/ConfigureCompiler.cmake \
+      --replace-fail 'gcc-ar' '${stdenv.cc.targetPrefix}ar'
   '';
 
   buildInputs = [
@@ -127,6 +131,8 @@ stdenv.mkDerivation rec {
     "-DOPENSSL_USE_STATIC_LIBS=FALSE"
     "-DOPENSSL_CRYPTO_LIBRARY=${openssl.out}/lib/libcrypto.so"
     "-DOPENSSL_SSL_LIBRARY=${openssl.out}/lib/libssl.so"
+
+    "-DCMAKE_AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   # the install phase for cmake is pretty wonky right now since it's not designed to
@@ -149,7 +155,7 @@ stdenv.mkDerivation rec {
     # NB: use the original setup.py.in, so we can substitute VERSION correctly
     cp ../LICENSE ./bindings/python
     substitute ../bindings/python/setup.py.in ./bindings/python/setup.py \
-      --replace 'VERSION' "${version}"
+      --replace 'VERSION' "${finalAttrs.version}"
     rm -f ./bindings/python/setup.py.* ./bindings/python/CMakeLists.txt
     rm -f ./bindings/python/fdb/*.pth # remove useless files
     rm -f ./bindings/python/*.rst ./bindings/python/*.mk
@@ -173,12 +179,13 @@ stdenv.mkDerivation rec {
     description = "Open source, distributed, transactional key-value store";
     homepage = "https://www.foundationdb.org";
     license = lib.licenses.asl20;
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
-    # Fails when cross-compiling with "/bin/sh: gcc-ar: not found"
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (!(avxEnabled finalAttrs.version)) [ "aarch64-linux" ];
     maintainers = with lib.maintainers; [
       thoughtpolice
       kornholi
     ];
   };
-}
+})
