@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/sebadob/rauthy/releases/tag/v${finalAttrs.version}";
-    description = "OpenID Connect Single Sign-On Identity & Access Management";
+    description = "Single Sign-On Identity & Access Management via OpenID Connect, OAuth 2.0 and PAM";
     license = lib.licenses.asl20;
     mainProgram = "rauthy";
     maintainers = with lib.maintainers; [
