@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "python310-docs-pdf-a4";
-  version = "3.10.7";
+  version = "3.12.0";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/doc/3.10.7/python-3.10.7-docs-pdf-a4.tar.bz2";
-    sha256 = "1gvi457dsj3ywwvxysp7idkk9ndngnby1dnfh1q8f5gv3kg4093r";
+    url = "http://www.python.org/ftp/python/doc/3.12.0/python-3.12.0-docs-pdf-a4.tar.bz2";
+    sha256 = "sha256-W9WPgU9G/zuutxVqTMMVUt/cfZJC7+qgR2pImDI//I4=";
   };
   installPhase = ''
     mkdir -p $out/share/doc/python310
