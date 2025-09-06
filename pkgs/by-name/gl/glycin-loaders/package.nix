@@ -19,18 +19,25 @@
   pkg-config,
   rustc,
   rustPlatform,
+  common-updater-scripts,
+  _experimental-update-script-combinators,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.2.3";
+  version = "2.0.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OAqv4r+07KDEW0JmDr/0SWANAKQ7YJ1bHIP3lfXI+zw=";
+    hash = "sha256-mkREIVtD1b2YUyW0CK4lC0S4Arb/SeGvCCXXAAi5Zz8=";
   };
 
-  cargoVendorDir = "vendor";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    name = "glycin-loaders-deps-${finalAttrs.version}";
+    hash = "sha256-omxOAZggqBzMKKg6NP8BnjnGwqIkn0fbOI3Vfwa+j1A=";
+    dontConfigure = true;
+  };
 
   nativeBuildInputs = [
     cargo
@@ -56,24 +63,49 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dglycin-loaders=true"
+    "-Dglycin-thumbnailer=false"
     "-Dlibglycin=false"
+    "-Dlibglycin-gtk4=false"
     "-Dvapi=false"
   ];
 
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace loaders/meson.build \
+    substituteInPlace glycin-loaders/meson.build \
       --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
   '';
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      attrPath = "glycin-loaders";
-      packageName = "glycin";
-    };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          attrPath = "glycin-loaders";
+          packageName = "glycin";
+        };
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version glycin-loaders --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
   meta = with lib; {
