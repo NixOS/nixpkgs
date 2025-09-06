@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Tidal";
-  version = "0.3.10";
+  version = "0.3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tehkillerbee";
     repo = "mopidy-tidal";
     tag = "v${version}";
-    hash = "sha256-hUYT9c4bEPfUU3f2ywK0MO0jDDLmM+3hp17XH4XJQt8=";
+    hash = "sha256-wqx/30UQVm1fEwP/bZeW7TtzGfn/wI0klQnFr9E3AOs=";
   };
 
   build-system = [ python3Packages.poetry-core ];
