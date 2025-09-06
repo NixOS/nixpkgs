@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl3
-    libplacebo
-    vulkan-headers
   ];
 
   nativeBuildInputs = [
+    libplacebo
+    vulkan-headers
     librashader
     pkg-config
     lcms
@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    ls -la
     mkdir -p $out/bin
     install -m755 ntrviewer $out/bin/ntrviewer
     runHook postInstall
