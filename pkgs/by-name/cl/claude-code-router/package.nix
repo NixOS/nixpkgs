@@ -53,7 +53,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "A powerful tool to route Claude Code requests to different models and customize any request.";
+    description = "Route Claude Code requests to different models and customize any request";
     homepage = "https://github.com/musistudio/claude-code-router";
     downloadPage = "https://www.npmjs.com/package/@musistudio/claude-code-router";
     license = lib.licenses.mit;
