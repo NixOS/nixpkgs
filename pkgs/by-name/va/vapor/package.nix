@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, stdenv, nix-update-script, }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vapor";
@@ -16,13 +21,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
         runHook preInstall
-        
         # Install the package sources and manifest for Swift Package Manager integration
         mkdir -p $out/share/vapor
         cp -r Sources/ $out/share/vapor/
         cp Package.swift $out/share/vapor/
         cp -r README.md LICENSE $out/share/vapor/ 2>/dev/null || true
-        
         # Create a simple wrapper script for easy Swift Package Manager usage
         mkdir -p $out/bin
         cat > $out/bin/vapor-version << 'EOF'
@@ -33,7 +36,6 @@ stdenv.mkDerivation rec {
     echo '.package(path: "'$out'/share/vapor")'
     EOF
         chmod +x $out/bin/vapor-version
-        
         runHook postInstall
   '';
 
@@ -42,9 +44,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Server-side Swift HTTP web framework";
     longDescription = ''
-      Vapor is an HTTP web framework for Swift. It provides a beautifully 
-      expressive and easy-to-use foundation for your next website, API, or 
-      cloud project. Built with a non-blocking, event-driven architecture, 
+      Vapor is an HTTP web framework for Swift. It provides a beautifully
+      expressive and easy-to-use foundation for your next website, API, or
+      cloud project. Built with a non-blocking, event-driven architecture,
       Vapor allows you to build high-performant, scalable APIs and HTTP servers.
     '';
     homepage = "https://vapor.codes";
