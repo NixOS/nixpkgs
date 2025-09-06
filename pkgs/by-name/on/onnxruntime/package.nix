@@ -3,7 +3,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -29,14 +28,14 @@
 }@inputs:
 
 let
-  version = "1.22.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fcTvMsEgO3tHOvCKCAqkO/bpZX4tcJHq9ZqpZH+uMqs=";
+    hash = "sha256-X8Pdtc0eR0iU+Xi2A1HrNo1xqCnoaxNjj4QFm/E3kSE=";
   };
 
   stdenv = throw "Use effectiveStdenv instead";
@@ -153,9 +152,6 @@ effectiveStdenv.mkDerivation rec {
       packaging
     ]
   )
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    libiconv
-  ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
