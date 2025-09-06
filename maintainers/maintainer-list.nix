@@ -12328,6 +12328,12 @@
     githubId = 310981;
     name = "Joel Burget";
   };
+  joelgranados = {
+    email = "joel.granados.oss@joelgranados.com";
+    github = "Joelgranados";
+    githubId = 356364;
+    name = "Joel Granados";
+  };
   joelmo = {
     email = "joel.moberg@gmail.com";
     github = "joelmo";
