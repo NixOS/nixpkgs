@@ -60,8 +60,6 @@
 
   obs-mute-filter = callPackage ./obs-mute-filter.nix { };
 
-  obs-ndi = qt6Packages.callPackage ./obs-ndi { };
-
   obs-noise = callPackage ./obs-noise.nix { };
 
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
