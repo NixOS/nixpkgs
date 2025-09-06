@@ -1632,7 +1632,7 @@ let
         merged = a.typeMerge b.functor;
       in
       if merged == null then setType "merge-error" { error = "Cannot merge types"; } else merged;
-  };
+  } // import ./types/record.nix { inherit lib; };
 
 in
 outer_types // outer_types.types
