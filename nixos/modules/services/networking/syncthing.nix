@@ -80,14 +80,31 @@ let
       umask 0077
 
       curl() {
-          # get the api key by parsing the config.xml
-          while
-              ! ${pkgs.libxml2}/bin/xmllint \
-                  --xpath 'string(configuration/gui/apikey)' \
-                  ${cfg.configDir}/config.xml \
-                  >"$RUNTIME_DIRECTORY/api_key"
-          do sleep 1; done
-          (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+          ${
+            if (cfg.apiKeyFile != null) then
+              ''
+                if [ ! -f "$RUNTIME_DIRECTORY/headers" ]
+                then
+                    (printf "X-API-Key: "; cat "${cfg.apiKeyFile}") >"$RUNTIME_DIRECTORY/headers"
+                fi
+              ''
+            else
+              ''
+                # Get the api key by parsing config.xml, we do not cache the result
+                # since apiKeyFile was not set in the (NixOS) config, and if we
+                # update the gui settings (without `apikey` set) then syncthing will
+                # generate a new api key.
+                while
+                    ! ${pkgs.libxml2}/bin/xmllint \
+                        --xpath 'string(configuration/gui/apikey)' \
+                        ${cfg.configDir}/config.xml \
+                        >"$RUNTIME_DIRECTORY/api_key"
+                do
+                    sleep 1
+                done
+                (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+              ''
+          }
           ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
               --retry 1000 --retry-delay 1 --retry-all-errors \
               "$@"
@@ -728,6 +745,22 @@ in
         '';
       };
 
+      apiKeyFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          The API key used by the REST API. You must set this option if you
+          plan to use the REST API, and have anything configured under
+          `settings.gui`, since the API key will be reset every time gui
+          settings are updated when syncthing is restarted.
+
+          If this option is set it takes precedence over anything set in
+          `settings.gui.apikey`. You can use `settings.gui.apikey` instead of
+          this option if having your API key in plain text in your NixOS
+          configuration does not bother you.
+        '';
+      };
+
       systemService = mkOption {
         type = types.bool;
         default = true;
@@ -946,17 +979,26 @@ in
               ''}";
           ExecStart =
             let
-              args = lib.escapeShellArgs (
-                (lib.cli.toCommandLineGNU { } {
+              args =
+                (lib.cli.toGNUCommandLine { } {
                   "no-browser" = true;
                   "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
                   "config" = cfg.configDir;
                   "data" = cfg.databaseDir;
                 })
-                ++ cfg.extraFlags
-              );
+                ++ (map lib.escapeShellArg cfg.extraFlags);
             in
-            "${lib.getExe cfg.package} ${args}";
+            pkgs.writeShellScript "syncthing-start" ''
+              ${optionalString (cfg.apiKeyFile != null) ''
+                if [ ! -r "${cfg.apiKeyFile}" ]; then
+                  printf >&2 "Cannot set STGUIAPIKEY: \"${cfg.apiKeyFile}\" could not be found\n"
+                  exit 1
+                fi
+                export STGUIAPIKEY="$(cat ${cfg.apiKeyFile})"
+              ''}
+              exec ${lib.getExe cfg.package} \
+                ${builtins.concatStringsSep " \\\n  " args}
+            '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
