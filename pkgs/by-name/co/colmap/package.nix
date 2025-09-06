@@ -1,6 +1,8 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
   cmake,
   boost,
   ceres-solver,
@@ -9,11 +11,12 @@
   glog,
   libGLU,
   glew,
-  qtbase,
-  flann,
   cgal,
   gmp,
   mpfr,
+  poselib,
+  sqlite,
+  lz4,
   autoAddDriverRunpath,
   config,
   stdenv,
@@ -22,61 +25,81 @@
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
+  faiss,
+  llvmPackages,
+  gtest,
 }:
 
 assert cudaSupport -> cudaPackages != { };
 
 let
-  boost_static = boost.override { enableStatic = true; };
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
+  # These deps are also needed by pycolmap.
+  pythonDeps = [
+    boost
+    eigen
+    ceres-solver
+    freeimage
+    glog
+    libGLU
+    glew
+    cgal
+    poselib
+    faiss
+    sqlite
+    gmp
+    mpfr
+    lz4
+    qt5.qtbase
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ]
+  ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv'.mkDerivation rec {
-  version = "3.9.1";
+  version = "3.12.5";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
     rev = version;
-    hash = "sha256-Xb4JOttCMERwPYs5DyGKHw+f9Wik1/rdJQKbgVuygH8=";
+    hash = "sha256-ngmEYCLeCh5pSNmXItV3siY6/DupEHK+dYZ56LWZbhg=";
   };
 
-  cmakeFlags = lib.optionals cudaSupport [
-    (lib.cmakeBool "CUDA_ENABLED" true)
+  cmakeFlags = [
+    (lib.cmakeBool "FETCH_POSELIB" false)
+    (lib.cmakeBool "FETCH_FAISS" false)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDots cudaCapabilities)
+      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDot cudaCapabilities)
     ))
   ];
 
   buildInputs = [
-    boost_static
-    ceres-solver
-    eigen
-    freeimage
-    glog
-    libGLU
-    glew
-    qtbase
-    flann
-    cgal
-    gmp
-    mpfr
     xorg.libSM
-  ]
-  ++ lib.optionals cudaSupport [
-    cudatoolkit
-    cudaPackages.cuda_cudart.static
-  ];
+  ] ++ pythonDeps;
 
   nativeBuildInputs = [
     cmake
     qt5.wrapQtAppsHook
+    gtest
   ]
   ++ lib.optionals cudaSupport [
     autoAddDriverRunpath
   ];
+
+  enableParallelBuilding = true;
+  enableParallelInstalling = true;
+
+  passthru.updateScript = gitUpdater { };
+  passthru.pythonDeps = pythonDeps;
 
   meta = with lib; {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
@@ -84,9 +107,13 @@ stdenv'.mkDerivation rec {
       COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
       with a graphical and command-line interface.
     '';
+    mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lebastr ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      lebastr
+      usertam
+    ];
   };
 }
