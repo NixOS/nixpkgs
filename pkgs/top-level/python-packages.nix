@@ -4266,6 +4266,8 @@ self: super: with self; {
 
   docling-jobkit = callPackage ../development/python-modules/docling-jobkit { };
 
+  docling-mcp = callPackage ../development/python-modules/docling-mcp { };
+
   docling-parse = callPackage ../development/python-modules/docling-parse {
     loguru-cpp = pkgs.loguru;
   };
@@ -9140,6 +9142,8 @@ self: super: with self; {
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
+
+  mellea = callPackage ../development/python-modules/mellea { };
 
   melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
 
