@@ -14663,8 +14663,6 @@ with pkgs;
 
   ### SCIENCE / ELECTRONICS
 
-  appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
-
   simulide_0_4_15 = callPackage ../by-name/si/simulide/package.nix { versionNum = "0.4.15"; };
   simulide_1_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
   simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
@@ -14722,9 +14720,7 @@ with pkgs;
     withNgshared = false;
   };
 
-  openems = callPackage ../applications/science/electronics/openems {
-    qcsxcad = libsForQt5.qcsxcad;
-  };
+  openems = callPackage ../applications/science/electronics/openems { };
 
   xyce-parallel = callPackage ../by-name/xy/xyce/package.nix {
     withMPI = true;
