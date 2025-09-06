@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs:{
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
   version = "0.32.1";
 
