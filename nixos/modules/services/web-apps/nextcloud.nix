@@ -7,9 +7,11 @@
 let
   cfg = config.services.nextcloud;
 
-  overridePackage = cfg.package.override {
-    inherit (config.security.pki) caBundle;
-  };
+  overridePackage =
+    (if cfg.enableCompressedAssets then cfg.package.passthru.compressed else cfg.package).override
+      {
+        inherit (config.security.pki) caBundle;
+      };
 
   fpm = config.services.phpfpm.pools.nextcloud;
 
@@ -424,6 +426,11 @@ in
         Set this to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
       '';
     };
+    enableCompressedAssets = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to use gzip, brotli and zstd pre-compressed artifacts for lower CPU usage and transfer size but bigger storage size.";
+    };
     https = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -450,7 +457,7 @@ in
       type = lib.types.package;
       readOnly = true;
       description = ''
-        Package to the finalized Nextcloud package, including all installed apps.
+        Package to the finalized Nextcloud package, including all installed apps and potentially pre-compressed assets.
         This is automatically set by the module.
       '';
     };
