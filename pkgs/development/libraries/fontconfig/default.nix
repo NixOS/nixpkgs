@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
 
     # Test causes error without patch shebangs.
-    patchShebangs doc/check-whitespace-in-args.py
+    patchShebangs doc/check-whitespace-in-args.py \
+      doc/check-missing-doc.py
   '';
 
   configureFlags = [
