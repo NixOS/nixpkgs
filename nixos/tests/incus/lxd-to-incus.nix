@@ -80,7 +80,7 @@ import ../make-test-python.nix (
 
     testScript = ''
       def lxd_wait_for_preseed(_) -> bool:
-        _, output = machine.systemctl("is-active lxd-preseed.service")
+        output = machine.systemctl("is-active lxd-preseed.service")
         return ("inactive" in output)
 
       def lxd_instance_is_up(_) -> bool:
