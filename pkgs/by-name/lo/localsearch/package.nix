@@ -38,6 +38,7 @@
   libseccomp,
   libtiff,
   libuuid,
+  libwebp,
   libxml2,
   poppler,
   systemd,
@@ -49,11 +50,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.9.0";
+  version = "3.10.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1C9AjcP7KP5U9amrv18d7PWBjbnC6exRwJRkvf0MFLk=";
+    hash = "sha256-EeihW7QeFzynGqL0lHnKUIwmleWmB/BA1AMvjbyNaFU=";
   };
 
   patches = [
@@ -102,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libtiff
     libuuid
+    libwebp
     libxml2
     poppler
     taglib
