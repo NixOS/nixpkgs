@@ -52,12 +52,10 @@ buildPythonPackage rec {
     lapack
   ];
 
-  cmakeFlags = [
-    # Prefer finding BLAS and LAPACK via pkg-config.
-    # Avoid using the Accelerate.framework from the Darwin SDK.
-    # Also, avoid mistaking BLAS for LAPACK.
-    (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
-  ];
+  # Prefer finding BLAS and LAPACK via pkg-config.
+  # Avoid using the Accelerate.framework from the Darwin SDK.
+  # Also, avoid mistaking BLAS for LAPACK.
+  env.CMAKE_ARGS = lib.cmakeBool "BLA_PREFER_PKGCONFIG" true;
 
   pythonImportsCheck = [
     "basix"

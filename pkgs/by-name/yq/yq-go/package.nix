@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yq-go";
-  version = "4.47.2";
+  version = "4.47.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hN2ps2JeEfTIbAWr0pSfz/qJa1plwIIbe7s3xT0m4hA=";
+    hash = "sha256-r9vHXDviQADv7yIwwzCHKjvHSNzZnJATwiWAaFW4vXs=";
   };
 
-  vendorHash = "sha256-Yy0ty7jIu5HMp59r987gZApcrb38JvcXfuEqCur1AwY=";
+  vendorHash = "sha256-mG9rKla2ZSEbOvSlV6jl7MBoo0dDI//CMcR2hLET4K4=";
 
   nativeBuildInputs = lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles

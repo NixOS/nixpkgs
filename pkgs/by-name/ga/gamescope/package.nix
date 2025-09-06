@@ -129,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     hwdata
     xorg.libX11
-    xorg.libxcb
     wayland
     wayland-protocols
     vulkan-loader

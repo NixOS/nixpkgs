@@ -25,6 +25,10 @@ python.pkgs.toPythonModule (
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
+    pythonRemoveDeps = [
+      "typer-slim" # we use typer instead
+    ];
+
     pythonRelaxDeps = [
       "certifi"
       "flask"
@@ -75,7 +79,7 @@ python.pkgs.toPythonModule (
         python-dateutil
         pyyaml
         setproctitle
-        typer-slim
+        typer
         uvloop
         valkey
         whitenoise

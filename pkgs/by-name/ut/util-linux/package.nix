@@ -81,15 +81,11 @@ stdenv.mkDerivation (finalPackage: rec {
     patchShebangs tests/run.sh tools/all_syscalls tools/all_errnos
 
     substituteInPlace sys-utils/eject.c \
-      --replace-fail "/bin/umount" "$bin/bin/umount"
-
-    # fix `mount -t` tab completion
-    substituteInPlace bash-completion/{blkid,mount,umount} \
-      --replace-fail "/lib/modules" "/run/booted-system/kernel-modules/lib/modules"
+      --replace "/bin/umount" "$bin/bin/umount"
   ''
   + lib.optionalString shadowSupport ''
     substituteInPlace include/pathnames.h \
-      --replace-fail "/bin/login" "${shadow}/bin/login"
+      --replace "/bin/login" "${shadow}/bin/login"
   ''
   + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace lib/c_strtod.c --replace-fail __APPLE__ __FreeBSD__
@@ -188,13 +184,12 @@ stdenv.mkDerivation (finalPackage: rec {
       ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
       moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
 
-      moveToOutput "bin/lastlog2" "$lastlog"
-      ln -svf "$lastlog/bin/"* $bin/bin/
-    ''
-    + lib.optionalString (withLastlog && systemdSupport) ''
       moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
       substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
         --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
+
+      moveToOutput "bin/lastlog2" "$lastlog"
+      ln -svf "$lastlog/bin/"* $bin/bin/
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
 

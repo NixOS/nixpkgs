@@ -1,11 +1,11 @@
 {
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   lib,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo123Module (finalAttrs: {
   pname = "avalanchego";
   version = "1.13.2";
 

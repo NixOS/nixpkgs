@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bngblaster";
-  version = "0.9.24";
+  version = "0.9.23";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "bngblaster";
     rev = finalAttrs.version;
-    hash = "sha256-flPMDpAEAICLR9TYz0vD62e26pJH2p/3u20sOEuKNx4=";
+    hash = "sha256-qo48OW02IMAAxMYTYguv5jKvy/GPq1WKgcluSrMIt2E=";
   };
 
   nativeBuildInputs = [ cmake ];

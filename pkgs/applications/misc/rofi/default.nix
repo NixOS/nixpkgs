@@ -1,47 +1,42 @@
 {
-  lib,
   stdenv,
-  bison,
-  buildPackages,
-  cairo,
-  check,
+  lib,
   fetchFromGitHub,
-  flex,
-  git,
-  glib,
-  librsvg,
-  libstartup_notification,
-  libxcb,
-  libxkbcommon,
   meson,
   ninja,
-  pandoc,
-  pango,
   pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+  libxkbcommon,
+  pango,
   which,
+  git,
+  cairo,
+  libxcb,
   xcb-imdkit,
-  xcbutil,
   xcb-util-cursor,
   xcbutilkeysyms,
+  xcbutil,
   xcbutilwm,
   xcbutilxrm,
-  waylandSupport ? true,
-  x11Support ? true,
+  libstartup_notification,
+  bison,
+  flex,
+  librsvg,
+  check,
+  glib,
+  buildPackages,
+  pandoc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "2.0.0";
+  version = "1.7.9.1";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-akKwIYH9OoCh4ZE/bxKPCppxXsUhplvfRjSGsdthFk4=";
+    hash = "sha256-HZMVGlK6ig7kWf/exivoiTe9J/SLgjm7VwRm+KgKN44=";
   };
 
   preConfigure = ''
@@ -52,46 +47,36 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-    glib
     pkg-config
+    glib
   ];
   nativeBuildInputs = [
-    bison
-    flex
     meson
     ninja
-    pandoc
     pkg-config
+    flex
+    bison
+    pandoc
   ];
   buildInputs = [
-    cairo
-    check
-    git
-    librsvg
-    libstartup_notification
     libxkbcommon
     pango
-    which
-  ]
-  ++ lib.optionals waylandSupport [
-    wayland
-    wayland-protocols
-    wayland-scanner
-  ]
-  ++ lib.optionals x11Support [
+    cairo
+    git
+    librsvg
+    check
+    libstartup_notification
     libxcb
     xcb-imdkit
-    xcbutil
     xcb-util-cursor
     xcbutilkeysyms
+    xcbutil
     xcbutilwm
     xcbutilxrm
+    which
   ];
 
-  mesonFlags =
-    lib.optionals x11Support [ "-Dimdkit=true" ]
-    ++ lib.optionals (!waylandSupport) [ "-Dwayland=disabled" ]
-    ++ lib.optionals (!x11Support) [ "-Dxcb=disabled" ];
+  mesonFlags = [ "-Dimdkit=true" ];
 
   doCheck = false;
 
@@ -99,10 +84,7 @@ stdenv.mkDerivation rec {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      bew
-      SchweGELBin
-    ];
+    maintainers = with maintainers; [ bew ];
     platforms = with platforms; linux;
     mainProgram = "rofi";
   };

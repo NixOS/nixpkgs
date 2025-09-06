@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
@@ -37,7 +37,7 @@ let
   };
 
 in
-buildGoModule rec {
+buildGo124Module rec {
   inherit version;
   pname = "glasskube";
 

@@ -1,6 +1,6 @@
 {
   buildTeleport,
-  buildGoModule,
+  buildGo124Module,
   wasm-bindgen-cli_0_2_95,
 }:
 buildTeleport rec {
@@ -11,5 +11,5 @@ buildTeleport rec {
   cargoHash = "sha256-04zykCcVTptEPGy35MIWG+tROKFzEepLBmn04mSbt7I=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
-  inherit buildGoModule;
+  buildGoModule = buildGo124Module;
 }

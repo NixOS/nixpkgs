@@ -436,7 +436,7 @@ stdenv.mkDerivation (
       echo -n "${buildMK}" > mk/build.mk
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
+    + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
       export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

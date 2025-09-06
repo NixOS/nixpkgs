@@ -32,7 +32,7 @@
   curlSupport ? true,
   curl,
   colladaSupport ? false,
-  collada-dom,
+  opencollada,
   opencascadeSupport ? false,
   opencascade-occt,
   ffmpegSupport ? false,
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
     ++ lib.optionals colladaSupport [
-      collada-dom
+      opencollada
       pcre
     ]
     ++ lib.optional opencascadeSupport opencascade-occt
@@ -114,8 +114,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk ]
     ++ lib.optional (restSupport || colladaSupport) boost;
-
-  env = lib.optionalAttrs colladaSupport { COLLADA_DIR = collada-dom; };
 
   patches = [
     (fetchpatch {

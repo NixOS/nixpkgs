@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-thepeg=${thepeg}"
-    "--with-boost=${lib.getDev boost}"
   ];
 
   enableParallelBuilding = true;

@@ -10,8 +10,6 @@
   audit,
   linuxHeaders,
   libxcrypt,
-  bash,
-  bashNonInteractive,
   nixosTests,
   meson,
   pkg-config,
@@ -39,10 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "linux-pam";
     tag = "v${finalAttrs.version}";
     hash = "sha256-kANcwxifQz2tYPSrSBSFiYNTm51Gr10L/zroCqm8ZHQ=";
-
   };
-
-  __structuredAttrs = true;
 
   # patching unix_chkpwd is required as the nix store entry does not have the necessary bits
   postPatch = ''
@@ -54,11 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "doc"
     "man"
-    "scripts"
     # "modules"
   ];
-
-  strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -79,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     db4
     libxcrypt
-    bash
   ]
   ++ lib.optionals withAudit [
     audit
@@ -106,17 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "examples" false)
   ];
 
-  postInstall = ''
-    moveToOutput sbin/pam_namespace_helper $scripts
-    moveToOutput etc/security/namespace.init $scripts
-  '';
-
   doCheck = false; # fails
-
-  outputChecks.out.disallowedRequisites = [
-    bash
-    bashNonInteractive
-  ];
 
   passthru = {
     tests = {

@@ -41,6 +41,7 @@ lib:
   ethtool,
   fetchFromGitHub,
   fetchgit,
+  fetchpatch,
   fetchurl,
   fetchzip,
   findutils,
@@ -54,7 +55,7 @@ lib:
   kmod,
   lib,
   libseccomp,
-  makeBinaryWrapper,
+  makeWrapper,
   nixosTests,
   overrideBundleAttrs ? { }, # An attrSet/function to override the `k3sBundle` derivation.
   overrideCniPluginsAttrs ? { }, # An attrSet/function to override the `k3sCNIPlugins` derivation.
@@ -68,11 +69,10 @@ lib:
   socat,
   sqlite,
   stdenv,
-  systemdMinimal,
+  systemd,
   util-linuxMinimal,
   yq-go,
   zstd,
-  versionCheckHook,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -328,7 +328,7 @@ let
     }).overrideAttrs
       overrideContainerdAttrs;
 in
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
   pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
@@ -345,13 +345,15 @@ buildGoModule (finalAttrs: {
     # Nix prefers dynamically linked binaries over static binary.
 
     substituteInPlace scripts/package-cli \
-      --replace-fail '"$LDFLAGS $STATIC" -o' \
-                '"$LDFLAGS" -o'
+      --replace '"$LDFLAGS $STATIC" -o' \
+                '"$LDFLAGS" -o' \
+      --replace "STATIC=\"-extldflags \'-static\'\"" \
+                ""
 
     # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
 
     substituteInPlace scripts/package-cli \
-      --replace-fail '"''${GO}" generate' \
+      --replace '"''${GO}" generate' \
                 'GOFLAGS="" \
                  GOOS="${pkgsBuildBuild.go.GOOS}" \
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \
@@ -379,7 +381,7 @@ buildGoModule (finalAttrs: {
 
   k3sKillallDeps = [
     bash
-    systemdMinimal
+    systemd
     procps
     coreutils
     gnugrep
@@ -387,10 +389,10 @@ buildGoModule (finalAttrs: {
     gnused
   ];
 
-  buildInputs = finalAttrs.k3sRuntimeDeps;
+  buildInputs = k3sRuntimeDeps;
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    makeWrapper
     rsync
     yq-go
     zstd
@@ -437,20 +439,23 @@ buildGoModule (finalAttrs: {
     # wildcard to match the arm64 build too
     install -m 0755 dist/artifacts/k3s* -D $out/bin/k3s
     wrapProgram $out/bin/k3s \
-      --prefix PATH : ${lib.makeBinPath finalAttrs.k3sRuntimeDeps} \
+      --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
     install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
     wrapProgram $out/bin/k3s-killall.sh \
-      --prefix PATH : ${lib.makeBinPath (finalAttrs.k3sRuntimeDeps ++ finalAttrs.k3sKillallDeps)}
+      --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
     runHook postInstall
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/k3s --version | grep -F "v${k3sVersion}" >/dev/null
+    runHook postInstallCheck
+  '';
 
   passthru = {
     inherit airgap-images;
@@ -459,16 +464,13 @@ buildGoModule (finalAttrs: {
     k3sRepo = k3sRepo;
     k3sRoot = k3sRoot;
     k3sBundle = k3sBundle;
-    tests =
+    mkTests =
+      version:
       let
-        mkTests =
-          version:
-          let
-            k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-          in
-          lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
       in
-      mkTests k3sVersion;
+      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+    tests = passthru.mkTests k3sVersion;
     updateScript = updateScript;
     imagesList = throw "k3s.imagesList was removed";
     airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
@@ -479,4 +481,4 @@ buildGoModule (finalAttrs: {
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
   meta = baseMeta;
-})
+}

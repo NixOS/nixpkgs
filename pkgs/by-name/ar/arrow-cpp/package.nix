@@ -37,7 +37,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf_31,
+  protobuf,
   python3,
   rapidjson,
   re2,
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbacktrace
     lz4
     nlohmann_json # alternative JSON parser to rapidjson
-    protobuf_31 # substrait requires protobuf
+    protobuf # substrait requires protobuf
     rapidjson
     re2
     snappy
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableFlight [
     grpc
     openssl
-    protobuf_31
+    protobuf
     sqlite
   ]
   ++ lib.optionals enableS3 [
@@ -177,9 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     LZ4_ROOT = lz4;
     ZSTD_ROOT = zstd.dev;
   };
-
-  # fails tests on glibc with this enabled
-  hardeningDisable = [ "glibcxxassertions" ];
 
   preConfigure = ''
     patchShebangs build-support/

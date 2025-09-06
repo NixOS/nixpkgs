@@ -36,9 +36,14 @@ buildPythonPackage {
     ninja
   ];
   dontUseCmakeConfigure = true;
-  cmakeFlags = cmakeFlags ++ [
-    (lib.cmakeBool "UNITS_BUILD_PYTHON_LIBRARY" true)
-  ];
+  env = {
+    SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
+      cmakeFlags
+      ++ [
+        (lib.cmakeBool "UNITS_BUILD_PYTHON_LIBRARY" true)
+      ]
+    );
+  };
 
   # Also upstream turns off testing for the python build so it seems, see:
   # https://github.com/LLNL/units/blob/v0.13.1/pyproject.toml#L65-L66 However

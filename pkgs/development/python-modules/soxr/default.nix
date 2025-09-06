@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  stdenv,
 
   # build-system
   cmake,
@@ -25,14 +26,15 @@
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "1.0.0";
+  version = "0.5.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
     tag = "v${version}";
-    hash = "sha256-8NVQD1LamIRe77bKEs8YqHXeXifdMJpQUedmeiBRHSI=";
+    fetchSubmodules = true;
+    hash = "sha256-Fpayc+MOpDUCdpoyJaIqSbMzuO0jYb6UN5ARFaxxOHk=";
   };
 
   patches = [ ./cmake-nanobind.patch ];
@@ -44,8 +46,8 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_SYSTEM_LIBSOXR" true)
+  pypaBuildFlags = [
+    "--config-setting=cmake.define.USE_SYSTEM_LIBSOXR=ON"
   ];
 
   build-system = [
@@ -67,7 +69,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
     description = "High quality, one-dimensional sample-rate conversion library";
     homepage = "https://github.com/dofuuz/python-soxr/tree/main";
     license = licenses.lgpl21Plus;

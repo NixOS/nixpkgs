@@ -5,6 +5,7 @@
   pnpm_10,
   nodejs_24,
   makeWrapper,
+  prisma,
   prisma-engines,
   ffmpeg,
   openssl,
@@ -48,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.3.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tQRfgLU0Dvf3vhELsttprfzscvHUgI1u7k9RA4S4vqo=";
+    hash = "sha256-/UNSAvXfVeybFGFFQaVklAbKGT64pa37DmUilzo5ss4=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -62,10 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = ''
+    substituteInPlace src/lib/db/migration/index.ts \
+      --replace-fail "pnpm prisma" ${lib.getExe' prisma "prisma"}
+  '';
+
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-zbr57RVBKGpnL5u0evbQAKGyMftHXj6cuntYBHiUxiM=";
+    hash = "sha256-TCbtaxc8AEpFhaHpK+NIrLPR6dQ+iFIEfEfwKob61yI=";
   };
 
   buildInputs = [

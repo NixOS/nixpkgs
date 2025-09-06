@@ -1,12 +1,12 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   libX11,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "certinfo";
   version = "1.0.24";
 

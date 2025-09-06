@@ -575,10 +575,10 @@ buildStdenv.mkDerivation {
       (
         if (lib.versionAtLeast version "143") then
           nss_latest
-        else if (lib.versionAtLeast version "141") then
+        else if (lib.versionAtLeast version "129") then
           nss_3_114
         else
-          nss_esr
+          nss_esr # 3.90
       )
     ]
     ++ lib.optional alsaSupport alsa-lib

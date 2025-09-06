@@ -16,98 +16,46 @@
 #
 # See comments on each function for more details.
 
-# installManPage [--name <path>] <path> [...<path>]
+# installManPage <path> [...<path>]
 #
 # Each argument is checked for its man section suffix and installed into the appropriate
 # share/man/man<n>/ directory. The function returns an error if any paths don't have the man
 # section suffix (with optional .gz compression).
-#
-# Optionally accepts pipes as input, which when provided require the `--name` argument to
-# name the output file.
-#
-# installManPage --name foobar.1 <($out/bin/foobar --manpage)
 installManPage() {
-    local arg name='' continueParsing=1
-    while { arg=$1; shift; }; do
-        if (( continueParsing )); then
-            case "$arg" in
-              --name)
-                  name=$1
-                  shift || {
-                      nixErrorLog "${FUNCNAME[0]}: --name flag expected an argument"
-                      return 1
-                  }
-                  continue;;
-              --name=*)
-                  # Treat `--name=foo` that same as `--name foo`
-                  name=${arg#--name=}
-                  continue;;
-              --)
-                  continueParsing=0
-                  continue;;
-            esac
-        fi
-
-        nixInfoLog "${FUNCNAME[0]}: installing $arg${name:+ as $name}"
-        local basename
-
-        # Check if path is empty
-        if test -z "$arg"; then
-            # It is an empty string
+    local path
+    for path in "$@"; do
+        if test -z "$path"; then
             nixErrorLog "${FUNCNAME[0]}: path cannot be empty"
             return 1
         fi
-
-        if test -n "$name"; then
-          # Provided name. Required for pipes, optional for paths
-          basename=$name
-        elif test -p "$arg"; then
-            # Named pipe requires a file name
-            nixErrorLog "${FUNCNAME[0]}: named pipe requires --name argument"
-        else
-            # Normal file without a name
-            basename=$(stripHash "$arg") # use stripHash in case it's a nix store path
-        fi
-
-        # Check that it is well-formed
+        nixInfoLog "${FUNCNAME[0]}: installing $path"
+        local basename
+        basename=$(stripHash "$path") # use stripHash in case it's a nix store path
         local trimmed=${basename%.gz} # don't get fooled by compressed manpages
         local suffix=${trimmed##*.}
         if test -z "$suffix" -o "$suffix" = "$trimmed"; then
-            nixErrorLog "${FUNCNAME[0]}: path missing manpage section suffix: $arg"
+            nixErrorLog "${FUNCNAME[0]}: path missing manpage section suffix: $path"
             return 1
         fi
-
-        # Create the out-path
         local outRoot
         if test "$suffix" = 3; then
             outRoot=${!outputDevman:?}
         else
             outRoot=${!outputMan:?}
         fi
-        local outPath="${outRoot}/share/man/man$suffix/"
-        nixInfoLog "${FUNCNAME[0]}: installing to $outPath"
-
-        # Install
-        if test -p "$arg"; then
-          # install doesn't work with pipes on Darwin
-          mkdir -p "$outPath" && cat "$arg" > "$outPath/$basename"
-        else
-          install -D --mode=644 --no-target-directory -- "$arg" "$outPath/$basename"
-        fi
-
-        # Reset the name for the next page
-        name=
+        local outPath="${outRoot}/share/man/man$suffix/$basename"
+        install -D --mode=644 --no-target-directory "$path" "$outPath"
     done
 }
 
 # installShellCompletion [--cmd <name>] ([--bash|--fish|--zsh] [--name <name>] <path>)...
 #
 # Each path is installed into the appropriate directory for shell completions for the given shell.
-# If one of `--bash`, `--fish`, `--zsh`, or `--nushell` is given the path is assumed to belong to
-# that shell. Otherwise the file extension will be examined to pick a shell. If the shell is
-# unknown a warning will be logged and the command will return a non-zero status code after
-# processing any remaining paths. Any of the shell flags will affect all subsequent paths (unless
-# another shell flag is given).
+# If one of `--bash`, `--fish`, or `--zsh` is given the path is assumed to belong to that shell.
+# Otherwise the file extension will be examined to pick a shell. If the shell is unknown a warning
+# will be logged and the command will return a non-zero status code after processing any remaining
+# paths. Any of the shell flags will affect all subsequent paths (unless another shell flag is
+# given).
 #
 # If the shell completion needs to be renamed before installing the optional `--name <name>` flag
 # may be given. Any name provided with this flag only applies to the next path.
@@ -136,7 +84,6 @@ installManPage() {
 #
 #   installShellCompletion --bash --name foobar.bash share/completions.bash
 #   installShellCompletion --fish --name foobar.fish share/completions.fish
-#   installShellCompletion --nushell --name foobar share/completions.nu
 #   installShellCompletion --zsh --name _foobar share/completions.zsh
 #
 # Or to use shell newline escaping to split a single invocation across multiple lines:
@@ -144,7 +91,6 @@ installManPage() {
 #   installShellCompletion --cmd foobar \
 #     --bash <($out/bin/foobar --bash-completion) \
 #     --fish <($out/bin/foobar --fish-completion) \
-#     --nushell <($out/bin/foobar --nushell-completion)
 #     --zsh <($out/bin/foobar --zsh-completion)
 #
 # If any argument is `--` the remaining arguments will be treated as paths.
@@ -154,7 +100,7 @@ installShellCompletion() {
         # Parse arguments
         if (( parseArgs )); then
             case "$arg" in
-            --bash|--fish|--zsh|--nushell)
+            --bash|--fish|--zsh)
                 shell=${arg#--}
                 continue;;
             --name)
@@ -200,7 +146,7 @@ installShellCompletion() {
         elif [[ -p "$arg" ]]; then
             # this is a named fd or fifo
             if [[ -z "$curShell" ]]; then
-                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, --zsh, or --nushell"
+                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, or --zsh"
                 return 1
             elif [[ -z "$name" && -z "$cmdname" ]]; then
                 nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --cmd or --name"
@@ -215,7 +161,6 @@ installShellCompletion() {
                 case "$argbase" in
                 ?*.bash) curShell=bash;;
                 ?*.fish) curShell=fish;;
-                ?*.nu) curShell=nushell;;
                 ?*.zsh) curShell=zsh;;
                 *)
                     if [[ "$argbase" = _* && "$argbase" != *.* ]]; then
@@ -237,7 +182,6 @@ installShellCompletion() {
         elif [[ -n "$cmdname" ]]; then
             case "$curShell" in
             bash|fish) outName=$cmdname.$curShell;;
-            nushell) outName=$cmdname.nu;;
             zsh) outName=_$cmdname;;
             *)
                 # Our list of shells is out of sync with the flags we accept or extensions we detect.
@@ -249,7 +193,6 @@ installShellCompletion() {
         case "$curShell" in
         bash) sharePath=bash-completion/completions;;
         fish) sharePath=fish/vendor_completions.d;;
-        nushell) sharePath=nushell/vendor/autoload;;
         zsh)
             sharePath=zsh/site-functions
             # only apply automatic renaming if we didn't have a manual rename

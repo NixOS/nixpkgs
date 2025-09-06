@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   fetchYarnDeps,
   yarnConfigHook,
@@ -48,7 +48,7 @@ let
 
 in
 
-buildGoModule rec {
+buildGo123Module rec {
   inherit src version;
 
   pname = "screego-server";

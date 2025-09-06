@@ -8,10 +8,10 @@ Subject: [PATCH] meson: Don't link ssh dropins
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index d392610625..c17d0a1feb 100644
+index 90860be99a..f021f76031 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -211,13 +211,13 @@ sshconfdir = get_option('sshconfdir')
+@@ -207,13 +207,13 @@ sshconfdir = get_option('sshconfdir')
  if sshconfdir == ''
          sshconfdir = sysconfdir / 'ssh/ssh_config.d'
  endif
@@ -27,6 +27,3 @@ index d392610625..c17d0a1feb 100644
  
  sshdprivsepdir = get_option('sshdprivsepdir')
  conf.set10('CREATE_SSHDPRIVSEPDIR', sshdprivsepdir != 'no' and not sshdprivsepdir.startswith('/usr/'))
--- 
-2.47.0
-

@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.6";
+  version = "17.5";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_6";
-    hash = "sha256-/7C+bjmiJ0/CvoAc8vzTC50vP7OsrM6o0w+lmmHvKvU=";
+    rev = "refs/tags/REL_17_5";
+    hash = "sha256-jWV7hglu7IPMZbqHrZVZHLbZYjVuDeut7nH50aSQIBc=";
   };
 
   __structuredAttrs = true;
@@ -128,9 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     make -C src/interfaces/libpq install
     make -C src/port install
 
-    substituteInPlace src/common/pg_config.env \
-      --replace-fail "$out" "@out@"
-
     install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
     moveToOutput "lib/*.a" "$dev"
 
@@ -154,9 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.pg_config = buildPackages.callPackage ./pg_config.nix {
     inherit (finalAttrs) finalPackage;
-    outputs = {
-      out = lib.getOutput "out" finalAttrs.finalPackage;
-    };
   };
 
   meta = {

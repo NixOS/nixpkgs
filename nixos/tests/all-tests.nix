@@ -439,7 +439,7 @@ in
     imports = [ ./discourse.nix ];
     _module.args.package = pkgs.discourseAllPlugins;
   };
-  dnscrypt-proxy = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy.nix;
+  dnscrypt-proxy2 = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy2.nix;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
@@ -1373,7 +1373,6 @@ in
   sslh = handleTest ./sslh.nix { };
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
   ssh-audit = runTest ./ssh-audit.nix;
-  sshwifty = runTest ./web-apps/sshwifty/default.nix;
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   stalwart-mail = runTest ./stalwart/stalwart-mail.nix;

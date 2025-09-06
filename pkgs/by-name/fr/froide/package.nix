@@ -135,7 +135,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
-    (postgresql.withPackages (p: [ p.postgis ]))
+    (postgresql.withPackages (p: [ p.postgis ])).out
     postgresqlTestHook
     pytest-django
     pytest-playwright

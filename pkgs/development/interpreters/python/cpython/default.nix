@@ -21,6 +21,7 @@
   expat,
   libffi,
   libuuid,
+  withLibxcrypt ? !withMinimalDeps,
   libxcrypt,
   withMpdecimal ? !withMinimalDeps,
   mpdecimal,
@@ -38,8 +39,8 @@
   windows,
 
   # optional dependencies
-  bluezSupport ? !withMinimalDeps && stdenv.hostPlatform.isLinux,
-  bluez-headers,
+  bluezSupport ? false,
+  bluez,
   mimetypesSupport ? !withMinimalDeps,
   mailcap,
   tzdata,
@@ -47,6 +48,12 @@
   gdbm,
   withReadline ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
   readline,
+  x11Support ? false,
+  tcl,
+  tk,
+  tclPackages,
+  libX11,
+  xorgproto,
 
   # splicing/cross
   pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}",
@@ -108,6 +115,10 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
+assert x11Support -> tcl != null && tk != null && xorgproto != null && libX11 != null;
+
+assert bluezSupport -> bluez != null;
+
 assert lib.assertMsg (
   enableFramework -> stdenv.hostPlatform.isDarwin
 ) "Framework builds are only supported on Darwin.";
@@ -134,16 +145,11 @@ let
     optionals
     optionalString
     replaceStrings
+    versionOlder
     ;
 
-  withLibxcrypt =
-    (!withMinimalDeps)
-    &&
-      # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
-      (!stdenv.hostPlatform.isFreeBSD)
-    &&
-      # crypt module was removed in 3.13
-      passthru.pythonOlder "3.13";
+  # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
+  libxcrypt = if stdenv.hostPlatform.isFreeBSD && withMinimalDeps then null else inputs.libxcrypt;
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
@@ -153,7 +159,8 @@ let
   passthru =
     let
       # When we override the interpreter we also need to override the spliced versions of the interpreter
-      inputs' = lib.filterAttrs (n: v: n != "passthruFun" && !lib.isDerivation v) inputs;
+      # bluez is excluded manually to break an infinite recursion.
+      inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && !lib.isDerivation v) inputs;
       # Memoization of the splices to avoid re-evaluating this function for all combinations of splices e.g.
       # python3.pythonOnBuildForHost.pythonOnBuildForTarget == python3.pythonOnBuildForTarget by consuming
       # __splices as an arg and using the cache if populated.
@@ -254,7 +261,7 @@ let
       zstd
     ]
     ++ optionals bluezSupport [
-      bluez-headers
+      bluez
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
@@ -268,6 +275,12 @@ let
     ]
     ++ optionals withReadline [
       readline
+    ]
+    ++ optionals x11Support [
+      libX11
+      tcl
+      tk
+      xorgproto
     ]
   );
 
@@ -352,6 +365,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
   ]
+  ++ optionals isPy313 [
+    # https://github.com/python/cpython/issues/137583
+    ./3.13/revert-gh134724.patch
+  ]
   ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
@@ -429,6 +446,11 @@ stdenv.mkDerivation (finalAttrs: {
     + optionalString mimetypesSupport ''
       substituteInPlace Lib/mimetypes.py \
         --replace-fail "@mime-types@" "${mailcap}"
+    ''
+    + optionalString (pythonOlder "3.13" && x11Support && ((tclPackages.tix or null) != null)) ''
+      substituteInPlace "Lib/tkinter/tix.py" --replace-fail \
+        "os.environ.get('TIX_LIBRARY')" \
+        "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
     '';
 
   env = {
@@ -559,6 +581,10 @@ stdenv.mkDerivation (finalAttrs: {
         if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"
       }'
   ''
+  + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
+    export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
+    export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+  ''
   + optionalString stdenv.hostPlatform.isWindows ''
     export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
   ''
@@ -577,9 +603,6 @@ stdenv.mkDerivation (finalAttrs: {
     optionalString enableNoSemanticInterposition ''
       export CFLAGS_NODIST="-fno-semantic-interposition"
     '';
-
-  # Our aarch64-linux bootstrap files lack Scrt1.o, which fails the config test
-  hardeningEnable = lib.optionals (!withMinimalDeps && !stdenv.hostPlatform.isAarch64) [ "pie" ];
 
   setupHook = python-setup-hook sitePackages;
 

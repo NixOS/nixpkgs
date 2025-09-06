@@ -89,7 +89,6 @@ rec {
         "armv7l-linux"
         "i686-linux"
         "loongarch64-linux"
-        "powerpc-linux"
         "powerpc64-linux"
         "powerpc64le-linux"
         "riscv64-linux"

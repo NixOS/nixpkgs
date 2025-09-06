@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.3.1";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "ssdp";
     tag = version;
-    hash = "sha256-HsU67vsJvoVyOy2QEq8leYcjl1EVdQ039jN1QyL0XgU=";
+    hash = "sha256-mORjMEg7Q/2CKZBLICSGF8dcdl98S6mBgJ4jujPGs6M=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
     homepage = "https://github.com/codingjoe/ssdp";
-    changelog = "https://github.com/codingjoe/ssdp/releases/tag/${src.tag}";
+    changelog = "https://github.com/codingjoe/ssdp/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "ssdp";

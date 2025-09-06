@@ -1,10 +1,10 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitLab,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "gitlab-container-registry";
   version = "4.27.0";
   rev = "v${version}-gitlab-ahmed-master-test";

@@ -17,12 +17,11 @@ buildPythonPackage {
   build-system = [ hatchling ];
 
   postPatch =
-    # Add the path to the uv binary as a fallback after other path search methods have been exhausted
+    # Do not rely on path lookup at runtime to find the uv binary.
+    # Use the propagated binary instead.
     ''
       substituteInPlace python/uv/_find_uv.py \
-        --replace-fail \
-        'sysconfig.get_path("scripts", scheme=_user_scheme()),' \
-        'sysconfig.get_path("scripts", scheme=_user_scheme()), "${builtins.baseNameOf (lib.getExe uv)}",'
+        --replace-fail '"""Return the uv binary path."""' "return '${lib.getExe uv}'"
     ''
     # Sidestep the maturin build system in favour of reusing the binary already built by nixpkgs,
     # to avoid rebuilding the uv binary for every active python package set.

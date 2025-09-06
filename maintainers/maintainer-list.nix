@@ -1974,11 +1974,6 @@
     githubId = 13426784;
     name = "arcnmx";
   };
-  arcstur = {
-    github = "arcstur";
-    githubId = 24514392;
-    name = "arcstur";
-  };
   arcticlimer = {
     email = "vinigm.nho@gmail.com";
     github = "viniciusmuller";

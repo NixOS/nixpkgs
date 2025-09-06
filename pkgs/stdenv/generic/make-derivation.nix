@@ -154,7 +154,6 @@ let
     "pie"
     "relro"
     "stackprotector"
-    "glibcxxassertions"
     "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
@@ -890,7 +889,7 @@ let
               "-c"
               ''
                 out="${placeholder "out"}"
-                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
+                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
                 declare -p > $out
                 for var in $passAsFile; do
                     pathVar="''${var}Path"

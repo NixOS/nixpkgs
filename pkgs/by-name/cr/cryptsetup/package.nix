@@ -23,9 +23,9 @@
   rebuildMan ? false,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.8.1";
+  version = "2.8.0";
 
   outputs = [
     "bin"
@@ -36,10 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url =
-      "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor finalAttrs.version}/"
-      + "cryptsetup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LDN563ZZfcq1CRFEmwE+JpfEv/zHFtu/DZsOj7u0b7Q=";
+    url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-zJ4tN8JahxzqN1ILKNUyIHsMFnD7EPxU1oBx9j9SQ6I=";
   };
 
   patches = [
@@ -108,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
-    changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${finalAttrs.version}/docs/v${finalAttrs.version}-ReleaseNotes";
+    changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
     license = lib.licenses.gpl2Plus;
     mainProgram = "cryptsetup";
     maintainers = with lib.maintainers; [
@@ -117,4 +115,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; linux;
   };
-})
+}
