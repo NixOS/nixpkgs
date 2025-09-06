@@ -67,9 +67,6 @@
       };
     client =
       { pkgs, ... }:
-      {
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
-      };
   };
   testScript = ''
     # Helpers

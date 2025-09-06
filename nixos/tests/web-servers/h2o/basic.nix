@@ -43,10 +43,6 @@ in
     server =
       { pkgs, ... }:
       {
-        environment.systemPackages = [
-          pkgs.curlHTTP3
-        ];
-
         services.h2o = {
           enable = true;
           defaultHTTPListenPort = port.HTTP;
