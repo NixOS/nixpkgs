@@ -16389,6 +16389,8 @@ self: super: with self; {
 
   scp = callPackage ../development/python-modules/scp { };
 
+  scram = callPackage ../development/python-modules/scram { };
+
   scramp = callPackage ../development/python-modules/scramp { };
 
   scrap-engine = callPackage ../development/python-modules/scrap-engine { };
