@@ -20,7 +20,7 @@ let
     inherit version;
     inherit src;
 
-    sourceRoot = "source/ui"; # Point to the ui subdirectory
+    sourceRoot = "${src.name}/ui"; # Point to the ui subdirectory
 
     npmDepsHash = "sha256-csEQdnbPcWtBxBu8Jv1bL1ArcZ3ikw0kZ+RdRnEEihs=";
 
