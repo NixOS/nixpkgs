@@ -193,7 +193,6 @@ dont-distribute-packages:
  - bamboo-plugin-photo
  - bamboo-theme-blueprint
  - bamboo-theme-mini-html5
- - bamse
  - bamstats
  - barley
  - Barracuda
@@ -311,7 +310,6 @@ dont-distribute-packages:
  - boots-cloud
  - boots-web
  - borel
- - botan-low
  - both
  - bound-gen
  - BPS
@@ -561,8 +559,6 @@ dont-distribute-packages:
  - container
  - containers-accelerate
  - content-store
- - continuum
- - continuum-client
  - control
  - control-monad-attempt
  - control-monad-exception
@@ -1308,6 +1304,7 @@ dont-distribute-packages:
  - haskell-admin-managed-functions
  - haskell-aliyun
  - haskell-bitmex-client
+ - haskell-debugger
  - haskell-docs
  - haskell-eigen-util
  - haskell-ftp
@@ -1618,7 +1615,6 @@ dont-distribute-packages:
  - hscassandra
  - hscope
  - hsdev
- - hsec-core
  - Hsed
  - hsendxmpp
  - hsfacter
@@ -2230,9 +2226,6 @@ dont-distribute-packages:
  - mongrel2-handler
  - monky
  - Monocle
- - monoidmap-aeson
- - monoidmap-examples
- - monoidmap-quickcheck
  - monomer-flatpak-example
  - monte-carlo
  - moo
@@ -2563,7 +2556,6 @@ dont-distribute-packages:
  - pinpon
  - pipe-enumerator
  - pipes-attoparsec-streaming
- - pipes-cacophony
  - pipes-cereal-plus
  - pipes-conduit
  - pipes-courier
@@ -2709,7 +2701,6 @@ dont-distribute-packages:
  - pure-cdb
  - pure-priority-queue-tests
  - purescript-iso
- - pursuit-client
  - push-notify
  - push-notify-ccs
  - push-notify-general
@@ -3144,7 +3135,6 @@ dont-distribute-packages:
  - siphon
  - siren-json
  - sirkel
- - sitemap
  - skeleton
  - skeletons
  - skylark-client

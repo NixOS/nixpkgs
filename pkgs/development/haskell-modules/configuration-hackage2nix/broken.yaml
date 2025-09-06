@@ -678,7 +678,6 @@ broken-packages:
   - cache-polysemy # failure in job https://hydra.nixos.org/build/233200602 at 2023-09-02
   - cached # failure in job https://hydra.nixos.org/build/233249807 at 2023-09-02
   - caching # failure in job https://hydra.nixos.org/build/233233548 at 2023-09-02
-  - cacophony # failure in job https://hydra.nixos.org/build/233239380 at 2023-09-02
   - caerbannog # failure in job https://hydra.nixos.org/build/252729101 at 2024-03-16
   - cafeteria-prelude # failure in job https://hydra.nixos.org/build/233254881 at 2023-09-02
   - cairo-canvas # failure in job https://hydra.nixos.org/build/252719057 at 2024-03-16
@@ -780,7 +779,6 @@ broken-packages:
   - check-cfg-ambiguity # failure in job https://hydra.nixos.org/build/233251852 at 2023-09-02
   - checked # failure in job https://hydra.nixos.org/build/233223182 at 2023-09-02
   - Checked # failure in job https://hydra.nixos.org/build/233257598 at 2023-09-02
-  - checked-exceptions # failure in job https://hydra.nixos.org/build/295092260 at 2025-04-22
   - checkmate # failure in job https://hydra.nixos.org/build/233248012 at 2023-09-02
   - chell-quickcheck # won't support QuickCheck >= 2.15 https://github.com/typeclasses/chell/issues/5#issuecomment-3152262118
   - chez-grater # failure in job https://hydra.nixos.org/build/233213537 at 2023-09-02
@@ -901,7 +899,6 @@ broken-packages:
   - colorless # failure in job https://hydra.nixos.org/build/233220728 at 2023-09-02
   - colour-text # failure in job https://hydra.nixos.org/build/252712609 at 2024-03-16
   - coltrane # failure in job https://hydra.nixos.org/build/233216437 at 2023-09-02
-  - com # failure in job https://hydra.nixos.org/build/233213869 at 2023-09-02
   - comark-syntax # failure in job https://hydra.nixos.org/build/233243043 at 2023-09-02
   - combinat # failure in job https://hydra.nixos.org/build/233259056 at 2023-09-02
   - combinat-compat # failure in job https://hydra.nixos.org/build/233201337 at 2023-09-02
@@ -3829,7 +3826,6 @@ broken-packages:
   - medium-sdk-haskell # failure in job https://hydra.nixos.org/build/233195507 at 2023-09-02
   - meep # failure in job https://hydra.nixos.org/build/233193144 at 2023-09-02
   - megalisp # failure in job https://hydra.nixos.org/build/233234992 at 2023-09-02
-  - megaparsec-tests # failure in job https://hydra.nixos.org/build/295095283 at 2025-04-22
   - megastore # failure in job https://hydra.nixos.org/build/233222876 at 2023-09-02
   - mellon-core # failure in job https://hydra.nixos.org/build/233221666 at 2023-09-02
   - melody # failure in job https://hydra.nixos.org/build/233223241 at 2023-09-02
@@ -3995,11 +3991,9 @@ broken-packages:
   - monoid # failure in job https://hydra.nixos.org/build/233252888 at 2023-09-02
   - monoid-absorbing # failure in job https://hydra.nixos.org/build/233236465 at 2023-09-02
   - monoid-owns # failure in job https://hydra.nixos.org/build/233259043 at 2023-09-02
-  - monoidmap # failure in job https://hydra.nixos.org/build/295095498 at 2025-04-22
   - monoidplus # failure in job https://hydra.nixos.org/build/233226759 at 2023-09-02
   - monoids # failure in job https://hydra.nixos.org/build/233231684 at 2023-09-02
   - monopati # failure in job https://hydra.nixos.org/build/233234119 at 2023-09-02
-  - months # failure in job https://hydra.nixos.org/build/267981052 at 2024-07-31
   - monus # failure in job https://hydra.nixos.org/build/233252424 at 2023-09-02
   - monus-weighted-search # timeout
   - monzo # failure in job https://hydra.nixos.org/build/233254681 at 2023-09-02
@@ -4103,7 +4097,6 @@ broken-packages:
   - nanoAgda # failure in job https://hydra.nixos.org/build/233259294 at 2023-09-02
   - nanocurses # failure in job https://hydra.nixos.org/build/233215906 at 2023-09-02
   - nanomsg # failure in job https://hydra.nixos.org/build/233240904 at 2023-09-02
-  - nanomsg-haskell # failure in job https://hydra.nixos.org/build/233207779 at 2023-09-02
   - nanoparsec # failure in job https://hydra.nixos.org/build/233248843 at 2023-09-02
   - nanopass # failure in job https://hydra.nixos.org/build/233230210 at 2023-09-02
   - NanoProlog # failure in job https://hydra.nixos.org/build/233244743 at 2023-09-02
@@ -4380,7 +4373,6 @@ broken-packages:
   - OSM # failure in job https://hydra.nixos.org/build/233231098 at 2023-09-02
   - osm-conduit # failure in job https://hydra.nixos.org/build/233259898 at 2023-09-02
   - oso2pdf # failure in job https://hydra.nixos.org/build/233235234 at 2023-09-02
-  - osv # failure in job https://hydra.nixos.org/build/295095872 at 2025-04-22
   - osx-ar # failure in job https://hydra.nixos.org/build/233194090 at 2023-09-02
   - ot # failure in job https://hydra.nixos.org/build/233244553 at 2023-09-02
   - OTP # failure in job https://hydra.nixos.org/build/233215664 at 2023-09-02
