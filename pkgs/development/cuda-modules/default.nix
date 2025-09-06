@@ -132,10 +132,12 @@ let
       installedRedistPackages = pkgs'.linkFarm "installedRedistPackages" (
         concatMapAttrs (
           name: pkg:
-          genAttrs' pkg.outputs (output: {
-            name = "${name}-${output}";
-            value = pkg.${output};
-          })
+          optionalAttrs (pkg.meta.available) (
+            genAttrs' pkg.outputs (output: {
+              name = "${name}-${output}";
+              value = pkg.${output};
+            })
+          )
         ) redistPackages
       );
 
