@@ -9,6 +9,7 @@
   # dependencies
   django,
   markdown,
+  jinja2,
   pyyaml,
 
   # tests
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     django
     pyyaml
     markdown
+    jinja2
   ];
 
   nativeCheckInputs = [
