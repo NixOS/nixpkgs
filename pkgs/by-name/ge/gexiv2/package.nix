@@ -11,13 +11,11 @@
   gnome,
   gobject-introspection,
   vala,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
+  gi-docgen,
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gexiv2";
   version = "0.15.2";
 
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gexiv2/${lib.versions.majorMinor finalAttrs.version}/gexiv2-${finalAttrs.version}.tar.xz";
     sha256 = "o6JSMNzPjFilTEw8ZLkm/pSMI9w5ENN/+yaKYwXl+6w=";
   };
 
@@ -38,9 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_43
+    gi-docgen
     (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
@@ -64,7 +60,7 @@ stdenv.mkDerivation rec {
 
   preCheck =
     let
-      libSuffix = if stdenv.hostPlatform.isDarwin then "2.dylib" else "so.2";
+      libSuffix = if stdenv.hostPlatform.isDarwin then "4.dylib" else "so.4";
     in
     ''
       # Our gobject-introspection patches make the shared library paths absolute
@@ -72,12 +68,17 @@ stdenv.mkDerivation rec {
       # though, so we need to replace the absolute path with a local one during build.
       # We are using a symlink that will be overridden during installation.
       mkdir -p $out/lib
-      ln -s $PWD/gexiv2/libgexiv2.${libSuffix} $out/lib/libgexiv2.${libSuffix}
+      ln -s $PWD/gexiv2/libgexiv2-0.16.${libSuffix} $out/lib/libgexiv2-0.16.${libSuffix}
     '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gexiv2";
       versionPolicy = "odd-unstable";
     };
   };
@@ -89,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     teams = [ teams.gnome ];
   };
-}
+})
