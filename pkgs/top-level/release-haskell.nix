@@ -317,7 +317,6 @@ let
         nix-delegate
         nix-deploy
         nix-diff
-        nix-linter
         nix-output-monitor
         nix-script
         nix-tree

@@ -39,8 +39,6 @@ self: super:
   # https://github.com/spacchetti/spago/issues/512
   spago = self.callPackage ../tools/purescript/spago/spago.nix { };
 
-  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
-
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative =
