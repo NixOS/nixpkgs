@@ -16,6 +16,6 @@ update-source-version dart $latestVersion --file=$MY_PATH/sources.nix
 
 systems=$(nix eval --json -f . dart.meta.platforms | jq --raw-output '.[]')
 for system in $systems; do
-  hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . dart.src.url --system "$system")))
+  hash=$(nix-hash --to-sri --type sha256 $(nix-prefetch-url $(nix eval --raw -f . dart.src.url --system "$system")))
   update-source-version dart $latestVersion $hash --file=$MY_PATH/sources.nix --system=$system --ignore-same-version --ignore-same-hash
 done
