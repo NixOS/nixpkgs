@@ -291,9 +291,6 @@ in
               # Otherwise systemd starts ifstate again, after the encryption password was entered by the user
               # and we are able to implement the cleanup using ExecStop rather than a separate unit.
               RemainAfterExit = true;
-              # When using network namespaces pyroute2 expects this directory to exists.
-              # @liske is currently investigating whether this should be considered a bug in pyroute2.
-              ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} /var/run";
               ExecStart = "${lib.getExe initrdCfg.package} --config ${
                 config.environment.etc."ifstate/ifstate.initrd.yaml".source
               } apply";
