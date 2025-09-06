@@ -27359,6 +27359,11 @@
     githubId = 51289041;
     name = "Vuks";
   };
+  vv01f = {
+    github = "vv01f";
+    githubId = 3034896;
+    name = "Wolf";
+  };
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";
     github = "vyorkin";
