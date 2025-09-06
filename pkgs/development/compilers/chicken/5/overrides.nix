@@ -90,11 +90,13 @@ in
   glut =
     old:
     (brokenOnDarwin old)
-    // (addToCscOptions [
-      "-I${(lib.getDev pkgs.libglut)}/include"
-      "-I${(lib.getDev pkgs.libGL)}/include"
-      "-I${(lib.getDev pkgs.libGLU)}/include"
-    ] old)
+    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) (
+      addToCscOptions [
+        "-I${(lib.getDev pkgs.libglut)}/include"
+        "-I${(lib.getDev pkgs.libGL)}/include"
+        "-I${(lib.getDev pkgs.libGLU)}/include"
+      ] old
+    )
     // (addToBuildInputs pkgs.libglut old);
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
