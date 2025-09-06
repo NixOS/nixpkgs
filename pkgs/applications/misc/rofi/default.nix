@@ -22,6 +22,9 @@
   wayland-protocols,
   wayland-scanner,
   which,
+  withIMDKit ? true,
+  withWayland ? true,
+  withX11 ? true,
   xcb-imdkit,
   xcbutil,
   xcb-util-cursor,
@@ -70,19 +73,26 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     pango
-    wayland
-    wayland-protocols
-    wayland-scanner
     which
-    xcb-imdkit
     xcbutil
     xcb-util-cursor
     xcbutilkeysyms
     xcbutilwm
     xcbutilxrm
+  ]
+  ++ lib.optionals withIMDKit [
+    xcb-imdkit
+  ]
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-protocols
+    wayland-scanner
   ];
 
-  mesonFlags = [ "-Dimdkit=true" ];
+  mesonFlags =
+    lib.optionals withIMDKit [ "-Dimdkit=true" ]
+    ++ lib.optionals (!withWayland) [ "-Dwayland=disabled" ]
+    ++ lib.optionals (!withX11) [ "-Dxcb=disabled" ];
 
   doCheck = false;
 
