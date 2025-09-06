@@ -81,10 +81,12 @@ let
         version = "8.06.15";
         sha256 = "sha256-I/y5qr5sasCtlrwxL/Lex79rg0o4tzDMBmQY7MdpU2w=";
       };
+      broken = mkNewParam {
+        version = null;
+        sha256 = null;
+      };
     };
-  param =
-    params.${lib.versions.majorMinor ocaml.version}
-    or (throw "labltk is not available for OCaml ${ocaml.version}");
+  param = params.${lib.versions.majorMinor ocaml.version} or params.broken;
 in
 
 param.stdenv.mkDerivation {
@@ -134,5 +136,6 @@ param.stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = !(params ? ${lib.versions.majorMinor ocaml.version});
   };
 }

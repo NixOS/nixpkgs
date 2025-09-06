@@ -19,58 +19,54 @@ let
   minimalOCamlVersion = "4.03";
   doCheck = true;
 in
+stdenv.mkDerivation {
 
-if lib.versionOlder ocaml.version minimalOCamlVersion then
-  builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
-else
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  stdenv.mkDerivation {
+  src = fetchurl {
+    url = "${webpage}/releases/${pname}-${version}.tbz";
+    hash = "sha256-5//UGI4u3OROYdxtwz9K2vCTzYiN16mOyEFhUQWtgEQ=";
+  };
 
-    name = "ocaml${ocaml.version}-${pname}-${version}";
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [
+    topkg
+    uutf
+    uunf
+    uucd
+  ];
 
-    src = fetchurl {
-      url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-5//UGI4u3OROYdxtwz9K2vCTzYiN16mOyEFhUQWtgEQ=";
-    };
+  propagatedBuildInputs = [ uchar ];
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      ocamlbuild
-      topkg
-    ];
-    buildInputs = [
-      topkg
-      uutf
-      uunf
-      uucd
-    ];
+  strictDeps = true;
 
-    propagatedBuildInputs = [ uchar ];
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString doCheck}
+    runHook postBuild
+  '';
 
-    strictDeps = true;
+  inherit (topkg) installPhase;
 
-    buildPhase = ''
-      runHook preBuild
-      ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString doCheck}
-      runHook postBuild
-    '';
+  inherit doCheck;
+  checkPhase = ''
+    runHook preCheck
+    ${topkg.run} test
+    runHook postCheck
+  '';
+  checkInputs = [ uucd ];
 
-    inherit (topkg) installPhase;
-
-    inherit doCheck;
-    checkPhase = ''
-      runHook preCheck
-      ${topkg.run} test
-      runHook postCheck
-    '';
-    checkInputs = [ uucd ];
-
-    meta = with lib; {
-      description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
-      homepage = webpage;
-      inherit (ocaml.meta) platforms;
-      license = licenses.bsd3;
-      maintainers = [ maintainers.vbgl ];
-    };
-  }
+  meta = with lib; {
+    description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
+    homepage = webpage;
+    inherit (ocaml.meta) platforms;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
+    broken = lib.versionOlder ocaml.version minimalOCamlVersion;
+  };
+}
