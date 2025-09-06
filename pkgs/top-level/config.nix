@@ -195,8 +195,44 @@ let
       '';
     };
 
+    allowlistedLicenses = mkOption {
+      description = ''
+        Allow licenses that are specifically acceptable. `allowlistedLicenses` only applies to unfree licenses unless
+        `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses.
+      '';
+      default = [ ];
+      type = types.listOf (types.attrsOf types.anything);
+      example = literalExpression ''
+        with lib.licenses; [
+          amd
+          wtfpl
+        ]
+      '';
+    };
+
+    blocklistedLicenses = mkOption {
+      description = ''
+        Block licenses that are specifically unacceptable. Unlike `allowlistedLicenses`, `blocklistedLicenses`
+        applies to all licenses.
+      '';
+      default = [ ];
+      type = types.listOf (types.attrsOf types.anything);
+      example = literalExpression ''
+        with lib.licenses; [
+          agpl3Only
+          gpl3Only
+        ]
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
-      feature = "build packages with CUDA support by default";
+      description = ''
+        Whether to build packages with CUDA support by default while building nixpkgs packages.
+
+        By enabling CUDA support, you agree to the terms and conditions of the following licenses:
+
+        ${lib.concatMapStringsSep "\n" (l: " - ${l.fullName}: ${builtins.toJSON l}") cudaLicenses}
+      '';
     };
 
     replaceBootstrapFiles = mkMassRebuild {
@@ -288,6 +324,16 @@ let
     };
   };
 
+  cudaLicenses =
+    let
+      licenses = lib.licenses;
+    in
+    [
+      licenses.nvidiaCuda
+      licenses.nvidiaCudaRedist
+    ]
+    ++ builtins.attrValues (import ../development/cuda-modules/_cuda/lib/licenses.nix);
+
 in
 {
 
@@ -311,6 +357,8 @@ in
     warnings = optionals config.warnUndeclaredOptions (
       mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
     );
+
+    allowlistedLicenses = lib.mkIf config.cudaSupport cudaLicenses;
   };
 
 }

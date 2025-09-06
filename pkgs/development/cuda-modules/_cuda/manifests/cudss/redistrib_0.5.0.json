@@ -1,0 +1,46 @@
+{
+    "release_date": "2025-02-13",
+    "release_label": "0.5.0",
+    "release_product": "cudss",
+    "libcudss": {
+        "name": "NVIDIA cuDSS library",
+        "license": "cuDSS library",
+        "license_path": "libcudss/LICENSE.txt",
+        "version": "0.5.0.16",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcudss/linux-x86_64/libcudss-linux-x86_64-0.5.0.16_cuda12-archive.tar.xz",
+                "sha256": "5245d2ba26a590839e2f1dd074f87e39ee5cc201c3b29245b35c7060d59c37a5",
+                "md5": "cb438f906120c01d062bd5db40244cd2",
+                "size": "61239504"
+            }
+        },
+        "cuda_variant": [
+            "12"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcudss/linux-sbsa/libcudss-linux-sbsa-0.5.0.16_cuda12-archive.tar.xz",
+                "sha256": "cb59cfa26b3a4277c55ddc700ef65bffb5369d4afc2cdf08c20a9ae324bed664",
+                "md5": "5f3b3746841a7715fbe7d8d51aeaa251",
+                "size": "61106156"
+            }
+        },
+        "windows-x86_64": {
+            "cuda12": {
+                "relative_path": "libcudss/windows-x86_64/libcudss-windows-x86_64-0.5.0.16_cuda12-archive.zip",
+                "sha256": "f9e0394bc839870c7e01abea2cb433a9352adaa91146ec25cca5960905c2c72e",
+                "md5": "2ea2f64901db68c0e0e7f419ab60bef1",
+                "size": "45099833"
+            }
+        },
+        "linux-aarch64": {
+            "cuda12": {
+                "relative_path": "libcudss/linux-aarch64/libcudss-linux-aarch64-0.5.0.16_cuda12-archive.tar.xz",
+                "sha256": "5d07496e90fc0afb334a7e434c86c6083b1e8cf56dc65d70a01bd811e54096d7",
+                "md5": "d78512e2beb84bc1d709d6dd02748b25",
+                "size": "28954192"
+            }
+        }
+    }
+}
