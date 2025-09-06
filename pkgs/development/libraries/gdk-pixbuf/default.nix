@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.42.12";
+  version = "2.43.5";
 
   outputs = [
     "out"
@@ -44,14 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      hash = "sha256-uVBbNEW5p+SM7TR2DDvLc+lm3zrJTJWhSMtmmrdI48c=";
+      hash = "sha256-pyPsJChCf4V7hyffu+nat3FCoT+20MR/lSIiUa42/xU=";
     };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-
-    ./static-deps.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -90,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgio_sniffing=false"
+    "-Dandroid=disabled"
+    "-Dglycin=disabled"
     (lib.mesonBool "gtk_doc" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "others" true)

@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.14.6";
+  version = "0.15.2";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "YGwoqq57Hz71yOq+Xn3/18WhyGbSW3Zx+4R/4oenK4s=";
+    sha256 = "o6JSMNzPjFilTEw8ZLkm/pSMI9w5ENN/+yaKYwXl+6w=";
   };
 
   nativeBuildInputs = [
