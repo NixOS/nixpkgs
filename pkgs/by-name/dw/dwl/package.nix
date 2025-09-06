@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   # required for whitespaces in makeFlags
   __structuredAttrs = true;
 
-  passthru = {
+  stdenv = {
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
