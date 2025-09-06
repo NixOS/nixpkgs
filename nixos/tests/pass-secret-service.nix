@@ -61,13 +61,13 @@
           machine.send_chars("${user.password}\n")
           machine.wait_until_succeeds("pgrep -u alice bash")
 
-          _, output = machine.systemctl("status dbus-org.freedesktop.secrets --no-pager", "alice")
+          output = machine.systemctl("status dbus-org.freedesktop.secrets --no-pager", "alice")
           assert "Active: inactive (dead)" in output
 
       with subtest("Service starts after a client tries to talk to the D-Bus API"):
           machine.send_chars("secrets-dbus-init; touch ${ready-file}\n")
           machine.wait_for_file("${ready-file}")
-          _, output = machine.systemctl("status dbus-org.freedesktop.secrets --no-pager", "alice")
+          output = machine.systemctl("status dbus-org.freedesktop.secrets --no-pager", "alice")
           assert "Active: active (running)" in output
     '';
 }

@@ -54,7 +54,7 @@ import ../make-test-python.nix (
 
     testScript = ''
       def wait_for_preseed(_) -> bool:
-        _, output = machine.systemctl("is-active lxd-preseed.service")
+        output = machine.systemctl("is-active lxd-preseed.service")
         return ("inactive" in output)
 
       machine.wait_for_unit("sockets.target")
