@@ -8,6 +8,7 @@
   pkg-config,
   python3,
   zlib,
+  unstableGitUpdater,
   romID ? "ntsc-final",
 }:
 let
@@ -96,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+  };
 
   meta = {
     description = "Modern cross-platform port of Perfect Dark";
