@@ -1,30 +1,30 @@
 {
-  stdenv,
-  lib,
+  bison,
+  buildPackages,
+  cairo,
+  check,
   fetchFromGitHub,
+  flex,
+  git,
+  glib,
+  lib,
+  librsvg,
+  libstartup_notification,
+  libxcb,
+  libxkbcommon,
   meson,
   ninja,
-  pkg-config,
-  libxkbcommon,
+  pandoc,
   pango,
+  pkg-config,
+  stdenv,
   which,
-  git,
-  cairo,
-  libxcb,
   xcb-imdkit,
+  xcbutil,
   xcb-util-cursor,
   xcbutilkeysyms,
-  xcbutil,
   xcbutilwm,
   xcbutilxrm,
-  libstartup_notification,
-  bison,
-  flex,
-  librsvg,
-  check,
-  glib,
-  buildPackages,
-  pandoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,33 +47,33 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-    pkg-config
     glib
+    pkg-config
   ];
   nativeBuildInputs = [
+    bison
+    flex
     meson
     ninja
-    pkg-config
-    flex
-    bison
     pandoc
+    pkg-config
   ];
   buildInputs = [
-    libxkbcommon
-    pango
     cairo
+    check
     git
     librsvg
-    check
     libstartup_notification
     libxcb
+    libxkbcommon
+    pango
+    which
     xcb-imdkit
+    xcbutil
     xcb-util-cursor
     xcbutilkeysyms
-    xcbutil
     xcbutilwm
     xcbutilxrm
-    which
   ];
 
   mesonFlags = [ "-Dimdkit=true" ];
