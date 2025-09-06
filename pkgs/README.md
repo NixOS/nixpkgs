@@ -518,6 +518,23 @@ See the Nixpkgs manual for more details on [standard meta-attributes](https://ni
 
 Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
 
+## `overrideAttrs` and `overridePythonAttrs`
+
+Please do not introduce new uses of `overrideAttrs` or `overridePythonAttrs` in Nixpkgs.
+These functions are useful for out-of-tree code because they allow easy overriding a package without changing its source in Nixpkgs, but when contributing to Nixpkgs you *can* change the source of other packages. So instead of using the escape hatch that is overriding, you should try to provide proper support for the functionality you need, in ways that are visible and can be understood and accounted for by the maintainers of the patched package.
+Using `overrideAttrs` and `overridePythonAttrs` in Nixpkgs causes maintainability problems:
+
+* It's easy for multiple packages to end up duplicating basically the same override without noticing.
+* It's not clear when working on an overridden package that it's being overridden elsewhere in Nixpkgs, so `overrideAttrs` and `overridePythonAttrs` are fragile and can break accidentally when the overridden package is changed.
+* Package maintainers will not be requested for review of overrides, even though they are likely to have important knowledge about the package.
+* It is easy for overridden packages to be forgotten and remain around long after they are no longer necessary.
+* Dependency closures end up being bigger than necessary due to unnecessarily including multiple versions of the same package.
+
+Instead, keep all instances of the same package next to each other, and try to minimize how many different instances of a package are in Nixpkgs.
+If you need a patch applied to a dependency, discuss with the maintainer of that dependency whether it would be acceptable to apply to the main version of the package.
+If you need a different version of a dependency, first try modifying your package to work with the version in Nixpkgs — it's often not very hard! — and if that's not possible, try to factor out a function that can build multiple versions of the package, including the main version.
+If you need to enable or disable optional functionality of a dependency, add an explicit flag to the package and use `override` instead.
+
 ## Sources
 
 Always fetch source files using [Nixpkgs fetchers](https://nixos.org/manual/nixpkgs/unstable/#chap-pkgs-fetchers).
