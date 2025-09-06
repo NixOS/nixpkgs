@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cista";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "felixguendling";
     repo = "cista";
     rev = "v${version}";
-    sha256 = "sha256-+DcxnckoXVSc+gXt21fxKkx4J1khLsQPuxYH9CBRrfE=";
+    sha256 = "sha256-Q7IDQckFa/iMZ/f3Bim/yWyKCGqsNxJJ5C9PTToFZYI=";
   };
 
   nativeBuildInputs = [ cmake ];
