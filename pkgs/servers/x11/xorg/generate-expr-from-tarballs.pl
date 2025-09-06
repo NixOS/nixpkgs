@@ -390,7 +390,10 @@ print OUT <<EOF;
   xlsatoms,
   xlsclients,
   xlsfonts,
+  xmag,
+  xmessage,
   xmodmap,
+  xmore,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -437,7 +440,10 @@ self: with self; {
     xlsatoms
     xlsclients
     xlsfonts
+    xmag
+    xmessage
     xmodmap
+    xmore
     xorgproto
     xprop
     xrandr
