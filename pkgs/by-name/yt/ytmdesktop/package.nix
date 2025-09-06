@@ -13,6 +13,8 @@
 
   electron,
   commandLineArgs ? "",
+
+  nix-update-script,
 }:
 
 let
@@ -136,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "YouTube Music Desktop App";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";
