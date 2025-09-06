@@ -1,0 +1,10 @@
+{
+  "x86_64-linux": {
+    "url": "https://pkgs.orb.net/stable/debian/pool/main/o/orb/orb_1.2.0_amd64.deb",
+    "hash": "sha256-+jU8jqB1AwnEDdTOR9cD+Xh+9Rub5aBFUbc7wd9Cm6w="
+  },
+  "aarch64-linux": {
+    "url": "https://pkgs.orb.net/stable/debian/pool/main/o/orb/orb_1.2.0_arm64.deb",
+    "hash": "sha256-srpgConQS+kw0XDuJOVjvbwNtvMcfUPi9ThyX4sq3W8="
+  }
+}
