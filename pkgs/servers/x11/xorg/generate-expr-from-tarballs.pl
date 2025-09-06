@@ -58,6 +58,7 @@ $pcMap{"xcb-ewmh"} = "xcbutilwm";
 $pcMap{"xcb-icccm"} = "xcbutilwm";
 $pcMap{"xcb-image"} = "xcbutilimage";
 $pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
+$pcMap{"xcb-cursor"} = "xcbutilcursor";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
@@ -344,6 +345,7 @@ print OUT <<EOF;
   libxau,
   libxaw,
   libxcb,
+  libxcb-cursor,
   libxcb-errors,
   libxcb-image,
   libxcb-keysyms,
@@ -376,10 +378,12 @@ print OUT <<EOF;
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
   xev,
+  xfontsel,
   xfsinfo,
   xgamma,
   xgc,
@@ -425,9 +429,11 @@ self: with self; {
     transset
     xbitmaps
     xcmsdb
+    xconsole
     xcursorgen
     xdriinfo
     xev
+    xfontsel
     xfsinfo
     xgamma
     xgc
@@ -482,6 +488,7 @@ self: with self; {
   libXxf86vm = libxxf86vm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilcursor = libxcb-cursor;
   xcbutilerrors = libxcb-errors;
   xcbutilimage = libxcb-image;
   xcbutilkeysyms = libxcb-keysyms;
