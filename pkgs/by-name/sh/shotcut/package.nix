@@ -7,11 +7,11 @@
   frei0r,
   ladspaPlugins,
   gettext,
-  mlt,
   jack1,
   pkg-config,
   fftw,
   qt6,
+  qt6Packages,
   cmake,
   gitUpdater,
   ffmpeg,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "25.01.25";
+  version = "25.08.16";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YrnmhxD7Yf2LgdEaBU4mmRdvZdO6VQ6IAb4s+V9QvLM=";
+    hash = "sha256-PpMfiqUwG11H+7sLkp3sLzDWjco1OxYqGyfMAFojSPU=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     frei0r
     ladspaPlugins
     gettext
-    mlt
+    qt6Packages.mlt
     fftw
     qt6.qtbase
     qt6.qttools
@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-mlt-ffmpeg-path.patch {
-      inherit mlt ffmpeg;
+      inherit ffmpeg;
+      mlt = qt6Packages.mlt;
     })
   ];
 
