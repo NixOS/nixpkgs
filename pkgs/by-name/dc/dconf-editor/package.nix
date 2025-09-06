@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   desktop-file-utils,
   meson,
   ninja,
@@ -23,20 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "45.0.1";
+  version = "49.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/dconf-editor/${lib.versions.major version}/dconf-editor-${version}.tar.xz";
-    hash = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
+    hash = "sha256-IvI9WgT0+/3gq3nWlhrprFURX+ttoXgl/4y0tr0rbnU=";
   };
 
   patches = [
-    # Fix crash with GSETTINGS_SCHEMA_DIR env var.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/baf183737d459dcde065c9f8f6fe5be7ed874de6.patch";
-      hash = "sha256-Vp0qjJChDr6IarUD+tZPLJhdI8v8r6EzWNfqFSnGvqQ=";
-    })
-
     # Look for compiled schemas in NIX_GSETTINGS_OVERRIDES_DIR
     # environment variable, to match what we patched GLib to do.
     ./schema-override-variable.patch
