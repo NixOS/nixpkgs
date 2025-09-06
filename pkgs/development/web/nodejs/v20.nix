@@ -18,8 +18,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.19.4";
-  sha256 = "b87fd7106013d3906706913ffc63a4403715fbb272c4f83ff4338527353eec0f";
+  version = "20.19.5";
+  sha256 = "230c899f4e2489c4b8d2232edd6cc02f384fb2397c2a246a22e415837ee5da51";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
