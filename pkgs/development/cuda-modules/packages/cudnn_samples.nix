@@ -10,13 +10,7 @@ buildRedist (finalAttrs: {
   redistName = "cudnn";
   pname = "cudnn_samples";
 
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-  ];
+  outputs = [ "out" ];
 
   allowFHSReferences = true;
 
