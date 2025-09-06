@@ -124,20 +124,6 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
       ghc810 = compiler.ghc8107;
-      ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
-        bootPkgs =
-          # the oldest ghc with aarch64-darwin support is 8.10.5
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc90 = compiler.ghc902;
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
         bootPkgs =
           # GHC >= 9.0 removed the armv7l bindist
@@ -165,7 +151,7 @@ in
 
           # No suitable bindists for powerpc64le
           if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc902
+            bb.packages.ghc8107
           else
             bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -422,12 +408,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       };
       ghc810 = packages.ghc8107;
-      ghc902 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc902;
-        ghc = bh.compiler.ghc902;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
-      };
-      ghc90 = packages.ghc902;
       ghc928 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc928;
         ghc = bh.compiler.ghc928;
