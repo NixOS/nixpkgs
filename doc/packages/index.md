@@ -22,6 +22,7 @@ lhapdf.section.md
 locales.section.md
 etc-files.section.md
 nginx.section.md
+nrfutil.section.md
 opengl.section.md
 shell-helpers.section.md
 python-tree-sitter.section.md
