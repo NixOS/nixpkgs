@@ -398,6 +398,9 @@ let
         makeScopeWithSplicing
         makeScopeWithSplicing'
         extendMkDerivation
+        renameCrossIndexFrom
+        renameCrossIndexTo
+        mapCrossIndex
         ;
       inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
       inherit (self.generators) mkLuaInline;
