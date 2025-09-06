@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      inherit (stdenv.targetPlatform.rust) cargoShortTarget;
+      inherit (stdenv.hostPlatform.rust) cargoShortTarget;
     in
     ''
       moveToOutput lib $dev
