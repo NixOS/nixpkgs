@@ -5,6 +5,7 @@
   autoPatchelfHook,
   unzip,
   makeWrapper,
+  desktop-file-utils,
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
