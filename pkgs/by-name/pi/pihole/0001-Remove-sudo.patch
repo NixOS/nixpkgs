@@ -1,7 +1,7 @@
-From a2b3aa45d6e073272608506b1d27e4f43f2b0032 Mon Sep 17 00:00:00 2001
-From: williamvds <william@williamvds.me>
-Date: Sun, 6 Apr 2025 23:00:41 +0100
-Subject: [PATCH 1/3] Remove sudo
+From 833856bd77dc6ea77557ab0659c1459bee393653 Mon Sep 17 00:00:00 2001
+From: averyv <avery@averyv.me>
+Date: Sat, 6 Sep 2025 17:51:48 +0100
+Subject: [PATCH 1/2] Remove sudo
 
 Rely on polkit and sensible permissions
 ---
@@ -9,16 +9,16 @@ Rely on polkit and sensible permissions
  1 file changed, 8 deletions(-)
 
 diff --git a/pihole b/pihole
-index 1d5093c..6afc48a 100755
+index 7b5e3eb..b00617e 100755
 --- a/pihole
 +++ b/pihole
 @@ -570,14 +570,6 @@ if [[ -z ${USER} ]]; then
    USER=$(whoami)
  fi
  
--# Check if the current user is neither root nor pihole and if the command
+-# Check if the current user is not root and if the command
 -# requires root. If so, exit with an error message.
--if [[ $EUID -ne 0 && ${USER} != "pihole" && need_root -eq 1 ]];then
+-if [[ $EUID -ne 0 && need_root -eq 1 ]];then
 -  echo -e "  ${CROSS} The Pi-hole command requires root privileges, try:"
 -  echo -e "      ${COL_GREEN}sudo pihole $*${COL_NC}"
 -  exit 1
@@ -28,5 +28,5 @@ index 1d5093c..6afc48a 100755
  case "${1}" in
    "allow" | "allowlist"           ) listFunc "$@";;
 -- 
-2.48.1
+2.50.1
 
