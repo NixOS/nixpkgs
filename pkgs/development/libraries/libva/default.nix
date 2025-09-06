@@ -17,7 +17,6 @@
   libGL,
   mesa,
   # for passthru.tests
-  intel-compute-runtime,
   intel-media-driver,
   mpv,
   intel-vaapi-driver,
@@ -81,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     # other drivers depending on libva and selected application users.
     # Please get a confirmation from the maintainer before adding more applications.
     inherit
-      intel-compute-runtime
       intel-media-driver
       intel-vaapi-driver
       mpv

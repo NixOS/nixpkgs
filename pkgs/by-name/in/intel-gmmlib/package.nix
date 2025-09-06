@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   # for passthru.tests
-  intel-compute-runtime,
   intel-media-driver,
 }:
 
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   passthru.tests = {
-    inherit intel-compute-runtime intel-media-driver;
+    inherit intel-media-driver;
   };
 
   meta = with lib; {

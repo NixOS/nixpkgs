@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   git,
-  llvmPackages_15,
+  llvmPackages_21,
   spirv-llvm-translator,
   buildWithPatches ? true,
 }:
@@ -21,7 +21,7 @@ let
       '';
     });
 
-  llvmPkgs = llvmPackages_15;
+  llvmPkgs = llvmPackages_21;
   inherit (llvmPkgs) llvm;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
   libclang = if buildWithPatches then passthru.libclang else llvmPkgs.libclang;
@@ -56,13 +56,13 @@ let
     };
   };
 
-  version = "15.0.3";
+  version = "21.1.0";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "intel";
       repo = "opencl-clang";
       tag = "v${version}";
-      hash = "sha256-JkYFmnDh7Ot3Br/818aLN33COEG7+xyOf8OhdoJX9Cw=";
+      hash = "sha256-2v6Bc1DMQ3qtqfQZJcCgLTem4061AYuP7O/zF4A+UBU=";
     };
 
     patches = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DPREFERRED_LLVM_VERSION=${lib.getVersion llvm}"
-    "-DOPENCL_HEADERS_DIR=${lib.getLib libclang}/lib/clang/${lib.getVersion libclang}/include/"
+    "-DOPENCL_HEADERS_DIR=${lib.getLib libclang}/lib/clang/${lib.versions.major (lib.getVersion libclang)}/include/"
 
     "-DLLVMSPIRV_INCLUDED_IN_LLVM=OFF"
     "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator'}"
