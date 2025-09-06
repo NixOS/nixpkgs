@@ -28,6 +28,7 @@
   libxkbcommon,
   libpng,
   libtiff,
+  librsvg,
   libjpeg,
   libxml2,
   gnome,
@@ -68,7 +69,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.18.6";
+  version = "4.20.0";
 
   outputs = [
     "out"
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4YF8ZQ3cMmH5qDRbOyKial2ArxVGMN7cA8x77O//0Po=";
+    hash = "sha256-eeUeYvfwz/MpBFabDOvJYpfQ6/r6begXIHPGnOA5Gpg=";
   };
 
   depsBuildBuild = [
@@ -119,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libpng
     libtiff
+    librsvg
     libjpeg
     (libepoxy.override { inherit x11Support; })
     isocodes
