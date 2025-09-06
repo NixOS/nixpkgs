@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "accelergy";
-  version = "unstable-2022-05-03";
+  version = "2019.micro-tutorial";
   format = "pyproject";
 
   src = fetchFromGitHub {
