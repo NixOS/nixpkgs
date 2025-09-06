@@ -536,6 +536,13 @@ stdenv.mkDerivation (
       export LLC="${getToolExe buildTargetLlvmPackages.llvm "llc"}"
       export OPT="${getToolExe buildTargetLlvmPackages.llvm "opt"}"
     ''
+    # LLVMAS should be a "specific LLVM compatible assembler" which needs to understand
+    # assembly produced by LLVM. The easiest way to be sure is to use clang from the same
+    # version as llc and opt. Note that the naming chosen by GHC is misleading, clang can
+    # be used as an assembler, llvm-as converts IR into machine code.
+    + lib.optionalString (useLLVM && lib.versionAtLeast version "9.10") ''
+      export LLVMAS="${getToolExe buildTargetLlvmPackages.clang "clang"}"
+    ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
       # The executable we specify via $CLANG is used as an assembler (exclusively, it seems, but this isn't
@@ -544,6 +551,7 @@ stdenv.mkDerivation (
       # the assembly it is given, we need to make sure that it matches the LLVM version of $CC if possible.
       # It is unclear (at the time of writing 2024-09-01)  whether $CC should match the LLVM version we use
       # for llc and opt which would require using a custom darwin stdenv for targetCC.
+      # 2025-09-06: The existence of LLVMAS suggests that matching $CC is fine (correct?) here.
       export CLANG="${
         if targetCC.isClang then
           toolPath "clang" targetCC
@@ -831,6 +839,11 @@ stdenv.mkDerivation (
       ghc-settings-edit "$settingsFile" \
         "LLVM llc command" "${getToolExe llvmPackages.llvm "llc"}" \
         "LLVM opt command" "${getToolExe llvmPackages.llvm "opt"}"
+    ''
+    # See comment for LLVMAS in preConfigure
+    + lib.optionalString (useLLVM && lib.versionAtLeast version "9.10") ''
+      ghc-settings-edit "$settingsFile" \
+        "LLVM llvm-as command" "${getToolExe llvmPackages.clang "clang"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       ghc-settings-edit "$settingsFile" \
