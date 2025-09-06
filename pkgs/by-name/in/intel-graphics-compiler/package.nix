@@ -8,14 +8,11 @@
   bison,
   flex,
   intel-compute-runtime,
-  llvmPackages_15,
   opencl-clang,
   python3,
   spirv-tools,
   spirv-headers,
   spirv-llvm-translator,
-
-  buildWithPatches ? true,
 }:
 
 let
@@ -26,8 +23,8 @@ let
     hash = "sha256-7coQegLcgIKiqnonZmgrKlw6FCB3ltSh6oMMvdopeQc=";
   };
 
-  inherit (llvmPackages_15) lld llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPackages_15) clang libclang;
+  inherit (opencl-clang.llvmPkgs) lld llvm;
+  inherit (opencl-clang) clang libclang;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
 
   # Handholding the braindead build script
