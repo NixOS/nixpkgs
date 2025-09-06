@@ -25267,6 +25267,12 @@
     githubId = 4541968;
     name = "Nova King";
   };
+  Techtix0 = {
+    name = "Techtix";
+    email = "techtix0@proton.me";
+    github = "Techtix0";
+    githubId = 187685940;
+  };
   teczito = {
     name = "Ruben";
     email = "ruben@teczito.com";
