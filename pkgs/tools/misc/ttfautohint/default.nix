@@ -25,18 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > VERSION
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      echo '#define VERSION "${finalAttrs.version}"' > version
+      substituteInPlace configure --replace-fail "macx-g++" "macx-clang"
     '';
-
-  postAutoreconf = ''
-    substituteInPlace configure --replace-fail "macx-g++" "macx-clang"
-  '';
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
     perl
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoreconfHook ]
   ++ lib.optionals enableGUI [ libsForQt5.qt5.wrapQtAppsHook ];
 
   buildInputs = [
