@@ -95,6 +95,7 @@
 
   # Linux Only Dependencies
   linuxHeaders,
+  systemd,
   util-linux,
   libuuid,
   udev,
@@ -105,6 +106,7 @@
   libxfs ? null,
   liburing ? null,
   zfs ? null,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   ...
 }:
 
@@ -386,6 +388,10 @@ rec {
       # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
       # * <https://github.com/ceph/ceph/pull/60999>
       ./boost-1.86-PyModule.patch
+
+      # See:
+      # <https://github.com/ceph/ceph/pull/60575>
+      ./ceph-systemd-prefix.patch
     ];
 
     nativeBuildInputs = [
@@ -503,6 +509,9 @@ rec {
       substituteInPlace src/client/fuse_ll.cc \
         --replace-fail "mount -i -o remount" "${util-linux}/bin/mount -i -o remount"
 
+      substituteInPlace systemd/*.service.in \
+        --replace-quiet "/bin/kill" "${util-linux}/bin/kill"
+
       # The install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       export PYTHONPATH=$PYTHONPATH:$lib/${sitePackages}:$out/${sitePackages}
       patchShebangs src/
@@ -512,7 +521,8 @@ rec {
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
       "-DWITH_CEPHFS_SHELL:BOOL=ON"
-      "-DWITH_SYSTEMD:BOOL=OFF"
+      "-DWITH_SYSTEMD:BOOL=${if withSystemd then "ON" else "OFF"}"
+      "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
       # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
       #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
       #     Command failed: 2
