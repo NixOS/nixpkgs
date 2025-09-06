@@ -232,6 +232,7 @@ rec {
       version,
       passthru ? { },
       solutions,
+      postFixupResholved ? "",
       ...
     }@attrs:
     let
@@ -285,6 +286,8 @@ rec {
         # supports default python.logging levels
         # LOGLEVEL="INFO";
         preFixup = phraseSolutions solutions unresholved;
+
+        postFixup = postFixupResholved;
 
         # don't break the metadata...
         meta = unresholved.meta;
