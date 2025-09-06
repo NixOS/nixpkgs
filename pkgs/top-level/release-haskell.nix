@@ -66,16 +66,9 @@ let
     ghc8107
     ghc902
     ghc928
-    ghc947
     ghc948
     ghc963
-    ghc964
-    ghc965
-    ghc966
     ghc967
-    ghc981
-    ghc982
-    ghc983
     ghc984
     ghc9101
     ghc9102
@@ -378,8 +371,7 @@ let
         uusi
         uqm
         uuagc
-        # vaultenv: broken by connection on 2024-03-16
-        wstunnel
+        vaultenv
         xmobar
         xmonadctl
         xmonad-with-packages
@@ -467,8 +459,8 @@ let
                 ;
             };
 
-            haskell.packages.native-bignum.ghc984 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc984)
+            haskell.packages.native-bignum.ghc9102 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9102)
                 hello
                 random
                 QuickCheck
@@ -507,14 +499,6 @@ let
             {
               haskellPackages = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-
-              haskell.packages.ghc98 = {
-                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
                   ghc
                   hello
                   microlens
@@ -590,7 +574,6 @@ let
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc928
-        compilerNames.ghc947
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
@@ -600,6 +583,7 @@ let
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
+      Cabal_3_16_0_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -634,6 +618,8 @@ let
         compilerNames.ghc902
       ];
       ghc-bignum = [
+        # When removing this, remember to drop the overrides from config*8.10.x.nix
+        # and the extra-packages entry from config*hackage2nix/main.yaml.
         compilerNames.ghc8107
       ];
       ghc-lib = released;
@@ -650,7 +636,7 @@ let
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
-        compilerNames.ghc966
+        compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
@@ -742,7 +728,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc984
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9102
         ];
       };
     }

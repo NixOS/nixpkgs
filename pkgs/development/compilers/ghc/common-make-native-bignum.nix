@@ -410,12 +410,6 @@ stdenv.mkDerivation (
       })
     ]
 
-    ++ lib.optionals (version == "9.4.6") [
-      # Work around a type not being defined when including Rts.h in bytestring's cbits
-      # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.
-      ./9.4.6-bytestring-posix-source.patch
-    ]
-
     ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
       # Prevent the paths module from emitting symbols that we don't use
       # when building with separate outputs.

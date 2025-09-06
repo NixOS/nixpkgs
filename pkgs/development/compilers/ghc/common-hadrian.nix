@@ -67,16 +67,16 @@
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs,
 
   # Whether to build terminfo.
-  # FIXME(@sternenseemann): This actually doesn't influence what hadrian does,
-  # just what buildInputs etc. looks like. It would be best if we could actually
-  # tell it what to do like it was possible with make.
   enableTerminfo ?
     !(
       stdenv.targetPlatform.isWindows
       || stdenv.targetPlatform.isGhcjs
-      # terminfo can't be built for cross
-      || (stdenv.buildPlatform != stdenv.hostPlatform)
-      || (stdenv.hostPlatform != stdenv.targetPlatform)
+      # Before <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13932>,
+      # we couldn't force hadrian to build terminfo for cross.
+      || (
+        lib.versionOlder version "9.15.20250808"
+        && (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+      )
     ),
 
   # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
@@ -132,10 +132,12 @@
     -- no way to set this via the command line
     finalStage :: Stage
     finalStage = ${
-      # Always build the stage 2 compiler if possible.
-      # TODO(@sternensemann): unify condition with make-built GHCs
-      if stdenv.hostPlatform.canExecute stdenv.targetPlatform then
-        "Stage2" # native compiler or “native” cross e.g. pkgsStatic
+      # N. B. hadrian ignores this setting if it doesn't agree it's possible,
+      # i.e. when its cross-compiling setting is true. So while we could, in theory,
+      # build Stage2 if hostPlatform.canExecute targetPlatform, hadrian won't play
+      # ball (with make, Stage2 was built if hostPlatform.system == targetPlatform.system).
+      if stdenv.hostPlatform == stdenv.targetPlatform then
+        "Stage2" # native compiler
       else
         "Stage1" # cross compiler
     }
@@ -274,17 +276,6 @@
             ../../tools/haskell/hadrian/disable-hyperlinked-source-extra-args.patch
         )
       ]
-      # Incorrect bounds on Cabal in hadrian
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
-      ++
-        lib.optionals
-          (lib.elem version [
-            "9.8.1"
-            "9.8.2"
-          ])
-          [
-            ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
-          ]
       ++ lib.optionals (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "enable-ignore-build-platform-mismatch.patch";
