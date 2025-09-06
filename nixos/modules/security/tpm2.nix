@@ -12,14 +12,39 @@ let
   # the tssGroup is only allowed to access the kernel resource manager
   # Therefore, if either of the two are null, the respective part isn't generated
   udevRules = tssUser: tssGroup: ''
-    ${lib.optionalString (tssUser != null) ''KERNEL=="tpm[0-9]*", MODE="0660", OWNER="${tssUser}"''}
+    ${lib.optionalString (
+      tssUser != null
+    ) ''KERNEL=="tpm[0-9]*", TAG+="systemd", MODE="0660", OWNER="${tssUser}"''}
     ${
-      lib.optionalString (tssUser != null || tssGroup != null) ''KERNEL=="tpmrm[0-9]*", MODE="0660"''
+      lib.optionalString (
+        tssUser != null || tssGroup != null
+      ) ''KERNEL=="tpmrm[0-9]*", TAG+="systemd", MODE="0660"''
       + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
       + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''
     }
   '';
 
+  fapiConfig = (
+    pkgs.writeText "fapi-config.json" (
+      builtins.toJSON (
+        {
+          profile_name = cfg.fapi.profileName;
+          profile_dir = cfg.fapi.profileDir;
+          user_dir = cfg.fapi.userDir;
+          system_dir = cfg.fapi.systemDir;
+          tcti = cfg.fapi.tcti;
+          system_pcrs = cfg.fapi.systemPcrs;
+          log_dir = cfg.fapi.logDir;
+          firmware_log_file = cfg.fapi.firmwareLogFile;
+          ima_log_file = cfg.fapi.imaLogFile;
+        }
+        // lib.optionalAttrs (cfg.fapi.ekCertLess != null) {
+          ek_cert_less = if cfg.fapi.ekCertLess then "yes" else "no";
+        }
+        // lib.optionalAttrs (cfg.fapi.ekFingerprint != null) { ek_fingerprint = cfg.fapi.ekFingerprint; }
+      )
+    )
+  );
 in
 {
   options.security.tpm2 = {
@@ -128,6 +153,97 @@ in
         default = "bus_name=com.intel.tss2.Tabrmd";
       };
     };
+
+    fapi = {
+      profileName = lib.mkOption {
+        description = ''
+          Name of the default cryptographic profile chosen from the profile_dir directory.
+        '';
+        type = lib.types.str;
+        default = "P_ECCP256SHA256";
+      };
+
+      profileDir = lib.mkOption {
+        description = ''
+          Directory that contains all cryptographic profiles known to FAPI.
+        '';
+        type = lib.types.str;
+        default = "${pkgs.tpm2-tss}/etc/tpm2-tss/fapi-profiles/";
+        defaultText = lib.literalExpression "\${pkgs.tpm2-tss}/etc/fapi-profiles/";
+      };
+
+      userDir = lib.mkOption {
+        description = ''
+          The directory where user objects are stored.
+        '';
+        type = lib.types.str;
+        default = "~/.local/share/tpm2-tss/user/keystore/";
+      };
+
+      systemDir = lib.mkOption {
+        description = ''
+          The directory where system objects, policies, and imported objects are stored.
+        '';
+        type = lib.types.str;
+        default = "/var/lib/tpm2-tss/keystore";
+      };
+
+      tcti = lib.mkOption {
+        description = ''
+          The TCTI interface which will be used.
+        '';
+        type = lib.types.str;
+        default = "";
+      };
+
+      systemPcrs = lib.mkOption {
+        description = ''
+          The PCR registers which are used by the system.
+        '';
+        type = lib.types.listOf lib.types.int;
+        default = [ ];
+      };
+
+      logDir = lib.mkOption {
+        description = ''
+          The directory for the event log.
+        '';
+        type = lib.types.str;
+        default = "/var/log/tpm2-tss/eventlog/";
+      };
+
+      ekCertLess = lib.mkOption {
+        description = ''
+          A switch to disable certificate verification.
+        '';
+        type = lib.types.nullOr lib.types.bool;
+        default = null;
+      };
+
+      ekFingerprint = lib.mkOption {
+        description = ''
+          The fingerprint of the endorsement key.
+        '';
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+
+      firmwareLogFile = lib.mkOption {
+        description = ''
+          The binary bios measurements.
+        '';
+        type = lib.types.str;
+        default = "/sys/kernel/security/tpm0/binary_bios_measurements";
+      };
+
+      imaLogFile = lib.mkOption {
+        description = ''
+          The binary IMA measurements (Integrity Measurement Architecture).
+        '';
+        type = lib.types.str;
+        default = "/sys/kernel/security/ima/binary_runtime_measurements";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -166,8 +282,63 @@ in
         );
       }
 
+      {
+        systemd.services."tpm2-udev-trigger" =
+          let
+            udevHash =
+              if cfg.applyUdevRules then (builtins.hashString "md5" (udevRules cfg.tssUser cfg.tssGroup)) else "";
+          in
+          {
+            description = "Trigger udev change for TPM devices";
+            wants = [ "systemd-udevd.service" ];
+            after = [
+              "tpm2.target"
+              "systemd-udevd.service"
+            ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = pkgs.writeShellScript "tpm2-udev-trigger.sh" ''
+                stateDir=/var/lib/tpm2-udev-trigger
+                mkdir -p $stateDir
+                newHash=${udevHash}
+                hashFile=$stateDir/hash.txt
+
+                # if file exists, read old hash
+                if [ -f $hashFile ]; then
+                  oldHash=$(cat $hashFile)
+                else
+                  oldHash=""
+                fi
+
+                if [ "$oldHash" != "$newHash" ]; then
+                  echo "TPM udev rules changed, triggering udev"
+                  for i in $(seq 0 9); do
+                    if [ -e /dev/tpm$i ]; then
+                      ${config.systemd.package}/bin/udevadm trigger --name-match=tpm$i --action=change
+                      ${config.systemd.package}/bin/udevadm trigger --name-match=tpmrm$i --action=change
+                    fi
+                  done
+                  echo "$newHash" > $hashFile
+                else
+                  echo "TPM udev rules unchanged, not triggering udev"
+                fi
+              '';
+            };
+          };
+      }
+
       (lib.mkIf cfg.abrmd.enable {
         systemd.services."tpm2-abrmd" = {
+          wants = [
+            "tpm2-udev-trigger.service"
+            "dev-tpm0.device"
+          ];
+          after = [
+            "tpm2-udev-trigger.service"
+            "dev-tpm0.device"
+          ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "dbus";
@@ -182,6 +353,14 @@ in
 
         services.dbus.packages = lib.singleton cfg.abrmd.package;
       })
+
+      {
+        environment.etc."tpm2-tss/fapi-config.json".source = fapiConfig;
+        systemd.tmpfiles.rules = [
+          "d ${cfg.fapi.logDir} 2750 tss ${cfg.tssGroup} -"
+          "d ${cfg.fapi.systemDir} 2750 root ${cfg.tssGroup} -"
+        ];
+      }
     ]
   );
 

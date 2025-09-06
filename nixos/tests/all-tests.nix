@@ -1511,6 +1511,7 @@ in
   tmate-ssh-server = runTest ./tmate-ssh-server.nix;
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
+  tpm2 = runTest ./tpm2.nix;
   tpm-ek = handleTest ./tpm-ek { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
   trafficserver = runTest ./trafficserver.nix;
