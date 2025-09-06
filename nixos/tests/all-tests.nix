@@ -1545,6 +1545,7 @@ in
   unit-perl = runTest ./web-servers/unit-perl.nix;
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
+  uptimed = runTest ./uptimed.nix;
   uptermd = runTest ./uptermd.nix;
   uptime-kuma = runTest ./uptime-kuma.nix;
   urn-timer = runTest ./urn-timer.nix;
