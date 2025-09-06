@@ -584,8 +584,6 @@ in
 
         netatop = callPackage ../os-specific/linux/netatop { };
 
-        perf = callPackage ../os-specific/linux/kernel/perf { };
-
         prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
         isgx = callPackage ../os-specific/linux/isgx { };
@@ -714,6 +712,7 @@ in
         xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
         amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
         kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
+        perf = lib.warnOnInstantiate "linuxPackages.perf is now perf" pkgs.perf; # Added 2025-08-28
         system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28

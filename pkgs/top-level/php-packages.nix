@@ -255,12 +255,11 @@ lib.makeScope pkgs.newScope (
       phpstan = callPackage ../development/php-packages/phpstan { };
 
       psalm = callPackage ../development/php-packages/psalm { };
-
-      psysh = callPackage ../development/php-packages/psysh { };
     }
     // lib.optionalAttrs config.allowAliases {
       phpcbf = throw "`phpcbf` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
       phpcs = throw "`phpcs` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      psysh = throw "`php8${lib.versions.minor php.version}Packages.psysh` is now deprecated, use `psysh`";
     };
 
     # This is a set of PHP extensions meant to be used in php.buildEnv
