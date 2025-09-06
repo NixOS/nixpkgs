@@ -2214,6 +2214,15 @@ mapAliases {
     simplified-chinese = source-han-sans;
     traditional-chinese = source-han-sans;
   };
+  sourceHanPackages = {
+    sans = source-han-sans;
+    serif = source-han-serif;
+    mono = source-han-mono;
+    sans-vf-otf = source-han-sans-vf-otf;
+    sans-vf-ttf = source-han-sans-vf-ttf;
+    serif-vf-otf = source-han-serif-vf-otf;
+    serif-vf-ttf = source-han-serif-vf-ttf;
+  };
   source-han-sans-japanese = source-han-sans;
   source-han-sans-korean = source-han-sans;
   source-han-sans-simplified-chinese = source-han-sans;
