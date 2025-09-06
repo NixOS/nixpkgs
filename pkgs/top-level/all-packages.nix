@@ -13384,6 +13384,7 @@ with pkgs;
   };
   code-cursor-fhs = code-cursor.fhs;
   code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
+  code-cursor-with-extensions = vscode-with-extensions.override { vscode = code-cursor; };
 
   windsurf = callPackage ../by-name/wi/windsurf/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;
