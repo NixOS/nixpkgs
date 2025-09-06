@@ -3,31 +3,28 @@
   lib,
   pkgs,
   ...
-}:
-
-with lib;
-
-let
+}: let
   cfg = config.services.cloudflare-ddns;
 
-  boolToString = b: if b then "true" else "false";
-  formatList = l: concatStringsSep "," l;
+  boolToString = b:
+    if b
+    then "true"
+    else "false";
+  formatList = l: lib.concatStringsSep "," l;
   formatDuration = d: d.String;
-
-in
-{
+in {
   options.services.cloudflare-ddns = {
-    enable = mkEnableOption "Cloudflare Dynamic DNS service";
+    enable = lib.mkEnableOption "Cloudflare Dynamic DNS service";
 
-    package = mkPackageOption {
-      type = types.package;
+    package = lib.mkPackageOption {
+      type = lib.types.package;
       default = pkgs.cloudflare-ddns;
-      defaultText = literalExpression "pkgs.cloudflare-ddns";
+      defaultText = lib.literalExpression "pkgs.cloudflare-ddns";
       description = "The cloudflare-ddns package to use.";
     };
 
-    credentialsFile = mkOption {
-      type = types.path;
+    credentialsFile = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to a file containing the Cloudflare API authentication token.
         The file content should be in the format `CLOUDFLARE_API_TOKEN=YOUR_SECRET_TOKEN`.
@@ -39,9 +36,9 @@ in
       example = "/run/secrets/cloudflare-ddns-token";
     };
 
-    domains = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+    domains = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
       description = ''
         List of domain names (FQDNs) to manage. Wildcards like `*.example.com` are supported.
         These domains will be managed for both IPv4 and IPv6 unless overridden by
@@ -54,39 +51,39 @@ in
       ];
     };
 
-    ip4Domains = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    ip4Domains = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = ''
         Explicit list of domains to manage only for IPv4. If set, overrides `domains` for IPv4.
         Corresponds to the `IP4_DOMAINS` environment variable.
       '';
-      example = [ "ipv4.example.com" ];
+      example = ["ipv4.example.com"];
     };
 
-    ip6Domains = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    ip6Domains = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = ''
         Explicit list of domains to manage only for IPv6. If set, overrides `domains` for IPv6.
         Corresponds to the `IP6_DOMAINS` environment variable.
       '';
-      example = [ "ipv6.example.com" ];
+      example = ["ipv6.example.com"];
     };
 
-    wafLists = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+    wafLists = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
       description = ''
         List of WAF IP Lists to manage, in the format `account-id/list-name`.
         (Experimental feature as of cloudflare-ddns 1.14.0).
       '';
-      example = [ "YOUR_ACCOUNT_ID/allowed_dynamic_ips" ];
+      example = ["YOUR_ACCOUNT_ID/allowed_dynamic_ips"];
     };
 
     provider = {
-      ipv4 = mkOption {
-        type = types.str;
+      ipv4 = lib.mkOption {
+        type = lib.types.str;
         default = "cloudflare.trace";
         description = ''
           IP detection provider for IPv4. Common values: `cloudflare.trace`, `cloudflare.doh`, `local`, `url:URL`, `none`.
@@ -94,8 +91,8 @@ in
           See cloudflare-ddns documentation for all options.
         '';
       };
-      ipv6 = mkOption {
-        type = types.str;
+      ipv6 = lib.mkOption {
+        type = lib.types.str;
         default = "cloudflare.trace";
         description = ''
           IP detection provider for IPv6. Common values: `cloudflare.trace`, `cloudflare.doh`, `local`, `url:URL`, `none`.
@@ -105,8 +102,8 @@ in
       };
     };
 
-    updateCron = mkOption {
-      type = types.str;
+    updateCron = lib.mkOption {
+      type = lib.types.str;
       default = "@every 5m";
       description = ''
         Cron expression for how often to check and update IPs.
@@ -115,14 +112,14 @@ in
       example = "@hourly";
     };
 
-    updateOnStart = mkOption {
-      type = types.bool;
+    updateOnStart = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Whether to perform an update check immediately on service start.";
     };
 
-    deleteOnStop = mkOption {
-      type = types.bool;
+    deleteOnStop = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to delete the managed DNS records and clear WAF lists when the service is stopped gracefully.
@@ -130,8 +127,8 @@ in
       '';
     };
 
-    cacheExpiration = mkOption {
-      type = types.str;
+    cacheExpiration = lib.mkOption {
+      type = lib.types.str;
       default = "6h";
       description = ''
         Duration for which API responses (like Zone ID, Record IDs) are cached.
@@ -139,8 +136,8 @@ in
       '';
     };
 
-    ttl = mkOption {
-      type = types.int;
+    ttl = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = ''
         Time To Live (TTL) for the DNS records in seconds.
@@ -148,8 +145,8 @@ in
       '';
     };
 
-    proxied = mkOption {
-      type = types.str;
+    proxied = lib.mkOption {
+      type = lib.types.str;
       default = "false";
       description = ''
         Whether the managed DNS records should be proxied through Cloudflare ('orange cloud').
@@ -159,46 +156,46 @@ in
       example = "true";
     };
 
-    recordComment = mkOption {
-      type = types.str;
+    recordComment = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = "Comment to add to managed DNS records.";
     };
 
-    wafListDescription = mkOption {
-      type = types.str;
+    wafListDescription = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = "Description for managed WAF lists (used when creating or verifying lists).";
     };
 
-    detectionTimeout = mkOption {
-      type = types.str;
+    detectionTimeout = lib.mkOption {
+      type = lib.types.str;
       default = "5s";
       description = "Timeout for detecting the public IP address.";
     };
 
-    updateTimeout = mkOption {
-      type = types.str;
+    updateTimeout = lib.mkOption {
+      type = lib.types.str;
       default = "30s";
       description = "Timeout for updating records via the Cloudflare API.";
     };
 
-    healthchecks = mkOption {
-      type = types.nullOr types.str;
+    healthchecks = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "URL for Healthchecks.io monitoring endpoint (optional).";
       example = "https://hc-ping.com/your-uuid";
     };
 
-    uptimeKuma = mkOption {
-      type = types.nullOr types.str;
+    uptimeKuma = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "URL for Uptime Kuma push monitor endpoint (optional).";
       example = "https://status.example.com/api/push/tag?status=up&msg=OK&ping=";
     };
 
-    shoutrrr = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    shoutrrr = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = "List of Shoutrrr notification service URLs (optional).";
       example = [
@@ -207,21 +204,20 @@ in
       ];
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "cloudflare-ddns";
       description = "User account under which the service runs.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "cloudflare-ddns";
       description = "Group under which the service runs.";
     };
-
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.ttl == 1 || (cfg.ttl >= 30 && cfg.ttl <= 86400);
@@ -233,7 +229,7 @@ in
       }
       {
         assertion =
-          cfg.domains != [ ] || cfg.ip4Domains != null || cfg.ip6Domains != null || cfg.wafLists != [ ];
+          cfg.domains != [] || cfg.ip4Domains != null || cfg.ip6Domains != null || cfg.wafLists != [];
         message = "services.cloudflare-ddns requires at least one domain (domains, ip4Domains, ip6Domains) or WAF list (wafLists) to be specified";
       }
       {
@@ -248,7 +244,7 @@ in
       group = cfg.group;
       home = "/var/lib/${cfg.user}";
     };
-    users.groups.${cfg.group} = { };
+    users.groups.${cfg.group} = {};
 
     systemd.tmpfiles.rules = [
       "d /var/lib/${cfg.user} 0750 ${cfg.user} ${cfg.group} - -"
@@ -256,9 +252,9 @@ in
 
     systemd.services.cloudflare-ddns = {
       description = "Cloudflare Dynamic DNS Client Service (favonia)";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
+      wants = ["network-online.target"];
 
       serviceConfig = {
         User = cfg.user;
@@ -268,19 +264,16 @@ in
 
         EnvironmentFile = cfg.credentialsFile;
 
-        Environment =
-          let
-            toEnv = name: value: "${name}=\"${toString value}\"";
-            toEnvList = name: value: "${name}=\"${formatList value}\"";
-            toEnvDuration = name: value: "${name}=\"${formatDuration value}\"";
-            toEnvBool = name: value: "${name}=\"${boolToString value}\"";
-            toEnvMaybe =
-              pred: name: value:
-              optionalString pred (toEnv name value);
-            toEnvMaybeList =
-              pred: name: value:
-              optionalString pred (toEnvList name value);
-          in
+        Environment = let
+          toEnv = name: value: "${name}=\"${toString value}\"";
+          toEnvList = name: value: "${name}=\"${formatList value}\"";
+          toEnvDuration = name: value: "${name}=\"${formatDuration value}\"";
+          toEnvBool = name: value: "${name}=\"${boolToString value}\"";
+          toEnvMaybe = pred: name: value:
+            lib.optionalString pred (toEnv name value);
+          toEnvMaybeList = pred: name: value:
+            lib.optionalString pred (toEnvList name value);
+        in
           lib.filter (envVar: envVar != "") [
             (toEnvList "DOMAINS" cfg.domains)
             (toEnvMaybeList (cfg.ip4Domains != null) "IP4_DOMAINS" cfg.ip4Domains)
@@ -289,7 +282,7 @@ in
             (toEnv "IP4_PROVIDER" cfg.provider.ipv4)
             (toEnv "IP6_PROVIDER" cfg.provider.ipv6)
 
-            (toEnvMaybeList (cfg.wafLists != [ ]) "WAF_LISTS" cfg.wafLists)
+            (toEnvMaybeList (cfg.wafLists != []) "WAF_LISTS" cfg.wafLists)
             (toEnvMaybe (cfg.wafListDescription != "") "WAF_LIST_DESCRIPTION" cfg.wafListDescription)
 
             (toEnv "UPDATE_CRON" cfg.updateCron)
@@ -306,10 +299,10 @@ in
 
             (toEnvMaybe (cfg.healthchecks != null) "HEALTHCHECKS" cfg.healthchecks)
             (toEnvMaybe (cfg.uptimeKuma != null) "UPTIMEKUMA" cfg.uptimeKuma)
-            (toEnvMaybeList (cfg.shoutrrr != null) "SHOUTRRR" (concatStringsSep "\n" cfg.shoutrrr))
+            (toEnvMaybeList (cfg.shoutrrr != null) "SHOUTRRR" (lib.concatStringsSep "\n" cfg.shoutrrr))
           ];
 
-        ExecStart = "${cfg.package}/bin/ddns";
+        ExecStart = "${lib.getExe config.package}";
 
         Restart = "on-failure";
         RestartSec = "30s";

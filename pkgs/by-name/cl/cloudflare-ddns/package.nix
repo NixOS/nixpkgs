@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "cloudflare-ddns";
   version = "1.15.1";
@@ -21,15 +20,15 @@ buildGoModule rec {
     "cmd/ddns"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A dynamic DNS (DDNS) client for Cloudflare";
     longDescription = ''
       A feature-rich and robust Cloudflare DDNS updater with a small footprint.
       The program will detect your machine’s public IP addresses and update DNS records using the Cloudflare API.
     '';
     homepage = "https://github.com/favonia/cloudflare-ddns";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shokerplz ];
-    platforms = platforms.unix ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [shokerplz];
+    platforms = lib.platforms.unix ++ lib.platforms.darwin;
   };
 }
