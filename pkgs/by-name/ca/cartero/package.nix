@@ -49,14 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     desktop-file-utils
     libxml2
-    meson
-    ninja
     python313
-    cargo
-    rustc
-    pkg-config
-    blueprint-compiler
-    desktop-file-utils
     gtk4
     shared-mime-info
     glib
