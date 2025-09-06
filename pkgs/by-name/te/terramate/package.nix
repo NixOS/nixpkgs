@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "terramate";
-  version = "0.14.4";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "terramate-io";
     repo = "terramate";
     rev = "v${version}";
-    hash = "sha256-36AZBi4QYmYc+0e6LsWkGmanf13hyCJZU7kusP/zwlQ=";
+    hash = "sha256-SS+N/jwI7im906HJiUKcq3Ac1epHkP7186ihbndsHSw=";
   };
 
-  vendorHash = "sha256-u9eXi7FjMsXm0H0y7Gs/Wu2I8tp4rRLxtjUxrrHJkEU=";
+  vendorHash = "sha256-qM6BeCCf60VJhhHKDoHahqQfXH4VZjP8QdfGcF2egaA=";
 
   # required for version info
   nativeBuildInputs = [ git ];
