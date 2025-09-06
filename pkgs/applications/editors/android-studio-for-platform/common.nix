@@ -10,6 +10,7 @@
   android-tools,
   bash,
   buildFHSEnv,
+  ccache,
   coreutils,
   dpkg,
   e2fsprogs,
@@ -100,6 +101,8 @@ let
             unzip
             zip
             e2fsprogs
+
+            ccache
           ]
         }" \
         --prefix LD_LIBRARY_PATH : "${
