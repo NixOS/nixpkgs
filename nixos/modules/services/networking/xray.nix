@@ -23,6 +23,20 @@ with lib;
 
       package = mkPackageOption pkgs "xray" { };
 
+      settingsExtension = mkOption {
+        type = types.enum [
+          "json"
+          "yaml"
+          "toml"
+        ];
+        default = "json";
+        description = ''
+          Configuration file extension for xray. JSON, YAML and TOML are supported.
+
+          Note: If `settingsFile` is used, its extension must match the configured extension, otherwise xray will fail to parse it.
+        '';
+      };
+
       settingsFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -68,17 +82,10 @@ with lib;
   config =
     let
       cfg = config.services.xray;
-      settingsFile =
-        if cfg.settingsFile != null then
-          cfg.settingsFile
-        else
-          pkgs.writeTextFile {
-            name = "xray.json";
-            text = builtins.toJSON cfg.settings;
-            checkPhase = ''
-              ${cfg.package}/bin/xray -test -config $out
-            '';
-          };
+      extension = cfg.settingsExtension;
+      serializer = (pkgs.formats.${extension} { }).generate "xray.${extension}";
+
+      settingsFile = if cfg.settingsFile != null then cfg.settingsFile else serializer cfg.settings;
 
     in
     mkIf cfg.enable {
@@ -94,11 +101,11 @@ with lib;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         script = ''
-          exec "${cfg.package}/bin/xray" -config "$CREDENTIALS_DIRECTORY/config.json"
+          exec "${cfg.package}/bin/xray" -config "$CREDENTIALS_DIRECTORY/config.${extension}"
         '';
         serviceConfig = {
           DynamicUser = true;
-          LoadCredential = "config.json:${settingsFile}";
+          LoadCredential = "config.${extension}:${settingsFile}";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           NoNewPrivileges = true;
