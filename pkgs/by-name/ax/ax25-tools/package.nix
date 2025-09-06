@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   pname = "ax25-tools";
   version = "0.0.10-rc5";
 
+  strictDeps = true;
+
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ libax25 ];
