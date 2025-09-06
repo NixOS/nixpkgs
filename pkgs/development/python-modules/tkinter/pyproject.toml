@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tkinter"
+version = "@python_version@"
+description = "Tkinter."
+requires-python = ">=@python_version@"
+
+[tool.setuptools]
+packages = ["tkinter"]
+ext-modules = [
+  { name = "_tkinter", sources = ["_tkinter.c"], libraries = ["tcl9.0", "tcl9tk9.0"], include-dirs = ["@python_internal_dir@/"] }
+]
+

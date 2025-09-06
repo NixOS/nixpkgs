@@ -16,7 +16,7 @@ let
     }:
     fetchpatch {
       inherit sha256 name;
-      url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-4/debian/patches/${debname}";
+      url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-7/debian/patches/${debname}";
     };
 
 in
@@ -96,6 +96,31 @@ stdenv.mkDerivation rec {
       name = "CVE-2017-6833.patch";
       debname = "10_Check-for-division-by-zero-in-BlockCodec-runPull.patch";
       sha256 = "1rlislkjawq98bbcf1dgl741zd508wwsg85r37ca7pfdf6wgl6z7";
+    })
+    (fetchDebianPatch {
+      name = "CVE-2018-13440.patch";
+      debname = "11_CVE-2018-13440.patch";
+      sha256 = "sha256-qDfjiBJ4QXgn8588Ra1X0ViH0jBjtFS/+2zEGIUIhuo=";
+    })
+    (fetchDebianPatch {
+      name = "CVE-2018-17095.patch";
+      debname = "12_CVE-2018-17095.patch";
+      sha256 = "sha256-FC89EFZuRLcj5x4wZVqUlitEMTRPSZk+qzQpIoVk9xY=";
+    })
+    (fetchDebianPatch {
+      name = "CVE-2022-24599.patch";
+      debname = "0013-Fix-CVE-2022-24599.patch";
+      sha256 = "sha256-DHJQ4B6cvKfSlXy66ZC5RNaCMDaygj8dWLZZhJnhw1E=";
+    })
+    (fetchDebianPatch {
+      name = "1_CVE-2019-13147.patch";
+      debname = "0014-Partial-fix-of-CVE-2019-13147.patch";
+      sha256 = "sha256-clb/XiIZbmttPr2dT9AZsbQ97W6lwifEwMO4l2ZEh0k=";
+    })
+    (fetchDebianPatch {
+      name = "2_CVE-2019-13147.patch";
+      debname = "0015-Partial-fix-of-CVE-2019-13147.patch";
+      sha256 = "sha256-JOZIw962ae7ynnjJXGO29i8tuU5Dhk67DmB0o5/vSf4=";
     })
   ];
 

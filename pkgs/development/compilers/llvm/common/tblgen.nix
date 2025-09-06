@@ -56,11 +56,30 @@ let
     else
       src;
 
+  # List of tablegen targets.
+  targets = [
+    "clang-tblgen"
+    "llvm-tblgen"
+  ]
+  ++ lib.optionals (lib.versionAtLeast release_version "15") [
+    "clang-tidy-confusable-chars-gen"
+  ]
+  ++ lib.optionals (lib.versionAtLeast release_version "16") [
+    "mlir-tblgen"
+  ]
+  ++
+    lib.optionals ((lib.versionAtLeast release_version "15") && (lib.versionOlder release_version "20"))
+      [
+        "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
+      ];
+
   self = stdenv.mkDerivation (finalAttrs: {
     inherit pname version patches;
 
     src = src';
     sourceRoot = "${finalAttrs.src.name}/llvm";
+
+    __structuredAttrs = true;
 
     postPatch = ''
       (
@@ -100,26 +119,13 @@ let
     ]
     ++ devExtraCmakeFlags;
 
-    # List of tablegen targets.
-    ninjaFlags = [
-      "clang-tblgen"
-      "llvm-tblgen"
-    ]
-    ++ lib.optionals (lib.versionAtLeast release_version "15") [
-      "clang-tidy-confusable-chars-gen"
-    ]
-    ++ lib.optionals (lib.versionAtLeast release_version "16") [
-      "mlir-tblgen"
-    ]
-    ++
-      lib.optionals ((lib.versionAtLeast release_version "15") && (lib.versionOlder release_version "20"))
-        [
-          "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
-        ];
+    ninjaFlags = targets;
+
+    inherit targets;
 
     installPhase = ''
-      mkdir -p $out
-      cp -ar bin $out/bin
+      mkdir -p $out/bin
+      cp "''${targets[@]/#/bin/}" $out/bin
     '';
   });
 in
