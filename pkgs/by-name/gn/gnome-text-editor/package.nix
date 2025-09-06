@@ -12,7 +12,6 @@
   wrapGAppsHook4,
   ninja,
   gnome,
-  cairo,
   icu,
   itstool,
   libadwaita,
@@ -24,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-text-editor";
-  version = "48.3";
+  version = "49.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major finalAttrs.version}/gnome-text-editor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-P56XIjlO200hRcBtaSELPT/KXNK5DWMmQ751CEPVVro=";
+    hash = "sha256-WpKly7oFXBLj2pV/FxIjvmibaoDnglcBSEc582Q0tDE=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cairo
     icu
     glib
     gsettings-desktop-schemas
