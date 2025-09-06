@@ -2,24 +2,17 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
+  callPackage,
   apple-sdk_15,
   findutils,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "lima-additional-guestagents";
-  version = "1.2.1";
 
-  src = fetchFromGitHub {
-    owner = "lima-vm";
-    repo = "lima";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-90fFsS5jidaovE2iqXfe4T2SgZJz6ScOwPPYxCsCk/k=";
-  };
-
-  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
+  # Because agents must use the same version as lima, lima's updateScript should also update the shared src.
+  # nixpkgs-update: no auto update
+  inherit (callPackage ./source.nix { }) version src vendorHash;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
@@ -62,10 +55,6 @@ buildGoModule (finalAttrs: {
 
     runHook postInstallCheck
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://github.com/lima-vm/lima";
