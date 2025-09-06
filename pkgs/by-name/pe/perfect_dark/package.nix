@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL2,
+  sdl2-compat,
   cmake,
   libGL,
   pkg-config,
   python3,
   zlib,
+  unstableGitUpdater,
   romID ? "ntsc-final",
 }:
 let
@@ -27,14 +28,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fgsfdsfgs";
     repo = "perfect_dark";
     rev = "bb4fcffeb5dc382fce4c609897a2e82590d7d709";
-    hash = "sha256-XLmAjwEzz4fPpHuk3IBmhhDfiuudwMTnYgVe6Wcfdsg=";
+    hash = "sha256-naWE+oWgvrd4CSoBm6W4em60baTWn4uSnKbWh8WKPDM=";
+
+    postFetch = ''
+      pushd $out
+      rm tools/gzip
+      rm -r tools/mkrom
+      popd
+    '';
   };
 
   enableParallelBuilding = true;
 
   # Fails to build if not set:
   hardeningDisable = [ "format" ];
-  hardeningEnable = [ "pie" ];
 
   cmakeFlags = [
     (lib.cmakeFeature "ROMID" romID)
@@ -47,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL2
+    sdl2-compat
     libGL
     zlib
   ];
@@ -72,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   preConfigure = ''
-    patchShebangs --build .
+    patchShebangs --build tools/assetmgr
   '';
 
   installPhase = ''
@@ -90,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+  };
 
   meta = {
     description = "Modern cross-platform port of Perfect Dark";
@@ -114,8 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       # perfect_dark, khrplatform.h, port/fast3d
       mit
-      # Vendored source code and binaries of 'gzip'.
-      gpl3Plus
       # Derivative work of "Perfect Dark" © 2000 Rare Ltd.
       unfree
     ];
