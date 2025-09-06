@@ -145,6 +145,11 @@ let
 in
 
 {
+
+  meta = {
+    maintainers = with lib.maintainers; [ armelclo ];
+  };
+
   options = {
     services.xserver.desktopManager.phosh = {
       enable = lib.mkOption {
@@ -222,6 +227,16 @@ in
         XDG_SESSION_DESKTOP = "phosh";
         XDG_SESSION_TYPE = "wayland";
       };
+    };
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-phosh
+        pkgs.xdg-desktop-portal-gnome
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      configPackages = lib.mkDefault [ pkgs.phosh ];
     };
 
     environment.systemPackages = [
