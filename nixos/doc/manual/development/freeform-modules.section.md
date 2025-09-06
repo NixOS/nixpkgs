@@ -29,7 +29,8 @@ Most freeform submodules can also be represented as freeform records.
 The following example is equivalent to the first submodule example:
 
 ```nix
-{ lib, config, ... }: {
+{ lib, config, ... }:
+{
 
   options.settings = lib.mkOption {
     type = lib.types.record {
@@ -44,12 +45,12 @@ The following example is equivalent to the first submodule example:
           # We could also set `optional = true` instead of setting a default:
           # optional = true;
         };
+      };
     };
   };
 }
 ```
 
-::: {#ex-freeform-module .example}
 ### Freeform submodule
 
 The following shows a submodule assigning a freeform type that allows
