@@ -14,14 +14,14 @@
 let
   finalAttrs = {
     pname = "duden";
-    version = "0.19.1";
+    version = "0.19.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "radomirbosak";
       repo = "duden";
       rev = finalAttrs.version;
-      hash = "sha256-c6IItrjFVbsdYg3sDrExcxv7aRcKhd/M5hiZD+wBZ2Y=";
+      hash = "sha256-wjFIlwd4qG6aG9w0VPus6BGqghwIlPC6a8m0eagvIYM=";
     };
 
     nativeBuildInputs = [ poetry-core ];
