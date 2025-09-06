@@ -62,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
         + lib.optionalString (lib.versionAtLeast release_version "14") ''
           cp -r ${monorepoSrc}/cmake "$out"
         ''
+        # Needs "libcxx/utils/merge_archives.py"
+        + lib.optionalString (lib.versions.major release_version == "13") ''
+          cp -r ${monorepoSrc}/libcxx "$out"
+        ''
         + lib.optionalString (lib.versionAtLeast release_version "21") ''
           cp -r ${monorepoSrc}/third-party "$out"
         ''
