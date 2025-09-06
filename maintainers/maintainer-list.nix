@@ -15287,6 +15287,11 @@
     github = "M0NsTeRRR";
     githubId = 37785089;
   };
+  m0ustache3 = {
+    name = "M0ustach3";
+    github = "M0ustach3";
+    githubId = 37956764;
+  };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
     github = "m1cr0man";
@@ -16241,6 +16246,12 @@
     githubId = 5546264;
     name = "Colton J. McCurdy";
     keys = [ { fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94"; } ];
+  };
+  mcjocobe = {
+    email = "josecolomerbel@gmail.com";
+    github = "mcjocobe";
+    githubId = 94081214;
+    name = "Jose Colomer";
   };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";

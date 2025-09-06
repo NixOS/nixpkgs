@@ -3018,11 +3018,7 @@ with pkgs;
     isStereo = true;
   };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
-    python3 = python312;
-  };
   google-cloud-sdk-gce = google-cloud-sdk.override {
-    python3 = python312;
     with-gce = true;
   };
 
@@ -3151,8 +3147,6 @@ with pkgs;
 
   hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
 
-  homesick = callPackage ../tools/misc/homesick { };
-
   host = bind.host;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
@@ -3182,20 +3176,6 @@ with pkgs;
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
 
   icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
-
-  inherit
-    (callPackages ../tools/filesystems/irods rec {
-      stdenv = llvmPackages_13.libcxxStdenv;
-      libcxx = llvmPackages_13.libcxx;
-      boost = boost178.override { inherit stdenv; };
-      fmt = fmt_9.override { inherit stdenv; };
-      nanodbc_llvm = nanodbc.override { inherit stdenv; };
-      avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
-      spdlog_llvm = spdlog.override { inherit stdenv fmt; };
-    })
-    irods
-    irods-icommands
-    ;
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -3371,8 +3351,6 @@ with pkgs;
   lagrange-tui = lagrange.override { enableTUI = true; };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
-
-  mailcatcher = callPackage ../development/web/mailcatcher { };
 
   maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
 
@@ -4030,10 +4008,6 @@ with pkgs;
   };
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
-
-  rtabmap = callPackage ../by-name/rt/rtabmap/package.nix {
-    pcl = pcl.override { vtk = vtkWithQt5; };
-  };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
     jack = libjack2;
@@ -4720,7 +4694,6 @@ with pkgs;
   corretto21 = javaPackages.compiler.corretto21;
 
   inherit (callPackage ../development/compilers/crystal { })
-    crystal_1_11
     crystal_1_14
     crystal_1_15
     crystal_1_16
@@ -7173,9 +7146,7 @@ with pkgs;
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
-  sparse = callPackage ../development/tools/analysis/sparse {
-    llvm = llvm_14;
-  };
+  sparse = callPackage ../development/tools/analysis/sparse { };
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
@@ -10336,12 +10307,9 @@ with pkgs;
     fftw = fftwFloat;
   };
 
-  buildArmTrustedFirmware =
-    callPackage ../misc/arm-trusted-firmware/build-arm-trusted-firmware.nix
-      { };
-
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
+    buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
     armTrustedFirmwareAllwinnerH616
@@ -12102,7 +12070,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_30
     k3s_1_31
     k3s_1_32
     k3s_1_33
@@ -14412,74 +14379,9 @@ with pkgs;
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
 
-  cp2k =
-    # CP2K requires all dependencies from the Grimme ecosystem to be build with
-    # CMake instead of Meson. Unfortunately most other consumers require meson
-    let
-      grimmeCmake = lib.makeScope pkgs.newScope (self: {
-        mctc-lib = pkgs.mctc-lib.override {
-          buildType = "cmake";
-          inherit (self) jonquil toml-f;
-        };
-
-        toml-f = pkgs.toml-f.override {
-          buildType = "cmake";
-          inherit (self) test-drive;
-        };
-
-        dftd4 = pkgs.dftd4.override {
-          buildType = "cmake";
-          inherit (self) mstore mctc-lib multicharge;
-        };
-
-        jonquil = pkgs.jonquil.override {
-          buildType = "cmake";
-          inherit (self) toml-f test-drive;
-        };
-
-        mstore = pkgs.mstore.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib;
-        };
-
-        multicharge = pkgs.multicharge.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib mstore;
-        };
-
-        test-drive = pkgs.test-drive.override { buildType = "cmake"; };
-
-        simple-dftd3 = pkgs.simple-dftd3.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib mstore toml-f;
-        };
-
-        tblite = pkgs.tblite.override {
-          buildType = "cmake";
-          inherit (self)
-            mctc-lib
-            mstore
-            toml-f
-            multicharge
-            dftd4
-            simple-dftd3
-            ;
-        };
-
-        sirius = pkgs.sirius.override {
-          inherit (self)
-            mctc-lib
-            toml-f
-            multicharge
-            dftd4
-            simple-dftd3
-            ;
-        };
-      });
-    in
-    grimmeCmake.callPackage ../applications/science/chemistry/cp2k/default.nix {
-      libxc = pkgs.libxc_7;
-    };
+  cp2k = callPackage ../by-name/cp/cp2k/package.nix {
+    libxc = pkgs.libxc_7;
+  };
 
   ### SCIENCE/GEOMETRY
 
@@ -15482,7 +15384,7 @@ with pkgs;
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
-  nitrokey-app2 = qt6Packages.callPackage ../tools/security/nitrokey-app2 { };
+  nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
 
   hy = with python3Packages; toPythonApplication hy;
 

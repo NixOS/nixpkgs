@@ -52,7 +52,10 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
-  pythonRelaxDeps = [ "mpris_server" ];
+  pythonRelaxDeps = [
+    "mpris_server"
+    "ytmusicapi"
+  ];
 
   postInstall = ''
     make install prefix=$out

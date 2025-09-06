@@ -47,7 +47,6 @@
   libgeotiff,
   laszip_2,
   gdal,
-  gdcm,
   pdal,
   alembic,
   imath,
@@ -138,19 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = sourceSha256;
   };
 
-  postPatch =
-    let
-      vtk-dicom = fetchFromGitHub {
-        owner = "dgobbi";
-        repo = "vtk-dicom";
-        tag = "v0.8.17";
-        hash = "sha256-1lI2qsV4gymWqjeouEHZ5FRlmlh9vimH7J5rzA+eOds=";
-      };
-    in
-    ''
-      cp --no-preserve=mode -r ${vtk-dicom} ./Remote/vtkDICOM
-    '';
-
   nativeBuildInputs = [
     cmake
     pkg-config # required for finding MySQl
@@ -168,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     libgeotiff
     laszip_2
     gdal
-    (gdcm.override { enableVTK = false; })
     pdal
     alembic
     imath
@@ -305,9 +290,6 @@ stdenv.mkDerivation (finalAttrs: {
     # mpiSupport
     (lib.cmakeBool "VTK_USE_MPI" mpiSupport)
     (vtkBool "VTK_GROUP_ENABLE_MPI" mpiSupport)
-
-    # Remote module options
-    (lib.cmakeBool "USE_GDCM" true) # for vtkDicom
   ];
 
   pythonImportsCheck = [ "vtk" ];

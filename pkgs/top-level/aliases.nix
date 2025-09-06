@@ -652,6 +652,7 @@ mapAliases {
   crystal_1_7 = throw "'crystal_1_7' has been removed as it is obsolete and no longer used in the tree. Consider using 'crystal' instead"; # Added 2025-02-13
   crystal_1_8 = throw "'crystal_1_8' has been removed as it is obsolete and no longer used in the tree. Consider using 'crystal' instead"; # Added 2025-02-13
   crystal_1_9 = throw "'crystal_1_9' has been removed as it is obsolete and no longer used in the tree. Consider using 'crystal' instead"; # Added 2025-02-13
+  crystal_1_11 = throw "'crystal_1_11' has been removed as it is obsolete and no longer used in the tree. Consider using 'crystal' instead"; # Added 2025-09-04
   crystal_1_12 = throw "'crystal_1_12' has been removed as it is obsolete and no longer used in the tree. Consider using 'crystal' instead"; # Added 2025-02-19
   clash-geoip = throw "'clash-geoip' has been removed. Consider using 'dbip-country-lite' instead."; # added 2024-10-19
   clash-verge = throw "'clash-verge' has been removed, as it was broken and unmaintained. Consider using 'clash-verge-rev' or 'clash-nyanpasu' instead"; # Added 2024-09-17
@@ -1225,6 +1226,7 @@ mapAliases {
   k3s_1_27 = throw "'k3s_1_27' has been removed from nixpkgs as it has reached end of life on 2024-06-28"; # Added 2024-06-01
   k3s_1_28 = throw "'k3s_1_28' has been removed from nixpkgs as it has reached end of life"; # Added 2024-12-15
   k3s_1_29 = throw "'k3s_1_29' has been removed from nixpkgs as it has reached end of life"; # Added 2025-05-05
+  k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   # k3d was a 3d editing software k-3d - "k3d has been removed because it was broken and has seen no release since 2016" Added 2022-01-04
   # now kube3d/k3d will take its place
   kube3d = k3d; # Added 2022-0705
@@ -2479,6 +2481,7 @@ mapAliases {
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
 
   ### W ###
+  w_scan = throw "'w_scan' has been removed due to lack of upstream maintenance"; # Added 2025-08-29
   wakatime = wakatime-cli; # 2024-05-30
   wal_e = throw "wal_e was removed as it is unmaintained upstream and depends on the removed boto package; upstream recommends using wal-g or pgbackrest"; # Added 2024-09-22
   wapp = tclPackages.wapp; # Added 2024-10-02

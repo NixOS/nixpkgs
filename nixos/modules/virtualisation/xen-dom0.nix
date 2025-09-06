@@ -9,6 +9,7 @@
 
 let
   inherit (builtins) readFile;
+  inherit (lib.meta) hiPrio;
   inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule mkIf;
   inherit (lib.options)
     mkOption
@@ -797,7 +798,7 @@ in
     environment = {
       systemPackages = [
         cfg.package
-        cfg.qemu.package
+        (hiPrio cfg.qemu.package)
       ];
       etc =
         # Set up Xen Domain 0 configuration files.
