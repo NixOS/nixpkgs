@@ -4,6 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   nixosTests,
+  baseUrl ? "/",
 }:
 
 buildNpmPackage rec {
@@ -25,12 +26,22 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-WDquc35cwyTyVM8Il5aVYWbJqSKhR8wsMNNFgexFKYg=";
 
+  npmBuildFlags =
+    [ ]
+    ++ lib.optionals (baseUrl != "/") [
+      "--"
+      "--base"
+      "${lib.strings.removeSuffix "/" baseUrl}/"
+    ];
+
   installPhase = ''
-    mkdir -p $out/share/fluidd
-    cp -r dist $out/share/fluidd/htdocs
+    mkdir -p $(dirname $out/share/fluidd/htdocs${baseUrl})
+    cp -r ./dist $out/share/fluidd/htdocs${baseUrl}
   '';
 
-  passthru.tests = { inherit (nixosTests) fluidd; };
+  passthru.tests = {
+    inherit (nixosTests) fluidd;
+  };
 
   meta = with lib; {
     description = "Klipper web interface";
