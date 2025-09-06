@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adwaita-fonts";
-  version = "48.2";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-fonts/${lib.versions.major finalAttrs.version}/adwaita-fonts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FW9+kvL4LlJ/xzwwnbsjfApKXDqVvF7pSl77aUfFU+A=";
+    hash = "sha256-MVfGIOtbcrJasVbRlKpOsiP5hw1Uf+g/298G0+e+yzc=";
   };
 
   nativeBuildInputs = [
