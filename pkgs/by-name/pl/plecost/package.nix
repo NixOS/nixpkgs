@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "plecost";
-  version = "1.1.4";
+  version = "latest";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     repo = "plecost";
     # Release is untagged
     rev = "aa40e504bee95cf731f0cc9f228bcf5fdfbe6194";
-    sha256 = "K8ESI2EOqH9zBDfSKgVcTKjCMdRhBiwltIbXDt1vF+M=";
+    sha256 = "sha256-K8ESI2EOqH9zBDfSKgVcTKjCMdRhBiwltIbXDt1vF+M=";
   };
 
   patches = [
