@@ -75,9 +75,6 @@ in
 
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
-  fourmolu = doDistribute self.fourmolu_0_16_0_0;
-  ormolu = doDistribute self.ormolu_0_7_7_0;
-  stylish-haskell = doDistribute self.stylish-haskell_0_15_0_1;
 
   # 2025-08-10: Tests fail, but fix is not released yet https://github.com/clash-lang/ghc-typelits-natnormalise/issues/89
   ghc-typelits-natnormalise = doDistribute (doJailbreak self.ghc-typelits-natnormalise_0_7_12);
@@ -90,7 +87,6 @@ in
   haddock-library =
     assert super.haddock-library.version == "1.11.0";
     doJailbreak super.haddock-library;
-  large-generics = doJailbreak super.large-generics; # base <4.20
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
 
   #
