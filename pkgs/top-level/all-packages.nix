@@ -7126,10 +7126,7 @@ with pkgs;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
-  muonStandalone = muon.override {
-    embedSamurai = true;
-    buildDocs = false;
-  };
+  muonStandalone = muon.override { embedSamurai = true; };
 
   seer = libsForQt5.callPackage ../development/tools/misc/seer { };
 
