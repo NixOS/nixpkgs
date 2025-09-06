@@ -6,7 +6,7 @@
   boost,
   python3,
   eigen,
-  python3Packages,
+  fetchPypi,
   icestorm,
   trellis,
   llvmPackages,
@@ -38,6 +38,23 @@ let
     rev = "06d3b424dd0e52d678087c891c022544238fb9e3";
     hash = "sha256-nmyFFUO+/J2lb+lPATEjdYq0d21P1fN3N94JXR8brZ0=";
   };
+
+  python = python3.override {
+    self = python3;
+    packageOverrides = _: super: {
+      # override neccessary until next release comes out which supports 0.21
+      # https://github.com/YosysHQ/nextpnr/issues/1546
+      apycula = super.apycula.overridePythonAttrs rec {
+        version = "0.18";
+
+        src = fetchPypi {
+          inherit version;
+          pname = "Apycula";
+          hash = "sha256-nUaXnx4xFNH5wKZRaFXt0uLAgLm5/dTSKhiZQoSL8pg=";
+        };
+      };
+    };
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -53,13 +70,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    python3
+    python
   ]
   ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs = [
     boostPython
     eigen
-    python3Packages.apycula
+    python.pkgs.apycula
   ]
   ++ (lib.optional enableGui qtbase)
   ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
@@ -78,7 +95,7 @@ stdenv.mkDerivation rec {
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
-      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
+      "-DGOWIN_BBA_EXECUTABLE=${python.pkgs.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
       "-DHIMBAECHEL_UARCH=all"
       "-DHIMBAECHEL_GOWIN_DEVICES=all"
