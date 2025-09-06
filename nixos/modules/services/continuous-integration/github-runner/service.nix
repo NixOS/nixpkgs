@@ -41,10 +41,9 @@
         currentConfigTokenFilename = ".current-token";
 
         workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
-        # Support old github-runner versions which don't have the `nodeRuntimes` arg yet.
-        package = cfg.package.override (
-          old: lib.optionalAttrs (lib.hasAttr "nodeRuntimes" old) { inherit (cfg) nodeRuntimes; }
-        );
+        package = cfg.package.override ({
+          inherit (cfg) nodeRuntimes;
+        });
       in
       lib.nameValuePair svcName {
         description = "GitHub Actions runner";
