@@ -12,13 +12,12 @@
   findutils,
   gawk,
   gnused,
+  rofi,
   # wayland-only deps
-  rofi-wayland,
   pass-wayland,
   wl-clipboard,
   wtype,
   # x11-only deps
-  rofi,
   pass,
   xclip,
   xdotool,
@@ -63,16 +62,15 @@ stdenv.mkDerivation {
       gnused
       libnotify
       pwgen
+      rofi
       util-linux
     ]
     ++ lib.optionals (backend == "x11") [
-      rofi
       (pass.withExtensions (ext: [ ext.pass-otp ]))
       xclip
       xdotool
     ]
     ++ lib.optionals (backend == "wayland") [
-      rofi-wayland
       (pass-wayland.withExtensions (ext: [ ext.pass-otp ]))
       wl-clipboard
       wtype
