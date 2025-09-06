@@ -178,6 +178,10 @@ in
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
           Restart = "on-failure";
+
+          CacheDirectory = "calibre-web";
+          CacheDirectoryMode = "0750";
+          environment.CACHE_DIR = "/var/cache/calibre-web";
         }
         // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
           StateDirectory = cfg.dataDir;
