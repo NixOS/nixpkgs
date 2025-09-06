@@ -932,6 +932,7 @@ mapAliases {
   francis = kdePackages.francis; # added 2024-07-13
   freecad-qt6 = freecad; # added 2025-06-14
   freecad-wayland = freecad; # added 2025-06-14
+  freenet = lib.warnOnInstantiate "freenet has been renamed to hyphanet" hyphanet; # Added 2025-09-02
   freerdp3 = freerdp; # added 2025-03-25
   freerdpUnstable = freerdp; # added 2025-03-25
   frostwire = throw "frostwire was removed, as it was broken due to reproducibility issues, use `frostwire-bin` package instead."; # added 2024-05-17
