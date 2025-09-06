@@ -3067,6 +3067,14 @@ with pkgs;
     xenSupport = true;
   };
 
+  grub2_xen_pvh = grub2.override {
+    xenPvhSupport = true;
+  };
+
+  grub2_pvgrub_image = grub2_pvhgrub_image.override {
+    grubPlatform = "xen";
+  };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
@@ -5624,10 +5632,6 @@ with pkgs;
     );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
-  cargo-flamegraph = callPackage ../by-name/ca/cargo-flamegraph/package.nix {
-    inherit (linuxPackages) perf;
-  };
-
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
@@ -6400,8 +6404,17 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
-  ansible = ansible_2_18;
-  ansible_2_18 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = ansible_2_19;
+  ansible_2_19 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_18 = python3Packages.toPythonApplication (
+    python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+      version = "2.18.8";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-sHZiFalqR845kz0n4emWyivrVM8bOQfHQtNckTsfeM0=";
+      };
+    })
+  );
   ansible_2_17 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
       version = "2.17.8";
@@ -6515,7 +6528,7 @@ with pkgs;
 
   bazel = bazel_7;
 
-  bazel_7 = callPackage ../development/tools/build-managers/bazel/bazel_7 {
+  bazel_7 = callPackage ../by-name/ba/bazel_7/package.nix {
     inherit (darwin) sigtool;
     buildJdk = jdk21_headless;
     runJdk = jdk21_headless;
@@ -7059,7 +7072,6 @@ with pkgs;
   pycritty = with python3Packages; toPythonApplication pycritty;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
-    inherit (linuxPackages) perf;
     llvmPackages = llvmPackages_21;
     stdenv = llvmPackages_21.stdenv;
   };
@@ -14707,8 +14719,6 @@ with pkgs;
 
   ### SCIENCE / ELECTRONICS
 
-  appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
-
   simulide_0_4_15 = callPackage ../by-name/si/simulide/package.nix { versionNum = "0.4.15"; };
   simulide_1_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
   simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
@@ -14766,9 +14776,7 @@ with pkgs;
     withNgshared = false;
   };
 
-  openems = callPackage ../applications/science/electronics/openems {
-    qcsxcad = libsForQt5.qcsxcad;
-  };
+  openems = callPackage ../applications/science/electronics/openems { };
 
   xyce-parallel = callPackage ../by-name/xy/xyce/package.nix {
     withMPI = true;

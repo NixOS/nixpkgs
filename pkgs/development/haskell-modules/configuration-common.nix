@@ -1948,16 +1948,6 @@ with haskellLib;
   # https://github.com/biocad/servant-openapi3/issues/30
   servant-openapi3 = dontCheck super.servant-openapi3;
 
-  # Point hspec 2.7.10 to correct dependencies
-  hspec_2_7_10 = super.hspec_2_7_10.override {
-    hspec-discover = self.hspec-discover_2_7_10;
-    hspec-core = self.hspec-core_2_7_10;
-  };
-  hspec-discover_2_7_10 = super.hspec-discover_2_7_10.override {
-    hspec-meta = self.hspec-meta_2_7_8;
-  };
-  hspec-core_2_7_10 = doJailbreak (dontCheck super.hspec-core_2_7_10);
-
   # Disable test cases that were broken by insignificant changes in icu 76
   # https://github.com/haskell/text-icu/issues/108
   text-icu = overrideCabal (drv: {
