@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
         patches = (if prev ? patches then prev.patches else [ ]) ++ [
           # Otherwise the PATH will be cleared and bwrap could not be found
           ./libglycin-no-clearenv.patch
+          # weird known issue with unexpected versions of bubblewrap
+          # https://gitlab.gnome.org/GNOME/glycin/-/issues/88
+          ./libglycin-no-seccomp.patch
+          # Instead of FHS paths, bind NixOS ones
+          ./libglycin-bind-correct-paths.patch
         ];
       }
     ))
