@@ -651,7 +651,7 @@ Write a Bash script to a "bin" subdirectory of a directory in the Nix store.
 : The contents of the file.
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 This function is a combination of [](#trivial-builder-writeShellScript) and [](#trivial-builder-writeScriptBin).
 

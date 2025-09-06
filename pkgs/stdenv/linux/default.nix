@@ -23,7 +23,7 @@
 # Stages are described below along with their definitions.
 #
 # Debugging stdenv dependency graph:
-# An useful tool to explore dependencies across stages is to use
+# A useful tool to explore dependencies across stages is to use
 # '__bootPackages' attribute of 'stdenv. Examples of last 3 stages:
 # - stdenv
 # - stdenv.__bootPackages.stdenv
