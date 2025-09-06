@@ -17,15 +17,15 @@
   libnotify,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toxic";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "toxic";
-    rev = "v${version}";
-    hash = "sha256-qwMkqPTONtG+LnH6a/Debp+n39dJpbUMoy1nIukYjKo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HNZKQPNwKLvtT/0EJlDaJnGI04gpJqXHKjd/85H3zH8=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     libconfig
   ];
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     description = "Reference CLI for Tox";
     mainProgram = "toxic";
     homepage = "https://github.com/TokTok/toxic";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
   };
-}
+})
