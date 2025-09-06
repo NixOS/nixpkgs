@@ -10772,6 +10772,7 @@ with pkgs;
     ubootTools
     ubootA20OlinuxinoLime
     ubootA20OlinuxinoLime2EMMC
+    ubootAppleM1
     ubootBananaPi
     ubootBananaPim2Zero
     ubootBananaPim3
