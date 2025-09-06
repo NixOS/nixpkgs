@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     qmake
+  ];
+
+  buildInputs = [
+    python3
     qtdeclarative
     qtsvg
     qttools
@@ -47,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!qt6Support) [
     qtxmlpatterns
   ];
-
-  buildInputs = [ python3 ];
 
   env.QTDIR = "${qtbase}"; # Used to find qtcoreversion.h
 
