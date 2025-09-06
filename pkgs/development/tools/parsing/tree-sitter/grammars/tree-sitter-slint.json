@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/slint-ui/tree-sitter-slint",
+  "rev": "96bc969d20ff347030519184ea2467f4046a524d",
+  "date": "2025-07-13T19:36:58Z",
+  "path": "/nix/store/vns80yp0k4hpjrdxyasbijnj1q2v1rlf-tree-sitter-slint",
+  "sha256": "0q55q7rjf53jvhdxxr4qbnxwi5j1vxbda6g9pw18swn11nw72dn9",
+  "hash": "sha256-yTZxuA3Bco0Cv+kZ1VbfQZbIu12Y5N4b3HIUJ/PBpWA=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}
