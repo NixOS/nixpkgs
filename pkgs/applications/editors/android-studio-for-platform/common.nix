@@ -125,6 +125,8 @@ let
 
             # For Soong sync
             e2fsprogs
+
+            ccache
           ]
         }"
     '';
@@ -154,6 +156,7 @@ let
       zlib
       ncurses5
       ncurses5.dev
+      ccache
     ];
     profile = ''
       export ALLOW_NINJA_ENV=true
