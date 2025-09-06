@@ -1602,6 +1602,7 @@ mapAliases {
   mihomo-party = throw "'mihomo-party' has been removed due to upstream license violation"; # Added 2025-08-20
   mikutter = throw "'mikutter' has been removed because the package was broken and had no maintainers"; # Added 2024-10-01
   mime-types = mailcap; # Added 2022-01-21
+  minecraft = throw "'minecraft' has been removed because the package was broken. Consider using 'prismlauncher' instead"; # Added 2025-09-06
   minetest = luanti; # Added 2024-11-11
   minetestclient = luanti-client; # Added 2024-11-11
   minetestserver = luanti-server; # Added 2024-11-11

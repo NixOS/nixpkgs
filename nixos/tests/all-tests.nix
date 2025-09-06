@@ -913,7 +913,6 @@ in
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
   mindustry = runTest ./mindustry.nix;
-  minecraft = runTest ./minecraft.nix;
   minecraft-server = runTest ./minecraft-server.nix;
   minidlna = runTest ./minidlna.nix;
   miniflux = runTest ./miniflux.nix;
