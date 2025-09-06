@@ -1902,6 +1902,7 @@ mapAliases {
   phlare = throw "'phlare' has been removed as the upstream project was archived."; # Added 2025-03-27
   picom-next = picom; # Added 2024-02-13
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
+  pidginPackages.purple-matrix = purple-matrix;
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
@@ -2025,6 +2026,7 @@ mapAliases {
   psstop = throw "'psstop' has been removed because the upstream repo has been archived"; # Added 2025-05-10
   ptask = throw "'ptask' has been removed because its upstream is unavailable"; # Added 2025-05-10
   purple-signald = throw "'purple-signald' has been removed due to lack of upstream maintenance"; # Added 2025-05-17
+  purple-matrix = throw "'purple-matrix' has been unmaintained since April 2022, so it was dropped."; # Added 2025-09-01
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxlib = throw "pxlib has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
   pxview = throw "pxview has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
@@ -2669,7 +2671,6 @@ mapAliases {
     purple-googlechat
     purple-hangouts
     purple-lurch
-    purple-matrix
     purple-mm-sms
     purple-plugin-pack
     purple-slack

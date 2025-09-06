@@ -52,8 +52,6 @@ lib.makeScope newScope (
 
     purple-lurch = callPackage ./purple-lurch { };
 
-    purple-matrix = callPackage ./purple-matrix { };
-
     purple-mm-sms = callPackage ./purple-mm-sms { };
 
     purple-plugin-pack = callPackage ./purple-plugin-pack { };
