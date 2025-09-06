@@ -7,6 +7,9 @@
   jdk,
   makeWrapper,
   stripJavaArchivesHook,
+  # lisp-modules related args
+  wrapLisp,
+  packageOverrides ? (self: super: { }),
 }:
 
 let
@@ -54,7 +57,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    inherit
+      (wrapLisp {
+        inherit packageOverrides;
+        pkg = finalAttrs.finalPackage;
+        faslExt = "abcl";
+      })
+      pkgs
+      withPackages
+      buildASDFSystem
+      withOverrides
+      ;
+  };
 
   meta = {
     description = "JVM-based Common Lisp implementation";

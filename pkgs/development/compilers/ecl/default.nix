@@ -17,17 +17,20 @@
   threadSupport ? true,
   useBoehmgc ? false,
   boehmgc,
+  # lisp-modules related args
+  wrapLisp,
+  packageOverrides ? (self: super: { }),
 }:
 
 let
   cc = if stdenv.cc.isClang then clang else gcc;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecl";
   version = "24.5.10";
 
   src = fetchurl {
-    url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
+    url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${finalAttrs.version}.tgz";
     hash = "sha256-5Opluxhh4OSVOGv6i8ZzvQFOltPPnZHpA4+RQ1y+Yis=";
   };
 
@@ -88,6 +91,20 @@ stdenv.mkDerivation rec {
     }"
   '';
 
+  passthru = {
+    inherit
+      (wrapLisp {
+        inherit packageOverrides;
+        pkg = finalAttrs.finalPackage;
+        faslExt = "fas";
+      })
+      pkgs
+      withPackages
+      buildASDFSystem
+      withOverrides
+      ;
+  };
+
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
@@ -95,6 +112,6 @@ stdenv.mkDerivation rec {
     mainProgram = "ecl";
     teams = [ lib.teams.lisp ];
     platforms = platforms.unix;
-    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
+    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${finalAttrs.version}/CHANGELOG";
   };
-}
+})
