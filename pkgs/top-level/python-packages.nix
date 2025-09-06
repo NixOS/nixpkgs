@@ -10319,6 +10319,8 @@ self: super: with self; {
 
   neo4j = callPackage ../development/python-modules/neo4j { };
 
+  neohubapi = callPackage ../development/python-modules/neohubapi { };
+
   neoteroi-mkdocs = callPackage ../development/python-modules/neoteroi-mkdocs { };
 
   nessclient = callPackage ../development/python-modules/nessclient { };
