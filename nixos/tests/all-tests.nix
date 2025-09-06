@@ -359,6 +359,7 @@ in
   coder = runTest ./coder.nix;
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
+  concourse = runTest ./concourse.nix;
   connman = runTest ./connman.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
