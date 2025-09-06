@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   rustPlatform,
+  arro3-core,
   pyarrow,
   pyarrow-hotfix,
   openssl,
@@ -15,29 +16,29 @@
   pytest-cov-stub,
   pytest-mock,
   pandas,
+  deprecated,
   azure-storage-blob,
 }:
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.25.5";
+  version = "1.1.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fz5Lg/z/EPJkdK4RcWHD8r3V9EwwwgRjwktri1IOdlY=";
+    hash = "sha256-s/iWYoh2zARl3M+0DPdur5d8a1URl+jinaMPBFeruEE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-6SGVKJu01MzZxJv29PZKea+Z2YwAnvzbdDlnA4R6Az0=";
+    hash = "sha256-JYstNjd/KC9xp2h72vkQfin/LXNTXeb0hLpGUiGgRlE=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
 
   dependencies = [
-    pyarrow
-    pyarrow-hotfix
+    arro3-core
   ];
 
   buildInputs = [
@@ -61,10 +62,14 @@ buildPythonPackage rec {
     pytestCheckHook
     pandas
     polars
+    deprecated
+    arro3-core
     pytest-benchmark
     pytest-cov-stub
     pytest-mock
     azure-storage-blob
+    pyarrow
+    pyarrow-hotfix
   ];
 
   preCheck = ''
@@ -75,14 +80,6 @@ buildPythonPackage rec {
     # In tests we want to use deltalake that we have built
     rm -rf deltalake
   '';
-
-  pytestFlags = [
-    "--benchmark-disable"
-  ];
-
-  disabledTestMarks = [
-    "integration"
-  ];
 
   meta = with lib; {
     description = "Native Rust library for Delta Lake, with bindings into Python";
