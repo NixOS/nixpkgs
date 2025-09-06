@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-minify-plugin";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "mkdocs-minify-plugin";
     tag = version;
-    hash = "sha256-LDCAWKVbFsa6Y/tmY2Zne4nOtxe4KvNplZuWxg4e4L8=";
+    hash = "sha256-Cp8eSEW7Yx7l1TcaS4ctOBLGYpAzapm2tkSbmzyb7rA=";
   };
 
   propagatedBuildInputs = [
