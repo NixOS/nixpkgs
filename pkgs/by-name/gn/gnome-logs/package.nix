@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "45.0";
+  version = "49.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/gnome-logs-${version}.tar.xz";
-    hash = "sha256-sooG6lyYvRfyhztQfwhbDKDemBATZhH08u6wmGFOzlI=";
+    hash = "sha256-FgqCL/N2Wgl6xFsbRSyGZajMJFQF1CH5/xZMk2q3hV4=";
   };
 
   nativeBuildInputs = [
