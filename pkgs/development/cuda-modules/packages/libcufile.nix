@@ -6,7 +6,7 @@
   rdma-core,
 }:
 buildRedist {
-  redistname = "cuda";
+  redistName = "cuda";
   pname = "libcufile";
 
   outputs = [

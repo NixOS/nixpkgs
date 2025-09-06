@@ -210,7 +210,7 @@ extendMkDerivation {
       __structuredAttrs = true;
       strictDeps = true;
 
-      version = lib.defaultTo "0-unsupported" finalAttrs.passthru.release.version;
+      version = finalAttrs.passthru.release.version or "0-unsupported";
 
       # Name should be prefixed by cudaNamePrefix to create more descriptive path names.
       name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
@@ -346,7 +346,7 @@ extendMkDerivation {
 
         supportedReleases =
           passthru.supportedReleases
-            or (getSupportedReleases (lib.defaultTo [ ] finalAttrs.passthru.release));
+            or (getSupportedReleases (lib.defaultTo { } finalAttrs.passthru.release));
 
         supportedNixSystems =
           passthru.supportedNixSystems or (pipe finalAttrs.passthru.supportedReleases [
