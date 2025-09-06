@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.48.0.0";
+  version = "3.50.4.0";
   pyproject = true;
 
   # https://github.com/rogerbinns/apsw/issues/548
   src = fetchurl {
     url = "https://github.com/rogerbinns/apsw/releases/download/${version}/apsw-${version}.tar.gz";
-    hash = "sha256-iwvUW6vOQu2EiUuYWVaz5D3ePSLrj81fmLxoGRaTzRk=";
+    hash = "sha256-/yn+LmgOYGcXYOWViteiADdcAzx6XdZo2Pkl+CqkA5M=";
   };
 
   build-system = [ setuptools ];
