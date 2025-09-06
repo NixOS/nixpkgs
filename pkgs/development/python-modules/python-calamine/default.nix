@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "python-calamine";
-  version = "0.4.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimastbk";
     repo = "python-calamine";
     tag = "v${version}";
-    hash = "sha256-qbme5P/oo7djoKbGFd+mVz6p4sHl1zejQI9wOarHzMA=";
+    hash = "sha256-Q0MGCnQDgY1gONLptRMUuGyq7rwsb9I/gv2tugX9HhM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-8X6TDCxeDLHObJ+q/bEYTonHe0bgXMnBrIz3rKalfyk=";
+    hash = "sha256-1b4sr+bObxNEHr//EUOcoKVKWcf7L4kWn4y1qY1pZOc=";
   };
 
   buildInputs = [ libiconv ];
