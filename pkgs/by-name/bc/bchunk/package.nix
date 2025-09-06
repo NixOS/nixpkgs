@@ -1,16 +1,18 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bchunk";
   version = "1.2.2";
 
-  src = fetchurl {
-    url = "http://he.fi/bchunk/${pname}-${version}.tar.gz";
-    sha256 = "12dxx98kbpc5z4dgni25280088bhlsb677rp832r82zzc1drpng7";
+  src = fetchFromGitHub {
+    owner = "hessu";
+    repo = "bchunk";
+    tag = "release/${finalAttrs.version}";
+    hash = "sha256-wFhBRLRwyC7FrGzadbssqLI9/UwfxBmFfOetaFJgsCo=";
   };
 
   makeFlags = lib.optionals stdenv.cc.isClang [
@@ -30,4 +32,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     mainProgram = "bchunk";
   };
-}
+})
