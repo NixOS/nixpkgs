@@ -15,7 +15,7 @@ let
       isLibrary = false;
       isExecutable = true;
       executableHaskellDepends = [ base ];
-      license = "unknown";
+      license = pkgs.lib.licenses.free;
     };
 
   drv = haskellPackages.callPackage pkgDef { };

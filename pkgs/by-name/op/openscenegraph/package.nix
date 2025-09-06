@@ -145,6 +145,9 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = with platforms; linux ++ darwin;
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+    license = with lib.licenses; [
+      lgpl21Only
+      wxWindowsException31
+    ];
   };
 }
