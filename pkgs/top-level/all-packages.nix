@@ -9321,6 +9321,10 @@ with pkgs;
     go = buildPackages.go_1_25;
   };
 
+  buildGccGoModule = callPackage ../build-support/go/module.nix {
+    go = buildPackages.gccgo;
+  };
+
   ### DEVELOPMENT / HARE
 
   hareHook = callPackage ../by-name/ha/hare/hook.nix { };
