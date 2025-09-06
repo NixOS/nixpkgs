@@ -17910,6 +17910,8 @@ self: super: with self; {
 
   tapsaff = callPackage ../development/python-modules/tapsaff { };
 
+  targ = callPackage ../development/python-modules/targ { };
+
   tasklib = callPackage ../development/python-modules/tasklib { };
 
   taskw = callPackage ../development/python-modules/taskw { };
