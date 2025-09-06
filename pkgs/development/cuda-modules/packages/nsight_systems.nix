@@ -38,10 +38,7 @@ buildRedist {
 
   allowFHSReferences = true;
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs = [ "out" ];
 
   # An ad hoc replacement for
   # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11

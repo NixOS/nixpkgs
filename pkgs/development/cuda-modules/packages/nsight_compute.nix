@@ -30,10 +30,7 @@ buildRedist {
   # messages like
   #   skipping [$out]/host/linux-desktop-glibc_2_11_3-x64/libQt6Core.so.6 because its architecture (x64) differs from
   #   target (AArch64)
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs = [ "out" ];
 
   allowFHSReferences = true;
 
