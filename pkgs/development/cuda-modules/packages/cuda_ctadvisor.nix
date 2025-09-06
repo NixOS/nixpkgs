@@ -1,5 +1,5 @@
 { buildRedist }:
-{
+buildRedist {
   redistName = "cuda";
   pname = "cuda_ctadvisor";
 
