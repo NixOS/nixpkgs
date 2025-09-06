@@ -117,6 +117,7 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/cucumber-sp/yandex-music-linux/releases/tag/v${version}";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
+    broken = true; # Repository for yandex-music-linux (https://github.com/cucumber-sp/yandex-music-linux/) keeps moving tags and breaking hashes.
     maintainers = with lib.maintainers; [ shved ];
   };
 }
