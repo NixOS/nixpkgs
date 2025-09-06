@@ -1,25 +1,24 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
+  lib,
   playwright,
-  setuptools,
+  poetry-core,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "playwright-stealth";
-  version = "1.0.6-unstable-2023-09-11";
+  version = "2.0.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "AtuboDad";
-    repo = "playwright_stealth";
-    # https://github.com/AtuboDad/playwright_stealth/issues/25
-    rev = "43f7433057906945b1648179304d7dbd8eb10874";
-    hash = "sha256-ZWmuVwjEgrPmfxjvws3TdocW6tyNH++fyRfKQ0oJ6bo=";
+  # Changes haven't been pushed to Github or Gitlab; pypi is the only source
+  src = fetchPypi {
+    inherit version;
+    pname = "playwright_stealth";
+    hash = "sha256-T0TUFtQiZomJWk0c+0Do0TchbAyXEOqPhLri2/EYb8U=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [ playwright ];
 
