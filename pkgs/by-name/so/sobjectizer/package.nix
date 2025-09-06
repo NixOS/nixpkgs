@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # The tests require the shared library thanks to the patch.
-  doCheck = withShared;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && withShared;
 
   # Receive semi-automated updates.
   passthru.updateScript = pkgs.nix-update-script { };
