@@ -1318,6 +1318,8 @@ mapAliases {
   libiconv-darwin = darwin.libiconv;
   libixp_hg = libixp;
   libjpeg_drop = throw "'libjpeg_drop' has been renamed to/replaced by 'libjpeg_original'"; # Converted to throw 2024-10-17
+  libkkc = throw "'libkkc' has been removed due to lack of maintenance. Consider using anthy instead"; # added 2025-08-28
+  libkkc-data = throw "'libkkc-data' has been remoed as it was depending on libkkc which was removed"; # Added 2025-08-28
   liblastfm = throw "'liblastfm' has been renamed to/replaced by 'libsForQt5.liblastfm'"; # Converted to throw 2024-10-17
   libmp3splt = throw "'libmp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   libmx = throw "'libmx' has been removed due to lack of maintenance upstream."; # Added 2024-12-04

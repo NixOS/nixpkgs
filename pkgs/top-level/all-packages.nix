@@ -2551,7 +2551,7 @@ with pkgs;
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
-    kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
+    kkc = throw "ibus-engines.kkc has been removed as it depending on libkkc which was removed"; # added 2025-08-28
 
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
