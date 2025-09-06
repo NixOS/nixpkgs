@@ -70,6 +70,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
   * These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
 * Source-available software should be built from source where possible.
   Binary blobs risk supply chain attacks and vendored outdated libraries.
+  If you cannot build from source, you will almost always have to set `meta.sourceProvenance = [ lib.sourceTypes.binaryNativeCode ]`.
 
 This section describes a general framework of understanding and exceptions might apply.
 
@@ -499,6 +500,8 @@ The `meta` attribute set should always be placed last in the derivativion and an
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
+* `meta.sourceProvenance` must be set if the package is not built from source.
+  * If you are repackaging a `.deb`, `.rpm`, `.whl`, or any other format provided by your upstream, this should almost always be set to `lib.sourceTypes.binaryNativeCode`.
 * `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
   * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`.
     For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
