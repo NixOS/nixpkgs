@@ -31,7 +31,7 @@ let
       ./0003-fix-aarch64-segfault.patch
     ];
 
-    npmDepsHash = "sha256-xxdqZ7u6cZ0XXekRaD6RcyOk+7pdh8LUKaSzawGWwHU=";
+    npmDepsHash = "sha256-IYzWw1Ctz5L5R+e54t88ntYjREhaaQOwXBCAh4Th/EU=";
   };
 in
 rustPlatform.buildRustPackage {

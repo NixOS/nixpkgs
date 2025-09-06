@@ -5,14 +5,14 @@ Subject: [PATCH] fix(deps): bump rollup from 4.45.3 to 4.46.3
 
 Old version segfaults on aarch64-linux.
 ---
- frontend/package-lock.json | 182 ++++++++++++++++++++-----------------
- frontend/package.json      |   1 +
+ package-lock.json | 182 ++++++++++++++++++++-----------------
+ package.json      |   1 +
  2 files changed, 100 insertions(+), 83 deletions(-)
 
-diff --git a/frontend/package-lock.json b/frontend/package-lock.json
+diff --git a/package-lock.json b/package-lock.json
 index dde789c5..78b6ffbe 100644
---- a/frontend/package-lock.json
-+++ b/frontend/package-lock.json
+--- a/package-lock.json
++++ b/package-lock.json
 @@ -20,6 +20,7 @@
          "eslint-plugin-svelte": "^3.0.2",
          "prettier": "^3.1.0",
@@ -357,10 +357,10 @@ index dde789c5..78b6ffbe 100644
          "fsevents": "~2.3.2"
        }
      },
-diff --git a/frontend/package.json b/frontend/package.json
+diff --git a/package.json b/package.json
 index 947049e3..275151c4 100644
---- a/frontend/package.json
-+++ b/frontend/package.json
+--- a/package.json
++++ b/package.json
 @@ -24,6 +24,7 @@
      "eslint-plugin-svelte": "^3.0.2",
      "prettier": "^3.1.0",
