@@ -28,7 +28,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/favonia/cloudflare-ddns";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [shokerplz];
+    maintainers = with lib.maintainers; [ shokerplz ];
     platforms = lib.platforms.unix ++ lib.platforms.darwin;
   };
 }

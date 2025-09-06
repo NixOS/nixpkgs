@@ -3,16 +3,15 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.cloudflare-ddns;
 
-  boolToString = b:
-    if b
-    then "true"
-    else "false";
+  boolToString = b: if b then "true" else "false";
   formatList = l: lib.concatStringsSep "," l;
   formatDuration = d: d.String;
-in {
+in
+{
   options.services.cloudflare-ddns = {
     enable = lib.mkEnableOption "Cloudflare Dynamic DNS service";
 
@@ -38,7 +37,7 @@ in {
 
     domains = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       description = ''
         List of domain names (FQDNs) to manage. Wildcards like `*.example.com` are supported.
         These domains will be managed for both IPv4 and IPv6 unless overridden by
@@ -58,7 +57,7 @@ in {
         Explicit list of domains to manage only for IPv4. If set, overrides `domains` for IPv4.
         Corresponds to the `IP4_DOMAINS` environment variable.
       '';
-      example = ["ipv4.example.com"];
+      example = [ "ipv4.example.com" ];
     };
 
     ip6Domains = lib.mkOption {
@@ -68,17 +67,17 @@ in {
         Explicit list of domains to manage only for IPv6. If set, overrides `domains` for IPv6.
         Corresponds to the `IP6_DOMAINS` environment variable.
       '';
-      example = ["ipv6.example.com"];
+      example = [ "ipv6.example.com" ];
     };
 
     wafLists = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       description = ''
         List of WAF IP Lists to manage, in the format `account-id/list-name`.
         (Experimental feature as of cloudflare-ddns 1.14.0).
       '';
-      example = ["YOUR_ACCOUNT_ID/allowed_dynamic_ips"];
+      example = [ "YOUR_ACCOUNT_ID/allowed_dynamic_ips" ];
     };
 
     provider = {
@@ -229,7 +228,7 @@ in {
       }
       {
         assertion =
-          cfg.domains != [] || cfg.ip4Domains != null || cfg.ip6Domains != null || cfg.wafLists != [];
+          cfg.domains != [ ] || cfg.ip4Domains != null || cfg.ip6Domains != null || cfg.wafLists != [ ];
         message = "services.cloudflare-ddns requires at least one domain (domains, ip4Domains, ip6Domains) or WAF list (wafLists) to be specified";
       }
       {
@@ -244,7 +243,7 @@ in {
       group = cfg.group;
       home = "/var/lib/${cfg.user}";
     };
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d /var/lib/${cfg.user} 0750 ${cfg.user} ${cfg.group} - -"
@@ -252,9 +251,9 @@ in {
 
     systemd.services.cloudflare-ddns = {
       description = "Cloudflare Dynamic DNS Client Service (favonia)";
-      wantedBy = ["multi-user.target"];
-      after = ["network-online.target"];
-      wants = ["network-online.target"];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         User = cfg.user;
@@ -264,16 +263,19 @@ in {
 
         EnvironmentFile = cfg.credentialsFile;
 
-        Environment = let
-          toEnv = name: value: "${name}=\"${toString value}\"";
-          toEnvList = name: value: "${name}=\"${formatList value}\"";
-          toEnvDuration = name: value: "${name}=\"${formatDuration value}\"";
-          toEnvBool = name: value: "${name}=\"${boolToString value}\"";
-          toEnvMaybe = pred: name: value:
-            lib.optionalString pred (toEnv name value);
-          toEnvMaybeList = pred: name: value:
-            lib.optionalString pred (toEnvList name value);
-        in
+        Environment =
+          let
+            toEnv = name: value: "${name}=\"${toString value}\"";
+            toEnvList = name: value: "${name}=\"${formatList value}\"";
+            toEnvDuration = name: value: "${name}=\"${formatDuration value}\"";
+            toEnvBool = name: value: "${name}=\"${boolToString value}\"";
+            toEnvMaybe =
+              pred: name: value:
+              lib.optionalString pred (toEnv name value);
+            toEnvMaybeList =
+              pred: name: value:
+              lib.optionalString pred (toEnvList name value);
+          in
           lib.filter (envVar: envVar != "") [
             (toEnvList "DOMAINS" cfg.domains)
             (toEnvMaybeList (cfg.ip4Domains != null) "IP4_DOMAINS" cfg.ip4Domains)
@@ -282,7 +284,7 @@ in {
             (toEnv "IP4_PROVIDER" cfg.provider.ipv4)
             (toEnv "IP6_PROVIDER" cfg.provider.ipv6)
 
-            (toEnvMaybeList (cfg.wafLists != []) "WAF_LISTS" cfg.wafLists)
+            (toEnvMaybeList (cfg.wafLists != [ ]) "WAF_LISTS" cfg.wafLists)
             (toEnvMaybe (cfg.wafListDescription != "") "WAF_LIST_DESCRIPTION" cfg.wafListDescription)
 
             (toEnv "UPDATE_CRON" cfg.updateCron)
