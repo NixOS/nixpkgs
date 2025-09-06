@@ -45,7 +45,7 @@ pkgs.stdenv.mkDerivation (
 
     buildInputs = buildInputs ++ [
       pkgs.git
-      pkgs.nodePackages.bower
+      pkgs.bower
     ];
   }
 )
