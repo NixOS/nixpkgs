@@ -35,7 +35,6 @@
   libXrandr,
   nix-update-script,
   onnxruntime,
-  opencv4,
   openhmd,
   openvr,
   orc,
@@ -125,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    opencv4
     openhmd
     openvr
     orc
