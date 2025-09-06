@@ -1224,10 +1224,14 @@ rec {
               # take images can know in advance how the image is supposed to be used.
               isExe = true;
             };
+            meta = {
+              mainProgram = "stream-${baseName}";
+            };
             nativeBuildInputs = [ makeWrapper ];
           }
           ''
-            makeWrapper $streamScript $out --add-flags $conf
+            mkdir -p $out/bin
+            makeWrapper $streamScript $out/bin/stream-${baseName} --add-flags $conf
           '';
     in
     result
