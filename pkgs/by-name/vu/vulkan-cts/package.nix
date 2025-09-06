@@ -121,9 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a external/vulkancts/modules/vulkan/deqp-vk $out/bin/
     cp -a external/vulkancts/modules/vulkan/vulkan $out/archive-dir/
     cp -a external/vulkancts/modules/vulkan/vk-default $out/
+  '';
 
+  postFixup = ''
+    patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/bin/deqp-vk
     wrapProgram $out/bin/deqp-vk \
-      --add-flags '--deqp-vk-library-path=${vulkan-loader}/lib/libvulkan.so' \
       --add-flags "--deqp-archive-dir=$out/archive-dir"
   '';
 
