@@ -190,7 +190,7 @@ in
           }
       '';
 
-      "openldap/ldap.conf".source = ldapConf;
+      "ldap.conf".source = ldapConf;
     };
 
     environment.etc."chromium/policies/managed/freeipa.json" = mkIf cfg.chromiumSupport {
