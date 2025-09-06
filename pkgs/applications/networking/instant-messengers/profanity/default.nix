@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = finalAttrs.version;
-    hash = "sha256-3TmnbTnL8SPSd3seThavOOJVELi8kWLSlZlAub24KZ4=";
+    hash = "sha256-h+R+hasc45NZOneuqZ+z+yjfpsPm317OXq0LYe3t+cQ=";
   };
 
   patches = [
