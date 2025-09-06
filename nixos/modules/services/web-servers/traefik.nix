@@ -466,7 +466,7 @@ in
         AmbientCapabilities = "cap_net_bind_service";
         CapabilityBoundingSet = "cap_net_bind_service";
         NoNewPrivileges = true;
-        LimitNPROC = 64;
+        TasksMax = 64;
         LimitNOFILE = 1048576;
         PrivateTmp = true;
         PrivateDevices = true;
