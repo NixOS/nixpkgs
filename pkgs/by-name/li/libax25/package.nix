@@ -10,6 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libax25";
   version = "0.0.12-rc5";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     glibc
