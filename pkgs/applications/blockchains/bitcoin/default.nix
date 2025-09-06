@@ -45,14 +45,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "29.0";
+  version = "29.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "882c782c34a3bf2eacd1fae5cdc58b35b869883512f197f7d6dc8f195decfdaa";
+    sha256 = "067f624ae273b0d85a1554ffd7c098923351a647204e67034df6cc1dfacfa06b";
   };
 
   nativeBuildInputs = [
@@ -93,12 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       checksums = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-lOwVH0UqIhOT0I9rAvswuqy+tZ8ZRhH0kGnn9VCbRv4=";
+        hash = "sha256-teQ02vm875Isks9sBC2HV3Zo78W+UkXGH9zgyNhOnQs=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-s05cRmZ9aoPdSZTaz6D6qmVwX6OprqxynPn5vZQ7bbw=";
+        hash = "sha256-hyk57QyGJnrjuuGRmvfOhVAx9Nru93e8bfah5fSVcmg=";
       };
 
       verifyBuilderKeys =
@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
       gpg --no-autostart --batch --verify --status-fd 1 SHA256SUMS.asc SHA256SUMS > verify.log
       ${verifyBuilderKeys}
+      echo "Checking ${checksums} for bitcoin-${finalAttrs.version}.tar.gz..."
       grep bitcoin-${finalAttrs.version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
       echo "Verifying the checksum of bitcoin-${finalAttrs.version}.tar.gz..."
       sha256sum -c SHA256SUMS.filtered
