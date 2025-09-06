@@ -1851,6 +1851,8 @@ self: super: with self; {
 
   berkeleydb = callPackage ../development/python-modules/berkeleydb { };
 
+  bertopic = callPackage ../development/python-modules/bertopic { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
@@ -3384,6 +3386,8 @@ self: super: with self; {
   datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
 
   datalad-next = callPackage ../development/python-modules/datalad-next { };
+
+  datamapplot = callPackage ../development/python-modules/datamapplot { };
 
   datamodel-code-generator = callPackage ../development/python-modules/datamodel-code-generator { };
 
@@ -13244,6 +13248,8 @@ self: super: with self; {
 
   pykwb = callPackage ../development/python-modules/pykwb { };
 
+  pylabeladjust = callPackage ../development/python-modules/pylabeladjust { };
+
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
 
   pylacus = callPackage ../development/python-modules/pylacus { };
@@ -13847,6 +13853,8 @@ self: super: with self; {
       };
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
+
+  pyqtree = callPackage ../development/python-modules/pyqtree { };
 
   pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine { };
 
