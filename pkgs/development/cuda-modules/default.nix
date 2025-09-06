@@ -117,9 +117,9 @@ let
 
       unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" (
         concatMapAttrs (
-          name: drv:
-          optionalAttrs (drv.src != null && drv.passthru ? redistName) {
-            ${name} = drv.src;
+          name: attr:
+          optionalAttrs (attr.src or null != null && attr ? passthru.redistName) {
+            ${name} = attr.src;
           }
         ) finalCudaPackages
       );
