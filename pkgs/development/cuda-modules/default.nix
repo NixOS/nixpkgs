@@ -57,6 +57,14 @@ let
 
   cudaPackagesFixedPoint =
     finalCudaPackages:
+    let
+      redistPackages = concatMapAttrs (
+        name: attr:
+        optionalAttrs (attr.src or null != null && attr ? passthru.redistName) {
+          ${name} = attr.src;
+        }
+      ) finalCudaPackages;
+    in
     {
       # NOTE:
       # It is important that _cuda is not part of the package set fixed-point. As described by
@@ -115,13 +123,16 @@ let
           ;
       };
 
-      unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" (
+      unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" redistPackages;
+
+      installedRedistPackages = pkgs'.linkFarm "installedRedistPackages" (
         concatMapAttrs (
-          name: attr:
-          optionalAttrs (attr.src or null != null && attr ? passthru.redistName) {
-            ${name} = attr.src;
-          }
-        ) finalCudaPackages
+          name: pkg:
+          lib.genAttrs' pkg.outputs (output: {
+            name = "${name}-${output}";
+            value = pkg.${output};
+          })
+        ) redistPackages
       );
 
       flags =
