@@ -57,6 +57,8 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  # Parallel tests do not work as some of the tests modify env variables.
+  # pytest-xdist plugin is removed to disable parallel tests
   disabledTestPaths = [
     # import file mismatch
     # imported module 'app_test' has this __file__ attribute:
