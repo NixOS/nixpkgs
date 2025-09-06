@@ -16,7 +16,7 @@ let
       }
     else
       {
-        stable = "0.0.356";
+        stable = "0.0.359";
         ptb = "0.0.186";
         canary = "0.0.844";
         development = "0.0.97";
@@ -44,7 +44,7 @@ let
     x86_64-darwin = {
       stable = fetchurl {
         url = "https://stable.dl2.discordapp.net/apps/osx/${version}/Discord.dmg";
-        hash = "sha256-oATRY8cpdpTZr7iMQ/SIvSbXDxhsCviQQFqytDG9u/c=";
+        hash = "sha256-bxKzOPiljJaY78aiX2BklfMHXgwKrLuWEQVmrNk3TdE=";
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
