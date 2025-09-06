@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   bison,
   buildPackages,
   cairo,
@@ -7,7 +9,6 @@
   flex,
   git,
   glib,
-  lib,
   librsvg,
   libstartup_notification,
   libxcb,
@@ -17,7 +18,6 @@
   pandoc,
   pango,
   pkg-config,
-  stdenv,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -28,6 +28,8 @@
   xcbutilkeysyms,
   xcbutilwm,
   xcbutilxrm,
+  waylandSupport ? true,
+  x11Support ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,13 +69,17 @@ stdenv.mkDerivation rec {
     git
     librsvg
     libstartup_notification
-    libxcb
     libxkbcommon
     pango
+    which
+  ]
+  ++ lib.optionals waylandSupport [
     wayland
     wayland-protocols
     wayland-scanner
-    which
+  ]
+  ++ lib.optionals x11Support [
+    libxcb
     xcb-imdkit
     xcbutil
     xcb-util-cursor
@@ -82,7 +88,10 @@ stdenv.mkDerivation rec {
     xcbutilxrm
   ];
 
-  mesonFlags = [ "-Dimdkit=true" ];
+  mesonFlags =
+    lib.optionals x11Support [ "-Dimdkit=true" ]
+    ++ lib.optionals (!waylandSupport) [ "-Dwayland=disabled" ]
+    ++ lib.optionals (!x11Support) [ "-Dxcb=disabled" ];
 
   doCheck = false;
 
