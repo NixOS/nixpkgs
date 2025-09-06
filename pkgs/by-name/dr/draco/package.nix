@@ -13,46 +13,40 @@
   tinygltf,
 }:
 
-let
-  cmakeBool = b: if b then "ON" else "OFF";
-in
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.7";
   pname = "draco";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = finalAttrs.version;
-    hash = "sha256-p0Mn4kGeBBKL7Hoz4IBgb6Go6MdkgE7WZgxAnt1tE/0=";
-    fetchSubmodules = true;
+    hash = "sha256-Y1bwBFe3bCklZN2+TBs6mhqDKQjrezMiT5zXlPFuMew=";
   };
 
   # ld: unknown option: --start-group
-  postPatch = ''
+  postPatch = lib.optional stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/draco_targets.cmake \
       --replace "^Clang" "^AppleClang"
   '';
 
-  buildInputs = [
+  nativeBuildInputs = [
+    cmake
+    python3
     gtest
-  ]
-  ++ lib.optionals withTranscoder [
+  ];
+
+  buildInputs = lib.optionals withTranscoder [
     eigen
     ghc_filesystem
     tinygltf
   ];
 
-  nativeBuildInputs = [
-    cmake
-    python3
-  ];
-
   cmakeFlags = [
-    "-DDRACO_ANIMATION_ENCODING=${cmakeBool withAnimation}"
-    "-DDRACO_GOOGLETEST_PATH=${gtest}"
-    "-DBUILD_SHARED_LIBS=${cmakeBool true}"
-    "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
+    (lib.cmakeFeature "DRACO_GOOGLETEST_PATH" (builtins.toString gtest))
+    (lib.cmakeBool "DRACO_ANIMATION_ENCODING" withAnimation)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "DRACO_TRANSCODER_SUPPORTED" withTranscoder)
   ]
   ++ lib.optionals withTranscoder [
     "-DDRACO_EIGEN_PATH=${eigen}/include/eigen3"
@@ -67,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
     changelog = "https://github.com/google/draco/releases/tag/${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jansol ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jansol ];
+    platforms = lib.platforms.all;
   };
 })
