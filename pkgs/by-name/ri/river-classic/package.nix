@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitea,
   libGL,
   libX11,
@@ -19,6 +18,7 @@
   wlroots_0_19,
   xwayland,
   zig_0_15,
+  nix-update-script,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
@@ -37,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-yu2m44v52PRSlAUC4sWMhudREe778y97WPG7IVbD24g=";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -62,12 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ]
-  ++ lib.optional withManpages "-Dman-pages"
-  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags =
+    lib.optional withManpages "-Dman-pages" ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
@@ -79,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {

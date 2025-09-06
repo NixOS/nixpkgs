@@ -1,5 +1,4 @@
 {
-  callPackage,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -24,9 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     zig.hook
   ];
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-B3ps6AfYdcbSNiVuhJQWrjHxknoKmYL8jdbBVr4lINY=";
+  };
 
   meta = {
     description = "Hex viewer";
