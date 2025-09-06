@@ -27,7 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fgsfdsfgs";
     repo = "perfect_dark";
     rev = "bb4fcffeb5dc382fce4c609897a2e82590d7d709";
-    hash = "sha256-XLmAjwEzz4fPpHuk3IBmhhDfiuudwMTnYgVe6Wcfdsg=";
+    hash = "sha256-naWE+oWgvrd4CSoBm6W4em60baTWn4uSnKbWh8WKPDM=";
+
+    postFetch = ''
+      pushd $out
+      rm tools/gzip
+      rm -r tools/mkrom
+      popd
+    '';
   };
 
   enableParallelBuilding = true;
@@ -113,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       # perfect_dark, khrplatform.h, port/fast3d
       mit
-      # Vendored source code and binaries of 'gzip'.
-      gpl3Plus
       # Derivative work of "Perfect Dark" © 2000 Rare Ltd.
       unfree
     ];
