@@ -19,13 +19,13 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   pname = "c3c${optionalString debug "-debug"}";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LIwav9ZvNRn4tGh+MGEhimSIKROU3H+R1pc3oyGDb18=";
+    hash = "sha256-o95Y5CYPITjn8KjxIZlBtwc6FfvZo2m5atR1Fyh9w+c=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
