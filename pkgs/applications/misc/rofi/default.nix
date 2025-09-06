@@ -18,6 +18,9 @@
   pango,
   pkg-config,
   stdenv,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
   which,
   xcb-imdkit,
   xcbutil,
@@ -29,14 +32,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.9.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-HZMVGlK6ig7kWf/exivoiTe9J/SLgjm7VwRm+KgKN44=";
+    hash = "sha256-akKwIYH9OoCh4ZE/bxKPCppxXsUhplvfRjSGsdthFk4=";
   };
 
   preConfigure = ''
@@ -67,6 +70,9 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     pango
+    wayland
+    wayland-protocols
+    wayland-scanner
     which
     xcb-imdkit
     xcbutil
