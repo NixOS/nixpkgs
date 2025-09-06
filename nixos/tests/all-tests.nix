@@ -1619,6 +1619,7 @@ in
   xmonad = runTest ./xmonad.nix;
   xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
   xpadneo = runTest ./xpadneo.nix;
+  xray = runTest ./xray.nix;
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
   xscreensaver = runTest ./xscreensaver.nix;
