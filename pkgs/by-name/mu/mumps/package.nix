@@ -48,7 +48,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   name = "mumps";
-  version = "5.8.0";
+  version = "5.8.1";
   # makeFlags contain space and one should use makeFlagsArray+
   # Setting this magic var is an optional solution
   __structuredAttrs = true;
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
-    hash = "sha256-opJW7+Z/YhyUFwYTTTuWZuykz8Z4do6/XTBThHyTVCs=";
+    hash = "sha256-60hNYhbHONv9E9VY8G0goE83q7AwJh1u/Z+QRK8anHQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
