@@ -191,7 +191,8 @@ self: super: {
   }) self.tar_0_6_0_0;
   # text-metrics >= 0.3.3 requires GHC2021
   text-metrics = doDistribute (doJailbreak self.text-metrics_0_3_2);
-  bytestring-handle = unmarkBroken (doDistribute super.bytestring-handle);
+  # Lift QuickCheck < 2.15
+  bytestring-handle = doJailbreak (unmarkBroken (doDistribute super.bytestring-handle));
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
