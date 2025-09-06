@@ -23,6 +23,7 @@
   stdenv,
   typescript,
   webkitgtk_4_1,
+  writableTmpDirAsHomeHook,
 }:
 let
   esbuild_21-5 =
@@ -70,11 +71,18 @@ stdenv.mkDerivation (finalAttrs: {
       "GIT_PROXY_COMMAND"
       "SOCKS_SERVER"
     ];
-    nativeBuildInputs = [ bun ];
+    nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+    ];
     dontConfigure = true;
     buildPhase = ''
       runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
       bun install --no-progress --frozen-lockfile
+
       runHook postBuild
     '';
     installPhase = ''
