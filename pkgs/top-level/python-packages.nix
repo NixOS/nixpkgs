@@ -5131,6 +5131,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
+
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
@@ -8811,6 +8813,8 @@ self: super: with self; {
   lxml-html-clean = callPackage ../development/python-modules/lxml-html-clean { };
 
   lxml-stubs = callPackage ../development/python-modules/lxml-stubs { };
+
+  lxst = callPackage ../development/python-modules/lxst { };
 
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
@@ -12666,6 +12670,8 @@ self: super: with self; {
   pycmus = callPackage ../development/python-modules/pycmus { };
 
   pycocotools = callPackage ../development/python-modules/pycocotools { };
+
+  pycodec2 = callPackage ../development/python-modules/pycodec2 { };
 
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
