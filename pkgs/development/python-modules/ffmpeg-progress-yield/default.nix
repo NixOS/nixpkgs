@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -39,6 +40,16 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "test/test.py" ];
+
+  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
+    # cannot access /usr/bin/pgrep from the sandbox
+    "test_context_manager"
+    "test_context_manager_with_exception"
+    "test_automatic_cleanup_on_exception"
+    "test_async_context_manager"
+    "test_async_context_manager_with_exception"
+    "test_async_automatic_cleanup_on_exception"
+  ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 
