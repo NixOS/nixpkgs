@@ -10,7 +10,7 @@
   libxml2,
   libX11,
   glslang,
-  llvmPackages_14,
+  llvmPackages,
   versionCheckHook,
   gitUpdater,
 
@@ -73,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLLVM [
     # Slang only supports LLVM 14:
     # https://github.com/shader-slang/slang/blob/v2025.15/docs/building.md#llvm-support
-    llvmPackages_14.llvm
-    llvmPackages_14.libclang
+    llvmPackages.llvm
+    llvmPackages.libclang
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.
@@ -147,5 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "slangc";
     platforms = lib.platforms.all;
+    broken = withLLVM;
   };
 })

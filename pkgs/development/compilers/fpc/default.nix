@@ -111,5 +111,9 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = platforms.unix;
+    # See:
+    # * <https://gitlab.com/freepascal.org/fpc/source/-/issues/41045>
+    # * <https://gitlab.com/freepascal.org/fpc/source/-/merge_requests/887>
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }
