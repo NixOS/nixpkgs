@@ -19,7 +19,6 @@
   libadwaita,
   libxcvt,
   libGL,
-  libICE,
   libX11,
   libXcomposite,
   libXcursor,
@@ -27,8 +26,6 @@
   libXext,
   libXfixes,
   libXi,
-  libXtst,
-  libxkbfile,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
@@ -39,9 +36,11 @@
   libdrm,
   libgbm,
   libei,
+  libepoxy,
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
+  libglycin,
   atk,
   gtk4,
   fribidi,
@@ -72,7 +71,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "48.4";
+  version = "49.rc";
 
   outputs = [
     "out"
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EYnPfmPMh8/dHzqG6PFNl8M9ap2iVPI+gWVVSbbFDZM=";
+    hash = "sha256-nwBnr8bHV2kwNloLpW1zb6rVsqbejsmQiby2vPYpIVA=";
   };
 
   mesonFlags = [
@@ -131,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     egl-wayland
     glib
+    libglycin
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -139,8 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libadwaita
     libgbm
     libei
+    libepoxy
     libdisplay-info
     libGL
     libgudev
@@ -159,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libICE
     libX11
     libXcomposite
     libXcursor
@@ -167,8 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXfixes
     libXi
-    libXtst
-    libxkbfile
     xkeyboard_config
     libxkbcommon
     libxcb
@@ -176,8 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libXau
 
-    # for gdctl shebang
+    # for gdctl and gnome-service-client shebangs
     (python3.withPackages (pp: [
+      pp.dbus-python
       pp.pygobject3
       pp.argcomplete
     ]))
@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "16"; # bumped each dev cycle
+    libmutter_api_version = "17"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
