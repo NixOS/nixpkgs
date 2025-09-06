@@ -18,7 +18,7 @@ let
     hash = "sha256-gKKSrd58F8pe/fy29gLY/4ugfhVXI0yyUnIarIMF/L8=";
   };
   web = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "${pname}-web";
+    pname = "cup-docker-web";
     inherit version src;
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
