@@ -207,14 +207,14 @@ update /etc/fstab.
     which will be used by the boot partition.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart root ext4 512MB -8GB
+    # parted /dev/sda -- mkpart root ext4 512MiB -8GiB
     ```
 
 3.  Next, add a *swap* partition. The size required will vary according
-    to needs, here a 8GB one is created.
+    to needs, here a 8GiB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart swap linux-swap -8GB 100%
+    # parted /dev/sda -- mkpart swap linux-swap -8GiB 100%
     ```
 
     ::: {.note}
@@ -227,7 +227,7 @@ update /etc/fstab.
     reserved 512MiB at the start of the disk.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
+    # parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
     # parted /dev/sda -- set 3 esp on
     ```
     ::: {.note}
@@ -258,7 +258,7 @@ update /etc/fstab.
     end part, where the swap will live.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary 1MB -8GB
+    # parted /dev/sda -- mkpart primary 1MiB -8GiB
     ```
 
 3.  Set the root partition's boot flag to on. This allows the disk to be booted from.
@@ -268,10 +268,10 @@ update /etc/fstab.
     ```
 
 4.  Finally, add a *swap* partition. The size required will vary
-    according to needs, here a 8GB one is created.
+    according to needs, here a 8GiB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+    # parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
     ```
 
     ::: {.note}
@@ -517,8 +517,8 @@ corresponding configuration Nix expression.
 ### Example partition schemes for NixOS on `/dev/sda` (MBR)
 ```ShellSession
 # parted /dev/sda -- mklabel msdos
-# parted /dev/sda -- mkpart primary 1MB -8GB
-# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+# parted /dev/sda -- mkpart primary 1MiB -8GiB
+# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
 ```
 :::
 
@@ -526,9 +526,9 @@ corresponding configuration Nix expression.
 ### Example partition schemes for NixOS on `/dev/sda` (UEFI)
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
-# parted /dev/sda -- mkpart root ext4 512MB -8GB
-# parted /dev/sda -- mkpart swap linux-swap -8GB 100%
-# parted /dev/sda -- mkpart ESP fat32 1MB 512MB
+# parted /dev/sda -- mkpart root ext4 512MiB -8GiB
+# parted /dev/sda -- mkpart swap linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
 # parted /dev/sda -- set 3 esp on
 ```
 :::
