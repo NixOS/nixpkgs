@@ -289,6 +289,10 @@ in
               "anubis"
             else
               null;
+          # Since we use "/run/anubis" as a default RuntimeDirectory, multiple instances share the RuntimeDirectory.
+          # By default, when any instance is restarted, the RuntimeDirectory is nuked, breaking all other instances in
+          # the process. This setting ensures that both manual and automatic service restarts preserve parent directory.
+          RuntimeDirectoryPreserve = "yes";
 
           # hardening
           NoNewPrivileges = true;
