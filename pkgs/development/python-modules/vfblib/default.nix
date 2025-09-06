@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "vfblib";
-  version = "0.10.2";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
     tag = "v${version}";
-    hash = "sha256-lcYk6h2kWFIknCHKkrxdSKab7szvSZhFwmFvkT6VTEo=";
+    hash = "sha256-fAczRejHDe02iWMWXQzNHLmxRX5ApIPvUzsYnwqrKn8=";
   };
 
   build-system = [
