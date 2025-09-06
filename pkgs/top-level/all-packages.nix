@@ -6468,9 +6468,10 @@ with pkgs;
     apacheKafka_3_8
     apacheKafka_3_9
     apacheKafka_4_0
+    apacheKafka_4_1
     ;
 
-  apacheKafka = apacheKafka_4_0;
+  apacheKafka = apacheKafka_4_1;
 
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
