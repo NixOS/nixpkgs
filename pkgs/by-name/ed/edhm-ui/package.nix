@@ -90,37 +90,37 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    mkdir -p $out/opt/edhm-ui
-    cp -r edhm-ui-v3-linux-x64/* $out/opt/edhm-ui/
+        mkdir -p $out/opt/edhm-ui
+        cp -r edhm-ui-v3-linux-x64/* $out/opt/edhm-ui/
 
-    # Make the main executable... executable
-    chmod +x $out/opt/edhm-ui/edhm-ui-v3
+        # Make the main executable... executable
+        chmod +x $out/opt/edhm-ui/edhm-ui-v3
 
-    # Create wrapper script
-    makeWrapper $out/opt/edhm-ui/edhm-ui-v3 $out/bin/edhm-ui \
-      --set LD_LIBRARY_PATH "${lib.makeLibraryPath buildInputs}" \
-      --prefix PATH : ${lib.makeBinPath [ ]}
+        # Create wrapper script
+        makeWrapper $out/opt/edhm-ui/edhm-ui-v3 $out/bin/edhm-ui \
+          --set LD_LIBRARY_PATH "${lib.makeLibraryPath buildInputs}" \
+          --prefix PATH : ${lib.makeBinPath [ ]}
 
-    # Install desktop entry
-    mkdir -p $out/share/applications
-    cat > $out/share/applications/edhm-ui.desktop <<EOF
-[Desktop Entry]
-Name=EDHM UI
-Comment=Elite Dangerous HUD Mod Manager
-Exec=$out/bin/edhm-ui
-Icon=$out/opt/edhm-ui/resources/images/icon.png
-Terminal=false
-Type=Application
-Categories=Game;Utility;
-EOF
+        # Install desktop entry
+        mkdir -p $out/share/applications
+        cat > $out/share/applications/edhm-ui.desktop <<EOF
+    [Desktop Entry]
+    Name=EDHM UI
+    Comment=Elite Dangerous HUD Mod Manager
+    Exec=$out/bin/edhm-ui
+    Icon=$out/opt/edhm-ui/resources/images/icon.png
+    Terminal=false
+    Type=Application
+    Categories=Game;Utility;
+    EOF
 
-    # Install icon
-    mkdir -p $out/share/pixmaps
-    cp $out/opt/edhm-ui/resources/images/icon.png $out/share/pixmaps/edhm-ui.png
+        # Install icon
+        mkdir -p $out/share/pixmaps
+        cp $out/opt/edhm-ui/resources/images/icon.png $out/share/pixmaps/edhm-ui.png
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   meta = with lib; {
