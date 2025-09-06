@@ -23,7 +23,6 @@ let
     "ghc8107Binary"
     "ghc902Binary"
     "ghc924Binary"
-    "ghc963Binary"
     "ghc984Binary"
     # ghcjs
     "ghcjs"
@@ -96,10 +95,6 @@ in
 
       ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
         llvmPackages = pkgs.llvmPackages_12;
-      };
-
-      ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
-        llvmPackages = pkgs.llvmPackages_15;
       };
 
       ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix {
@@ -178,24 +173,6 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
       ghc94 = compiler.ghc948;
-      ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc928
-          else
-            bb.packages.ghc924Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
         bootPkgs =
           # For GHC 9.2 no armv7l bindists are available.
@@ -217,15 +194,13 @@ in
       ghc96 = compiler.ghc967;
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
         bootPkgs =
-          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
-            bb.packages.ghc984Binary
-          else if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch32 then
             # For GHC 9.6 no armv7l bindists are available.
-            bb.packages.ghc963
+            bb.packages.ghc967
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
+            bb.packages.ghc967
           else
-            bb.packages.ghc963Binary;
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -240,18 +215,11 @@ in
         bootPkgs =
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
+            bb.packages.ghc984
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
+            bb.packages.ghc984
           else
-            bb.packages.ghc963Binary;
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -265,18 +233,11 @@ in
         bootPkgs =
           # For GHC 9.6 no armv7l bindists are available.
           if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
+            bb.packages.ghc984
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
+            bb.packages.ghc984
           else
-            bb.packages.ghc963Binary;
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -404,12 +365,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
-      ghc963Binary = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc963Binary;
-        ghc = bh.compiler.ghc963Binary;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-        packageSetConfig = bootstrapPackageSet;
-      };
       ghc984Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc984Binary;
         ghc = bh.compiler.ghc984Binary;
@@ -440,11 +395,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
       };
       ghc94 = packages.ghc948;
-      ghc963 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc963;
-        ghc = bh.compiler.ghc963;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-      };
       ghc967 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc967;
         ghc = bh.compiler.ghc967;
