@@ -28,6 +28,7 @@
   libxkbcommon,
   libpng,
   libtiff,
+  librsvg,
   libjpeg,
   libxml2,
   gnome,
@@ -119,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libpng
     libtiff
+    librsvg
     libjpeg
     (libepoxy.override { inherit x11Support; })
     isocodes
