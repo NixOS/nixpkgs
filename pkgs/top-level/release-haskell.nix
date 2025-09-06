@@ -66,16 +66,9 @@ let
     ghc8107
     ghc902
     ghc928
-    ghc947
     ghc948
     ghc963
-    ghc964
-    ghc965
-    ghc966
     ghc967
-    ghc981
-    ghc982
-    ghc983
     ghc984
     ghc9101
     ghc9102
@@ -590,7 +583,6 @@ let
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc928
-        compilerNames.ghc947
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
@@ -650,7 +642,7 @@ let
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
-        compilerNames.ghc966
+        compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
