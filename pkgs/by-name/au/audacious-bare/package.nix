@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     ln -s ${audacious-plugins}/share/audacious/Skins $out/share/audacious/
   '';
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qt6.qtbase}/lib -iframework ${qt6.qtbase}/lib";
+
   meta = {
     description = "Lightweight and versatile audio player";
     homepage = "https://audacious-media-player.org";
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
       ttuegel
       thiagokokada
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = with lib.licenses; [
       bsd2
       bsd3 # https://github.com/audacious-media-player/audacious/blob/master/COPYING
