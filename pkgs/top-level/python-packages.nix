@@ -18789,6 +18789,8 @@ self: super: with self; {
     inherit (pkgs) file zlib;
   };
 
+  typed-argparse = callPackage ../development/python-modules/typed-argparse { };
+
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
   typedmonarchmoney = callPackage ../development/python-modules/typedmonarchmoney { };
