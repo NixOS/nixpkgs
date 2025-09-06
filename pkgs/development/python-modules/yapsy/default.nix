@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "yapsy";
-  version = "1.12.2-unstable-2023-03-29";
+  version = "release_Yapsy-1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
