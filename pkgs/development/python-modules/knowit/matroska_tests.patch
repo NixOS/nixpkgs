@@ -1,0 +1,25 @@
+diff --git a/tests/__init__.py b/tests/__init__.py
+index 5c91d3b..7faad8d 100644
+--- a/tests/__init__.py
++++ b/tests/__init__.py
+@@ -5,10 +5,8 @@ import re
+ import sys
+ from collections.abc import Mapping
+ from datetime import timedelta
+-from io import BytesIO
+ from zipfile import ZipFile
+ 
+-import requests
+ import yaml
+ from yaml.constructor import Constructor
+ 
+@@ -103,8 +101,7 @@ class MediaFiles(object):
+ 
+         # download matroska test suite
+         if not os.path.exists(data_path) or len(os.listdir(data_path)) != 8:
+-            r = requests.get('http://downloads.sourceforge.net/project/matroska/test_files/matroska_test_w1_1.zip')
+-            with ZipFile(BytesIO(r.content), 'r') as f:
++            with ZipFile("@matroskaTestFile@", 'r') as f:
+                 f.extractall(data_path, [m for m in f.namelist() if os.path.splitext(m)[1] == '.mkv'])
+ 
+         # populate a dict with mkv files
