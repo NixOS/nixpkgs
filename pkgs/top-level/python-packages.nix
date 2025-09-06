@@ -1033,6 +1033,8 @@ self: super: with self; {
 
   async-modbus = callPackage ../development/python-modules/async-modbus { };
 
+  async-property = callPackage ../development/python-modules/async-property { };
+
   async-stagger = callPackage ../development/python-modules/async-stagger { };
 
   async-timeout = callPackage ../development/python-modules/async-timeout { };
@@ -10316,6 +10318,8 @@ self: super: with self; {
   neo = callPackage ../development/python-modules/neo { };
 
   neo4j = callPackage ../development/python-modules/neo4j { };
+
+  neohubapi = callPackage ../development/python-modules/neohubapi { };
 
   neoteroi-mkdocs = callPackage ../development/python-modules/neoteroi-mkdocs { };
 
