@@ -44,12 +44,6 @@ buildPythonPackage rec {
 
   buildInputs = [ ffmpeg-headless ];
 
-  env = {
-    # If not, setup.py fails with:
-    # ValueError: You are not using a virtual environment
-    GITHUB_ACTIONS = "true";
-  };
-
   preCheck =
     let
       # Update with `./update-test-samples.bash` if necessary.
