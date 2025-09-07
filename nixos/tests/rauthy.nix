@@ -6,7 +6,7 @@
   ];
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     let
       # Do not use this in production. This will make the secret world-readable
       # in the Nix store
@@ -57,16 +57,36 @@
         };
       };
 
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = [ "rauthy" ];
-        ensureUsers = [
-          {
-            name = "rauthy";
-            ensureDBOwnership = true;
-          }
-        ];
-      };
+      services.postfix =
+        let
+          domainName = "localhost";
+        in
+        {
+          enable = true;
+          settings = {
+            main = {
+              myhostname = domainName;
+              mydestination = "${domainName}, localhost";
+              mynetworks_style = "host";
+              smtpd_tls_security_level = "may"; # Enable TLS if available
+              smtpd_tls_chain_files = [ ]; # Add your certificate files here if you need secure SMTP
+              smtp_tls_security_level = "may"; # Enables TLS for outgoing emails if available
+              smtp_tls_CAfile = config.security.pki.caBundle;
+              # Optionally, allow local recipients
+              local_recipient_maps = null;
+            };
+          };
+
+          # Optionally, you might want to open the SMTP port for local connections.
+          enableSubmission = true;
+          setSendmail = true;
+
+          user = "postfix";
+          group = "postfix";
+          setgidGroup = "postdrop";
+          postmasterAlias = "postmaster";
+          rootAlias = "root@localhost";
+        };
     };
 
   # TODO: write asserts, maybe add a mail server so it doesnt crash?
