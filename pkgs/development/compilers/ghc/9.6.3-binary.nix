@@ -210,8 +210,6 @@ let
 
 in
 
-assert import ./common-have-ncg.nix { inherit lib stdenv version; };
-
 stdenv.mkDerivation {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
@@ -471,5 +469,6 @@ stdenv.mkDerivation {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     teams = [ lib.teams.haskell ];
+    broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
 }
