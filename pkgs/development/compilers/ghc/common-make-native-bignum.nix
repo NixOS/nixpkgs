@@ -503,13 +503,6 @@ stdenv.mkDerivation (
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-    ''
-    # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
-    # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
-    + lib.optionalString (lib.versions.majorMinor version == "9.4") ''
-      substituteInPlace configure --replace \
-        'MinBootGhcVersion="9.0"' \
-        'MinBootGhcVersion="8.10"'
     '';
 
     # Although it is usually correct to pass --host, we don't do that here because
