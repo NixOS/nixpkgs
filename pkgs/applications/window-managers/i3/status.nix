@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bGf1LK5PE533ZK0cxzZWK+D5d1B5G8IStT80wG6vIgU=";
   };
 
+  separateDebugInfo = true;
   nativeBuildInputs = [
     meson
     ninja
