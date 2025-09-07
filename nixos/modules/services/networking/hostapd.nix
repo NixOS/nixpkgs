@@ -1330,6 +1330,22 @@ in
         assertion = cfg.radios != { };
         message = "At least one radio must be configured with hostapd!";
       }
+      {
+        assertion =
+          let
+            wirelessEnabled = config.networking.wireless.enable;
+            wirelessInterfaces = config.networking.wireless.interfaces;
+            hostapdInterfaces = lib.attrNames cfg.radios;
+            hasInterfaceConflict = lib.intersectLists hostapdInterfaces wirelessInterfaces != [ ];
+          in
+          # we check if wirelessInterfaces is empty as that means all interfaces implicit
+          !wirelessEnabled || (wirelessInterfaces != [ ] && !hasInterfaceConflict);
+        message = "Can't use interface in hostapd, as wpa_supplicant already uses it. Either specify `networking.wireless.interfaces` and exclude those in `services.hostapd.radios` or disable `networking.wireless.enable`";
+      }
+      {
+        assertion = !config.networking.wireless.iwd.enable;
+        message = "hostapd and iwd conflict, use `networking.wireless.enable` in combination with `networking.wireless.interfaces`";
+      }
     ]
     # Radio warnings
     ++ (concatLists (
