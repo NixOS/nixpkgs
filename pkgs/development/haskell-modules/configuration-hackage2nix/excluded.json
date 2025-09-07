@@ -1,0 +1,7 @@
+{
+  "excluded-packages": [
+    "# keep-sorted start case=no skip_lines=1 ",
+    "__insert-target-for-script__",
+    "# keep-sorted end"
+  ]
+}

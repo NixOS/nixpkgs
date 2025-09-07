@@ -77,7 +77,8 @@ run_hackage2nix() {
    --config "$config_dir/main.yaml" \
    --config "$config_dir/stackage.yaml" \
    --config "$config_dir/broken.yaml" \
-   --config "$config_dir/transitive-broken.yaml"
+   --config "$config_dir/transitive-broken.yaml" \
+   --config "$config_dir/excluded.json"
 }
 
 echo "Obtaining Hackage data …"
