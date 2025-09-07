@@ -13,35 +13,94 @@
   enableBlurhashing ? true,
   # upstream continuwuity enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
-  rust-jemalloc-sys,
+  rust-jemalloc-sys-unprefixed,
   enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
   nixosTests,
 }:
 let
-  rust-jemalloc-sys' = rust-jemalloc-sys.override {
-    unprefixed = !stdenv.hostPlatform.isDarwin;
-  };
-  rocksdb' = rocksdb.override {
-    inherit enableLiburing;
-    # rocksdb does not support prefixed jemalloc, which is required on darwin
-    enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
-    jemalloc = rust-jemalloc-sys';
-  };
+  rocksdb' =
+    (rocksdb.override {
+      inherit enableLiburing;
+      # rocksdb does not support prefixed jemalloc, which is required on darwin
+      enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
+      jemalloc = rust-jemalloc-sys-unprefixed;
+    }).overrideAttrs
+      (
+        final: old: {
+          version = "10.4.fb";
+          src = fetchFromGitea {
+            domain = "forgejo.ellis.link";
+            owner = "continuwuation";
+            repo = "rocksdb";
+            rev = "10.4.fb";
+            hash = "sha256-/Hvy1yTH/0D5aa7bc+/uqFugCQq4InTdwlRw88vA5IY=";
+          };
+
+          patches = [ ];
+
+          cmakeFlags =
+            lib.subtractLists [
+              # no real reason to have snappy or zlib, no one uses this
+              "-DWITH_SNAPPY=1"
+              "-DZLIB=1"
+              "-DWITH_ZLIB=1"
+              # we dont need to use ldb or sst_dump (core_tools)
+              "-DWITH_CORE_TOOLS=1"
+              # we dont need to build rocksdb tests
+              "-DWITH_TESTS=1"
+              # we use rust-rocksdb via C interface and dont need C++ RTTI
+              "-DUSE_RTTI=1"
+              # this doesn't exist in RocksDB, and USE_SSE is deprecated for
+              # PORTABLE=$(march)
+              "-DFORCE_SSE42=1"
+            ] old.cmakeFlags
+            ++ [
+              # no real reason to have snappy, no one uses this
+              "-DWITH_SNAPPY=0"
+              "-DZLIB=0"
+              "-DWITH_ZLIB=0"
+              # we dont need to use ldb or sst_dump (core_tools)
+              "-DWITH_CORE_TOOLS=0"
+              # we dont need trace tools
+              "-DWITH_TRACE_TOOLS=0"
+              # we dont need to build rocksdb tests
+              "-DWITH_TESTS=0"
+              # we use rust-rocksdb via C interface and dont need C++ RTTI
+              "-DUSE_RTTI=0"
+              "-DPORTABLE=1"
+            ];
+          outputs = [ "out" ];
+          preInstall = "";
+          postPatch = ''
+            # Fix gcc-13 build failures due to missing <cstdint> and
+            # <system_error> includes, fixed upstyream sice 8.x
+            sed -e '1i #include <cstdint>' -i db/compaction/compaction_iteration_stats.h
+            sed -e '1i #include <cstdint>' -i table/block_based/data_block_hash_index.h
+            sed -e '1i #include <cstdint>' -i util/string_util.h
+            sed -e '1i #include <cstdint>' -i include/rocksdb/utilities/checkpoint.h
+          '';
+        }
+      );
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.6";
+  version = "0.5.0-rc.7";
 
+  # Switch back to fetchFromGitea once archive download errors are fixed
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xK/jTURQzFJ1FkF1E9cItTxXAgXgTwAiA9/8aE51FvU=";
+    hash = "sha256-u1k1r95qBoEizeILR5rrM5lDFz2a2NjUwM9TTi0HNjw=";
   };
 
-  cargoHash = "sha256-+7k1dtrXdonFDXa2Z/qVo4n1hZRmMWEQKKlffki8+/k=";
+  # Patch to fix linking issue caused by resolv-conf which has been submitted upstream
+  # https://github.com/hickory-dns/resolv-conf/pull/55
+  cargoPatches = [ ./cargolock.patch ];
+
+  cargoHash = "sha256-ZmDNeIuT49+Mvv8qAahRKe7T73Vh79k5zP1VfjmYdsI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +111,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bzip2
     zstd
   ]
-  ++ lib.optional enableJemalloc rust-jemalloc-sys'
+  ++ lib.optional enableJemalloc [
+    rust-jemalloc-sys-unprefixed
+  ]
   ++ lib.optional enableLiburing liburing;
 
   env = {
@@ -76,6 +137,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "systemd"
     "url_preview"
     "zstd_compression"
+    "bindgen-runtime"
   ]
   ++ lib.optional enableBlurhashing "blurhashing"
   ++ lib.optional enableJemalloc [
