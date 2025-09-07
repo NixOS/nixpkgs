@@ -11,7 +11,7 @@
   libxml2,
   libxslt,
   gobject-introspection,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   wrapGAppsNoGuiHook,
   python3,
   gdk-pixbuf,
@@ -25,7 +25,7 @@
   libsoup_3,
   libX11,
   withGtk ? true,
-  gtk3,
+  gtk4,
   libmediaart,
   pipewire,
   sqlite,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt # for xsltproc
     gobject-introspection
-    (if withGtk then wrapGAppsHook3 else wrapGAppsNoGuiHook)
+    (if withGtk then wrapGAppsHook4 else wrapGAppsNoGuiHook)
     python3
   ];
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
     shared-mime-info
   ]
-  ++ lib.optionals withGtk [ gtk3 ]
+  ++ lib.optionals withGtk [ gtk4 ]
   ++ (with gst_all_1; [
     gstreamer
     gst-editing-services
