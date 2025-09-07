@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae";
-  version = "3.1.66";
+  version = "3.2.35";
 
   src = fetchFromGitHub {
     owner = "FrodeSolheim";
     repo = "fs-uae";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zPVRPazelmNaxcoCStB0j9b9qwQDTgv3O7Bg3VlW9ys=";
+    hash = "sha256-e+Q+PC6Kpq3OBKsgoRvmu2p9dQfJeRCdFO1agXIGcU8=";
   };
 
   nativeBuildInputs = [
