@@ -8548,6 +8548,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-multi-modal-llms-openai
       { };
 
+  llama-index-node-parser-docling =
+    callPackage ../development/python-modules/llama-index-node-parser-docling
+      { };
+
   llama-index-readers-database =
     callPackage ../development/python-modules/llama-index-readers-database
       { };
