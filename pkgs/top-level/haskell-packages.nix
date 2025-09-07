@@ -14,7 +14,6 @@ let
     "native-bignum"
     # Binary GHCs
     "ghc902Binary"
-    "ghc924Binary"
     "ghc963Binary"
     "ghc984Binary"
   ];
@@ -74,8 +73,6 @@ in
       ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
         llvmPackages = pkgs.llvmPackages_20;
       };
-
-      ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix { };
 
       ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix { };
 
@@ -252,12 +249,6 @@ in
         buildHaskellPackages = bh.packages.ghc902Binary;
         ghc = bh.compiler.ghc902Binary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
-        packageSetConfig = bootstrapPackageSet;
-      };
-      ghc924Binary = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc924Binary;
-        ghc = bh.compiler.ghc924Binary;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
       ghc963Binary = callPackage ../development/haskell-modules {
