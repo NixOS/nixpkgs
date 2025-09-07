@@ -186,7 +186,8 @@ let
   hasDeniedNonSourceProvenance =
     attrs: hasNonSourceProvenance attrs && !allowNonSource && !allowNonSourcePredicate attrs;
 
-  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (toList value));
+  showLicenseOrSourceType =
+    value: toString (map (v: v.shortName or v.fullName or "unknown") (toList value));
   showLicense = showLicenseOrSourceType;
   showSourceType = showLicenseOrSourceType;
 
