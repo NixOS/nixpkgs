@@ -10,7 +10,6 @@ buildGoModule (
   finalAttrs:
   let
     version = "0.0.20250522";
-    shortVer = version;
   in
   {
     pname = "wireguard-go";
@@ -24,9 +23,6 @@ buildGoModule (
     postPatch = ''
       # Skip formatting tests
       rm -f format_test.go
-
-      # Inject version
-      printf 'package main\n\nconst Version = "${shortVer}"' > version.go
     '';
 
     vendorHash = "sha256-sCajxTV26jjlmgmbV4GG6hg9NkLGS773ZbFyKucvuBE=";
@@ -56,7 +52,7 @@ buildGoModule (
 
     passthru.tests.version = testers.testVersion {
       package = wireguard-go;
-      version = "v${shortVer}";
+      version = "v${version}";
     };
 
     meta = with lib; {
