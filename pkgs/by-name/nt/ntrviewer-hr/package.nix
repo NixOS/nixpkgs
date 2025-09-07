@@ -1,4 +1,5 @@
-{ callPackage,
+{
+  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -13,7 +14,7 @@
   lcms,
   libunwind,
   shaderc,
-  nasm
+  nasm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
