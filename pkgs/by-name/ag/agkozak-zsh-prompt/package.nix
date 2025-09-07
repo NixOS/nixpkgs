@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "agkozak-zsh-prompt";
   version = "3.11.4";
 
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "agkozak-zsh-prompt";
-    tag = "v${version}";
-    sha256 = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
   };
 
   strictDeps = true;
@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation rec {
     cp -r -- lib/*.zsh agkozak-zsh-prompt.plugin.zsh prompt_agkozak-zsh-prompt_setup "$plugindir"/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, asynchronous Zsh prompt";
     homepage = "https://github.com/agkozak/agkozak-zsh-prompt";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})
