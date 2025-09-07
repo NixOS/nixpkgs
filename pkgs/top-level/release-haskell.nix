@@ -383,11 +383,7 @@ let
             "aarch64-darwin"
           ]
           {
-            haskell.compiler = lib.recursiveUpdate (packagePlatforms pkgs.pkgsMusl.haskell.compiler) {
-              # remove musl ghc865Binary since it is known to be broken and
-              # causes an evaluation error on darwin.
-              ghc865Binary = { };
-            };
+            haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler;
 
             # Get some cache going for MUSL-enabled GHC.
             haskellPackages = {
