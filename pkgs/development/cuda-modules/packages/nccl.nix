@@ -112,7 +112,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     ];
     # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
-    badPlatforms = _mkMetaBadPlatforms (!(config.inHydra or false)) finalAttrs;
+    badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter
       orivej
