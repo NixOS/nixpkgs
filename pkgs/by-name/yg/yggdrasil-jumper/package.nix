@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yggdrasil-jumper";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "one-d-wide";
     repo = "yggdrasil-jumper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Op3KBJ911AjB7BIJuV4xR8KHMxBtQj7hf++tC1g7SlM=";
+    hash = "sha256-5VLHX7sjtoIfBCOnS2RWUJKpzvchlkmI3obZZBf+rco=";
   };
 
-  cargoHash = "sha256-EbG83rGlUbiJC1qm9H1+YrCFSq23kSDeW7KMHP8Wee8=";
+  cargoHash = "sha256-HsxZNJXSXjyTz/ZB4MWD7CrLI136QL8HJs0X3rEuF9g=";
 
   passthru.updateScript = nix-update-script { };
 
