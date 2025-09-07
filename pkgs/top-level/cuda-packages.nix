@@ -3,8 +3,6 @@
   callPackage,
   config,
   lib,
-  pkgs,
-  stdenv,
 }:
 let
   # NOTE: Because manifests are used to add redistributables to the package set,
