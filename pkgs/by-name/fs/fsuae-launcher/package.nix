@@ -1,6 +1,6 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   fsuae,
   gettext,
   python3Packages,
@@ -11,11 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae-launcher";
-  version = "3.1.70";
+  version = "3.2.20";
 
-  src = fetchurl {
-    url = "https://fs-uae.net/files/FS-UAE-Launcher/Stable/${finalAttrs.version}/fs-uae-launcher-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yvJ8sa44V13SEUJ6C9SgS+N2ZFH5+20TTL2ICY9A36c=";
+  src = fetchFromGitHub {
+    owner = "FrodeSolheim";
+    repo = "fs-uae-launcher";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JuCwcVKuc0EzsKQiPXobH9tiIWEFD3tjcXneRXzjsH0=";
   };
 
   nativeBuildInputs = [
