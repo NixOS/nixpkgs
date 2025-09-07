@@ -377,6 +377,7 @@ buildGoModule rec {
     conntrack-tools
     runc
     bash
+    su
   ];
 
   k3sKillallDeps = [
