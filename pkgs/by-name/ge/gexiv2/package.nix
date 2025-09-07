@@ -11,13 +11,15 @@
   gnome,
   gobject-introspection,
   vala,
-  gi-docgen,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.15.2";
+  version = "0.14.6";
 
   outputs = [
     "out"
@@ -26,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gexiv2/${lib.versions.majorMinor finalAttrs.version}/gexiv2-${finalAttrs.version}.tar.xz";
-    sha256 = "o6JSMNzPjFilTEw8ZLkm/pSMI9w5ENN/+yaKYwXl+6w=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "YGwoqq57Hz71yOq+Xn3/18WhyGbSW3Zx+4R/4oenK4s=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gobject-introspection
     vala
-    gi-docgen
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
     (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
@@ -60,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck =
     let
-      libSuffix = if stdenv.hostPlatform.isDarwin then "4.dylib" else "so.4";
+      libSuffix = if stdenv.hostPlatform.isDarwin then "2.dylib" else "so.2";
     in
     ''
       # Our gobject-introspection patches make the shared library paths absolute
@@ -68,17 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
       # though, so we need to replace the absolute path with a local one during build.
       # We are using a symlink that will be overridden during installation.
       mkdir -p $out/lib
-      ln -s $PWD/gexiv2/libgexiv2-0.16.${libSuffix} $out/lib/libgexiv2-0.16.${libSuffix}
+      ln -s $PWD/gexiv2/libgexiv2.${libSuffix} $out/lib/libgexiv2.${libSuffix}
     '';
-
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gexiv2";
+      packageName = pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -90,4 +89,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     teams = [ teams.gnome ];
   };
-})
+}
