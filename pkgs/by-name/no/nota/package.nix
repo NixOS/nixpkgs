@@ -1,22 +1,21 @@
 {
   haskellPackages,
-  fetchurl,
+  fetchFromGitHub,
   lib,
 }:
 
 haskellPackages.mkDerivation rec {
   pname = "nota";
-  version = "1.0";
+  version = "1.0-unstable-2023-03-01";
 
-  # Can't use fetchFromGitLab since codes.kary.us doesn't support https
-  src = fetchurl {
-    url = "http://codes.kary.us/nota/nota/-/archive/V${version}/nota-V${version}.tar.bz2";
-    sha256 = "0bbs6bm9p852hvqadmqs428ir7m65h2prwyma238iirv42pk04v8";
+  src = fetchFromGitHub {
+    owner = "pouyakary";
+    repo = "Nota";
+    rev = "3548b864e5aa30ffbf1704a79dbb3bd3aab813be";
+    hash = "sha256-96T9uxUEV22/vn6aoInG1UPXbzlDHswOSkywkdwsMeY=";
   };
 
-  postUnpack = ''
-    export sourceRoot=$sourceRoot/source
-  '';
+  sourceRoot = "${src.name}/source";
 
   isLibrary = false;
   isExecutable = true;
@@ -37,8 +36,8 @@ haskellPackages.mkDerivation rec {
     time
   ];
 
-  description = "Most beautiful command line calculator";
-  homepage = "https://kary.us/nota";
+  description = "Command line calculator";
+  homepage = "https://pouyakary.org/nota/";
   license = lib.licenses.mpl20;
   maintainers = [ ];
   mainProgram = "nota";
