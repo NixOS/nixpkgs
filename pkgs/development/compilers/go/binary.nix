@@ -34,7 +34,11 @@ stdenv.mkDerivation {
     homepage = "https://go.dev/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.golang ];
-    platforms = lib.platforms.darwin ++ lib.platforms.freebsd ++ lib.platforms.linux;
+    # These are the platforms that do not have full from-source bootstrap support.
+    # Darwin does not have gccgo support, and modern versions do not support 1.4, which would be required for non-gccgo bootstrapping.
+    # FreeBSD is reported to not compile versions needed for full source bootstrap.
+    # Loongarch64 is only known to work well with go 1.21+, so we cannot reliably bootstrap it.
+    platforms = lib.platforms.darwin ++ lib.platforms.freebsd ++ lib.platforms.loongarch64;
     badPlatforms = [
       # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
       # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware
@@ -42,5 +46,6 @@ stdenv.mkDerivation {
       # https://github.com/golang/go/issues/73349 - upstream will not accept submissions to fix this
       "powerpc64-linux"
     ];
+    mainProgram = "go";
   };
 }
