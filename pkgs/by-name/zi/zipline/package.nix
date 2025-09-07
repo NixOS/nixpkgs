@@ -5,6 +5,7 @@
   pnpm_10,
   nodejs_24,
   makeWrapper,
+  prisma,
   prisma-engines,
   ffmpeg,
   openssl,
@@ -48,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.3";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WyL/ItY/hvmBDRBB063QAIATPT51bPChkFKH7i32sz0=";
+    hash = "sha256-/UNSAvXfVeybFGFFQaVklAbKGT64pa37DmUilzo5ss4=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -62,10 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = ''
+    substituteInPlace src/lib/db/migration/index.ts \
+      --replace-fail "pnpm prisma" ${lib.getExe' prisma "prisma"}
+  '';
+
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-LDLcde+p0wjy1BddiNxJwFLS/7O9jGpMNapojZIipeA=";
+    fetcherVersion = 2;
+    hash = "sha256-TCbtaxc8AEpFhaHpK+NIrLPR6dQ+iFIEfEfwKob61yI=";
   };
 
   buildInputs = [
@@ -106,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
