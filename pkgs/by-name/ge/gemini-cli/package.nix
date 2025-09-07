@@ -3,25 +3,33 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  ripgrep,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.2.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ykNgtHtH+PPCycRn9j1lc8UIEHqYj54l0MTeVz6OhsQ=";
+    hash = "sha256-nlDXWAfFmhRwfZ46knUeF5ar6huPFLJ5wSxcts4bjfM=";
   };
 
   patches = [
     # FIXME: remove once https://github.com/google-gemini/gemini-cli/pull/5336 is merged
+    # FIXME: PR is merged though package is failing without the patch
     ./restore-missing-dependencies-fields.patch
+    # removes @lvce-editor/ripgrep and make upstream code to use ripgrep from nixpkgs
+    ./replace-npm-s-ripgrep-with-local.patch
   ];
 
-  npmDepsHash = "sha256-gpNt581BHDA12s+3nm95UOYHjoa7Nfe46vgPwFr7ZOU=";
+  npmDepsHash = "sha256-q7E5YEMjHs9RvfT4ctzltqHr/+cCh3M+G6D2MkLiJFg=";
+
+  buildInputs = [
+    ripgrep
+  ];
 
   preConfigure = ''
     mkdir -p packages/generated
@@ -36,10 +44,12 @@ buildNpmPackage (finalAttrs: {
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
     rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
     cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
 
     ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
     chmod +x "$out/bin/gemini"
