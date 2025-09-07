@@ -1,11 +1,10 @@
 {
-  mkDerivation,
   haskellPackages,
   fetchurl,
   lib,
 }:
 
-mkDerivation rec {
+haskellPackages.mkDerivation rec {
   pname = "nota";
   version = "1.0";
 
