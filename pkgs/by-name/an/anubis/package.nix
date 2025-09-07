@@ -13,38 +13,56 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.21.3";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CMFd9che+D1ot1Iqk0VcJmna0xIqHlRIvNnzYo+q+RU=";
+    hash = "sha256-LOYBl9r00AJljGvlacd506cLeMr8Ndh817/ZIw46Uu0=";
   };
 
-  vendorHash = "sha256-cWkC3Bqut5h3hHh5tPIPeHMnkwoqKMnG1x40uCtUIwI=";
+  postPatch = ''
+    substituteInPlace lib/challenge/preact/preact.go \
+      --replace-fail "//go:generate ./build.sh" ""
+  '';
 
-  nativeBuildInputs = [
-    esbuild
-    brotli
-    zstd
-  ];
+  vendorHash = "sha256-/iTAbwYSHTz9SrJ0vrAXsA+3yS0jUreJDF52gju9CgU=";
 
-  xess = buildNpmPackage {
-    pname = "anubis-xess";
+  assets = buildNpmPackage {
+    pname = "anubis-assets";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-NJMUXGXcaY8l1WIbvCn+aIknVuagR7X8gRkme9xpYQ0=";
+    npmDepsHash = "sha256-s+OxVf6Iysobfuo0nAh5qF157opD2sR5D+7awAx6GTs=";
+
+    nativeBuildInputs = [
+      esbuild
+      brotli
+      zstd
+    ];
+
+    postPatch = ''
+      patchShebangs ./web/build.sh ./lib/challenge/preact/build.sh
+    '';
 
     buildPhase = ''
       runHook preBuild
+
+      ./web/build.sh && ./lib/challenge/preact/build.sh
       npx postcss ./xess/xess.css -o xess.min.css
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
-      install -Dm644 xess.min.css $out/xess.min.css
+
+      mkdir -p $out/{web,preact,xess}
+
+      cp -r web/static/* $out/web
+      cp -r lib/challenge/preact/static/* $out/preact
+      install -Dm644 xess.min.css $out
+
       runHook postInstall
     '';
   };
@@ -58,12 +76,12 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
 
-  postPatch = ''
-    patchShebangs ./web/build.sh
-  '';
-
   preBuild = ''
-    go generate ./... && ./web/build.sh && cp -r ${finalAttrs.xess}/xess.min.css ./xess
+    go generate ./...
+
+    cp -r ${finalAttrs.assets}/web/* ./web/static
+    cp -r ${finalAttrs.assets}/preact/* ./lib/challenge/preact/static
+    install -Dm644 ${finalAttrs.assets}/xess.min.css -t xess
   '';
 
   preCheck = ''
