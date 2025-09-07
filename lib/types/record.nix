@@ -2,111 +2,129 @@
 
 let
   inherit (lib)
+    types
     mapAttrs
-    concatMapAttrs
-    zipAttrs
-    removeAttrs
     attrNames
     showOption
-    optional
-    optionalAttrs
-    mergeDefinitions
     mkOptionType
     isAttrs
     ;
 
-  inherit (lib.options)
-    showDefs
-    ;
-
-  inherit (lib.strings)
-    escapeNixIdentifier
+  inherit (types)
+    unspecified
+    optionDescriptionPhrase
     ;
 
   record =
     {
-      fields ? { },
-      freeformType ? null,
-    }@args:
+      optional ? { },
+      required ? { },
+      wildcardType ? null,
+    }:
     let
-      checkField =
-        name: field:
-        if field._type or null != "field" then
-          throw "Record field `${escapeNixIdentifier name}` must be declared with `mkField`."
-        else if (field.optional or false) && (field ? default) then
-          throw "Record field `${escapeNixIdentifier name}` is optional, but a `default` is provided."
-        else
-          field;
-
-      checkFreeformType =
-        type:
-        if type._type or null == "option-type" then
-          type
-        else
-          throw "Record freeformType must be declared with `mkOptionType`.";
-
-      checkedFields = mapAttrs checkField fields;
-      freeformType = if args ? freeformType then checkFreeformType args.freeformType else null;
+      # Matches the behavior of fixupOptionType
+      # Adds types.unspecified for options that have no type
+      fixupFieldType =
+        name:
+        let
+          decl = optional.${name} or required.${name} or null;
+        in
+        if decl != null then decl // { type = decl.type or unspecified; } else null;
     in
     mkOptionType {
       name = "record";
       description =
-        if freeformType == null then "record" else "open record of ${freeformType.description}";
-      descriptionClass = if freeformType == null then "noun" else "composite";
+        if wildcardType == null then
+          "record"
+        else
+          "open record of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") wildcardType
+          }";
+      descriptionClass = if wildcardType == null then "noun" else "composite";
       check = isAttrs;
-      merge =
-        loc: defs:
+      merge.v2 =
+        { loc, defs }:
         let
-          data = zipAttrs (
-            map (
-              def:
-              mapAttrs (_: value: {
-                inherit (def) file;
-                inherit value;
-              }) def.value
-            ) defs
+          pushPositions = map (
+            def:
+            mapAttrs (n: v: {
+              inherit (def) file;
+              value = v;
+            }) def.value
           );
-          fieldValues = concatMapAttrs (
-            fieldName: field:
-            let
-              mergedOption = mergeDefinitions (loc ++ [ fieldName ]) field.type (
-                data.${fieldName} or [ ]
-                ++ optional (field ? default) {
-                  value = lib.mkOptionDefault field.default;
-                  file = "the default value of field ${showOption loc}";
-                }
-              );
-              isRequired = !field.optional or false;
-            in
-            builtins.addErrorContext "while evaluating the field `${fieldName}' of option `${showOption loc}'" (
-              optionalAttrs (isRequired || mergedOption.isDefined) {
-                ${fieldName} = mergedOption.mergedValue;
-              }
-            )
-          ) checkedFields;
-          extraData = removeAttrs data (attrNames checkedFields);
-          extraValues = mapAttrs (
+
+          # Checks
+          intersection = lib.intersectAttrs optional required;
+          optionalDefault = lib.filterAttrs (_: opt: opt ? default) optional;
+
+          # Definitions + option defaults
+          allDefs =
+            defs
+            ++ (lib.mapAttrsToList (name: opt: {
+              file = (builtins.unsafeGetAttrPos name required).file or "<unknown-file>";
+              value = {
+                ${name} = lib.mkOptionDefault opt.default;
+              };
+            }) (lib.filterAttrs (n: opt: opt ? default) required));
+
+          merged = lib.zipAttrsWith (
             name: defs:
-            builtins.addErrorContext "while evaluating freeform value `${name}' of option `${showOption loc}'" (
-              (mergeDefinitions (loc ++ [ name ]) freeformType defs).mergedValue
-            )
-          ) extraData;
-          checkedExtraDefs =
-            if extraData == { } then
-              fieldValues
-            else
-              throw ''
-                A definition for option `${showOption loc}' has an unknown fields:
-                ${lib.concatMapAttrsStringSep "\n" (name: defs: "`${name}'${showDefs defs}") extraData}'';
+            let
+              # elemType = optional.${name}.type or required.${name}.type or wildcardType;
+              elemType = (fixupFieldType name).type or wildcardType;
+            in
+            lib.modules.mergeDefinitions (loc ++ [ name ]) elemType defs
+          ) (pushPositions allDefs);
         in
-        if freeformType == null then checkedExtraDefs else fieldValues // extraValues;
-      nestedTypes = lib.optionalAttrs (freeformType != null) {
-        inherit freeformType;
+        {
+          headError =
+            if intersection != { } then
+              {
+                message = "The following attributes of '${showOption loc}' are both declared in 'optional' and in 'required': ${lib.concatStringsSep ", " (attrNames intersection)}";
+              }
+            else if optionalDefault != { } then
+              {
+                message = "The following attributes of '${showOption loc}' are declared in 'optional' cannot have a default value: ${lib.concatStringsSep ", " (attrNames optionalDefault)}";
+              }
+            else
+              null;
+          # TODO: expose fields, fieldValues and extraValues
+          valueMeta = {
+            attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) merged;
+          };
+          value = mapAttrs (
+            name: v:
+            let
+              elemType = (fixupFieldType name).type or wildcardType;
+            in
+            if required ? ${name} then
+              # Non-optional, lazy ?
+              v.mergedValue
+            else
+              # Optional, lazy
+              v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+          ) merged;
+        };
+      nestedTypes = lib.optionalAttrs (wildcardType != null) {
+        inherit wildcardType;
       };
-      # TODO: include `_freeformOptions`
-      getSubOptions = prefix: lib.mapAttrs (name: field:
-        mergeDefinitions (prefix ++ [ name ]) field.type [ ]
-      ) checkedFields;
+      getSubOptions =
+        prefix:
+        # Since this type doesn't support type merging, we can safely use the original attrs to display documentation.
+        lib.mapAttrs (
+          name: opt:
+          (
+            opt
+            // {
+              loc = prefix ++ [ name ];
+              inherit name;
+              declarations = [
+                (builtins.unsafeGetAttrPos name optional).file or (builtins.unsafeGetAttrPos name required).file
+                  or "<unknown-file>"
+              ];
+            }
+          )
+        ) (mapAttrs (n: o: fixupFieldType n) (optional // required));
     };
 
 in

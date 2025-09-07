@@ -623,7 +623,7 @@ rec {
       # To find infinite recursion in NixOS option docs:
       # builtins.trace opt.loc
       [ docOption ] ++ optionals subOptionsVisible subOptions
-    ) (collect isOption options);
+    ) (collect (o: isOption  o) options);
 
   /**
     This function recursively removes all derivation attributes from

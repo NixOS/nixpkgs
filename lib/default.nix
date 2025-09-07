@@ -482,7 +482,6 @@ let
         repoRevToName
         filterSource
         ;
-      inherit (self.fields) mkField;
       inherit (self.modules)
         evalModules
         setDefaultModuleLocation
