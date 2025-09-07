@@ -136,6 +136,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # We rename it ourselves for now, until upstream fixes the issue
       substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
+
+      # The generate-licenses script wants a specific version of cargo-about eventhough
+      # newer versions work just as well.
+      substituteInPlace script/generate-licenses \
+        --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
     '';
 
   cargoHash = "sha256-ehFq0e5G+3242nMHFIDFXVhZCyjwxfMckjhKQ7Iwbu0=";
