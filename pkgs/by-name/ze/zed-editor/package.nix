@@ -233,10 +233,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Flaky: unreliably fails on certain hosts (including Hydra)
     "--skip=zed::tests::test_window_edit_state_restoring_enabled"
+    # The following tests are flaky on at least x86_64-linux and aarch64-darwin,
+    # where they sometimes fail with: "database table is locked: workspaces".
+    "--skip=zed::tests::test_open_file_in_many_spaces"
+    "--skip=zed::tests::test_open_non_existing_file"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky: unreliably fails on certain hosts (including Hydra)
     "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
+    "--skip=zed::open_listener::tests::test_open_workspace_with_nonexistent_files"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Fails on certain hosts (including Hydra) for unclear reason
