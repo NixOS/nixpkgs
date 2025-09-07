@@ -2565,7 +2565,15 @@ with pkgs;
   # Top-level fix-point used in `cudaPackages`' internals
   _cuda = import ../development/cuda-modules/_cuda;
 
-  inherit (callPackages ./cuda-packages.nix { })
+  inherit
+    (import ./cuda-packages.nix {
+      inherit
+        _cuda
+        callPackage
+        config
+        lib
+        ;
+    })
     cudaPackages_12_6
     cudaPackages_12_8
     cudaPackages_12_9
