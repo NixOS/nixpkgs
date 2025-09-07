@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
-
+  __structuredAttrs = true;
   nativeBuildInputs = [
     SDL2
     meson
@@ -158,4 +158,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
-# TODO: investigate failure when using __structuredAttrs
