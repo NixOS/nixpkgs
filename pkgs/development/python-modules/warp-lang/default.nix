@@ -52,7 +52,7 @@ let
 
     src =
       let
-        baseURL = "https://developer.download.nvidia.com/compute/cublasdx/redist/cublasdx";
+        baseURL = "https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx";
         cudaMajorVersion = cudaPackages.cudaMajorVersion; # only 12, 13 supported
         cudaVersion = "${cudaMajorVersion}.0"; # URL example: ${baseURL}/cuda12/${name}-${version}-cuda12.0.zip
         name = lib.concatStringsSep "-" [
@@ -65,8 +65,14 @@ let
 
         # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
         hashes = {
-          aarch64-linux = "sha256-d/aBC+zU2ciaw3isv33iuviXYaLGLdVDdzynGk9SFck=";
-          x86_64-linux = "sha256-CHIH0s4SnA67COtHBkwVCajW/3f0VxNBmuDLXy4LFIg=";
+          "12" = {
+            aarch64-linux = "sha256-d/aBC+zU2ciaw3isv33iuviXYaLGLdVDdzynGk9SFck=";
+            x86_64-linux = "sha256-CHIH0s4SnA67COtHBkwVCajW/3f0VxNBmuDLXy4LFIg=";
+          };
+          "13" = {
+            aarch64-linux = "sha256-TetJbMts8tpmj5PV4+jpnUHMcooDrXUEKL3aGWqilKI=";
+            x86_64-linux = "sha256-wLJLbRpQWa6QEm8ibm1gxt3mXvkWvu0vEzpnqTIvE1M=";
+          };
         };
       in
       lib.mapNullable (
@@ -75,7 +81,7 @@ let
           inherit hash name;
           url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
         }
-      ) (hashes.${effectiveStdenv.hostPlatform.system} or null);
+      ) (hashes.${cudaMajorVersion}.${effectiveStdenv.hostPlatform.system} or null);
 
     dontUnpack = true;
     dontConfigure = true;
