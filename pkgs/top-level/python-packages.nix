@@ -8556,6 +8556,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-readers-database
       { };
 
+  llama-index-readers-docling =
+    callPackage ../development/python-modules/llama-index-readers-docling
+      { };
+
   llama-index-readers-file = callPackage ../development/python-modules/llama-index-readers-file { };
 
   llama-index-readers-json = callPackage ../development/python-modules/llama-index-readers-json { };
