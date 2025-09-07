@@ -736,6 +736,7 @@ with lib.maintainers;
   llvm = {
     members = [
       dtzWill
+      emily
       ericson2314
       lovek323
       qyliss
