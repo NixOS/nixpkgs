@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  callPackage,
   zig_0_14,
   versionCheckHook,
 }:
@@ -25,9 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [
     "-Dversion=v${finalAttrs.version}"
-    "--system"
-    (callPackage ./build.zig.zon.nix { })
   ];
+
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-QgJfNPSWmRhLwLyDdkGKVI2YVRGSzsi4MwC2fHJhoxg=";
+  };
 
   doCheck = true;
   zigCheckFlags = finalAttrs.zigBuildFlags;

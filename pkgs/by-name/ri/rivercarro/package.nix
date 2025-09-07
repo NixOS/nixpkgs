@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromSourcehut,
   pkg-config,
   river-classic,
@@ -35,9 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     zig.hook
   ];
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-EqfWZlTyV0zmw4HVBUmdN039DVz1nzptwBAAKjsJ2IQ=";
+  };
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~novakane/rivercarro";

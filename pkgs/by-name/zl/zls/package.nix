@@ -3,7 +3,6 @@
   stdenv,
   zig_0_14,
   fetchFromGitHub,
-  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,9 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ zig_0_14.hook ];
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-5ub+AA2PYuHrzPfouii/zfuFmQfn6mlMw4yOUDCw3zI=";
+  };
 
   meta = {
     description = "Zig LSP implementation + Zig Language Server";
