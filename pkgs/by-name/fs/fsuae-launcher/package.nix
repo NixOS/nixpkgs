@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fs-uae-launcher";
     maintainers = with lib.maintainers; [
       sander
+      c4patino
     ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
