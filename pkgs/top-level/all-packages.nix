@@ -13626,9 +13626,7 @@ with pkgs;
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
 
-  zexy = callPackage ../applications/audio/pd-plugins/zexy {
-    autoconf = buildPackages.autoconf269;
-  };
+  zexy = callPackage ../applications/audio/pd-plugins/zexy { };
 
   zed-editor-fhs = zed-editor.fhs;
 
