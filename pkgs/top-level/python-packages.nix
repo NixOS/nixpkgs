@@ -5011,6 +5011,8 @@ self: super: with self; {
 
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
+  fast-query-parsers = callPackage ../development/python-modules/fast-query-parsers { };
+
   fast-simplification = callPackage ../development/python-modules/fast-simplification { };
 
   fastai = callPackage ../development/python-modules/fastai { };
@@ -11662,6 +11664,8 @@ self: super: with self; {
 
   piccata = callPackage ../development/python-modules/piccata { };
 
+  piccolo = callPackage ../development/python-modules/piccolo { };
+
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
   pick = callPackage ../development/python-modules/pick { };
@@ -17911,6 +17915,8 @@ self: super: with self; {
   tappy = callPackage ../development/python-modules/tappy { };
 
   tapsaff = callPackage ../development/python-modules/tapsaff { };
+
+  targ = callPackage ../development/python-modules/targ { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
 
