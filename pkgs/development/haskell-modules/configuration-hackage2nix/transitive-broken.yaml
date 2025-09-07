@@ -35,7 +35,6 @@ dont-distribute-packages:
  - AERN-RnToRm
  - AERN-RnToRm-Plot
  - aeson-native
- - aeson_1_5_6_0
  - affine
  - afis
  - afv
