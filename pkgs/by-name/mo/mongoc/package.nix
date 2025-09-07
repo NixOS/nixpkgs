@@ -10,17 +10,25 @@
   icu,
   cyrus_sasl,
   snappy,
+  nix-update-script,
+  version ? "1.30.3",
 }:
 
+let
+  hashes = {
+    "1.30.3" = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
+    "2.1.1" = "sha256-W3Idagq/I/sR74ioqv3cxzKnqFHW92lhCl6817no2C0=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.30.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     tag = version;
-    hash = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
+    hash = hashes.${version};
   };
 
   nativeBuildInputs = [
@@ -48,6 +56,10 @@ stdenv.mkDerivation rec {
   preFixup = ''
     rm -rf src/{libmongoc,libbson}
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Official C client library for MongoDB";

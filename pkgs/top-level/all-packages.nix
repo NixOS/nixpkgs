@@ -14986,6 +14986,9 @@ with pkgs;
 
   meilisearch_1_11 = callPackage ../by-name/me/meilisearch/package.nix { version = "1.11.3"; };
 
+  mongoc_1 = mongoc;
+  mongoc_2 = callPackage ../by-name/mo/mongoc/package.nix { version = "2.1.1"; };
+
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   nixDependencies = recurseIntoAttrs (
