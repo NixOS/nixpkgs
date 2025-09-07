@@ -63,8 +63,6 @@ let
 
   # list of all compilers to test specific packages on
   released = with compilerNames; [
-    ghc8107
-    ghc928
     ghc948
     ghc963
     ghc967
@@ -519,10 +517,6 @@ let
           # Cross compilation of GHC
           haskell.compiler = {
             inherit (packagePlatforms pkgs.pkgsCross.riscv64.haskell.compiler)
-              # Our oldest GHC which still uses its own expression. 8.10.7 can
-              # theoretically be used to chain bootstrap all GHCs on riscv64
-              # which doesn't have official bindists.
-              ghc8107
               # Latest GHC we are able to cross-compile.
               ghc948
               ;
@@ -533,8 +527,6 @@ let
           # Cross compilation of GHC
           haskell.compiler = {
             inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.compiler)
-              # Uses a separate expression and LLVM backend for aarch64.
-              ghc8107
               # Latest GHC we are able to cross-compile. Uses NCG backend.
               ghc948
               ;
@@ -554,8 +546,6 @@ let
         # from the package sets. Due to (transitively) requiring recent versions
         # of core packages, it is not always reasonable to get cabal-install to
         # work with older compilers.
-        compilerNames.ghc8107
-        compilerNames.ghc928
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
@@ -573,12 +563,7 @@ let
         compilerNames.ghc9101
         compilerNames.ghc9102
       ];
-      haskell-language-server = lib.subtractLists [
-        # Support ceased as of 2.3.0.0
-        compilerNames.ghc8107
-        # Support ceased as of 2.10.0.0
-        compilerNames.ghc928
-      ] released;
+      haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc9101
@@ -591,12 +576,6 @@ let
       language-nix = released;
       nix-paths = released;
       titlecase = released;
-      ghc-api-compat = [
-        compilerNames.ghc8107
-      ];
-      ghc-bignum = [
-        compilerNames.ghc8107
-      ];
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
@@ -679,12 +658,7 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc8107Binary
-          jobs.pkgsMusl.haskell.compiler.ghc8107
-          jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
-          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
