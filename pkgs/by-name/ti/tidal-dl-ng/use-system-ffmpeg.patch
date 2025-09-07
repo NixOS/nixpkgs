@@ -1,0 +1,41 @@
+diff --git a/tidal_dl_ng/download.py b/tidal_dl_ng/download.py
+index 40f4976..e94751d 100644
+--- a/tidal_dl_ng/download.py
++++ b/tidal_dl_ng/download.py
+@@ -158,18 +158,6 @@ class Download:
+         self.event_abort = event_abort
+         self.event_run = event_run
+ 
+-        if not self.settings.data.path_binary_ffmpeg and (
+-            self.settings.data.video_convert_mp4 or self.settings.data.extract_flac
+-        ):
+-            self.settings.data.video_convert_mp4 = False
+-            self.settings.data.extract_flac = False
+-
+-            self.fn_logger.error(
+-                "FFmpeg path is not set. Videos can be downloaded but will not be processed. FLAC cannot be "
+-                "extracted from MP4 containers. Make sure FFmpeg is installed. The path to the FFmpeg binary must "
+-                "be set in (`path_binary_ffmpeg`)."
+-            )
+-
+     def _get_media_urls(
+         self,
+         media: Track | Video,
+@@ -1712,7 +1700,7 @@ class Download:
+         self.fn_logger.debug(f"Converting video: {path_file.name} -> {path_file_out.name}")
+ 
+         ffmpeg = (
+-            FFmpeg(executable=self.settings.data.path_binary_ffmpeg)
++            FFmpeg(executable="@ffmpeg@")
+             .option("y")
+             .option("hide_banner")
+             .option("nostdin")
+@@ -1738,7 +1726,7 @@ class Download:
+         path_media_out = path_media_src.with_suffix(AudioExtensions.FLAC)
+ 
+         ffmpeg = (
+-            FFmpeg(executable=self.settings.data.path_binary_ffmpeg)
++            FFmpeg(executable="@ffmpeg@")
+             .option("hide_banner")
+             .option("nostdin")
+             .input(url=path_media_src)
