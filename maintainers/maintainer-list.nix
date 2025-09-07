@@ -7504,12 +7504,6 @@
     githubId = 9874955;
     name = "Elnu";
   };
-  elohmeier = {
-    email = "elo-nixos@nerdworks.de";
-    github = "elohmeier";
-    githubId = 2536303;
-    name = "Enno Lohmeier";
-  };
   elpdt852 = {
     email = "nix@pdtpartners.com";
     github = "elpdt852";
@@ -24425,6 +24419,12 @@
     githubId = 7512804;
     name = "Martin Langlotz";
   };
+  stapelberg = {
+    name = "Michael Stapelberg";
+    github = "stapelberg";
+    githubId = 55506;
+    email = "michael+nix@stapelberg.ch";
+  };
   starcraft66 = {
     name = "Tristan Gosselin-Hane";
     email = "starcraft66@gmail.com";
@@ -26240,6 +26240,11 @@
     github = "toyboot4e";
     githubId = 47905926;
     name = "toyboot4e";
+  };
+  tphanir = {
+    github = "tphanir";
+    name = "phani";
+    githubId = 125972587;
   };
   tpw_rules = {
     name = "Thomas Watson";

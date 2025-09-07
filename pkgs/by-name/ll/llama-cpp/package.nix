@@ -188,7 +188,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "llama";
     maintainers = with maintainers; [
       dit7ya
-      elohmeier
       philiptaron
       xddxdd
     ];
