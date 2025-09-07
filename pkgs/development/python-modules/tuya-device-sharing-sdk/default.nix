@@ -12,8 +12,8 @@ let
   version = "0.2.4";
 in
 buildPythonPackage {
-  format = "setuptools";
   inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
