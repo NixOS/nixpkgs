@@ -343,6 +343,10 @@ let
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 
+  # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+  # so haddock isn't available for GHC cross-compilers. Can we fix that?
+  hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
+
   hadrianSettings =
     # -fexternal-dynamic-refs apparently (because it's not clear from the
     # documentation) makes the GHC RTS able to load static libraries, which may
@@ -495,9 +499,6 @@ stdenv.mkDerivation (
       patchShebangs --build .
     '';
 
-    # GHC needs the locale configured during the Haddock phase.
-    LANG = "en_US.UTF-8";
-
     # GHC is a bit confused on its cross terminology.
     # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
     preConfigure = ''
@@ -548,9 +549,15 @@ stdenv.mkDerivation (
           "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
       }"
     ''
-    + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
-    ''
+    # Haddock and sphinx need a working locale
+    + lib.optionalString (enableDocs || hasHaddock) (
+      ''
+        export LANG="en_US.UTF-8"
+      ''
+      + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+        export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
+      ''
+    )
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
     ''
@@ -854,13 +861,10 @@ stdenv.mkDerivation (
 
       inherit llvmPackages;
       inherit enableShared;
+      inherit hasHaddock;
 
       # Expose hadrian used for bootstrapping, for debugging purposes
       inherit hadrian;
-
-      # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
-      # so haddock isn't available for GHC cross-compilers. Can we fix that?
-      hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
 
       bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
