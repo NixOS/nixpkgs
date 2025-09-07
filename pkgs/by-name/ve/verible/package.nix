@@ -102,5 +102,10 @@ buildBazelPackage rec {
       hzeller
       newam
     ];
+    badPlatforms = [
+      # ERROR: no such package '@@bazel_tools~xcode_configure_extension~local_config_xcode//':
+      # BUILD file not found in directory '' of external repository
+      "aarch64-darwin"
+    ];
   };
 }
