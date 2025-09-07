@@ -69,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      c4patino
+    ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })
