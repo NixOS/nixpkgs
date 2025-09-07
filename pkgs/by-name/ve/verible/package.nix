@@ -37,7 +37,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "${GIT_VERSION}";
+    tag = GIT_VERSION;
     hash = "sha256-/RZqBNmyBZI6CO2ffS6p8T4wse1MKytNMphXFdkTOWQ=";
   };
 
@@ -94,11 +94,11 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server";
     homepage = "https://github.com/chipsalliance/verible";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hzeller
       newam
     ];
