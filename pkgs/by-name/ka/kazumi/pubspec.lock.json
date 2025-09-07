@@ -224,11 +224,11 @@
       "dependency": "direct main",
       "description": {
         "name": "card_settings_ui",
-        "sha256": "69946704bf4e05830e4737645188f14420285063c8e15f82ef8f5708dba55df8",
+        "sha256": "73670e4685d44fed8e9669e813153801825eea6f7a2845665e3a5a8631761e6c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.0.1"
     },
     "characters": {
       "dependency": "transitive",
@@ -394,8 +394,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "user_script",
-        "resolved-ref": "0372b6b20c7d48b5777180b8d3cb0124f2e6b061",
+        "ref": "main",
+        "resolved-ref": "f95c8d09e66a73dce5465770f6fb41e4a13fad44",
         "url": "https://github.com/Predidit/linux_webview_window.git"
       },
       "source": "git",
@@ -2223,6 +2223,6 @@
   },
   "sdks": {
     "dart": ">=3.8.0 <4.0.0",
-    "flutter": ">=3.35.1"
+    "flutter": ">=3.35.3"
   }
 }
