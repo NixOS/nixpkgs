@@ -68,6 +68,6 @@ buildPythonPackage rec {
     description = "Python module for Apache ORC file format";
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

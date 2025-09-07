@@ -49,32 +49,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-      graphviz
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
 
   propagatedBuildInputs = [
     cereal_1_3_2
     eigen
     jrl-cmakemodules
     simde
-  ] ++ lib.optionals pythonSupport [ python3Packages.nanobind ];
+  ]
+  ++ lib.optionals pythonSupport [ python3Packages.nanobind ];
 
   nativeCheckInputs = [ ctestCheckHook ];
 
-  checkInputs =
-    [ matio ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.scipy
-    ];
+  checkInputs = [
+    matio
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.scipy
+  ];
 
   ctestFlags = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     "--exclude-regex"

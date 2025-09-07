@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mount-zip";
-  version = "1.8";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mount-zip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HxHXQfyX3jdTJ5s/QwC9tkjU+JbPDEm7FUGss7tB0EM=";
+    hash = "sha256-d6cjqsqIYFPuAWKxjlLXCWNKT33xbMW8gLriZWj0SSc=";
   };
 
   strictDeps = true;

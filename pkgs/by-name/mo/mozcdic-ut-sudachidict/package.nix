@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT SudachiDict Dictionary is a dictionary converted from SudachiDict for Mozc.";
+    description = "Dictionary converted from SudachiDict for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-sudachidict";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ pineapplehunter ];

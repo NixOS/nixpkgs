@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rabbitmqadmin-ng";
-  version = "2.2.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "rabbitmq";
     repo = "rabbitmqadmin-ng";
     tag = "v${version}";
-    hash = "sha256-F/AkkmGn6LvbCiSE3znl/U/YDYLGQ7SCe0lBDTBzqic=";
+    hash = "sha256-NiTLanB/Q5NtI1UUeaJ+IGJpJhfUhStsuJs6azSKnxE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZldTiRsxJH3UYNC9KeQ4WtPM75CtcAB6sbo3yzzZ5xA=";
+  cargoHash = "sha256-IYwtap2zvGXb4pPXQGbE87hbFzxBVQ6i7cd3WWa0wX0=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

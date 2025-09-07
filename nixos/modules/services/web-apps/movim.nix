@@ -589,19 +589,18 @@ in
     environment.systemPackages = [ package ];
 
     users = {
-      users =
-        {
-          movim = mkIf (cfg.user == "movim") {
-            isSystemUser = true;
-            group = cfg.group;
-          };
-        }
-        // lib.optionalAttrs (cfg.h2o != null) {
-          "${config.services.h2o.user}".extraGroups = [ cfg.group ];
-        }
-        // lib.optionalAttrs (cfg.nginx != null) {
-          "${config.services.nginx.user}".extraGroups = [ cfg.group ];
+      users = {
+        movim = mkIf (cfg.user == "movim") {
+          isSystemUser = true;
+          group = cfg.group;
         };
+      }
+      // lib.optionalAttrs (cfg.h2o != null) {
+        "${config.services.h2o.user}".extraGroups = [ cfg.group ];
+      }
+      // lib.optionalAttrs (cfg.nginx != null) {
+        "${config.services.nginx.user}".extraGroups = [ cfg.group ];
+      };
       groups = {
         ${cfg.group} = { };
       };
@@ -656,25 +655,24 @@ in
                   "proxy.tunnel" = "ON";
                   "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
                 };
-                "/" =
-                  {
-                    "file.dir" = "${package}/share/php/movim/public";
-                    "file.index" = [
-                      "index.php"
-                      "index.html"
-                    ];
-                    redirect = {
-                      url = "/index.php/";
-                      internal = "YES";
-                      status = 307;
-                    };
-                    "header.set" = [
-                      "Content-Security-Policy: ${movimCSP}"
-                    ];
-                  }
-                  // lib.optionalAttrs (with cfg.precompressStaticFiles; brotli.enable || gzip.enable) {
-                    "file.send-compressed" = "ON";
+                "/" = {
+                  "file.dir" = "${package}/share/php/movim/public";
+                  "file.index" = [
+                    "index.php"
+                    "index.html"
+                  ];
+                  redirect = {
+                    url = "/index.php/";
+                    internal = "YES";
+                    status = 307;
                   };
+                  "header.set" = [
+                    "Content-Security-Policy: ${movimCSP}"
+                  ];
+                }
+                // lib.optionalAttrs (with cfg.precompressStaticFiles; brotli.enable || gzip.enable) {
+                  "file.send-compressed" = "ON";
+                };
               };
               "file.custom-handler" = {
                 extension = [ ".php" ];
@@ -832,7 +830,8 @@ in
           "listen.group" = cfg.group;
           "listen.mode" = "0660";
           "catch_workers_output" = true;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
     };
 
@@ -846,52 +845,51 @@ in
         requires = lib.optional cfg.database.createLocally dbUnit;
         after = lib.optional cfg.database.createLocally dbUnit;
 
-        serviceConfig =
-          {
-            Type = "oneshot";
-            User = cfg.user;
-            Group = cfg.group;
-            UMask = "077";
-          }
-          // lib.optionalAttrs (cfg.secretFile != null) {
-            LoadCredential = "env-secrets:${cfg.secretFile}";
-          };
+        serviceConfig = {
+          Type = "oneshot";
+          User = cfg.user;
+          Group = cfg.group;
+          UMask = "077";
+        }
+        // lib.optionalAttrs (cfg.secretFile != null) {
+          LoadCredential = "env-secrets:${cfg.secretFile}";
+        };
 
         script = # sh
-          ''
-            # Env vars
-            rm -f ${cfg.dataDir}/.env
-            cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
+        ''
+          # Env vars
+          rm -f ${cfg.dataDir}/.env
+          cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
+          echo -e '\n' >> ${cfg.dataDir}/.env
+          if [[ -f "$CREDENTIALS_DIRECTORY/env-secrets"  ]]; then
+            cat "$CREDENTIALS_DIRECTORY/env-secrets" >> ${cfg.dataDir}/.env
             echo -e '\n' >> ${cfg.dataDir}/.env
-            if [[ -f "$CREDENTIALS_DIRECTORY/env-secrets"  ]]; then
-              cat "$CREDENTIALS_DIRECTORY/env-secrets" >> ${cfg.dataDir}/.env
-              echo -e '\n' >> ${cfg.dataDir}/.env
-            fi
+          fi
 
-            # Caches, logs
-            mkdir -p ${cfg.dataDir}/public/cache ${cfg.logDir} ${cfg.runtimeDir}/cache
-            chmod -R ug+rw ${cfg.dataDir}/public/cache
-            chmod -R ug+rw ${cfg.logDir}
-            chmod -R ug+rwx ${cfg.runtimeDir}/cache
+          # Caches, logs
+          mkdir -p ${cfg.dataDir}/public/cache ${cfg.logDir} ${cfg.runtimeDir}/cache
+          chmod -R ug+rw ${cfg.dataDir}/public/cache
+          chmod -R ug+rw ${cfg.logDir}
+          chmod -R ug+rwx ${cfg.runtimeDir}/cache
 
-            # Migrations
-            MOVIM_VERSION="${package.version}"
-            if [[ ! -f "${cfg.dataDir}/.migration-version" ]] || [[ "$MOVIM_VERSION" != "$(<${cfg.dataDir}/.migration-version)" ]]; then
-              ${package}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
-            fi
+          # Migrations
+          MOVIM_VERSION="${package.version}"
+          if [[ ! -f "${cfg.dataDir}/.migration-version" ]] || [[ "$MOVIM_VERSION" != "$(<${cfg.dataDir}/.migration-version)" ]]; then
+            ${package}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
+          fi
+        ''
+        + lib.optionalString (podConfigFlags != "") (
+          let
+            flags = lib.concatStringsSep " " (
+              [ "--no-interaction" ]
+              ++ lib.optional cfg.debug "-vvv"
+              ++ lib.optional (!cfg.debug && cfg.verbose) "-v"
+            );
+          in
           ''
-          + lib.optionalString (podConfigFlags != "") (
-            let
-              flags = lib.concatStringsSep " " (
-                [ "--no-interaction" ]
-                ++ lib.optional cfg.debug "-vvv"
-                ++ lib.optional (!cfg.debug && cfg.verbose) "-v"
-              );
-            in
-            ''
-              ${lib.getExe package} config ${podConfigFlags}
-            ''
-          );
+            ${lib.getExe package} config ${podConfigFlags}
+          ''
+        );
       };
 
       services.${phpExecutionUnit} = {
@@ -910,20 +908,18 @@ in
           "network.target"
           "local-fs.target"
         ];
-        requires =
-          [
-            "movim-data-setup.service"
-            "${phpExecutionUnit}.service"
-          ]
-          ++ lib.optional cfg.database.createLocally dbUnit
-          ++ lib.optional (webServerService != null) webServerService;
-        after =
-          [
-            "movim-data-setup.service"
-            "${phpExecutionUnit}.service"
-          ]
-          ++ lib.optional cfg.database.createLocally dbUnit
-          ++ lib.optional (webServerService != null) webServerService;
+        requires = [
+          "movim-data-setup.service"
+          "${phpExecutionUnit}.service"
+        ]
+        ++ lib.optional cfg.database.createLocally dbUnit
+        ++ lib.optional (webServerService != null) webServerService;
+        after = [
+          "movim-data-setup.service"
+          "${phpExecutionUnit}.service"
+        ]
+        ++ lib.optional cfg.database.createLocally dbUnit
+        ++ lib.optional (webServerService != null) webServerService;
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
           WS_PORT = builtins.toString cfg.port;

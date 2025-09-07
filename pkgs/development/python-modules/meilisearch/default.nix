@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "meilisearch";
-  version = "0.36.0";
+  version = "0.37.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "meilisearch";
     repo = "meilisearch-python";
     tag = "v${version}";
-    hash = "sha256-S6l/nH+UWLgNUOkRVjLptKhWeYrlN1KL8jSfyBHMI3s=";
+    hash = "sha256-KKJ93WvkbQEtyRgROT3uGShLSwOaKrOpPDNyMJLqQ4M=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,8 @@ buildPythonPackage rec {
   dependencies = [
     camel-converter
     requests
-  ] ++ camel-converter.optional-dependencies.pydantic;
+  ]
+  ++ camel-converter.optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "meilisearch" ];
 

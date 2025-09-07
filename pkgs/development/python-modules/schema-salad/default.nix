@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.9.20250408123006";
+  version = "8.9.20250723145140";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,34 +30,36 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = version;
-    hash = "sha256-sPPHz43zvqdQ3eruRlVxLLP1ZU/UoVdtDhtQRAo8vNg=";
+    hash = "sha256-FEdv0VORkvXhqXPrmyCZ1Ib5Lz4fKwRkEqEcEXpfGq8=";
   };
 
   pythonRelaxDeps = [ "mistune" ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<9"]' '["setuptools_scm"]'
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy[mypyc]==1.15.0" "mypy"
+      --replace-fail '"setuptools_scm[toml]>=8.0.4,<9"' '"setuptools_scm[toml]"' \
+      --replace-fail "mypy[mypyc]==1.17.0" "mypy"
     sed -i "/black>=/d" pyproject.toml
   '';
 
   build-system = [ setuptools-scm ];
 
-  dependencies =
-    [
-      cachecontrol
-      mistune
-      mypy
-      mypy-extensions
-      rdflib
-      requests
-      ruamel-yaml
-      types-dataclasses
-      types-requests
-      types-setuptools
-    ]
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  dependencies = [
+    cachecontrol
+    mistune
+    mypy
+    mypy-extensions
+    rdflib
+    requests
+    ruamel-yaml
+    types-dataclasses
+    types-requests
+    types-setuptools
+  ]
+  ++ cachecontrol.optional-dependencies.filecache
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 

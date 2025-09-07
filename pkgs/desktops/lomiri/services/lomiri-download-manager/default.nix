@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [ "doc" ];
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   patches = [
     # Remove when version > 0.2.1
@@ -65,18 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      validatePkgConfig
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withDocumentation [
-      doxygen
-      graphviz
-      qttools # qdoc
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    validatePkgConfig
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    graphviz
+    qttools # qdoc
+  ];
 
   buildInputs = [
     boost

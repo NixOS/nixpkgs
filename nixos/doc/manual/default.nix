@@ -15,6 +15,7 @@ let
   inherit (pkgs) buildPackages runCommand docbook_xsl_ns;
 
   inherit (pkgs.lib)
+    evalModules
     hasPrefix
     removePrefix
     flip
@@ -24,6 +25,7 @@ let
     escapeShellArg
     concatMapStringsSep
     sourceFilesBySuffices
+    modules
     ;
 
   common = import ./common.nix;
@@ -117,7 +119,49 @@ let
         ${testOptionsDoc.optionsJSON}/${common.outputPath}/options.json
     sed -e '/@PYTHON_MACHINE_METHODS@/ {' -e 'r ${testDriverMachineDocstrings}/machine-methods.md' -e 'd' -e '}' \
       -i ./development/writing-nixos-tests.section.md
+    substituteInPlace ./development/modular-services.md \
+      --replace-fail \
+        '@PORTABLE_SERVICE_OPTIONS@' \
+        ${portableServiceOptions.optionsJSON}/${common.outputPath}/options.json
+    substituteInPlace ./development/modular-services.md \
+      --replace-fail \
+        '@SYSTEMD_SERVICE_OPTIONS@' \
+        ${systemdServiceOptions.optionsJSON}/${common.outputPath}/options.json
   '';
+
+  portableServiceOptions = buildPackages.nixosOptionsDoc {
+    inherit
+      (evalModules {
+        modules = [
+          (modules.importApply ../../modules/system/service/portable/service.nix {
+            pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
+          })
+        ];
+      })
+      options
+      ;
+    inherit revision warningsAreErrors;
+    transformOptions =
+      opt:
+      opt
+      // {
+        # Clean up declaration sites to not refer to the NixOS source tree.
+        declarations = map stripAnyPrefixes opt.declarations;
+      };
+  };
+
+  systemdServiceOptions = buildPackages.nixosOptionsDoc {
+    inherit (evalModules { modules = [ ../../modules/system/service/systemd/service.nix ]; }) options;
+    # TODO: filter out options that are not systemd-specific, maybe also change option prefix to just `service-opt-`?
+    inherit revision warningsAreErrors;
+    transformOptions =
+      opt:
+      opt
+      // {
+        # Clean up declaration sites to not refer to the NixOS source tree.
+        declarations = map stripAnyPrefixes opt.declarations;
+      };
+  };
 
 in
 rec {

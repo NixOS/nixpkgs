@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cma";
-  version = "4.0.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "CMA-ES";
     repo = "pycma";
     tag = "r${version}";
-    hash = "sha256-W4KDtX/Ho/XUrZr2cmS66Q0q90FEHRJN0VF4sMgonRw=";
+    hash = "sha256-2uCn5CZma9RLK8zaaPhiQCqnK+2dWgLNr5+Ck2cV6vI=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization";
     homepage = "https://github.com/CMA-ES/pycma";
-    changelog = "https://github.com/CMA-ES/pycma/releases/tag/r${version}";
+    changelog = "https://github.com/CMA-ES/pycma/releases/tag/r${src.tag}";
     license = licenses.bsd3;
     maintainers = [ ];
   };

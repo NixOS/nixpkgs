@@ -61,33 +61,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gcc-arm-embedded
     udevCheckHook
-  ] ++ lib.optional withGui wrapQtAppsHook;
-  buildInputs =
-    [
-      readline
-      bzip2
-      openssl
-      jansson
-      gd
-      lz4
-      whereami
-      lua
-    ]
-    ++ lib.optional withGui qtbase
-    ++ lib.optional withPython python3
-    ++ lib.optional withBlueshark bluez5;
+  ]
+  ++ lib.optional withGui wrapQtAppsHook;
+  buildInputs = [
+    readline
+    bzip2
+    openssl
+    jansson
+    gd
+    lz4
+    whereami
+    lua
+  ]
+  ++ lib.optional withGui qtbase
+  ++ lib.optional withPython python3
+  ++ lib.optional withBlueshark bluez5;
 
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-      "UDEV_PREFIX=${placeholder "out"}/etc/udev/rules.d"
-      "PLATFORM=${hardwarePlatform}"
-      "PLATFORM_EXTRAS=${hardwarePlatformExtras}"
-      "STANDALONE=${standalone}"
-      "USE_BREW=0"
-    ]
-    ++ lib.optional withSmall "PLATFORM_SIZE=256"
-    ++ map (x: "SKIP_${x}=1") withoutFunctions;
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "UDEV_PREFIX=${placeholder "out"}/etc/udev/rules.d"
+    "PLATFORM=${hardwarePlatform}"
+    "PLATFORM_EXTRAS=${hardwarePlatformExtras}"
+    "STANDALONE=${standalone}"
+    "USE_BREW=0"
+  ]
+  ++ lib.optional withSmall "PLATFORM_SIZE=256"
+  ++ map (x: "SKIP_${x}=1") withoutFunctions;
   enableParallelBuilding = true;
 
   doInstallCheck = true;

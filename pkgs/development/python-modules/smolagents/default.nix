@@ -33,7 +33,7 @@
   # openai
   openai,
   # toolkit
-  duckduckgo-search,
+  ddgs,
   markdownify,
   # torch
   numpy,
@@ -52,19 +52,26 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.18.0";
+  version = "1.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-pRpogmVes8ZX19GZff+HmGdykvMnBJ7hGsoYsUGVOSY=";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
   };
 
-  build-system = [ setuptools ];
+  # TODO: remove at the next release
+  # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+  # Caused by: https://github.com/huggingface/transformers/commit/1ecd52e50a31e7c344c32564e0484d7e9a0f2256
+  # Fixed in: https://github.com/huggingface/smolagents/pull/1625
+  postPatch = ''
+    substituteInPlace tests/test_types.py \
+      --replace-fail "require_soundfile" "require_torchcodec"
+  '';
 
-  pythonRelaxDeps = [ "pillow" ];
+  build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
@@ -101,7 +108,7 @@ buildPythonPackage rec {
     #   opentelemetry-sdk
     # ];
     toolkit = [
-      duckduckgo-search
+      ddgs
       markdownify
     ];
     torch = [
@@ -112,7 +119,8 @@ buildPythonPackage rec {
     transformers = [
       accelerate
       transformers
-    ] ++ self.torch;
+    ]
+    ++ self.torch;
     # vision = [
     #   helium
     #   selenium
@@ -128,42 +136,48 @@ buildPythonPackage rec {
     pytest-datadir
     pytestCheckHook
     wikipedia-api
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "smolagents" ];
 
-  disabledTests =
-    [
-      # Missing dependencies
-      "test_ddgs_with_kwargs"
-      "test_e2b_executor_instantiation"
-      "test_flatten_messages_as_text_for_all_models"
-      "mcp"
-      "test_import_smolagents_without_extras"
-      "test_vision_web_browser_main"
-      "test_multiple_servers"
-      # Tests require network access
-      "test_agent_type_output"
-      "test_call_different_providers_without_key"
-      "test_can_import_sklearn_if_explicitly_authorized"
-      "test_transformers_message_no_tool"
-      "test_transformers_message_vl_no_tool"
-      "test_transformers_toolcalling_agent"
-      "test_visit_webpage"
-      "test_wikipedia_search"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Missing dependencies
-      "test_get_mlx"
+  disabledTestPaths = [
+    # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+    "tests/test_types.py"
+  ];
 
-      # Fatal Python error: Aborted
-      # thread '<unnamed>' panicked, Attempted to create a NULL object.
-      # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
-      "TestDuckDuckGoSearchTool"
-      "test_init_agent_with_different_toolsets"
-      "test_multiagents_save"
-      "test_new_instance"
-    ];
+  disabledTests = [
+    # Missing dependencies
+    "test_cleanup"
+    "test_ddgs_with_kwargs"
+    "test_e2b_executor_instantiation"
+    "test_flatten_messages_as_text_for_all_models"
+    "mcp"
+    "test_import_smolagents_without_extras"
+    "test_vision_web_browser_main"
+    "test_multiple_servers"
+    # Tests require network access
+    "test_agent_type_output"
+    "test_call_different_providers_without_key"
+    "test_can_import_sklearn_if_explicitly_authorized"
+    "test_transformers_message_no_tool"
+    "test_transformers_message_vl_no_tool"
+    "test_transformers_toolcalling_agent"
+    "test_visit_webpage"
+    "test_wikipedia_search"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Missing dependencies
+    "test_get_mlx"
+
+    # Fatal Python error: Aborted
+    # thread '<unnamed>' panicked, Attempted to create a NULL object.
+    # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
+    "TestDuckDuckGoSearchTool"
+    "test_init_agent_with_different_toolsets"
+    "test_multiagents_save"
+    "test_new_instance"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

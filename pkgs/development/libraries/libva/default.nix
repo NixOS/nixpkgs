@@ -46,18 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
-  ] ++ lib.optional (!minimal) wayland-scanner;
+  ]
+  ++ lib.optional (!minimal) wayland-scanner;
 
-  buildInputs =
-    [ libdrm ]
-    ++ lib.optionals (!minimal) [
-      libX11
-      libXext
-      libXfixes
-      wayland
-      libffi
-      libGL
-    ];
+  buildInputs = [
+    libdrm
+  ]
+  ++ lib.optionals (!minimal) [
+    libX11
+    libXext
+    libXfixes
+    wayland
+    libffi
+    libGL
+  ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
@@ -98,16 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    pkgConfigModules =
-      [
-        "libva"
-        "libva-drm"
-      ]
-      ++ lib.optionals (!minimal) [
-        "libva-glx"
-        "libva-wayland"
-        "libva-x11"
-      ];
+    pkgConfigModules = [
+      "libva"
+      "libva-drm"
+    ]
+    ++ lib.optionals (!minimal) [
+      "libva-glx"
+      "libva-wayland"
+      "libva-x11"
+    ];
     platforms = platforms.unix;
     badPlatforms = [
       # Mandatory libva shared library.

@@ -9,12 +9,16 @@
   fetchgit,
   fetchFromGitHub,
   fetchFromGitea,
+  fetchpatch2,
   rustPlatform,
   editline,
   ncurses,
   clangStdenv,
+  nixpkgs-review,
   nix-direnv,
   nix-fast-build,
+  haskell,
+  nix-serve-ng,
   colmena,
 
   storeDir ? "/nix/store",
@@ -92,6 +96,10 @@ let
             stdenv = lixStdenv;
           };
 
+          nixpkgs-review = nixpkgs-review.override {
+            nix = self.lix;
+          };
+
           nix-direnv = nix-direnv.override {
             nix = self.lix;
           };
@@ -104,6 +112,15 @@ let
             inherit (self) nix-eval-jobs;
           };
 
+          nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
+            (haskell.lib.compose.enableCabalFlag "lix")
+            (haskell.lib.compose.overrideCabal (drv: {
+              # https://github.com/aristanetworks/nix-serve-ng/issues/46
+              # Resetting (previous) broken flag since it may be related to C++ Nix
+              broken = lib.versionAtLeast self.lix.version "2.93";
+            }))
+          ];
+
           colmena = colmena.override {
             nix = self.lix;
             inherit (self) nix-eval-jobs;
@@ -113,42 +130,6 @@ let
 in
 lib.makeExtensible (self: {
   inherit makeLixScope;
-
-  lix_2_90 = self.makeLixScope {
-    attrName = "lix_2_90";
-
-    lix-args = rec {
-      version = "2.90.0";
-
-      src = fetchFromGitHub {
-        owner = "lix-project";
-        repo = "lix";
-        rev = version;
-        hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
-      };
-
-      docCargoDeps = rustPlatform.fetchCargoVendor {
-        name = "lix-doc-${version}";
-        inherit src;
-        sourceRoot = "${src.name or src}/lix-doc";
-        hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
-      };
-
-      knownVulnerabilities = [
-        "Lix 2.90 is vulnerable to CVE-2025-46415 and CVE-2025-46416 and will not receive updates."
-      ];
-    };
-
-    nix-eval-jobs-args = {
-      version = "2.90.0";
-      src = fetchgit {
-        url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
-        # https://git.lix.systems/lix-project/nix-eval-jobs/commits/branch/release-2.90
-        rev = "9c23772cf25e0d891bef70b7bcb7df36239672a5";
-        hash = "sha256-oT273pDmYzzI7ACAFUOcsxtT6y34V5KF7VBSqTza7j8=";
-      };
-    };
-  };
 
   lix_2_91 = self.makeLixScope {
     attrName = "lix_2_91";
@@ -162,6 +143,15 @@ lib.makeExtensible (self: {
         rev = version;
         hash = "sha256-b5d+HnPcyHz0ZJW1+LZl4qm4LGTB/TiaDFQVlVL2xpE=";
       };
+
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-2.91-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/ecff59d77371b21fef229c33ebb629bc49a8fad5.patch";
+          sha256 = "sha256-2M5oId5kObwzpw67rddAPI2RbWPEVlGBrMUXZWqqmEo=";
+        })
+      ];
 
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
@@ -195,6 +185,15 @@ lib.makeExtensible (self: {
         hash = "sha256-iP2iUDxA99RcgQyZROs7bQw8pqxa1vFudRqjAIHg9Iw=";
       };
 
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+          hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+        })
+      ];
+
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
         inherit src;
@@ -216,15 +215,24 @@ lib.makeExtensible (self: {
     attrName = "lix_2_93";
 
     lix-args = rec {
-      version = "2.93.2";
+      version = "2.93.3";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
         rev = version;
-        hash = "sha256-J4ycLoXHPsoBoQtEXFCelL4xlq5pT8U9tNWNKm43+YI=";
+        hash = "sha256-Oqw04eboDM8rrUgAXiT7w5F2uGrQdt8sGX+Mk6mVXZQ=";
       };
+
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+          hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+        })
+      ];
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
@@ -238,29 +246,27 @@ lib.makeExtensible (self: {
     attrName = "git";
 
     lix-args = rec {
-      version = "2.94.0-pre-20250624_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0-pre-20250807_${builtins.substring 0 12 src.rev}";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "42e2bd045c9e51a59fdab038dc4e6f9e86c4922c";
-        hash = "sha256-BsY8kpwQML9/036g9C+No7lhzqmn4ZTlIsuo92SVSJk=";
+        rev = "8bbd5e1d0df9c31b4d86ba07bc85beb952e42ccb";
+        hash = "sha256-P+WiN95OjCqHhfygglS/VOFTSj7qNdL5XQDo2wxhQqg=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
         inherit src;
-        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+        hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
       };
     };
   };
 
   latest = self.lix_2_93;
 
-  # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
-  # See: https://git.lix.systems/lix-project/lix/issues/662
-  stable = self.lix_2_91;
+  stable = self.lix_2_93;
 
   # Previously, `nix-eval-jobs` was not packaged here, so we export an
   # attribute with the previously-expected structure for compatibility. This
@@ -273,7 +279,6 @@ lib.makeExtensible (self: {
           self.${version}.lix;
     in
     lib.dontRecurseIntoAttrs {
-      lix_2_90 = mkAlias "lix_2_90";
       lix_2_91 = mkAlias "lix_2_91";
       # NOTE: Do not add new versions of Lix here.
       stable = mkAlias "stable";

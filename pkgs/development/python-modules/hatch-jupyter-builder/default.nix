@@ -30,7 +30,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     twine
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   disabledTests = [
     # tests pip install, which unsurprisingly fails
@@ -39,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/jupyterlab/hatch-jupyter-builder/releases/tag/v${version}";
-    description = "hatch plugin to help build Jupyter packages";
+    description = "Hatch plugin to help build Jupyter packages";
     mainProgram = "hatch-jupyter-builder";
     homepage = "https://github.com/jupyterlab/hatch-jupyter-builder";
     license = licenses.bsd3;

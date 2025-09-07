@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "genxword";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "riverrun";
     repo = "genxword";
-    rev = "v${version}";
-    sha256 = "17h8saja45bv612yk0pra9ncbp2mjnx5n10q25nqhl765ks4bmb5";
+    tag = "v${version}";
+    hash = "sha256-vzzkXfMnkeTFQmTNAfCIKqVVNm1I6GSfRV1lwGmLj6Y=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     gtksourceview3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pycairo
     pygobject3
   ];
@@ -46,10 +50,11 @@ python3.pkgs.buildPythonApplication rec {
   # there are no tests
   doCheck = false;
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    homepage = "https://github.com/riverrun/genxword";
     description = "Crossword generator";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "genxword";
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

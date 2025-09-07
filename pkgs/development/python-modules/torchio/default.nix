@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   deprecated,
@@ -29,18 +29,18 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.16";
+  version = "0.20.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-BWn4Kg44mMfUs4wtajYZTH6TATWxLVifCfZKfql/hdI=";
+    hash = "sha256-l2KQLZDxsP8Bjk/vPG2YbU+8Z6/lOvNvy9NYKTdW+cY=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   dependencies = [
@@ -64,15 +64,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # tries to download models:
-      "test_load_all"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-      "test_queue_multiprocessing"
-    ];
+  disabledTests = [
+    # tries to download models:
+    "test_load_all"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_queue_multiprocessing"
+  ];
 
   pythonImportsCheck = [
     "torchio"
@@ -81,7 +80,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "https://torchio.readthedocs.io";
+    homepage = "https://docs.torchio.org";
     changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];

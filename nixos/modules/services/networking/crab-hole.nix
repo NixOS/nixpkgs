@@ -43,7 +43,7 @@ in
       };
 
       settings = lib.mkOption {
-        description = "Crab-holes config. See big example https://github.com/LuckyTurtleDev/crab-hole/blob/main/example-config.toml";
+        description = "Crab-holes config. See big example <https://github.com/LuckyTurtleDev/crab-hole/blob/main/example-config.toml>";
 
         example = {
           downstream = [

@@ -21,7 +21,7 @@ buildPecl rec {
   buildInputs = [ lua51Packages.lua ];
 
   meta = {
-    description = "extension for PHP 7 and PHP 8 to allow safely running untrusted Lua 5.1 code from within PHP";
+    description = "Extension for PHP 7 and PHP 8 to allow safely running untrusted Lua 5.1 code from within PHP";
     license = lib.licenses.mit;
     homepage = "https://www.mediawiki.org/wiki/LuaSandbox";
     maintainers = with lib.maintainers; [ georgyo ];

@@ -5,20 +5,18 @@
   meta.maintainers = with lib.maintainers; [ oxalica ];
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       virtualisation.useDefaultFilesystems = false;
 
       virtualisation.rootDevice = "/dev/vda";
 
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.btrfs-progs}/bin/mkfs.btrfs --label root /dev/vda
-      '';
-
+      boot.initrd.systemd.enable = true;
       virtualisation.fileSystems = {
         "/" = {
-          device = "/dev/disk/by-label/root";
+          device = config.virtualisation.rootDevice;
           fsType = "btrfs";
+          autoFormat = true;
         };
       };
 

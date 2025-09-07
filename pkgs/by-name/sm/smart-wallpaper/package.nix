@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "smart-wallpaper";
-  version = "unstable-2022-09-15";
+  version = "0-unstable-2022-09-15";
 
   src = fetchFromGitHub {
     owner = "Baitinq";

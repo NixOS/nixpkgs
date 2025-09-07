@@ -17,7 +17,7 @@ let
   botScript = "$out/bin/wpcleaner-bot";
   runTaskScript = "$out/bin/wpcleaner-run-task";
   extraJavaArgs = [
-    "-Dawt.useSystemAAFontSettings=lcd"
+    "-Dawt.useSystemAAFontSettings=gasp"
     "-Xms1g"
     "-Xmx8g"
   ];
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "An utility for performing maintenance on Wikipedia";
+    description = "Utility for performing maintenance on Wikipedia";
     longDescription = ''
       WPCleaner is a tool designed to help with various maintenance tasks, especially repairing
       links to disambiguation pages, checking Wikipedia, fixing spelling and typography, and

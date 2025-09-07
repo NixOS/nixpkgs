@@ -54,24 +54,23 @@ let
       xrandr
     ])
   );
-  programs =
-    [
-      ps
-      dnsutils
-    ] # Core programs
-    ++ recommendedSystemPrograms
-    ++ recommendedDisplayInformationPrograms;
+  programs = [
+    ps
+    dnsutils
+  ] # Core programs
+  ++ recommendedSystemPrograms
+  ++ recommendedDisplayInformationPrograms;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
-  version = "3.3.38-1";
+  version = "3.3.39-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
     tag = finalAttrs.version;
-    hash = "sha256-+2NPQUn2A8Xy5ByKYS3MOcad6xXvkqcusWEMr7mkEwA=";
+    hash = "sha256-IfwklyXMOuluQ6L96n7k31RHItE7GmmjExrPAGBjbUQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

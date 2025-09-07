@@ -24,19 +24,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Wa07LLcMQ1PxA8CJhaLDu5OllfJYKmJ8uWDfXOu8rus=";
 
-  rpathLibs =
-    [
-      fontconfig
-      libGL
-      xorg.libxcb
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    fontconfig
+    libGL
+    xorg.libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    wayland
+  ];
 
   nativeBuildInputs = [
     cmake

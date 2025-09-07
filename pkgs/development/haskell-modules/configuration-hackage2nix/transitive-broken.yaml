@@ -136,11 +136,13 @@ dont-distribute-packages:
  - atlassian-connect-core
  - atmos-dimensional-tf
  - atom-msp430
+ - atomic-css
  - atomic-primops-foreign
  - atp
  - attenuation-profunctors
  - AttoJson
  - attoparsec-enumerator
+ - attoparsec-isotropic
  - attoparsec-iteratee
  - attoparsec-text-enumerator
  - atuin
@@ -267,7 +269,6 @@ dont-distribute-packages:
  - birch-beer
  - bird
  - BirdPP
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -276,7 +277,6 @@ dont-distribute-packages:
  - bitcoin-api-extra
  - bitcoin-block
  - bitcoin-tx
- - bitcoin-types
  - bitcoind-regtest
  - Bitly
  - bitly-cli
@@ -339,9 +339,7 @@ dont-distribute-packages:
  - bytestring-read
  - bytetrie
  - ca
- - cabal-bounds
  - cabal-cache
- - cabal-cargs
  - cabal-query
  - cabal-test
  - cabal2arch
@@ -470,6 +468,7 @@ dont-distribute-packages:
  - clod
  - cloud-haskell
  - cloud-seeder
+ - cloudevents-haskell
  - cloudyfs
  - clr-bindings
  - clr-inline
@@ -682,6 +681,7 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
+ - dde
  - debug
  - decimal-arithmetic
  - dedukti
@@ -700,7 +700,6 @@ dont-distribute-packages:
  - delimiter-separated
  - delta
  - delta-h
- - delta-store
  - dep-t-advice
  - dep-t-dynamic
  - dep-t-value
@@ -722,7 +721,6 @@ dont-distribute-packages:
  - dhall-secret
  - dia-functions
  - diagrams-html5
- - diagrams-reflex
  - diagrams-wx
  - dialog
  - diff
@@ -1065,8 +1063,6 @@ dont-distribute-packages:
  - gelatin-gl
  - gelatin-sdl2
  - gelatin-shaders
- - gemini-router
- - gemini-textboard
  - Genbank
  - gencheck
  - Gene-CluEDO
@@ -1085,6 +1081,7 @@ dont-distribute-packages:
  - geodetic
  - geolite-csv
  - getemx
+ - ghc-debugger
  - ghc-dump-util
  - ghc-experimental
  - ghc-imported-from
@@ -1197,7 +1194,7 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - grisette_0_12_0_0
+ - grisette_0_13_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1364,7 +1361,6 @@ dont-distribute-packages:
  - haskelldb-hsql-postgresql
  - haskelldb-hsql-sqlite3
  - haskelldb-th
- - HaskellNet-SSL
  - haskelm
  - haskey
  - haskey-mtl
@@ -1377,7 +1373,6 @@ dont-distribute-packages:
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
- - haskore-realtime
  - haskore-supercollider
  - haskore-synthesizer
  - hasktorch-ffi-thc
@@ -1586,7 +1581,7 @@ dont-distribute-packages:
  - HPong
  - hpqtypes-effectful
  - hpqtypes-extras
- - hpqtypes-extras_1_17_0_1
+ - hpqtypes-extras_1_18_0_0
  - hprotoc
  - hprotoc-fork
  - hps
@@ -1612,7 +1607,6 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
- - hs-pkpass
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
@@ -1636,6 +1630,7 @@ dont-distribute-packages:
  - hsdev
  - hsec-core
  - Hsed
+ - hsendxmpp
  - hsfacter
  - HSGEP
  - HSHHelpers
@@ -1752,7 +1747,6 @@ dont-distribute-packages:
  - igrf
  - ihaskell-inline-r
  - ihaskell-rlangqq
- - ihaskell-symtegration
  - ihttp
  - imap
  - imbib
@@ -1875,7 +1869,6 @@ dont-distribute-packages:
  - json-pointer-hasql
  - json-query
  - json-rpc-client
- - json-schema
  - json-state
  - json-togo
  - json2-hdbc
@@ -1938,12 +1931,13 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
+ - knead
  - knit-haskell
  - koji-install
  - koji-tool
+ - koji-tool_1_3
  - korfu
  - ks-test
- - kubernetes-api-client
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
@@ -2013,7 +2007,6 @@ dont-distribute-packages:
  - legion-discovery
  - legion-discovery-client
  - legion-extra
- - leksah
  - leksah-server
  - lens-utils
  - lenz
@@ -2065,7 +2058,6 @@ dont-distribute-packages:
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
- - list1
  - listenbrainz-client
  - ListT
  - liszt
@@ -2076,6 +2068,7 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
+ - llvm-dsl
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
@@ -2136,7 +2129,6 @@ dont-distribute-packages:
  - magic-wormhole
  - mahoro
  - maid
- - mail-pool
  - MailchimpSimple
  - mailgun
  - majordomo
@@ -2211,12 +2203,11 @@ dont-distribute-packages:
  - Michelangelo
  - micro-gateway
  - microformats2-types
+ - MicroHs
  - MicrosoftTranslator
  - midimory
  - mig-server
  - mighttpd
- - migrant-hdbc
- - migrant-sqlite-simple
  - minecraft-data
  - minesweeper
  - minilight
@@ -2285,14 +2276,11 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp-pm
  - mptcpanalyzer
- - msgpack-aeson
  - msgpack-arbitrary
  - msgpack-binary
  - msgpack-idl
  - msgpack-persist
- - msgpack-rpc
  - msgpack-rpc-conduit
  - msgpack-testsuite
  - msi-kb-backlit
@@ -2471,7 +2459,6 @@ dont-distribute-packages:
  - ollama-holes-plugin
  - olwrapper
  - om-kubernetes
- - one-time-password
  - online-csv
  - OnRmt
  - oops-examples
@@ -2537,6 +2524,7 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
+ - patch-image
  - pathfindingcore
  - patterns
  - paypal-rest-client
@@ -2621,6 +2609,16 @@ dont-distribute-packages:
  - Plot-ho-matic
  - PlslTools
  - plugins-auto
+ - pms-application-service
+ - pms-domain-service
+ - pms-infra-cmdrun
+ - pms-infra-procspawn
+ - pms-infra-socket
+ - pms-infra-watch
+ - pms-infrastructure
+ - pms-ui-notification
+ - pms-ui-request
+ - pms-ui-response
  - png-file
  - pngload
  - pointless-lenses
@@ -2637,7 +2635,6 @@ dont-distribute-packages:
  - polysemy-hasql
  - polysemy-hasql-test
  - polysemy-kvstore-jsonfile
- - polysemy-log-co
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
@@ -2723,6 +2720,7 @@ dont-distribute-packages:
  - psql
  - ptera
  - ptera-th
+ - pty-mcp-server
  - publicsuffixlist
  - puffytools
  - Pugs
@@ -2761,6 +2759,7 @@ dont-distribute-packages:
  - queryparser-presto
  - queryparser-vertica
  - queuelike
+ - quick-process
  - quickcheck-poly
  - quickcheck-regex
  - quickcheck-relaxng
@@ -2815,12 +2814,11 @@ dont-distribute-packages:
  - rasa-ext-vim
  - rascal
  - raw-feldspar
- - rawlock
  - razom-text-util
  - rbr
  - rc
  - rdioh
- - rds-data
+ - rds-data-polysemy
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -2844,12 +2842,10 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-dom-colonnade
  - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
- - reflex-localize-dom
  - reflex-monad-auth
  - reflex-process
  - reform-blaze
@@ -2868,7 +2864,6 @@ dont-distribute-packages:
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
- - registry-messagepack
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -2890,7 +2885,6 @@ dont-distribute-packages:
  - reserve
  - resin
  - resource-pool-catchio
- - resource-registry
  - resource-simple
  - rest-client
  - rest-core
@@ -3156,7 +3150,6 @@ dont-distribute-packages:
  - sibe
  - sigma-ij
  - signals
- - signature
  - signify-hs
  - silvi
  - simgi
@@ -3264,7 +3257,6 @@ dont-distribute-packages:
  - spelling-suggest
  - sphero
  - spice
- - spike
  - SpinCounter
  - splines
  - sprinkles
@@ -3498,7 +3490,6 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
- - trasa-reflex
  - trasa-server
  - trasa-th
  - traversal-template
@@ -3550,6 +3541,7 @@ dont-distribute-packages:
  - TypeClass
  - typed-encoding-encoding
  - typed-gui
+ - typed-protocols-doc
  - typed-streams
  - typedflow
  - TypeIlluminator
@@ -3647,7 +3639,6 @@ dont-distribute-packages:
  - venzone
  - verdict-json
  - verifiable-expressions
- - verismith
  - versioning-servant
  - vertexenum
  - vflow-types
@@ -3732,7 +3723,6 @@ dont-distribute-packages:
  - windowslive
  - winery
  - winio
- - wire-streams
  - Wired
  - wl-pprint-ansiterm
  - wl-pprint-terminfo
@@ -3751,7 +3741,6 @@ dont-distribute-packages:
  - WringTwistree
  - write-buffer-stm
  - writer-cps-full
- - wsjtx-udp
  - wstunnel
  - wtk-gtk
  - wu-wei
@@ -3779,7 +3768,6 @@ dont-distribute-packages:
  - xml-catalog
  - xml-enumerator
  - xml-enumerator-combinators
- - xml-isogen
  - xml-monad
  - xml-pipe
  - xml-push
@@ -3829,7 +3817,6 @@ dont-distribute-packages:
  - yesod-continuations
  - yesod-examples
  - yesod-fay
- - yesod-fb
  - yesod-mangopay
  - yesod-paypal-rest
  - yesod-platform

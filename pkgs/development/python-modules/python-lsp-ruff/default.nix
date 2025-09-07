@@ -42,7 +42,8 @@ buildPythonPackage rec {
     cattrs
     lsprotocol
     python-lsp-server
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

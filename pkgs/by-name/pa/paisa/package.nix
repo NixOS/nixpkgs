@@ -93,7 +93,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://paisa.fyi/";
     changelog = "https://github.com/ananthakumaran/paisa/releases/tag/v${finalAttrs.version}";
-    description = "Paisa is a Personal finance manager. It builds on top of the ledger double entry accounting tool.";
+    description = "Personal finance manager, building on top of the ledger double entry accounting tool";
     license = lib.licenses.agpl3Only;
     mainProgram = "paisa";
     maintainers = with lib.maintainers; [ skowalak ];

@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.8.1";
+  version = "9.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-NCNeTxR4eWMJ3OHcBEQ2MZky9XiEExPscGhriDvXYf8=";
+    hash = "sha256-InypyVCk08tsByKaIBRFWldwRz1AkNCgFD3DL4OG84w=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -46,36 +46,36 @@ stdenv.mkDerivation rec {
     cmake
     wrapGAppsHook3
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      curl
-      libsForQt5.dxflib
-      fftw
-      libsvm
-      hdf5
-      gdal
-      wxGTK32
-      pdal
-      proj
-      libharu
-      opencv
-      vigra
-      libpq
-      libiodbc
-      xz
-      qhull
-      giflib
-    ]
-    # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
-    # for why the have additional buildInputs on darwin
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      unixODBC
-      poppler
-      netcdf
-      sqlite
-    ];
+  buildInputs = [
+    curl
+    libsForQt5.dxflib
+    fftw
+    libsvm
+    hdf5
+    gdal
+    wxGTK32
+    pdal
+    proj
+    libharu
+    opencv
+    vigra
+    libpq
+    libiodbc
+    xz
+    qhull
+    giflib
+  ]
+  # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
+  # for why the have additional buildInputs on darwin
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    unixODBC
+    poppler
+    netcdf
+    sqlite
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))

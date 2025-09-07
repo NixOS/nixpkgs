@@ -53,7 +53,13 @@ in
         query logging.
       '';
       default = 0;
-      example = "3";
+      example = 3;
+    };
+
+    openFirewallDNS = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open ports in the firewall for pihole-FTL's DNS server.";
     };
 
     openFirewallDHCP = mkOption {
@@ -234,7 +240,7 @@ in
       (mkDefaults {
         misc.readOnly = true; # Prevent config changes via API or CLI by default
         webserver.port = ""; # Disable the webserver by default
-        misc.privacyLevel = cfg.privacyLevel;
+        misc.privacylevel = cfg.privacyLevel;
       })
 
       # Move state files to cfg.stateDirectory
@@ -434,9 +440,13 @@ in
     };
 
     networking.firewall = lib.mkMerge [
-      (mkIf cfg.openFirewallDHCP {
+      (mkIf cfg.openFirewallDNS {
         allowedUDPPorts = [ 53 ];
         allowedTCPPorts = [ 53 ];
+      })
+
+      (mkIf cfg.openFirewallDHCP {
+        allowedUDPPorts = [ 67 ];
       })
 
       (mkIf cfg.openFirewallWebserver {

@@ -40,17 +40,18 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [ libdrm ]
-    ++ lib.optionals (!minimal) [
-      libva1-minimal
-      libX11
-      libXext
-      libXfixes
-      wayland
-      libffi
-      libGL
-    ];
+  buildInputs = [
+    libdrm
+  ]
+  ++ lib.optionals (!minimal) [
+    libva1-minimal
+    libX11
+    libXext
+    libXfixes
+    wayland
+    libffi
+    libGL
+  ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   # Add FHS paths for non-NixOS applications.

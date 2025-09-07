@@ -16,11 +16,6 @@
   # `extraDependencies` that are not in the closure of `packages`.
   extraDependencies = p: { libraryHaskellDepends = [ p.conduit ]; };
   nativeBuildInputs = [ cabal-install ];
-  phases = [
-    "unpackPhase"
-    "buildPhase"
-    "installPhase"
-  ];
   unpackPhase = ''
     sourceRoot=$(pwd)/scratch
     mkdir -p "$sourceRoot"

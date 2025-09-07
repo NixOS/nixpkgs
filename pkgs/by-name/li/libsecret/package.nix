@@ -76,7 +76,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsecret/${lib.versions.majorMinor version}/libsecret-${version}.tar.xz";
@@ -87,30 +88,28 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      libxslt # for xsltproc for building man pages
-      docbook-xsl-nons
-      docbook_xml_dtd_42
-      libintl
-      vala
-      glib
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    libxslt # for xsltproc for building man pages
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+    libintl
+    vala
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+  ];
 
-  buildInputs =
-    [
-      libgcrypt
-    ]
-    ++ lib.optionals withTpm2Tss [ tpm2-tss ]
-    ++ lib.optionals abrmdSupport [ tpm2-abrmd ];
+  buildInputs = [
+    libgcrypt
+  ]
+  ++ lib.optionals withTpm2Tss [ tpm2-tss ]
+  ++ lib.optionals abrmdSupport [ tpm2-abrmd ];
 
   propagatedBuildInputs = [
     glib
@@ -149,29 +148,28 @@ stdenv.mkDerivation rec {
     mesonFlagsArray+=("-Dc_link_args=-Wl,--push-state,--no-as-needed -ltss2-tcti-tabrmd -ltss2-tcti-device -Wl,--pop-state")
   '';
 
-  preCheck =
-    ''
-      # Our gobject-introspection patches make the shared library paths absolute
-      # in the GIR files. When running tests, the library is not yet installed,
-      # though, so we need to replace the absolute path with a local one during build.
-      # We are using a symlink that will be overwitten during installation.
-      mkdir -p $out/lib $out/lib
-      ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
-      ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
-    ''
-    + lib.optionalString (withTpm2Tss && !abrmdSupport) ''
-      # If abrmdSupport is disabled, the user‐space resource manager TCTI
-      # module is not linked at compile time. It is however needed during
-      # testing because the TPM emulator lacks an integrated resource manager
-      # The module path is therefore injected temporarly using the
-      # LD_LIBRARY_PATH environment variable, so that it may be found by
-      # dlopen().
-      #
-      # If abrmdSupport is enabled, this is avoided to check that the
-      # module has been properly linked and can be located through the
-      # DT_RUNPATH and DT_NEEDED entries in libsecret-1.so.
-      export LD_LIBRARY_PATH+=":${lib.makeLibraryPath [ tpm2-abrmd ]}"
-    '';
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overwitten during installation.
+    mkdir -p $out/lib $out/lib
+    ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
+    ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
+  ''
+  + lib.optionalString (withTpm2Tss && !abrmdSupport) ''
+    # If abrmdSupport is disabled, the user‐space resource manager TCTI
+    # module is not linked at compile time. It is however needed during
+    # testing because the TPM emulator lacks an integrated resource manager
+    # The module path is therefore injected temporarly using the
+    # LD_LIBRARY_PATH environment variable, so that it may be found by
+    # dlopen().
+    #
+    # If abrmdSupport is enabled, this is avoided to check that the
+    # module has been properly linked and can be located through the
+    # DT_RUNPATH and DT_NEEDED entries in libsecret-1.so.
+    export LD_LIBRARY_PATH+=":${lib.makeLibraryPath [ tpm2-abrmd ]}"
+  '';
 
   checkPhase = ''
     runHook preCheck

@@ -8,14 +8,16 @@
   perl,
   go,
   python3,
-  protobuf_29, # does not build with 30+
+  protobuf,
   zlib,
   gtest,
   brotli,
   lz4,
   zstd,
-  libusb1,
   pcre2,
+  fetchpatch2,
+  fmt,
+  udev,
 }:
 
 let
@@ -24,12 +26,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "35.0.1";
+  version = "35.0.2";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-ZUAwx/ltJdciTNaGH6wUoEPPHTmA9AKIzfviGflP+vk=";
+    hash = "sha256-0sMiIoAxXzbYv6XALXYytH42W/4ud+maNWT7ZXbwQJc=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/nmeum/android-tools/0c4d79943e23785589ce1881cbb5a9bc76d64d9b/patches/extras/0003-extras-libjsonpb-Fix-incompatibility-with-protobuf-v.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/extras/";
+      hash = "sha256-PO6ZKP54ri2ujVa/uFXgMy/zMQjjIo4e/EPW2Cu6a1Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -39,22 +50,30 @@ stdenv.mkDerivation rec {
     go
   ];
   buildInputs = [
-    protobuf_29
+    protobuf
     zlib
     gtest
     brotli
     lz4
     zstd
-    libusb1
     pcre2
-  ];
+    fmt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
   propagatedBuildInputs = [ pythonEnv ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
   '';
 
-  meta = with lib; {
+  cmakeFlags = [
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (lib.cmakeBool "protobuf_MODULE_COMPATIBLE" true)
+    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ANDROID_TOOLS_USE_BUNDLED_LIBUSB" true)
+  ];
+
+  meta = {
     description = "Android SDK platform tools";
     longDescription = ''
       Android SDK Platform-Tools is a component for the Android SDK. It
@@ -74,12 +93,12 @@ stdenv.mkDerivation rec {
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       unicode-dfs-2015
+      mit
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
-    teams = [ teams.android ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.android ];
   };
 }

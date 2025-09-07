@@ -45,7 +45,8 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  } // config.thunderbird.policies or { };
+  }
+  // config.thunderbird.policies or { };
   policiesJson = writeText "thunderbird-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") { } sources;

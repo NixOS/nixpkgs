@@ -29,7 +29,7 @@ rebar3Relx rec {
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p bash common-updater-scripts git nix-prefetch-git gnutar gzip "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}" nixfmt-rfc-style
+    #!nix-shell -i bash -p bash common-updater-scripts git nix-prefetch-git gnutar gzip "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}"
 
     set -euo pipefail
 

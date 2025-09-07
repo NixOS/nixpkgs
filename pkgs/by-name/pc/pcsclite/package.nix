@@ -23,9 +23,6 @@
   polkitSupport ? false,
 }:
 
-assert polkitSupport -> dbusSupport;
-assert systemdSupport -> dbusSupport;
-
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "2.3.0";
@@ -55,41 +52,39 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  mesonFlags =
-    [
-      (lib.mesonOption "sysconfdir" "/etc")
-      # The OS should care on preparing the drivers into this location
-      (lib.mesonOption "usbdropdir" "/var/lib/pcsc/drivers")
-      (lib.mesonBool "libsystemd" systemdSupport)
-      (lib.mesonBool "polkit" polkitSupport)
-      (lib.mesonOption "ipcdir" "/run/pcscd")
-    ]
-    ++ lib.optionals systemdSupport [
-      (lib.mesonOption "systemdunit" "system")
-    ]
-    ++ lib.optionals (!udevSupport) [
-      (lib.mesonBool "libudev" false)
-    ];
+  mesonFlags = [
+    (lib.mesonOption "sysconfdir" "/etc")
+    # The OS should care on preparing the drivers into this location
+    (lib.mesonOption "usbdropdir" "/var/lib/pcsc/drivers")
+    (lib.mesonBool "libsystemd" systemdSupport)
+    (lib.mesonBool "polkit" polkitSupport)
+    (lib.mesonOption "ipcdir" "/run/pcscd")
+  ]
+  ++ lib.optionals systemdSupport [
+    (lib.mesonOption "systemdunit" "system")
+  ]
+  ++ lib.optionals (!udevSupport) [
+    (lib.mesonBool "libudev" false)
+  ];
 
   # disable building pcsc-wirecheck{,-gen} when cross compiling
   # see also: https://github.com/LudovicRousseau/PCSC/issues/25
-  postPatch =
-    ''
-      substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
-        --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
-    ''
-    + lib.optionalString systemdSupport ''
-      substituteInPlace meson.build \
-        --replace-fail \
-          "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + unit + 'unitdir')" \
-          "systemdsystemunitdir = '${placeholder "out"}/lib/systemd/system'"
-    ''
-    + lib.optionalString polkitSupport ''
-      substituteInPlace meson.build \
-        --replace-fail \
-          "install_dir : polkit_dep.get_variable('policydir')" \
-          "install_dir : '${placeholder "out"}/share/polkit-1/actions'"
-    '';
+  postPatch = ''
+    substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
+      --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
+  ''
+  + lib.optionalString systemdSupport ''
+    substituteInPlace meson.build \
+      --replace-fail \
+        "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + unit + 'unitdir')" \
+        "systemdsystemunitdir = '${placeholder "out"}/lib/systemd/system'"
+  ''
+  + lib.optionalString polkitSupport ''
+    substituteInPlace meson.build \
+      --replace-fail \
+        "install_dir : polkit_dep.get_variable('policydir')" \
+        "install_dir : '${placeholder "out"}/share/polkit-1/actions'"
+  '';
 
   postInstall = ''
     # pcsc-spy is a debugging utility and it drags python into the closure
@@ -104,13 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs =
-    [ python3 ]
-    ++ lib.optionals systemdSupport [ systemdLibs ]
-    ++ lib.optionals (!systemdSupport && udevSupport) [ udev ]
-    ++ lib.optionals dbusSupport [ dbus ]
-    ++ lib.optionals polkitSupport [ polkit ]
-    ++ lib.optionals (!udevSupport) [ libusb1 ];
+  buildInputs = [
+    python3
+  ]
+  ++ lib.optionals systemdSupport [ systemdLibs ]
+  ++ lib.optionals (!systemdSupport && udevSupport) [ udev ]
+  ++ lib.optionals dbusSupport [ dbus ]
+  ++ lib.optionals polkitSupport [ polkit ]
+  ++ lib.optionals (!udevSupport) [ libusb1 ];
 
   passthru = {
     tests = {
@@ -132,5 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.anthonyroussel ];
     pkgConfigModules = [ "libpcsclite" ];
     platforms = lib.platforms.unix;
+    broken = !(polkitSupport -> dbusSupport) || !(systemdSupport -> dbusSupport);
   };
 })

@@ -42,7 +42,7 @@ in
       default = [ ];
       description = ''
         Extra arguments to pass to the matter-server executable.
-        See https://github.com/home-assistant-libs/python-matter-server?tab=readme-ov-file#running-the-development-server for options.
+        See <https://github.com/home-assistant-libs/python-matter-server?tab=readme-ov-file#running-the-development-server> for options.
       '';
     };
   };

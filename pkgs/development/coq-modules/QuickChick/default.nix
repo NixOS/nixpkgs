@@ -16,87 +16,29 @@ in
   owner = "QuickChick";
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        {
-          cases = [
-            (lib.versions.range "8.15" "9.0")
-            lib.pred.true
-          ];
-          out = "2.0.4";
-        }
-        {
-          cases = [
-            (lib.versions.range "8.13" "8.17")
-            lib.pred.true
-          ];
-          out = "1.6.5";
-        }
-        {
-          cases = [
-            "8.13"
-            lib.pred.true
-          ];
-          out = "1.5.0";
-        }
-        {
-          cases = [
-            "8.12"
-            lib.pred.true
-          ];
-          out = "1.4.0";
-        }
-        {
-          cases = [
-            "8.11"
-            lib.pred.true
-          ];
-          out = "1.3.2";
-        }
-        {
-          cases = [
-            "8.10"
-            lib.pred.true
-          ];
-          out = "1.2.1";
-        }
-        {
-          cases = [
-            "8.9"
-            lib.pred.true
-          ];
-          out = "1.1.0";
-        }
-        {
-          cases = [
-            "8.8"
-            lib.pred.true
-          ];
-          out = "20190311";
-        }
-        {
-          cases = [
-            "8.7"
-            lib.versions.isLe
-            "1.8"
-          ];
-          out = "1.0.0";
-        }
-        {
-          cases = [
-            "8.6"
-            lib.pred.true
-          ];
-          out = "20171102";
-        }
-        {
-          cases = [
-            "8.5"
-            lib.pred.true
-          ];
-          out = "20170512";
-        }
+        (case (lib.versions.range "8.15" "9.0") lib.pred.true "2.0.4")
+        (case (lib.versions.range "8.13" "8.17") lib.pred.true "1.6.5")
+        (case "8.13" lib.pred.true "1.5.0")
+        (case "8.12" lib.pred.true "1.4.0")
+        (case "8.11" lib.pred.true "1.3.2")
+        (case "8.10" lib.pred.true "1.2.1")
+        (case "8.9" lib.pred.true "1.1.0")
+        (case "8.8" lib.pred.true "20190311")
+        (case "8.7" (lib.versions.isLe "1.8") "1.0.0")
+        (case "8.6" lib.pred.true "20171102")
+        (case "8.5" lib.pred.true "20170512")
       ]
       null;
   release."2.0.4".sha256 = "sha256-WD8B+n8gyGctHMO+M8201Ca3Uw8zCWYsOatSNGCf0/s=";
@@ -126,12 +68,13 @@ in
 
   mlPlugin = true;
   nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
-  propagatedBuildInputs =
-    [ mathcomp-boot ]
-    ++ lib.optionals recent [
-      ExtLib
-      simple-io
-    ];
+  propagatedBuildInputs = [
+    mathcomp-boot
+  ]
+  ++ lib.optionals recent [
+    ExtLib
+    simple-io
+  ];
   extraInstallFlags = [ "-f Makefile.coq" ];
 
   enableParallelBuilding = false;

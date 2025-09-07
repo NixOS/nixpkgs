@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
-    license = licenses.unfreeRedistributable;
+    license = licenses.unfree;
     maintainers = with maintainers; [
       mlatus
       th0rgal

@@ -5,7 +5,7 @@
   yarn-berry_4,
   nodejs,
   python3,
-  electron,
+  electron_37,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
@@ -14,17 +14,18 @@
 }:
 
 let
+  electron = electron_37;
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.4.3";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XDz5JJF9ntVYPzItRsdnTiiIPSHmtfCdZrhD0KpJNyI=";
+    hash = "sha256-wC4fNDG5xx4uBiBZu7KjuATlSpESwI0dRO/8nZ7DXas=";
   };
 
   postPatch = ''
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-OFinYvzLEXahaLY5YZM4eamiMUSPJZ1nUCzo8hQdnFw=";
+    hash = "sha256-hNgiqU4pM0xEBAK6HGArMhAD8My2qIh5gyPV9sDnoeg=";
   };
 
   nativeBuildInputs = [

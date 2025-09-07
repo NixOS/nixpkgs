@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "globalplatform";
-  version = "2.4.0-unstable-2025-03-23";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "kaoh";
     repo = "globalplatform";
-    rev = "0f970751c5d9e8a7030f897ca2d1b86d0eeba4c2";
-    sha256 = "sha256-H/muc/gY5glXPWKj75fHi6+1DAP91YGAUefdQkX9nfk=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-ikhncinibeQjcpYstduYhWS/bvwRah6+wrWF9kutSOI=";
   };
 
   nativeBuildInputs = [
@@ -32,14 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
   ];
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pcsclite
-    ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pcsclite
+  ];
 
   cmakeFlags = [
     "-DTESTING=ON"

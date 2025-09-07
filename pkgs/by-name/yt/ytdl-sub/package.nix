@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.06.27";
+  version = "2025.08.15.post2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-Ub5ITm30hZHWSMKFD7TX4z1GBQ0fU+cMqWRt2AVbGoI=";
+    hash = "sha256-Ds3A3GN9f264e/gtVTZVHW+v25C7vt75QkWgdqA4aJw=";
   };
 
   postPatch = ''
@@ -59,10 +59,10 @@ python3Packages.buildPythonApplication rec {
     "test_thumbnail"
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # According to documentation, e2e tests can be flaky:
     # "This checksum can be inaccurate for end-to-end tests"
-    "--ignore=tests/e2e"
+    "tests/e2e"
   ];
 
   passthru.updateScript = ./update.sh;

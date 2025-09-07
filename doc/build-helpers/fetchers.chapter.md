@@ -163,6 +163,8 @@ Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automaticall
 
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
 
+To use a temporary Tor instance as a proxy for fetching from `.onion` addresses, add `nativeBuildInputs = [ tor.proxyHook ];` to the fetcher parameters.
+
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
@@ -827,6 +829,10 @@ Additionally, the following optional arguments can be given:
 
   See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
 
+*`rootDir`* (String)
+
+: When not empty, copy only contents of the subdirectory of the repository to the result. Automatically sets `sparseCheckout` and `nonConeMode` to avoid checking out any extra pieces. Incompatible with `leaveDotGit`.
+
 Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
 Future parameters additions might also happen without immediately being documented here.
 
@@ -840,7 +846,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `hash`.
+Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
@@ -889,6 +895,24 @@ or "hg"), `domain` and `fetchSubmodules`.
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+## `fetchFromRadicle` {#fetchfromradicle}
+
+This is used with Radicle repositories. The arguments expected are similar to `fetchgit`.
+
+Requires a `seed` argument (e.g. `seed.radicle.xyz` or `rosa.radicle.xyz`) and a `repo` argument
+(the repository id *without* the `rad:` prefix). Also accepts an optional `node` argument which
+contains the id of the node from which to fetch the specified ref. If `node` is `null` (the
+default), a canonical ref is fetched instead.
+
+```nix
+fetchFromRadicle {
+  seed = "seed.radicle.xyz";
+  repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5"; # heartwood
+  tag = "releases/1.3.0";
+  hash = "sha256-4o88BWKGGOjCIQy7anvzbA/kPOO+ZsLMzXJhE61odjw=";
+}
+```
 
 ## `requireFile` {#requirefile}
 

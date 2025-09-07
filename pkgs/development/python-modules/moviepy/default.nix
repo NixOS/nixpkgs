@@ -69,32 +69,32 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # See https://github.com/NixOS/nixpkgs/issues/381908 and https://github.com/NixOS/nixpkgs/issues/385450.
-  pytestFlagsArray = [ "--timeout=600" ];
+  pytestFlags = [ "--timeout=600" ];
 
   pythonImportsCheck = [ "moviepy" ];
 
-  disabledTests =
-    [
-      # stalls
-      "test_doc_examples"
-      # video orientation mismatch, 0 != 180
-      "test_PR_529"
-      # video orientation [1920, 1080] != [1080, 1920]
-      "test_ffmpeg_parse_video_rotation"
-      "test_correct_video_rotation"
-      # media duration mismatch: assert 230.0 == 30.02
-      "test_ffmpeg_parse_infos_decode_file"
-      # Failed: DID NOT RAISE <class 'OSError'>
-      "test_ffmpeg_resize"
-      "test_ffmpeg_stabilize_video"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Failed: Timeout >30.0s
-      "test_issue_1682"
-    ];
+  disabledTests = [
+    # stalls
+    "test_doc_examples"
+    # video orientation mismatch, 0 != 180
+    "test_PR_529"
+    # video orientation [1920, 1080] != [1080, 1920]
+    "test_ffmpeg_parse_video_rotation"
+    "test_correct_video_rotation"
+    # media duration mismatch: assert 230.0 == 30.02
+    "test_ffmpeg_parse_infos_decode_file"
+    # Failed: DID NOT RAISE <class 'OSError'>
+    "test_ffmpeg_resize"
+    "test_ffmpeg_stabilize_video"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Failed: Timeout >30.0s
+    "test_issue_1682"
+  ];
 
   disabledTestPaths = [
     "tests/test_compositing.py"

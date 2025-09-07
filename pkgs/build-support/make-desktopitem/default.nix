@@ -156,7 +156,8 @@ lib.makeOverridable (
       "URL" = url;
       "PrefersNonDefaultGPU" = boolOrNullToString prefersNonDefaultGPU;
       # "SingleMainWindow" = boolOrNullToString singleMainWindow;
-    } // extraConfig;
+    }
+    // extraConfig;
 
     # Render a single attribute pair to a Key=Value line.
     # FIXME: this isn't entirely correct for arbitrary strings, as some characters

@@ -11,7 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
 
   meta = {
-    description = "Gtk Blueprint language support.";
+    description = "Gtk Blueprint language support";
     license = lib.licenses.lgpl3;
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=bodil.blueprint-gtk";
     maintainers = [ lib.maintainers.lyndeno ];

@@ -19,13 +19,13 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    hash = "sha256-Xi3M8M8UukxwWXNTnbFLA8RIWa6CHs84PjrOvtJEl78=";
+    hash = "sha256-uw41kaIljz9Y378rX2BK0W/ZVUx8IjlIBqYHDuLgZpA=";
   };
 
   outputs = [
@@ -44,33 +44,43 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [ gpgme ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lvm2
-      btrfs-progs
-    ];
+  buildInputs = [
+    gpgme
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lvm2
+    btrfs-progs
+  ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make bin/skopeo completions docs
+    make bin/skopeo docs
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    make completions
+  ''
+  + ''
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      PREFIX=${placeholder "out"} make install-binary install-completions install-docs
-      install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/skopeo \
-        --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    PREFIX=${placeholder "out"} make install-binary install-docs
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    PREFIX=${placeholder "out"} make install-completions
+  ''
+  + ''
+    install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru = {
     policy = runCommand "policy" { } ''

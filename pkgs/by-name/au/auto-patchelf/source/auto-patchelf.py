@@ -42,6 +42,13 @@ def is_dynamic_executable(elf: ELFFile) -> bool:
     # section but their ELF type is DYN.
     return bool(elf.get_section_by_name(".interp"))
 
+def is_separate_debug_object(elf: ELFFile) -> bool:
+    # objects created by separateDebugInfo = true have all the section headers
+    # of the unstripped objects but those that normal `strip` would have kept
+    # are NOBITS
+    text_section = elf.get_section_by_name(".text")
+    return elf.has_dwarf_info() and bool(text_section) and text_section.header['sh_type'] == "SHT_NOBITS"
+
 
 def get_dependencies(elf: ELFFile) -> list[list[Path]]:
     dependencies = []
@@ -174,6 +181,10 @@ def populate_cache(initial: list[Path], recursive: bool =False) -> None:
 
             try:
                 with open_elf(path) as elf:
+                    if is_separate_debug_object(elf):
+                        print(f"skipping {path} because it looks like a separate debug object")
+                        continue
+
                     osabi = get_osabi(elf)
                     arch = get_arch(elf)
                     rpath = [Path(p) for p in get_rpath(elf)

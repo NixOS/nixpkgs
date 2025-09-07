@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://oras.land/";
     changelog = "https://github.com/oras-project/oras/releases/tag/v${finalAttrs.version}";
-    description = "ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
+    description = "Distribute artifacts across OCI registries with ease";
     mainProgram = "oras";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

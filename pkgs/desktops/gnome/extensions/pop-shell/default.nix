@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "gnome-shell-extension-pop-shell";
-  version = "1.2.0-unstable-2025-03-10";
+  version = "1.2.0-unstable-2025-07-09";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "b3fc4253dc29b30fb52ac5eef5d3af643a46d18c";
-    hash = "sha256-EMX1AREpOO3DgxV/EbF2hP5JLggzlgFu1gsbhF3W1os=";
+    rev = "6fd8c039a081e8ad7bbd40ef7883ec6e5fc2a3f8";
+    hash = "sha256-3zIbfjaJSUbPmUVppoSBWviQWQvykaT1qw9uQvcXmvM=";
   };
 
   nativeBuildInputs = [

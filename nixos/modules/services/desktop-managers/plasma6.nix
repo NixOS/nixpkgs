@@ -68,13 +68,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.enable -> !config.services.xserver.desktopManager.plasma5.enable;
-        message = "Cannot enable plasma5 and plasma6 at the same time!";
-      }
-    ];
-
     qt.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages =
@@ -153,41 +146,44 @@ in
           systemsettings
           kcmutils
         ];
-        optionalPackages =
-          [
-            aurorae
-            plasma-browser-integration
-            plasma-workspace-wallpapers
-            konsole
-            kwin-x11
-            (lib.getBin qttools) # Expose qdbus in PATH
-            ark
-            elisa
-            gwenview
-            okular
-            kate
-            ktexteditor # provides elevated actions for kate
-            khelpcenter
-            dolphin
-            baloo-widgets # baloo information in Dolphin
-            dolphin-plugins
-            spectacle
-            ffmpegthumbs
-            krdp
-            xwaylandvideobridge # exposes Wayland windows to X11 screen capture
-          ]
-          ++ lib.optionals config.services.flatpak.enable [
-            # Since PackageKit Nix support is not there yet,
-            # only install discover if flatpak is enabled.
-            discover
-          ];
+        optionalPackages = [
+          aurorae
+          plasma-browser-integration
+          plasma-workspace-wallpapers
+          konsole
+          kwin-x11
+          (lib.getBin qttools) # Expose qdbus in PATH
+          ark
+          elisa
+          gwenview
+          okular
+          kate
+          ktexteditor # provides elevated actions for kate
+          khelpcenter
+          dolphin
+          baloo-widgets # baloo information in Dolphin
+          dolphin-plugins
+          spectacle
+          ffmpegthumbs
+          krdp
+          xwaylandvideobridge # exposes Wayland windows to X11 screen capture
+        ]
+        ++ lib.optionals config.hardware.sensor.iio.enable [
+          # This is required for autorotation in Plasma 6
+          qtsensors
+        ]
+        ++ lib.optionals config.services.flatpak.enable [
+          # Since PackageKit Nix support is not there yet,
+          # only install discover if flatpak is enabled.
+          discover
+        ];
       in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
-        pkgs.plasma5Packages.kwayland-integration
+        kwayland-integration
         (
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar

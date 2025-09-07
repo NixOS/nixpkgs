@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsbeautifier" ];
 
-  pytestFlagsArray = [ "jsbeautifier/tests/testindentation.py" ];
+  enabledTestPaths = [ "jsbeautifier/tests/testindentation.py" ];
 
   meta = with lib; {
     description = "JavaScript unobfuscator and beautifier";

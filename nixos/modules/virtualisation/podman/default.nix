@@ -161,9 +161,11 @@ in
                 config.systemd.package # To allow systemd-based container healthchecks
               ]
               ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-            extraRuntimes =
-              [ pkgs.runc ]
-              ++ lib.optionals
+            extraRuntimes = [
+              pkgs.runc
+            ]
+            ++
+              lib.optionals
                 (
                   config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
                   == "slirp4netns"

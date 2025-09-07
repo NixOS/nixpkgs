@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-s6gXinH706tAxDyHrhPV4u+Z1tbLvBOhI1JhdiwrHG8=";
 
   nativeBuildInputs = [
@@ -114,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Independent verification of binary packages - reproducible builds";
     homepage = "https://github.com/kpcyrd/rebuilderd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "rebuilderd";
   };
 })

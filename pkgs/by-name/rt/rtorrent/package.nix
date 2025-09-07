@@ -14,17 +14,19 @@
   zlib,
   nixosTests,
   gitUpdater,
+  withLua ? false,
+  lua5_4_compat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-rtorrent";
-  version = "0.15.4";
+  version = "0.15.6";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0OnDxmfliVP3GF2xzUZkURippzCGUwLebuyjb7nz/vs=";
+    hash = "sha256-B/5m1JXdUpczUMNN4cy5p6YurjmRFxMQHG3cQFSmZSs=";
   };
 
   outputs = [
@@ -50,12 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     openssl
     zlib
-  ];
+  ]
+  ++ lib.optionals withLua [ lua5_4_compat ];
 
   configureFlags = [
     "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
-  ];
+  ]
+  ++ lib.optionals withLua [ "--with-lua" ];
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

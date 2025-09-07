@@ -48,20 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  buildInputs =
-    [
-      libXdmcp
-      libpthreadstubs
-      python312Packages.pyside2
-      python312Packages.pyside2-tools
-      python312Packages.shiboken2
-      qt5.qtbase
-      qt5.qtsvg
-      vulkan-loader
-    ]
-    ++ lib.optionals waylandSupport [
-      wayland
-    ];
+  buildInputs = [
+    libXdmcp
+    libpthreadstubs
+    python312Packages.pyside2
+    python312Packages.pyside2-tools
+    python312Packages.shiboken2
+    qt5.qtbase
+    qt5.qtsvg
+    vulkan-loader
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+  ];
 
   nativeBuildInputs = [
     addDriverRunpath

@@ -5,6 +5,7 @@
   meson,
   ninja,
   appstream,
+  gtksourceview5,
   desktop-file-utils,
   gobject-introspection,
   wrapGAppsHook4,
@@ -14,18 +15,21 @@
   libportal-gtk4,
   gnome,
   librsvg,
-  libavif,
+  webp-pixbuf-loader,
+  libsoup_3,
+  bash,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.5.0";
+  version = "1.9.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-IamiF3mn3rVmDJrEOl0Ji+7muo8e8kunOxAZJTBNjM8=";
+    hash = "sha256-iDldzS7LLJ/+CfKBpD50LW/YrZ2xb8aqZI9Bs1AOcCM=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +44,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    gtksourceview5
     libadwaita
     libportal-gtk4
+    libsoup_3
+    bash
   ];
 
   dependencies = with python3Packages; [
@@ -54,7 +61,7 @@ python3Packages.buildPythonApplication rec {
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
           librsvg
-          libavif
+          webp-pixbuf-loader
         ];
       }
     }"
@@ -63,6 +70,8 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Make your screenshots ready for the world";

@@ -70,7 +70,11 @@ stdenv.mkDerivation {
 
   # Provide libgpm.so for compatibility
   postInstall = ''
-    ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
+    if test -e "$out/lib/libgpm.so.2"; then
+      ln -sv "$out/lib/libgpm.so.2" "$out/lib/libgpm.so"
+    else
+      rm -f "$out/lib/libgpm.so.2"
+    fi
   '';
 
   passthru.tests.static = pkgsStatic.gpm;

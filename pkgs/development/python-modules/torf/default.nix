@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "torf" ];
 
   meta = with lib; {
-    description = "create, parse and edit torrent files and magnet links";
+    description = "Create, parse and edit torrent files and magnet links";
     homepage = "https://github.com/rndusr/torf";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ambroisie ];

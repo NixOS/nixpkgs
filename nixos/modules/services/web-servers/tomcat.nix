@@ -427,7 +427,8 @@ in
           "JAVA_HOME='${cfg.jdk}'"
           "JAVA_OPTS='${builtins.toString cfg.javaOpts}'"
           "CATALINA_OPTS='${builtins.toString cfg.catalinaOpts}'"
-        ] ++ cfg.extraEnvironment;
+        ]
+        ++ cfg.extraEnvironment;
         ExecStart = "${tomcat}/bin/startup.sh";
         ExecStop = "${tomcat}/bin/shutdown.sh";
       };

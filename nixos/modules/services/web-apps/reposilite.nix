@@ -116,7 +116,7 @@ let
         type = lib.types.nullOr lib.types.str;
         description = ''
           Database connection string. Please use {option}`services.reposilite.database` instead.
-          See https://reposilite.com/guide/general#local-configuration for valid values.
+          See <https://reposilite.com/guide/general#local-configuration> for valid values.
         '';
         default = null;
       };
@@ -141,7 +141,7 @@ let
           Path to the .jsk KeyStore or paths to the PKCS#8 certificate and private key, separated by a space (see example).
           You can use `''${WORKING_DIRECTORY}` to refer to paths relative to Reposilite's working directory.
           If you are using a Java KeyStore, don't forget to specify the password via the {var}`REPOSILITE_LOCAL_KEYPASSWORD` environment variable.
-          See https://reposilite.com/guide/ssl for more information on how to set SSL up.
+          See <https://reposilite.com/guide/ssl> for more information on how to set SSL up.
         '';
         default = null;
         example = "\${WORKING_DIRECTORY}/cert.pem \${WORKING_DIRECTORY}/key.pem";
@@ -354,7 +354,7 @@ in
         assertion = cfg.settings.sslEnabled -> cfg.settings.keyPath != null;
         message = ''
           Reposilite was configured to enable SSL, but no valid paths to certificate files were provided via `settings.keyPath`.
-          Read more about SSL certificates here: https://reposilite.com/guide/ssl
+          Read more about SSL certificates here: <https://reposilite.com/guide/ssl>
         '';
       }
       {
@@ -395,10 +395,11 @@ in
     systemd.services.reposilite = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "network.target" ]
-        ++ (lib.optional useMySQL "mysql.service")
-        ++ (lib.optional usePostgres "postgresql.target");
+      after = [
+        "network.target"
+      ]
+      ++ (lib.optional useMySQL "mysql.service")
+      ++ (lib.optional usePostgres "postgresql.target");
 
       script =
         lib.optionalString (cfg.keyPasswordFile != null && cfg.settings.keyPassword == null) ''

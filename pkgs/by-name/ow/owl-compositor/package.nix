@@ -17,7 +17,7 @@ in
 
 stdenv.mkDerivation {
   pname = "owl-compositor";
-  version = "unstable-2021-11-10";
+  version = "0-unstable-2021-11-10";
 
   src = fetchFromGitHub {
     owner = "owl-compositor";
@@ -36,27 +36,25 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      wayland-scanner
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-      darwin.bootstrap_cmds
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      wrapGNUstepAppsHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    wayland-scanner
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+    darwin.bootstrap_cmds
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    wrapGNUstepAppsHook
+  ];
 
-  buildInputs =
-    [
-      libxkbcommon
-      wayland
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gnustep-back
-    ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gnustep-back
+  ];
 
   preConfigure = ''
     mkdir -p build

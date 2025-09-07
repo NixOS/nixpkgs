@@ -267,9 +267,9 @@ rec {
 
     mkPackageOption pkgs "GHC" {
       default = [ "ghc" ];
-      example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+      example = "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
     }
-    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
+    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
 
     mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
       extraDescription = "This is an example and doesn't actually do anything.";
@@ -572,30 +572,29 @@ rec {
       opt:
       let
         name = showOption opt.loc;
-        docOption =
-          {
-            loc = opt.loc;
-            inherit name;
-            description = opt.description or null;
-            declarations = filter (x: x != unknownModule) opt.declarations;
-            internal = opt.internal or false;
-            visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
-            readOnly = opt.readOnly or false;
-            type = opt.type.description or "unspecified";
-          }
-          // optionalAttrs (opt ? example) {
-            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-              renderOptionValue opt.example
-            );
-          }
-          // optionalAttrs (opt ? defaultText || opt ? default) {
-            default = builtins.addErrorContext "while evaluating the ${
-              if opt ? defaultText then "defaultText" else "default value"
-            } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-          }
-          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-            inherit (opt) relatedPackages;
-          };
+        docOption = {
+          loc = opt.loc;
+          inherit name;
+          description = opt.description or null;
+          declarations = filter (x: x != unknownModule) opt.declarations;
+          internal = opt.internal or false;
+          visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
+          readOnly = opt.readOnly or false;
+          type = opt.type.description or "unspecified";
+        }
+        // optionalAttrs (opt ? example) {
+          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+            renderOptionValue opt.example
+          );
+        }
+        // optionalAttrs (opt ? defaultText || opt ? default) {
+          default = builtins.addErrorContext "while evaluating the ${
+            if opt ? defaultText then "defaultText" else "default value"
+          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
+        }
+        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+          inherit (opt) relatedPackages;
+        };
 
         subOptions =
           let

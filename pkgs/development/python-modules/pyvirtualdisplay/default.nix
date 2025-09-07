@@ -55,7 +55,7 @@ buildPythonPackage rec {
     xorg.xvfb
   ];
 
-  pytestFlagsArray = [ "-v" ];
+  pytestFlags = [ "-v" ];
 
   meta = with lib; {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";

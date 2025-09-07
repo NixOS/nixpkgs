@@ -26,41 +26,15 @@
 
 buildPythonPackage rec {
   pname = "rlax";
-  version = "0.1.6";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "rlax";
     tag = "v${version}";
-    hash = "sha256-v2Lbzya+E9d7tlUVlQQa4fuPp2q3E309Qvyt70mcdb0=";
+    hash = "sha256-E/zYFd5bfx58FfA3uR7hzRAIs844QzJA8TZTwmwDByk=";
   };
-
-  # TODO: remove these patches at the next release (already on master)
-  patches = [
-    (fetchpatch {
-      # Follow chex API change (https://github.com/google-deepmind/chex/pull/52)
-      name = "replace-deprecated-chex-assertions";
-      url = "https://github.com/google-deepmind/rlax/commit/30e7913a1102667137654d6e652a6c4b9e9ba1f4.patch";
-      hash = "sha256-OPnuTKEtwZ28hzR1660v3DcktxTYjhR1xYvFbQvOhgs=";
-    })
-    (fetchpatch {
-      name = "remove-deprecation-warning";
-      url = "https://github.com/google-deepmind/rlax/commit/dea6eb479ffc32156aefe73015387a762c6b4562.patch";
-      hash = "sha256-htDyDRJW0eQx7AmrS3Fl7Lbh2VAmoYiDgHSePsQUaWs=";
-    })
-    (fetchpatch {
-      name = "fix-deprecation-warnings";
-      url = "https://github.com/google-deepmind/rlax/commit/605e0ef8ad8f9a06e88d4aabbb7d50e086d0cf3a.patch";
-      hash = "sha256-GZ/nGMXne6Lv6yDm/29NVTWxLBVSzaPYKAfQOLHY4UI=";
-    })
-    # https://github.com/google-deepmind/rlax/pull/135
-    (fetchpatch {
-      name = "fix-jax-0.6.0-compat";
-      url = "https://github.com/google-deepmind/rlax/commit/461b4cf9b4239d6b1b83aad6e5946f68d8402b93.patch";
-      hash = "sha256-uPMpm4IcoBWJwnyuIRjQEfo0F9HIW/lrwecxGW/Yw38=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -74,7 +48,6 @@ buildPythonPackage rec {
     jax
     jaxlib
     numpy
-    tensorflow-probability
   ];
 
   nativeCheckInputs = [
@@ -111,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library of reinforcement learning building blocks in JAX";
     homepage = "https://github.com/deepmind/rlax";
-    changelog = "https://github.com/google-deepmind/rlax/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/rlax/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };

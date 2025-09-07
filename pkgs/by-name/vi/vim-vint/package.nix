@@ -2,14 +2,14 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  replaceVars,
+  versionCheckHook,
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Vimjas";
@@ -18,21 +18,16 @@ buildPythonApplication rec {
     hash = "sha256-A0yXDkB/b9kEEXSoLeqVdmdm4p2PYL2QHqbF4FgAn30=";
   };
 
-  # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
-  disabled = !pythonAtLeast "3.5";
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
-  propagatedBuildInputs = [
-    ansicolor
-    chardet
-    pyyaml
-    setuptools
+  patches = [
+    # Otherwise, the following warning appears each time the binary is run:
+    # UserWarning: pkg_resources is deprecated as an API.
+    # This leads the `test/acceptance/test_cli.py::TestCLI::*` tests to fail
+    (replaceVars ./remove-pkg-resources.patch {
+      inherit version;
+    })
   ];
 
-  preCheck = ''
+  postPatch = ''
     substituteInPlace \
       test/acceptance/test_cli.py \
       test/acceptance/test_cli_vital.py \
@@ -41,12 +36,29 @@ buildPythonApplication rec {
         "cmd = ['$out/bin/vint'"
   '';
 
-  meta = with lib; {
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
+    ansicolor
+    chardet
+    pyyaml
+  ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    pytest-cov-stub
+  ]);
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Fast and Highly Extensible Vim script Language Lint implemented by Python";
     homepage = "https://github.com/Kuniwak/vint";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "vint";
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

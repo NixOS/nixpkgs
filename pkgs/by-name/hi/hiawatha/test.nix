@@ -13,7 +13,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     hiawatha
     curl
-  ] ++ lib.optional enableTls mbedtls;
+  ]
+  ++ lib.optional enableTls mbedtls;
 
   env = {
     inherit enableTls;

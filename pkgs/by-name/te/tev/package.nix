@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-ke1T5nOrDoJilpfshAIAFWw/640Gm5OaxZ+ZakCevTs=";
   };
@@ -28,21 +28,20 @@ stdenv.mkDerivation rec {
     cmake
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      libX11
-      libzip
-      glfw
-      libpng
-    ]
-    ++ (with xorg; [
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXxf86vm
-      libXext
-    ]);
+  buildInputs = [
+    libX11
+    libzip
+    glfw
+    libpng
+  ]
+  ++ (with xorg; [
+    libXrandr
+    libXinerama
+    libXcursor
+    libXi
+    libXxf86vm
+    libXext
+  ]);
 
   dontWrapGApps = true; # We also need zenity (see below)
 

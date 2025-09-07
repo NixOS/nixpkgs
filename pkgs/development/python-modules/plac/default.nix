@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.4.3";
+  version = "1.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ialbert";
     repo = "plac";
     tag = "v${version}";
-    hash = "sha256-EWwDtS2cRLBe4aZuH72hgg2BQnVJQ39GmPx05NxTNjE=";
+    hash = "sha256-GcPZ9Ufr2NU+95XZRVgB0+cKGAc17kIYxuxYvWiq//4=";
   };
 
   # tests are broken, see https://github.com/ialbert/plac/issues/74

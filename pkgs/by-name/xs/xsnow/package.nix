@@ -23,19 +23,18 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      gtk3-x11
-      libxkbcommon
-      libxml2
-      gsl
-    ]
-    ++ (with xorg; [
-      libX11
-      libXpm
-      libXt
-      libXtst
-    ]);
+  buildInputs = [
+    gtk3-x11
+    libxkbcommon
+    libxml2
+    gsl
+  ]
+  ++ (with xorg; [
+    libX11
+    libXpm
+    libXt
+    libXtst
+  ]);
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 

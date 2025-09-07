@@ -19,13 +19,13 @@
 
 flutter332.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-XkRSyy845hxQX5Ew5Sx3ZLh9UXfFMF6YdZJx+p/PJpo=";
+    hash = "sha256-n7BfstsuOTv8d16Y5oE/LDqlj0nVs/6196SnLaLN7h4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

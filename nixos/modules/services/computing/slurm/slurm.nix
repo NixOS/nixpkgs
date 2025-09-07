@@ -57,7 +57,8 @@ let
       cgroupConfig
       plugStackConfig
       mpiConf
-    ] ++ cfg.extraConfigPaths;
+    ]
+    ++ cfg.extraConfigPaths;
   };
 in
 

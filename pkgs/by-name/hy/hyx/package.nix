@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "minimalistic but powerful Linux console hex editor";
+    description = "Minimalistic but powerful Linux console hex editor";
     mainProgram = "hyx";
     homepage = "https://yx7.cc/code/";
     license = licenses.mit;

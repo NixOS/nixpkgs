@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "typeshed-client";
-  version = "2.7.0";
+  version = "2.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "JelleZijlstra";
     repo = "typeshed_client";
     tag = "v${version}";
-    hash = "sha256-dEfKZ930Jxa84HUqKpsL2JWQLeeWx6gIMtFHTbiw3Es=";
+    hash = "sha256-+muWm2/Psp8V1n7mEloc+ltuwHG/uRvDUgSFRNzz5EQ=";
   };
 
   build-system = [ setuptools ];
@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typeshed_client" ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Retrieve information from typeshed and other typing stubs";
     homepage = "https://github.com/JelleZijlstra/typeshed_client";
-    changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/v${version}";
+    changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };

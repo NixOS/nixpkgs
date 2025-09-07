@@ -89,12 +89,7 @@ in
       in
       {
         # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-        buildRustPackages = (selectRustPackage pkgsBuildHost).packages.stable // {
-          # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
-          buildRustPackages = self.buildRustPackages // {
-            __attrsFailEvaluation = true;
-          };
-        };
+        buildRustPackages = (selectRustPackage pkgsBuildHost).packages.stable;
         # Analogous to stdenv
         rustPlatform = makeRustPlatform self.buildRustPackages;
         rustc-unwrapped = self.callPackage ./rustc.nix ({

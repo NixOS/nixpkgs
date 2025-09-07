@@ -47,23 +47,22 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      ffmpeg
-      libadwaita
-      openssl
-      libepoxy
-      dbus
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    mpv-unwrapped
+    ffmpeg
+    libadwaita
+    openssl
+    libepoxy
+    dbus
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

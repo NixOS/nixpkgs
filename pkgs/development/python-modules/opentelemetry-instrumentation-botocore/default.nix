@@ -9,6 +9,7 @@
   moto,
   opentelemetry-test-utils,
   opentelemetry-propagator-aws-xray,
+  pytest-vcr,
   pytestCheckHook,
   aws-xray-sdk,
 }:
@@ -31,6 +32,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     opentelemetry-test-utils
+    pytest-vcr
     pytestCheckHook
   ];
 
@@ -44,6 +46,10 @@ buildPythonPackage {
   };
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.botocore" ];
+
+  disabledTests = [
+    "test_scan"
+  ];
 
   meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/blob/main/instrumentation/opentelemetry-instrumentation-botocore";

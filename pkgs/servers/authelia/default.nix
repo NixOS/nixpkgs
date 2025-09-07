@@ -60,17 +60,16 @@ buildGoModule rec {
   # several tests with networking and several that want chromium
   doCheck = false;
 
-  postInstall =
-    ''
-      mkdir -p $out/etc/authelia
-      cp config.template.yml $out/etc/authelia
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd authelia \
-        --bash <($out/bin/authelia completion bash) \
-        --fish <($out/bin/authelia completion fish) \
-        --zsh <($out/bin/authelia completion zsh)
-    '';
+  postInstall = ''
+    mkdir -p $out/etc/authelia
+    cp config.template.yml $out/etc/authelia
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd authelia \
+      --bash <($out/bin/authelia completion bash) \
+      --fish <($out/bin/authelia completion fish) \
+      --zsh <($out/bin/authelia completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

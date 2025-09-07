@@ -24,14 +24,13 @@ stdenv.mkDerivation rec {
     automake
     libtool
   ];
-  buildInputs =
-    [
-      freetype
-      SDL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-    ];
+  buildInputs = [
+    freetype
+    SDL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+  ];
 
   postPatch = ''
     substituteInPlace include/agg_renderer_outline_aa.h \
@@ -44,16 +43,15 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags =
-    [
-      (lib.enableFeature stdenv.hostPlatform.isLinux "platform")
-      (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
-      "--enable-examples=no"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--x-includes=${lib.getDev libX11}/include"
-      "--x-libraries=${lib.getLib libX11}/lib"
-    ];
+  configureFlags = [
+    (lib.enableFeature stdenv.hostPlatform.isLinux "platform")
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
+    "--enable-examples=no"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--x-includes=${lib.getDev libX11}/include"
+    "--x-libraries=${lib.getLib libX11}/lib"
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 

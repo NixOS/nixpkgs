@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   makeWrapper,
   pkg-config,
   kronosnet,
@@ -32,38 +33,44 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2025-30472.patch";
+      url = "https://github.com/corosync/corosync/commit/7839990f9cdf34e55435ed90109e82709032466a.patch??full_index=1";
+      hash = "sha256-EgGTfOM9chjLnb1QWNGp6IQQKQGdetNkztdddXlN/uo=";
+    })
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
   ];
 
-  buildInputs =
-    [
-      kronosnet
-      nss
-      nspr
-      libqb
-      systemd.dev
-    ]
-    ++ optional enableDbus dbus
-    ++ optional enableInfiniBandRdma rdma-core
-    ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net-snmp;
+  buildInputs = [
+    kronosnet
+    nss
+    nspr
+    libqb
+    systemd.dev
+  ]
+  ++ optional enableDbus dbus
+  ++ optional enableInfiniBandRdma rdma-core
+  ++ optional enableMonitoring libstatgrab
+  ++ optional enableSnmp net-snmp;
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-      "--with-logdir=/var/log/corosync"
-      "--enable-watchdog"
-      "--enable-qdevices"
-      # allows Type=notify in the systemd service
-      "--enable-systemd"
-    ]
-    ++ optional enableDbus "--enable-dbus"
-    ++ optional enableInfiniBandRdma "--enable-rdma"
-    ++ optional enableMonitoring "--enable-monitoring"
-    ++ optional enableSnmp "--enable-snmp";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--with-logdir=/var/log/corosync"
+    "--enable-watchdog"
+    "--enable-qdevices"
+    # allows Type=notify in the systemd service
+    "--enable-systemd"
+  ]
+  ++ optional enableDbus "--enable-dbus"
+  ++ optional enableInfiniBandRdma "--enable-rdma"
+  ++ optional enableMonitoring "--enable-monitoring"
+  ++ optional enableSnmp "--enable-snmp";
 
   installFlags = [
     "sysconfdir=$(out)/etc"

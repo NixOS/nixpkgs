@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   openssl,
   cmake,
@@ -49,54 +50,59 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.6";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-PYf8Ms0hmG4EWDjb+er6YvY/UFiQbIF6dtCL87O4rOs=";
+    hash = "sha256-nOswrYt9NrzJV6CFBWZCpj/wIJnIgmr3i2TreAKGGPI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ec4rIYZsIvYIezDm956aYSM75e/GEoNilVjm40691Ys=";
+  cargoHash = "sha256-YarKRApcQHom3AQIirqGdmUOuy5B+BRehLijvF/GRPc=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      rustPlatform.bindgenHook
-      installShellFiles
-      # Tries to access $HOME when installing shell files, and on Darwin
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+  patches = [
+    (fetchpatch {
+      name = "fix-build-failure.patch";
+      url = "https://github.com/aome510/spotify-player/commit/77af13b48b2a03e61fef1cffea899929057551dc.patch";
+      hash = "sha256-5q8W0X49iZLYdwrBiZJTESb628VPamrm0zEYwDm8CVk=";
+    })
+  ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      fontconfig
-    ]
-    ++ lib.optionals withSixel [ libsixel ]
-    ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
-    ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
-    ++ lib.optionals (withAudioBackend == "rodiojack") [
-      alsa-lib
-      libjack2
-    ]
-    ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
-    ++ lib.optionals (withAudioBackend == "gstreamer") [
-      gst_all_1.gstreamer
-      gst_all_1.gst-devtools
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rustPlatform.bindgenHook
+    installShellFiles
+    # Tries to access $HOME when installing shell files, and on Darwin
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [
+    openssl
+    dbus
+    fontconfig
+  ]
+  ++ lib.optionals withSixel [ libsixel ]
+  ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
+  ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
+  ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
+  ++ lib.optionals (withAudioBackend == "rodiojack") [
+    alsa-lib
+    libjack2
+  ]
+  ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
+  ++ lib.optionals (withAudioBackend == "gstreamer") [
+    gst_all_1.gstreamer
+    gst_all_1.gst-devtools
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 
   buildNoDefaultFeatures = true;
 

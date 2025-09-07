@@ -28,23 +28,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libXinerama
-      gettext
-      hamlib
-      fltk13
-      libjpeg
-      libpng
-      portaudio
-      libsndfile
-      libsamplerate
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      libpulseaudio
-      alsa-lib
-      udev
-    ];
+  buildInputs = [
+    libXinerama
+    gettext
+    hamlib
+    fltk13
+    libjpeg
+    libpng
+    portaudio
+    libsndfile
+    libsamplerate
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    libpulseaudio
+    alsa-lib
+    udev
+  ];
 
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
 

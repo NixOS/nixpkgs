@@ -51,8 +51,11 @@ python.pkgs.buildPythonApplication rec {
     mdit-py-plugins
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-vvrP"
+  ];
+
+  enabledTestPaths = [
     "tests/"
   ];
 

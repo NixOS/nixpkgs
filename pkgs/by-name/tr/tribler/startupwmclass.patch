@@ -1,9 +1,0 @@
-diff --git a/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop b/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop
-index b0472a18d..0e0be14f3 100644
---- a/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop
-+++ b/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop
-@@ -7,3 +7,4 @@ Terminal=false
- Type=Application
- Categories=Application;Network;P2P
- MimeType=x-scheme-handler/ppsp;x-scheme-handler/tswift;x-scheme-handler/magnet;application/x-bittorrent
-+StartupWMClass=Tribler

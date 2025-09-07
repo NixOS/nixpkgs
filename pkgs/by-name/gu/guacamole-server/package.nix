@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://guacamole.apache.org/";
     license = lib.licenses.asl20;
     mainProgram = "guacd";
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

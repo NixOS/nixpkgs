@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlxbf-bootctl";
-  version = "1.1-6";
+  version = "unstable-2025-01-16";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "mlxbf-bootctl";
-    rev = "mlxbf-bootctl-${version}";
-    hash = "sha256-F49ZZtty+NARXA/doAFLhsQn4XkPW6GWLXGy4waIaM0=";
+    rev = "278160ca8e08251cff5e7989e5a1010bd247a6ae";
+    hash = "sha256-qS35wCb8zvuF2Zs/5hPZkoZAapr7fwKQ/0ZOBPtrkRQ=";
   };
 
   installPhase = ''
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     # This package is supposed to only run on a BlueField. Thus aarch64-linux
     # is the only relevant platform.
     platforms = [ "aarch64-linux" ];
-    maintainers = with lib.maintainers; [ nikstur ];
+    maintainers = with lib.maintainers; [
+      nikstur
+      thillux
+    ];
   };
 }

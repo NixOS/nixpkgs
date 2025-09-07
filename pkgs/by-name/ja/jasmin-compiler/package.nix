@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2025.06.0";
+  version = "2025.06.1";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-VjWNvg/aF+omobF8b4YpRwVYM5K/b0GLoe1P/83ilk8=";
+    hash = "sha256-6StC+mnafHMLDCbaz4QqcrT+vK9PIVeh3BizzOH4Wfo=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -25,15 +25,14 @@ stdenv.mkDerivation rec {
     cmdliner
   ];
 
-  buildInputs =
-    [
-      mpfr
-      ppl
-    ]
-    ++ (with ocamlPackages; [
-      apron
-      yojson
-    ]);
+  buildInputs = [
+    mpfr
+    ppl
+  ]
+  ++ (with ocamlPackages; [
+    apron
+    yojson
+  ]);
 
   propagatedBuildInputs = with ocamlPackages; [
     angstrom
@@ -48,15 +47,9 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    pushd compiler
-    dune build @install
-    dune install --prefix=$bin --libdir=$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib
-    popd
-    mkdir -p $lib/lib/jasmin/easycrypt
-    cp eclib/*.ec $lib/lib/jasmin/easycrypt
-    runHook postInstall
+  preInstall = ''
+    export PREFIX=$lib
+    export DUNE_OPTS="--prefix=$bin --libdir=$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib"
   '';
 
   meta = {

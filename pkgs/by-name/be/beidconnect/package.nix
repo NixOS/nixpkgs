@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "beidconnect";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "fts-beidconnect";
     rev = finalAttrs.version;
-    hash = "sha256-xkBldXOlgLMgrvzm7ajXzJ92mpXrxHD1RX4DeBxU3kk=";
+    hash = "sha256-4eKO2yw2Ipfu1PvebgOR+BihsLlnWIJejGWqjztPA2I=";
   };
 
   nativeBuildInputs = [ pkg-config ];

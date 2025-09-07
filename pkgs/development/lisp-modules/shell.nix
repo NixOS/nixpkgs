@@ -1,18 +1,23 @@
 let
   pkgs = import ../../../. { };
+  inherit (pkgs) mkShellNoCC sbcl nixfmt-rfc-style;
 in
-pkgs.mkShell {
-  nativeBuildInputs = [
-    (pkgs.sbcl.withPackages (
-      ps: with ps; [
-        alexandria
-        str
-        dexador
-        cl-ppcre
-        sqlite
-        arrow-macros
-        jzon
-      ]
+mkShellNoCC {
+  packages = [
+    nixfmt-rfc-style
+    (sbcl.withPackages (
+      ps:
+      builtins.attrValues {
+        inherit (ps)
+          alexandria
+          str
+          dexador
+          cl-ppcre
+          sqlite
+          arrow-macros
+          jzon
+          ;
+      }
     ))
   ];
 }

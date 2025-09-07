@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     zlib
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio;
 
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.

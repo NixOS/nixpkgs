@@ -33,7 +33,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "itd is a daemon to interact with the PineTime running InfiniTime";
+    description = "Daemon to interact with the PineTime running InfiniTime";
     homepage = "https://gitea.elara.ws/Elara6331/itd";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -40,7 +40,8 @@ buildPythonPackage rec {
     httpx
     httpcore
     python-socks
-  ] ++ python-socks.optional-dependencies.asyncio;
+  ]
+  ++ python-socks.optional-dependencies.asyncio;
 
   optional-dependencies = {
     asyncio = [ async-timeout ];

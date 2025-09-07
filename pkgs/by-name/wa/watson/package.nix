@@ -6,12 +6,10 @@
   fetchpatch,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "watson";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -29,29 +27,35 @@ buildPythonApplication rec {
     })
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
+    arrow
+    click
+    click-didyoumean
+    requests
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    pytest-mock
+    mock
+    pytest-datafiles
+  ];
+
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
     installShellCompletion --fish watson.fish
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-    mock
-    pytest-datafiles
-  ];
-  propagatedBuildInputs = [
-    arrow
-    click
-    click-didyoumean
-    requests
-  ];
-  nativeBuildInputs = [ installShellFiles ];
+  pythonImportsCheck = [ "watson" ];
 
   meta = with lib; {
     homepage = "https://github.com/jazzband/Watson";
-    description = "Wonderful CLI to track your time!";
+    description = "Wonderful CLI to track your time";
     mainProgram = "watson";
     license = licenses.mit;
     maintainers = with maintainers; [

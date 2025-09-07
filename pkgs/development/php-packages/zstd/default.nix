@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.14.0+pie";
+  version = "0.15.1";
 in
 buildPecl {
   inherit version;
@@ -17,7 +17,7 @@ buildPecl {
     owner = "kjdev";
     repo = "php-ext-zstd";
     rev = version;
-    hash = "sha256-BfxYPc7Y9VKjm/RiyO+/thpqNJFGMdD5xK07EZMb+E8=";
+    hash = "sha256-Gf9/A4SmeiPGtUcTXoIU1sOzVRqIIpLAbD1QdTmBaHQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,6 +30,6 @@ buildPecl {
     description = "Zstd Extension for PHP";
     license = licenses.mit;
     homepage = "https://github.com/kjdev/php-ext-zstd";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

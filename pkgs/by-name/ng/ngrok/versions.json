@@ -1,38 +1,38 @@
 {
   "linux-386": {
     "sys": "linux-386",
-    "url": "https://bin.equinox.io/a/fK7zHbUXRW4/ngrok-v3-3.22.1-linux-386",
-    "sha256": "25d1317d5f2014b6ee8e27408256c96efb68e5ae855ae31ec78f39a16c6af2c9",
-    "version": "3.22.1"
+    "url": "https://bin.equinox.io/a/9q4HZ8StRme/ngrok-v3-3.25.0-linux-386",
+    "sha256": "69a76dacb52e568977d105d0d8945c70d1702f9516d42959a4236daaab53559e",
+    "version": "3.25.0"
   },
   "linux-amd64": {
     "sys": "linux-amd64",
-    "url": "https://bin.equinox.io/a/jBvFVwnCxra/ngrok-v3-3.22.1-linux-amd64",
-    "sha256": "edf3b724fd9768c380257aec415ea0636f3e1e8d4f67318e3e1ad71c71fb7c3d",
-    "version": "3.22.1"
+    "url": "https://bin.equinox.io/a/9smpcEP9X6q/ngrok-v3-3.25.0-linux-amd64",
+    "sha256": "13ec4a15ab815f29cd6d9eafc4bde3b6bb3a7c6ed5d96c3dd093884fb41c7b27",
+    "version": "3.25.0"
   },
   "linux-arm": {
     "sys": "linux-arm",
-    "url": "https://bin.equinox.io/a/3nCe4mzMEnu/ngrok-v3-3.22.1-linux-arm",
-    "sha256": "ef9e6d0796d9e73e3811a6b45f40dc534b2bafdf2c53e9d837d633417916bf0e",
-    "version": "3.22.1"
+    "url": "https://bin.equinox.io/a/jyXJJfSXXDP/ngrok-v3-3.25.0-linux-arm",
+    "sha256": "60901e0ce54f2730b27f76797c2b96f40b9af859403da6c4be81d9d6330bca9f",
+    "version": "3.25.0"
   },
   "linux-arm64": {
     "sys": "linux-arm64",
-    "url": "https://bin.equinox.io/a/7qiGrRXJ1od/ngrok-v3-3.22.1-linux-arm64",
-    "sha256": "ef154e04bbc0d48a28f387c20ccf7a57d38485fbdad2c7e46c04749cd79e42b5",
-    "version": "3.22.1"
+    "url": "https://bin.equinox.io/a/7TpsSBE1k4y/ngrok-v3-3.25.0-linux-arm64",
+    "sha256": "dd49f434b64c1b4646a2e287f939d77f4dfc8d0a314e39c69a89e8cf5275f55b",
+    "version": "3.25.0"
   },
   "darwin-amd64": {
     "sys": "darwin-amd64",
-    "url": "https://bin.equinox.io/a/bCPsqUE6DvJ/ngrok-v3-3.22.1-darwin-amd64",
-    "sha256": "7b2fb1bb04a4e18756ff59903bc5dc06a99a3426713058259f5359965a699b70",
-    "version": "3.22.1"
+    "url": "https://bin.equinox.io/a/9pCLo8uquic/ngrok-v3-3.25.0-darwin-amd64",
+    "sha256": "1199c6c6f6f4d5fc7c91ed5dbbbda2cf212568d7397e0785d92b1d1c4bd87a25",
+    "version": "3.25.0"
   },
   "darwin-arm64": {
     "sys": "darwin-arm64",
-    "url": "https://bin.equinox.io/a/4XSXTVcG6uw/ngrok-v3-3.22.1-darwin-arm64",
-    "sha256": "7911865275673426fc8bc24afbbe079a3047e61300ffe622b6e6214d4da85786",
-    "version": "3.22.1"
+    "url": "https://bin.equinox.io/a/2PceGNze17x/ngrok-v3-3.25.0-darwin-arm64",
+    "sha256": "a3799883672ed868036ec71353e9feec8389568b75e5d704a32a52a409f37133",
+    "version": "3.25.0"
   }
 }

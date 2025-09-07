@@ -5,10 +5,10 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-moegirl";
-  version = "20250610";
+  version = "20250810";
   src = fetchurl {
     url = "https://github.com/outloudvi/mw2fcitx/releases/download/${finalAttrs.version}/moegirl.dict.yaml";
-    hash = "sha256-ctAxF/H4gnmAvHyLsC4oUNCdGFbi5X7+Db/Lwmknlsw=";
+    hash = "sha256-/Yv/2kigtpNvnWlHYTJBMUlMV5i5toteaLiDJ0kDoZg=";
   };
 
   dontUnpack = true;

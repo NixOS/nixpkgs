@@ -13,7 +13,7 @@ lib.makeScope pkgs.newScope (
       inherit lib;
       inherit (pkgs)
         fetchFromBitbucket
-        fetchFromSavannah
+        fetchzip
         ;
     };
 
@@ -31,6 +31,11 @@ lib.makeScope pkgs.newScope (
       withPgtk = true;
     };
 
-    emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
+    emacs29-macport = callPackage (self.sources.emacs29-macport) (
+      inheritedArgs
+      // {
+        srcRepo = true;
+      }
+    );
   }
 )

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "avidtools";
-  version = "0.1.2";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2YtX+kUryTwaQ4QvExw5OJ4Rx8JoTzBeC8VSyNEL7OY=";
+    hash = "sha256-rYkA/+YfFhrS/WSx+jUWCsXDjp03aMoMiGdXeK3Kf4M=";
   };
 
   postPatch = ''

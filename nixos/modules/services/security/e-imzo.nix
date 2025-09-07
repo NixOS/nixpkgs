@@ -46,5 +46,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ orzklv ];
+  meta.maintainers = lib.teams.uzinfocom.members;
 }

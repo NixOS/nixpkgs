@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       version
       ;
+    fetcherVersion = 1;
     hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
   };
 
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "LSP wrapper for typescript extension of vscode.";
+    description = "LSP wrapper for typescript extension of vscode";
     homepage = "https://github.com/yioneko/vtsls";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kuglimon ];

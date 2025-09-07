@@ -15,14 +15,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "3.9";
+  version = "3.11";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = "healthchecks";
     tag = "v${version}";
-    sha256 = "sha256-78Ku7yYhgIZ+uIMPKkExIXUOKmfiRMjEiBm2SugyD+s=";
+    sha256 = "sha256-s8qhCp+6d2rixgrduWXopiWEpBCLVKkoDjTYT0eLSN8=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -38,6 +38,7 @@ py.pkgs.buildPythonApplication rec {
     psycopg2
     pycurl
     pydantic
+    pyjwt
     pyotp
     segno
     statsd
@@ -96,6 +97,6 @@ py.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/healthchecks/healthchecks";
     description = "Cron monitoring tool written in Python & Django";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    maintainers = [ ];
   };
 }

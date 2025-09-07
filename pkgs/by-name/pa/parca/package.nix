@@ -24,6 +24,7 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
+      fetcherVersion = 1;
       hash = "sha256-gczEkCU9xESn9T1eVOmGAufh+24mOsYCMO6f5tcbdmQ=";
     };
 
@@ -80,6 +81,9 @@ buildGoModule rec {
     changelog = "https://github.com/parca-dev/parca/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      brancz
+      metalmatze
+    ];
   };
 }

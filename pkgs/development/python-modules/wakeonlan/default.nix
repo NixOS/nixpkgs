@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_wakeonlan.py" ];
+  enabledTestPaths = [ "test_wakeonlan.py" ];
 
   pythonImportsCheck = [ "wakeonlan" ];
 

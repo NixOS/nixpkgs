@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
-    rev = version;
+    tag = version;
     hash = "sha256-WccnaIUF5M080M4vg5NzBCLpLVcE7ts/oJJE8CLRi8A=";
     fetchSubmodules = true;
   };

@@ -1,4 +1,9 @@
-{ version, hash }:
+{
+  version,
+  hash,
+  filename,
+  versionRegex,
+}:
 {
   lib,
   stdenv,
@@ -19,6 +24,7 @@
   enableFIPS ? false,
   nixosTests,
   nss_latest,
+  nix-update-script,
 }:
 
 let
@@ -37,17 +43,16 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs =
-    [
-      perl
-      ninja
-      (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    perl
+    ninja
+    (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     zlib
@@ -62,20 +67,19 @@ stdenv.mkDerivation rec {
     ./fix-cross-compilation.patch
   ];
 
-  postPatch =
-    ''
-      patchShebangs .
+  postPatch = ''
+    patchShebangs .
 
-      for f in coreconf/config.gypi build.sh; do
-        substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
-      done
+    for f in coreconf/config.gypi build.sh; do
+      substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
+    done
 
-      substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-      substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
-    '';
+    substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+    substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+  '';
 
   outputs = [
     "out"
@@ -105,28 +109,27 @@ stdenv.mkDerivation rec {
       target_system = stdenv.hostPlatform.uname.system;
       host = getArch stdenv.buildPlatform;
 
-      buildFlags =
-        [
-          "-v"
-          "--opt"
-          "--with-nspr=${nspr.dev}/include:${nspr.out}/lib"
-          "--system-sqlite"
-          "--enable-legacy-db"
-          "--target ${target}"
-          "-Dhost_arch=${host}"
-          "-Duse_system_zlib=1"
-          "--enable-libpkix"
-          "-j"
-          "$NIX_BUILD_CORES"
-        ]
-        ++ lib.optional enableFIPS "--enable-fips"
-        ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
-        ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
-          "-DOS=${target_system}"
-        ]
-        ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          "--disable-tests"
-        ];
+      buildFlags = [
+        "-v"
+        "--opt"
+        "--with-nspr=${nspr.dev}/include:${nspr.out}/lib"
+        "--system-sqlite"
+        "--enable-legacy-db"
+        "--target ${target}"
+        "-Dhost_arch=${host}"
+        "-Duse_system_zlib=1"
+        "--enable-libpkix"
+        "-j"
+        "$NIX_BUILD_CORES"
+      ]
+      ++ lib.optional enableFIPS "--enable-fips"
+      ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
+      ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
+        "-DOS=${target_system}"
+      ]
+      ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+        "--disable-tests"
+      ];
     in
     ''
       runHook preBuild
@@ -232,7 +235,14 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--override-filename"
+      "pkgs/development/libraries/nss/${filename}"
+      "--version-regex"
+      versionRegex
+    ];
+  };
 
   passthru.tests =
     lib.optionalAttrs (lib.versionOlder version nss_latest.version) {

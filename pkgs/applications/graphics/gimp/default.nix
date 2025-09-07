@@ -33,6 +33,7 @@
   librsvg,
   libwmf,
   zlib,
+  xz,
   libzip,
   ghostscript,
   aalib,
@@ -66,6 +67,7 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
+  fetchpatch,
 }:
 
 let
@@ -110,100 +112,106 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
+
+    # Fix a crash that occurs when trying to pick a color for text outline
+    # TODO: remove after GIMP 3.2 is released, per https://gitlab.gnome.org/GNOME/gimp/-/issues/14047#note_2491655
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/1685c86af5d6253151d0056a9677ba469ea10164.diff";
+      hash = "sha256-Rb3ANXWki21thByEIWkBgWEml4x9Qq2HAIB9ho1bygw=";
+    })
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      wrapGAppsHook3
-      libxslt # for xsltproc
-      gobject-introspection
-      perl
-      vala
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    wrapGAppsHook3
+    libxslt # for xsltproc
+    gobject-introspection
+    perl
+    vala
 
-      # for docs
-      gi-docgen
+    # for docs
+    gi-docgen
 
-      # for tests
-      desktop-file-utils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      xvfb-run
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+    # for tests
+    desktop-file-utils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+    xvfb-run
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      appstream-glib # for library
-      babl
-      cfitsio
-      gegl
-      gtk3
-      glib
-      gdk-pixbuf
-      pango
-      cairo
-      libarchive
-      gexiv2
-      harfbuzz
-      isocodes
-      freetype
-      fontconfig
-      lcms
-      libpng
-      libiff
-      libilbm
-      libjpeg
-      libjxl
-      poppler
-      poppler_data
-      libtiff
-      openexr
-      libmng
-      librsvg
-      libwmf
-      zlib
-      libzip
-      ghostscript
-      aalib
-      shared-mime-info
-      json-glib
-      libwebp
-      libheif
-      python
-      libexif
-      xorg.libXpm
-      xorg.libXmu
-      glib-networking
-      libmypaint
-      mypaint-brushes1
+  buildInputs = [
+    appstream-glib # for library
+    babl
+    cfitsio
+    gegl
+    gtk3
+    glib
+    gdk-pixbuf
+    pango
+    cairo
+    libarchive
+    gexiv2
+    harfbuzz
+    isocodes
+    freetype
+    fontconfig
+    lcms
+    libpng
+    libiff
+    libilbm
+    libjpeg
+    libjxl
+    poppler
+    poppler_data
+    libtiff
+    openexr
+    libmng
+    librsvg
+    libwmf
+    zlib
+    xz
+    libzip
+    ghostscript
+    aalib
+    shared-mime-info
+    json-glib
+    libwebp
+    libheif
+    python
+    libexif
+    xorg.libXpm
+    xorg.libXmu
+    glib-networking
+    libmypaint
+    mypaint-brushes1
 
-      # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
-      adwaita-icon-theme
+    # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
+    adwaita-icon-theme
 
-      # for Lua plug-ins
-      (luajit.withPackages (pp: [
-        pp.lgi
-      ]))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
+    # for Lua plug-ins
+    (luajit.withPackages (pp: [
+      pp.lgi
+    ]))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
 
-      # for JavaScript plug-ins
-      gjs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libgudev
-    ];
+    # for JavaScript plug-ins
+    gjs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libgudev
+  ];
 
   propagatedBuildInputs = [
     # needed by gimp-3.0.pc
@@ -213,21 +221,20 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2
   ];
 
-  mesonFlags =
-    [
-      "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-      "-Dicc-directory=/run/current-system/sw/share/color/icc"
-      "-Dcheck-update=no"
-      (lib.mesonEnable "gudev" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "headless-tests" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
-      # Not very important to do downstream, save a dependency.
-      "-Dappdata-test=disabled"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dalsa=disabled"
-      "-Djavascript=disabled"
-    ];
+  mesonFlags = [
+    "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "-Dicc-directory=/run/current-system/sw/share/color/icc"
+    "-Dcheck-update=no"
+    (lib.mesonEnable "gudev" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "headless-tests" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
+    # Not very important to do downstream, save a dependency.
+    "-Dappdata-test=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dalsa=disabled"
+    "-Djavascript=disabled"
+  ];
 
   doCheck = true;
 

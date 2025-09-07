@@ -6,16 +6,23 @@
 }:
 
 pythonPackages.buildPythonApplication rec {
-  pname = "Mopidy-Notify";
+  pname = "mopidy-notify";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "Mopidy-Notify";
     hash = "sha256-8FT4O4k0wEsdHA1vJaOW9UamJ3QLyO47HwL5XcSU3Pc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  pythonRelaxDeps = [ "pykka" ];
+
+  dependencies = [
     mopidy
     pythonPackages.pydbus
   ];

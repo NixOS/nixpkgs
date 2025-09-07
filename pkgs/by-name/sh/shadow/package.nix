@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.17.4";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = version;
-    hash = "sha256-HlSO1VCrMJtYlSL9/GvVw4mp/pEtuDju6V+6etrAAEk=";
+    hash = "sha256-M7We3JboNpr9H0ELbKcFtMvfmmVYaX9dYcsQ3sVX0lM=";
   };
 
   outputs = [
@@ -63,11 +63,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ libxcrypt ]
-    ++ lib.optional (pam != null && stdenv.hostPlatform.isLinux) pam
-    ++ lib.optional withLibbsd libbsd
-    ++ lib.optional withTcb tcb;
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ lib.optional (pam != null && (lib.meta.availableOn stdenv.hostPlatform pam)) pam
+  ++ lib.optional withLibbsd libbsd
+  ++ lib.optional withTcb tcb;
 
   patches = [
     ./keep-path.patch
@@ -88,16 +89,15 @@ stdenv.mkDerivation rec {
     export shadow_cv_logdir=/var/log
   '';
 
-  configureFlags =
-    [
-      "--enable-man"
-      "--with-group-name-max-length=32"
-      "--with-bcrypt"
-      "--with-yescrypt"
-      (lib.withFeature withLibbsd "libbsd")
-    ]
-    ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
-    ++ lib.optional withTcb "--with-tcb";
+  configureFlags = [
+    "--enable-man"
+    "--with-group-name-max-length=32"
+    "--with-bcrypt"
+    "--with-yescrypt"
+    (lib.withFeature withLibbsd "libbsd")
+  ]
+  ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
+  ++ lib.optional withTcb "--with-tcb";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
     substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd

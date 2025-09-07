@@ -25,6 +25,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "nvidia-ml-py"
+  ];
+
   dependencies = [ nvidia-ml-py ];
 
   pythonImportsCheck = [

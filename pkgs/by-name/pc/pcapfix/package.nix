@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://f00l.de/pcapfix/";
     description = "Repair your broken pcap and pcapng files";
     license = licenses.gpl3;
-    maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
     mainProgram = "pcapfix";
   };

@@ -25,9 +25,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
-    "-m 'not packaging'"
+    "packaging"
   ];
 
   pythonImportsCheck = [ "diceware" ];

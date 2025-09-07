@@ -6,8 +6,8 @@
 
 python3Packages.buildPythonPackage {
   pname = "evdevremapkeys";
-  version = "unstable-2021-05-04";
-  format = "setuptools";
+  version = "1.0.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "philipl";
@@ -16,7 +16,11 @@ python3Packages.buildPythonPackage {
     sha256 = "sha256-FwRbo0RTiiV2AB7z6XOalMnwMbj15jM4Dxs41TsIOQI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pyyaml
     pyxdg
     python-daemon

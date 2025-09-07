@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage {
     cp share/* $out/share/muso/
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-L0ZQoz9J5Hxg98puk1RbKuybLboIoOsy5qqGnvEPi1U=";
 
   meta = with lib; {

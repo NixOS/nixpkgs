@@ -2,15 +2,15 @@
 
 The Nix expressions related to the Eclipse platform and IDE are in [`pkgs/applications/editors/eclipse`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/eclipse).
 
-Nixpkgs provides a number of packages that will install Eclipse in its various forms. These range from the bare-bones Eclipse Platform to the more fully featured Eclipse SDK or Scala-IDE packages and multiple version are often available. It is possible to list available Eclipse packages by issuing the command:
+Nixpkgs provides several packages that will install Eclipse in its various forms. These range from the bare-bones Eclipse Platform to the more fully featured Eclipse SDK or Scala-IDE packages, and multiple versions are often available. It is possible to list available Eclipse packages by issuing the command:
 
 ```ShellSession
 $ nix-env -f '<nixpkgs>' -qaP -A eclipses --description
 ```
 
-Once an Eclipse variant is installed, it can be run using the `eclipse` command, as expected. From within Eclipse, it is then possible to install plugins in the usual manner by either manually specifying an Eclipse update site or by installing the Marketplace Client plugin and using it to discover and install other plugins. This installation method provides an Eclipse installation that closely resemble a manually installed Eclipse.
+Once an Eclipse variant is installed, it can be run using the `eclipse` command, as expected. From within Eclipse, it is then possible to install plugins in the usual manner by either manually specifying an Eclipse update site or by installing the Marketplace Client plugin and using it to discover and install other plugins. This installation method provides an Eclipse installation that closely resembles a manually installed Eclipse.
 
-If you prefer to install plugins in a more declarative manner, then Nixpkgs also offer a number of Eclipse plugins that can be installed in an _Eclipse environment_. This type of environment is created using the function `eclipseWithPlugins` found inside the `nixpkgs.eclipses` attribute set. This function takes as argument `{ eclipse, plugins ? [], jvmArgs ? [] }` where `eclipse` is a one of the Eclipse packages described above, `plugins` is a list of plugin derivations, and `jvmArgs` is a list of arguments given to the JVM running the Eclipse. For example, say you wish to install the latest Eclipse Platform with the popular Eclipse Color Theme plugin and also allow Eclipse to use more RAM. You could then add:
+If you prefer to install plugins in a more declarative manner, then Nixpkgs also offers several Eclipse plugins that can be installed in an _Eclipse environment_. This type of environment is created using the function `eclipseWithPlugins` found inside the `nixpkgs.eclipses` attribute set. This function takes as an argument `{ eclipse, plugins ? [], jvmArgs ? [] }` where `eclipse` is one of the Eclipse packages described above, `plugins` is a list of plugin derivations, and `jvmArgs` is a list of arguments given to the JVM running Eclipse. For example, say you wish to install the latest Eclipse Platform with the popular Eclipse Color Theme plugin and also allow Eclipse to use more RAM. You could then add:
 
 ```nix
 {
@@ -26,7 +26,7 @@ If you prefer to install plugins in a more declarative manner, then Nixpkgs also
 }
 ```
 
-to your Nixpkgs configuration (`~/.config/nixpkgs/config.nix`) and install it by running `nix-env -f '<nixpkgs>' -iA myEclipse` and afterward run Eclipse as usual. It is possible to find out which plugins are available for installation using `eclipseWithPlugins` by running:
+to your Nixpkgs configuration (`~/.config/nixpkgs/config.nix`) and install it by running `nix-env -f '<nixpkgs>' -iA myEclipse` and afterward running Eclipse as usual. It is possible to find out which plugins are available for installation using `eclipseWithPlugins` by running:
 
 ```ShellSession
 $ nix-env -f '<nixpkgs>' -qaP -A eclipses.plugins --description

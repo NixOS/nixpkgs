@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7vN3HRBCzvXT5Xoj+ciCiy+OQ0bC8s4C5360W+1Uld0=";
 
   postPatch =

@@ -9,13 +9,13 @@
 
 let
   name = "multipass";
-  version = "1.15.1";
+  version = "1.16.1";
 
   multipass_src = fetchFromGitHub {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ckIvijNWav8gCL8b+Iw84tWS4cpTobJDdHwh/p+Y3NI=";
+    hash = "sha256-DryVXuyAdjk+KhJZYqGh/r1H50rwM16vJ9igLtftgDY=";
     fetchSubmodules = true;
   };
 

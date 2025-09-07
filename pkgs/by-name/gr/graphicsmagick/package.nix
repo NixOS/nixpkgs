@@ -53,13 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxml2
     zlib
-  ] ++ lib.optionals libheifSupport [ libheif ];
+  ]
+  ++ lib.optionals libheifSupport [ libheif ];
 
   nativeBuildInputs = [
     nukeReferences
     pkg-config
     xz
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   configureFlags = [
     # specify delegates explicitly otherwise `gm` will invoke the build

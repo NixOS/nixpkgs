@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "5o85XSn84nOvNjIzlaZ2R6/TSHpKbWLXTO0FmqWsNMU=";
     fetchSubmodules = true;
   };

@@ -25,16 +25,15 @@ stdenv.mkDerivation rec {
   pname = "libxmlb";
   version = "0.3.22";
 
-  outputs =
-    [
-      "out"
-      "lib"
-      "dev"
-      "installedTests"
-    ]
-    ++ lib.optionals withIntrospection [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "installedTests"
+  ]
+  ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -47,20 +46,19 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      docbook_xml_dtd_43
-      docbook-xsl-nons
-      meson
-      ninja
-      pkg-config
-      python3
-      shared-mime-info
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    docbook_xml_dtd_43
+    docbook-xsl-nons
+    meson
+    ninja
+    pkg-config
+    python3
+    shared-mime-info
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
+  ];
 
   buildInputs = [
     glib

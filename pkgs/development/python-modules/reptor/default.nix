@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.31";
+  version = "0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
     tag = version;
-    hash = "sha256-AbrfQJQvKXpV4FrhkGZOLYX3px9dzr9whJZwzR/7UYM=";
+    hash = "sha256-nNG4rQHloOqcPZPnvw3hbw0+wCbB2XAdQ5/XnJtCHnE=";
   };
 
   pythonRelaxDeps = true;
@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";

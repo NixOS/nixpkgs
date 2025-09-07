@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  stalwart-mail,
   fetchFromGitHub,
   trunk,
   tailwindcss_3,
@@ -14,25 +15,23 @@
   zip,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "webadmin";
-  version = "0.1.27";
+  version = "0.1.32";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
-    tag = "v${version}";
-    hash = "sha256-ts2FT4QWDqNmm9Qj6JWEhgFW+3jAK/w90WIKF1Vil/w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HmQBMU7o0A20SY4tBw4SPVfHFfw8e0JsNQDNdZcex24=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    name = "${pname}-npm-deps";
+    name = "${finalAttrs.pname}-npm-deps";
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cvXfX3hqIp4NAAT1DgO/XZOXkeOgIEwkigA01qGYnxA=";
+  cargoHash = "sha256-a2+3uNNSLfb81QXjZfftbwpgjORPRSgC056U3FINP4o=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
@@ -71,8 +70,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";
     homepage = "https://github.com/stalwartlabs/webadmin";
-    changelog = "https://github.com/stalwartlabs/webadmin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/stalwartlabs/webadmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ onny ];
+    inherit (stalwart-mail.meta) maintainers;
   };
-}
+})

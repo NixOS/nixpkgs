@@ -1,66 +1,68 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  unzip,
   libX11,
-  libXt,
-  libnsl,
   libxcrypt,
+  fetchFromGitHub,
+  coreutils,
+  libpng,
+  xorg,
+  freetype,
+  zlib,
+  libjpeg,
+  openssl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unicon-lang";
-  version = "11.7";
-  src = fetchurl {
-    url = "http://unicon.org/dist/uni-2-4-2010.zip";
-    sha256 = "1g9l2dfp99dqih2ir2limqfjgagh3v9aqly6x0l3qavx3qkkwf61";
+  version = "13.2-unstable-2025-06-02";
+
+  src = fetchFromGitHub {
+    owner = "uniconproject";
+    repo = "unicon";
+    rev = "cf3b53b9578a004a52146a7adadc2a9409426624";
+    hash = "sha256-+4HSLnVTLdBVnKqWhOrx4XHTs3mRlM6n2ISQ+C1g3Ns=";
   };
-  nativeBuildInputs = [ unzip ];
+
+  postPatch = ''
+    substituteInPlace tests/Makefile --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+    substituteInPlace tests/Makedefs --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+  '';
+
   buildInputs = [
-    libnsl
-    libX11
-    libXt
     libxcrypt
+    # compression
+    zlib
+    # graphics
+    libX11
+    libjpeg
+    libpng
+    xorg.libXft
+    freetype
+    # ssl
+    openssl
   ];
 
   hardeningDisable = [ "fortify" ];
 
-  sourceRoot = ".";
+  # Issues when building plugins and running tests on aarch
+  enableParallelBuilding = false;
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: ../common/ipp.o:(.bss+0x0): multiple definition of `lpath'; tglobals.o:(.bss+0x30): first defined here
-  # TODO: remove the workaround once upstream releases version past:
-  #   https://sourceforge.net/p/unicon/unicon/ci/b1a65230233f3825d055aee913b4fdcf178a0eaf/
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  doCheck = true;
+  checkTarget = "Test";
 
-  configurePhase = ''
-    case "$(uname -a | sed 's/ /_/g')" in
-    Darwin*Version_9*i386) sys=intel_macos;;
-    Linux*x86_64*) sys=amd64_linux;;
-    Linux*i686*) sys=intel_linux;;
-    *) sys=unknown;;
-    esac
-    echo "all: ; echo" >  uni/3d/makefile
-    make X-Configure name=$sys
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/unicon -version
+    runHook postInstallCheck
   '';
 
-  buildPhase = ''
-    make Unicon
-  '';
-
-  installPhase = ''
-    mkdir -p $out/
-    cp -r bin $out/
-  '';
-
-  meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+  meta = {
     description = "Very high level, goal-directed, object-oriented, general purpose applications language";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
-    homepage = "http://unicon.org";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    homepage = "http://www.unicon.org";
   };
-}
+})

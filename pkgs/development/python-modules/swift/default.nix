@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.35.0";
+  version = "2.35.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x8RPQAPOERJShgYPy4uiezkHHSaxhftslEWqD7ShO40=";
+    hash = "sha256-1C0l2TlXoiFzxaZIAWz3h1cq8f11LcwGi3slpknimHU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

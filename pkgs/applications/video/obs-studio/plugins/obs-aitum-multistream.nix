@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-TqddyTBRWLyfwYi9I0nQE8Z19YL2RwkZqUwi7F9XpwQ=";
   };
 
+  # Remove after https://github.com/Aitum/obs-aitum-multistream/pull/15 is released :)
+  patches = [ ./obs-aitum-multistream.diff ];
+
   # Fix FTBFS with Qt >= 6.8
   prePatch = ''
     substituteInPlace CMakeLists.txt \

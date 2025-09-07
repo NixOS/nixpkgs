@@ -29,18 +29,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags =
-    [
-      "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
-      "PREFIX=${placeholder "out"}"
-      "ARGON2_VERSION=${version}"
-      "LIBRARY_REL=lib"
-      "PKGCONFIG_REL=lib"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "LIBRARIES=$(LIB_ST)"
-      "LINKED_LIB_EXT="
-    ];
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
+    "PREFIX=${placeholder "out"}"
+    "ARGON2_VERSION=${version}"
+    "LIBRARY_REL=lib"
+    "PKGCONFIG_REL=lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "LIBRARIES=$(LIB_ST)"
+    "LINKED_LIB_EXT="
+  ];
 
   meta = with lib; {
     description = "Key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";

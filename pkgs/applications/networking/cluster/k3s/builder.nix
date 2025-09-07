@@ -127,41 +127,24 @@ let
   ];
 
   # bundled into the k3s binary
-  traefikChart = fetchurl chartVersions.traefik;
-  traefik-crdChart = fetchurl chartVersions.traefik-crd;
-
-  mutFirstChar =
-    f: s:
-    let
-      firstChar = f (lib.substring 0 1 s);
-      rest = lib.substring 1 (-1) s;
-    in
-    firstChar + rest;
-
-  kebabToCamel =
-    s:
-    mutFirstChar lib.toLower (lib.concatMapStrings (mutFirstChar lib.toUpper) (lib.splitString "-" s));
-
-  # finds the images archive for the desired architecture, throws in case no suitable archive is found
-  findImagesArchive =
-    arch:
-    let
-      imagesVersionsNames = builtins.attrNames imagesVersions;
-    in
-    lib.findFirst (
-      n: lib.hasInfix arch n
-    ) (throw "k3s: no airgap images for ${arch} available") imagesVersionsNames;
+  traefik = {
+    chart = fetchurl chartVersions.traefik;
+    name = builtins.baseNameOf chartVersions.traefik.url;
+  };
+  traefik-crd = {
+    chart = fetchurl chartVersions.traefik-crd;
+    name = builtins.baseNameOf chartVersions.traefik-crd.url;
+  };
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
   # aarch64 (arm64) and x86_64 (amd64), throws on other architectures.
-  airgapImages = fetchurl (
-    if stdenv.hostPlatform.isAarch64 then
-      imagesVersions.${findImagesArchive "arm64"}
-    else if stdenv.hostPlatform.isx86_64 then
-      imagesVersions.${findImagesArchive "amd64"}
-    else
-      throw "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."
-  );
+  airgap-images =
+    {
+      x86_64-linux = fetchurl imagesVersions.airgap-images-amd64-tar-zst;
+      aarch64-linux = fetchurl imagesVersions.airgap-images-arm64-tar-zst;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "k3s: no airgap images available for system ${stdenv.hostPlatform.system}, consider using an image archive with an explicit architecture.");
 
   # so, k3s is a complicated thing to package
   # This derivation attempts to avoid including any random binaries from the
@@ -290,6 +273,18 @@ let
         "linux"
       ];
 
+      # Set flags for sqlite dbstat
+      CGO_CFLAGS = "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_USE_ALLOCA=1";
+
+      # Copy manifests and static charts pre build so they get embedded during build
+      preBuild = ''
+        cp -av manifests/* ./pkg/deploy/embed/
+
+        mkdir -p ./pkg/static/embed/charts/
+        cp -v ${traefik.chart} ./pkg/static/embed/charts/${traefik.name}
+        cp -v ${traefik-crd.chart} ./pkg/static/embed/charts/${traefik-crd.name}
+      '';
+
       # create the multicall symlinks for k3s
       postInstall = ''
         mv $out/bin/server $out/bin/k3s
@@ -332,11 +327,6 @@ let
       ldflags = versionldflags;
     }).overrideAttrs
       overrideContainerdAttrs;
-
-  # TODO (#409339): remove this patch. We had to add it to avoid a mass rebuild
-  # for the 25.05 release. Once the staging cycle referenced in the above PR completes,
-  # switch back to plain util-linuxMinimal.
-  k3sUtilLinux = util-linuxMinimal.withPatches;
 in
 buildGoModule rec {
   pname = "k3s";
@@ -383,7 +373,7 @@ buildGoModule rec {
     ipset
     bridge-utils
     ethtool
-    k3sUtilLinux # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
+    util-linuxMinimal # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
     bash
@@ -430,10 +420,6 @@ buildGoModule rec {
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
     ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
-    mkdir -p ./build/static/charts
-
-    cp ${traefikChart} ./build/static/charts
-    cp ${traefik-crdChart} ./build/static/charts
 
     export ARCH=$GOARCH
     export DRONE_TAG="v${k3sVersion}"
@@ -471,26 +457,28 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  passthru =
-    {
-      inherit airgapImages;
-      k3sCNIPlugins = k3sCNIPlugins;
-      k3sContainerd = k3sContainerd;
-      k3sRepo = k3sRepo;
-      k3sRoot = k3sRoot;
-      k3sBundle = k3sBundle;
-      mkTests =
-        version:
-        let
-          k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-        in
-        lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-      tests = passthru.mkTests k3sVersion;
-      updateScript = updateScript;
-    }
-    // (lib.mapAttrs' (
-      name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
-    ) imagesVersions);
+  passthru = {
+    inherit airgap-images;
+    k3sCNIPlugins = k3sCNIPlugins;
+    k3sContainerd = k3sContainerd;
+    k3sRepo = k3sRepo;
+    k3sRoot = k3sRoot;
+    k3sBundle = k3sBundle;
+    mkTests =
+      version:
+      let
+        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+      in
+      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+    tests = passthru.mkTests k3sVersion;
+    updateScript = updateScript;
+    imagesList = throw "k3s.imagesList was removed";
+    airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
+    airgapImagesAmd64 = throw "k3s.airgapImagesAmd64 was renamed to k3s.airgap-images-amd64-tar-zst";
+    airgapImagesArm64 = throw "k3s.airgapImagesArm64 was renamed to k3s.airgap-images-arm64-tar-zst";
+    airgapImagesArm = throw "k3s.airgapImagesArm was renamed to k3s.airgap-images-arm-tar-zst";
+  }
+  // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
   meta = baseMeta;
 }

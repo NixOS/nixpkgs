@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "nominal-api";
-  version = "0.708.0";
+  version = "0.806.0";
   pyproject = true;
 
   # nixpkgs-update: no auto update
   src = fetchPypi {
     inherit version;
     pname = "nominal_api";
-    hash = "sha256-gaMQ4bLhdBkDTUoHP5Cb0vS5emNcYga5eTvV2TEWQiU=";
+    hash = "sha256-V9zncQFNBi3MtgBHmwY4SoSgI9cjQuBt90PeRHjaXsw=";
   };
 
   build-system = [ setuptools ];

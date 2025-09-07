@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferron";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "ferronweb";
     repo = "ferron";
     tag = finalAttrs.version;
-    hash = "sha256-pJ3UGiQUIon1RTZqw0Y4b/FC+0aAxHSwmXRApWsNhP4=";
+    hash = "sha256-bBIhLkh9UV2MJKovQaFk3cC1rYafiyxknRlKWVQ5gwY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9ZJYf7tcsdBhE82MSmLi2deSM+l1mjfwSIHLTDan5Hg=";
+  cargoHash = "sha256-xsJJglSq8hpWWi0zknPL03nle99GxznPI3HON2o8zco=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,7 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/ferronweb/ferron";
     changelog = "https://github.com/ferronweb/ferron/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      GaetanLepage
+    ];
     mainProgram = "ferron";
   };
 })

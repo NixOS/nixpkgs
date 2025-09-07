@@ -50,7 +50,10 @@ stdenv.mkDerivation rec {
       SE platform.
     '';
     homepage = "https://visualvm.github.io";
-    license = licenses.gpl2ClasspathPlus;
+    license = with licenses; [
+      gpl2Plus
+      classpathException20
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [
       michalrus

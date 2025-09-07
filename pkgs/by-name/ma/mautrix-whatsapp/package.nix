@@ -14,19 +14,19 @@
 
 buildGoModule rec {
   pname = "mautrix-whatsapp";
-  version = "0.12.2";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
     rev = "v${version}";
-    hash = "sha256-Es6RWUo/e25wYGIz6feVNXIQbMCDPl1iZoKT3x8vHtA=";
+    hash = "sha256-FduZKeWApGR/SmjiZsVDC0KJZq8XRtfCFQUZhxlVswM=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-/R6MI6egGV1E1YzKcxBSOb2z97kA1HCK5GdMgfR1vSM=";
+  vendorHash = "sha256-Ujk/bJWo4tU7wQxyF7VP1JLqNh+VuNy5n31x9AWyEZA=";
 
   doCheck = false;
 
@@ -40,6 +40,7 @@ buildGoModule rec {
       vskilet
       ma27
       chvp
+      SchweGELBin
     ];
     mainProgram = "mautrix-whatsapp";
   };

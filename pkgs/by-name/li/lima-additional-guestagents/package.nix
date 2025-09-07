@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lima-additional-guestagents";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmn5AQpFbugFOmeiPUNMkPkgV1cZSR3nli90tdFmF0A";
+    hash = "sha256-90fFsS5jidaovE2iqXfe4T2SgZJz6ScOwPPYxCsCk/k=";
   };
 
-  vendorHash = "sha256-1+jWEZ4VvVjJ7tSL4vlkCrWxCoSu8hiXefKSm3GExNs=";
+  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15

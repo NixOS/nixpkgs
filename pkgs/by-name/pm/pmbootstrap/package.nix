@@ -52,16 +52,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # skip impure tests
-  disabledTests =
-    [
-      "test_pkgrepo_pmaports"
-      "test_random_valid_deviceinfos"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # assert chroot.type == ChrootType.BUILDROOT
-      # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
-      "test_valid_chroots"
-    ];
+  disabledTests = [
+    "test_pkgrepo_pmaports"
+    "test_random_valid_deviceinfos"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # assert chroot.type == ChrootType.BUILDROOT
+    # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
+    "test_valid_chroots"
+  ];
 
   versionCheckProgramArg = "--version";
 

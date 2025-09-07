@@ -43,7 +43,8 @@ buildPythonPackage rec {
     pyopenssl
     requests
     urllib3
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     aiohttp

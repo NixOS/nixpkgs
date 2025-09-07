@@ -9,6 +9,7 @@ dartConfigHook() {
     echo "Installing dependencies"
     mkdir -p .dart_tool
     cp "$packageConfig" .dart_tool/package_config.json
+    @python3@ @packageGraphScript@ > .dart_tool/package_graph.json
 
     packagePath() {
         jq --raw-output --arg name "$1" '.packages.[] | select(.name == $name) .rootUri | sub("file://"; "")' .dart_tool/package_config.json

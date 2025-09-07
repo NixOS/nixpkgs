@@ -21,18 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1.2";
 
   __structuredAttrs = true;
-  srcs =
-    [
-      (fetchurl {
-        url = "https://icculus.org/rott/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-        hash = "sha256-ECUW6MMS9rC79sYj4fAcv7vDFKzorf4fIB1HsVvZJ/8=";
-      })
-    ]
-    ++ lib.optional withSharewareData (fetchzip {
-      url = "http://icculus.org/rott/share/1rott13.zip";
-      hash = "sha256-l0pP+mNPAabGh7LZrwcB6KOhPRSycrZpAlPVTyDXc6Y=";
-      stripRoot = false;
-    });
+  srcs = [
+    (fetchurl {
+      url = "https://icculus.org/rott/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+      hash = "sha256-ECUW6MMS9rC79sYj4fAcv7vDFKzorf4fIB1HsVvZJ/8=";
+    })
+  ]
+  ++ lib.optional withSharewareData (fetchzip {
+    url = "http://icculus.org/rott/share/1rott13.zip";
+    hash = "sha256-l0pP+mNPAabGh7LZrwcB6KOhPRSycrZpAlPVTyDXc6Y=";
+    stripRoot = false;
+  });
 
   sourceRoot = "rott-${finalAttrs.version}/rott";
 

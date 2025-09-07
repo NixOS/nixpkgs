@@ -171,21 +171,6 @@ sub pciCheck {
         }
     }
 
-    # broadcom STA driver (wl.ko)
-    # list taken from http://www.broadcom.com/docs/linux_sta/README.txt
-    if ($vendor eq "0x14e4" &&
-        ($device eq "0x4311" || $device eq "0x4312" || $device eq "0x4313" ||
-         $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||
-         $device eq "0x4329" || $device eq "0x432a" || $device eq "0x432b" ||
-         $device eq "0x432c" || $device eq "0x432d" || $device eq "0x4353" ||
-         $device eq "0x4357" || $device eq "0x4358" || $device eq "0x4359" ||
-         $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
-        ) )
-     {
-        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
-        push @kernelModules, "wl";
-     }
-
     # broadcom FullMac driver
     # list taken from
     # https://wireless.wiki.kernel.org/en/users/Drivers/brcm80211#brcmfmac
@@ -344,7 +329,12 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (
+        glob("/dev/stratis/*/*"),
+        glob("/dev/mapper/*"),
+        glob("/dev/disk/by-uuid/*"),
+        glob("/dev/disk/by-label/*"),
+    ) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   curl,
+  libargon2,
   libevent,
   libsearpc,
   libuuid,
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
-  version = "9.0.8";
+  version = "9.0.14";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "sha256-IpRCgPxYy1El4EEvVEfzAlbxP/osQUb7pCP3/BhkecU=";
+    hash = "sha256-1vQ2iGwdzd4c69LYAJjSsUPt8AVL3kOPw0GsxgeN+bU=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libargon2
     libuuid
     sqlite
     libsearpc

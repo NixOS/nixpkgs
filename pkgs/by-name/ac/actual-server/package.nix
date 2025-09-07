@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  jq,
   makeWrapper,
   nodejs_22,
   python3,
@@ -10,13 +11,13 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  version = "25.6.1";
+  version = "25.9.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-+6rMfFmqm7HLYMgmiG+DE2bH5WkIZxwTiy2L/CdZYEI=";
+    hash = "sha256-TYvGavj0Ts1ahgseFhuOtmfOSgPkjBIr19SIGOgx++Q=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -24,8 +25,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "207279d37dbefd555e1470cd1c5a840c469ca672";
-    hash = "sha256-oojADl5LaeO44+j4j/MpCs4c0Td4RwrBtqNB6ZEcELo=";
+    rev = "3d88d15bf5125497de731f4e9dce19244bd4c7e0";
+    hash = "sha256-tOtDGNwR/DVEiOYilOLSJzNjBqvzxOF78ZJtmlz3fdg=";
   };
 
 in
@@ -60,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow `remove-untranslated-languages` to do its job.
     chmod -R u+w ./packages/desktop-client/locale
+
+    # Disable the postinstall script for `protoc-gen-js` because it tries to
+    # use network in buildPhase. It's just used as a dev tool and the generated
+    # protobuf code is committed in the repository.
+    cat <<< $(${lib.getExe jq} '.dependenciesMeta."protoc-gen-js".built = false' ./package.json) > ./package.json
   '';
 
   buildPhase = ''
@@ -76,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-mL4rIBJsx0wSAy1hY9fC0DyGLZOnvXhkFTlxQfK0Dfc=";
+    hash = "sha256-Vod0VfoZG2nwnu35XLAPqY5uuRLVD751D3ZysD0ypL0=";
   };
 
   pname = "actual-server";

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  python3,
   python3Packages,
   arpack-mpi,
   petsc,
@@ -29,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix slepc4py install prefix
     substituteInPlace config/packages/slepc4py.py \
       --replace-fail "slepc.prefixdir,'lib'" \
-      "slepc.prefixdir,'${python3.sitePackages}'"
+      "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
   '';
@@ -42,14 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     export SLEPC_DIR=$PWD
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.setuptools
-      python3Packages.cython
-    ];
+  nativeBuildInputs = [
+    python3Packages.python
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.setuptools
+    python3Packages.cython
+  ];
 
   configureFlags =
     lib.optionals withArpack [
@@ -59,13 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-slepc4py=1"
     ];
 
-  buildInputs =
-    [
-      mpi
-    ]
-    ++ lib.optionals withArpack [
-      arpack-mpi
-    ];
+  buildInputs = [
+    mpi
+  ]
+  ++ lib.optionals withArpack [
+    arpack-mpi
+  ];
 
   propagatedBuildInputs = [
     petsc
@@ -77,14 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs =
-    [
-      mpiCheckPhaseHook
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.pythonImportsCheckHook
-      python3Packages.unittestCheckHook
-    ];
+  nativeInstallCheckInputs = [
+    mpiCheckPhaseHook
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.pythonImportsCheckHook
+    python3Packages.unittestCheckHook
+  ];
 
   doInstallCheck = true;
 

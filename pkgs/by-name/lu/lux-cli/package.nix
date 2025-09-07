@@ -6,40 +6,42 @@
   lib,
   libgit2,
   libgpg-error,
-  luajit,
+  lua5_4,
   makeWrapper,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.7.4";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
-    tag = "v0.7.4";
-    hash = "sha256-m8GSs2gBw+WzDOBciOQHi7n4923XCd7z1TbfTnfJzUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jVKCjAYeWjy2jDOHEb6vu4ZNTXrSETgUt6NIE++trPE=";
   };
 
   buildAndTestSubdir = "lux-cli";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7q5NqAmsHcZEwDAeNRZLiQIKzFsx6BsWAgsv2s2dmRI=";
+
+  cargoHash = "sha256-Kv8wYxPGainwayru9pWBplg2PNcC86ZTAmDp9M4G1bQ=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    perl
     pkg-config
   ];
 
@@ -48,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    luajit
+    lua5_4
     openssl
   ];
 
@@ -61,13 +63,18 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = "--lib"; # Disable impure integration tests
 
   nativeCheckInputs = [
-    luajit
+    lua5_4
     nix
   ];
 
   postBuild = ''
     cargo xtask dist-man
     cargo xtask dist-completions
+  '';
+
+  postInstall = ''
+    installManPage target/dist/lx.1
+    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {
@@ -78,7 +85,7 @@ rustPlatform.buildRustPackage rec {
       with first-class support for Nix and Neovim.
     '';
     homepage = "https://nvim-neorocks.github.io/";
-    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/nvim-neorocks/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
@@ -86,4 +93,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "lx";
   };
-}
+})

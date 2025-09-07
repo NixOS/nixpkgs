@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-google";
-  version = "0.33.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RZDxo22ynOjNbv8jc/EMimCTxQGSfp8piqgKTO8Phl4=";
+    hash = "sha256-7olOS0vYfYaEIr4Tba3Cp5cc7fmJU+TJjom6ZvWIYzc=";
   };
 
-  vendorHash = "sha256-EHm5MmWpqREr8fUNCkhUO7XMFdXaR1QVRPE3JibNhhM=";
+  vendorHash = "sha256-9WI3mPZIM2+EEisliRWtq6ZKLjOVFWpLTYD7jwvataY=";
 
   # upstream Makefile also does a go test $(go list ./... | grep -v integration)
   preCheck = ''

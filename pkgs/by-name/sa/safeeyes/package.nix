@@ -14,12 +14,10 @@
   wrapGAppsHook3,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "safeeyes";
   version = "2.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -27,7 +25,7 @@ buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
+    substituteInPlace setup.py --replace-fail "root_dir = sys.prefix" "root_dir = '/'"
   '';
 
   nativeBuildInputs = [
@@ -40,14 +38,15 @@ buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     babel
     psutil
     xlib
     pygobject3
     dbus-python
     croniter
-    setuptools
     packaging
   ];
 
@@ -74,13 +73,14 @@ buildPythonApplication rec {
 
   doCheck = false; # no tests
 
+  pythonImportsCheck = [ "safeeyes" ];
+
   passthru.tests.version = testers.testVersion { package = safeeyes; };
 
   meta = with lib; {
     homepage = "http://slgobinath.github.io/SafeEyes";
     description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ srghma ];
     platforms = platforms.linux;
     mainProgram = "safeeyes";
   };

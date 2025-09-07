@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
   version = "5.0.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -22,6 +22,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace mapproxy/util/ext/serving.py --replace-warn "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
 
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonRemoveDeps = [ "future" ];
+
   dependencies = with python3Packages; [
     boto3 # needed for caches service
     jsonschema
@@ -31,7 +35,6 @@ python3Packages.buildPythonApplication rec {
     shapely
     gdal
     lxml
-    setuptools
     werkzeug
   ];
 
@@ -39,6 +42,8 @@ python3Packages.buildPythonApplication rec {
   # 1) Dependency list is huge.
   #    https://github.com/mapproxy/mapproxy/blob/master/requirements-tests.txt
   doCheck = false;
+
+  pythonImportsCheck = [ "mapproxy" ];
 
   meta = {
     description = "Open source proxy for geospatial data";

@@ -1,8 +1,8 @@
 diff --git a/build_llvm.py b/build_llvm.py
-index 9d5a26a7..3663e9c9 100644
+index aee0a9f1..6b9806c9 100644
 --- a/build_llvm.py
 +++ b/build_llvm.py
-@@ -338,25 +338,19 @@ def build_warp_clang_for_arch(args, lib_name, arch):
+@@ -350,25 +350,19 @@ def build_warp_clang_for_arch(args, lib_name: str, arch: str) -> None:
  
          clang_dll_path = os.path.join(build_path, f"bin/{lib_name}")
  
@@ -36,7 +36,7 @@ index 9d5a26a7..3663e9c9 100644
          else:
              libs = [f"-l{lib[3:-2]}" for lib in libs if os.path.splitext(lib)[1] == ".a"]
              if sys.platform == "darwin":
-@@ -364,7 +358,8 @@ def build_warp_clang_for_arch(args, lib_name, arch):
+@@ -376,7 +370,8 @@ def build_warp_clang_for_arch(args, lib_name: str, arch: str) -> None:
              else:
                  libs.insert(0, "-Wl,--start-group")
                  libs.append("-Wl,--end-group")
@@ -47,13 +47,13 @@ index 9d5a26a7..3663e9c9 100644
              libs.append("-ldl")
              if sys.platform != "darwin":
 diff --git a/warp/build_dll.py b/warp/build_dll.py
-index 4d411e1b..95fb7eaf 100644
+index 2218ff13..3fcf5796 100644
 --- a/warp/build_dll.py
 +++ b/warp/build_dll.py
-@@ -311,8 +311,8 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, libs, arch, mode=None
-             run_cmd(link_cmd)
+@@ -404,8 +404,8 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, arch, libs: Optional[
+         cuda_compiler = "clang++" if getattr(args, "clang_build_toolchain", False) else "nvcc"
+         cpp_compiler = "clang++" if getattr(args, "clang_build_toolchain", False) else "g++"
  
-     else:
 -        cpp_includes = f' -I"{warp_home_path.parent}/external/llvm-project/out/install/{mode}-{arch}/include"'
 -        cpp_includes += f' -I"{warp_home_path.parent}/_build/host-deps/llvm-project/release-{arch}/include"'
 +        cpp_includes = ' -I"@LLVM_DEV@/include"'

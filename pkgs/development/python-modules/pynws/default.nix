@@ -47,7 +47,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pynws" ];
 

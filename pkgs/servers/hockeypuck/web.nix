@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     description = "OpenPGP Key Server web resources";
     homepage = "https://github.com/hockeypuck/hockeypuck";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ ];
   };
 }

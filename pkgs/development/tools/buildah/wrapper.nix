@@ -38,14 +38,13 @@ let
     name = "${buildah-unwrapped.pname}-helper-binary-wrapper-${buildah-unwrapped.version}";
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths =
-      [
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        netavark
-        passt
-      ];
+    paths = [
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      aardvark-dns
+      netavark
+      passt
+    ];
   };
 
 in

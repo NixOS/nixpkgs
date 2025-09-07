@@ -43,12 +43,16 @@ let
 
     configureFlags = [
       "--with-system-editline"
-    ] ++ (lib.optional superServer "--enable-superserver");
+    ]
+    ++ (lib.optional superServer "--enable-superserver");
+
+    enableParallelBuilding = true;
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out
       cp -r gen/Release/firebird/* $out
+      rm $out/lib/*.a  # they were just symlinks to /build/source/...
       runHook postInstall
     '';
 
@@ -81,13 +85,13 @@ rec {
   firebird_4 = stdenv.mkDerivation (
     base
     // rec {
-      version = "4.0.5";
+      version = "4.0.6";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-OxkPpmnYTl65ns+hKHJd5IAPUiMj0g3HUpyRpwDNut8=";
+        hash = "sha256-65wfG6huDzvG/tEVllA58OfZqoL4U/ilw5YIDqQywTs=";
       };
 
       nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];

@@ -51,21 +51,20 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies =
-    [
-      haskellPackages.bz2
-      haskellPackages.memfd
-    ]
-    ++ [
-      build
-      bzip2
-      editline
-      libedit
-      libz
-      pcre2
-      readline
-      requests
-    ];
+  dependencies = [
+    haskellPackages.bz2
+    haskellPackages.memfd
+  ]
+  ++ [
+    build
+    bzip2
+    editline
+    libedit
+    libz
+    pcre2
+    readline
+    requests
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

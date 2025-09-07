@@ -47,7 +47,7 @@
 }:
 
 let
-  version = "5.19.0";
+  version = "5.20.0";
 
   electronLibPath = lib.makeLibraryPath [
     alsa-lib
@@ -95,7 +95,7 @@ buildNpmPackage (self: {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = version;
-    hash = "sha256-/pPmfgKwrtOrEu7YVJTuQF/FIMa+W6uSnFbMFuyURFQ=";
+    hash = "sha256-PENNkmCiCFcaHNCBfwVitYfqKN0ZR0QHwE3WQHp0tGI=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ buildNpmPackage (self: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-TNhD/ZkqJtsidAEIOL/WmJZw09BuFgd4ECnzbieNhVY=";
+  npmDepsHash = "sha256-4J5wGq/zpEK+xKtVg2zf7lIDHo9d4KW5fDY05siaFC4=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -197,7 +197,9 @@ buildNpmPackage (self: {
       qbit
       spikespaz
     ];
-    platforms = lib.platforms.linux;
+    # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.
+    # See: <https://github.com/castlabs/electron-releases/issues/198>
+    platforms = [ "x86_64-linux" ];
     mainProgram = "tidal-hifi";
   };
 })

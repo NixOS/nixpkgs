@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   pythonOlder,
 
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-2BT4VTZBAJx8Gk4qTTyhSoBMjJvKzmL4PO8IfTpN+2g=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "pytest-8.4.1-compat.patch";
+      url = "https://github.com/alexmojaki/executing/commit/fae0dd2f4bd0e74b8a928e19407fd4167f4b2295.patch";
+      hash = "sha256-ccYBeP4yXf3U4sRyeGUYhLz7QHbXFiMviQ1n+AIVMdo=";
+    })
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -39,7 +48,8 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency

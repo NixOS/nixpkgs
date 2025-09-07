@@ -43,16 +43,6 @@ let
 
   cfg = config.services.postgresql;
 
-  # ensure that
-  #   services.postgresql = {
-  #     enableJIT = true;
-  #     package = pkgs.postgresql_<major>;
-  #   };
-  # works.
-  basePackage = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
-
-  postgresql = if cfg.extensions == [ ] then basePackage else basePackage.withPackages cfg.extensions;
-
   toStr =
     value:
     if true == value then
@@ -72,13 +62,13 @@ let
   );
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" { } ''
-    ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
+    ${cfg.finalPackage}/bin/postgres -D${configFile} -C config_file >/dev/null
     touch $out
   '';
 
   groupAccessAvailable = versionAtLeast cfg.finalPackage.version "11.0";
 
-  extensionNames = map getName postgresql.installedExtensions;
+  extensionNames = map getName cfg.finalPackage.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
 in
 
@@ -143,7 +133,18 @@ in
       finalPackage = mkOption {
         type = types.package;
         readOnly = true;
-        default = postgresql;
+        default =
+          let
+            # ensure that
+            #   services.postgresql = {
+            #     enableJIT = true;
+            #     package = pkgs.postgresql_<major>;
+            #   };
+            # works.
+            withJit = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
+            withJitAndPackages = if cfg.extensions == [ ] then withJit else withJit.withPackages cfg.extensions;
+          in
+          withJitAndPackages;
         defaultText = "with config.services.postgresql; package.withPackages extensions";
         description = ''
           The postgresql package that will effectively be used in the system.
@@ -636,6 +637,20 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = (
+      let
+        unstableState =
+          if lib.hasInfix "beta" cfg.package.version then
+            "in beta"
+          else if lib.hasInfix "rc" cfg.package.version then
+            "a release candidate"
+          else
+            null;
+      in
+      lib.optional (unstableState != null)
+        "PostgreSQL ${lib.versions.major cfg.package.version} is currently ${unstableState}, and is not advised for use in production environments."
+    );
+
     assertions = map (
       { name, ensureDBOwnership, ... }:
       {
@@ -754,7 +769,7 @@ in
     systemd.targets.postgresql = {
       description = "PostgreSQL";
       wantedBy = [ "multi-user.target" ];
-      bindsTo = [
+      requires = [
         "postgresql.service"
         "postgresql-setup.service"
       ];
@@ -765,8 +780,13 @@ in
 
       after = [ "network.target" ];
 
-      # To trigger the .target also on "systemctl start postgresql".
-      bindsTo = [ "postgresql.target" ];
+      # To trigger the .target also on "systemctl start postgresql" as well as on
+      # restarts & stops.
+      # Please note that postgresql.service & postgresql.target binding to
+      # each other makes the Restart=always rule racy and results
+      # in sometimes the service not being restarted.
+      wants = [ "postgresql.target" ];
+      partOf = [ "postgresql.target" ];
 
       environment.PGDATA = cfg.dataDir;
 
@@ -805,6 +825,8 @@ in
           TimeoutSec = 120;
 
           ExecStart = "${cfg.finalPackage}/bin/postgres";
+
+          Restart = "always";
 
           # Hardening
           CapabilityBoundingSet = [ "" ];
@@ -857,7 +879,20 @@ in
         })
       ];
 
-      unitConfig.RequiresMountsFor = "${cfg.dataDir}";
+      unitConfig =
+        let
+          inherit (config.systemd.services.postgresql.serviceConfig) TimeoutSec;
+          maxTries = 5;
+          bufferSec = 5;
+        in
+        {
+          RequiresMountsFor = "${cfg.dataDir}";
+
+          # The max. time needed to perform `maxTries` start attempts of systemd
+          # plus a bit of buffer time (bufferSec) on top.
+          StartLimitIntervalSec = TimeoutSec * maxTries + bufferSec;
+          StartLimitBurst = maxTries;
+        };
     };
 
     systemd.services.postgresql-setup = {
@@ -877,53 +912,52 @@ in
       environment.PGPORT = builtins.toString cfg.settings.port;
 
       # Wait for PostgreSQL to be ready to accept connections.
-      script =
-        ''
-          check-connection() {
-            psql -d postgres -v ON_ERROR_STOP=1 <<-'  EOF'
-              SELECT pg_is_in_recovery() \gset
-              \if :pg_is_in_recovery
-              \i still-recovering
-              \endif
-            EOF
-          }
-          while ! check-connection 2> /dev/null; do
-              if ! systemctl is-active --quiet postgresql.service; then exit 1; fi
-              sleep 0.1
-          done
+      script = ''
+        check-connection() {
+          psql -d postgres -v ON_ERROR_STOP=1 <<-'  EOF'
+            SELECT pg_is_in_recovery() \gset
+            \if :pg_is_in_recovery
+            \i still-recovering
+            \endif
+          EOF
+        }
+        while ! check-connection 2> /dev/null; do
+            if ! systemctl is-active --quiet postgresql.service; then exit 1; fi
+            sleep 0.1
+        done
 
-          if test -e "${cfg.dataDir}/.first_startup"; then
-            ${optionalString (cfg.initialScript != null) ''
-              psql -f "${cfg.initialScript}" -d postgres
-            ''}
-            rm -f "${cfg.dataDir}/.first_startup"
-          fi
-        ''
-        + optionalString (cfg.ensureDatabases != [ ]) ''
-          ${concatMapStrings (database: ''
-            psql -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || psql -tAc 'CREATE DATABASE "${database}"'
-          '') cfg.ensureDatabases}
-        ''
-        + ''
-          ${concatMapStrings (
-            user:
-            let
-              dbOwnershipStmt = optionalString user.ensureDBOwnership ''psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
+        if test -e "${cfg.dataDir}/.first_startup"; then
+          ${optionalString (cfg.initialScript != null) ''
+            psql -f "${cfg.initialScript}" -d postgres
+          ''}
+          rm -f "${cfg.dataDir}/.first_startup"
+        fi
+      ''
+      + optionalString (cfg.ensureDatabases != [ ]) ''
+        ${concatMapStrings (database: ''
+          psql -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || psql -tAc 'CREATE DATABASE "${database}"'
+        '') cfg.ensureDatabases}
+      ''
+      + ''
+        ${concatMapStrings (
+          user:
+          let
+            dbOwnershipStmt = optionalString user.ensureDBOwnership ''psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
 
-              filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
+            filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
 
-              clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
+            clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
 
-              userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
-            in
-            ''
-              psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
-              ${userClauses}
+            userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
+          in
+          ''
+            psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
+            ${userClauses}
 
-              ${dbOwnershipStmt}
-            ''
-          ) cfg.ensureUsers}
-        '';
+            ${dbOwnershipStmt}
+          ''
+        ) cfg.ensureUsers}
+      '';
     };
   };
 

@@ -7,12 +7,14 @@
 python3Packages.buildPythonPackage rec {
   pname = "pydf";
   version = "12";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "7f47a7c3abfceb1ac04fc009ded538df1ae449c31203962a1471a4eb3bf21439";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1 $out/share/pydf
@@ -21,7 +23,7 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "colourised df(1)-clone";
+    description = "Colourised df(1)-clone";
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/pydf/";
     mainProgram = "pydf";
     license = licenses.publicDomain;

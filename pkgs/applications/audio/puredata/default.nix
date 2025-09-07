@@ -33,35 +33,33 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      fftw
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      portmidi
-      portaudio
-    ];
+  buildInputs = [
+    fftw
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    portmidi
+    portaudio
+  ];
 
-  configureFlags =
-    [
-      "--enable-fftw"
-      "--enable-jack"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-alsa"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--enable-portaudio"
-      "--enable-portmidi"
-      "--without-local-portaudio"
-      "--without-local-portmidi"
-      "--disable-jack-framework"
-      "--with-wish=${tk}/bin/wish8.6"
-    ];
+  configureFlags = [
+    "--enable-fftw"
+    "--enable-jack"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-alsa"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--enable-portaudio"
+    "--enable-portmidi"
+    "--without-local-portaudio"
+    "--without-local-portmidi"
+    "--disable-jack-framework"
+    "--with-wish=${tk}/bin/wish8.6"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/pd --prefix PATH : ${lib.makeBinPath [ tk ]}
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''A real-time graphical programming environment for audio, video, and graphical processing'';
+    description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
     homepage = "http://puredata.info";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;

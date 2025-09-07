@@ -10,7 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
   version = "2.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garabik";
@@ -26,9 +26,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   postFixup = ''
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
   '';
 
   postInstall = ''

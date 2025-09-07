@@ -13,7 +13,6 @@ from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
-from .constants import WITH_NIX_2_18
 from .models import (
     Action,
     BuildAttr,
@@ -228,18 +227,7 @@ def copy_closure(
         case (Remote(_) as host, None) | (None, Remote(_) as host):
             nix_copy_closure(host, to=bool(to_host))
         case (Remote(_), Remote(_)):
-            if WITH_NIX_2_18:
-                # With newer Nix, use `nix copy` instead of `nix-copy-closure`
-                # since it supports `--to` and `--from` at the same time
-                # TODO: once we drop Nix 2.3 from nixpkgs, remove support for
-                # `nix-copy-closure`
-                nix_copy(to_host, from_host)
-            else:
-                # With older Nix, we need to copy from to local and local to
-                # host. This means it is slower and need additional disk space
-                # in local
-                nix_copy_closure(from_host, to=False)
-                nix_copy_closure(to_host, to=True)
+            nix_copy(to_host, from_host)
 
 
 def edit() -> None:
@@ -693,16 +681,26 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all_channels: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
+    if not sudo and os.geteuid() != 0:
+        raise NixOSRebuildError(
+            "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+        )
+
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
             all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):
-            run_wrapper(["nix-channel", "--update", channel_path.name], check=False)
+            run_wrapper(
+                ["nix-channel", "--update", channel_path.name],
+                check=False,
+                sudo=sudo,
+            )

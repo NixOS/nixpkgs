@@ -18,7 +18,7 @@
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.17" "9.0") "1.10.0")
+      (case (range "8.17" "9.1") "1.10.0")
       (case (range "8.11" "8.19") "1.8.0")
       (case (range "8.7" "8.13") "1.3.0")
     ] null;
@@ -28,13 +28,14 @@
   release."1.3.0".sha256 = "1yp7ca36jyl9kz35ghxig45x6cd0bny2bpmy058359p94wc617ax";
   mlPlugin = true;
   nativeBuildInputs = [ coq.ocamlPackages.cppo ];
-  propagatedBuildInputs =
-    [ ExtLib ]
-    ++ (with coq.ocamlPackages; [
-      ocaml
-      findlib
-      ocamlbuild
-    ]);
+  propagatedBuildInputs = [
+    ExtLib
+  ]
+  ++ (with coq.ocamlPackages; [
+    ocaml
+    findlib
+    ocamlbuild
+  ]);
 
   doCheck = true;
   checkTarget = "test";

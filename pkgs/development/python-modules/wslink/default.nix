@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wslink";
-  version = "2.3.4";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kitware";
     repo = "wslink";
     tag = "v${version}";
-    hash = "sha256-QTMEZgoV7Ua3x2C2E9Z1NsX35/JcfmpLZDjNd/HzDj8=";
+    hash = "sha256-IFXxMN+OXJ/J2BSegxOBjE4iSA27pLyCpyyx4hmo9NU=";
   };
 
   sourceRoot = "${src.name}/python";

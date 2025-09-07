@@ -71,25 +71,25 @@ let
 
         sourceRoot = "${src.name}/${pname}";
 
-        cmakeFlags =
-          [
-            "-DCMAKE_INSTALL_LIBDIR=lib"
-            "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DINDI_DATA_DIR=share/indi/"
-          ]
-          ++ lib.optional doCheck [
-            "-DINDI_BUILD_UNITTESTS=ON"
-            "-DINDI_BUILD_INTEGTESTS=ON"
-          ]
-          ++ cmakeFlags;
+        cmakeFlags = [
+          "-DCMAKE_INSTALL_LIBDIR=lib"
+          "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DINDI_DATA_DIR=share/indi/"
+        ]
+        ++ lib.optional doCheck [
+          "-DINDI_BUILD_UNITTESTS=ON"
+          "-DINDI_BUILD_INTEGTESTS=ON"
+        ]
+        ++ cmakeFlags;
 
         nativeBuildInputs = [
           cmake
           ninja
           pkg-config
           udevCheckHook
-        ] ++ nativeBuildInputs;
+        ]
+        ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
 

@@ -68,7 +68,8 @@ stdenv.mkDerivation {
     gtk2
     libgnomecanvas
     gtksourceview
-  ] ++ param.buildInputs or [ ];
+  ]
+  ++ param.buildInputs or [ ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];

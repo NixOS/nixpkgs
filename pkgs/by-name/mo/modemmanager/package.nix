@@ -56,39 +56,37 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      glib
-      pkg-config
-      libxslt
-      python3
-      udevCheckHook
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    glib
+    pkg-config
+    libxslt
+    python3
+    udevCheckHook
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      glib
-      libgudev
-      ppp
-      libmbim
-      libqmi
-      bash-completion
-      dbus
-      bash # shebangs in share/ModemManager/fcc-unlock.available.d/
-    ]
-    ++ lib.optionals withPolkit [
-      polkit
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    glib
+    libgudev
+    ppp
+    libmbim
+    libqmi
+    bash-completion
+    dbus
+    bash # shebangs in share/ModemManager/fcc-unlock.available.d/
+  ]
+  ++ lib.optionals withPolkit [
+    polkit
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   nativeInstallCheckInputs = [
     python3

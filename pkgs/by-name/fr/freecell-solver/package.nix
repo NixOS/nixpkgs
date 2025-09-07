@@ -37,32 +37,31 @@ stdenv.mkDerivation (finalAttrs: {
     six
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      cmocka
-      gperf
-      ninja
-      perl
-      pkg-config
-      python3
+  nativeBuildInputs = [
+    cmake
+    cmocka
+    gperf
+    ninja
+    perl
+    pkg-config
+    python3
+  ]
+  ++ (
+    with perl.pkgs;
+    TaskFreecellSolverTesting.buildInputs
+    ++ [
+      GamesSolitaireVerify
+      HTMLTemplate
+      Moo
+      PathTiny
+      StringShellQuote
+      TaskFreecellSolverTesting
+      TemplateToolkit
+      TextTemplate
     ]
-    ++ (
-      with perl.pkgs;
-      TaskFreecellSolverTesting.buildInputs
-      ++ [
-        GamesSolitaireVerify
-        HTMLTemplate
-        Moo
-        PathTiny
-        StringShellQuote
-        TaskFreecellSolverTesting
-        TemplateToolkit
-        TextTemplate
-      ]
-    )
-    ++ [ python3.pkgs.wrapPython ]
-    ++ finalAttrs.pythonPath;
+  )
+  ++ [ python3.pkgs.wrapPython ]
+  ++ finalAttrs.pythonPath;
 
   buildInputs = [
     gmp

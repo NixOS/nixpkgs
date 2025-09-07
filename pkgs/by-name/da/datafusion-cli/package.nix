@@ -6,18 +6,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "datafusion-cli";
-  version = "48.0.0";
+  version = "49.0.2";
 
   src = fetchFromGitHub {
     name = "datafusion-cli-source";
     owner = "apache";
     repo = "arrow-datafusion";
     tag = finalAttrs.version;
-    hash = "sha256-DkMJKZI5rOH/PGXiAXY/GtYwYvhZ2b3zKeGeD9o2AvE=";
+    hash = "sha256-/vqesGd0O/oZCx2UJLrFS1EeiLu7HkhHWhvGBEIZKdQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9uMmxP/MvFXfylKCCcZS1YEp8snF5Tds9Eh0hL6U0oE=";
+  cargoHash = "sha256-E7RT9n7zLoRGD4eNx5Fm89NtCxl2KujxfVhAeP+56vY=";
 
   buildAndTestSubdir = "datafusion-cli";
 
@@ -39,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   meta = {
-    description = "cli for Apache Arrow DataFusion";
+    description = "CLI for Apache Arrow DataFusion";
     mainProgram = "datafusion-cli";
     homepage = "https://arrow.apache.org/datafusion";
     changelog = "https://github.com/apache/arrow-datafusion/blob/${finalAttrs.version}/datafusion/CHANGELOG.md";

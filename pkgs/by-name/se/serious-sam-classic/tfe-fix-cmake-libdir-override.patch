@@ -1,0 +1,17 @@
+diff --git a/SamTFE/Sources/CMakeLists.txt b/SamTFE/Sources/CMakeLists.txt
+index 956518b..76308f2 100644
+--- a/SamTFE/Sources/CMakeLists.txt
++++ b/SamTFE/Sources/CMakeLists.txt
+@@ -221,10 +221,10 @@ endif (LINUX)
+ message(STATUS "Operating system name: ${CMAKE_OS_NAME}")
+ 
+ set(CMAKE_ARCH_BITS 32)
+-set(CMAKE_INSTALL_LIBDIR "/usr/lib")
++#set(CMAKE_INSTALL_LIBDIR "/usr/lib")
+ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+     set(CMAKE_ARCH_BITS 64)
+-    set(CMAKE_INSTALL_LIBDIR "/usr/lib64")
++    #set(CMAKE_INSTALL_LIBDIR "/usr/lib64")
+ endif()
+ 
+ message(STATUS "Arch bits: ${CMAKE_ARCH_BITS}")

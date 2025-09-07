@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     tag = "v${version}";
-    hash = "sha256-PX3vNrw/EM1d7/9JuxhfHG63dIULNUYWs0PGbOC7AcA=";
+    hash = "sha256-X8nmfG7ZhtB4P6N0ku0Gc9xHOGJFeGTnB1WizZ2X1fk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lBwhaoRdYOmfVSYKmeBbLp/D7cZ43z3CEnyt7sVVRlw=";
+  cargoHash = "sha256-p3ryAggKR6ylCvaQ8M30OmLyGCL4bOYR/YwqNfAzcAg=";
 
   nativeBuildInputs = [
     pandoc

@@ -10,19 +10,21 @@
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.14.3";
+  version = "0.14.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fTXwrxZXtAUakMPAwsDSQz886Dnbkw/b7T1lFt4qXfE=";
+    hash = "sha256-+u1GAToaYqUZPElhWolmg+pcFO1HRLy0vRhpsUIFUdg=";
   };
 
   prePatch = ''
     # pythonRelaxDeps doesn't work here
-    substituteInPlace pyproject.toml --replace-fail "setuptools >= 61.2, < 72" "setuptools"
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 61.2, < 72" "setuptools" \
+      --replace-fail "cython >= 3, < 3.1" cython
   '';
 
   nativeBuildInputs = [

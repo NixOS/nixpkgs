@@ -7,7 +7,6 @@
   qttools,
   qtwayland,
   wrapQtAppsHook,
-  ...
 }:
 
 stdenv.mkDerivation rec {

@@ -29,7 +29,6 @@ let
     pname = "sniprun-bin";
     inherit version src;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-cu7wn75rQcwPLjFl4v05kVMsiCD0mAlIBt49mvIaPPU=";
 
     nativeBuildInputs = [ makeWrapper ];

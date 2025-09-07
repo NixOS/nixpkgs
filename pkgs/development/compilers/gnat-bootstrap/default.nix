@@ -33,83 +33,62 @@ stdenv.mkDerivation (
         url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
       in
       {
-        "11" =
-          {
-            gccVersion = "11.2.0";
-            alireRevision = "4";
-          }
-          // {
-            x86_64-darwin = {
-              inherit url;
-              hash = "sha256-FmBgD20PPQlX/ddhJliCTb/PRmKxe9z7TFPa2/SK4GY=";
-              upstreamTriplet = "x86_64-apple-darwin19.6.0";
-            };
-            x86_64-linux = {
-              inherit url;
-              hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
-              upstreamTriplet = "x86_64-pc-linux-gnu";
-            };
-          }
-          .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
-        "12" =
-          {
-            gccVersion = "12.1.0";
-            alireRevision = "2";
-          }
-          // {
-            x86_64-darwin = {
-              inherit url;
-              hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
-              upstreamTriplet = "x86_64-apple-darwin19.6.0";
-            };
-            x86_64-linux = {
-              inherit url;
-              hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
-              upstreamTriplet = "x86_64-pc-linux-gnu";
-            };
-          }
-          .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
-        "13" =
-          {
-            gccVersion = "13.2.0";
-            alireRevision = "2";
-          }
-          // {
-            x86_64-darwin = {
-              inherit url;
-              hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
-              upstreamTriplet = "x86_64-apple-darwin21.6.0";
-            };
-            x86_64-linux = {
-              inherit url;
-              hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
-              upstreamTriplet = "x86_64-pc-linux-gnu";
-            };
-          }
-          .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
-        "14" =
-          {
-            gccVersion = "14.2.0";
-            alireRevision = "1";
-          }
-          // {
-            x86_64-darwin = {
-              inherit url;
-              hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
-              upstreamTriplet = "x86_64-apple-darwin21.6.0";
-            };
-            x86_64-linux = {
-              inherit url;
-              hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
-              upstreamTriplet = "x86_64-pc-linux-gnu";
-            };
-            aarch64-linux = {
-              inherit url;
-              hash = "sha256-SVW/0yyj6ZH1GAjvD+unII+zSLGd3KGFt1bjjQ3SEFU=";
-              upstreamTriplet = "aarch64-linux-gnu";
-            };
-          }
-          .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "12" = {
+          gccVersion = "12.1.0";
+          alireRevision = "2";
+        }
+        // {
+          x86_64-darwin = {
+            inherit url;
+            hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
+            upstreamTriplet = "x86_64-apple-darwin19.6.0";
+          };
+          x86_64-linux = {
+            inherit url;
+            hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "13" = {
+          gccVersion = "13.2.0";
+          alireRevision = "2";
+        }
+        // {
+          x86_64-darwin = {
+            inherit url;
+            hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
+            upstreamTriplet = "x86_64-apple-darwin21.6.0";
+          };
+          x86_64-linux = {
+            inherit url;
+            hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "14" = {
+          gccVersion = "14.2.0";
+          alireRevision = "1";
+        }
+        // {
+          x86_64-darwin = {
+            inherit url;
+            hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
+            upstreamTriplet = "x86_64-apple-darwin21.6.0";
+          };
+          x86_64-linux = {
+            inherit url;
+            hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+          aarch64-linux = {
+            inherit url;
+            hash = "sha256-SVW/0yyj6ZH1GAjvD+unII+zSLGd3KGFt1bjjQ3SEFU=";
+            upstreamTriplet = "aarch64-linux-gnu";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
       };
     inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
   in
@@ -123,48 +102,46 @@ stdenv.mkDerivation (
       inherit (versionMap.${majorVersion}) url hash;
     };
 
-    nativeBuildInputs =
-      [
-        dejagnu
-        gmp
-        guile
-        libipt
-        mpfr
-        python3
-        readline
-        sourceHighlight
-        zlib
-      ]
-      ++ lib.optionals stdenv.buildPlatform.isLinux [
-        autoPatchelfHook
-        glibc
-      ]
-      ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform elfutils) [
-        elfutils
-      ];
+    nativeBuildInputs = [
+      dejagnu
+      gmp
+      guile
+      libipt
+      mpfr
+      python3
+      readline
+      sourceHighlight
+      zlib
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isLinux [
+      autoPatchelfHook
+      glibc
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform elfutils) [
+      elfutils
+    ];
 
-    buildInputs =
-      [
-        expat
-      ]
-      ++ lib.optionals (lib.versionAtLeast majorVersion "13") [
-        ncurses
-      ]
-      ++ lib.optionals (lib.versionOlder majorVersion "13") [
-        ncurses5
-      ]
-      ++ [
-        xz
-      ]
-      ++
-        lib.optionals
-          (
-            lib.versionAtLeast majorVersion "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
-          )
-          [
-            # not sure why the bootstrap binaries link to zstd only on this architecture but they do
-            zstd
-          ];
+    buildInputs = [
+      expat
+    ]
+    ++ lib.optionals (lib.versionAtLeast majorVersion "13") [
+      ncurses
+    ]
+    ++ lib.optionals (lib.versionOlder majorVersion "13") [
+      ncurses5
+    ]
+    ++ [
+      xz
+    ]
+    ++
+      lib.optionals
+        (
+          lib.versionAtLeast majorVersion "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+        )
+        [
+          # not sure why the bootstrap binaries link to zstd only on this architecture but they do
+          zstd
+        ];
 
     strictDeps = true;
 
@@ -191,51 +168,50 @@ stdenv.mkDerivation (
         rm -f bin/ld ${upstreamTriplet}/bin/ld
       '';
 
-    installPhase =
-      ''
-        mkdir -p $out
-        cp -ar * $out/
-      ''
+    installPhase = ''
+      mkdir -p $out
+      cp -ar * $out/
+    ''
 
-      # So far with the Darwin gnat-bootstrap binary packages, there have been two
-      # types of dylib path references to other dylibs that need fixups:
-      #
-      # 1.  Dylibs in $out/lib with paths starting with
-      #     /Users/runner/.../gcc/install that refer to other dylibs in $out/lib
-      # 2.  Dylibs in $out/lib/gcc/*/*/adalib with paths starting with
-      #     @rpath that refer to other dylibs in $out/lib/gcc/*/*/adalib
-      #
-      # Additionally, per Section 14.4 Fixed Headers in the GCC 12.2.0 manual [2],
-      # we have to update the fixed header files in current Alire GCC package, since it
-      # was built against macOS 10.15 (Darwin 19.6.0), but Nix currently
-      # builds against macOS 10.12, and the two header file structures differ.
-      # For example, the current Alire GCC package has a fixed <stdio.h>
-      # from macOS 10.15 that contains a #include <_stdio.h>, but neither the Alire
-      # GCC package nor macOS 10.12 have such a header (<xlocale/_stdio.h> and
-      # <secure/_stdio.h> in 10.12 are not equivalent; indeed, 10.15 <_stdio.h>
-      # says it contains code shared by <stdio.h> and <xlocale/_stdio.h>).
-      #
-      # [2]: https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Fixed-Headers.html
+    # So far with the Darwin gnat-bootstrap binary packages, there have been two
+    # types of dylib path references to other dylibs that need fixups:
+    #
+    # 1.  Dylibs in $out/lib with paths starting with
+    #     /Users/runner/.../gcc/install that refer to other dylibs in $out/lib
+    # 2.  Dylibs in $out/lib/gcc/*/*/adalib with paths starting with
+    #     @rpath that refer to other dylibs in $out/lib/gcc/*/*/adalib
+    #
+    # Additionally, per Section 14.4 Fixed Headers in the GCC 12.2.0 manual [2],
+    # we have to update the fixed header files in current Alire GCC package, since it
+    # was built against macOS 10.15 (Darwin 19.6.0), but Nix currently
+    # builds against macOS 10.12, and the two header file structures differ.
+    # For example, the current Alire GCC package has a fixed <stdio.h>
+    # from macOS 10.15 that contains a #include <_stdio.h>, but neither the Alire
+    # GCC package nor macOS 10.12 have such a header (<xlocale/_stdio.h> and
+    # <secure/_stdio.h> in 10.12 are not equivalent; indeed, 10.15 <_stdio.h>
+    # says it contains code shared by <stdio.h> and <xlocale/_stdio.h>).
+    #
+    # [2]: https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Fixed-Headers.html
 
-      + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-        upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/x86_64-darwin/gcc/install"
-        for i in "$out"/lib/*.dylib "$out"/lib/gcc/*/*/adalib/*.dylib; do
-          if [[ -f "$i" && ! -h "$i" ]]; then
-            install_name_tool -id "$i" "$i" || true
-            for old_path in $(otool -L "$i" | grep "$upstreamBuildPrefix" | awk '{print $1}'); do
-              new_path=`echo "$old_path" | sed "s,$upstreamBuildPrefix,$out,"`
-              install_name_tool -change "$old_path" "$new_path" "$i" || true
-            done
-            for old_path in $(otool -L "$i" | grep "@rpath" | awk '{print $1}'); do
-              new_path=$(echo "$old_path" | sed "s,@rpath,$(dirname "$i"),")
-              install_name_tool -change "$old_path" "$new_path" "$i" || true
-            done
-          fi
-        done
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/x86_64-darwin/gcc/install"
+      for i in "$out"/lib/*.dylib "$out"/lib/gcc/*/*/adalib/*.dylib; do
+        if [[ -f "$i" && ! -h "$i" ]]; then
+          install_name_tool -id "$i" "$i" || true
+          for old_path in $(otool -L "$i" | grep "$upstreamBuildPrefix" | awk '{print $1}'); do
+            new_path=`echo "$old_path" | sed "s,$upstreamBuildPrefix,$out,"`
+            install_name_tool -change "$old_path" "$new_path" "$i" || true
+          done
+          for old_path in $(otool -L "$i" | grep "@rpath" | awk '{print $1}'); do
+            new_path=$(echo "$old_path" | sed "s,@rpath,$(dirname "$i"),")
+            install_name_tool -change "$old_path" "$new_path" "$i" || true
+          done
+        fi
+      done
 
-        "$out"/libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/mkheaders -v -v \
-          "$out" "${stdenv.cc.libc}"
-      '';
+      "$out"/libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/mkheaders -v -v \
+        "$out" "${stdenv.cc.libc}"
+    '';
 
     passthru = {
       langC = true; # TRICK for gcc-wrapper to wrap it
@@ -253,7 +229,8 @@ stdenv.mkDerivation (
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
-      ] ++ lib.optionals (lib.versionAtLeast majorVersion "14") [ "aarch64-linux" ];
+      ]
+      ++ lib.optionals (lib.versionAtLeast majorVersion "14") [ "aarch64-linux" ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
   }

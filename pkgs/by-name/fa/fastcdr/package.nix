@@ -32,14 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      graphviz-nox
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    graphviz-nox
+  ];
 
   doCheck = true;
 

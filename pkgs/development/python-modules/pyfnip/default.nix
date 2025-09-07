@@ -22,7 +22,8 @@ buildPythonPackage rec {
 
   dependencies = [
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   # Project has no tests
   doCheck = false;

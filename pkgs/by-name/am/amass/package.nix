@@ -2,31 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  pkg-config,
+  libpostalWithData,
 }:
-
 buildGoModule rec {
   pname = "amass";
-  version = "4.2.0";
+  version = "5.0.1";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libpostalWithData ];
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     tag = "v${version}";
-    hash = "sha256-lhvU2fUnjQ+D+EZDRircNg/np4Ynk+HzOBgxT1L8BaQ=";
+    hash = "sha256-uAuBWzEwppnmYacfPI7MZUW+7PdSs3EqYm1WQI4fthQ=";
   };
 
-  vendorHash = "sha256-PdFIWK4yBh8Bb9mzYdU2h7pDPK8FZMhu8meTd9snP48=";
-
-  outputs = [
-    "out"
-    "wordlists"
-  ];
-
-  postInstall = ''
-    mkdir -p $wordlists
-    cp -R examples/wordlists/*.txt $wordlists
-    gzip $wordlists/*.txt
-  '';
+  vendorHash = "sha256-/AowoZfOk2tib996oC2hsMnzbe/CVbCBesTWXp6xE6Y=";
 
   # https://github.com/OWASP/Amass/issues/640
   doCheck = false;
@@ -40,9 +33,6 @@ buildGoModule rec {
       uses the IP addresses obtained during resolution to discover associated
       netblocks and ASNs. All the information is then used to build maps of the
       target networks.
-
-      Amass ships with a set of wordlist (to be used with the amass -w flag)
-      that are found under the wordlists output.
     '';
     homepage = "https://owasp.org/www-project-amass/";
     changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";

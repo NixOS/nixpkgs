@@ -6,23 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "clairvoyance";
-  version = "2.5.3";
-  format = "pyproject";
+  version = "2.5.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nikitastupin";
     repo = "clairvoyance";
     tag = "v${version}";
-    hash = "sha256-CVXa2HvX7M0cwqnTeZVETg07j324ATQuMNreEgAC2QA=";
+    hash = "sha256-5PbvR0HVvA2xFzD+Jtisxuk68pdM29NyweFbZKBbhzs=";
   };
 
   pythonRelaxDeps = [ "rich" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     rich
   ];
@@ -37,9 +35,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'asyncio = "^3.4.3"' ""
   '';
 
-  pythonImportsCheck = [
-    "clairvoyance"
-  ];
+  pythonImportsCheck = [ "clairvoyance" ];
 
   disabledTests = [
     # KeyError
@@ -48,10 +44,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "Tool to obtain GraphQL API schemas";
-    mainProgram = "clairvoyance";
     homepage = "https://github.com/nikitastupin/clairvoyance";
-    changelog = "https://github.com/nikitastupin/clairvoyance/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/nikitastupin/clairvoyance/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "clairvoyance";
   };
 }

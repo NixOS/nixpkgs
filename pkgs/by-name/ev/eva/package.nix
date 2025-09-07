@@ -13,12 +13,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eX2d9h6zNbheS68j3lyhJW05JZmQN2I2MdcmiZB8Mec=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7vhhm2qAaSwBjbYfDER9bnC3OOOun4brn7Ft4mO6jfI=";
 
   meta = with lib; {
     description = "Calculator REPL, similar to bc";
-    homepage = "https://github.com/NerdyPepper/eva";
+    homepage = "https://github.com/oppiliappan/eva";
     license = licenses.mit;
     maintainers = with maintainers; [
       ma27

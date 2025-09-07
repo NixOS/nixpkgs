@@ -19,7 +19,7 @@
   locale,
   ncurses,
   netcat,
-  nettools,
+  net-tools,
   pihole-ftl,
   procps,
   resholve,
@@ -27,7 +27,6 @@
   systemd,
   util-linux,
   stateDir ? "/etc/pihole",
-  ...
 }:
 
 (resholve.mkDerivation rec {
@@ -119,7 +118,7 @@
         locale
         ncurses
         netcat
-        nettools
+        net-tools
         pihole-ftl
         procps
         sqlite
@@ -245,13 +244,12 @@
 }).overrideAttrs
   (old: {
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
-    preFixup =
-      ''
-        scriptsDir=$out/usr/share/pihole
+    preFixup = ''
+      scriptsDir=$out/usr/share/pihole
 
-        substituteInPlace $out/bin/pihole $scriptsDir/advanced/Scripts/*.sh \
-          --replace-quiet /etc/.pihole $scriptsDir \
-          --replace-quiet /opt/pihole $scriptsDir/advanced/Scripts
-      ''
-      + old.preFixup;
+      substituteInPlace $out/bin/pihole $scriptsDir/advanced/Scripts/*.sh \
+        --replace-quiet /etc/.pihole $scriptsDir \
+        --replace-quiet /opt/pihole $scriptsDir/advanced/Scripts
+    ''
+    + old.preFixup;
   })

@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+LQxU4jWBAOk+qHNvGxYXudX5dG6szQt3PiPI41Zxlo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-X9dWIeDKy3qLmFwUevN8ZUcwNVtt7Wnecbg7M6zUXFU=";
 
   propagatedBuildInputs = [ umu-launcher ];

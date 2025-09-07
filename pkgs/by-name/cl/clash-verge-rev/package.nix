@@ -12,25 +12,25 @@
 }:
 let
   pname = "clash-verge-rev";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-NNP/NDC/Y4oBQftM6Z+pOFMEtdtvcIMYyY3sGwkpmrc=";
+    hash = "sha256-mTtHgH+Qf9OaQz7I5IT8SUpXOZVObwEGdKRKq107rLU=";
   };
 
   src-service = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service";
-    rev = "2b36be1417cb30ce592951cbadb1503e61c2c784"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-yTttQpWmqhgOx9wPGE01Bjp52QjTXLAfg+7+kPny+yg=";
+    rev = "cccf77a22ac78fe2188fd3bf519d368a2549b941"; # no meaningful tags in this repo. The only way is updating manully every time.
+    hash = "sha256-ADtY3h69JiRw43H+V6mzyDr/XsnAVwXXRZGBSRNA4TY=";
   };
 
-  service-cargo-hash = "sha256-HET7/Lyc0Ip1f9WMVzUWr0QFuL8YN3dgZdK0adl/rYc=";
-  pnpm-hash = "sha256-bhWaDP0gHJC6Mx9QFl4Ltk7y5jozt0eLtsPOWg821Yw=";
-  vendor-hash = "sha256-UkiPJNr5leKuffrrh8n2uhCe/QVjIb4S9heZXP7oKqw=";
+  service-cargo-hash = "sha256-a6jp3v/AdcWvBCzEfdtfbHUdqh3a1gNN9D8hRdU1RTc=";
+  pnpm-hash = "sha256-WrJ5iWuPoXe220ZPAbo4Z9Zlk2B9Cob0KOL6Q+xSVys=";
+  vendor-hash = "sha256-aOXBk3RZfelqdeKwP992rjBJ6Ps2GdEGBqzMBudCqKw=";
 
   service = callPackage ./service.nix {
     inherit
@@ -64,8 +64,7 @@ let
     license = lib.licenses.gpl3Only;
     mainProgram = "clash-verge";
     maintainers = with lib.maintainers; [
-      Guanran928
-      bot-wxt1221
+      hhr2020
     ];
     platforms = lib.platforms.linux;
   };

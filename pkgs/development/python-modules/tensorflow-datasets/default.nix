@@ -76,31 +76,30 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      absl-py
-      array-record
-      dm-tree
-      etils
-      immutabledict
-      numpy
-      promise
-      protobuf
-      psutil
-      pyarrow
-      requests
-      simple-parsing
-      tensorflow-metadata
-      termcolor
-      toml
-      tqdm
-      wrapt
-    ]
-    ++ etils.optional-dependencies.epath
-    ++ etils.optional-dependencies.etree
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-    ];
+  dependencies = [
+    absl-py
+    array-record
+    dm-tree
+    etils
+    immutabledict
+    numpy
+    promise
+    protobuf
+    psutil
+    pyarrow
+    requests
+    simple-parsing
+    tensorflow-metadata
+    termcolor
+    toml
+    tqdm
+    wrapt
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.etree
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -137,12 +136,6 @@ buildPythonPackage rec {
     tensorflow
     tifffile
     zarr
-  ];
-
-  pytestFlagsArray = [
-    # AttributeError: 'NoneType' object has no attribute 'Table'
-    "--deselect=tensorflow_datasets/core/file_adapters_test.py::test_read_write"
-    "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
   disabledTests = [
@@ -209,6 +202,10 @@ buildPythonPackage rec {
     # Require `gcld3` and `nltk.punkt` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/text/c4_test.py"
     "tensorflow_datasets/text/c4_utils_test.py"
+
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/file_adapters_test.py::test_read_write"
+    "tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
   meta = {

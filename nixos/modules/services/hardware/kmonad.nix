@@ -141,60 +141,60 @@ let
         StartLimitIntervalSec = 2;
         StartLimitBurst = 5;
       };
-      serviceConfig =
-        {
-          ExecStart = ''
-            ${lib.getExe cfg.package} ${mkCfg keyboard} \
-              ${utils.escapeSystemdExecArgs cfg.extraArgs}
-          '';
-          Restart = "always";
-          # Restart at increasing intervals from 2s to 1m
-          RestartSec = 2;
-          RestartSteps = 30;
-          RestartMaxDelaySec = "1min";
-          Nice = -20;
-          DynamicUser = true;
-          User = "kmonad";
-          Group = "kmonad";
-          SupplementaryGroups = [
-            # These ensure that our dynamic user has access to the device node
-            config.users.groups.input.name
-            config.users.groups.uinput.name
-          ] ++ keyboard.extraGroups;
-        }
-        // lib.optionalAttrs keyboard.enableHardening {
-          DeviceAllow = [
-            "/dev/uinput w"
-            "char-input r"
-          ];
-          CapabilityBoundingSet = [ "" ];
-          DevicePolicy = "closed";
-          IPAddressDeny = [ "any" ];
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          PrivateNetwork = true;
-          PrivateUsers = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          RestrictAddressFamilies = [ "none" ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          SystemCallArchitectures = [ "native" ];
-          SystemCallErrorNumber = "EPERM";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged"
-            "~@resources"
-          ];
-          UMask = "0077";
-        };
+      serviceConfig = {
+        ExecStart = ''
+          ${lib.getExe cfg.package} ${mkCfg keyboard} \
+            ${utils.escapeSystemdExecArgs cfg.extraArgs}
+        '';
+        Restart = "always";
+        # Restart at increasing intervals from 2s to 1m
+        RestartSec = 2;
+        RestartSteps = 30;
+        RestartMaxDelaySec = "1min";
+        Nice = -20;
+        DynamicUser = true;
+        User = "kmonad";
+        Group = "kmonad";
+        SupplementaryGroups = [
+          # These ensure that our dynamic user has access to the device node
+          config.users.groups.input.name
+          config.users.groups.uinput.name
+        ]
+        ++ keyboard.extraGroups;
+      }
+      // lib.optionalAttrs keyboard.enableHardening {
+        DeviceAllow = [
+          "/dev/uinput w"
+          "char-input r"
+        ];
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        IPAddressDeny = [ "any" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateNetwork = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [ "none" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = [ "native" ];
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0077";
+      };
       # make sure the new config is used after nixos-rebuild switch
       # stopIfChanged controls[0] how a service is "restarted" during
       # nixos-rebuild switch.  By default, stopIfChanged is true, which stops

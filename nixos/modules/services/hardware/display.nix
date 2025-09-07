@@ -141,7 +141,7 @@ in
                 An EDID filename to be used for configured display, as in `edid/<filename>`.
                 See for more information:
                 - `hardware.display.edid.packages`
-                - https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes_and_EDID
+                - <https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes_and_EDID>
               '';
             };
             mode = lib.mkOption {
@@ -153,8 +153,8 @@ in
                     <xres>x<yres>[M][R][-<bpp>][@<refresh>][i][m][eDd]
 
                 See for more information:
-                - https://docs.kernel.org/fb/modedb.html
-                - https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes
+                - <https://docs.kernel.org/fb/modedb.html>
+                - <https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes>
               '';
               example = lib.literalExpression ''
                 "e"

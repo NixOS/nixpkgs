@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cgal";
-  version = "5.6.2";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "https://github.com/CGAL/cgal/releases/download/v${version}/CGAL-${version}.tar.xz";
-    hash = "sha256-RY9g346PHy/a2TyPJOGqj0sJXMYaFPrIG5BoDXMGpC4=";
+    sha256 = "0zwvyp096p0vx01jks9yf74nx6zjh0vjbwr6sl6n6mn52zrzpk8a";
   };
 
   # note: optional component libCGAL_ImageIO would need zlib and opengl;
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
       lgpl3Plus
     ];
     platforms = platforms.all;
-    maintainers = [ maintainers.raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      drew-dirac
+      ylannl
+    ];
   };
 }

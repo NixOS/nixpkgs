@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/zip/files/zip-3.0-zipnote-freeze.patch?id=d37d095fc7a2a9e4a8e904a7bf0f597fe99df85a";
       hash = "sha256-EVr7YS3IytnCRjAYUlkg05GA/kaAY9NRFG7uDt0QLAY=";
     })
-  ] ++ lib.optionals (enableNLS && !stdenv.hostPlatform.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
+  ]
+  ++ lib.optionals (enableNLS && !stdenv.hostPlatform.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
   buildInputs =
-    lib.optional enableNLS libnatspec
-    ++ lib.optional stdenv.hostPlatform.isCygwin libiconv;
+    lib.optional enableNLS libnatspec ++ lib.optional stdenv.hostPlatform.isCygwin libiconv;
 
   meta = with lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";

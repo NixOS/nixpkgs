@@ -2,14 +2,14 @@
   lib,
   fetchFromGitea,
   fetchNpmDeps,
-  buildGoModule,
+  buildGo125Module,
   nodejs,
   npmHooks,
   python3,
 }:
 
 let
-  file-compose = buildGoModule {
+  file-compose = buildGo125Module {
     pname = "file-compose";
     version = "unstable-2023-10-21";
 
@@ -25,16 +25,16 @@ let
   };
 in
 
-buildGoModule rec {
+buildGo125Module rec {
   pname = "readeck";
-  version = "0.19.2";
+  version = "0.20.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "readeck";
     repo = "readeck";
     tag = version;
-    hash = "sha256-gTU1RMd6b1wLIqI8VGa1Fn8+ydhW76E8ft5du71E1zM=";
+    hash = "sha256-7ZLEAMma0eLrcCbwbeK8EPDY1+ZOJy3i4Rz+obDsuko=";
   };
 
   nativeBuildInputs = [
@@ -80,13 +80,13 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-RkyQ7uY7OIpBY7ep2L2Ilq5abY0f91g2uqigdS64sL0=";
+    hash = "sha256-/imn3IoRh6aoQFNH0yMmgYNktfkN647H4KfpcVVC728=";
   };
 
-  vendorHash = "sha256-gqiK96FnfvRAzT0RUpYnT7HftZ1YV9jxbjstcKtGBho=";
+  vendorHash = "sha256-8SdDuMsFKpEhJ3qnH/9nly54A/PJCCh5xIyKNLDs740=";
 
   meta = {
-    description = "Web application that lets you save the readable content of web pages you want to keep forever.";
+    description = "Web application that lets you save the readable content of web pages you want to keep forever";
     mainProgram = "readeck";
     homepage = "https://readeck.org/";
     changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";

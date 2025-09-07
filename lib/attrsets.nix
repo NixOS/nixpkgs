@@ -509,7 +509,7 @@ rec {
 
     `nameList`
 
-    : The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
+    : The list of attributes to fetch from `set`. Each attribute name must exist on the attribute set
 
     `set`
 
@@ -632,6 +632,16 @@ rec {
     `pred`
 
     : Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
+
+      <!-- TIP -->
+      If possible, decide on `name` first and on `value` only if necessary.
+      This avoids evaluating the value if the name is already enough, making it possible, potentially, to have the argument reference the return value.
+      (Depending on context, that could still be considered a self reference by users; a common pattern in Nix.)
+
+      <!-- TIP -->
+      `filterAttrs` is occasionally the cause of infinite recursion in configuration systems that allow self-references.
+      To support the widest range of user-provided logic, perform the `filterAttrs` call as late as possible.
+      Typically that's right before using it in a derivation, as opposed to an implicit conversion whose result is accessible to the user's expressions.
 
     `set`
 
@@ -1216,7 +1226,44 @@ rec {
 
     :::
   */
-  genAttrs = names: f: listToAttrs (map (n: nameValuePair n (f n)) names);
+  genAttrs = names: f: genAttrs' names (n: nameValuePair n (f n));
+
+  /**
+    Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
+    The applied function should return both the new name and value as a `nameValuePair`.
+    ::: {.warning}
+    In case of attribute name collision the first entry determines the value,
+    all subsequent conflicting entries for the same name are silently ignored.
+    :::
+
+    # Inputs
+
+    `xs`
+
+    : A list of strings `s` used as generator.
+
+    `f`
+
+    : A function, given a string `s` from the list `xs`, returns a new `nameValuePair`.
+
+    # Type
+
+    ```
+    genAttrs' :: [ Any ] -> (Any -> { name :: String; value :: Any; }) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.genAttrs'` usage example
+
+    ```nix
+    genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s))
+    => { x_foo = "y_foo"; x_bar = "y_bar"; }
+    ```
+
+    :::
+  */
+  genAttrs' = xs: f: listToAttrs (map f xs);
 
   /**
     Check whether the argument is a derivation. Any set with
@@ -2038,10 +2085,8 @@ rec {
   dontRecurseIntoAttrs = attrs: attrs // { recurseForDerivations = false; };
 
   /**
-    `unionOfDisjoint x y` is equal to `x // y // z` where the
-    attrnames in `z` are the intersection of the attrnames in `x` and
-    `y`, and all values `assert` with an error message.  This
-     operator is commutative, unlike (//).
+    `unionOfDisjoint x y` is equal to `x // y`, but accessing attributes present
+    in both `x` and `y` will throw an error.  This operator is commutative, unlike `//`.
 
     # Inputs
 

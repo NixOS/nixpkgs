@@ -3,24 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  mashumaro,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "5.3.1";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
     tag = "v${version}";
-    hash = "sha256-bgD+wtq9AXCobUCpDfGVe6Ze1cTbbM5auXohQw5gcnk=";
+    hash = "sha256-t+MftumVBcIOO8WvWZcLXLp5Iq87Vpvqc4cxH+yTBAo=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    mashumaro
+    requests
+  ];
 
   doCheck = false; # no tests
 

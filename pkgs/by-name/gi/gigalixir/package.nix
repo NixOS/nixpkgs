@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gigalixir";
     repo = "gigalixir-cli";
     tag = "v${version}";
-    hash = "sha256-D7HbNQ0heQ0aXAA+z0JIwqWlerChPvzXrIGtXz+UiwQ=";
+    hash = "sha256-OCPxOVWHUvH3Tj9bR+aj2VUNNuY5GWhnDaSKRDqLSvI=";
   };
 
   postPatch = ''

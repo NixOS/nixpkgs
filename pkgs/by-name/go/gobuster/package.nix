@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gobuster";
-  version = "3.7.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "OJ";
     repo = "gobuster";
     tag = "v${version}";
-    hash = "sha256-RiT9WUvMCv64Q1kl3WoZ6hu8whpAuG2SN6S0897SE2k=";
+    hash = "sha256-ddTu13jbleylrcas93pGL98d0mE+2HNlPCVO+0iCP/4=";
   };
 
-  vendorHash = "sha256-3okd9ixxfFJTVYMj3qLnezfeR6esfagEfUNfWl6Oo60=";
+  vendorHash = "sha256-h/ZJeHk0J8qOC/ZWw6gaHwy5mIE7RuZulITbhTpQJi8=";
 
   ldflags = [
     "-s"

@@ -42,17 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs =
-    [
-      sdl3
-      libtiff
-      libwebp
-      libavif
-    ]
-    ++ (lib.optionals (!enableSTB) [
-      libpng
-      libjpeg
-    ]);
+  buildInputs = [
+    sdl3
+    libtiff
+    libwebp
+    libavif
+  ]
+  ++ (lib.optionals (!enableSTB) [
+    libpng
+    libjpeg
+  ]);
 
   cmakeFlags = [
     # fail when a dependency could not be found

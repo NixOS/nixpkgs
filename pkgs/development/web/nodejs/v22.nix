@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.16.0";
-  sha256 = "720894f323e5c1ac24968eb2676660c90730d715cb7f090be71a668662a17c37";
+  version = "22.18.0";
+  sha256 = "120e0f74419097a9fafae1fd80b9de7791a587e6f1c48c22b193239ccd0f7084";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -51,12 +51,5 @@ buildNodejs {
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
-
-      # Can be removed after https://github.com/NixOS/nixpkgs/pull/403958.
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
-        hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
-        revert = true;
-      })
     ];
 }

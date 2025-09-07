@@ -15,9 +15,7 @@ bundlerEnv {
   passthru.updateScript = bundlerUpdateScript "git-fame";
 
   meta = with lib; {
-    description = ''
-      A command-line tool that helps you summarize and pretty-print collaborators based on contributions
-    '';
+    description = "Command-line tool that helps you summarize and pretty-print collaborators based on contributions";
     homepage = "http://oleander.io/git-fame-rb";
     license = licenses.mit;
     maintainers = with maintainers; [

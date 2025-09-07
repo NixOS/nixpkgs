@@ -31,7 +31,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     pytest-xdist
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_bloom" ];
 

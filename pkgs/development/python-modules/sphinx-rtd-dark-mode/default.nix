@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pytestFlagsArray = [ "tests/build.py" ];
+  enabledTestPaths = [ "tests/build.py" ];
 
   pythonImportsCheck = [ "sphinx_rtd_dark_mode" ];
 

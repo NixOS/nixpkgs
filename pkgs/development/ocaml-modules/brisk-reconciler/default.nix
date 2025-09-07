@@ -4,22 +4,27 @@
   lib,
   reason,
   ppxlib,
+  ocaml,
 }:
+
+let
+  version =
+    if lib.versionAtLeast ocaml.version "5.3" then
+      throw "brisk-reconciler is not available for OCaml ${ocaml.version}"
+    else
+      "1.0.0-alpha1";
+in
 
 buildDunePackage {
   pname = "brisk-reconciler";
-  version = "unstable-2020-12-02";
-
-  duneVersion = "3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "briskml";
     repo = "brisk-reconciler";
-    rev = "c9d5c4cf5dd17ff2da994de2c3b0f34c72778f70";
-    sha256 = "sha256-AAB4ZzBnwfwFXOAqX/sIT6imOl70F0YNMt96SWOOE9w=";
+    tag = "v${version}";
+    hash = "sha256-Xj6GGsod3lnEEjrzPrlHwQAowq66uz8comlhpWK888k=";
   };
-
-  nativeBuildInputs = [ reason ];
 
   buildInputs = [
     ppxlib

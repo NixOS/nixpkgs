@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RequestsLibrary" ];
 
-  pytestFlagsArray = [ "utests" ];
+  enabledTestPaths = [ "utests" ];
 
   meta = with lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";

@@ -9,25 +9,27 @@ let
   cfg = config.services.victoriametrics;
   settingsFormat = pkgs.formats.yaml { };
 
-  startCLIList =
-    [
-      "${cfg.package}/bin/victoria-metrics"
-      "-storageDataPath=/var/lib/${cfg.stateDir}"
-      "-httpListenAddr=${cfg.listenAddress}"
+  startCLIList = [
+    "${cfg.package}/bin/victoria-metrics"
+    "-storageDataPath=/var/lib/${cfg.stateDir}"
+    "-httpListenAddr=${cfg.listenAddress}"
 
-    ]
-    ++ lib.optionals (cfg.retentionPeriod != null) [ "-retentionPeriod=${cfg.retentionPeriod}" ]
-    ++ cfg.extraOptions;
+  ]
+  ++ lib.optionals (cfg.retentionPeriod != null) [ "-retentionPeriod=${cfg.retentionPeriod}" ]
+  ++ cfg.extraOptions;
   prometheusConfigYml = checkedConfig (
     settingsFormat.generate "prometheusConfig.yaml" cfg.prometheusConfig
   );
 
   checkedConfig =
     file:
-    pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
-      ln -s ${file} $out
-      ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
-    '';
+    if cfg.checkConfig then
+      pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
+      ''
+    else
+      file;
 in
 {
   options.services.victoriametrics = {
@@ -125,6 +127,17 @@ in
         Extra options to pass to VictoriaMetrics. See the docs:
         <https://docs.victoriametrics.com/single-server-victoriametrics/#list-of-command-line-flags>
         or {command}`victoriametrics -help` for more information.
+      '';
+    };
+
+    checkConfig = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Check configuration.
+
+        If you use credentials stored in external files (`environmentFile`, etc),
+        they will not be visible  and it will report errors, despite a correct configuration.
       '';
     };
   };

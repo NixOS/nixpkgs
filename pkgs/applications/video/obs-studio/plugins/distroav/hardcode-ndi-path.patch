@@ -1,8 +1,8 @@
 diff --git a/src/plugin-main.cpp b/src/plugin-main.cpp
-index 0d94add..617af73 100644
+index 43f0e28..5e393c6 100644
 --- a/src/plugin-main.cpp
 +++ b/src/plugin-main.cpp
-@@ -369,14 +369,7 @@ const NDIlib_v5 *load_ndilib() 
+@@ -412,14 +412,7 @@ const NDIlib_v5 *load_ndilib()
  	if (!temp_path.isEmpty()) {
  		locations << temp_path;
  	}
@@ -15,4 +15,6 @@ index 0d94add..617af73 100644
 -	locations << "/usr/local/lib";
 -#endif
 +	locations << "@NDI@/lib";
-	auto lib_path = QString();
+ 	auto lib_path = QString();
+ #if defined(Q_OS_LINUX)
+ 	// Linux

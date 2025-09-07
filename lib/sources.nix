@@ -42,7 +42,9 @@ let
       # Filter out version control software files/directories
       (
         baseName == ".git"
-        || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")
+        ||
+          type == "directory"
+          && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg" || baseName == ".jj")
       )
       ||
         # Filter out editor backup / swap files.

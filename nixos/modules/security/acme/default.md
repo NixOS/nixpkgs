@@ -210,14 +210,20 @@ Nix config. Instead, generate them one time with a systemd service:
 ```nix
 {
   systemd.services.dns-rfc2136-conf = {
-    requiredBy = ["acme-example.com.service" "bind.service"];
-    before = ["acme-example.com.service" "bind.service"];
+    requiredBy = [
+      "acme-example.com.service"
+      "bind.service"
+    ];
+    before = [
+      "acme-example.com.service"
+      "bind.service"
+    ];
     unitConfig = {
       ConditionPathExists = "!/var/lib/secrets/dnskeys.conf";
     };
     serviceConfig = {
       Type = "oneshot";
-      UMask = 0077;
+      UMask = 77;
     };
     path = [ pkgs.bind ];
     script = ''
@@ -312,28 +318,32 @@ can be applied to any service.
 
   # Now you must augment OpenSMTPD's systemd service to load
   # the certificate files.
-  systemd.services.opensmtpd.requires = ["acme-finished-mail.example.com.target"];
-  systemd.services.opensmtpd.serviceConfig.LoadCredential = let
-    certDir = config.security.acme.certs."mail.example.com".directory;
-  in [
-    "cert.pem:${certDir}/cert.pem"
-    "key.pem:${certDir}/key.pem"
-  ];
+  systemd.services.opensmtpd.requires = [ "acme-mail.example.com.service" ];
+  systemd.services.opensmtpd.serviceConfig.LoadCredential =
+    let
+      certDir = config.security.acme.certs."mail.example.com".directory;
+    in
+    [
+      "cert.pem:${certDir}/cert.pem"
+      "key.pem:${certDir}/key.pem"
+    ];
 
   # Finally, configure OpenSMTPD to use these certs.
-  services.opensmtpd = let
-    credsDir = "/run/credentials/opensmtpd.service";
-  in {
-    enable = true;
-    setSendmail = false;
-    serverConfiguration = ''
-      pki mail.example.com cert "${credsDir}/cert.pem"
-      pki mail.example.com key "${credsDir}/key.pem"
-      listen on localhost tls pki mail.example.com
-      action act1 relay host smtp://127.0.0.1:10027
-      match for local action act1
-    '';
-  };
+  services.opensmtpd =
+    let
+      credsDir = "/run/credentials/opensmtpd.service";
+    in
+    {
+      enable = true;
+      setSendmail = false;
+      serverConfiguration = ''
+        pki mail.example.com cert "${credsDir}/cert.pem"
+        pki mail.example.com key "${credsDir}/key.pem"
+        listen on localhost tls pki mail.example.com
+        action act1 relay host smtp://127.0.0.1:10027
+        match for local action act1
+      '';
+    };
 }
 ```
 
@@ -366,3 +376,11 @@ systemd-tmpfiles --create
 # Note: Do this for all certs that share the same account email address
 systemctl start acme-example.com.service
 ```
+
+## Ensuring dependencies for services that need to be reloaded when a certificate challenges {#module-security-acme-reload-dependencies}
+
+Services that depend on ACME certificates and need to be reloaded can use one of two approaches to reload upon successfull certificate acquisition or renewal:
+
+1. **Using the `security.acme.certs.<name>.reloadServices` option**: This will cause `systemctl try-reload-or-restart` to be run for the listed services.
+
+2. **Using a separate reload unit**: if you need perform more complex actions you can implement a separate reload unit but need to ensure that it lists the `acme-renew-<name>.service` unit both as `wantedBy` AND `after`. See the nginx module implementation with its `nginx-config-reload` service.

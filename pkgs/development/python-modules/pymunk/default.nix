@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "7.0.1";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lqOOgSP02J+IILQ2QPH2I9aETx+X7qCcRmDwMXgKn/g=";
+    hash = "sha256-8wRYlyYTJbs+iShEAt1DuQjQpYcdwgEFl+NrQwnwIps=";
   };
 
   nativeBuildInputs = [ cffi ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "pymunk/tests" ];
+  enabledTestPaths = [ "pymunk/tests" ];
 
   pythonImportsCheck = [ "pymunk" ];
 

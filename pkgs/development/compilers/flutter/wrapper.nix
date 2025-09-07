@@ -4,17 +4,16 @@
   darwin,
   callPackage,
   flutter,
-  supportedTargetFlutterPlatforms ?
-    [
-      "universal"
-      "web"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux && !(flutter ? engine)) "linux"
-    ++ lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin) "android"
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "macos"
-      "ios"
-    ],
+  supportedTargetFlutterPlatforms ? [
+    "universal"
+    "web"
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && !(flutter ? engine)) "linux"
+  ++ lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin) "android"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "macos"
+    "ios"
+  ],
   artifactHashes ? flutter.artifactHashes,
   extraPkgConfigPackages ? [ ],
   extraLibraries ? [ ],
@@ -148,13 +147,14 @@ in
     pname = "flutter-wrapped";
     inherit (flutter) version;
 
-    nativeBuildInputs =
-      [ makeWrapper ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ]
-      ++ lib.optionals supportsLinuxDesktopTarget [
-        glib
-        wrapGAppsHook3
-      ];
+    nativeBuildInputs = [
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ]
+    ++ lib.optionals supportsLinuxDesktopTarget [
+      glib
+      wrapGAppsHook3
+    ];
 
     passthru = flutter.passthru // {
       inherit (flutter) version;
@@ -166,46 +166,45 @@ in
     dontUnpack = true;
     dontWrapGApps = true;
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        for path in ${
-          builtins.concatStringsSep " " (
-            builtins.foldl' (
-              paths: pkg:
-              paths
-              ++ (map (directory: "'${pkg}/${directory}/pkgconfig'") [
-                "lib"
-                "share"
-              ])
-            ) [ ] pkgConfigPackages
-          )
-        }; do
-          addToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
-        done
+      for path in ${
+        builtins.concatStringsSep " " (
+          builtins.foldl' (
+            paths: pkg:
+            paths
+            ++ (map (directory: "'${pkg}/${directory}/pkgconfig'") [
+              "lib"
+              "share"
+            ])
+          ) [ ] pkgConfigPackages
+        )
+      }; do
+        addToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
+      done
 
-        mkdir -p $out/bin
-        makeWrapper '${immutableFlutter}' $out/bin/flutter \
-          --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-      ''
-      + lib.optionalString (flutter ? engine && flutter.engine.meta.available) ''
-        --set-default FLUTTER_ENGINE "${flutter.engine}" \
-        --add-flags "--local-engine-host ${flutter.engine.outName}" \
-      ''
-      + ''
-          --suffix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
-          --suffix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
-          --suffix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
-          --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCxxFlags)}' \
-          --prefix CFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCFlags)}' \
-          --prefix LDFLAGS "''\t" '${
-            builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)
-          }' \
-          ''${gappsWrapperArgs[@]}
+      mkdir -p $out/bin
+      makeWrapper '${immutableFlutter}' $out/bin/flutter \
+        --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
+    ''
+    + lib.optionalString (flutter ? engine && flutter.engine.meta.available) ''
+      --set-default FLUTTER_ENGINE "${flutter.engine}" \
+      --add-flags "--local-engine-host ${flutter.engine.outName}" \
+    ''
+    + ''
+        --suffix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
+        --suffix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
+        --suffix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
+        --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCxxFlags)}' \
+        --prefix CFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCFlags)}' \
+        --prefix LDFLAGS "''\t" '${
+          builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)
+        }' \
+        ''${gappsWrapperArgs[@]}
 
-        runHook postInstall
-      '';
+      runHook postInstall
+    '';
 
     inherit (flutter) meta;
   }

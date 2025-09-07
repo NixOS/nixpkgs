@@ -23,13 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DHMAT_GIT_VERSION=OFF"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkg-config # used to find the LAPACK
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkg-config # used to find the LAPACK
+  ];
 
   buildInputs = [
     blas

@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "1-1 End-to-End Encrypted Internet Pipe Powered by Hyperswarm ";
+    description = "1-1 End-to-End Encrypted Internet Pipe Powered by Hyperswarm";
     homepage = "https://github.com/holepunchto/hyperbeam";
     mainProgram = "hyperbeam";
     license = lib.licenses.mit;

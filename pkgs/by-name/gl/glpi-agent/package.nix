@@ -6,7 +6,7 @@
   pciutils,
   usbutils,
   iproute2,
-  nettools,
+  net-tools,
   fetchFromGitHub,
   makeWrapper,
   versionCheckHook,
@@ -105,7 +105,7 @@ perlPackages.buildPerlPackage rec {
             dmidecode
             pciutils
             usbutils
-            nettools
+            net-tools
             iproute2
           ]
         }

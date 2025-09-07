@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   protobuf,
   go-protobuf,
   pkg-config,
@@ -35,23 +34,14 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opensnitch";
-  version = "1.7.0.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZkXqocgxyJGo5uQq4Ct1wmUIQljtx5oPzj4JfWWAuSE=";
+    hash = "sha256-XAR7yZjAzbMxIVGSV82agpAGwlejkILGgDI6iRicZuQ=";
   };
-
-  patches = [
-    # https://github.com/evilsocket/opensnitch/issues/1357
-    # remove next release
-    (fetchpatch {
-      url = "https://github.com/dwongdev/opensnitch/commit/376b06ef97ef79e3afa699878af2e59918aa7ef0.patch?full_index=1";
-      hash = "sha256-QBhc4A2Dign5JY4fcQ2c3F02xFj3m3G2VwY9cFuWV3w=";
-    })
-  ];
 
   postPatch = ''
     # Allow configuring Version at build time
@@ -73,7 +63,7 @@ buildGoModule (finalAttrs: {
     protoc-gen-go-grpc'
   ];
 
-  vendorHash = "sha256-IByoQuJsGORmePlv1HzvF8RSu2XhP5Sry1j3NoY2WP8=";
+  vendorHash = "sha256-6/N/E+uk6RVmSLy6fSWjHj+J5mPFXtHZwWThhFJnfYY=";
 
   preBuild = ''
     make -C ../proto ../daemon/ui/protocol/ui.pb.go

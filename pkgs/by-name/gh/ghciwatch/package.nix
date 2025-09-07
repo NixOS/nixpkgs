@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-K7BNGRilzi01loE0yS4CZFDNz8TQ9Z+fELO5HUvGObE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kH5YTadpaUXDma+7SfBJxrOIsd9Gm0EU3MfhFmQ3U80=";
 
   # integration tests are not run but the macros need this variable to be set

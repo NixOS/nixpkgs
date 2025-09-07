@@ -48,29 +48,27 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs =
-    [
-      fsspec
-      hypothesis
-      pandas
-      pyarrow
-      pytest-remotedata
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [
-      # requires wasmer which is broken for python 3.12
-      # https://github.com/wasmerio/wasmer-python/issues/778
-      snapshottest
-    ];
-
-  pytestFlagsArray = [
-    "-m"
-    "'not remote_data'"
+  checkInputs = [
+    fsspec
+    hypothesis
+    pandas
+    pyarrow
+    pytest-remotedata
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
     # requires snapshottest
     "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  disabledTestMarks = [
+    "remote_data"
   ];
 
   disabledTests = [

@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jellyfin-tui";
-  version = "1.2.1";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "dhonus";
     repo = "jellyfin-tui";
     tag = "v${version}";
-    hash = "sha256-9TSg7J5Pbb2cpL9fEMs5ZJjmA70o8TEmbDkYIK2inTc=";
+    hash = "sha256-fRlnfCHjUZWvp+pYxLUXFxW/nR7Glhhfm4YQKLR2XaY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-dFUUJovJcf5pzH9nta7G+E7hcZTZONLPgQ1HAX4RYrY=";
+  cargoHash = "sha256-VUg96qyTF7XkZsl4wl70u5S9NqgRCGJ4od8Cj4dSoI8=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -43,6 +42,10 @@ rustPlatform.buildRustPackage rec {
     }"
   '';
   doInstallCheck = true;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 src/extra/jellyfin-tui.desktop $out/share/applications/jellyfin-tui.desktop
+  '';
 
   passthru.updateScript = nix-update-script { };
 

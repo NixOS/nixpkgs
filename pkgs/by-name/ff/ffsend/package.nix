@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (

@@ -4,25 +4,43 @@
   fetchFromGitHub,
   nodejs,
   nix-update-script,
+  versionCheckHook,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
-  version = "0.18.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "eyaltoledano";
     repo = "claude-task-master";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-RnbquGcanpBH5A++MZOVNLXEdn7qVJIVWxUOZEBpF/o=";
+    tag = "task-master-ai@${finalAttrs.version}";
+    hash = "sha256-7Vs8k8/ym2K+FzX3fAke344S9gEhjPCnzz1z+OlounE=";
   };
 
-  npmDepsHash = "sha256-GjRxjafbJ5DqikvO3Z7YPtuUHaG5ezxdrQq9f7WDEi4=";
+  npmDepsHash = "sha256-6dPIZtbTmLVrJgaSAZE7pT1+xbKVkBS+UF8xfy/micc=";
 
   dontNpmBuild = true;
+
+  npmFlags = [ "--ignore-scripts" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
 
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    mkdir -p $out/lib/node_modules/task-master-ai/apps
+    cp -r apps/extension $out/lib/node_modules/task-master-ai/apps/extension
+    cp -r apps/docs $out/lib/node_modules/task-master-ai/apps/docs
+  '';
+
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = 1;
+  };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/task-master";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Node.js agentic AI workflow orchestrator";

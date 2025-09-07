@@ -10,13 +10,7 @@
   shell ? stdenvNoCC.shell,
 }:
 
-let
-  stdenv = stdenvNoCC;
-
-  darwinCodeSign = stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64;
-in
-
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "remove-references-to";
 
   dontUnpack = true;
@@ -29,15 +23,13 @@ stdenv.mkDerivation {
     chmod a+x $out/bin/remove-references-to
   '';
 
-  postFixup = lib.optionalString darwinCodeSign ''
-    mkdir -p $out/nix-support
-    substituteAll ${./darwin-sign-fixup.sh} $out/nix-support/setup-hooks.sh
-  '';
-
   env = {
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
-  } // lib.optionalAttrs darwinCodeSign { inherit signingUtils; };
+    signingUtils = lib.optionalString (
+      stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
+    ) signingUtils;
+  };
 
   meta.mainProgram = "remove-references-to";
 }

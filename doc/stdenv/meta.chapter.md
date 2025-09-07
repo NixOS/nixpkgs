@@ -108,9 +108,7 @@ The *priority* of the package, used by `nix-env` to resolve file name conflicts 
 The list of Nix platform types on which the package is supported. Hydra builds packages according to the platform specified. If no platform is specified, the package does not have prebuilt binaries. An example is:
 
 ```nix
-{
-  meta.platforms = lib.platforms.linux;
-}
+{ meta.platforms = lib.platforms.linux; }
 ```
 
 Attribute Set `lib.platforms` defines [various common lists](https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix) of platforms types.
@@ -164,9 +162,7 @@ This means that `broken` can be used to express constraints, for example:
 - Does not cross compile
 
   ```nix
-  {
-    meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
-  }
+  { meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform); }
   ```
 
 - Broken if all of a certain set of its dependencies are broken

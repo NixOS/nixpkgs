@@ -3,7 +3,6 @@
   stdenv,
   bash,
   fetchFromGitHub,
-  fetchpatch,
   SDL2,
   alsa-lib,
   catch2_3,
@@ -13,7 +12,6 @@
   gpsd,
   gtk-layer-shell,
   gtkmm3,
-  howard-hinnant-date,
   iniparser,
   jsoncpp,
   libcava,
@@ -74,13 +72,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-KfWjYDqJf2jNmYAnmV7EQHweMObEBreUc2G7/LpvvC0=";
+    hash = "sha256-mGiBZjfvtZZkSHrha4UF2l1Ogbij8J//r2h4gcZAJ6w=";
   };
 
   postUnpack = lib.optional cavaSupport ''
@@ -90,24 +88,15 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  patches = [
-    (fetchpatch {
-      name = "waybar-default-icon.patch";
-      url = "https://github.com/Alexays/Waybar/commit/c336bc5466c858ac41dc9afd84f04a5ffec9e292.patch";
-      hash = "sha256-RRGy/aeFX95fW0pT6mXhww2RdEtoOnaT3+dc7iB3bAY=";
-    })
-  ];
-
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      wayland-scanner
-      wrapGAppsHook3
-    ]
-    ++ lib.optional withMediaPlayer gobject-introspection
-    ++ lib.optional enableManpages scdoc;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    wrapGAppsHook3
+  ]
+  ++ lib.optional withMediaPlayer gobject-introspection
+  ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
@@ -115,41 +104,39 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3
   ];
 
-  buildInputs =
-    [
-      gtk-layer-shell
-      gtkmm3
-      howard-hinnant-date
-      jsoncpp
-      libsigcxx
-      libxkbcommon
-      spdlog
-      wayland
-    ]
-    ++ lib.optionals cavaSupport [
-      SDL2
-      alsa-lib
-      fftw
-      iniparser
-      ncurses
-      portaudio
-    ]
-    ++ lib.optional evdevSupport libevdev
-    ++ lib.optional gpsSupport gpsd
-    ++ lib.optional inputSupport libinput
-    ++ lib.optional jackSupport libjack2
-    ++ lib.optional mpdSupport libmpdclient
-    ++ lib.optional mprisSupport playerctl
-    ++ lib.optional nlSupport libnl
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional sndioSupport sndio
-    ++ lib.optional systemdSupport systemdMinimal
-    ++ lib.optional traySupport libdbusmenu-gtk3
-    ++ lib.optional udevSupport udev
-    ++ lib.optional upowerSupport upower
-    ++ lib.optional wireplumberSupport wireplumber
-    ++ lib.optional (cavaSupport || pipewireSupport) pipewire
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
+  buildInputs = [
+    gtk-layer-shell
+    gtkmm3
+    jsoncpp
+    libsigcxx
+    libxkbcommon
+    spdlog
+    wayland
+  ]
+  ++ lib.optionals cavaSupport [
+    SDL2
+    alsa-lib
+    fftw
+    iniparser
+    ncurses
+    portaudio
+  ]
+  ++ lib.optional evdevSupport libevdev
+  ++ lib.optional gpsSupport gpsd
+  ++ lib.optional inputSupport libinput
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional mpdSupport libmpdclient
+  ++ lib.optional mprisSupport playerctl
+  ++ lib.optional nlSupport libnl
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional sndioSupport sndio
+  ++ lib.optional systemdSupport systemdMinimal
+  ++ lib.optional traySupport libdbusmenu-gtk3
+  ++ lib.optional udevSupport udev
+  ++ lib.optional upowerSupport upower
+  ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional (cavaSupport || pipewireSupport) pipewire
+  ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;

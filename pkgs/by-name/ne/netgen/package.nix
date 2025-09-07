@@ -73,27 +73,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   # when generating python stub file utilizing system python pybind11_stubgen module
   # cmake need to inherit pythonpath
-  postPatch =
-    ''
-      sed -i '/-DBDIR=''\'''${CMAKE_CURRENT_BINARY_DIR}/a\
-      -DNETGEN_VERSION_GIT=''\'''${NETGEN_VERSION_GIT}
-      ' CMakeLists.txt
+  postPatch = ''
+    sed -i '/-DBDIR=''\'''${CMAKE_CURRENT_BINARY_DIR}/a\
+    -DNETGEN_VERSION_GIT=''\'''${NETGEN_VERSION_GIT}
+    ' CMakeLists.txt
 
-      substituteInPlace python/CMakeLists.txt \
-        --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
-                       ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
+    substituteInPlace python/CMakeLists.txt \
+      --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
+                     ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
 
-      substituteInPlace ng/ng.tcl ng/onetcl.cpp \
-        --replace-fail "libnggui" "$out/lib/libnggui"
+    substituteInPlace ng/ng.tcl ng/onetcl.cpp \
+      --replace-fail "libnggui" "$out/lib/libnggui"
 
-      substituteInPlace ng/Togl2.1/CMakeLists.txt \
-        --replace-fail "/usr/bin/gcc" "$CC"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      # mesh generation differs on x86_64 and aarch64 platform
-      # test_tutorials will fail on aarch64 platform
-      rm tests/pytest/test_tutorials.py
-    '';
+    substituteInPlace ng/Togl2.1/CMakeLists.txt \
+      --replace-fail "/usr/bin/gcc" "$CC"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    # mesh generation differs on x86_64 and aarch64 platform
+    # test_tutorials will fail on aarch64 platform
+    rm tests/pytest/test_tutorials.py
+  '';
 
   nativeBuildInputs = [
     libicns
@@ -101,7 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3Packages.pybind11-stubgen
     python3Packages.pythonImportsCheckHook
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     metis

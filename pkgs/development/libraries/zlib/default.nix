@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional splitStaticOutput "static";
+  ]
+  ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
@@ -134,19 +135,18 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
-  makeFlags =
-    [
-      "PREFIX=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      "-f"
-      "win32/Makefile.gcc"
-    ]
-    ++ lib.optionals shared [
-      # Note that as of writing (zlib 1.2.11), this flag only has an effect
-      # for Windows as it is specific to `win32/Makefile.gcc`.
-      "SHARED_MODE=1"
-    ];
+  makeFlags = [
+    "PREFIX=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "-f"
+    "win32/Makefile.gcc"
+  ]
+  ++ lib.optionals shared [
+    # Note that as of writing (zlib 1.2.11), this flag only has an effect
+    # for Windows as it is specific to `win32/Makefile.gcc`.
+    "SHARED_MODE=1"
+  ];
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

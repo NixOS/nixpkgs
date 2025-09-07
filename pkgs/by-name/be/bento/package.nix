@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "bento";
-  version = "1.8.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "warpstreamlabs";
     repo = "bento";
     tag = "v${version}";
-    hash = "sha256-EAEeyMWXL/OL/LGgOQxvXtwrrVXtqY05AMeU5z86tks=";
+    hash = "sha256-HLUDZx8Uk40mVxS8g9xHZi6AwWu4JkxXPjsIXrMr9K4=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-N3YkY1wfxdPnwbEXDxHi/J3Oi3qiNtDMOwvSThX6cf0=";
+  vendorHash = "sha256-Dwf4q5lXO2gtvfB0Ib5LmaXg/MSNir+RzLU4rfE/mB4=";
 
   subPackages = [
     "cmd/bento"

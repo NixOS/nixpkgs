@@ -1,15 +1,17 @@
+diff --git a/conda/base/context.py b/conda/base/context.py
+index 34a5e6495..ac017f48b 100644
 --- a/conda/base/context.py
 +++ b/conda/base/context.py
-@@ -754,7 +754,7 @@
-
+@@ -826,7 +826,7 @@ class Context(Configuration):
+ 
      @property
-     def conda_prefix(self):
+     def conda_prefix(self) -> PathType:
 -        return abspath(sys.prefix)
 +        return expand("~/.conda")
-
+ 
      @property
      @deprecated(
-@@ -787,27 +787,17 @@
+@@ -858,25 +858,17 @@ class Context(Configuration):
          The vars can refer to each other if necessary since the dict is ordered.
          None means unset it.
          """
@@ -26,12 +28,10 @@
 -            }
 -        else:
 -            exe = "conda.exe" if on_win else "conda"
--            # I was going to use None to indicate a variable to unset, but that gets tricky with
--            # error-on-undefined.
 -            return {
 -                "CONDA_EXE": os.path.join(sys.prefix, BIN_DIRECTORY, exe),
--                "_CE_M": "",
--                "_CE_CONDA": "",
+-                "_CE_M": None,
+-                "_CE_CONDA": None,
 -                "CONDA_PYTHON_EXE": sys.executable,
 -            }
 +        import sys
@@ -45,6 +45,6 @@
 +            "_CE_CONDA": "conda",
 +            "CONDA_PYTHON_EXE": sys.executable,
 +        }
-
+ 
      @memoizedproperty
-     def channel_alias(self):
+     def channel_alias(self) -> Channel:

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mrtrix";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
     rev = finalAttrs.version;
-    hash = "sha256-5GcQVZaRV7A6aA/ES6qR0dNBrToJiUXt/LyLYmnpvlQ=";
+    hash = "sha256-cPI6Ac1Yp5yb07zv9r5O7ZbsHpjrv5BkzbAW1qgj3gQ=";
     fetchSubmodules = true;
   };
 
@@ -36,26 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     less
     python3
-  ] ++ lib.optional withGui qt5.wrapQtAppsHook;
+  ]
+  ++ lib.optional withGui qt5.wrapQtAppsHook;
 
-  buildInputs =
-    [
-      ants
-      eigen_3_4_0
-      python3
-      fftw
-      libtiff
-      libpng
-      zlib
-    ]
-    ++ lib.optionals withGui [
-      libGL
-      libGLU
-      libX11
-      libXext
-      qt5.qtbase
-      qt5.qtsvg
-    ];
+  buildInputs = [
+    ants
+    eigen_3_4_0
+    python3
+    fftw
+    libtiff
+    libpng
+    zlib
+  ]
+  ++ lib.optionals withGui [
+    libGL
+    libGLU
+    libX11
+    libXext
+    qt5.qtbase
+    qt5.qtsvg
+  ];
 
   nativeInstallCheckInputs = [ bc ];
 

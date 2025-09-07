@@ -7,7 +7,6 @@
   darwin,
   copyDesktopItems,
   makeDesktopItem,
-  ...
 }:
 let
   pname = "feishin";
@@ -37,21 +36,20 @@ buildNpmPackage {
     lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
-  postPatch =
-    ''
-      # release/app dependencies are installed on preConfigure
-      substituteInPlace package.json \
-        --replace-fail "electron-builder install-app-deps &&" ""
+  postPatch = ''
+    # release/app dependencies are installed on preConfigure
+    substituteInPlace package.json \
+      --replace-fail "electron-builder install-app-deps &&" ""
 
-      # Don't check for updates.
-      substituteInPlace src/main/main.ts \
-        --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # https://github.com/electron/electron/issues/31121
-      substituteInPlace src/main/main.ts \
-        --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
-    '';
+    # Don't check for updates.
+    substituteInPlace src/main/main.ts \
+      --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # https://github.com/electron/electron/issues/31121
+    substituteInPlace src/main/main.ts \
+      --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
+  '';
 
   preConfigure =
     let
@@ -95,40 +93,39 @@ buildNpmPackage {
         -c.npmRebuild=false
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      cp -r release/build/**/Feishin.app $out/Applications/
-      makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/share/feishin
-      pushd release/build/*/
-      cp -r locales resources{,.pak} $out/share/feishin
-      popd
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -r release/build/**/Feishin.app $out/Applications/
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/feishin
+    pushd release/build/*/
+    cp -r locales resources{,.pak} $out/share/feishin
+    popd
 
-      # Code relies on checking app.isPackaged, which returns false if the executable is electron.
-      # Set ELECTRON_FORCE_IS_PACKAGED=1.
-      # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
-      makeWrapper ${lib.getExe electron} $out/bin/feishin \
-        --add-flags $out/share/feishin/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --set ELECTRON_FORCE_IS_PACKAGED=1 \
-        --inherit-argv0
+    # Code relies on checking app.isPackaged, which returns false if the executable is electron.
+    # Set ELECTRON_FORCE_IS_PACKAGED=1.
+    # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
+    makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --add-flags $out/share/feishin/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set ELECTRON_FORCE_IS_PACKAGED=1 \
+      --inherit-argv0
 
-      for size in 32 64 128 256 512 1024; do
-        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        ln -s \
-          $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
-          $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
-      done
-    ''
-    + ''
-      runHook postInstall
-    '';
+    for size in 32 64 128 256 512 1024; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      ln -s \
+        $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
+    done
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

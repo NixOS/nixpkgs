@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "conda-package-streaming";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conda";
     repo = "conda-package-streaming";
     tag = "v${version}";
-    hash = "sha256-Y0moewJROhybbyo263akbO20Q6As245ULKJikkWU4XE=";
+    hash = "sha256-BfvD+64c9uxBvEJnAuI4MaF0CqS9Gwnqx1Xi+l36Dwo=";
   };
 
   build-system = [ flit-core ];

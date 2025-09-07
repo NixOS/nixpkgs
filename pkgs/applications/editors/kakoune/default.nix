@@ -13,6 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-AJvh6NVFpbPsyzfeii/5muE+i4TwfxhwhDVgMLYOJCM=";
   };
+
   makeFlags = [
     "debug=no"
     "PREFIX=${placeholder "out"}"
@@ -23,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  preBuild = ''
+    appendToVar makeFlags "CXX=$CXX"
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

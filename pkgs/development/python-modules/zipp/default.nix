@@ -1,27 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   func-timeout,
   jaraco-itertools,
-  pythonOlder,
+  setuptools,
   setuptools-scm,
 }:
 
 let
   zipp = buildPythonPackage rec {
     pname = "zipp";
-    version = "3.21.0";
-    format = "pyproject";
+    version = "3.23.0";
+    pyproject = true;
 
-    disabled = pythonOlder "3.7";
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-LJlY9kMKIEA0GlLrYI7W3ZPvQ5LgL/4hlBfBsotd0fQ=";
+    src = fetchFromGitHub {
+      owner = "jaraco";
+      repo = "zipp";
+      tag = "v${version}";
+      hash = "sha256-iao7Aco1Ktvyt1uQCD/le4tAdyVpxfKPi3TRT12YHuU=";
     };
 
-    nativeBuildInputs = [ setuptools-scm ];
+    postPatch = ''
+      # Downloads license text at build time
+      sed -i "/coherent\.licensed/d" pyproject.toml
+    '';
+
+    build-system = [
+      setuptools
+      setuptools-scm
+    ];
 
     # Prevent infinite recursion with pytest
     doCheck = false;

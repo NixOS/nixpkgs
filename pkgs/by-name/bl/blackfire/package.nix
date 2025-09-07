@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.28.28";
+  version = "2.28.31";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -60,23 +60,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "luMpquZCnK6eFffPLoHNt7XUyBgJNqzeNkC4mhdYVqQ=";
+        sha256 = "v2MkLqTNG9creNZBBshTuhrMxlF4OIDlzQOgrEyKmMY=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "K8/AYVpz25Pwe4Vf1sxwYd/l6yu6hgG/LETbiH1VxgQ=";
+        sha256 = "hFJdO/YFxwCpWBmR8jZwmak2Fc9wgMwLax5puaLVEbs=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "COXdRnO0PAV1XbpK6VusBSiwMkP/WAfDfBDRGDpF2OY=";
+        sha256 = "RDk4DE0x24m5yBBezlGuLQ/l7yugyd5SYvfYoDFfJuI=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "WZsF4SJ3BinPx9hhSG4Bi028qXUQXjdtqf2j/0/FN1w=";
+        sha256 = "Xq0G0w2FJXEGVmXmyhbdzXY9OiZn4+5i8GypMOdeAhA=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "l19yB2cA7JK7oUl4MnxLKoqA8RFD1KLq/NXsAkWmxFQ=";
+        sha256 = "cHmh1JyPa2u2c6KGlZC1/hlDlxMSrDKY1jwaEcJVq0M=";
       };
     };
 
@@ -103,11 +103,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Blackfire Profiler agent and client";
+    description = "Profiler agent and client";
     homepage = "https://blackfire.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    maintainers = with maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

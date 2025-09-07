@@ -94,7 +94,8 @@ python3.pkgs.buildPythonApplication rec {
     udev
     xorg.libXtst
     xorg.libxkbfile
-  ] ++ lib.optional atspiSupport at-spi2-core;
+  ]
+  ++ lib.optional atspiSupport at-spi2-core;
 
   pythonPath = with python3.pkgs; [
     dbus-python

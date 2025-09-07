@@ -76,7 +76,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "fider";
     maintainers = with lib.maintainers; [
-      drupol
       niklaskorz
     ];
   };

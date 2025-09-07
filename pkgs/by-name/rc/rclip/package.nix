@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "open_clip_torch"
     "pillow"
     "rawpy"
     "torch"
@@ -43,7 +44,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     versionCheckHook
-  ] ++ (with python3Packages; [ pytestCheckHook ]);
+  ]
+  ++ (with python3Packages; [ pytestCheckHook ]);
   versionCheckProgramArg = "--version";
 
   disabledTestPaths = [

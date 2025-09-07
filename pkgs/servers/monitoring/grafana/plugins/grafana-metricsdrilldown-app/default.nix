@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-metricsdrilldown-app";
-  version = "1.0.4";
-  zipHash = "sha256-FdeicETOYWdITUBFC19wdGn53ACsRc7Pq2iampksAS4=";
+  version = "1.0.12";
+  zipHash = "sha256-5IH4iNRPFGvJjUnVO3v67+hAU4eV6ck2wC0qiYtLJn0=";
   meta = with lib; {
-    description = "The Grafana Metrics Drilldown app provides a queryless experience for browsing Prometheus-compatible metrics. Quickly find related metrics without writing PromQL queries.";
+    description = "Queryless experience for browsing Prometheus-compatible metrics. Quickly find related metrics without writing PromQL queries";
     license = licenses.agpl3Only;
-    teams = [ lib.maintainers.marcel ];
+    maintainers = [ lib.maintainers.marcel ];
     platforms = platforms.unix;
   };
 }

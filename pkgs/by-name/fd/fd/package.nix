@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "10.2.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    hash = "sha256-B+lOohoPH7UkRxRNTzSVt0SDrqEwh4hIvBF3uWliDEI=";
+    hash = "sha256-rUoR8LHtzwGQBwJGEsWpMYKG6HcGKcktcyF7TxTDJs8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0LzraGDujLMs60/Ytq2hcG/3RYbo8sJkurYVhRpa2D8=";
+  cargoHash = "sha256-yiR23t48I0USD21tnFZzmTmO0D8kWNzP9Ff3QM9GitU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,16 +34,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_invalid_utf8"
   ];
 
-  postInstall =
-    ''
-      installManPage doc/fd.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd fd \
-        --bash <($out/bin/fd --gen-completions bash) \
-        --fish <($out/bin/fd --gen-completions fish)
-      installShellCompletion --zsh contrib/completion/_fd
-    '';
+  postInstall = ''
+    installManPage doc/fd.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
+    installShellCompletion --zsh contrib/completion/_fd
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = fd;

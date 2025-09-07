@@ -33,7 +33,8 @@ buildPythonPackage rec {
     help2man
     markdown-it-py
     shtab
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HEyPfkusgk8JEYAzIS8Zj5EU0MK4wt4amlsJqBEG/Kc=";
 
   nativeBuildInputs = [
@@ -47,21 +46,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  checkFlags =
-    [
-      # Requires network access:
-      # failed to lookup address information: Temporary failure in name resolution
-      "--skip=options::common::address::tests::resolve_should_properly_resolve_bind_address"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Timeout on darwin
-      # Custom { kind: TimedOut, error: "" }
-      "--skip=cli::api::watch::should_support_json_reporting_changes_using_correct_request_id"
-      "--skip=cli::api::watch::should_support_json_watching_directory_recursively"
-      "--skip=cli::api::watch::should_support_json_watching_single_file"
-      "--skip=cli::client::fs_watch::should_support_watching_a_directory_recursively"
-      "--skip=cli::client::fs_watch::should_support_watching_a_single_file"
-    ];
+  checkFlags = [
+    # Requires network access:
+    # failed to lookup address information: Temporary failure in name resolution
+    "--skip=options::common::address::tests::resolve_should_properly_resolve_bind_address"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Timeout on darwin
+    # Custom { kind: TimedOut, error: "" }
+    "--skip=cli::api::watch::should_support_json_reporting_changes_using_correct_request_id"
+    "--skip=cli::api::watch::should_support_json_watching_directory_recursively"
+    "--skip=cli::api::watch::should_support_json_watching_single_file"
+    "--skip=cli::client::fs_watch::should_support_watching_a_directory_recursively"
+    "--skip=cli::client::fs_watch::should_support_watching_a_single_file"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

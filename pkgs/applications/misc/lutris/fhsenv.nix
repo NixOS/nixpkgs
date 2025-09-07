@@ -22,6 +22,7 @@ let
       gnome-desktop
       libgnome-keyring
       webkitgtk_4_1
+      adwaita-icon-theme
     ];
   xorgDeps =
     pkgs: with pkgs.xorg; [

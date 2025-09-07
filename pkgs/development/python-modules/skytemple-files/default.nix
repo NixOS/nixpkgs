@@ -69,14 +69,16 @@ buildPythonPackage rec {
       gql
       graphql-core
       lru-dict
-    ] ++ gql.optional-dependencies.aiohttp;
+    ]
+    ++ gql.optional-dependencies.aiohttp;
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     parameterized
     xmldiff
-  ] ++ optional-dependencies.spritecollab;
+  ]
+  ++ optional-dependencies.spritecollab;
 
   preCheck = "pushd test";
   postCheck = "popd";

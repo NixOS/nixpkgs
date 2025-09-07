@@ -36,22 +36,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      asio
-      fmt
-      nettle
-      gnutls
-      msgpack-cxx
-      readline
-      libargon2
-    ]
-    ++ lib.optionals enableProxyServerAndClient [
-      jsoncpp
-      restinio
-      llhttp
-      openssl
-    ];
+  buildInputs = [
+    asio
+    fmt
+    nettle
+    gnutls
+    msgpack-cxx
+    readline
+    libargon2
+  ]
+  ++ lib.optionals enableProxyServerAndClient [
+    jsoncpp
+    restinio
+    llhttp
+    openssl
+  ];
 
   cmakeFlags =
     lib.optionals enableProxyServerAndClient [

@@ -26,15 +26,14 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      cairo
-      opencv
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_nvcc
-    ];
+  buildInputs = [
+    cairo
+    opencv
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/lib/frei0r-1/*.so* ; do

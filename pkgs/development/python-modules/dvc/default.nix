@@ -65,7 +65,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.60.1";
+  version = "3.63.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     tag = version;
-    hash = "sha256-e5QOWpx0Q47BJxnw9zWi483uezDN1pRevuBCrFGNpp0=";
+    hash = "sha256-7wuxNPELHdxQSHKHQo8KTQ9yj8KW8RVEN0ykJN/he9E=";
   };
 
   pythonRelaxDeps = [
@@ -91,55 +91,54 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies =
-    [
-      attrs
-      celery
-      colorama
-      configobj
-      distro
-      dpath
-      dulwich
-      dvc-data
-      dvc-http
-      dvc-render
-      dvc-studio-client
-      dvc-task
-      flatten-dict
-      flufl-lock
-      fsspec
-      funcy
-      grandalf
-      gto
-      hydra-core
-      iterative-telemetry
-      kombu
-      networkx
-      omegaconf
-      packaging
-      pathspec
-      platformdirs
-      psutil
-      pydot
-      pygtrie
-      pyparsing
-      requests
-      rich
-      ruamel-yaml
-      scmrepo
-      shortuuid
-      shtab
-      tabulate
-      tomlkit
-      tqdm
-      typing-extensions
-      voluptuous
-      zc-lockfile
-    ]
-    ++ lib.optionals enableGoogle optional-dependencies.gs
-    ++ lib.optionals enableAWS optional-dependencies.s3
-    ++ lib.optionals enableAzure optional-dependencies.azure
-    ++ lib.optionals enableSSH optional-dependencies.ssh;
+  dependencies = [
+    attrs
+    celery
+    colorama
+    configobj
+    distro
+    dpath
+    dulwich
+    dvc-data
+    dvc-http
+    dvc-render
+    dvc-studio-client
+    dvc-task
+    flatten-dict
+    flufl-lock
+    fsspec
+    funcy
+    grandalf
+    gto
+    hydra-core
+    iterative-telemetry
+    kombu
+    networkx
+    omegaconf
+    packaging
+    pathspec
+    platformdirs
+    psutil
+    pydot
+    pygtrie
+    pyparsing
+    requests
+    rich
+    ruamel-yaml
+    scmrepo
+    shortuuid
+    shtab
+    tabulate
+    tomlkit
+    tqdm
+    typing-extensions
+    voluptuous
+    zc-lockfile
+  ]
+  ++ lib.optionals enableGoogle optional-dependencies.gs
+  ++ lib.optionals enableAWS optional-dependencies.s3
+  ++ lib.optionals enableAzure optional-dependencies.azure
+  ++ lib.optionals enableSSH optional-dependencies.ssh;
 
   optional-dependencies = {
     azure = [ dvc-azure ];

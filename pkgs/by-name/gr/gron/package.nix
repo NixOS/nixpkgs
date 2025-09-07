@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Make JSON greppable!";
+    description = "Make JSON greppable";
     mainProgram = "gron";
     longDescription = ''
       gron transforms JSON into discrete assignments to make it easier to grep

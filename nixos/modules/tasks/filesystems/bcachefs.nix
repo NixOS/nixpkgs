@@ -91,13 +91,27 @@ let
   mkUnits =
     prefix: name: fs:
     let
-      mountUnit = "${utils.escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint))}.mount";
-      device = firstDevice fs;
+      parseTags =
+        device:
+        if lib.hasPrefix "LABEL=" device then
+          "/dev/disk/by-label/" + lib.removePrefix "LABEL=" device
+        else if lib.hasPrefix "UUID=" device then
+          "/dev/disk/by-uuid/" + lib.removePrefix "UUID=" device
+        else if lib.hasPrefix "PARTLABEL=" device then
+          "/dev/disk/by-partlabel/" + lib.removePrefix "PARTLABEL=" device
+        else if lib.hasPrefix "PARTUUID=" device then
+          "/dev/disk/by-partuuid/" + lib.removePrefix "PARTUUID=" device
+        else if lib.hasPrefix "ID=" device then
+          "/dev/disk/by-id/" + lib.removePrefix "ID=" device
+        else
+          device;
+      device = parseTags (firstDevice fs);
       mkDeviceUnit = device: "${utils.escapeSystemdPath device}.device";
+      mkMountUnit = path: "${utils.escapeSystemdPath (lib.removeSuffix "/" path)}.mount";
       deviceUnit = mkDeviceUnit device;
+      mountUnit = mkMountUnit (prefix + fs.mountPoint);
       extractProperty =
-        prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
-      mkMountUnit = path: "${utils.escapeSystemdPath path}.mount";
+        prop: options: (map (lib.removePrefix prop) (builtins.filter (lib.hasPrefix prop) options));
       normalizeUnits =
         unit:
         if lib.hasPrefix "/dev/" unit then
@@ -106,8 +120,10 @@ let
           mkMountUnit unit
         else
           unit;
-      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires" fs.options);
-      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants" fs.options);
+      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires=" fs.options);
+      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants=" fs.options);
+      requiredMounts = extractProperty "x-systemd.requires-mounts-for=" fs.options;
+      wantedMounts = extractProperty "x-systemd.wants-mounts-for=" fs.options;
     in
     {
       name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
@@ -122,6 +138,10 @@ let
         bindsTo = [ deviceUnit ];
         requires = requiredUnits;
         wants = wantedUnits;
+        unitConfig = {
+          RequiresMountsFor = requiredMounts;
+          WantsMountsFor = wantedMounts;
+        };
         conflicts = [ "shutdown.target" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
@@ -208,8 +228,6 @@ in
         inherit assertions;
         # needed for systemd-remount-fs
         system.fsPackages = [ pkgs.bcachefs-tools ];
-        # FIXME: Remove this line when the LTS (default) kernel is at least version 6.7
-        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
         services.udev.packages = [ pkgs.bcachefs-tools ];
 
         systemd = {
@@ -222,18 +240,17 @@ in
 
       (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != { })) {
         inherit assertions;
-        boot.initrd.availableKernelModules =
-          [
-            "bcachefs"
-            "sha256"
-          ]
-          ++ lib.optionals (config.boot.kernelPackages.kernel.kernelOlder "6.15") [
-            # chacha20 and poly1305 are required only for decryption attempts
-            # kernel 6.15 uses kernel api libraries for poly1305/chacha20: 4bf4b5046de0ef7f9dc50f3a9ef8a6dcda178a6d
-            # kernel 6.16 removes poly1305: ceef731b0e22df80a13d67773ae9afd55a971f9e
-            "poly1305"
-            "chacha20"
-          ];
+        boot.initrd.availableKernelModules = [
+          "bcachefs"
+          "sha256"
+        ]
+        ++ lib.optionals (config.boot.kernelPackages.kernel.kernelOlder "6.15") [
+          # chacha20 and poly1305 are required only for decryption attempts
+          # kernel 6.15 uses kernel api libraries for poly1305/chacha20: 4bf4b5046de0ef7f9dc50f3a9ef8a6dcda178a6d
+          # kernel 6.16 removes poly1305: ceef731b0e22df80a13d67773ae9afd55a971f9e
+          "poly1305"
+          "chacha20"
+        ];
         boot.initrd.systemd.extraBin = {
           # do we need this? boot/systemd.nix:566 & boot/systemd/initrd.nix:357
           "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
@@ -297,7 +314,7 @@ in
             scrubTimer =
               fs:
               let
-                fs' = utils.escapeSystemdPath fs;
+                fs' = if fs == "/" then "root" else utils.escapeSystemdPath fs;
               in
               lib.nameValuePair "bcachefs-scrub-${fs'}" {
                 description = "regular bcachefs scrub timer on ${fs}";
@@ -317,7 +334,7 @@ in
             scrubService =
               fs:
               let
-                fs' = utils.escapeSystemdPath fs;
+                fs' = if fs == "/" then "root" else utils.escapeSystemdPath fs;
               in
               lib.nameValuePair "bcachefs-scrub-${fs'}" {
                 description = "bcachefs scrub on ${fs}";

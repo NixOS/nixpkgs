@@ -7,8 +7,6 @@
   makeWrapper,
 }:
 
-assert nvidiaSupport -> stdenv.hostPlatform.isLinux;
-
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
   version = "0.14.1";
@@ -25,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xfp+nR4ihaTO4AZHizYg4qqf9MR030Qb5bN2nzhbytQ=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
@@ -45,6 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    platforms = if nvidiaSupport then platforms.linux else platforms.unix;
   };
 }

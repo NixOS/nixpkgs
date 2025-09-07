@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dump1090";
-  version = "10.1";
+  version = "10.2";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "dump1090";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8J17fqNrn5Mqqv4lFHEp4zjc/zeyMUb+fWdk+ssPBwU=";
+    hash = "sha256-kTJ8FMugBRJaxWas/jEj4E5TmVnNpNdhq4r2YFFwgTU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optional stdenv.hostPlatform.isLinux limesuite;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux limesuite;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
 

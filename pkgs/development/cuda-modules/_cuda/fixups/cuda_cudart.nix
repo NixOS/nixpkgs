@@ -28,11 +28,10 @@ prevAttrs: {
       fi
     '';
 
-  postFixup =
-    prevAttrs.postFixup or ""
-    + ''
-      moveToOutput lib/stubs "$stubs"
-      ln -s "$stubs"/lib/stubs/* "$stubs"/lib/
-      ln -s "$stubs"/lib/stubs "''${!outputLib}/lib/stubs"
-    '';
+  postFixup = prevAttrs.postFixup or "" + ''
+    mv "''${!outputDev}/share" "''${!outputDev}/lib"
+    moveToOutput lib/stubs "$stubs"
+    ln -s "$stubs"/lib/stubs/* "$stubs"/lib/
+    ln -s "$stubs"/lib/stubs "''${!outputLib}/lib/stubs"
+  '';
 }

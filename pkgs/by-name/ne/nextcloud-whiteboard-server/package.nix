@@ -8,16 +8,16 @@
 }:
 buildNpmPackage rec {
   pname = "nextcloud-whiteboard-server";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "whiteboard";
     tag = "v${version}";
-    hash = "sha256-nDZnO1aqOP78xqcQKBJd7B8idG3Jbjqj5ifWqMslB6M=";
+    hash = "sha256-4qk6mAFz7bYWtrlqiVPiyWF4ub4Ks9RhS5oODlOYRvA=";
   };
 
-  npmDepsHash = "sha256-EiD1fAT6i8V1arXBNaqHk8GvAgetL3VZT9d2/3zPIj8=";
+  npmDepsHash = "sha256-WHSMK7s6vohphHoNh96yejdwXHBxdkQSpMMNiFS15E4=";
 
   nativeBuildInputs = [ makeWrapper ];
 
