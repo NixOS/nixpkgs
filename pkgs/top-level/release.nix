@@ -363,9 +363,6 @@ let
           packages =
             genAttrs
               [
-                # TODO: share this list between release.nix and release-haskell.nix
-                "ghc90"
-                "ghc92"
                 "ghc94"
                 "ghc96"
                 "ghc98"

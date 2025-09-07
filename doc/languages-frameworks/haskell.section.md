@@ -1305,7 +1305,7 @@ let
   # Name of the compiler and package set you want to change. If you are using
   # the default package set `haskellPackages`, you need to look up what version
   # of GHC it currently uses (note that this is subject to change).
-  ghcName = "ghc92";
+  ghcName = "ghc910";
   # Desired new setting
   enableProfiling = true;
 

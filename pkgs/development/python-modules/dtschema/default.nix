@@ -25,11 +25,6 @@ buildPythonPackage rec {
     sha256 = "sha256-UJU8b9BzuuUSHRjnA6hOd1bMPNOlk4LNtrQV5aZmGhI=";
   };
 
-  patches = [
-    # Change name of pylibfdt to libfdt
-    ./fix_libfdt_name.patch
-  ];
-
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [

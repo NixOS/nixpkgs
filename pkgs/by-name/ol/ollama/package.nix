@@ -258,7 +258,6 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       abysssol
       dit7ya
-      elohmeier
       prusnak
     ];
   };

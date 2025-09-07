@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-Kzn/ThLjTGy3ZYIkTwCV1wi22c7rWo4u/L3llppC6wQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.10,<3.1.0" "Cython>=3.1.0,<4.0.0"
+  '';
+
   build-system = [
     cython
     extension-helpers

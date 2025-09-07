@@ -2690,7 +2690,6 @@ with haskellLib;
   # 2025-02-06: Allow tasty-quickcheck == 0.11.*
   # https://github.com/google/ghc-source-gen/issues/120
   ghc-source-gen = doJailbreak super.ghc-source-gen;
-  ghc-source-gen_0_4_5_0 = doJailbreak super.ghc-source-gen_0_4_5_0;
   # https://github.com/byteverse/bytebuild/issues/20#issuecomment-2652113837
   bytebuild = doJailbreak super.bytebuild;
   # https://github.com/haskellari/lattices/issues/132
