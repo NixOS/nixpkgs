@@ -107,7 +107,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
     ];
     license = licenses.bsd3;
-    broken = _mkMetaBroken (!(config.inHydra or false)) finalAttrs;
+    broken = _mkMetaBroken finalAttrs;
     maintainers = with maintainers; [ jmillerpdt ];
     teams = [ teams.cuda ];
   };
