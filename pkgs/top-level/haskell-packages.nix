@@ -111,9 +111,7 @@ in
       };
       ghc810 = compiler.ghc8107;
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
-        bootPkgs =
-          # GHC >= 9.0 removed the armv7l bindist
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc8107Binary else bb.packages.ghc902Binary;
+        bootPkgs = bb.packages.ghc902Binary;
         inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
         python3 = buildPackages.python311; # so that we don't have two of them
         # Need to use apple's patched xattr until
@@ -140,9 +138,7 @@ in
       };
       ghc94 = compiler.ghc948;
       ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc928 else bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc924Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -153,9 +149,7 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc928 else bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc924Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -170,9 +164,6 @@ in
         bootPkgs =
           if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
             bb.packages.ghc984Binary
-          else if stdenv.buildPlatform.isAarch32 then
-            # For GHC 9.6 no armv7l bindists are available.
-            bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -187,10 +178,7 @@ in
       ghc98 = compiler.ghc984;
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
@@ -210,10 +198,7 @@ in
       };
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
@@ -260,9 +245,7 @@ in
       };
       ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-        bootPkgs =
-          # No armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc984 else bb.packages.ghc984Binary;
+        bootPkgs = bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
