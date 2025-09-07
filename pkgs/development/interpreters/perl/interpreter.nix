@@ -71,16 +71,15 @@ stdenv.mkDerivation (
 
     disallowedReferences = [ stdenv.cc ];
 
-    patches =
-      [
-        ./no-sys-dirs.patch
-      ]
-      ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        ./cpp-precomp.patch
-        ./sw_vers.patch
-      ]
-      ++ lib.optional crossCompiling ./cross.patch;
+    patches = [
+      ./no-sys-dirs.patch
+    ]
+    ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./cpp-precomp.patch
+      ./sw_vers.patch
+    ]
+    ++ lib.optional crossCompiling ./cross.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -318,8 +317,14 @@ stdenv.mkDerivation (
       rev = crossVersion;
       hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
     };
-
-    # Patches are above!!!
+    patches = [
+      # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
+      # https://github.com/arsv/perl-cross/pull/159
+      ./cross-fdopendir.patch
+      # Add patchset for 5.42.0 - Can hopefully be removed once perl-cross is updated
+      # https://github.com/arsv/perl-cross/pull/164
+      ./perl-5.42.0-cross.patch
+    ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc
