@@ -26,11 +26,10 @@
 }:
 
 let
-  getAllOutputs = p: [
-    (lib.getBin p)
-    (lib.getLib p)
-    (lib.getDev p)
-  ];
+  # Retrieve all the outputs of a package except for the "static" output.
+  getAllOutputs =
+    p: lib.concatMap (output: lib.optionals (output != "static") [ p.${output} ]) p.outputs;
+
   hostPackages = [
     cuda_cuobjdump
     cuda_gdb
