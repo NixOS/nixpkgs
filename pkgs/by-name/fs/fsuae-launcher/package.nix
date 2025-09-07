@@ -6,6 +6,7 @@
   python3Packages,
   stdenv,
   libsForQt5,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${fsuae}/bin/fs-uae-device-helper $out/bin
     ln -s ${fsuae}/share/fs-uae $out/share/fs-uae
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://fs-uae.net";
