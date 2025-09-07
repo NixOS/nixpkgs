@@ -9,15 +9,15 @@
 buildGoModule (
   finalAttrs:
   let
-    rev = "f333402bd9cbe0f3eeb02507bd14e23d7d639280";
-    shortVer = "${finalAttrs.version} (${lib.substring 0 7 rev})";
+    version = "0.0.20250522";
+    shortVer = version;
   in
   {
     pname = "wireguard-go";
-    version = "0.0.20250522";
+    inherit version;
 
     src = fetchzip {
-      url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${rev}.tar.xz";
+      url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
       hash = "sha256-GRr8NKKb4SHd0WxmNL84eiofFHcauDDmSyNNrXermcA=";
     };
 
