@@ -136,6 +136,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # We rename it ourselves for now, until upstream fixes the issue
       substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
+
+      # The generate-licenses script wants a specific version of cargo-about eventhough
+      # newer versions work just as well.
+      substituteInPlace script/generate-licenses \
+        --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
     '';
 
   cargoHash = "sha256-ehFq0e5G+3242nMHFIDFXVhZCyjwxfMckjhKQ7Iwbu0=";
@@ -228,10 +233,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Flaky: unreliably fails on certain hosts (including Hydra)
     "--skip=zed::tests::test_window_edit_state_restoring_enabled"
+    # The following tests are flaky on at least x86_64-linux and aarch64-darwin,
+    # where they sometimes fail with: "database table is locked: workspaces".
+    "--skip=zed::tests::test_open_file_in_many_spaces"
+    "--skip=zed::tests::test_open_non_existing_file"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky: unreliably fails on certain hosts (including Hydra)
     "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
+    "--skip=zed::open_listener::tests::test_open_workspace_with_nonexistent_files"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Fails on certain hosts (including Hydra) for unclear reason
