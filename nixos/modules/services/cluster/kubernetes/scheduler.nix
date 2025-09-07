@@ -8,6 +8,10 @@ let
   cfg = top.scheduler;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "services" "kubernetes" "scheduler" "port" ] [ "services" "services" "kubernetes" "scheduler" "securePort" ])
+  ];
+
   ###### interface
   options.services.kubernetes.scheduler = with lib.types; {
 
@@ -40,10 +44,22 @@ in
       default = true;
     };
 
-    port = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening port.";
+    securePort = mkOption {
+      description = lib.mdDoc "Kubernetes scheduler secure listening port.";
       default = 10251;
       type = port;
+    };
+
+    tlsCertFile = mkOption {
+      description = lib.mdDoc "Kubernetes controller-manager certificate file.";
+      default = null;
+      type = nullOr path;
+    };
+
+    tlsKeyFile = mkOption {
+      description = lib.mdDoc "Kubernetes controller-manager private key file.";
+      default = null;
+      type = nullOr path;
     };
 
     verbosity = mkOption {
@@ -71,7 +87,11 @@ in
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
-          --secure-port=${toString cfg.port} \
+          --secure-port=${toString cfg.securePort} \
+          ${optionalString (cfg.tlsCertFile!=null)
+            "--tls-cert-file=${cfg.tlsCertFile}"} \
+          ${optionalString (cfg.tlsKeyFile!=null)
+            "--tls-private-key-file=${cfg.tlsKeyFile}"} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
