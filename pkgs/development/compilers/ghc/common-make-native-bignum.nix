@@ -355,7 +355,7 @@ stdenv.mkDerivation (
         ]
     )
 
-    ++ lib.optionals (lib.versionAtLeast version "9.2") [
+    ++ [
       # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
       # Can be removed if the Cabal library included with ghc backports the linked fix
       (fetchpatch {
@@ -363,17 +363,6 @@ stdenv.mkDerivation (
         stripLen = 1;
         extraPrefix = "libraries/Cabal/";
         sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
-      })
-    ]
-
-    ++ lib.optionals (lib.versionOlder version "9.2.2") [
-      # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
-      (fetchpatch {
-        name = "ghc-9.0.2-fcompact-unwind.patch";
-        # Note that the test suite is not packaged.
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
-        sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
       })
     ]
 
@@ -417,12 +406,7 @@ stdenv.mkDerivation (
       # These cause problems as they're not eliminated by GHC's dead code
       # elimination on aarch64-darwin. (see
       # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-      (
-        if lib.versionAtLeast version "9.2" then
-          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-        else
-          ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
-      )
+      ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
     ];
 
     postPatch = "patchShebangs .";
@@ -483,7 +467,7 @@ stdenv.mkDerivation (
 
       echo -n "${buildMK}" > mk/build.mk
     ''
-    + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
+    + lib.optionalString (lib.versionAtLeast version "9.4") ''
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
@@ -495,7 +479,7 @@ stdenv.mkDerivation (
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "9.2") ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
 
       # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
       export XATTR=${lib.getBin xattr}/bin/xattr
@@ -603,11 +587,6 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals enableDocs [
       sphinx
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versions.majorMinor version == "9.0") [
-      # TODO(@sternenseemann): backport addition of XATTR env var like
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
-      xattr
     ];
 
     # Everything the stage0 compiler needs to build stage1: CC, bintools, extra libs.
