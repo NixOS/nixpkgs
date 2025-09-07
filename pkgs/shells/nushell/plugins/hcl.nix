@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Yethal/nu_plugin_hcl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yethal ];
+    broken = true;
   };
 })
