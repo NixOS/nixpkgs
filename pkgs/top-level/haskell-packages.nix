@@ -9,18 +9,10 @@
 }:
 
 let
-  # These are attributes in compiler that support integer-simple.
-  integerSimpleIncludes = [
-    "ghc810"
-    "ghc8107"
-  ];
-
-  nativeBignumExcludes = integerSimpleIncludes ++ [
+  nativeBignumExcludes = [
     # haskell.compiler sub groups
-    "integer-simple"
     "native-bignum"
     # Binary GHCs
-    "ghc8107Binary"
     "ghc902Binary"
     "ghc924Binary"
     "ghc963Binary"
@@ -78,10 +70,6 @@ in
       bb = pkgsBuildBuild.haskell;
     in
     {
-      ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-
       ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
         llvmPackages = pkgs.llvmPackages_12;
       };
@@ -98,32 +86,6 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
 
-      ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
-        bootPkgs = bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc810 = compiler.ghc8107;
-      ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
-        bootPkgs =
-          # GHC >= 9.0 removed the armv7l bindist
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc8107Binary else bb.packages.ghc902Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc92 = compiler.ghc928;
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
         bootPkgs =
           # Building with 9.2 is broken due to
@@ -140,9 +102,7 @@ in
       };
       ghc94 = compiler.ghc948;
       ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc928 else bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc924Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -153,9 +113,7 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc928 else bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc924Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -170,9 +128,6 @@ in
         bootPkgs =
           if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
             bb.packages.ghc984Binary
-          else if stdenv.buildPlatform.isAarch32 then
-            # For GHC 9.6 no armv7l bindists are available.
-            bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -187,10 +142,7 @@ in
       ghc98 = compiler.ghc984;
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
@@ -210,10 +162,7 @@ in
       };
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
@@ -260,9 +209,7 @@ in
       };
       ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-        bootPkgs =
-          # No armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then bb.packages.ghc984 else bb.packages.ghc984Binary;
+        bootPkgs = bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -272,20 +219,6 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_18;
         llvmPackages = pkgs.llvmPackages_18;
       };
-
-      # The integer-simple attribute set contains all the GHC compilers
-      # build with integer-simple instead of integer-gmp.
-      integer-simple =
-        let
-          integerSimpleGhcNames = pkgs.lib.filter (name: builtins.elem name integerSimpleIncludes) (
-            pkgs.lib.attrNames compiler
-          );
-        in
-        pkgs.recurseIntoAttrs (
-          pkgs.lib.genAttrs integerSimpleGhcNames (
-            name: compiler.${name}.override { enableIntegerSimple = true; }
-          )
-        );
 
       # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
       # with "native" and "gmp" backends.
@@ -302,8 +235,12 @@ in
         );
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
+      ghc810 = throw "'haskell.compiler.ghc810' has been removed."; # Added 2025-09-07
+      ghc90 = throw "'haskell.compiler.ghc90' has been removed."; # Added 2025-09-07
+      ghc92 = throw "'haskell.compiler.ghc92' has been removed."; # Added 2025-09-07
       ghcjs = throw "'haskell.compiler.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       ghcjs810 = throw "'haskell.compiler.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
+      integer-simple = throw "All GHC versions with integer-simple support have been removed."; # Added 2025-09-07
     }
   );
 
@@ -316,12 +253,6 @@ in
       bh = buildPackages.haskell;
     in
     {
-      ghc8107Binary = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc8107Binary;
-        ghc = bh.compiler.ghc8107Binary;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-        packageSetConfig = bootstrapPackageSet;
-      };
       ghc902Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc902Binary;
         ghc = bh.compiler.ghc902Binary;
@@ -346,18 +277,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
-      ghc8107 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc8107;
-        ghc = bh.compiler.ghc8107;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      };
-      ghc810 = packages.ghc8107;
-      ghc928 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc928;
-        ghc = bh.compiler.ghc928;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc92 = packages.ghc928;
       ghc948 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc948;
         ghc = bh.compiler.ghc948;
@@ -409,25 +328,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
       };
 
-      # The integer-simple attribute set contains package sets for all the GHC compilers
-      # using integer-simple instead of integer-gmp.
-      integer-simple =
-        let
-          integerSimpleGhcNames = pkgs.lib.filter (name: builtins.elem name integerSimpleIncludes) (
-            pkgs.lib.attrNames packages
-          );
-        in
-        pkgs.lib.genAttrs integerSimpleGhcNames (
-          name:
-          packages.${name}.override (oldAttrs: {
-            ghc = bh.compiler.integer-simple.${name};
-            buildHaskellPackages = bh.packages.integer-simple.${name};
-            overrides = pkgs.lib.composeExtensions (oldAttrs.overrides or (_: _: { })) (
-              _: _: { integer-simple = null; }
-            );
-          })
-        );
-
       native-bignum =
         let
           nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
@@ -443,8 +343,11 @@ in
         );
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
+      ghc810 = throw "'haskell.packages.ghc810' has been removed."; # Added 2025-09-07
       ghc90 = throw "'haskell.packages.ghc90' has been removed."; # Added 2025-09-07
+      ghc92 = throw "'haskell.packages.ghc92' has been removed."; # Added 2025-09-07
       ghcjs = throw "'haskell.packages.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       ghcjs810 = throw "'haskell.packages.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
+      integer-simple = throw "All GHC versions with integer-simple support have been removed."; # Added 2025-09-07
     };
 }
