@@ -97,7 +97,7 @@ in
       };
       ghc94 = compiler.ghc948;
       ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
-        bootPkgs = bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -108,7 +108,7 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs = bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
