@@ -6,7 +6,7 @@
   cudnn,
   cuda_nvrtc,
   lib,
-  libcudla ? null, # only for Jetson
+  libcudla, # only for Jetson
   patchelf,
   stdenv,
 }:

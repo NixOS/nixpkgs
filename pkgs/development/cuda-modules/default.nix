@@ -3,25 +3,15 @@
   config,
   lib,
   pkgs,
-  stdenv,
   # Manually provided arguments
   manifests,
 }:
 let
-  inherit (lib.attrsets)
-    concatMapAttrs
-    genAttrs'
-    listToAttrs
-    mapAttrs
-    mapCartesianProduct
-    optionalAttrs
-    ;
   inherit (lib.customisation) callPackagesWith;
   inherit (lib.filesystem) packagesFromDirectoryRecursive;
   inherit (lib.fixedPoints) composeManyExtensions extends;
   inherit (lib.lists) optionals;
-  inherit (lib.strings) concatStringsSep versionAtLeast versionOlder;
-  inherit (lib.trivial) importJSON;
+  inherit (lib.strings) versionAtLeast versionOlder;
   inherit (lib.versions) major majorMinor;
   inherit (_cuda.lib)
     dropDots
@@ -59,14 +49,6 @@ let
 
   cudaPackagesFixedPoint =
     finalCudaPackages:
-    let
-      redistPackages = concatMapAttrs (
-        name: attr:
-        optionalAttrs (attr.src or null != null && attr ? passthru.redistName) {
-          ${name} = attr;
-        }
-      ) finalCudaPackages;
-    in
     {
       # NOTE:
       # It is important that _cuda is not part of the package set fixed-point. As described by
@@ -125,22 +107,6 @@ let
           ;
       };
 
-      unpackedRedistPackages = pkgs'.linkFarm "unpackedRedistPackages" (
-        mapAttrs (_: attr: attr.src) redistPackages
-      );
-
-      installedRedistPackages = pkgs'.linkFarm "installedRedistPackages" (
-        concatMapAttrs (
-          name: pkg:
-          optionalAttrs (pkg.meta.available) (
-            genAttrs' pkg.outputs (output: {
-              name = "${name}-${output}";
-              value = pkg.${output};
-            })
-          )
-        ) redistPackages
-      );
-
       flags =
         formatCapabilities {
           inherit (finalCudaPackages.backendStdenv) cudaCapabilities cudaForwardCompat;
@@ -155,96 +121,14 @@ let
           dropDot = dropDots;
           isJetsonBuild = finalCudaPackages.backendStdenv.hasJetsonCudaCapability;
         };
-
-      # Loose packages
-      # Barring packages which share a home (e.g., cudatoolkit), new packages
-      # should be added to ./packages in "by-name" style, where they will be automatically
-      # discovered and added to the package set.
-
-      # Prevent missing attribute errors
-      # NOTE(@connorbaker): CUDA 12.3 does not have a cuda_compat package; indeed, none of the release supports
-      # Jetson devices. To avoid errors in the case that cuda_compat is not defined, we have a dummy package which
-      # is always defined, but does nothing, will not build successfully, and has no platforms.
-      cuda_compat = pkgs'.runCommand "cuda_compat" {
-        meta = {
-          broken = true;
-          platforms = [ ];
-        };
-      } "false";
-
-      # Alternative versions of select packages.
-      # This should be minimized as much as possible.
-      cudnn_8_9 = finalCudaPackages.cudnn.overrideAttrs (prevAttrs: {
-        passthru = prevAttrs.passthru // {
-          release =
-            let
-              manifest =
-                if finalCudaPackages.backendStdenv.hasJetsonCudaCapability then
-                  ./_cuda/manifests/cudnn/redistrib_8.9.5.json
-                else
-                  ./_cuda/manifests/cudnn/redistrib_8.9.7.json;
-            in
-            (importJSON manifest).cudnn;
-        };
-      });
-
-      tests =
-        let
-          bools = [
-            true
-            false
-          ];
-          configs = {
-            openCVFirst = bools;
-            useOpenCVDefaultCuda = bools;
-            useTorchDefaultCuda = bools;
-          };
-          builder =
-            {
-              openCVFirst,
-              useOpenCVDefaultCuda,
-              useTorchDefaultCuda,
-            }@config:
-            {
-              name = concatStringsSep "-" (
-                [
-                  "test"
-                  (if openCVFirst then "opencv" else "torch")
-                ]
-                ++ optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
-                  "with-default-cuda"
-                ]
-                ++ [
-                  "then"
-                  (if openCVFirst then "torch" else "opencv")
-                ]
-                ++ optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
-                  "with-default-cuda"
-                ]
-              );
-              value = finalCudaPackages.callPackage ./tests/opencv-and-torch config;
-            };
-        in
-        listToAttrs (mapCartesianProduct builder configs)
-        // {
-          flags = finalCudaPackages.callPackage ./tests/flags.nix { };
-        };
     }
-    # CUDA version-specific packages
     // packagesFromDirectoryRecursive {
       inherit (finalCudaPackages) callPackage;
       directory = ./packages;
     };
 
   composedExtensions = composeManyExtensions (
-    [
-      # TODO: cudnn
-      # TODO: cutensor
-      # TODO: libcusparse_lt for various releases
-      # TODO: tensorrt
-      (import ./cuda-library-samples/extension.nix { inherit lib stdenv; })
-    ]
-    ++ optionals config.allowAliases [
+    optionals config.allowAliases [
       (import ./aliases.nix { inherit lib; })
     ]
     ++ _cuda.extensions

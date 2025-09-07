@@ -4,18 +4,17 @@
   autoPatchelfHook,
   backendStdenv,
   cmake,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_nvcc ? null,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
   cudatoolkit,
-  libcusparse_lt ? null,
-  cutensor ? null,
+  libcusparse_lt,
+  cutensor,
   fetchFromGitHub,
   lib,
-  libcusparse ? null,
+  libcusparse,
   setupCudaHook,
 }:
-
 let
   base = backendStdenv.mkDerivation (finalAttrs: {
     src = fetchFromGitHub {
@@ -85,10 +84,6 @@ in
       '';
 
       CUTENSOR_ROOT = cutensor;
-
-      meta = prevAttrs.meta or { } // {
-        broken = cutensor == null;
-      };
     }
   );
 
@@ -122,16 +117,6 @@ in
 
       CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
       CUSPARSELT_PATH = lib.getLib libcusparse_lt;
-
-      meta = prevAttrs.meta or { } // {
-        broken =
-          # Base dependencies
-          libcusparse_lt == null
-          || libcusparse == null
-          || cuda_nvcc == null
-          || cuda_cudart == null
-          || cuda_cccl == null;
-      };
     }
   );
 }

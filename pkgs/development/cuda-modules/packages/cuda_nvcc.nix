@@ -5,7 +5,7 @@
   cudaAtLeast,
   cudaOlder,
   lib,
-  libnvvm ? null,
+  libnvvm,
 }:
 buildRedist (finalAttrs: {
   redistName = "cuda";
@@ -148,10 +148,6 @@ buildRedist (finalAttrs: {
         EOF
       ''
     );
-
-  platformAssertions = lib.optionals (cudaAtLeast "13.0") (
-    _cuda.lib._mkMissingPackagesAssertions { inherit libnvvm; }
-  );
 
   meta = {
     description = "CUDA compiler driver";

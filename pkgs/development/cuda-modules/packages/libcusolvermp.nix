@@ -2,7 +2,7 @@
   _cuda,
   buildRedist,
   cuda_cudart,
-  libcal ? null,
+  libcal,
   libcublas,
   libcusolver,
 }:
@@ -23,8 +23,6 @@ buildRedist {
     libcublas
     libcusolver
   ];
-
-  platformAssertions = _cuda.lib._mkMissingPackagesAssertions { inherit libcal; };
 
   meta = {
     description = "High-performance, distributed-memory, GPU-accelerated library that provides tools for solving dense linear systems and eigenvalue problems";
