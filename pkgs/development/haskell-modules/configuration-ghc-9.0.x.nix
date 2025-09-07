@@ -1,18 +1,6 @@
-{
-  config,
-  pkgs,
-  haskellLib,
-}:
-
-with haskellLib;
-
-let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
-  inherit (pkgs) lib;
-in
+{ }:
 
 self: super: {
-
   # Disable GHC 9.0.x core libraries.
   array = null;
   base = null;
@@ -42,152 +30,10 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  # GHC only builds terminfo if it is a native compiler
-  terminfo =
-    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
-      null
-    else
-      doDistribute self.terminfo_0_4_1_7;
+  terminfo = null;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  # GHC only bundles the xhtml library if haddock is enabled, check if this is
-  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
-
-  # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
-  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
-  # These core package only exist for GHC >= 9.4. The best we can do is feign
-  # their existence to callPackages, but their is no shim for lower GHC versions.
-  system-cxx-std-lib = null;
-
-  # Becomes a core package in GHC >= 9.8
-  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
-
-  # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_1_0_0;
-
-  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
-  ghc-internal = null;
-  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
-  ghc-toolchain = null;
-  ghc-platform = null;
-
-  # Only required for ghc >= 9.2
-  nothunks = super.nothunks.override {
-    wherefrom-compat = null;
-  };
-
-  # Needs base-orphans for GHC < 9.8 / base < 4.19
-  some = addBuildDepend self.base-orphans super.some;
-
-  # Jailbreaks & Version Updates
-
-  # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
-  tar = doDistribute (doJailbreak self.tar_0_6_0_0);
-  # text-metrics >= 0.3.3 requires GHC2021
-  text-metrics = doDistribute self.text-metrics_0_3_2;
-
-  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
-  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
-  # hashable >= 1.5 only supports GHC >= 9.6 / base >= 4.18
-  hashable = self.hashable_1_4_7_0;
-  hashable_1_4_7_0 =
-    # extra deps for GHC < 9.4
-    addBuildDepends
-      [
-        self.data-array-byte
-        self.base-orphans
-      ]
-      # For GHC < 9.2, os-string is not required
-      (super.hashable_1_4_7_0.override { os-string = null; });
-
-  # Too strict lower bounds on base
-  primitive-addr = doJailbreak super.primitive-addr;
-
-  hashable-time = doJailbreak super.hashable-time;
-  tuple = addBuildDepend self.base-orphans super.tuple;
-  vector-th-unbox = doJailbreak super.vector-th-unbox;
-
-  ormolu = self.ormolu_0_5_2_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
-
-  stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
-
-  doctest = dontCheck super.doctest;
-
-  haskell-language-server =
-    lib.throwIf config.allowAliases
-      "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version"
-      (markBroken super.haskell-language-server);
-
-  # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
-  hpack = dontCheck super.hpack;
-
-  # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute self.ghc-tags_1_5;
-
-  # ghc-lib >= 9.6 and friends no longer build with GHC 9.0
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
-  ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
-
-  # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
-  # due to a GHC bug that has been fixed for GHC >= 9.2.2
-  # https://github.com/ekmett/reflection/issues/51    krank:ignore-line
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141 krank:ignore-line
-  reflection = dontCheck super.reflection;
-
-  ghc-api-compat = unmarkBroken super.ghc-api-compat;
-
-  # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
-  hiedb = overrideCabal (old: {
-    libraryHaskellDepends = old.libraryHaskellDepends ++ [ self.ghc-api-compat ];
-  }) super.hiedb;
-
-  # https://github.com/lspitzner/butcher/issues/7
-  butcher = doJailbreak super.butcher;
-
-  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
-  aeson = dontCheck super.aeson;
-
-  # 2022-05-31: weeder 2.4.* requires GHC 9.2
-  weeder = doDistribute self.weeder_2_3_1;
-  # Unnecessarily strict upper bound on lens
-  weeder_2_3_1 = doJailbreak (
-    super.weeder_2_3_1.override {
-      # weeder < 2.6 only supports algebraic-graphs < 0.7
-      # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
-      algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-    }
-  );
-
-  # Later versions only support GHC >= 9.2
-  ghc-exactprint = self.ghc-exactprint_0_6_4;
-
-  retrie = dontCheck self.retrie_1_1_0_0;
-
-  # Needs OneTuple for ghc < 9.2
-  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
-
-  hspec-megaparsec = super.hspec-megaparsec_2_2_0;
-
-  # No instance for (Show B.Builder) arising from a use of ‘print’
-  http-types = dontCheck super.http-types;
-
-  # Packages which need compat library for GHC < 9.6
-  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
-    indexed-traversable
-    these
-    ;
-  base-compat-batteries = addBuildDepends [
-    self.foldable1-classes-compat
-    self.OneTuple
-  ] super.base-compat-batteries;
-  OneTuple = addBuildDepends [
-    self.foldable1-classes-compat
-    self.base-orphans
-  ] super.OneTuple;
+  xhtml = null;
 }
