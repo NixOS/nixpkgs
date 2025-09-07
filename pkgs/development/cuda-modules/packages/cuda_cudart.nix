@@ -7,7 +7,7 @@
   buildRedist,
   cuda_cccl,
   cuda_compat,
-  cuda_crt ? null,
+  cuda_crt,
   cuda_nvcc,
   cudaAtLeast,
   lib,
@@ -91,10 +91,6 @@ buildRedist {
     ln -srvt "''${!outputStubs:?}/lib/" *.so *.so.*
     popd >/dev/null
   '';
-
-  platformAssertions = lib.optionals (cudaAtLeast "13.0") (
-    _cuda.lib._mkMissingPackagesAssertions { inherit cuda_crt; }
-  );
 
   meta.description = "CUDA Runtime";
 }

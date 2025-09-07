@@ -1,7 +1,7 @@
 {
   _cuda,
   buildRedist,
-  libcal ? null,
+  libcal,
   libcublas,
   nvshmem ? null, # TODO(@connorbaker): package this
 }:
@@ -23,7 +23,7 @@ buildRedist {
     libcublas
   ];
 
-  platformAssertions = _cuda.lib._mkMissingPackagesAssertions { inherit libcal nvshmem; };
+  platformAssertions = _cuda.lib._mkMissingPackagesAssertions { inherit nvshmem; };
 
   meta = {
     description = "High-performance, multi-process, GPU-accelerated library for distributed basic dense linear algebra";

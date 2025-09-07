@@ -2,7 +2,6 @@
   _cuda,
   addDriverRunpath,
   cmake,
-  config,
   cuda_cudart,
   cuda_nvcc,
   cuda_nvrtc,

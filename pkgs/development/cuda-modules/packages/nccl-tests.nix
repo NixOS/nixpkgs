@@ -4,7 +4,6 @@
 {
   backendStdenv,
   _cuda,
-  config,
   cuda_cccl,
   cuda_cudart,
   cuda_nvcc,
