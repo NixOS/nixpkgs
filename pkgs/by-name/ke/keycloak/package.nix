@@ -63,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     ln -s ${junixsocket-common}/share/java/* providers/
     ln -s ${junixsocket-native-common}/share/java/* providers/
-  ''
-  + ''
     patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
