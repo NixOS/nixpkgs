@@ -14985,6 +14985,8 @@ self: super: with self; {
 
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
 
+  python-rako-2025 = callPackage ../development/python-modules/python-rako-2025 { };
+
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
   python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
