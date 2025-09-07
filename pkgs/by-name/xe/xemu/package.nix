@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs scripts
 
     substituteInPlace ./scripts/xemu-version.sh \
       --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
