@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "netlify";
-    repo = pname;
+    repo = "gotrue";
     rev = "v${version}";
     hash = "sha256-9h6CyCY7741tJR+qWDLwgPkAtE/kmaoTqlXEY+mOW58=";
   };
