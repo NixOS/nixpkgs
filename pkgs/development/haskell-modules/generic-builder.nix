@@ -957,7 +957,7 @@ lib.fix (
         #   # and with python:
         #
         #   > nix-shell -E 'with (import <nixpkgs> {}); \
-        #   >    haskell.packages.ghc865.hello.envFunc { buildInputs = [ python ]; }'
+        #   >    haskellPackages.hello.envFunc { buildInputs = [ python ]; }'
         envFunc =
           {
             withHoogle ? false,
