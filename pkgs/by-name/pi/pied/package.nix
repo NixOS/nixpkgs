@@ -3,8 +3,10 @@
   fetchFromGitHub,
   flutter327,
   gst_all_1,
+  killall,
+  piper-tts,
+  makeBinaryWrapper,
 }:
-
 flutter327.buildFlutterApplication rec {
   pname = "pied";
   version = "0.3.0";
@@ -21,6 +23,8 @@ flutter327.buildFlutterApplication rec {
 
   strictDeps = true;
 
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -30,6 +34,12 @@ flutter327.buildFlutterApplication rec {
   postInstall = ''
     install -D flatpak/com.mikeasoft.pied.desktop -t $out/share/applications
     install -D flatpak/com.mikeasoft.pied.png -t $out/share/pixmaps
+    wrapProgram $out/bin/pied --prefix PATH : ${
+      lib.makeBinPath [
+        killall
+        piper-tts
+      ]
+    }
   '';
 
   meta = {
