@@ -136,6 +136,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # We rename it ourselves for now, until upstream fixes the issue
       substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
+    ''
+
+    # nixpkgs ships cargo-about 0.8, which is a seamless upgrade from 0.8
+    + ''
+      substituteInPlace script/generate-licenses \
+        --replace-fail 'CARGO_ABOUT_VERSION="0.7"' 'CARGO_ABOUT_VERSION="0.8"'
     '';
 
   cargoHash = "sha256-ehFq0e5G+3242nMHFIDFXVhZCyjwxfMckjhKQ7Iwbu0=";
