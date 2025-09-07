@@ -96,7 +96,9 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/nrfutil --prefix PATH ":" "$out/bin"
+    wrapProgram $out/bin/nrfutil \
+      --prefix PATH ":" "$out/bin" \
+      --set NRF_JLINK_DLL_PATH "${segger-jlink-headless}/lib/libjlinkarm.so"
   '';
 
   passthru = {
