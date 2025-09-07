@@ -37,40 +37,40 @@ import ./make-test-python.nix {
 
       environment.systemPackages =
         let
-          sendTestMail = pkgs.writeScriptBin "send-testmail" ''
-            #!${pkgs.python3.interpreter}
+          sendTestMail = pkgs.writers.writePython3Bin "send-testmail" { } ''
             import smtplib
 
             with smtplib.SMTP('${domain}') as smtp:
-              smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test\n\nTest data.')
-              smtp.quit()
+                smtp.sendmail('root@localhost', 'alice@localhost',
+                              'Subject: Test\n\nTest data.')
+                smtp.quit()
           '';
 
-          sendTestMailStarttls = pkgs.writeScriptBin "send-testmail-starttls" ''
-            #!${pkgs.python3.interpreter}
+          sendTestMailStarttls = pkgs.writers.writePython3Bin "send-testmail-starttls" { } ''
             import smtplib
             import ssl
 
             ctx = ssl.create_default_context()
 
             with smtplib.SMTP('${domain}') as smtp:
-              smtp.ehlo()
-              smtp.starttls(context=ctx)
-              smtp.ehlo()
-              smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test STARTTLS\n\nTest data.')
-              smtp.quit()
+                smtp.ehlo()
+                smtp.starttls(context=ctx)
+                smtp.ehlo()
+                smtp.sendmail('root@localhost', 'alice@localhost',
+                              'Subject: Test STARTTLS\n\nTest data.')
+                smtp.quit()
           '';
 
-          sendTestMailSmtps = pkgs.writeScriptBin "send-testmail-smtps" ''
-            #!${pkgs.python3.interpreter}
+          sendTestMailSmtps = pkgs.writers.writePython3Bin "send-testmail-smtps" { } ''
             import smtplib
             import ssl
 
             ctx = ssl.create_default_context()
 
             with smtplib.SMTP_SSL(host='${domain}', context=ctx) as smtp:
-              smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test SMTPS\n\nTest data.')
-              smtp.quit()
+                smtp.sendmail('root@localhost', 'alice@localhost',
+                              'Subject: Test SMTPS\n\nTest data.')
+                smtp.quit()
           '';
         in
         [
