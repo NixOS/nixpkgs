@@ -1,16 +1,16 @@
-From aed1c4b0be7576d20eed81070da2c6f92573df18 Mon Sep 17 00:00:00 2001
-From: Keshav Kini <keshav.kini@gmail.com>
-Date: Sat, 30 May 2020 21:27:47 -0700
-Subject: [PATCH] Fix some paths for Nix build
+From 2c7829aec41f6915bda2a23af57f0b39b075a70b Mon Sep 17 00:00:00 2001
+From: C4 Patino <c4patino@gmail.com>
+Date: Wed, 3 Sep 2025 22:43:05 -0500
+Subject: [PATCH] path changes for nix
 
 ---
  books/build/features.sh                                     | 1 +
  books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp          | 6 +-----
- .../bundle/software/cl+ssl-20220707-git/src/reload.lisp     | 3 +++
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../bundle/software/cl+ssl-20231021-git/src/reload.lisp     | 2 ++
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/books/build/features.sh b/books/build/features.sh
-index feb5b2b59c..4b654e08bc 100755
+index 20ef1f1cc7..e8a16396e3 100755
 --- a/books/build/features.sh
 +++ b/books/build/features.sh
 @@ -125,6 +125,7 @@ EOF
@@ -22,7 +22,7 @@ index feb5b2b59c..4b654e08bc 100755
      cat >> Makefile-features <<EOF
  export OS_HAS_IPASIR ?= 1
 diff --git a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
-index 762e4ad4c0..c9802cb582 100644
+index 762e4ad4c0..abc95d0ad8 100644
 --- a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
 +++ b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
 @@ -30,11 +30,7 @@
@@ -34,24 +34,23 @@ index 762e4ad4c0..c9802cb582 100644
 -           (cw "WARNING: $IPASIR_SHARED_LIBRARY not specified, ~
 -                defaulting to \"libipasirglucose4.so\"")
 -           "libipasirglucose4.so"))
-+      (cffi::load-foreign-library (or libname "@libipasir@"))
++(cffi::load-foreign-library (or libname "@libipasir@"))
      (error () (er hard? 'load-ipasir-shardlib-raw
                    "Couldn't load ipasir shared library from ~s0."
                    libname))))
-diff --git a/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp
-index d409b4440f..5c65c5b4da 100644
---- a/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp
-+++ b/books/quicklisp/bundle/software/cl+ssl-20220707-git/src/reload.lisp
-@@ -87,6 +87,9 @@ sudo rm /usr/local/lib/libcrypto.dylib /usr/local/lib/libssl.dylib
- ;;
- ;; These are 32-bit only.
+diff --git a/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp
+index 05ab8837d0..fb60937580 100644
+--- a/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp
++++ b/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp
+@@ -14,6 +14,8 @@
+ ;;;     put this directly into ffi.lisp
  
+ (in-package :cl+ssl)
 +(cl+ssl/config:define-libssl-path "@libssl@")
 +(cl+ssl/config:define-libcrypto-path "@libcrypto@")
-+
- (unless cl+ssl/config::*libcrypto-override*
-   (cffi:define-foreign-library libcrypto
-     (:windows (:or #+(and windows x86-64) "libcrypto-1_1-x64.dll"
+ 
+ ;; The default OS-X libssl seems have had insufficient crypto algos
+ ;; (missing TLSv1_[1,2]_XXX methods,
 -- 
-2.31.1
+2.50.1
 

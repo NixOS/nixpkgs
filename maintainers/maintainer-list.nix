@@ -14727,6 +14727,12 @@
     githubId = 40217331;
     name = "LizeLive";
   };
+  ljxfstorm = {
+    name = "Likai Liu";
+    email = "ljxf.storm@live.cn";
+    github = "ljxfstorm";
+    githubId = 7077478;
+  };
   llakala = {
     email = "elevenaka11@gmail.com";
     github = "llakala";

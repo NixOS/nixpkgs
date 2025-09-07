@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf269,
+  autoconf,
   automake,
   libtool,
   pkg-config,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf269
+    autoconf
     automake
     help2man
     libtool
@@ -75,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/^843;/d" tests/testsuite
     # test 875 (INDEXED sample)
     sed -i "/^875;/d" tests/testsuite
+
+    # gnucobol.texi:2765: no matching `@end verbatim'
+    sed -i "214i @end verbatim" doc/cbrunt.tex
   '';
 
   preConfigure = ''
