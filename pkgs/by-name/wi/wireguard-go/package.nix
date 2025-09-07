@@ -9,16 +9,16 @@
 buildGoModule (
   finalAttrs:
   let
-    rev = "12269c2761734b15625017d8565745096325392f";
+    rev = "f333402bd9cbe0f3eeb02507bd14e23d7d639280";
     shortVer = "${finalAttrs.version} (${lib.substring 0 7 rev})";
   in
   {
     pname = "wireguard-go";
-    version = "0-unstable-2023-12-11";
+    version = "0.0.20250522";
 
     src = fetchzip {
       url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${rev}.tar.xz";
-      hash = "sha256-br7/dwr/e4HvBGJXh+6lWqxBUezt5iZNy9BFqEA1bLk=";
+      hash = "sha256-GRr8NKKb4SHd0WxmNL84eiofFHcauDDmSyNNrXermcA=";
     };
 
     postPatch = ''
@@ -29,7 +29,7 @@ buildGoModule (
       printf 'package main\n\nconst Version = "${shortVer}"' > version.go
     '';
 
-    vendorHash = "sha256-RqZ/3+Xus5N1raiUTUpiKVBs/lrJQcSwr1dJib2ytwc=";
+    vendorHash = "sha256-sCajxTV26jjlmgmbV4GG6hg9NkLGS773ZbFyKucvuBE=";
 
     subPackages = [ "." ];
 
