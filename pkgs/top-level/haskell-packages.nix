@@ -302,6 +302,7 @@ in
         );
     }
     // pkgs.lib.optionalAttrs config.allowAliases {
+      ghc90 = throw "'haskell.compiler.ghc90' has been removed."; # Added 2025-09-07
       ghcjs = throw "'haskell.compiler.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       ghcjs810 = throw "'haskell.compiler.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
     }
