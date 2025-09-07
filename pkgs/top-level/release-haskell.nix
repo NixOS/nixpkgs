@@ -63,7 +63,6 @@ let
 
   # list of all compilers to test specific packages on
   released = with compilerNames; [
-    ghc928
     ghc948
     ghc963
     ghc967
@@ -547,7 +546,6 @@ let
         # from the package sets. Due to (transitively) requiring recent versions
         # of core packages, it is not always reasonable to get cabal-install to
         # work with older compilers.
-        compilerNames.ghc928
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
@@ -565,10 +563,7 @@ let
         compilerNames.ghc9101
         compilerNames.ghc9102
       ];
-      haskell-language-server = lib.subtractLists [
-        # Support ceased as of 2.10.0.0
-        compilerNames.ghc928
-      ] released;
+      haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc9101
@@ -663,9 +658,7 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };

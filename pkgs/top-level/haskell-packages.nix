@@ -86,18 +86,6 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
 
-      ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
-        bootPkgs = bb.packages.ghc902Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc92 = compiler.ghc928;
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
         bootPkgs =
           # Building with 9.2 is broken due to
@@ -249,6 +237,7 @@ in
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.compiler.ghc810' has been removed."; # Added 2025-09-07
       ghc90 = throw "'haskell.compiler.ghc90' has been removed."; # Added 2025-09-07
+      ghc92 = throw "'haskell.compiler.ghc92' has been removed."; # Added 2025-09-07
       ghcjs = throw "'haskell.compiler.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       ghcjs810 = throw "'haskell.compiler.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       integer-simple = throw "All GHC versions with integer-simple support have been removed."; # Added 2025-09-07
@@ -288,12 +277,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
-      ghc928 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc928;
-        ghc = bh.compiler.ghc928;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc92 = packages.ghc928;
       ghc948 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc948;
         ghc = bh.compiler.ghc948;
@@ -362,6 +345,7 @@ in
     // pkgs.lib.optionalAttrs config.allowAliases {
       ghc810 = throw "'haskell.packages.ghc810' has been removed."; # Added 2025-09-07
       ghc90 = throw "'haskell.packages.ghc90' has been removed."; # Added 2025-09-07
+      ghc92 = throw "'haskell.packages.ghc92' has been removed."; # Added 2025-09-07
       ghcjs = throw "'haskell.packages.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       ghcjs810 = throw "'haskell.packages.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
       integer-simple = throw "All GHC versions with integer-simple support have been removed."; # Added 2025-09-07
