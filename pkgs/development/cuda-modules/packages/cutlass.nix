@@ -225,7 +225,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    badPlatforms = _mkMetaBadPlatforms (!(config.inHydra or false)) finalAttrs;
+    badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = [ maintainers.connorbaker ];
     teams = [ teams.cuda ];
   };

@@ -439,8 +439,8 @@ extendMkDerivation {
         '';
         sourceProvenance = meta.sourceProvenance or [ sourceTypes.binaryNativeCode ];
         platforms = finalAttrs.passthru.supportedNixSystems;
-        broken = _mkMetaBroken (!(config.inHydra or false)) finalAttrs;
-        badPlatforms = _mkMetaBadPlatforms (!(config.inHydra or false)) finalAttrs;
+        broken = _mkMetaBroken finalAttrs;
+        badPlatforms = _mkMetaBadPlatforms finalAttrs;
         downloadPage =
           meta.downloadPage
             or "https://developer.download.nvidia.com/compute/${finalAttrs.passthru.redistName}/redist/${finalAttrs.pname}";
