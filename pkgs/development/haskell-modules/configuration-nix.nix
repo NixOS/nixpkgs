@@ -152,9 +152,6 @@ builtins.intersectAttrs super {
     }) super.spreadsheet
   );
 
-  # fix errors caused by hardening flags
-  epanet-haskell = disableHardening [ "format" ] super.epanet-haskell;
-
   # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
   streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
 
@@ -251,9 +248,6 @@ builtins.intersectAttrs super {
     '';
   }) super.jni;
 
-  # Won't find it's header files without help.
-  sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
-
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   cabal-fmt = enableSeparateBinOutput super.cabal-fmt;
   hindent = enableSeparateBinOutput super.hindent;
@@ -337,7 +331,6 @@ builtins.intersectAttrs super {
       if pkgs.stdenv.hostPlatform.isDarwin then [ (appendConfigureFlag "-fhave-quartz-gtk") ] else [ ]
     )
   );
-  gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
   shelly = overrideCabal (drv: {
@@ -375,16 +368,8 @@ builtins.intersectAttrs super {
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
-  amqp-conduit = dontCheck super.amqp-conduit;
-  bitcoin-api = dontCheck super.bitcoin-api;
-  bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
-  bitx-bitcoin = dontCheck super.bitx-bitcoin; # http://hydra.cryp.to/build/926187/log/raw
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
-  digitalocean-kzs = dontCheck super.digitalocean-kzs; # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types; # http://hydra.cryp.to/build/1114046/nixlog/1/raw
-  hadoop-rpc = dontCheck super.hadoop-rpc; # http://hydra.cryp.to/build/527461/nixlog/2/raw
-  hjsonschema = overrideCabal (drv: { testTargets = [ "local" ]; }) super.hjsonschema;
-  marmalade-upload = dontCheck super.marmalade-upload; # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client; # the spec runs openid against google.com
@@ -392,25 +377,15 @@ builtins.intersectAttrs super {
   pipes-mongodb = dontCheck super.pipes-mongodb; # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   riak = dontCheck super.riak; # http://hydra.cryp.to/build/498763/log/raw
-  scotty-binding-play = dontCheck super.scotty-binding-play;
-  servant-router = dontCheck super.servant-router;
   serversession-backend-redis = dontCheck super.serversession-backend-redis;
-  slack-api = dontCheck super.slack-api; # https://github.com/mpickering/slack-api/issues/5
-  stackage = dontCheck super.stackage; # http://hydra.cryp.to/build/501867/nixlog/1/raw
-  textocat-api = dontCheck super.textocat-api; # http://hydra.cryp.to/build/887011/log/raw
   wreq = dontCheck super.wreq; # http://hydra.cryp.to/build/501895/nixlog/1/raw
-  wreq-sb = dontCheck super.wreq-sb; # http://hydra.cryp.to/build/783948/log/raw
   download = dontCheck super.download;
   http-client = dontCheck super.http-client;
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
-  transient-universe = dontCheck super.transient-universe;
   telegraph = dontCheck super.telegraph;
   js-jquery = dontCheck super.js-jquery;
-  hPDB-examples = dontCheck super.hPDB-examples;
-  tcp-streams = dontCheck super.tcp-streams;
-  holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
@@ -462,9 +437,6 @@ builtins.intersectAttrs super {
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
 
-  # Needs access to locale data, but looks for it in the wrong place.
-  scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
-
   # Disable tests because they require a mattermost server
   mattermost-api = dontCheck super.mattermost-api;
 
@@ -481,11 +453,6 @@ builtins.intersectAttrs super {
 
   # Test suite requires running a docker container via testcontainers
   amqp-streamly = dontCheck super.amqp-streamly;
-
-  # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
-  # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
-  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
   shellify = enableSeparateBinOutput super.shellify;
   specup = enableSeparateBinOutput super.specup;
@@ -508,17 +475,6 @@ builtins.intersectAttrs super {
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
-
-  # Hardcoded include path
-  poppler = overrideCabal (drv: {
-    postPatch = ''
-      sed -i -e 's,glib/poppler.h,poppler.h,' poppler.cabal
-      sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
-    '';
-  }) super.poppler;
-
-  # Uses OpenGL in testing
-  caramia = dontCheck super.caramia;
 
   # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
@@ -560,36 +516,8 @@ builtins.intersectAttrs super {
     '';
   }) super.GlomeVec;
 
-  # Tries to run GUI in tests
-  leksah = dontCheck (
-    overrideCabal (drv: {
-      executableSystemDepends =
-        (drv.executableSystemDepends or [ ])
-        ++ (with pkgs; [
-          adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
-          wrapGAppsHook3 # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
-          gtk3 # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
-        ]);
-      postPatch = (drv.postPatch or "") + ''
-        for f in src/IDE/Leksah.hs src/IDE/Utils/ServerConnection.hs
-        do
-          substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
-        done
-      '';
-    }) super.leksah
-  );
-
   # dyre's tests appear to be trying to directly call GHC.
   dyre = dontCheck super.dyre;
-
-  # https://github.com/edwinb/EpiVM/issues/13
-  # https://github.com/edwinb/EpiVM/issues/14
-  epic = addExtraLibraries [ pkgs.boehmgc pkgs.gmp ] (
-    addBuildTool self.buildHaskellPackages.happy super.epic
-  );
-
-  # https://github.com/ekmett/wl-pprint-terminfo/issues/7
-  wl-pprint-terminfo = addExtraLibrary pkgs.ncurses super.wl-pprint-terminfo;
 
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary pkgs.libpcap super.pcap;
@@ -620,31 +548,9 @@ builtins.intersectAttrs super {
     prePatch = ''sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal"'';
   }) super.hcwiid;
 
-  # cabal2nix doesn't pick up some of the dependencies.
-  ginsu =
-    let
-      g = addBuildDepend pkgs.perl super.ginsu;
-      g' = overrideCabal (drv: {
-        executableSystemDepends = (drv.executableSystemDepends or [ ]) ++ [
-          pkgs.ncurses
-        ];
-      }) g;
-    in
-    g';
-
   # Tests require `docker` command in PATH
   # Tests require running docker service :on localhost
   docker = dontCheck super.docker;
-
-  # https://github.com/deech/fltkhs/issues/16
-  fltkhs = overrideCabal (drv: {
-    libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.autoconf ];
-    librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [
-      pkgs.fltk13
-      pkgs.libGL
-      pkgs.libjpeg
-    ];
-  }) super.fltkhs;
 
   # Select dependency discovery method and provide said dependency
   jpeg-turbo = enableCabalFlag "pkgconfig" (
@@ -653,9 +559,6 @@ builtins.intersectAttrs super {
 
   # https://github.com/skogsbaer/hscurses/pull/26
   hscurses = addExtraLibrary pkgs.ncurses super.hscurses;
-
-  # Looks like Avahi provides the missing library
-  dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
 
   # Tests execute goldplate
   goldplate = overrideCabal (drv: {
@@ -719,20 +622,10 @@ builtins.intersectAttrs super {
 
   discount = super.discount.override { markdown = pkgs.discount; };
 
-  # tests require working stack installation with all-cabal-hashes cloned in $HOME
-  stackage-curator = dontCheck super.stackage-curator;
-
   stack = self.generateOptparseApplicativeCompletions [ "stack" ] super.stack;
 
   # hardcodes /usr/bin/tr: https://github.com/snapframework/io-streams/pull/59
   io-streams = enableCabalFlag "NoInteractiveTests" super.io-streams;
-
-  # requires autotools to build
-  secp256k1 = addBuildTools [
-    pkgs.buildPackages.autoconf
-    pkgs.buildPackages.automake
-    pkgs.buildPackages.libtool
-  ] super.secp256k1;
 
   # requires libsecp256k1 in pkg-config-depends
   secp256k1-haskell = addPkgconfigDepend pkgs.secp256k1 super.secp256k1-haskell;
@@ -743,31 +636,12 @@ builtins.intersectAttrs super {
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend pkgs.gobject-introspection super.haskell-gi-base;
 
-  # requires valid, writeable $HOME
-  hatex-guide = overrideCabal (drv: {
-    preConfigure = ''
-      ${drv.preConfigure or ""}
-      export HOME=$PWD
-    '';
-  }) super.hatex-guide;
-
-  # https://github.com/plow-technologies/servant-streaming/issues/12
-  servant-streaming-server = dontCheck super.servant-streaming-server;
-
   # https://github.com/haskell-servant/servant/pull/1238
   servant-client-core =
     if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then
       appendPatch ./patches/servant-client-core-redact-auth-header.patch super.servant-client-core
     else
       super.servant-client-core;
-
-  # tests run executable, relying on PATH
-  # without this, tests fail with "Couldn't launch intero process"
-  intero = overrideCabal (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/intero:$PATH"
-    '';
-  }) super.intero;
 
   # Break infinite recursion cycle with criterion and network-uri.
   js-flot = dontCheck super.js-flot;
@@ -887,9 +761,6 @@ builtins.intersectAttrs super {
       sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
     '';
   }) super.sbv;
-
-  # The test-suite requires a running PostgreSQL server.
-  Frames-beam = dontCheck super.Frames-beam;
 
   # Test suite requires yices to be in PATH
   crucible-symio = overrideCabal (drv: {
@@ -1050,7 +921,6 @@ builtins.intersectAttrs super {
   HTTP = dontCheck super.HTTP;
 
   # Break infinite recursions.
-  Dust-crypto = dontCheck super.Dust-crypto;
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   snap-server = dontCheck super.snap-server;
@@ -1183,7 +1053,6 @@ builtins.intersectAttrs super {
 
   # The test suites fail because there's no PostgreSQL database running in our
   # build sandbox.
-  hasql-queue = dontCheck super.hasql-queue;
   postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
   postgresql-pure = dontCheck super.postgresql-pure;
 
@@ -1259,14 +1128,6 @@ builtins.intersectAttrs super {
       export NIX_GHC_PACKAGE_PATH_FOR_TEST=$PWD/dist/package.conf.inplace/:$packageConfDir:
     '';
   }) super.ihaskell;
-
-  # tests need to execute the built executable
-  stutter = overrideCabal (drv: {
-    preCheck = ''
-      export PATH=dist/build/stutter:$PATH
-    ''
-    + (drv.preCheck or "");
-  }) super.stutter;
 
   # Install man page and generate shell completions
   pinboard-notes-backup = overrideCabal (drv: {
@@ -1470,35 +1331,6 @@ builtins.intersectAttrs super {
       '';
     }))
   ];
-
-  # ats-format uses cli-setup in Setup.hs which is quite happy to write
-  # to arbitrary files in $HOME. This doesn't either not achieve anything
-  # or even fail, so we prevent it and install everything necessary ourselves.
-  # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
-  ats-format = self.generateOptparseApplicativeCompletions [ "atsfmt" ] (
-    justStaticExecutables (
-      overrideCabal (drv: {
-        # use vanilla Setup.hs
-        preCompileBuildDriver = ''
-          cat > Setup.hs << EOF
-          module Main where
-          import Distribution.Simple
-          main = defaultMain
-          EOF
-        ''
-        + (drv.preCompileBuildDriver or "");
-        # install man page
-        buildTools = [
-          pkgs.buildPackages.installShellFiles
-        ]
-        ++ (drv.buildTools or [ ]);
-        postInstall = ''
-          installManPage man/atsfmt.1
-        ''
-        + (drv.postInstall or "");
-      }) super.ats-format
-    )
-  );
 
   # Some hash implementations are x86 only, but part of the test suite.
   # So executing and building it on non-x86 platforms will always fail.
@@ -1715,9 +1547,6 @@ builtins.intersectAttrs super {
   emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
-
-  # Disable checks to break dependency loop with SCalendar
-  scalendar = dontCheck super.scalendar;
 
   # Make sure we build xz against nixpkgs' xz package instead of
   # Hackage repackaging of the upstream sources.
