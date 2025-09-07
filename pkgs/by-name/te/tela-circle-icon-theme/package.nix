@@ -13,10 +13,7 @@
   colorVariants ? [ ], # default is standard
 }:
 
-let
-  pname = "tela-circle-icon-theme";
-in
-lib.checkListOfEnum "${pname}: color variants"
+lib.checkListOfEnum "tela-circle-icon-theme: color variants"
   [
     "standard"
     "black"
