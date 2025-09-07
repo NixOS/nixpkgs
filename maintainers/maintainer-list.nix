@@ -16140,6 +16140,12 @@
     githubId = 4708337;
     name = "Marcelo A. de L. Santos";
   };
+  maxicode = {
+    email = "ride-mullets-tidal@duck.com";
+    github = "maxicode2";
+    githubId = 65052855;
+    name = "maxicode";
+  };
   maximsmol = {
     email = "maximsmol@gmail.com";
     github = "maximsmol";
