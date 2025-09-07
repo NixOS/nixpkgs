@@ -17,6 +17,7 @@
   stdenv,
   zip,
   zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://fs-uae.net";
