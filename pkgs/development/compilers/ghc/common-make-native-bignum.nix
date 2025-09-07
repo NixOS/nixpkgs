@@ -309,12 +309,7 @@ stdenv.mkDerivation (
       # package db. This fixes linking whenever stdenv and propagation won't
       # quite pass the correct -L flags to the linker, e.g. when using GHC
       # outside of stdenv/nixpkgs or build->build compilation in pkgsStatic.
-      (
-        if lib.versionAtLeast version "9.4" then
-          ./ghc-9.4-rts-package-db-libnuma-dirs.patch
-        else
-          ./ghc-8.10-9.2-rts-package-db-libnuma-dirs.patch
-      )
+      ./ghc-9.4-rts-package-db-libnuma-dirs.patch
     ]
 
     # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first
@@ -333,27 +328,20 @@ stdenv.mkDerivation (
     #
     # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6877
-    ++ (
-      if lib.versionAtLeast version "9.4" then
-        [
-          # Need to use this patch so the next one applies, passes file location info to the cc phase
-          (fetchpatch {
-            name = "ghc-add-location-to-cc-phase.patch";
-            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
-            hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
-          })
-          # Makes Cc phase directly generate object files instead of assembly
-          (fetchpatch {
-            name = "ghc-cc-directly-emit-object.patch";
-            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
-            hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
-          })
-        ]
-      else
-        [
-          # TODO(@sternenseemann): backport changes to GHC < 9.4 if possible
-        ]
-    )
+    ++ [
+      # Need to use this patch so the next one applies, passes file location info to the cc phase
+      (fetchpatch {
+        name = "ghc-add-location-to-cc-phase.patch";
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
+        hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
+      })
+      # Makes Cc phase directly generate object files instead of assembly
+      (fetchpatch {
+        name = "ghc-cc-directly-emit-object.patch";
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
+        hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
+      })
+    ]
 
     ++ [
       # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
@@ -366,36 +354,16 @@ stdenv.mkDerivation (
       })
     ]
 
-    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
-    ++ lib.optionals (lib.versionOlder version "9.4") [
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
-        sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
-        extraPrefix = "utils/haddock/";
-        stripLen = 1;
-      })
-    ]
-
     # Fixes stack overrun in rts which crashes an process whenever
     # freeHaskellFunPtr is called with nixpkgs' hardening flags.
     # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
     # TODO: patch doesn't apply for < 9.4, but may still be necessary?
-    ++ lib.optionals (lib.versionAtLeast version "9.4") [
+    ++ [
       (fetchpatch {
         name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
         url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
         sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
-      })
-    ]
-
-    ++ lib.optionals (lib.versionOlder version "9.4.6") [
-      # Fix docs build with sphinx >= 6.0
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
-      (fetchpatch {
-        name = "ghc-docs-sphinx-6.0.patch";
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
-        sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
       })
     ]
 
@@ -466,8 +434,6 @@ stdenv.mkDerivation (
       export AR_STAGE0="$AR_FOR_BUILD"
 
       echo -n "${buildMK}" > mk/build.mk
-    ''
-    + lib.optionalString (lib.versionAtLeast version "9.4") ''
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
@@ -503,13 +469,6 @@ stdenv.mkDerivation (
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-    ''
-    # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
-    # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
-    + lib.optionalString (lib.versions.majorMinor version == "9.4") ''
-      substituteInPlace configure --replace \
-        'MinBootGhcVersion="9.0"' \
-        'MinBootGhcVersion="8.10"'
     '';
 
     # Although it is usually correct to pass --host, we don't do that here because
