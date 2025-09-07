@@ -6,11 +6,11 @@
   wireguard-go,
 }:
 
+let
+  version = "0.0.20250522";
+in
 buildGoModule (
   finalAttrs:
-  let
-    version = "0.0.20250522";
-  in
   {
     pname = "wireguard-go";
     inherit version;
