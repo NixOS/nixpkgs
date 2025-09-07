@@ -5,7 +5,8 @@
   fetchFromGitHub,
   cmake,
   git,
-  llvmPackages_15,
+  #llvmPackages_15,
+  llvmPackages,
   spirv-llvm-translator,
   buildWithPatches ? true,
 }:
@@ -21,7 +22,8 @@ let
       '';
     });
 
-  llvmPkgs = llvmPackages_15;
+  #llvmPkgs = llvmPackages_15;
+  llvmPkgs = llvmPackages;
   inherit (llvmPkgs) llvm;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
   libclang = if buildWithPatches then passthru.libclang else llvmPkgs.libclang;
@@ -117,7 +119,14 @@ stdenv.mkDerivation {
     license = licenses.ncsa;
     maintainers = [ ];
     platforms = platforms.all;
-    # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
-    broken = stdenv.hostPlatform.isDarwin;
+    broken =
+      # Needs `llvmPackages_15` dependency resolving; see:
+      #
+      # * <https://github.com/NixOS/nixpkgs/pull/440272>
+      # * <https://github.com/NixOS/nixpkgs/pull/440534>
+      true
+
+      # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
+      || stdenv.hostPlatform.isDarwin;
   };
 }
