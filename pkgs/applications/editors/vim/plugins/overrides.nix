@@ -3947,6 +3947,13 @@ assertNoAdditions {
     };
   });
 
+  vim-textobj-line = super.vim-textobj-line.overrideAttrs (old: {
+    dependencies = [ self.vim-textobj-user ];
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ llakala ];
+    };
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";

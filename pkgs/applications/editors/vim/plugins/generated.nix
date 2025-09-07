@@ -21024,6 +21024,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-textobj-line = buildVimPlugin {
+    pname = "vim-textobj-line";
+    version = "2021-09-27";
+    src = fetchFromGitHub {
+      owner = "kana";
+      repo = "vim-textobj-line";
+      rev = "1a6780d29adcf7e464e8ddbcd0be0a9df1a37339";
+      sha256 = "0di9y3nbb9raj0lj7d76cjic4vs1msrqk3gzsl3r7b1qr0y3mdw7";
+    };
+    meta.homepage = "https://github.com/kana/vim-textobj-line/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-textobj-multiblock = buildVimPlugin {
     pname = "vim-textobj-multiblock";
     version = "2014-06-02";
