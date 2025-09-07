@@ -7,20 +7,18 @@
   tabulate,
   coverage,
   flake8,
-  pytest,
   pytestCheckHook,
-  fetchpatch,
 }:
 buildPythonPackage rec {
   pname = "pyquerylist";
-  version = "0-unstable-2025-03-03";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "markmuetz";
     repo = "pyquerylist";
     # no recent releases including the pytest rewrite
-    rev = "1de783a7eddbe0726c6bf49c90153f1130c18ef8";
+    tag = "v${version}";
     hash = "sha256-ZhXFnzCKhcFPH8ayxwnDucD6v4E1y0jIk+3SeARAHlw=";
   };
 
