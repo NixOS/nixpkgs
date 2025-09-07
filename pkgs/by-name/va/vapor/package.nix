@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vapor";
   version = "4.105.0";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
         mkdir -p $out/bin
         cat > $out/bin/vapor-version << 'EOF'
     #!/bin/sh
-    echo "Vapor ${version}"
+    echo "Vapor ${finalAttrs.version}"
     echo "Sources available at: $out/share/vapor"
     echo "To use in your Swift project, add the following to your Package.swift:"
     echo '.package(path: "'$out'/share/vapor")'
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
         runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { attrPath = pname; };
+  passthru.updateScript = nix-update-script { attrPath = finalAttrs.pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Server-side Swift HTTP web framework";
     longDescription = ''
       Vapor is an HTTP web framework for Swift. It provides a beautifully
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
       Vapor allows you to build high-performant, scalable APIs and HTTP servers.
     '';
     homepage = "https://vapor.codes";
-    changelog = "https://github.com/vapor/vapor/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; darwin ++ linux;
+    changelog = "https://github.com/vapor/vapor/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})
