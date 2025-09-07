@@ -62,7 +62,7 @@ let
     stdenv.cc.cc
     stdenv.cc.libc
   ];
-  version = "1.0.41";
+  version = "1.0.43";
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
-    hash = "sha256-x1L0Al/3RDVuAIqA/5ntnU0Iz77N3sPyD0dNHpi+S74=";
+    hash = "sha256-jYidVJgVqm2O/WZT03NseO557R8eT1/js+PwqzDucKw=";
   };
 
   nativeBuildInputs = [

@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "lilex";
-  version = "2.601";
+  version = "2.610";
 
   src = fetchurl {
     url = "https://github.com/mishamyrt/Lilex/releases/download/${version}/Lilex.zip";
-    hash = "sha256-qlgaFNxYExerLPtDCYJW17ph97EWcAhICN6Fnpfljlg=";
+    hash = "sha256-iU0NLIy0wAFFBDSYmjo7tjKQ+I1GJ1hZTkcByxePYGM=";
   };
 
   nativeBuildInputs = [ unzip ];
