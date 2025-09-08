@@ -23,7 +23,7 @@
 }:
 
 # cpp and mpi options are mutually exclusive
-# (--enable-unsupported could be used to force the build)
+# "-DALLOW_UNSUPPORTED=ON" could be used to force the build.
 assert !cppSupport || !mpiSupport;
 
 let
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
   ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
   ++ lib.optionals threadsafe [
-    "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON"
+    "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
     "-DHDF5_BUILD_HL_LIB=OFF"
   ]
   # broken in nixpkgs since around 1.14.3 -> 1.14.4.3

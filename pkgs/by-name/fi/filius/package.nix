@@ -14,7 +14,7 @@ maven.buildMavenPackage rec {
 
   src = fetchFromGitLab {
     owner = "filius1";
-    repo = pname;
+    repo = "filius";
     # they seem to have stopped using the "v" prefix since 2.9.3
     tag = version;
     hash = "sha256-nQyDPLDQe5kFH3PhCmLqAt8kVnitPwX5K3xLnyntF5k=";
