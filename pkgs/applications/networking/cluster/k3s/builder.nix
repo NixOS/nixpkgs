@@ -69,7 +69,7 @@ lib:
   socat,
   sqlite,
   stdenv,
-  systemd,
+  systemdMinimal,
   util-linuxMinimal,
   yq-go,
   zstd,
@@ -380,7 +380,7 @@ buildGoModule (finalAttrs: {
 
   k3sKillallDeps = [
     bash
-    systemd
+    systemdMinimal
     procps
     coreutils
     gnugrep
