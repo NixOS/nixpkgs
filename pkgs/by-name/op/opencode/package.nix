@@ -22,12 +22,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.6.4";
+  version = "0.6.6";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o7SzDGbWgCh8cMNK+PeLxAw0bQMKFouHdedUslpA6gw=";
+    hash = "sha256-f24G9ZDr0tX7w1tcKcTuhAUZlsG6g9+JWyrDw5mVMhQ=";
   };
 
   tui = buildGoModule {
