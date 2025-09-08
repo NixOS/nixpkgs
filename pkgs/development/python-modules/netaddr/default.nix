@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "netaddr";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,19 +24,19 @@ buildPythonPackage rec {
     sed -i "s/IS_MUSL = .*/IS_MUSL = True/" netaddr/tests/__init__.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "netaddr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Network address manipulation library for Python";
     mainProgram = "netaddr";
     homepage = "https://netaddr.readthedocs.io/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";
     changelog = "https://github.com/netaddr/netaddr/blob/${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
