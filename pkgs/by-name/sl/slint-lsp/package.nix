@@ -15,14 +15,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-lsp";
-  version = "1.12.1";
+  version = "1.13.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-adYd/PJ2c+SmJm7CNjCueaqHiHDC2KzFd4tS88wEMS4=";
+    hash = "sha256-xgGkgL2UyRBef57lA4dpVx3RcC7R+1Y2ejV8h6yzQCA=";
   };
 
-  cargoHash = "sha256-Wa07LLcMQ1PxA8CJhaLDu5OllfJYKmJ8uWDfXOu8rus=";
+  cargoHash = "sha256-TgI7MsWtI2mwXuTpaXLRmoNfghLoXqlM1/NIFKNU0Uc=";
 
   rpathLibs = [
     fontconfig
