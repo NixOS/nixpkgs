@@ -9,6 +9,7 @@
   libarchive,
   libpkgconf,
   pkgconf,
+  replaceVars,
   samurai,
   zlib,
   embedSamurai ? false,
@@ -155,6 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  setupHook = replaceVars ./setup-hook.sh {
+    embedSamurai = lib.boolToString embedSamurai;
+    isFreeBSD = lib.boolToString stdenv.hostPlatform.isFreeBSD;
+  };
+
   passthru.srcsAttrs = {
     muon-src = fetchFromSourcehut {
       name = "muon-src";
@@ -200,5 +206,3 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "muon";
   };
 })
-# TODO LIST:
-# 1. setup hook
