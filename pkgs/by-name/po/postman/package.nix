@@ -43,9 +43,9 @@ let
       exit 0
     fi
     update-source-version postman $latestVersion
-    systems=$(nix eval --json -f . postman.meta.platforms | jq --raw-output '.[]')
+    systems=$(nix --extra-experimental-features nix-command eval --json -f . postman.meta.platforms | jq --raw-output '.[]')
     for system in $systems; do
-      hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . postman.src.url --system "$system")))
+      hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix --extra-experimental-features nix-command eval --raw -f . postman.src.url --system "$system")))
       update-source-version postman $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
     done
   '';
