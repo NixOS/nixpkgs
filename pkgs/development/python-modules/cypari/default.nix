@@ -74,7 +74,10 @@ buildPythonPackage rec {
     description = "Sage's PARI extension, modified to stand alone";
     homepage = "https://github.com/3-manifolds/CyPari";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
     changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
   };
 }
