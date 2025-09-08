@@ -20,7 +20,9 @@ let
       (unixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
     ];
 
-  dedicatedRuntimeDirectory = # Set when more than one instance uses unix sockets.
+  dedicatedRuntimeDirectory =
+    # Set when more than one instance uses unix sockets.
+    # This is used to detect if the runtime `anubis` is allowed for backward compatibility.
     let
       instanceUsesUnixSockets = instance: lib.length (unixSocketAddrs instance.settings) > 0;
     in
