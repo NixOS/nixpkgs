@@ -36,7 +36,7 @@ in
 
   options = {
 
-    hardware.enableAllFirmware = lib.mkEnableOption "all firmware regardless of license";
+    hardware.enableAllFirmware = lib.mkEnableOption "all firmware, including unfree packages that must be explictly allowed. Alternatively, use the hardware.enableRedistributableFirmware option";
 
     hardware.enableRedistributableFirmware =
       lib.mkEnableOption "firmware with a license allowing redistribution"
