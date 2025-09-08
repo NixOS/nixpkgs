@@ -12,12 +12,12 @@ let
   ar = if !isCross then "ar" else "${cross}-ar";
   ranlib = if !isCross then "ranlib" else "${cross}-ranlib";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     sed -i 's,set --, set -x; set --,' Makefile
   '';
   pname = "tinycdb";
-  version = "0.80";
+  version = "0.81";
   # In general, static library (.a) goes to "dev", shared (.so) to
   # "lib". In case of static build, there is no .so library, so "lib"
   # output is useless and empty.
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $dev/lib $out/bin
     mv $out/lib/libcdb.a $dev/lib
-    rmdir $out/lib
+    rm --recursive $out/lib
   ''
   + (
     if static then
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
   );
 
   src = fetchurl {
-    url = "http://www.corpit.ru/mjt/tinycdb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-wyG5BekCwsqZo/+Kjd39iCMkf+Ht7IpLuF+Dhpxjn7g=";
+    url = "https://www.corpit.ru/mjt/tinycdb/tinycdb-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Rp3i1EW/VIgPZS9LbclcfN9vVQLDVSSkWyEi1w1H68I=";
   };
 
   meta = with lib; {
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     platforms = platforms.linux;
   };
-}
+})
