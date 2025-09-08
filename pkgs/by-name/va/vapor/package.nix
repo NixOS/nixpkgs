@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://vapor.codes";
     changelog = "https://github.com/vapor/vapor/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fbettag ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 })
