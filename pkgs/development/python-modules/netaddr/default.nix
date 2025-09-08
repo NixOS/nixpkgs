@@ -20,9 +20,13 @@ buildPythonPackage rec {
   # Test suite uses internal packaging._musllinux module to detect libc flavor. The module assumes
   # the python executable is dynamically linked - it then attempts to parse linked library name to
   # detect musl. It won't work on a static build.
-  postPatch = lib.optionalString (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isStatic) ''
-    sed -i "s/IS_MUSL = .*/IS_MUSL = True/" netaddr/tests/__init__.py
-  '';
+  postPatch =
+    if (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isStatic) then
+      ''
+        sed -i "s/IS_MUSL = .*/IS_MUSL = True/" netaddr/tests/__init__.py
+      ''
+    else
+      null;
 
   build-system = [ setuptools ];
 
