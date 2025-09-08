@@ -7,7 +7,7 @@
   boost,
   ceres-solver,
   eigen,
-  freeimage,
+  openimageio,
   glog,
   libGLU,
   glew,
@@ -40,7 +40,7 @@ let
     boost
     eigen
     ceres-solver
-    freeimage
+    openimageio
     glog
     libGLU
     glew
@@ -63,14 +63,17 @@ let
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv'.mkDerivation rec {
-  version = "3.12.5";
+  version = "unstable-2025-08-21";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = version;
-    hash = "sha256-ngmEYCLeCh5pSNmXItV3siY6/DupEHK+dYZ56LWZbhg=";
+    rev = "d478af0ce448251b44e6a4525f8bf640f6cdc9e3";
+    hash = "sha256-UOPm9p5i0+cMmGQYixHDwtxtdM1taHD0QvVyCJPTico=";
   };
+
+  # TODO: remove this when OpenImageIO support is in a release
+  patches = [ ./openimageio.patch ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" false)
@@ -116,6 +119,7 @@ stdenv'.mkDerivation rec {
     maintainers = with maintainers; [
       lebastr
       usertam
+      chpatrick
     ];
   };
 }

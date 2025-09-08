@@ -19,7 +19,7 @@ buildPythonPackage {
 
   inherit (colmap) src version;
 
-  patches = [ ./remove-version-bounds.patch ];
+  patches = colmap.patches ++ [ ./remove-version-bounds.patch ];
 
   pyproject = true;
 

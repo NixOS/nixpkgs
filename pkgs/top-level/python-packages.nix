@@ -12645,7 +12645,7 @@ self: super: with self; {
 
   pycollada = callPackage ../development/python-modules/pycollada { };
 
-  pycolmap = callPackage ../development/python-modules/pycolmap { };
+  pycolmap = callPackage ../development/python-modules/pycolmap { pybind11 = self.pybind11_3; };
 
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
 
