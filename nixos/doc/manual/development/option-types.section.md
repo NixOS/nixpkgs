@@ -232,6 +232,23 @@ merging is handled.
     definitions cannot be merged. The regular expression is processed
     using `builtins.match`.
 
+`types.address.ipv4`
+
+:   An IPv4 address in dot-decimal notation (e.g. `"192.168.1.1"`).
+    Multiple definitions cannot be merged.
+
+`types.address.ipv6`
+
+:   An IPv6 address in standard notation as defined by RFC 5952,
+    including compressed format (e.g. `"2001:db8::1"`), IPv4-mapped
+    addresses (e.g. `"::ffff:192.0.2.128"`), and IPv4-embedded
+    addresses. Multiple definitions cannot be merged.
+
+`types.address.ip`
+
+:   Either an IPv4 or IPv6 address. Accepts any valid IP address in
+    either format. Multiple definitions cannot be merged.
+
 ### Specialised types {#sec-option-types-specialised}
 
 `types.luaInline`
