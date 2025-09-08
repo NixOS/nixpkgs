@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_cron";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "pg_cron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N6lLmfegUeHCpwXztMifTRvajlVLyxL0j+8edouKIOQ=";
+    hash = "sha256-oQjaQeIEMbg5pipY8tT4I7bNdyDOwcr/ZJikqgcEZOs=";
   };
 
   meta = {
