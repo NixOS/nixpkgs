@@ -106,6 +106,12 @@ in
       done
 
       install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 assets/logo-32.png   $out/share/icons/hicolor/32x32/apps/syncthing.png
+      install -Dm644 assets/logo-64.png   $out/share/icons/hicolor/64x64/apps/syncthing.png
+      install -Dm644 assets/logo-128.png  $out/share/icons/hicolor/128x128/apps/syncthing.png
+      install -Dm644 assets/logo-256.png  $out/share/icons/hicolor/256x256/apps/syncthing.png
+      install -Dm644 assets/logo-512.png  $out/share/icons/hicolor/512x512/apps/syncthing.png
+      install -Dm644 assets/logo-only.svg $out/share/icons/hicolor/scalable/apps/syncthing.svg
 
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
