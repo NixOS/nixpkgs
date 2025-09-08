@@ -114,6 +114,8 @@ buildNpmPackage (finalAttrs: {
     })
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
