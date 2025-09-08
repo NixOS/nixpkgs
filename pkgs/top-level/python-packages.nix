@@ -20004,6 +20004,8 @@ self: super: with self; {
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 
+  wikitextprocessor = callPackage ../development/python-modules/wikitextprocessor { };
+
   willow = callPackage ../development/python-modules/willow { };
 
   winacl = callPackage ../development/python-modules/winacl { };
