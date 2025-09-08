@@ -9,6 +9,7 @@
   libappindicator,
   librsvg,
   udevCheckHook,
+  acl,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -61,6 +62,11 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
     pytest-cov-stub
   ];
+
+  preConfigure = ''
+    substituteInPlace lib/solaar/listener.py \
+      --replace-fail /usr/bin/getfacl "${lib.getExe' acl "getfacl"}"
+  '';
 
   # the -cli symlink is just to maintain compabilility with older versions where
   # there was a difference between the GUI and CLI versions.
