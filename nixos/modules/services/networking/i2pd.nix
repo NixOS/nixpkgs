@@ -417,7 +417,7 @@ in
       };
 
       port = mkOption {
-        type = with types; nullOr int;
+        type = with types; nullOr port;
         default = null;
         description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
