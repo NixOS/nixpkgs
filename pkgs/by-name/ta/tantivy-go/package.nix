@@ -15,14 +15,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ksHw+62JwQrzxLuXwYfTLOkC22Miz1Rpl5XX8+vPBcM=";
   };
 
-  cargoHash = "sha256-GKbQFWXKEgYmoTyFCQ/SAgFB7UJpYN2SWwZEiUxd260=";
+  sourceRoot = "${finalAttrs.src.name}/rust";
 
-  cargoPatches = [
-    ./add-Cargo.lock.patch
-  ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rust-stemmers-1.2.0" = "sha256-GJYFQf025U42rJEoI9eIi3xDdK6enptAr3jphuKJdiw=";
+      "tantivy-0.23.0" = "sha256-e2ffM2gRC5eww3xv9izLqukGUgduCt2u7jsqTDX5l8k=";
+      "tantivy-jieba-0.11.0" = "sha256-BDz6+EVksgLkOj/8XXxPMVshI0X1+oLt6alDLMpnLZc=";
+    };
+  };
 
-  cargoRoot = "rust";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+    chmod +w ../bindings.h
+  '';
 
   meta = {
     description = "Tantivy go bindings";
