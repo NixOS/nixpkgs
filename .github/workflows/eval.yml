@@ -222,7 +222,7 @@ jobs:
 
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             const { readFile } = require('node:fs/promises')
@@ -263,7 +263,7 @@ jobs:
           path: versions
 
       - name: Add version comparison table to job summary
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           SYSTEMS: ${{ inputs.systems }}
           VERSIONS: ${{ needs.versions.outputs.versions }}
