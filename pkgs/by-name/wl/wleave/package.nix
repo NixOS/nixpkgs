@@ -10,6 +10,7 @@
   glib,
   gtk4,
   gtk4-layer-shell,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wleave";
@@ -61,6 +62,8 @@ rustPlatform.buildRustPackage rec {
       --fish <(cat completions/wleave.fish) \
       --zsh <(cat completions/_wleave)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Wayland-native logout script written in GTK4";
