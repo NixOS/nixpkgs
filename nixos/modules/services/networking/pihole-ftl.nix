@@ -422,10 +422,15 @@ in
         script =
           let
             days = toString cfg.queryLogDeleter.age;
-            database = "${cfg.stateDirectory}/pihole-FTL.db";
+            database = cfg.settings.files.database;
           in
           ''
             set -euo pipefail
+
+            # Avoid creating an empty database file if it doesn't yet exist
+            if [ ! -f "${database}" ]; then
+              exit 0;
+            fi
 
             echo "Deleting query logs older than ${days} days"
             ${getExe cfg.package} sqlite3 "${database}" "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
