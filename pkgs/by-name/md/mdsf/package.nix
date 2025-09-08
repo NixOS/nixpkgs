@@ -7,7 +7,7 @@
 }:
 let
   pname = "mdsf";
-  version = "0.10.5";
+  version = "0.10.6";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "hougesen";
     repo = "mdsf";
     tag = "v${version}";
-    hash = "sha256-m7VoGozJShEw6qVXScxgX7CCyIh62unVvzjq/W7Ynu8=";
+    hash = "sha256-fWJSCYWbt1P9Y2mZQ3n36SOnW7s3Cu7nmDS9dOv9hII=";
   };
 
-  cargoHash = "sha256-AMo2LPC6RviYu2qx202o0gFIIJdjNJxS/zY06TEcpKw=";
+  cargoHash = "sha256-qwROKSUiTvBix3mxnwtoS9pTlemi9U7oCa/nlERq9sw=";
 
   # many tests fail for various reasons of which most depend on the build sandbox
   doCheck = false;
