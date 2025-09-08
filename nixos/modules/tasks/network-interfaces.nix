@@ -99,7 +99,7 @@ let
   routeOpts = v: {
     options = {
       address = mkOption {
-        type = types.str;
+        type = addrTypeDynamic v;
         description = "IPv${toString v} address of the network.";
       };
 
@@ -133,9 +133,9 @@ let
       };
 
       via = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (if v == 6 then lib.types.address.ipv6 else lib.types.address.ip);
         default = null;
-        description = "IPv${toString v} address of the next hop.";
+        description = "IP${if v == 4 then "v4" else ""} address of the next hop.";
       };
 
       options = mkOption {
