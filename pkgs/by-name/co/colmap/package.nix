@@ -7,7 +7,7 @@
   boost,
   ceres-solver,
   eigen,
-  freeimage,
+  openimageio,
   glog,
   libGLU,
   glew,
@@ -26,6 +26,7 @@
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
   faiss,
+  sqlite,
   llvmPackages,
   gtest,
 }:
@@ -35,18 +36,46 @@ assert cudaSupport -> cudaPackages != { };
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
+  depsAlsoForPycolmap = [
+    boost
+    eigen
+    ceres-solver
+    openimageio
+    glog
+    libGLU
+    glew
+    cgal
+    poselib
+    faiss
+    sqlite
+    gmp
+    mpfr
+    lz4
+    qt5.qtbase
+  ]
+  ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ]
+  ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
+
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv'.mkDerivation rec {
-  version = "3.12.5";
+  version = "unstable-3.12.5-openimageio";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = version;
-    hash = "sha256-ngmEYCLeCh5pSNmXItV3siY6/DupEHK+dYZ56LWZbhg=";
+    rev = "f8edccaa36909713b9d3930e1ca65cb364a38b26";
+    hash = "sha256-0lD7ywM48ODe11u9D3XSk9btqQ4gs/APBFf9IyiXe6g=";
   };
+
+  # TODO: remove this when https://github.com/colmap/colmap/pull/3459 is in a release
+  # This was produced with:
+  # git diff f8edccaa36909713b9d3930e1ca65cb364a38b26 e40c0730020938587c9d4eb7634cbff93cbc2f81
+  patches = [ ./openimageio.patch ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" false)
@@ -66,7 +95,7 @@ stdenv'.mkDerivation rec {
     boost
     ceres-solver
     eigen
-    freeimage
+    openimageio
     glog
     libGLU
     glew
@@ -77,14 +106,8 @@ stdenv'.mkDerivation rec {
     gmp
     mpfr
     xorg.libSM
-    poselib
-    faiss
   ]
-  ++ lib.optionals cudaSupport [
-    cudatoolkit
-    cudaPackages.cuda_cudart.static
-  ]
-  ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
+  ++ depsAlsoForPycolmap;
 
   nativeBuildInputs = [
     cmake
@@ -95,7 +118,7 @@ stdenv'.mkDerivation rec {
     autoAddDriverRunpath
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.depsAlsoForPycolmap = depsAlsoForPycolmap;
 
   meta = with lib; {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
@@ -110,6 +133,7 @@ stdenv'.mkDerivation rec {
     maintainers = with maintainers; [
       lebastr
       usertam
+      chpatrick
     ];
   };
 }
