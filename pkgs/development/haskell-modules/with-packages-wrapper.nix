@@ -68,10 +68,14 @@ let
     )
   );
   hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
-  # CLang is needed on Darwin for -fllvm to work:
+  # Clang is needed on Darwin for -fllvm to work.
+  # GHC >= 9.10 needs an LLVM specific assembler which we use clang for.
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
   llvm = lib.makeBinPath (
-    [ ghc.llvmPackages.llvm ] ++ lib.optional stdenv.targetPlatform.isDarwin ghc.llvmPackages.clang
+    [ ghc.llvmPackages.llvm ]
+    ++ lib.optionals (lib.versionAtLeast ghc.version "9.10" || stdenv.targetPlatform.isDarwin) [
+      ghc.llvmPackages.clang
+    ]
   );
 in
 
