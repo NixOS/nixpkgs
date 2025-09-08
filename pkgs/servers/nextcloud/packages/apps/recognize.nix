@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
     node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
+    rm -r ./build-tmp-napi-v*/
     cd -
 
     # Test tfjs returns exit code 0
