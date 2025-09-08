@@ -280,7 +280,7 @@ in
           assertion =
             !dedicatedRuntimeDirectory
             || lib.all validInstanceUnixSocketAddrs (lib.attrsToList enabledInstances);
-          message = lib.trace (builtins.toString (lib.map validInstanceUnixSocketAddrs (lib.attrsToList enabledInstances))) "use the prefix /run/anubis/anubis-<instance name> in BIND and METRICS_BIND when configuring multiple instances";
+          message = "use the prefix /run/anubis/anubis-<instance name> in BIND and METRICS_BIND when configuring multiple instances";
         }
       ];
 
