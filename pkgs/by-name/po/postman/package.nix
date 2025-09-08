@@ -70,6 +70,7 @@ let
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "postman";
   };
 in
 
