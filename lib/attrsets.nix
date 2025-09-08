@@ -4,7 +4,8 @@
 { lib }:
 
 let
-  inherit (builtins) head length;
+  inherit (builtins) head length typeOf;
+  inherit (lib.asserts) assertMsg;
   inherit (lib.trivial)
     oldestSupportedReleaseIsAtLeast
     mergeAttrs
@@ -1192,6 +1193,125 @@ rec {
           name: value:
           if isAttrs value && cond value then recurse (path ++ [ name ]) value else f (path ++ [ name ]) value
         );
+    in
+    recurse [ ] set;
+
+  /**
+    Apply a function to each leaf (non‐attribute‐set attribute) of a tree of
+    nested attribute sets, returning the results of the function as a list,
+    ordered lexicographically by their attribute paths.
+
+    Like `mapAttrsRecursive`, but concatenates the mapping function results
+    into a list.
+
+    # Inputs
+
+    `f`
+
+    : Mapping function which, given an attribute’s path and value, returns a
+      new value.
+
+      This value will be an element of the list returned by
+      `mapAttrsToListRecursive`.
+
+      The first argument to the mapping function is a list of attribute names
+      forming the path to the leaf attribute. The second argument is the leaf
+      attribute value, which will never be an attribute set.
+
+    `set`
+
+    : Attribute set to map over.
+
+    # Type
+
+    ```
+    mapAttrsToListRecursive :: ([String] -> a -> b) -> AttrSet -> [b]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.mapAttrsToListRecursive` usage example
+
+    ```nix
+    mapAttrsToListRecursive (path: value: "${concatStringsSep "." path}=${value}")
+      { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
+    => [ "n.a=A" "n.m.b=B" "n.m.c=C" "d=D" ]
+    ```
+    :::
+  */
+  mapAttrsToListRecursive = mapAttrsToListRecursiveCond (_: _: true);
+
+  /**
+    Determine the nodes of a tree of nested attribute sets by applying a
+    predicate, then apply a function to the leaves, returning the results
+    as a list, ordered lexicographically by their attribute paths.
+
+    Like `mapAttrsToListRecursive`, but takes an additional predicate to
+    decide whether to recurse into an attribute set.
+
+    Unlike `mapAttrsRecursiveCond` this predicate receives the attribute path
+    as its first argument, in addition to the attribute set.
+
+    # Inputs
+
+    `pred`
+
+    : Predicate to decide whether to recurse into an attribute set.
+
+      If the predicate returns true, `mapAttrsToListRecursiveCond` recurses into
+      the attribute set. If the predicate returns false, it does not recurse
+      but instead applies the mapping function, treating the attribute set as
+      a leaf.
+
+      The first argument to the predicate is a list of attribute names forming
+      the path to the attribute set. The second argument is the attribute set.
+
+    `f`
+
+    : Mapping function which, given an attribute’s path and value, returns a
+      new value.
+
+      This value will be an element of the list returned by
+      `mapAttrsToListRecursiveCond`.
+
+      The first argument to the mapping function is a list of attribute names
+      forming the path to the leaf attribute. The second argument is the leaf
+      attribute value, which may be an attribute set if the predicate returned
+      false.
+
+    `set`
+
+    : Attribute set to map over.
+
+    # Type
+    ```
+    mapAttrsToListRecursiveCond :: ([String] -> AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> [b]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.mapAttrsToListRecursiveCond` usage example
+
+    ```nix
+    mapAttrsToListRecursiveCond
+      (path: as: !(lib.isDerivation as))
+      (path: value: "--set=${lib.concatStringsSep "." path}=${toString value}")
+      {
+        rust.optimize = 2;
+        target = {
+          riscv64-unknown-linux-gnu.linker = pkgs.lld;
+        };
+      }
+    => [ "--set=rust.optimize=2" "--set=target.riscv64-unknown-linux-gnu.linker=/nix/store/sjw4h1k…" ]
+    ```
+    :::
+  */
+  mapAttrsToListRecursiveCond =
+    pred: f: set:
+    let
+      mapRecursive =
+        path: value: if isAttrs value && pred path value then recurse path value else [ (f path value) ];
+      recurse = path: set: concatMap (name: mapRecursive (path ++ [ name ]) set.${name}) (attrNames set);
     in
     recurse [ ] set;
 
