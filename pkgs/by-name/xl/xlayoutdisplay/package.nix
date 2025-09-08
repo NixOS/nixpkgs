@@ -9,14 +9,14 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlayoutdisplay";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "xlayoutdisplay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A37jFhVTW/3QNEf776Oi3ViRK+ebOPRTsEQqdmNhA7E=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement";
     homepage = "https://github.com/alex-courtis/xlayoutdisplay";
-    maintainers = with maintainers; [ dtzWill ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ dtzWill ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "xlayoutdisplay";
   };
-}
+})
