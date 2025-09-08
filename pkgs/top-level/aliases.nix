@@ -2209,6 +2209,7 @@ mapAliases {
   space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
   spatialite_gui = throw "spatialite_gui has been renamed to spatialite-gui"; # Added 2025-01-12
   spatialite_tools = throw "spatialite_tools has been renamed to spatialite-tools"; # Added 2025-02-06
+  sonusmix = throw "'sonusmix' has been removed due to lack of maintenance"; # Added 2025-08-27
 
   # Added 2020-02-10
   sourceHanSansPackages = {
