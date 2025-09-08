@@ -77,6 +77,17 @@ self: super: {
 
   # Jailbreaks & Version Updates
 
+  # Module ‘GHC.Exts’ does not export ‘word32ToInt32#’
+  # Needs {Int,Word}32# primops, https://gitlab.haskell.org/ghc/ghc/-/commit/06982b6cc886d65aa325475ddfb4ad38c69b2d96
+  alex =
+    if pkgs.stdenv.hostPlatform.isBigEndian then
+      (overrideCabal (drv: {
+        version = "3.5.1.0";
+        sha256 = "01rax51p8p91a5jv5i56fny4lzmwgvjlxh767gh9x5gbz23gwbn9";
+      }) super.alex)
+    else
+      super.alex;
+
   # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
   tar = doDistribute (doJailbreak self.tar_0_6_0_0);
   # text-metrics >= 0.3.3 requires GHC2021
@@ -176,6 +187,11 @@ self: super: {
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # Module ‘GHC.Exts’ does not export ‘word32ToInt32#’
+  # Needs {Int,Word}32# primops, https://gitlab.haskell.org/ghc/ghc/-/commit/06982b6cc886d65aa325475ddfb4ad38c69b2d96
+  happy = if pkgs.stdenv.hostPlatform.isBigEndian then super.happy_1_20_1_1 else super.happy;
+  happy-lib = if pkgs.stdenv.hostPlatform.isBigEndian then null else super.happy-lib;
 
   hspec-megaparsec = super.hspec-megaparsec_2_2_0;
 
