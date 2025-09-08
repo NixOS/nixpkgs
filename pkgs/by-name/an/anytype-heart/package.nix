@@ -82,6 +82,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Shared library for Anytype clients";
     homepage = "https://anytype.io/";
+    changelog = "https://github.com/anyproto/anytype-heart/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [
       autrimpo
