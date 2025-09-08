@@ -41,6 +41,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://objfw.nil.im";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.steeleduncan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
