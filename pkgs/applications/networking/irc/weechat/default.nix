@@ -38,6 +38,7 @@
   libargon2,
   extraBuildInputs ? [ ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -172,10 +173,8 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/weechat --version
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell
