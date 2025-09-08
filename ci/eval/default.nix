@@ -267,6 +267,15 @@ let
       chunkSize ? 5000,
       quickTest ? false,
       baseline,
+      # Which maintainer should be considered the author?
+      # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
+      githubAuthorId ? "nixpkgs-ci",
+      # What files have been touched? Defaults to none; use the expression below to calculate it.
+      # ```
+      # git diff --name-only --merge-base master HEAD \
+      #   | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
+      # ```
+      touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]",
     }:
     let
       diffs = symlinkJoin {
@@ -282,10 +291,12 @@ let
           }
         ) evalSystems;
       };
+      comparisonReport = compare {
+        combinedDir = combine { diffDir = diffs; };
+        inherit touchedFilesJson githubAuthorId;
+      };
     in
-    combine {
-      diffDir = diffs;
-    };
+    comparisonReport;
 
 in
 {
