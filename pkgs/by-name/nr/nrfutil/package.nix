@@ -95,11 +95,31 @@ symlinkJoin {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postBuild = ''
-    wrapProgram $out/bin/nrfutil \
-      --prefix PATH ":" "$out/bin" \
-      --set NRF_JLINK_DLL_PATH "${segger-jlink-headless}/lib/libjlinkarm.so"
-  '';
+  postBuild =
+    let
+      wrapProgramArgs = lib.concatStringsSep " " (
+        [
+          ''--prefix PATH : "$out/bin"''
+          ''--prefix PATH : "$out"/lib/nrfutil-npm''
+          ''--prefix PATH : "$out"/lib/nrfutil-nrf5sdk-tools''
+          ''--set NRF_JLINK_DLL_PATH '${segger-jlink-headless}'/lib/libjlinkarm.so''
+          ''--set NRFUTIL_BLE_SNIFFER_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-shim''
+          ''--set NRFUTIL_BLE_SNIFFER_HCI_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-hci-shim''
+        ]
+        ++ (
+          let
+            # These are the extensions with the probe-plugin-worker executable vendored.
+            relevantExtensions = lib.intersectLists [ "nrfutil-device" "nrfutil-trace" ] extensions;
+          in
+          lib.optionals (relevantExtensions != [ ]) [
+            ''--set NRF_PROBE_PATH "$out"/lib/${lib.head relevantExtensions}''
+          ]
+        )
+      );
+    in
+    ''
+      wrapProgram $out/bin/nrfutil ${wrapProgramArgs}
+    '';
 
   passthru = {
     updateScript = ./update.sh;
