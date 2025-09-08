@@ -57,7 +57,7 @@
   sigtool,
   sqlite,
   replaceVars,
-  systemd,
+  systemdLibs,
   tree-sitter,
   texinfo,
   webkitgtk_4_0,
@@ -87,7 +87,7 @@
   withPgtk ? false,
   withSelinux ? stdenv.hostPlatform.isLinux,
   withSQLite3 ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withToolkitScrollBars ? true,
   withTreeSitter ? true,
   withWebP ? true,
@@ -321,7 +321,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals withTreeSitter [
     tree-sitter
