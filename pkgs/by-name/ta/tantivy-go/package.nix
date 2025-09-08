@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       autrimpo
       adda
+      kira-bruneau
     ];
   };
 }
