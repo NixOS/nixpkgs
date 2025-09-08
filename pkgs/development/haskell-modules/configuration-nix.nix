@@ -523,8 +523,14 @@ builtins.intersectAttrs super {
       )
     );
 
-  # Needs help finding LLVM.
-  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
+  # Forces the LLVM backend; upstream signalled intent to remove this
+  # in 2017: <https://github.com/SeanRBurton/spaceprobe/issues/1>.
+  spaceprobe = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace spaceprobe.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.spaceprobe;
 
   # Tries to run GUI in tests
   leksah = dontCheck (
