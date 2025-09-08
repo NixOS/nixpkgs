@@ -254,6 +254,17 @@ in
             )
           ];
 
+          # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/boot/networkd.nix#L3444
+          additionalUpstreamUnits = [
+            "network-online.target"
+            "network-pre.target"
+            "network.target"
+            "nss-lookup.target"
+            "nss-user-lookup.target"
+            "remote-fs-pre.target"
+            "remote-fs.target"
+          ];
+
           services.ifstate-initrd = {
             description = "IfState initrd";
 
