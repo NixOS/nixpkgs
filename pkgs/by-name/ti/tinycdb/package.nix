@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Rp3i1EW/VIgPZS9LbclcfN9vVQLDVSSkWyEi1w1H68I=";
   };
 
-  meta = with lib; {
+  meta = {
 
     description = "Utility to manipulate constant databases (cdb)";
     mainProgram = "cdb";
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.corpit.ru/mjt/tinycdb.html";
-    license = licenses.publicDomain;
-    platforms = platforms.linux;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.linux;
   };
 })
