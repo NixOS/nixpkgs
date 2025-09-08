@@ -68,13 +68,18 @@ let
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface: "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
+  addrTypeDynamic =
+    v:
+    assert v == 4 || v == 6;
+    if v == 4 then lib.types.address.ipv4 else lib.types.address.ipv6;
+
   addrOpts =
     v:
     assert v == 4 || v == 6;
     {
       options = {
         address = mkOption {
-          type = types.str;
+          type = addrTypeDynamic v;
           description = ''
             IPv${toString v} address of the interface. Leave empty to configure the
             interface using DHCP.
