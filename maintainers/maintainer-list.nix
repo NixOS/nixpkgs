@@ -22618,6 +22618,13 @@
     githubId = 766350;
     name = "Richard Zetterberg";
   };
+  S0AndS0 = {
+    name = "S0AndS0";
+    email = "S0AndS0@digital-mercenaries.com";
+    github = "S0AndS0";
+    githubId = 4116150;
+    matrix = "@s0ands0:matrix.org";
+  };
   s0me1newithhand7s = {
     name = "hand7s";
     email = "s0me1newithhand7s@gmail.com";
