@@ -5,7 +5,7 @@
   fetchFromGitHub,
   hypothesis,
   hatchling,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonOlder,
   trustme,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiosmtpd
     hypothesis
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
     trustme
   ];
