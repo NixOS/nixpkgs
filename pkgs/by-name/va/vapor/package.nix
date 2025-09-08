@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vapor";
-  version = "4.105.0";
+  version = "4.115.1";
 
   src = fetchFromGitHub {
     owner = "vapor";
     repo = "vapor";
-    rev = "7aa836b77626bf07e71d5f50b9ad87cbe439ed81";
-    hash = "sha256-AyuxnJFUoo+l5xOCyXl74dh/WzH9TiZmNLzPAT0P7uM=";
+    tag = finalAttrs.version;
+    hash = "sha256-mOTZucGKOCjNghdGC3H7g5Kwjgn9DTn7mI6Q91Oitis=";
   };
 
   dontBuild = true;
