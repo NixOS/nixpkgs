@@ -83,6 +83,8 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
 
@@ -96,7 +98,7 @@ buildPythonPackage {
   cmakeFlags = [
     (lib.cmakeFeature "COMPUTE_BACKEND" (if cudaSupport then "cuda" else "cpu"))
   ];
-  CUDA_HOME = "${cuda-native-redist}";
+  CUDA_HOME = lib.optionalString cudaSupport "${cuda-native-redist}";
   NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
     "-I${cuda-native-redist}/include"
     "-L${cuda-native-redist}/lib"
