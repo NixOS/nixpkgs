@@ -162,7 +162,9 @@ let
   gatewayCoerce = address: { inherit address; };
 
   gatewayOpts =
+    v:
     { ... }:
+    assert v == 4 || v == 6;
     {
 
       options = {
@@ -670,7 +672,7 @@ in
         interface = "enp3s0";
         source = "131.211.84.2";
       };
-      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule (gatewayOpts 4)));
       description = ''
         The default gateway. It can be left empty if it is auto-detected through DHCP.
         It can be specified as a string or an option set along with a network interface.
@@ -684,7 +686,7 @@ in
         interface = "enp3s0";
         source = "2001:4d0:1e04:895::2";
       };
-      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule (gatewayOpts 6)));
       description = ''
         The default ipv6 gateway. It can be left empty if it is auto-detected through DHCP.
         It can be specified as a string or an option set along with a network interface.
