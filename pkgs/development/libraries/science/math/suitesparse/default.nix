@@ -80,7 +80,7 @@ effectiveStdenv.mkDerivation rec {
     "CFLAGS=-DBLAS64"
   ]
   ++ lib.optionals enableCuda [
-    "CUDA_PATH=${cudaPackages.cuda_nvcc}"
+    "CUDA_PATH=${lib.getBin cudaPackages.cuda_nvcc}"
     "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
     "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
   ]
