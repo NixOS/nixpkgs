@@ -19555,6 +19555,8 @@ self: super: with self; {
 
   utils = callPackage ../development/python-modules/utils { };
 
+  utitools = callPackage ../development/python-modules/utitools { };
+
   uuid6 = callPackage ../development/python-modules/uuid6 { };
 
   uv = callPackage ../development/python-modules/uv { inherit (pkgs) uv; };
