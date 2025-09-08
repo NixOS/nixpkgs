@@ -276,6 +276,8 @@ let
 
         conan-lwt = callPackage ../development/ocaml-modules/conan/lwt.nix { };
 
+        conan-unix = callPackage ../development/ocaml-modules/conan/unix.nix { };
+
         conduit = callPackage ../development/ocaml-modules/conduit { };
 
         conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
