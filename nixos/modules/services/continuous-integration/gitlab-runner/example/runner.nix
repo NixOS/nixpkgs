@@ -41,7 +41,7 @@ let
   };
 
   # The prebuild script which is run before every job.
-  preBuildScript = pkgs.callPackage ./scripts/runner-prebuild-script.nix;
+  preBuildScript = pkgs.callPackage ./scripts/runner-prebuild-script.nix { };
 
   # Bootstrap packages which should always be in the `/nix/store`.
   bootstrapPkgs = [
@@ -273,7 +273,7 @@ in
       }
       //
       # Workaround to add the job images to the registry.
-      lib.mapAttrs (name: image: {
+      lib.concatMapAttrs (name: image: {
         "${name}-container" = {
           imageFile = jobImages.${name};
           image = "${jobImageNames.${name}}:latest";
