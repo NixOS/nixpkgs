@@ -161,7 +161,7 @@ in
       {
         assertion =
           cfg.settings != null
-          -> lib.foldl (a: b: a && b) true (
+          -> builtins.all (b: b) (
             lib.mapAttrsToList (
               mcu: _: mcu != null -> (lib.hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)
             ) cfg.firmwares
