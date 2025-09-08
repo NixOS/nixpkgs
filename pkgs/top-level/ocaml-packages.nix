@@ -270,6 +270,8 @@ let
 
         colors = callPackage ../development/ocaml-modules/colors { };
 
+        conan = callPackage ../development/ocaml-modules/conan { };
+
         conduit = callPackage ../development/ocaml-modules/conduit { };
 
         conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
