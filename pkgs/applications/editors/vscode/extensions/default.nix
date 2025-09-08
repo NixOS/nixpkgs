@@ -3698,6 +3698,22 @@ let
 
       oops418.nix-env-picker = callPackage ./oops418.nix-env-picker { };
 
+      patbenatar.advanced-new-file = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "advanced-new-file";
+          publisher = "patbenatar";
+          version = "1.2.2";
+          hash = "sha256-z1QYlYn0RSy2FWCZBYYHbN5BTWp4cp/sOy19tRr1RiU=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/patbenatar.advanced-new-file/changelog";
+          description = "Create files anywhere in your workspace from the keyboard";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=patbenatar.advanced-new-file";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
       ph-hawkins.arc-plus = callPackage ./ph-hawkins.arc-plus { };
 
       phind.phind = buildVscodeMarketplaceExtension {
