@@ -532,6 +532,14 @@ builtins.intersectAttrs super {
     '';
   }) super.spaceprobe;
 
+  # Forces the LLVM backend.
+  GlomeVec = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace GlomeVec.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.GlomeVec;
+
   # Tries to run GUI in tests
   leksah = dontCheck (
     overrideCabal (drv: {
