@@ -112,7 +112,8 @@ in
   isLibrary ? !isExecutable,
   jailbreak ? false,
   license,
-  enableParallelBuilding ? true,
+  # Some bug in older releases is causing built Setup binaries to segfault when using parallelism on POWER
+  enableParallelBuilding ? !stdenv.hostPlatform.isPower || lib.versionAtLeast ghc.version "8.10",
   maintainers ? null,
   teams ? null,
   changelog ? null,
