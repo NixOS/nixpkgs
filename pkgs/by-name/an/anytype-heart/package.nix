@@ -87,6 +87,7 @@ buildGoModule {
     maintainers = with lib.maintainers; [
       autrimpo
       adda
+      kira-bruneau
     ];
     platforms = [
       "x86_64-linux"
