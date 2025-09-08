@@ -9131,6 +9131,8 @@ self: super: with self; {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+  mediawiki-langcodes = callPackage ../development/python-modules/mediawiki-langcodes { };
+
   medpy = callPackage ../development/python-modules/medpy { };
 
   medvol = callPackage ../development/python-modules/medvol { };
