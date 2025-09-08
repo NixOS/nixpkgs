@@ -12,6 +12,7 @@
   autoPatchelfHook,
   versionCheckHook,
   makeWrapper,
+  installShellFiles,
 
   symlinkJoin,
   extensions ? [ ],
@@ -36,55 +37,64 @@ let
     ];
   };
 
-  packages = map (
-    name:
-    let
-      package = platformSources.packages.${name};
-    in
-    stdenvNoCC.mkDerivation (finalAttrs: {
-      pname = name;
-      inherit (package) version;
+  packages =
+    map
+      (
+        name:
+        let
+          package = platformSources.packages.${name};
+        in
+        stdenvNoCC.mkDerivation (finalAttrs: {
+          pname = name;
+          inherit (package) version;
 
-      src = fetchurl {
-        url = "https://files.nordicsemi.com/artifactory/swtools/external/nrfutil/packages/${name}/${name}-${platformSources.triplet}-${package.version}.tar.gz";
-        inherit (package) hash;
-      };
+          src = fetchurl {
+            url = "https://files.nordicsemi.com/artifactory/swtools/external/nrfutil/packages/${name}/${name}-${platformSources.triplet}-${package.version}.tar.gz";
+            inherit (package) hash;
+          };
 
-      nativeBuildInputs = [
-        autoPatchelfHook
-      ];
+          nativeBuildInputs = [
+            autoPatchelfHook
+          ];
 
-      buildInputs = [
-        xz
-        zlib
-        libusb1
-        gcc.cc.lib
-        segger-jlink-headless
-      ];
+          buildInputs = [
+            xz
+            zlib
+            libusb1
+            gcc.cc.lib
+            segger-jlink-headless
+          ];
 
-      dontConfigure = true;
-      dontBuild = true;
+          dontConfigure = true;
+          dontBuild = true;
 
-      installPhase = ''
-        runHook preInstall
+          installPhase = ''
+            runHook preInstall
 
-        mkdir -p $out
-        mv data/* $out/
+            mkdir -p $out
+            mv data/* $out/
 
-        runHook postInstall
-      '';
+            runHook postInstall
+          '';
 
-      doInstallCheck = true;
-      nativeInstallCheckInputs = [
-        versionCheckHook
-      ];
-      versionCheckProgramArg = "--version";
+          doInstallCheck = true;
+          nativeInstallCheckInputs = [
+            versionCheckHook
+          ];
+          versionCheckProgramArg = "--version";
 
-      meta = sharedMeta // {
-        mainProgram = name;
-      };
-    })
-  ) ([ "nrfutil" ] ++ extensions);
+          meta = sharedMeta // {
+            mainProgram = name;
+          };
+        })
+      )
+      (
+        [
+          "nrfutil"
+          "nrfutil-completion"
+        ]
+        ++ extensions
+      );
 
 in
 symlinkJoin {
@@ -93,7 +103,10 @@ symlinkJoin {
 
   paths = packages;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   postBuild =
     let
@@ -118,7 +131,11 @@ symlinkJoin {
       );
     in
     ''
-      wrapProgram $out/bin/nrfutil ${wrapProgramArgs}
+      wrapProgram "$out"/bin/nrfutil ${wrapProgramArgs}
+
+      installShellCompletion --cmd nrfutil \
+        --bash $(realpath "$out"/share/nrfutil-completion/scripts/bash/setup.bash) \
+        --zsh $(realpath "$out"/share/nrfutil-completion/scripts/zsh/_nrfutil)
     '';
 
   passthru = {
