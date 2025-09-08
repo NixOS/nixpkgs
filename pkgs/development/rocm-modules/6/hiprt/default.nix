@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprt";
-  version = "2.5.a21e075.3";
+  version = "3.0.9ba63f3";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "HIPRT";
     tag = finalAttrs.version;
-    sha256 = "sha256-3yGhwIsFHlFMCEzuYnXuXNzs99m7f2LTkYaTGs0GEcI=";
+    sha256 = "sha256-At5BZTNR3ks0hRoxIfNnKWThhf40RAq6GWYnVzAh9Zg=";
   };
 
   postPatch = ''
