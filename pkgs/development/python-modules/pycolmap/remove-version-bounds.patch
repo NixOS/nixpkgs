@@ -1,30 +1,20 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 25be4362..475d6da0 100644
+index bf546aca..3edec448 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -1,11 +1,10 @@
  [build-system]
  requires = [
 -    "scikit-build-core>=0.3.3",
--    "pybind11==2.13.6",
--    "pybind11_stubgen @ git+https://github.com/sarlinpe/pybind11-stubgen@sarlinpe/fix-2024-11",
+-    "pybind11==3.0.0",
+-    "pybind11_stubgen @ git+https://github.com/sarlinpe/pybind11-stubgen@sarlinpe/fix-2025-08-20",
 +    "scikit-build-core",
 +    "pybind11",
 +    "pybind11_stubgen",
      "numpy",
--    "ruff==0.6.7",
+-    "ruff==0.12.7",
 -    "clang-format==19.1.0",
 +    "ruff",
  ]
  build-backend = "scikit_build_core.build"
- 
-diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
-index 95a1c71f..8fab18d9 100644
---- a/python/CMakeLists.txt
-+++ b/python/CMakeLists.txt
-@@ -1,4 +1,4 @@
--cmake_minimum_required(VERSION 3.10)
-+cmake_minimum_required(VERSION 3.15)
- project(${SKBUILD_PROJECT_NAME} VERSION ${SKBUILD_PROJECT_VERSION})
- option(GENERATE_STUBS "Whether to generate stubs" ON)
  
