@@ -73,6 +73,7 @@ lib:
   util-linuxMinimal,
   yq-go,
   zstd,
+  versionCheckHook,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -451,11 +452,8 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/k3s --version | grep -F "v${k3sVersion}" >/dev/null
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit airgap-images;
