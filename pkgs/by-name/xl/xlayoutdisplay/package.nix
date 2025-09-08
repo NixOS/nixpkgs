@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   xorg,
   boost,
@@ -18,6 +19,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-A37jFhVTW/3QNEf776Oi3ViRK+ebOPRTsEQqdmNhA7E=";
   };
+
+  patches = [
+    # https://github.com/alex-courtis/xlayoutdisplay/pull/34
+    (fetchpatch2 {
+      name = "cpp-version.patch";
+      url = "https://github.com/alex-courtis/xlayoutdisplay/commit/56983b45070edde78cc816d9cff4111315e94a7a.patch";
+      hash = "sha256-zd28Nkw8Kmm20zGT6wvdBHcHfE4p+RFotUO9zJwPQMc=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with xorg; [
