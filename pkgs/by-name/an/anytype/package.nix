@@ -127,6 +127,7 @@ buildNpmPackage {
       running-grass
       autrimpo
       adda
+      kira-bruneau
     ];
     platforms = [
       "x86_64-linux"
