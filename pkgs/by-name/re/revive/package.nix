@@ -24,7 +24,8 @@ buildGoModule rec {
       rm -rf $out/.git
     '';
   };
-  vendorHash = "sha256-0MMkIXhZbL6fCYxsIXUenMYVwu9i4KvxxMUh5QjfoN0=";
+  proxyVendor = true;
+  vendorHash = "sha256-SCZvPVPf0HSS3BLlp+BK53PGupmHXFYsOk7WT5WXXxU=";
 
   ldflags = [
     "-s"
