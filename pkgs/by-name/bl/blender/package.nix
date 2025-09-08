@@ -24,6 +24,7 @@
   glew,
   gmp,
   hipSupport ? false,
+  hiprtSupport ? false,
   jackaudioSupport ? false,
   jemalloc,
   lib,
@@ -139,6 +140,9 @@ stdenv'.mkDerivation (finalAttrs: {
     + (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+    '')
+    + (lib.optionalString hiprtSupport ''
+      substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"libhiprt64.so",' '"${rocmPackages.hiprt}/lib/libhiprt64.so",'
     '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -158,6 +162,11 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DWITH_CODEC_SNDFILE=ON"
     "-DWITH_CPU_CHECK=OFF"
     "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
+    "-DWITH_CYCLES_DEVICE_HIP=${if hipSupport then "ON" else "OFF"}"
+    "-DWITH_CYCLES_DEVICE_HIPRT=${if hiprtSupport then "ON" else "OFF"}"
+    "-DWITH_CYCLES_HIP_BINARIES=${if hiprtSupport then "ON" else "OFF"}"
+    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
+    "-DHIPRT_INCLUDE_DIR=${rocmPackages.hiprt}/include"
     "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_OSL=OFF"
     "-DWITH_FFTW3=ON"
@@ -185,6 +194,9 @@ stdenv'.mkDerivation (finalAttrs: {
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
     "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
     "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ]
+  ++ lib.optionals hiprtSupport [
+    rocmPackages.hipcc
   ]
   ++ lib.optionals waylandSupport [
     "-DWITH_GHOST_WAYLAND=ON"
