@@ -62,7 +62,6 @@
   texinfo,
   webkitgtk_4_0,
   wrapGAppsHook3,
-  writeText,
   zlib,
 
   # Boolean flags
