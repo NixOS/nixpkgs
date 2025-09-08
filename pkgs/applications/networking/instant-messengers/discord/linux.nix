@@ -47,7 +47,7 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
   libappindicator-gtk3,
   libdbusmenu,
   writeScript,
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   libPath = lib.makeLibraryPath (
     [
       libcxx
-      systemd
+      systemdLibs
       libpulseaudio
       libdrm
       libgbm
