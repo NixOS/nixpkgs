@@ -111,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mevislab.github.io/pythonqt/";
     license = licenses.lgpl21;
     platforms = platforms.all;
-    maintainers = with maintainers; [ hlolli ];
+    maintainers = with maintainers; [
+      hlolli
+      nim65s
+    ];
     # ref. https://github.com/MeVisLab/pythonqt/issues/276
     broken = stdenv.hostPlatform.isDarwin && qt6Support;
   };
