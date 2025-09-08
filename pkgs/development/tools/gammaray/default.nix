@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KDAB/GammaRay";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
     mainProgram = "gammaray";
   };
 }

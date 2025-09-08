@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "skops";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
     tag = "v${version}";
-    hash = "sha256-OLRnaG++5Z7Y0WZnvfdPn6iIXzum5FTL0+geiO5QjYs=";
+    hash = "sha256-1550LIVyChqP5q4VZmflCXPyXXg4eHJU5AlVQJD2M8c=";
   };
 
   build-system = [ hatchling ];
