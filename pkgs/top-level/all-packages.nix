@@ -12117,7 +12117,7 @@ with pkgs;
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
+  kiwix = qt6Packages.callPackage ../applications/misc/kiwix { };
 
   kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
 
