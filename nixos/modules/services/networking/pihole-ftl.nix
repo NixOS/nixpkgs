@@ -198,6 +198,19 @@ in
         '';
       };
     };
+
+    webserverEnabled = mkOption {
+      type = types.bool;
+      default = (
+        (hasAttrByPath [ "webserver" "port" ] cfg.settings)
+        && !builtins.elem cfg.settings.webserver.port [
+          ""
+          null
+        ]
+      );
+      internal = true;
+      description = "Whether the webserver is enabled.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -208,15 +221,7 @@ in
       }
 
       {
-        assertion =
-          builtins.length cfg.lists == 0
-          || (
-            (hasAttrByPath [ "webserver" "port" ] cfg.settings)
-            && !builtins.elem cfg.settings.webserver.port [
-              ""
-              null
-            ]
-          );
+        assertion = builtins.length cfg.lists == 0 || cfg.webserverEnabled;
         message = ''
           The Pi-hole webserver must be enabled for lists set in services.pihole-ftl.lists to be automatically loaded on startup via the web API.
           services.pihole-ftl.settings.port must be defined, e.g. by enabling services.pihole-web.enable and defining services.pihole-web.port.
@@ -348,6 +353,8 @@ in
 
       pihole-ftl-setup = {
         description = "Pi-hole FTL setup";
+        enable = builtins.length cfg.lists > 0;
+
         # Wait for network so lists can be downloaded
         after = [ "network-online.target" ];
         requires = [ "network-online.target" ];

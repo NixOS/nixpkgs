@@ -1193,6 +1193,7 @@ in
   pict-rs = runTest ./pict-rs.nix;
   pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
+  pihole-ftl = import ./pihole-ftl { inherit runTest; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = runTest ./plausible.nix;
