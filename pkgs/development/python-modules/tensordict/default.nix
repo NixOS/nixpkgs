@@ -29,15 +29,20 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-OdS9dw/BtSLZuY857O2njlFOMQj5IJ6v9c2aRP+H1Hc=";
+    hash = "sha256-yxyA9BfN2hp1C3s+g2zBM2gVtckH3LV7luWw8DshFUs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
 
   build-system = [
     pybind11
