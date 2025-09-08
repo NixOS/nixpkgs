@@ -176,6 +176,11 @@ in
           "network.target"
         ];
 
+        unitConfig = {
+          # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
+          DefaultDependencies = "no";
+        };
+
         # mount is always available on nixos, avoid adding additional store paths to the closure
         path = [ "/run/wrappers" ];
 
@@ -290,6 +295,11 @@ in
             wants = [
               "network.target"
             ];
+
+            unitConfig = {
+              # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
+              DefaultDependencies = "no";
+            };
 
             # mount is always available on nixos, avoid adding additional store paths to the closure
             # https://github.com/NixOS/nixpkgs/blob/2b8e2457ebe576ebf41ddfa8452b5b07a8d493ad/nixos/modules/system/boot/systemd/initrd.nix#L550-L551
