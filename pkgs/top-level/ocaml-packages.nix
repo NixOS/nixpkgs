@@ -272,6 +272,8 @@ let
 
         conan = callPackage ../development/ocaml-modules/conan { };
 
+        conan-database = callPackage ../development/ocaml-modules/conan/database.nix { };
+
         conduit = callPackage ../development/ocaml-modules/conduit { };
 
         conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
