@@ -11,13 +11,8 @@ with pkgs;
         let
           pkgSets = lib.pipe pkgNames [
             (filter (lib.hasPrefix "llvmPackages"))
-            (filter (n: n != "rocmPackages.llvm"))
-            # Are throw aliases.
-            (filter (n: n != "llvmPackages_rocm"))
+            # Are aliases.
             (filter (n: n != "llvmPackages_latest"))
-            (filter (n: n != "llvmPackages_6"))
-            (filter (n: n != "llvmPackages_7"))
-            (filter (n: n != "llvmPackages_8"))
             (filter (n: n != "llvmPackages_9"))
             (filter (n: n != "llvmPackages_10"))
             (filter (n: n != "llvmPackages_11"))
@@ -42,6 +37,10 @@ with pkgs;
               (filter (n: n != "gcc6Stdenv"))
               (filter (n: n != "gcc7Stdenv"))
               (filter (n: n != "gcc8Stdenv"))
+              (filter (n: n != "gcc9Stdenv"))
+              (filter (n: n != "gcc10Stdenv"))
+              (filter (n: n != "gcc11Stdenv"))
+              (filter (n: n != "gcc12Stdenv"))
             ]
             ++
               lib.optionals
