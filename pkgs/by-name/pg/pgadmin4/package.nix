@@ -20,14 +20,14 @@
 
 let
   pname = "pgadmin";
-  version = "9.7";
-  yarnHash = "sha256-c+qPT9E4a/xqgSmfE0OnzLP31k0dXC6b2fwXnBKZjuE=";
+  version = "9.8";
+  yarnHash = "sha256-NvQlrDXn9sa4MpytFYPsC4bKO8Thx/MuqG8M6VIa2ig=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-UpeqEjaXm4mHVLpgJM1/pa2mhM6WbqW4A4U9u3RK+qw=";
+    hash = "sha256-gnVrMuxWV7lAol1gyONbhtuUL4EEOfOPkRUM2esMgi0=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests

@@ -343,8 +343,6 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
-  copilot-language-server-fhs = copilot-language-server.fhs;
-
   cup-docker-noserver = cup-docker.override { withServer = false; };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
