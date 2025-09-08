@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tantivy go bindings";
     homepage = "https://github.com/anyproto/tantivy-go";
+    changelog = "https://github.com/anyproto/tantivy-go/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       autrimpo
