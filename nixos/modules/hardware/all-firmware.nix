@@ -85,16 +85,6 @@ in
         ++ lib.optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware;
     })
     (lib.mkIf cfg.enableAllFirmware {
-      assertions = [
-        {
-          assertion = cfg.enableAllFirmware -> pkgs.config.allowUnfree;
-          message = ''
-            the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
-              This requires nixpkgs.config.allowUnfree to be true.
-              An alternative is to use the hardware.enableRedistributableFirmware option.
-          '';
-        }
-      ];
       hardware.firmware =
         with pkgs;
         [
