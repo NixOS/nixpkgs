@@ -77,6 +77,8 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsToListRecursive
+    mapAttrsToListRecursiveCond
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -3564,6 +3566,118 @@ runTests {
       133
       233
       333
+    ];
+  };
+
+  testMapAttrsToListRecursive = {
+    expr = mapAttrsToListRecursive (p: v: "${concatStringsSep "." p}=${v}") {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "a.b=A"
+      "c.d=B"
+      "c.e.f=C"
+      "c.e.g=D"
+      "h.i.j.k=E"
+    ];
+  };
+
+  testMapAttrsToListRecursiveWithLists = {
+    expr = mapAttrsToListRecursive (p: v: v) {
+      a = [ ];
+      b = {
+        c = [ [ ] ];
+      };
+      d = {
+        e = {
+          f = [ [ [ ] ] ];
+        };
+      };
+    };
+    expected = [
+      [ ]
+      [ [ ] ]
+      [ [ [ ] ] ]
+    ];
+  };
+
+  testMapAttrsToListRecursiveCond = {
+    expr = mapAttrsToListRecursiveCond (p: as: !(as ? stop)) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          stop = null;
+          f = "C";
+          g = {
+            h = "D";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        stop = null;
+        f = "C";
+        g = {
+          h = "D";
+        };
+      }
+    ];
+  };
+
+  testMapAttrsToListRecursiveCondPath = {
+    expr = mapAttrsToListRecursiveCond (p: as: length p < 2) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        f = "C";
+        g = "D";
+      }
+      {
+        j = {
+          k = "E";
+        };
+      }
     ];
   };
 
