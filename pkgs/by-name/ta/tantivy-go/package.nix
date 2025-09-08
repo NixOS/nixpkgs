@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tantivy-go";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "tantivy-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ksHw+62JwQrzxLuXwYfTLOkC22Miz1Rpl5XX8+vPBcM=";
   };
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoRoot = "rust";
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   meta = {
     description = "Tantivy go bindings";
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
       kira-bruneau
     ];
   };
-}
+})
