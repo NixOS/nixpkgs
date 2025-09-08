@@ -1,4 +1,7 @@
 {
+  "module-service-gitlab-runner": [
+    "index.html#module-service-gitlab-runner#module-service-gitlab-runner"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
