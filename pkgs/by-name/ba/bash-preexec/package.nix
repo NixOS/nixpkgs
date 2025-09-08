@@ -26,20 +26,28 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   patchPhase = ''
+    runHook prePatch
+
     # Needed since the tests expect that HISTCONTROL is set.
     sed -i '/setup()/a HISTCONTROL=""' test/bash-preexec.bats
 
     # Skip tests failing with Bats 1.5.0.
     # See https://github.com/rcaloras/bash-preexec/issues/121
     sed -i '/^@test.*IFS/,/^}/d' test/bash-preexec.bats
+
+    runHook postPatch
   '';
 
   checkPhase = ''
+    runHook preCheck
     bats test
+    runHook postCheck
   '';
 
   installPhase = ''
-    install -Dm755 $src/bash-preexec.sh $out/share/bash/bash-preexec.sh
+    runHook preInstall
+    install -Dm755 bash-preexec.sh $out/share/bash/bash-preexec.sh
+    runHook postInstall
   '';
 
   meta = with lib; {
