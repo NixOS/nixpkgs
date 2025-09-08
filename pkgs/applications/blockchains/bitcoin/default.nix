@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ python3 ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkFlags = [
     "LC_ALL=en_US.UTF-8"

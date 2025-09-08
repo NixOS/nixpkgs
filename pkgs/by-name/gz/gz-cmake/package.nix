@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ python3 ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # Extract the version by matching the tag's prefix.
   passthru.updateScript = nix-update-script {

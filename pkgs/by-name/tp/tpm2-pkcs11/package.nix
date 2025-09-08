@@ -158,7 +158,7 @@ chosenStdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   dontStrip = true;
   dontPatchELF = true;
 

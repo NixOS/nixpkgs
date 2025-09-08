@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "Z3_JAVA_JAR_INSTALLDIR" "${placeholder "java"}/share/java")
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkPhase = ''
     runHook preCheck
 
