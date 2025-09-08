@@ -14834,8 +14834,6 @@ with pkgs;
     enableJupyter = false;
   };
 
-  speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
-
   ### SCIENCE / MISC
 
   boinc-headless = boinc.override { headless = true; };
