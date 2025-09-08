@@ -42,14 +42,14 @@
   scanSnapDriversPackage ? sane-drivers.epjitsu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sane-backends";
   version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sane-project";
     repo = "backends";
-    rev = "refs/tags/${version}";
+    tag = finalAttrs.version;
     hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
@@ -131,8 +131,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-lockdir=/var/lock/sane"
   ]
-  ++ lib.optional (avahi != null) "--with-avahi"
-  ++ lib.optional (libusb1 != null) "--with-usb";
+  ++ lib.optionals (avahi != null) [ "--with-avahi" ]
+  ++ lib.optionals (libusb1 != null) [ "--with-usb" ];
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-
       compatFirmware =
         extraFirmware
         ++ lib.optional (gt68xxFirmware != null) {
@@ -160,7 +159,6 @@ stdenv.mkDerivation rec {
         mkdir -p $out/share/sane/${f.backend}
         ln -sv ${f.src} $out/share/sane/${f.backend}/${f.name}
       '';
-
     in
     ''
       mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
@@ -208,4 +206,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.symphorien ];
   };
-}
+})
