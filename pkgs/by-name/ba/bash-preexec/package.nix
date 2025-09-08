@@ -15,8 +15,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "rcaloras";
     repo = "bash-preexec";
-    rev = version;
-    sha256 = "sha256-4DzbeIiUX7iXy2CeSvRC2X+XnjVk+/UiMbM/dLHx7zU=";
+    tag = version;
+    hash = "sha256-4DzbeIiUX7iXy2CeSvRC2X+XnjVk+/UiMbM/dLHx7zU=";
   };
 
   nativeCheckInputs = [ bats ];
@@ -50,14 +50,15 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Preexec and precmd functions for Bash just like Zsh";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/rcaloras/bash-preexec";
-    maintainers = [
-      maintainers.hawkw
-      maintainers.rycee
+    changelog = "https://github.com/rcaloras/bash-preexec/releases/tag/${version}";
+    maintainers = with lib.maintainers; [
+      hawkw
+      rycee
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
