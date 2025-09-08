@@ -7,6 +7,7 @@
 
 let
   inherit (lib)
+    concatMapStringsSep
     concatStringsSep
     flip
     literalMD
@@ -95,9 +96,9 @@ let
     '';
   };
 
-  defaultJmxRolesFile = builtins.foldl' (left: right: left + right) "" (
-    map (role: "${role.username} ${role.password}") cfg.jmxRoles
-  );
+  defaultJmxRolesFile = concatMapStringsSep "" (
+    role: "${role.username} ${role.password}"
+  ) cfg.jmxRoles;
 
   fullJvmOptions =
     cfg.jvmOpts
