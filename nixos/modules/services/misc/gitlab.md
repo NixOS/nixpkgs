@@ -10,6 +10,7 @@ configure a webserver to proxy HTTP requests to the socket.
 
 For instance, the following configuration could be used to use nginx as
 frontend proxy:
+
 ```nix
 {
   services.nginx = {
@@ -40,6 +41,7 @@ The default state dir is `/var/gitlab/state`. This is where
 all data like the repositories and uploads will be stored.
 
 A basic configuration with some custom settings could look like this:
+
 ```nix
 {
   services.gitlab = {
@@ -104,6 +106,7 @@ the [services.gitlab.backup.startAt](#opt-services.gitlab.backup.startAt)
 option to configure regular backups.
 
 To run a manual backup, start the `gitlab-backup` service:
+
 ```ShellSession
 $ systemctl start gitlab-backup.service
 ```
@@ -116,6 +119,11 @@ will have to run the command as the user that you configured to run
 GitLab with.
 
 A list of all available rake tasks can be obtained by running:
+
 ```ShellSession
 $ sudo -u git -H gitlab-rake -T
 ```
+
+## Runner {#module-service-gitlab-runner}
+
+See [section](#module-services-gitlab-runner).
