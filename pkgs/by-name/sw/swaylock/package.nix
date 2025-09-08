@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     mainProgram = "swaylock";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xmake.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      rewine
+      wineee
       rennsax
     ];
     mainProgram = "xmake";

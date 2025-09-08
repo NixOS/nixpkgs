@@ -21676,12 +21676,6 @@
     githubId = 32239737;
     keys = [ { fingerprint = "91EB E870 1639 1323 642A  6803 B966 009D 57E6 9CC6"; } ];
   };
-  rewine = {
-    email = "lhongxu@outlook.com";
-    github = "wineee";
-    githubId = 22803888;
-    name = "Lu Hongxu";
-  };
   rexxDigital = {
     email = "joellarssonpriv@gmail.com";
     github = "rexxDigital";
@@ -27680,6 +27674,12 @@
     email = "wilsonehusin@gmail.com";
     github = "wilsonehusin";
     githubId = 14004487;
+  };
+  wineee = {
+    email = "lhongxu@outlook.com";
+    github = "wineee";
+    githubId = 22803888;
+    name = "Lu Hongxu";
   };
   winpat = {
     email = "patrickwinter@posteo.ch";
