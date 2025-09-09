@@ -8,16 +8,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazyjj";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "lazyjj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pz2q+uyr8r5G5Zs5mC/nvHdK6hTpiLBzjgUmvd5dwZw=";
+    hash = "sha256-BmME+LpYv3Ynpbo/k9pA5qcNmv7XLPXasPvHW4QalwY=";
   };
 
-  cargoHash = "sha256-70xKyzRFMyAKhSwEsdNBK2afs0UpVoTvIXuQJgeqYY8=";
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail \
+        'version = "0.5.0"' \
+        'version = "0.6.0"'
+  '';
+
+  cargoHash = "sha256-bQNLhQAUw2JgThC+RiNC5ap8D6a4JgflV2whXKu7QF8=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -34,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "TUI for Jujutsu/jj";
