@@ -8,18 +8,19 @@
   ast-grep,
   common-updater-scripts,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "tidgi";
   version = "0.12.4";
 
   src =
     {
       x86_64-darwin = fetchurl {
-        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}/TidGi-darwin-x64-${version}.zip";
+        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-x64-${finalAttrs.version}.zip";
         hash = "sha256-nxfnPz2oxsYUsT2Q9ADDxVq5xcJvkNDQTBX8EkGUF4g=";
       };
       aarch64-darwin = fetchurl {
-        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}/TidGi-darwin-arm64-${version}.zip";
+        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-arm64-${finalAttrs.version}.zip";
         hash = "sha256-bSJFM67+KVECUqjwu1HYipn+zOps1ahNzM721yZL52c=";
       };
     }
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/tag/v${version}";
+    changelog = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/tag/v${finalAttrs.version}";
     description = "Customizable personal knowledge-base and blogging platform with git as backup manager";
     homepage = "https://github.com/tiddly-gittly/TidGi-Desktop";
     license = lib.licenses.mpl20;
@@ -73,4 +74,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
