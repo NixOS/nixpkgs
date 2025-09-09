@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     # Use transmission fork from post-3.3-transmission branch
     owner = "transmission";
-    repo = pname;
+    repo = "libutp";
     rev = "fda9f4b3db97ccb243fcbed2ce280eb4135d705b";
     sha256 = "CvuZLOBksIl/lS6LaqOIuzNvX3ihlIPjI3Eqwo7YJH0=";
   };

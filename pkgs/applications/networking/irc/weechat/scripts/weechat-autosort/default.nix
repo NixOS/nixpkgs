@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "de-vri-es";
-    repo = pname;
+    repo = "weechat-autosort";
     rev = "d62fa8633015ebc2676060fcdae88c402977be46";
     sha256 = "sha256-doYDRIWiuHam2i3r3J3BZuWEhopoN4jms/xPXGyypok=";
   };

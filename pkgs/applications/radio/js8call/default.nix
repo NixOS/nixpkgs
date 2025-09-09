@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromBitbucket {
     owner = "widefido";
-    repo = pname;
+    repo = "js8call";
     rev = "v${version}-ga";
     sha256 = "sha256-mFPhiAAibCiAkLrysAmIQalVCGd9ips2lqbAsowYprY=";
   };
