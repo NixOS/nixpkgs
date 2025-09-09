@@ -7,14 +7,13 @@
   fetchFromGitHub,
   nix-update-script,
   nvd,
+  # Make optional as nom is AGPL. This mirrors nix-community/nh/package.nix
+  use-nom ? true,
   nix-output-monitor,
   buildPackages,
 }:
 let
-  runtimeDeps = [
-    nvd
-    nix-output-monitor
-  ];
+  runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
