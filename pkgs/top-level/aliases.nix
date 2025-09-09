@@ -1261,7 +1261,6 @@ mapAliases {
   kramdown-rfc2629 = throw "'kramdown-rfc2629' has been renamed to/replaced by 'rubyPackages.kramdown-rfc2629'"; # Converted to throw 2024-10-17
   krb5Full = krb5;
   kreative-square-fonts = throw "'kreative-square-fonts' has been renamed to 'kreative-square'"; # Added 2025-04-16
-  krename = throw "'krename' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   krita-beta = throw "'krita-beta' has been renamed to/replaced by 'krita'"; # Converted to throw 2024-10-17
   krun = throw "'krun' has been renamed to/replaced by 'muvm'"; # Added 2025-05-01
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
@@ -2210,6 +2209,7 @@ mapAliases {
   space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
   spatialite_gui = throw "spatialite_gui has been renamed to spatialite-gui"; # Added 2025-01-12
   spatialite_tools = throw "spatialite_tools has been renamed to spatialite-tools"; # Added 2025-02-06
+  sonusmix = throw "'sonusmix' has been removed due to lack of maintenance"; # Added 2025-08-27
 
   # Added 2020-02-10
   sourceHanSansPackages = {

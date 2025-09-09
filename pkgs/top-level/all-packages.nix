@@ -418,9 +418,7 @@ with pkgs;
     name = "die-hook";
   } ../build-support/setup-hooks/die.sh;
 
-  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
   devShellTools = callPackage ../build-support/dev-shell-tools { };
 
@@ -3141,7 +3139,10 @@ with pkgs;
     cppSupport = false;
   };
 
-  hdf5-threadsafe = hdf5.override { threadsafe = true; };
+  hdf5-threadsafe = hdf5.override {
+    cppSupport = false;
+    threadsafe = true;
+  };
 
   heaptrack = kdePackages.callPackage ../development/tools/profiling/heaptrack { };
 
@@ -6471,9 +6472,10 @@ with pkgs;
     apacheKafka_3_8
     apacheKafka_3_9
     apacheKafka_4_0
+    apacheKafka_4_1
     ;
 
-  apacheKafka = apacheKafka_4_0;
+  apacheKafka = apacheKafka_4_1;
 
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
@@ -12103,7 +12105,7 @@ with pkgs;
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
+  kiwix = qt6Packages.callPackage ../applications/misc/kiwix { };
 
   kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
 

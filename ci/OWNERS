@@ -223,9 +223,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
+/pkgs/development/compilers/llvm @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
-/doc/toolchains/llvm.chapter.md @alyssais @RossComputerGuy @NixOS/llvm
+/doc/toolchains/llvm.chapter.md @NixOS/llvm
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
@@ -494,7 +494,8 @@ pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
 pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
-pkgs/by-name/te/teleport*   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
 pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor

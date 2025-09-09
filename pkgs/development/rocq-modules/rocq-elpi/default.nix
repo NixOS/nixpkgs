@@ -17,7 +17,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.1") "3.0.1")
+        (case (range "9.0" "9.1") "3.3.0")
         (case (range "9.0" "9.1") "2.0.7")
       ] { };
   elpi = rocq-core.ocamlPackages.elpi.override { version = default-elpi-version; };
@@ -36,7 +36,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.1") "3.0.0")
+        (case (range "9.0" "9.1") "3.1.0")
         (case (range "9.0" "9.1") "2.6.0")
         (case ("9.0") "2.5.2")
       ] null;

@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.25";
+  version = "0.6.26";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-XB3cwxtcOVoAwGJroZuPT8XwaCo3wpkn2KIEuuXMeu4=";
+    hash = "sha256-ourzYHwVSlM4nqEbkKf6PsNfNkW8quXdcBSW0p16pIg=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-WL1kdXn7uAaBEwWiIJzzisMZ1uiaOVtFViWK/kW6lsY=";
+    npmDepsHash = "sha256-xZtES8qZ7MTt/OviEqGmGO3D3BuOpMGHjnBuSsdFJgM=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -85,12 +85,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  pythonRemoveDeps = [
-    "docker"
-    "pytest"
-    "pytest-docker"
-  ];
-
   dependencies =
     with python3Packages;
     [
@@ -126,7 +120,6 @@ python3Packages.buildPythonApplication rec {
       firecrawl-py
       fpdf2
       ftfy
-      gcp-storage-emulator
       google-api-python-client
       google-auth-httplib2
       google-auth-oauthlib
@@ -139,11 +132,9 @@ python3Packages.buildPythonApplication rec {
       langchain
       langchain-community
       langdetect
-      langfuse
       ldap3
       loguru
       markdown
-      moto
       nltk
       onnxruntime
       openai
@@ -172,14 +163,12 @@ python3Packages.buildPythonApplication rec {
       playwright
       posthog
       psutil
-      psycopg2-binary
       pyarrow
       pycrdt
       pydub
       pyjwt
       pymdown-extensions
       pymilvus
-      pymongo
       pymysql
       pypandoc
       pypdf
@@ -209,7 +198,22 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ moto.optional-dependencies.s3;
+    ++ pyjwt.optional-dependencies.crypto;
+
+  optional-dependencies = with python3Packages; rec {
+    postgres = [
+      pgvector
+      psycopg2-binary
+    ];
+
+    all = [
+      moto
+      gcp-storage-emulator
+      pymongo
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ postgres;
+  };
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -247,6 +251,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
       shivaraj-bh
+      codgician
     ];
   };
 }

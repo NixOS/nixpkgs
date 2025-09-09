@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (background != null) ''
       substituteInPlace $configFile \
-        --replace-fail 'Background="backgrounds/wall.jpg"' 'Background="${background}"' \
+        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"' \
         --replace-fail 'CustomBackground="false"' 'CustomBackground="true"'
     ''}
 

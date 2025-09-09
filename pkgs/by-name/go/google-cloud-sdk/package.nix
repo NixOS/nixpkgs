@@ -18,6 +18,9 @@
   callPackage,
   installShellFiles,
   with-gce ? false,
+  # NumPy is an optional runtime dependency and only needed for IAP TCP forwarding
+  # https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
+  with-numpy ? true,
 }:
 
 let
@@ -47,10 +50,10 @@ let
       cryptography
       pyopenssl
       crcmod
-      numpy
       grpcio
     ]
     ++ lib.optional (with-gce) google-compute-engine
+    ++ lib.optional (with-numpy) numpy
   );
 
   data = import ./data.nix { };
