@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jkroepke";
-    repo = pname;
+    repo = "helm-secrets";
     rev = "v${version}";
     hash = "sha256-sAGENuyg2t/H7BYF+Y+Nk3SB2/PA/V+L374iXmppkqc=";
   };

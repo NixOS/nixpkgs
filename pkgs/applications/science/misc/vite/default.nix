@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "solverstack";
-    repo = pname;
+    repo = "vite";
     rev = "6d497cc519fac623e595bd174e392939c4de845c";
     hash = "sha256-Yf2jYALZplIXzVtd/sg6gzEYrZ+oU0zLG1ETd/hiTi0=";
   };

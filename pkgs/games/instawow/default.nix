@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "layday";
-    repo = pname;
+    repo = "instawow";
     tag = "v${version}";
     sha256 = "sha256-NFs8+BUXJEn64TDojG/xkH1O+zZurv0PWY+YDhu2mQY=";
   };

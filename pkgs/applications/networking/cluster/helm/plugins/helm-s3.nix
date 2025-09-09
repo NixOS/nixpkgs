@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hypnoglow";
-    repo = pname;
+    repo = "helm-s3";
     rev = "v${version}";
     hash = "sha256-9n/Dzgr/wYGgJq47FdNGPPpOFzTRt4VaK8HA06F5FIE=";
   };

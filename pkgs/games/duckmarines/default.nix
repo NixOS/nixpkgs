@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = pname;
+    exec = "duckmarines";
     icon = icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";

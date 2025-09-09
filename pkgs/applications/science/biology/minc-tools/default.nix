@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = pname;
+    repo = "minc-tools";
     rev = "c86a767dbb63aaa05ee981306fa09f6133bde427";
     hash = "sha256-PLNcuDU0ht1PcjloDhrPzpOpE42gbhPP3rfHtP7WnM4=";
   };
