@@ -22809,6 +22809,13 @@
     githubId = 96694484;
     name = "Sandeep Patel";
   };
+  sandydoo = {
+    name = "Sander";
+    github = "sandydoo";
+    githubId = 7572407;
+    email = "hey@sandydoo.me";
+    matrix = "@sandydoo:matrix.org";
+  };
   Sanskarzz = {
     email = "sanskar.gur@gmail.com";
     github = "Sanskarzz";
