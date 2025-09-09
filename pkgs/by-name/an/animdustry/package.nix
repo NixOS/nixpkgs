@@ -4,11 +4,9 @@
   autoPatchelfHook,
   copyDesktopItems,
   makeDesktopItem,
-
   fetchFromGitHub,
   buildNimPackage,
   callPackage,
-
   libX11,
   libXcursor,
   libXrandr,
@@ -42,14 +40,11 @@ buildNimPackage (finalAttrs: {
     libGL
     libXxf86vm
   ];
-
   nativeBuildInputs = [
     fau
-
     autoPatchelfHook
     copyDesktopItems
   ];
-
   runtimeDependencies = [
     libpulseaudio
   ];
@@ -73,15 +68,11 @@ buildNimPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItems =
-    let
+  desktopItems = makeDesktopItem {
       name = "Animdustry";
       exec = "animdustry";
-      icon = exec;
-    in
-    makeDesktopItem {
-      inherit name icon exec;
-      desktopName = name;
+      icon = "animdustry";
+      desktopName = "Animdustry";
       categories = [ "Game" ];
     };
 
@@ -90,10 +81,13 @@ buildNimPackage (finalAttrs: {
     downloadPage = "https://github.com/Anuken/animdustry/releases";
     description = "Anime gacha rhythm game";
     longDescription = ''
-      the anime gacha bullet hell rhythm game
-      created as a mindustry april 1st event
+      The anime gacha bullet hell rhythm game that was created as a Mindustry (2022) April 1st event.
     '';
-    license = lib.licenses.unfree;
+    license = with lib.licenses; [
+      unfree
+      cc-by-30
+      cc-by-nd-30
+    ];
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [
       Ezjfc
