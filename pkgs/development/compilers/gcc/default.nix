@@ -294,11 +294,6 @@ pipe
            '-s' # workaround for hitting hydra log limit
            'LIMITS_H_TEST=false'
         )
-      '')
-      + optionalString targetPlatform.isCygwin (''
-        substituteInPlace gcc/config/i386/cygwin.h \
-          --replace '../../include/w32api' "${libcCross}/include/w32api" \
-          --replace '../include/w32api' "${libcCross}/include/w32api"
       '');
 
       inherit

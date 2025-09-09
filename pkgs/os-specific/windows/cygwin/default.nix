@@ -30,6 +30,10 @@ let
       "man"
     ];
 
+    postPatch = ''
+      patchShebangs --build winsup/cygwin/scripts
+    '';
+
     preConfigure = ''
       pushd winsup
       aclocal --force
@@ -38,10 +42,9 @@ let
       rm -rf autom4te.cache
       popd
       patch -p0 -i ${./after-autogen.patch}
-    '';
-
-    postPatch = ''
-      patchShebangs --build winsup/cygwin/scripts
+      mkdir "../build"
+      cd "../build"
+      configureScript="../$sourceRoot/configure"
     '';
 
     env.CXXFLAGS_FOR_TARGET = "-Wno-error";
@@ -59,10 +62,11 @@ let
 
     enableParallelBuilding = true;
 
-    postInstall = ''
-      mv $out/x86_64-pc-cygwin/* $out/
-      rmdir $out/x86_64-pc-cygwin
-    '';
+    makeFlags = [ "tooldir=$(out)" ];
+
+    # this is explicitly -j1 in cygwin.cygport
+    # without it the install order is non-deterministic
+    enableParallelInstalling = false;
 
     hardeningDisable = [
       "fortify"
@@ -80,15 +84,18 @@ let
       "--with-cross-bootstrap"
       "ac_cv_prog_CC=gcc"
     ];
+
+    passthru.w32api = mingw_w64;
   };
 in
-# TODO: Is there something like nix-support which would achieve this better?
-symlinkJoin {
-  pname = "cygwin-and-mingw_w64";
-  inherit (newlib-cygwin) version;
-  paths = [
-    newlib-cygwin
-    mingw_w64
-    mingw_w64.dev
-  ];
-}
+newlib-cygwin
+# # TODO: Is there something like nix-support which would achieve this better?
+# symlinkJoin {
+#   pname = "cygwin-and-mingw_w64";
+#   inherit (newlib-cygwin) version;
+#   paths = [
+#     newlib-cygwin
+#     mingw_w64
+#     mingw_w64.dev
+#   ];
+# }

@@ -29,10 +29,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/include/
-    ln -s ${mingw_w64_headers}/include/w32api $out/include/
     cp -r newlib/libc/include/* $out/include/
     cp -r winsup/cygwin/include/* $out/include/
   '';
+
+  passthru.w32api = mingw_w64_headers;
 
   meta = {
     platforms = lib.platforms.windows;
