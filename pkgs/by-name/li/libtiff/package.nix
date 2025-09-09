@@ -75,6 +75,23 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/libtiff/libtiff/-/commit/ed141286a37f6e5ddafb5069347ff5d587e7a4e0.patch";
       hash = "sha256-DIsk8trbHMMTrj6jP5Ae8ciRjHV4CPHdWCN+VbeFnFo=";
     })
+
+    # Fix the build with CMake 4.
+    (fetchpatch {
+      name = "libtiff-cmake-4-1.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/d1279f0f9c8fee724c380523a7a6cf60c690521d.patch";
+      hash = "sha256-7EwfgG8zYwyNPIpyCYq8PSbf1TBmo4N36e96GB3wWPo=";
+    })
+    (fetchpatch {
+      name = "libtiff-cmake-4-2.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/2b6b70183d048b8f32e6b95e9aa82ed2e46ddf1f.patch";
+      hash = "sha256-fGhlm2PYxjXAyMdM8vyvgcDzzJw8YTHWFRunr+RZnOU=";
+    })
+    (fetchpatch {
+      name = "libtiff-cmake-4-3.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/ff5997ea1206df2ebbbf5e30611c8a84f649a333.patch";
+      hash = "sha256-G2Q8EKOzNLh028kPYAKmoEzAbDu0tGNpnxkd3pMT96U=";
+    })
   ];
 
   postPatch = ''
