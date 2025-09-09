@@ -50,7 +50,7 @@ let
           makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
         ''
         + optionalString cfg.enableConfiguredRecompile ''
-          --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_GHC "${xmonadEnv}/bin/${xmonadEnv.passthru.targetPrefix}ghc" \
         ''
         + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
