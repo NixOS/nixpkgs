@@ -66,7 +66,7 @@ jobs:
 
       - name: "Add 'has: port to stable' label"
         if: steps.backport.outputs.created_pull_numbers != ''
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           # Not using the app on purpose to avoid triggering another workflow run after adding this label.
           script: |
