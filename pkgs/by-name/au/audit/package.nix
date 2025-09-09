@@ -9,7 +9,6 @@
   linuxHeaders,
   python3,
   swig,
-  pkgsCross,
   libcap_ng,
   installShellFiles,
 
@@ -17,9 +16,13 @@
   # configure script tries executing python to gather info instead of relying on
   # python3-config exclusively
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
+
+  # passthru
   nix-update-script,
   testers,
   nixosTests,
+  pkgsStatic ? { }, # CI has allowVariants = false, in which case pkgsMusl would not be passed. So, instead add a default here.
+  pkgsMusl ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
@@ -108,7 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      musl = pkgsCross.musl64.audit;
+      musl = pkgsMusl.audit or null;
+      static = pkgsStatic.audit or null;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       audit = nixosTests.audit;
     };
