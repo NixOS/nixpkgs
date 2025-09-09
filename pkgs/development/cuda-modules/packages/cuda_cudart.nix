@@ -17,17 +17,17 @@ buildRedist {
   pname = "cuda_cudart";
 
   # NOTE: A number of packages expect cuda_cudart to be in a single directory.
+  # NOTE: CMake expects the static libraries to exist alongside the dynamic libraries,
+  # so we omit the static output.
   outputs = [
     "out"
     "dev"
     "include"
     "lib"
-    "static"
     "stubs"
   ];
 
   propagatedBuildOutputs = [
-    "static" # required by CMake
     "stubs" # always propagate, even when cuda_compat is used, to avoid symbol linking errors
   ];
 
