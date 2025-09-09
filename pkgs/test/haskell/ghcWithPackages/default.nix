@@ -1,6 +1,7 @@
 {
   lib,
   runCommand,
+  runCommandCC,
   haskellPackages,
 }:
 
@@ -43,6 +44,23 @@ lib.recurseIntoAttrs {
           exit 1
         fi
 
+        touch $out
+      '';
+
+  use-llvm =
+    let
+      ghc = (haskellPackages.ghcWithPackages.override { useLLVM = true; }) (_: [ ]);
+    in
+    runCommandCC "ghc-with-packages-use-llvm"
+      {
+        nativeBuildInputs = [ ghc ];
+      }
+      ''
+        echo 'main = pure ()' > test.hs
+        # -ddump-llvm is unnecessary, but nice for visual feedback in the build log
+        ${ghc.targetPrefix}ghc --make -fllvm -keep-llvm-files -ddump-llvm test.hs
+        # Did we actually use the LLVM backend?
+        test -f test.ll
         touch $out
       '';
 }
