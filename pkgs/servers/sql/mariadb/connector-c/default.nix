@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "3.4") [
     # fix compilation against gcc15
     (fetchpatch {
       url = "https://github.com/mariadb-corporation/mariadb-connector-c/commit/e8448137f3365568090d5c0d4051039ddc1cdb6f.patch";
