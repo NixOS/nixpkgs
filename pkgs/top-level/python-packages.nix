@@ -1136,6 +1136,12 @@ self: super: with self; {
 
   audiotools = callPackage ../development/python-modules/audiotools { };
 
+  audit = toPythonModule (
+    pkgs.audit.override {
+      python3Packages = self;
+    }
+  );
+
   auditok = callPackage ../development/python-modules/auditok { };
 
   auditwheel = callPackage ../development/python-modules/auditwheel {
