@@ -21,7 +21,7 @@
 with lib;
 
 let
-  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix (
+  rootfsImage = pkgs.callPackage config.sdImage.rootFilesystem (
     {
       inherit (config.sdImage) storePaths;
       compressImage = config.sdImage.compressImage;
@@ -105,6 +105,20 @@ in
       default = "FIRMWARE";
       description = ''
         Name of the filesystem which holds the boot firmware.
+      '';
+    };
+
+    rootFilesystem = mkOption {
+      type = types.oneOf [
+        types.package
+        types.path
+      ];
+      default = ../../../lib/make-ext4-fs.nix;
+      example = ''
+        nixpkgs/nixos/lib/make-btrfs-fs.nix
+      '';
+      description = ''
+        The filesystem creator used for the root partition.
       '';
     };
 
@@ -333,7 +347,7 @@ in
           ${pkgs.parted}/bin/partprobe
           ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
         '';
-        nixPathRegistrationFile = config.sdImage.nixPathRegistrationFile;
+        inherit (config.sdImage) nixPathRegistrationFile;
       in
       ''
         # On the first boot do some maintenance tasks
