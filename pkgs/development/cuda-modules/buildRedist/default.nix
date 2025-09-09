@@ -409,6 +409,10 @@ extendMkDerivation {
               subtractLists finalAttrs.passthru.expectedOutputs (attrNames finalAttrs.passthru.outputToPatterns)
               == [ ];
           }
+          {
+            message = "propagatedBuildOutputs is a subset of outputs";
+            assertion = subtractLists finalAttrs.outputs finalAttrs.propagatedBuildOutputs == [ ];
+          }
         ]
         ++ brokenAssertions;
 
