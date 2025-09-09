@@ -14052,10 +14052,6 @@ with pkgs;
 
   openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
-  openmw = libsForQt5.callPackage ../games/openmw { };
-
-  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
-
   openraPackages_2019 = import ../games/openra_2019 {
     inherit lib;
     pkgs = pkgs.__splicedPackages;
