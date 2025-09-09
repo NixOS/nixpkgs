@@ -893,6 +893,12 @@
     githubId = 4717906;
     name = "Jakub Skokan";
   };
+  aiyion = {
+    email = "git@aiyionpri.me";
+    github = "AiyionPrime";
+    githubId = 6937725;
+    name = "Jan-Niklas Burfeind";
+  };
   ajaxbits = {
     email = "contact@ajaxbits.com";
     github = "ajaxbits";
