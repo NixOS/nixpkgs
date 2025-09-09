@@ -142,6 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
     + (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+      substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
     '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -195,6 +196,8 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DWITH_CYCLES_CUDA_BINARIES=ON"
   ]
   ++ lib.optionals hipSupport [
+    "-DHIPRT_INCLUDE_DIR=${rocmPackages.hiprt}/include"
+    "-DWITH_CYCLES_DEVICE_HIPRT=ON"
     "-DWITH_CYCLES_HIP_BINARIES=ON"
   ]
   ++ lib.optionals waylandSupport [
