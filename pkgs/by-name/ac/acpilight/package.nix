@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitlab.com/wavexx/acpilight.git";
     tag = "v${version}";
-    sha256 = "1r0r3nx6x6vkpal6vci0zaa1n9dfacypldf6k8fxg7919vzxdn1w";
+    hash = "sha256-PNjW/04hndcdmsY1ej1TriUblPogsm2ounObbrodGeQ=";
   };
 
   pyenv = python3.withPackages (

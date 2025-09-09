@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "huertatipografica";
     repo = "Alegreya-Sans";
     tag = "v${version}";
-    sha256 = "0xz5lq9fh0pj02ifazhddzh792qkxkz1z6ylj26d93wshc90jl5g";
+    hash = "sha256-r1AJEoOaj9SMkNSbH/7sE4t04G8NfuWiAPIC6BKm5Xc=";
   };
 
   installPhase = ''

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alan-if";
     repo = "alan";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-9F99rr7tdkaGPHtD92ecmUxO6xrjQDRhGtSTVbMLz30=";
+    hash = "sha256-9F99rr7tdkaGPHtD92ecmUxO6xrjQDRhGtSTVbMLz30=";
   };
 
   postPatch = ''

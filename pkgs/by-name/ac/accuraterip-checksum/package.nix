@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "leo-bogert";
     repo = "accuraterip-checksum";
     tag = "version${version}";
-    sha256 = "1a6biy78jb094rifazn4a2g1dlhryg5q8p8gwj0a60ipl0vfb9bj";
+    hash = "sha256-cqXlNqA3AqOA5A9dhMvzGdIWnlDEfuViJgksiY6Py6g=";
   };
 
   buildInputs = [ libsndfile ];
