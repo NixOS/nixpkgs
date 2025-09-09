@@ -9665,7 +9665,9 @@ self: super: with self; {
 
   mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
 
-  mpl-typst = callPackage ../development/python-modules/mpl-typst { };
+  mpl-typst = callPackage ../development/python-modules/mpl-typst {
+    inherit (pkgs) typst;
+  };
 
   mplcursors = callPackage ../development/python-modules/mplcursors { };
 
