@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Developer tools for AVID";
     homepage = "https://github.com/avidml/avidtools";
+    changelog = "https://github.com/avidml/avidtools/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
