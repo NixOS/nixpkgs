@@ -147,6 +147,7 @@ stdenv.mkDerivation (
         "-Dinstallstyle=lib/perl5"
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
+        "-Accflags=-D_GNU_SOURCE"
       ]
       ++ lib.optional stdenv.hostPlatform.isStatic "-Uusedl"
       ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [
