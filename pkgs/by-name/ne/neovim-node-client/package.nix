@@ -9,18 +9,18 @@
 
 buildNpmPackage rec {
   pname = "node-client";
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "node-client";
     tag = "v${version}";
-    hash = "sha256-0vPw2hCGUDepSpF1gp/lI71EgwGsCSnw7ePP7ElHsTQ=";
+    hash = "sha256-nAV0X5882Ps5zDPfmoRHm0a0NtzCOpBQEZqOT2/GCZU=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-VYoJAi1RzVf5ObjuGmnuiA/1WYBWC+qYPdfWF98+oGw=";
+    hash = "sha256-AN3TVvCyWjjm1GfnI+ZMt27KQC7qYxQ0bcysAaDsyz4=";
   };
 
   buildPhase = ''

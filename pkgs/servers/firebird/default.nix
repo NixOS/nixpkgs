@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchDebianPatch,
   libedit,
-  autoreconfHook271,
+  autoreconfHook,
   zlib,
   unzip,
   libtommath,
@@ -32,7 +33,7 @@ let
       ];
     };
 
-    nativeBuildInputs = [ autoreconfHook271 ];
+    nativeBuildInputs = [ autoreconfHook ];
 
     buildInputs = [
       libedit
@@ -52,7 +53,7 @@ let
       runHook preInstall
       mkdir -p $out
       cp -r gen/Release/firebird/* $out
-      rm $out/lib/*.a  # they were just symlinks to /build/source/...
+      rm -f $out/lib/*.a  # they were just symlinks to /build/source/...
       runHook postInstall
     '';
 
@@ -62,14 +63,24 @@ rec {
   firebird_3 = stdenv.mkDerivation (
     base
     // rec {
-      version = "3.0.12";
+      version = "3.0.13";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-po8tMrOahfwayVXa7Eadr9+ZEmZizHlCmxi094cOJSY=";
+        hash = "sha256-ti3cFfByM2wxOLkAebwtFe25B5W7jOwi3f7MPYo/yUA=";
       };
+
+      patches = [
+        (fetchDebianPatch {
+          pname = "firebird3.0";
+          version = "3.0.13.ds7";
+          debianRevision = "2";
+          patch = "no-binary-gbaks.patch";
+          hash = "sha256-LXUMM38PBYeLPdgaxLPau4HWB4ItJBBnx7oGwalL6Pg=";
+        })
+      ];
 
       buildInputs = base.buildInputs ++ [
         zlib

@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tk-safe";
-  version = "25.8.1";
+  version = "25.8.2";
 
   # To update, check https://search.apps.ubuntu.com/api/v1/package/tk-safe and copy the anon_download_url and version.
   src = fetchurl {
-    url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_18.snap";
-    hash = "sha256-OrDbxLcmbL/yTANCMHcJsdGE+LK8rondGQvj+YBqS0E=";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_19.snap";
+    hash = "sha256-bjlkLCTHkGH2LdeGd3LIp7L8f7SzZetpEpvGpPEzjcA=";
   };
 
   desktopItems = [

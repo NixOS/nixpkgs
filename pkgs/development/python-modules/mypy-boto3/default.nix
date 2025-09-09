@@ -462,8 +462,8 @@ rec {
       "sha256-mkaBmHn3LsOHnH4kTWkGbCsL4w/TrPBt/pBXnj+1Ai8=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.40.15"
-      "sha256-ZqswkZ6qHqFpxJctVjK7bZnUz4kE9A5x+1mAjxucPxM=";
+    buildMypyBoto3Package "ecs" "1.40.25"
+      "sha256-D4um6U9AGip84EUFA0qKHUzyAAjAE2pwlI++QQvGrHY=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.40.0"
@@ -681,8 +681,8 @@ rec {
       "sha256-AS7G6I5JR2tkq1m+cx+9PFaIhe7QwWH0DF/7vuIY+zQ=";
 
   mypy-boto3-iotsitewise =
-    buildMypyBoto3Package "iotsitewise" "1.40.2"
-      "sha256-BXLPMwfbqcpaRnAuxrmG4pWUsVFHUW+foMvB1gh5Ye4=";
+    buildMypyBoto3Package "iotsitewise" "1.40.26"
+      "sha256-nGCezdRTJ4uq7aSd0mGSOvk+/Rn4KKeCAc++KgPxRAg=";
 
   mypy-boto3-iotthingsgraph =
     buildMypyBoto3Package "iotthingsgraph" "1.40.15"
@@ -1161,8 +1161,8 @@ rec {
       "sha256-+fgiX8rSj53vuJuuTOX26sipW3xiFDt7ik7r65alHcw=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.40.0"
-      "sha256-maSifwTWL+CzEDLydPLhmIn6ZkJEE2F6lBaHPEhWfx0=";
+    buildMypyBoto3Package "s3" "1.40.26"
+      "sha256-jSv9EFKJTQ6EyfuTWNg4ug7tAmUHbH3X9FYix3AnXJk=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.40.12"
@@ -1173,8 +1173,8 @@ rec {
       "sha256-HPAyUwvfUNZl3Ts3H0evVO7UifAiiwrDPyYJ4titkqA=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.40.19"
-      "sha256-x2eOXSeFcdWJSgdMcjUPRwH56/N+BjXpCnmWMj9po/w=";
+    buildMypyBoto3Package "sagemaker" "1.40.25"
+      "sha256-n0J5zoHTKuovhScGAPMdG9s5zPPgkXUV0aTTXqDVIAU=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.40.16"
@@ -1221,8 +1221,8 @@ rec {
       "sha256-9lCTZdXU/jJgcDutzvWhxFRV7UVOXwPzVzpQI8wXZkQ=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.40.1"
-      "sha256-wNGHpSbcxVrb4UYCLDQHJKZ0+2qB7PKaBM9GSN9dF/k=";
+    buildMypyBoto3Package "securityhub" "1.40.26"
+      "sha256-0DkWoaAhZ0w3CXYtQgvABDZ+PeCIjB9asQkDGSl1/oU=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.40.0"
