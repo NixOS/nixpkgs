@@ -12,7 +12,8 @@
   elm2nix,
   nixfmt,
   nixosTests,
-  dockerTools,
+  glibc,
+  cni-plugins,
 }:
 
 let
@@ -115,18 +116,40 @@ stdenv.mkDerivation rec {
     '';
 
     doCheck = false; # Tests broken
-
   };
-  binary-tar = fetchTarball {
-    url = "https://github.com/concourse/concourse/releases/download/v${version}/concourse-${version}-linux-amd64.tgz";
-    sha256 = "0f0kblsig0d3j4swynxj16pa5iycxa92bd4pm5vzxqr3nn4w2ncl";
+  init = stdenv.mkDerivation {
+    pname = "init";
+    inherit version;
+    src = "${src}/cmd/init";
+    buildInputs = [
+      glibc.static
+    ];
+    buildPhase = ''
+      mkdir -p $out
+      gcc -O2 -static -o $out/init init.c
+    '';
+  };
+  resource-types = stdenv.mkDerivation {
+    pname = "resource-types";
+    inherit version;
+    src = fetchTarball {
+      url = "https://github.com/concourse/concourse/releases/download/v${version}/concourse-${version}-linux-amd64.tgz";
+      sha256 = "0f0kblsig0d3j4swynxj16pa5iycxa92bd4pm5vzxqr3nn4w2ncl";
+    };
+    dontConfigure = true;
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out
+      cp -r resource-types/* $out/
+    '';
   };
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
     mkdir -p $out/bin
     cp ${executable}/bin/concourse $out/bin/
-    cp -r ${binary-tar}/resource-types $out/resource-types
+    cp ${cni-plugins}/bin/* $out/bin
+    cp -r ${resource-types} $out/resource-types
   '';
 
   passthru = {
