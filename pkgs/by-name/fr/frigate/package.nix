@@ -59,10 +59,42 @@ let
     hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
   };
 
-  # TODO: OpenVino model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L64-L77
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L120-L123
-  # Convert https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2 with https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/build_ov_model.py into OpenVino IR format
+  ssdlite_mobilenet_v2_coco-openvino = stdenv.mkDerivation {
+    pname = "ssdlite_mobilnet_v2-coco-openvino";
+    version = "2-coco-2018_05_09";
+
+    src = fetchurl {
+      url = "http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz";
+      hash = "sha256-VCRFzOg02/u33xmRQl1HXoWi1+xoxgpPJiuxiqwQyLI=";
+    };
+
+    nativeBuildInputs = [
+      python.pkgs.openvino
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+      python3 -m openvino.tools.ovc \
+        ./frozen_inference_graph.pb \
+        --compress_to_fp16 \
+        --output_model ssdlite_mobilenet_v2
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp -v ssdlite_mobilenet_v2.{bin,xml} $out/
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Object detection model trained on the COCO dataset.";
+      license = lib.licenses.asl20;
+      homepage = "https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2/";
+    };
+  };
+
   coco_91cl_bkgr = fetchurl {
     url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
@@ -192,6 +224,8 @@ python3Packages.buildPythonApplication rec {
 
     tar --extract --gzip --file ${tflite_audio_model}
     cp --no-preserve=mode ./1.tflite $out/share/frigate/cpu_audio_model.tflite
+
+    ln -s ${ssdlite_mobilenet_v2_coco-openvino}/*.{bin,xml} $out/share/frigate/
 
     cp --no-preserve=mode ${coco_91cl_bkgr} $out/share/frigate/coco_91cl_bkgr.txt
     sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
