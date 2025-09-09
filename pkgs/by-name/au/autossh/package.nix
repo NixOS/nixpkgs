@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.harding.motd.ca/autossh/${pname}-${version}.tgz";
-    sha256 = "0xqjw8df68f4kzkns5gcah61s5wk0m44qdk2z1d6388w6viwxhsz";
+    hash = "sha256-X8PO4zYcoWFa+GI2TEgFkxcdDFTsFW3nn8Qh4xriEnc=";
   };
 
   preConfigure = ''

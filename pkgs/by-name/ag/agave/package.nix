@@ -12,7 +12,7 @@ let
     name: hash:
     fetchurl {
       url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-${name}.ttf";
-      sha256 = hash;
+      hash = hash;
       name = "Agave-${name}.ttf";
     };
   # There are slashed variants, but with same name so only bundle the default versions for now:

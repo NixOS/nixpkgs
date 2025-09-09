@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "wojtekka";
     repo = "6tunnel";
     rev = version;
-    sha256 = "sha256-ftTAFjHlXRrXH6co8bX0RY092lAmv15svZn4BKGVuq0=";
+    hash = "sha256-ftTAFjHlXRrXH6co8bX0RY092lAmv15svZn4BKGVuq0=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

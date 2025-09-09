@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://al.chemy.org/files/Alchemy-${version}.tar.gz";
-    sha256 = "0449bvdccgx1jqnws1bckzs4nv2d230523qs0jx015gi81s1q7li";
+    hash = "sha256-kR4cdEDxlQC6BBoPUcAQTWxL9J9sBc0tlqE/xtpeiRA=";
   };
 
   installPhase = ''

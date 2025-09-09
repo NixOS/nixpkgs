@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "hrdwrrsk";
     repo = "adementary-theme";
     rev = version;
-    sha256 = "14y5s18g9r2c1ciw1skfksn09gvqgy8vjvwbr0z8gacf0jc2apqk";
+    hash = "sha256-E18lmASOqYc+yItvuZF/eL8ErJ5u6sAjC0zk9FDQxZM=";
   };
 
   preBuild = ''

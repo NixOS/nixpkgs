@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "20kly";
     repo = "20kly";
     tag = "v${version}";
-    sha256 = "1zxsxg49a02k7zidx3kgk2maa0vv0n1f9wrl5vch07sq3ghvpphx";
+    hash = "sha256-Hd674RtYHwDZLjTz5IIFewOlqphvjt7iP1MAlcjruv8=";
   };
 
   patchPhase = ''

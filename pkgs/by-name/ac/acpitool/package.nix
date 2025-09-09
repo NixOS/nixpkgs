@@ -9,7 +9,7 @@ let
   acpitool-patch-051-4 =
     params:
     fetchpatch rec {
-      inherit (params) name sha256;
+      inherit (params) name hash;
       url = "https://salsa.debian.org/debian/acpitool/raw/33e2ef42a663de820457b212ea2925e506df3b88/debian/patches/${name}";
     };
 
@@ -20,33 +20,33 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/acpitool/acpitool-${version}.tar.bz2";
-    sha256 = "004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f";
+    hash = "sha256-AE+2zUMQKRi2MCz1N6LbfOrdoErvLgkG3fIw+CDa008=";
   };
 
   patches = [
     (acpitool-patch-051-4 {
       name = "ac_adapter.patch";
-      sha256 = "0rn14vfv9x5gmwyvi6bha5m0n0pm4wbpg6h8kagmy3i1f8lkcfi8";
+      hash = "sha256-KDo2KXIhDl+fmgiadxcn9QILalFwmbg9r6/0tN0mwWY=";
     })
     (acpitool-patch-051-4 {
       name = "battery.patch";
-      sha256 = "190msm5cgqgammxp1j4dycfz206mggajm5904r7ifngkcwizh9m7";
+      hash = "sha256-pyb4I2fzWRdPJiCVKtV71QDxHfONyHB7rerhx0rVFaQ=";
     })
     (acpitool-patch-051-4 {
       name = "kernel3.patch";
-      sha256 = "1qb47iqnv09i7kgqkyk9prr0pvlx0yaip8idz6wc03wci4y4bffg";
+      hash = "sha256-z7lFPImMD8C4+S2iG5UHne4Lcr5p+onfPDGBbXE8ZOE=";
     })
     (acpitool-patch-051-4 {
       name = "wakeup.patch";
-      sha256 = "1mmzf8n4zsvc7ngn51map2v42axm9vaf8yknbd5amq148sjf027z";
+      hash = "sha256-/wjgpEYk4KpKW3Z65NROtStBtriqhmKfPWzrTyxyv9Y=";
     })
     (acpitool-patch-051-4 {
       name = "0001-Do-not-assume-fixed-line-lengths-for-proc-acpi-wakeu.patch";
-      sha256 = "10wwh7l3jbmlpa80fzdr18nscahrg5krl18pqwy77f7683mg937m";
+      hash = "sha256-9Yz06kDmuHM8xxcFmmd5GSqmLQq5fQeQurQuOeiBnIM=";
     })
     (acpitool-patch-051-4 {
       name = "typos.patch";
-      sha256 = "1178fqpk6sbqp1cyb1zf9qv7ahpd3pidgpid3bbpms7gyhqvvdpa";
+      hash = "sha256-6ra9MfTv6HrXGi3e1+Id7UJ1Nk7uh+VZuHhpMy926IQ=";
     })
   ];
 

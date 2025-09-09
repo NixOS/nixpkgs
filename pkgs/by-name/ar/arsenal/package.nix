@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Orange-Cyberdefense";
     repo = "arsenal";
     tag = version;
-    sha256 = "sha256-C8DEB/xojU7vGvmeBF+PBD6KWMaJgwa7PpRS5+YzQ6c=";
+    hash = "sha256-C8DEB/xojU7vGvmeBF+PBD6KWMaJgwa7PpRS5+YzQ6c=";
   };
 
   build-system = with python3.pkgs; [

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-+OTQ2UWFLcL5HDv4j33LjKvADg/ClbuS6JPlSUXggIU=";
+    hash = "sha256-+OTQ2UWFLcL5HDv4j33LjKvADg/ClbuS6JPlSUXggIU=";
   };
 
   dontUnpack = true;

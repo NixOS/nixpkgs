@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/acpid2/acpid-${version}.tar.xz";
-    sha256 = "sha256-LQlcjPy8hHyux0bWLNyNC/8ewbxy73xnTHIeBNpqszM=";
+    hash = "sha256-LQlcjPy8hHyux0bWLNyNC/8ewbxy73xnTHIeBNpqszM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

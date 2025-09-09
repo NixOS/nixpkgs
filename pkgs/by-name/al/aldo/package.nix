@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://git.savannah.gnu.org/${pname}.git";
     tag = "v${version}";
-    sha256 = "0swvdq0pw1msy40qkpn1ar9kacqjyrw2azvf2fy38y0svyac8z2i";
+    hash = "sha256-UXzElN8aeDS8E25/JXj2EjM1U1bB3okB8boGfgFum2s=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

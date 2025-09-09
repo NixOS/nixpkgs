@@ -10,7 +10,7 @@
 let
   font = fetchurl {
     url = "http://kingbird.myphotos.cc/ee22d44076adb8a34d8e20df4be3730a/SnipesConsole.ttf";
-    sha256 = "06n8gq18js0bv4svx84ljzhs9zmi81wy0zqcqj3b4g0rsrkr20a7";
+    sha256 = "sha256-RwGRZ9YZPLKGxAx/4HlAsf6k4ZeUoL412QtoiQJ+yBo=";
   };
 
 in
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "Davidebyzero";
     repo = "Snipes";
     rev = "caa2ce036a9f6461ccdb7ef8306edbd126dd4081";
-    sha256 = "sha256-iIoh5odCziX1cKs5qf4hJdXpUhy9kdht0YMLLfhvKZA=";
+    hash = "sha256-iIoh5odCziX1cKs5qf4hJdXpUhy9kdht0YMLLfhvKZA=";
   };
 
   postPatch = ''

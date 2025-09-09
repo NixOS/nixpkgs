@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/acsccid/acsccid-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-KPYHWlSUpWjOL9hmbEifb0pRWZtE+8k5Dh3bSNPMxb0=";
+    hash = "sha256-KPYHWlSUpWjOL9hmbEifb0pRWZtE+8k5Dh3bSNPMxb0=";
   };
 
   nativeBuildInputs = [

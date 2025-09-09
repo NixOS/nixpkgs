@@ -14,7 +14,7 @@ php82.buildComposerProject2 (finalAttrs: {
     owner = "agorakit";
     repo = "agorakit";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-YCHszRi+atEkaM9bHncpRtQsuiS6P22yKSqYzXq8flk=";
+    hash = "sha256-YCHszRi+atEkaM9bHncpRtQsuiS6P22yKSqYzXq8flk=";
   };
 
   installPhase = ''

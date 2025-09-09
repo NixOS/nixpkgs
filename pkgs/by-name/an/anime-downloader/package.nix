@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "anime-dl";
     repo = "anime-downloader";
     rev = version;
-    sha256 = "sha256-Uk2mtsSrb8fCD9JCFzvLBzMEB7ViVDrKPSOKy9ALJ6o=";
+    hash = "sha256-Uk2mtsSrb8fCD9JCFzvLBzMEB7ViVDrKPSOKy9ALJ6o=";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];

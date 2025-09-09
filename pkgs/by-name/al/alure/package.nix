@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   src = fetchurl {
-    url = "http://kcat.strangesoft.net/alure-releases/alure-${version}.tar.bz2";
-    sha256 = "0w8gsyqki21s1qb2s5ac1kj08i6nc937c0rr08xbw9w9wvd6lpj6";
+    url = "https://web.archive.org/web/20190529213651if_/https://kcat.strangesoft.net/alure-releases/alure-${version}.tar.bz2";
+    hash = "sha256-Rl5q2uaJJ746AjkDdkZi1kQE5AxMFS0WDjqIOLHXD3E=";
   };
 
   nativeBuildInputs = [ cmake ];

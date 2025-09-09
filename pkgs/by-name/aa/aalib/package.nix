@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/aa-project/aalib-${version}.tar.gz";
-    sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
+    hash = "sha256-+93akjDPbuKk9XBrSxHiGQrkX17aHwQJ3E+Zs14KcO4=";
   };
 
   outputs = [
