@@ -175,6 +175,7 @@
   libpromhttp = throw "'libpromhttp' has been removed as it is broken and unmaintained upstream."; # Added 2025-06-16
   libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
   libsoup = throw "‘libsoup’ has been renamed to ‘libsoup_2_4’"; # Added 2024-12-02
+  libtransmission = throw "libtransmission has been renamed to libtransmission_3 since libtransmission_4 is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2024-06-10
   ligo = throw "ligo has been removed from nixpkgs for lack of maintainance"; # Added 2025-06-03
   lima-bin = throw "lima-bin has been replaced by lima"; # Added 2025-05-13
   littlenavmap = throw "littlenavmap has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
@@ -309,6 +310,9 @@
   texinfo4 = throw "'texinfo4' has been removed in favor of the latest version"; # Added 2025-06-08
   tracker = throw "tracker has been renamed to tinysparql"; # Added 2024-09-30
   tracker-miners = throw "tracker-miners has been renamed to localsearch"; # Added 2024-09-30
+  transmission = throw "transmission has been renamed to transmission_3 since transmission_4 is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2024-06-10
+  transmission-gtk = throw "transmission-gtk has been renamed to transmission_3-gtk since transmission_4-gtk is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2024-06-10
+  transmission-qt = throw "transmission-qt has been renamed to transmission_3-qt since transmission_4-qt is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2024-06-10
   treefmt2 = throw "treefmt2 has been renamed to treefmt"; # 2025-03-06
   trojita = throw "'trojita' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
   uae = throw "'uae' has been removed due to lack of upstream maintenance. Consider using 'fsuae' instead."; # Added 2025-06-11

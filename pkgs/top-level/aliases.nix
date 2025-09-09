@@ -29,18 +29,6 @@ let
     else
       alias;
 
-  transmission3Warning =
-    {
-      prefix ? "",
-      suffix ? "",
-    }:
-    let
-      p = "${prefix}transmission${suffix}";
-      p3 = "${prefix}transmission_3${suffix}";
-      p4 = "${prefix}transmission_4${suffix}";
-    in
-    "${p} has been renamed to ${p3} since ${p4} is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)";
-
   deprecatedPlasma5Packages = {
     inherit (plasma5Packages)
       akonadi
@@ -1079,16 +1067,6 @@ in
   tomcat_connectors = apacheHttpdPackages.mod_jk; # Added 2024-06-07
   tooling-language-server = deputy; # Added 2025-06-22
   tor-browser-bundle-bin = tor-browser; # Added 2023-09-23
-  transmission = lib.warnOnInstantiate (transmission3Warning { }) transmission_3; # Added 2024-06-10
-  transmission-gtk = lib.warnOnInstantiate (transmission3Warning {
-    suffix = "-gtk";
-  }) transmission_3-gtk; # Added 2024-06-10
-  transmission-qt = lib.warnOnInstantiate (transmission3Warning {
-    suffix = "-qt";
-  }) transmission_3-qt; # Added 2024-06-10
-  libtransmission = lib.warnOnInstantiate (transmission3Warning {
-    prefix = "lib";
-  }) libtransmission_3; # Added 2024-06-10
   LPCNet = lpcnet; # Added 2025-05-05
   transfig = fig2dev; # Added 2022-02-15
   transifex-client = transifex-cli; # Added 2023-12-29
