@@ -189,20 +189,20 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
     "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
+  ++ lib.optionals cudaSupport [
+    "-DOPTIX_ROOT_DIR=${optix}"
+    "-DWITH_CYCLES_CUDA_BINARIES=ON"
+  ]
   ++ lib.optionals waylandSupport [
     "-DWITH_GHOST_WAYLAND=ON"
     "-DWITH_GHOST_WAYLAND_DBUS=ON"
     "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
     "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
   ]
+  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLIBDIR=/does-not-exist"
     "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
-  ]
-  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
-  ++ lib.optionals cudaSupport [
-    "-DOPTIX_ROOT_DIR=${optix}"
-    "-DWITH_CYCLES_CUDA_BINARIES=ON"
   ];
 
   preConfigure = ''
