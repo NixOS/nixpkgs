@@ -41,10 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs auparse/test/auparse_test.py
   '';
 
-  # https://github.com/linux-audit/audit-userspace/issues/474
-  # building databuf_test fails otherwise, as that uses hidden symbols only available in the static builds
-  dontDisableStatic = true;
-
   outputs = [
     "bin"
     "lib"
