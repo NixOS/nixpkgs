@@ -111,6 +111,7 @@ buildPythonPackage rec {
     pytest-mock
     mock
     pyyaml
+    psutil
   ];
 
   disabledTestPaths = [
