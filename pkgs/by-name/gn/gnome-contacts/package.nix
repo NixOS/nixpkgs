@@ -3,6 +3,7 @@
   stdenv,
   gettext,
   fetchurl,
+  blueprint-compiler,
   evolution-data-server-gtk4,
   pkg-config,
   libxslt,
@@ -29,14 +30,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "48.0";
+  version = "49.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/gnome-contacts-${version}.tar.xz";
-    hash = "sha256-onYplbWUJ+w/GF8otVlONwd7cqcM18GSF+1jRjfswbU=";
+    hash = "sha256-miIJ8lAH3GpJ2IbcFkCJhgjynaWY1SOgC0zfjbP5dNY=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config

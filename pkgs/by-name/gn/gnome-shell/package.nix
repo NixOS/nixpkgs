@@ -61,6 +61,7 @@
   libGL,
   libXi,
   libX11,
+  libxkbcommon,
   libxml2,
 }:
 
@@ -69,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "48.4";
+  version = "49.rc";
 
   outputs = [
     "out"
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QOLtdLRTZ/DKOPv6oKtHCGjSNZHQPcQNCr1v930jtwc=";
+    hash = "sha256-Hv8ooNfiUECI8ISa/zHxwMhw2WJwA56G5W13+OEHrkE=";
   };
 
   patches = [
@@ -156,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
+    libxkbcommon
     libxml2
 
     # recording
@@ -185,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       src/data-to-c.py \
-      meson/generate-app-list.py
+      build-aux/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
