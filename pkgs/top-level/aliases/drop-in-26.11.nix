@@ -129,6 +129,7 @@
   gnufdisk = throw "'gnufdisk' has been removed due to lack of maintenance upstream"; # Added 2024-12-31
   gnustep = throw "The gnustep scope has been replaced with top-level packages: gnustep-back, -base, -gui, -libobjc, -make, -systempreferences; gorm, gworkspace, projectcenter."; # Added 2025-01-25
   grafana-agent = throw "'grafana-agent' has been removed, as it only works with an EOL compiler and will become EOL during the 25.05 release. Consider migrating to 'grafana-alloy' instead"; # Added 2025-04-02
+  graylog-5_2 = throw "graylog 5.2 is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.2 to latest series."; # Added 2025-03-21
   googler = throw "'googler' has been removed, as it no longer works and is abandoned upstream"; # Added 2025-04-01
   green-pdfviewer = throw "'green-pdfviewer' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   grun = throw "grun has been removed due to lack of maintenance upstream and depending on gtk2"; # Added 2025-03-29
@@ -187,6 +188,31 @@
   manicode = throw "manicode has been renamed to codebuff"; # Added 2024-12-10
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
   manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
+  maple-mono-NF = throw ''
+    maple-mono-NF had been moved to maple-mono.NF.
+    for installing all maple-mono:
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
+  ''; # Added 2025-03-18
+  maple-mono-otf = throw ''
+    maple-mono-otf had been moved to maple-mono.opentype.
+    for installing all maple-mono:
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
+  ''; # Added 2025-03-18
+  maple-mono-woff2 = throw ''
+    maple-mono-woff2 had been moved to maple-mono.woff2.
+    for installing all maple-mono:
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
+  ''; # Added 2025-03-18
+  maple-mono-SC-NF = throw ''
+    mono-SC-NF had been superseded by maple-mono.NF-CN.
+    for installing all maple-mono:
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
+  ''; # Added 2025-03-18
+  maple-mono-autohint = throw ''
+    maple-mono-autohint had been moved to maple-mono.truetype-autohint.
+    for installing all maple-mono:
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
+  ''; # Added 2025-03-18
   mapmap = throw "'mapmap' has been removed as it has been unmaintained since 2021"; # Added 2025-05-17
   markets = throw "'markets' has been removed as it was archived upstream in 2023"; # Added 2025-04-17
   matomo-beta = throw "matomo-beta has been removed as it mostly just pointed to the latest matomo release, use `matomo.overrideAttrs` to access a specific beta version instead"; # Added 2025-01-15
@@ -198,12 +224,39 @@
   music-player = throw "'music-player' has been removed due to lack of maintenance upstream. Consider using 'fum' or 'termusic' instead."; # Added 2025-05-02
   neocomp = throw "neocomp has been remove because it fails to build and was unmaintained upstream"; # Added 2025-04-28
   netbox_3_7 = throw "netbox 3.7 series has been removed as it was EOL"; # Added 2025-04-23
+  nextcloud29 = throw ''
+    Nextcloud v29 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2025-04. Please upgrade to at least Nextcloud v30 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud30;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 28 you have to upgrade to Nextcloud 29
+    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2025-04-11
   nextcloud29Packages = throw "Nextcloud 29 is EOL!"; # Added 2025-04-11
+  nextcloud28 = throw ''
+    Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud29;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 27 you have to upgrade to Nextcloud 28
+    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2025-01-19
   nextcloud28Packages = throw "Nextcloud 28 is EOL!"; # Added 2025-01-19
   nextcloud-news-updater = throw "nextcloud-news-updater has been removed because the project is unmaintained"; # Added 2025-03-28
   nix-plugin-pijul = throw "nix-plugin-pijul has been removed due to being discontinued"; # added 2025-05-18
   noah = throw "'noah' has been removed because it was broken and its upstream archived"; # Added 2025-05-10
   nodejs_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed"; # Added 2025-04-23
+  nomad_1_4 = throw "nomad_1_4 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
+  nomad_1_5 = throw "nomad_1_5 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
+  nomad_1_6 = throw "nomad_1_6 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
+  nomad_1_7 = throw "nomad_1_7 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-03-27
+  nomad_1_8 = throw "nomad_1_8 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-03-27
   nux = throw "nux has been removed because it has been abandoned for 4 years"; # Added 2025-03-22
   ocis-bin = throw "ocis-bin has been renamed to ocis_5-bin'. Future major.minor versions will be made available as separate packages"; # Added 2025-03-30
   odoo15 = throw "odoo15 has been removed from nixpkgs as it is unsupported; migrate to a newer version of odoo"; # Added 2025-05-06
@@ -213,6 +266,14 @@
   openvdb_11 = throw "'openvdb_11' has been removed in favor of the latest version'"; # Added 2025-05-03
   opera = throw "'opera' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-05-19
   omping = throw "'omping' has been removed because its upstream has been archived"; # Added 2025-05-10
+  oxygen-icons5 = throw ''
+    The top-level oxygen-icons5 alias has been removed.
+
+    Please explicitly use kdePackages.oxygen-icons for the latest Qt 6-based version,
+    or libsForQt5.oxygen-icons5 for the deprecated Qt 5 version.
+
+    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
+  ''; # Added 2025-03-15;
   pax-rs = throw "'pax-rs' has been removed because upstream has disappeared"; # Added 2025-01-25
   passky-desktop = throw "passky-desktop has been removed, as it was unmaintained and blocking the Electron 29 removal."; # Added 2025-02-24
   paco = throw "'paco' has been removed as it has been abandoned"; # Added 2025-04-30
@@ -226,6 +287,14 @@
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
   pgf1 = throw "'pgf1' has been removed since it is unmaintained. Consider using 'pgf' instead"; # Added 2025-05-10
+  polkit-kde-agent = throw ''
+    The top-level polkit-kde-agent alias has been removed.
+
+    Please explicitly use kdePackages.polkit-kde-agent-1 for the latest Qt 6-based version,
+    or libsForQt5.polkit-kde-agent for the deprecated Qt 5 version.
+
+    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
+  ''; # Added 2025-03-07
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
   tsearch_extras = throw "'tsearch_extras' has been removed from nixpkgs"; # Added 2024-12-15
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18

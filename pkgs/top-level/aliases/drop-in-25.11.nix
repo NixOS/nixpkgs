@@ -61,6 +61,7 @@
   gamin = throw "'gamin' has been removed as it is unmaintained upstream"; # Added 2024-04-19
   go_1_22 = throw "Go 1.22 is end-of-life and 'go_1_22' has been removed. Please use a newer Go toolchain."; # Added 2024-03-28
   git-credential-1password = throw "'git-credential-1password' has been removed, as the upstream project is deleted."; # Added 2024-05-20
+  graylog-5_0 = throw "graylog 5.0.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.0.x to latest series."; # Added 2024-02-15
   jush = throw "jush has been removed from nixpkgs because it is unmaintained"; # Added 2024-05-28
   k3s_1_26 = throw "'k3s_1_26' has been removed from nixpkgs as it has reached end of life"; # Added 2024-05-20
   k3s_1_27 = throw "'k3s_1_27' has been removed from nixpkgs as it has reached end of life on 2024-06-28"; # Added 2024-06-01

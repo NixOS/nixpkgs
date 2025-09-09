@@ -376,8 +376,6 @@ in
 
   ### _ ###
   _1password = lib.warnOnInstantiate "_1password has been renamed to _1password-cli to better follow upstream name usage" _1password-cli; # Added 2024-10-24
-  "7z2hashcat" =
-    throw "'7z2hashcat' has been renamed to '_7z2hashcat' as the former isn't a valid variable name."; # Added 2024-11-27
 
   ### A ###
 
@@ -392,7 +390,6 @@ in
     admin-fe = lib.warnOnInstantiate "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'" akkoma-admin-fe; # Added 2025-03-14
     akkoma-fe = lib.warnOnInstantiate "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'" akkoma-fe; # Added 2025-03-14
   };
-  antennas = throw "antennas has been removed as it only works with tvheadend, which nobody was willing to maintain and was stuck on an unmaintained version that required FFmpeg 4. Please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version"; # Added 2024-08-21
   ao = libfive; # Added 2024-10-11
   apacheAnt = ant; # Added 2024-11-28
   appthreat-depscan = dep-scan; # Added 2024-04-10
@@ -584,12 +581,6 @@ in
   gg = go-graft; # Added 2025-03-07
   ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
   gnu-cobol = gnucobol; # Added 2024-09-17
-  gogs = throw ''
-    Gogs development has stalled. Also, it has several unpatched, critical vulnerabilities that
-    weren't addressed within a year: https://github.com/gogs/gogs/issues/7777
-
-    Consider migrating to forgejo or gitea.
-  ''; # Added 2024-10-12
 
   gitAndTools = self // {
     darcsToGit = darcs-to-git;
@@ -638,9 +629,6 @@ in
   graalvm-ce = graalvmPackages.graalvm-ce; # Added 2024-08-10
   graalvm-oracle = graalvmPackages.graalvm-oracle; # Added 2024-12-17
   grafana_reporter = grafana-reporter; # Added 2024-06-09
-  graylog-5_0 = throw "graylog 5.0.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.0.x to latest series."; # Added 2024-02-15
-  graylog-5_1 = throw "graylog 5.1.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.1.x to latest series."; # Added 2024-10-16
-  graylog-5_2 = throw "graylog 5.2 is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.2 to latest series."; # Added 2025-03-21
   gringo = clingo; # added 2022-11-27
   grub2_full = grub2; # Added 2022-11-18
   gtkcord4 = dissent; # Added 2024-03-10
@@ -853,32 +841,6 @@ in
   MACS2 = macs2; # Added 2023-06-12
   mariadb-client = hiPrio mariadb.client; # added 2019.07.28
 
-  maple-mono-NF = throw ''
-    maple-mono-NF had been moved to maple-mono.NF.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-18
-  maple-mono-otf = throw ''
-    maple-mono-otf had been moved to maple-mono.opentype.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-18
-  maple-mono-woff2 = throw ''
-    maple-mono-woff2 had been moved to maple-mono.woff2.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-18
-  maple-mono-SC-NF = throw ''
-    mono-SC-NF had been superseded by maple-mono.NF-CN.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-18
-  maple-mono-autohint = throw ''
-    maple-mono-autohint had been moved to maple-mono.truetype-autohint.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-18
-
   marwaita-manjaro = lib.warnOnInstantiate "marwaita-manjaro has been renamed to marwaita-teal" marwaita-teal; # Added 2024-07-08
   marwaita-peppermint = lib.warnOnInstantiate "marwaita-peppermint has been renamed to marwaita-red" marwaita-red; # Added 2024-07-01
   marwaita-ubuntu = lib.warnOnInstantiate "marwaita-ubuntu has been renamed to marwaita-orange" marwaita-orange; # Added 2024-07-08
@@ -920,57 +882,8 @@ in
   neocities-cli = neocities; # Added 2024-07-31
   nettools = net-tools; # Added 2025-06-11
   newt-go = fosrl-newt; # Added 2025-06-24
-  nextcloud29 = throw ''
-    Nextcloud v29 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2025-04. Please upgrade to at least Nextcloud v30 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud30;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 28 you have to upgrade to Nextcloud 29
-    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2025-04-11
-  nextcloud28 = throw ''
-    Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud29;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 27 you have to upgrade to Nextcloud 28
-    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2025-01-19
-  nextcloud27 = throw ''
-    Nextcloud v27 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2024-06. Please upgrade to at least Nextcloud v28 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud28;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 26 you have to upgrade to Nextcloud 27
-    first on 24.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2024-06-25
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = makePlasma5Throw "neochat"; # added 2022-05-10
-  nerdfonts = throw ''
-    nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
-    For example change:
-      fonts.packages = [
-        ...
-        (pkgs.nerdfonts.override { fonts = [ "0xproto" "DroidSansMono" ]; })
-      ]
-    to
-      fonts.packages = [
-        ...
-        pkgs.nerd-fonts._0xproto
-        pkgs.nerd-fonts.droid-sans-mono
-      ]
-    or for all fonts
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
-  ''; # Added 2024-11-09
   networkmanager_strongswan = networkmanager-strongswan; # added 2025-06-29
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
@@ -993,11 +906,6 @@ in
   nodejs-18_x = nodejs_18; # Added 2022-11-06
   nodejs-slim-18_x = nodejs-slim_18; # Added 2022-11-06
   nomacs-qt6 = nomacs; # Added 2025-08-30
-  nomad_1_4 = throw "nomad_1_4 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
-  nomad_1_5 = throw "nomad_1_5 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
-  nomad_1_6 = throw "nomad_1_6 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
-  nomad_1_7 = throw "nomad_1_7 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-03-27
-  nomad_1_8 = throw "nomad_1_8 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-03-27
   noto-fonts-emoji = noto-fonts-color-emoji; # Added 2023-09-09
   noto-fonts-extra = noto-fonts; # Added 2023-04-08
   NSPlist = nsplist; # Added 2024-01-05
@@ -1024,14 +932,6 @@ in
   onlyoffice-bin_latest = onlyoffice-bin; # Added 2024-07-03
   OSCAR = oscar; # Added 2024-06-12
   overrideSDK = "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
-  oxygen-icons5 = throw ''
-    The top-level oxygen-icons5 alias has been removed.
-
-    Please explicitly use kdePackages.oxygen-icons for the latest Qt 6-based version,
-    or libsForQt5.oxygen-icons5 for the deprecated Qt 5 version.
-
-    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
-  ''; # Added 2025-03-15;
 
   ### P ###
 
@@ -1063,14 +963,6 @@ in
   pltScheme = racket; # just to be sure
   poac = cabinpkg; # Added 2025-01-22
   podofo010 = podofo_0_10; # Added 2025-06-01
-  polkit-kde-agent = throw ''
-    The top-level polkit-kde-agent alias has been removed.
-
-    Please explicitly use kdePackages.polkit-kde-agent-1 for the latest Qt 6-based version,
-    or libsForQt5.polkit-kde-agent for the deprecated Qt 5 version.
-
-    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
-  ''; # Added 2025-03-07
   powerdns = pdns; # Added 2022-03-28
 
   # Ever since building with JIT by default, those are the same.
@@ -1160,13 +1052,6 @@ in
 
   SDL_classic = SDL1; # Added 2024-09-03
   scantailor = scantailor-advanced; # Added 2022-05-26
-  schildichat-web = throw ''
-    schildichat has been removed as it is severely lacking behind the Element upstream and does not receive regular security fixes.
-    Please participate in upstream discussion on getting out new releases:
-    https://github.com/SchildiChat/schildichat-desktop/issues/212
-    https://github.com/SchildiChat/schildichat-desktop/issues/215''; # Added 2023-12-05
-  schildichat-desktop = schildichat-web;
-  schildichat-desktop-wayland = schildichat-web;
   scitoken-cpp = scitokens-cpp; # Added 2024-02-12
   session-desktop-appimage = session-desktop;
   sequoia = sequoia-sq; # Added 2023-06-26
@@ -1283,7 +1168,6 @@ in
   trilium-next-server = trilium-server; # Added 2025-08-30
   trust-dns = hickory-dns; # Added 2024-08-07
   tvbrowser-bin = tvbrowser; # Added 2023-03-02
-  tvheadend = throw "tvheadend has been removed as it nobody was willing to maintain it and it was stuck on an unmaintained version that required FFmpeg 4. Please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version"; # Added 2024-08-21
   typst-fmt = typstfmt; # Added 2023-07-15
 
   ### U ###
@@ -1324,12 +1208,6 @@ in
   wakatime = wakatime-cli; # 2024-05-30
   wapp = tclPackages.wapp; # Added 2024-10-02
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_100;
-  wayfireApplications-unwrapped = throw ''
-    'wayfireApplications-unwrapped.wayfire' has been renamed to/replaced by 'wayfire'
-    'wayfireApplications-unwrapped.wayfirePlugins' has been renamed to/replaced by 'wayfirePlugins'
-    'wayfireApplications-unwrapped.wcm' has been renamed to/replaced by 'wayfirePlugins.wcm'
-    'wayfireApplications-unwrapped.wlroots' has been removed
-  ''; # Add 2023-07-29
   webfontkitgenerator = webfont-bundler; # Added 2025-07-27
   whatsapp-for-linux = wasistlos; # Added 2025-01-30
   wineWayland = wine-wayland;
