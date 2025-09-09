@@ -13,7 +13,7 @@
   graphviz,
 
   # propagatedBuildInputs
-  cereal_1_3_2,
+  cereal,
   eigen,
   jrl-cmakemodules,
   simde,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    cereal_1_3_2
+    cereal
     eigen
     jrl-cmakemodules
     simde
