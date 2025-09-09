@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace-fail "/usr/include/linux/audit.h" \
                      "${linuxHeaders}/include/linux/audit.h"
+  ''
+  + lib.optionalString (enablePython && finalAttrs.finalPackage.doCheck) ''
+    patchShebangs auparse/test/auparse_test.py
   '';
 
   # https://github.com/linux-audit/audit-userspace/issues/474
@@ -97,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     bash
     bashNonInteractive
   ];
+
+  doCheck = true;
 
   postInstall = ''
     installShellCompletion --bash init.d/audit.bash_completion
