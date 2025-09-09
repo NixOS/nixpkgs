@@ -357,7 +357,6 @@ in
 // mapAliases (import ./aliases/drop-in-27.05.nix)
 // mapAliases (import ./aliases/drop-in-26.11.nix)
 // mapAliases (import ./aliases/drop-in-26.05.nix)
-// mapAliases (import ./aliases/drop-in-25.11.nix)
 // mapAliases {
   # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
   forceSystem = system: _: (import self.path { localSystem = { inherit system; }; });
