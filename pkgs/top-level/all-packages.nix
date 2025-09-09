@@ -14056,6 +14056,10 @@ with pkgs;
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
+  openmw-dev = libsForQt5.callPackage ../games/openmw/openmw-dev.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreMedia VideoDecodeAcceleration VideoToolbox;
+  };
+
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   openraPackages_2019 = import ../games/openra_2019 {
