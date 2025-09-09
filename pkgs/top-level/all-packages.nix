@@ -326,8 +326,6 @@ with pkgs;
     practiceMod = true;
   };
 
-  cereal = cereal_1_3_2;
-
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
   clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
