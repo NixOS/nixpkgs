@@ -137,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
   configurePlatforms = [ ];
 
   configureFlags = [
-    "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
   ]
   ++ (
