@@ -3,7 +3,7 @@ let
   localProxyPort = 43;
 in
 {
-  name = "dnscrypt-proxy2";
+  name = "dnscrypt-proxy";
   meta.maintainers = with lib.maintainers; [ joachifm ];
 
   nodes = {
@@ -14,8 +14,8 @@ in
       {
         security.apparmor.enable = true;
 
-        services.dnscrypt-proxy2.enable = true;
-        services.dnscrypt-proxy2.settings = {
+        services.dnscrypt-proxy.enable = true;
+        services.dnscrypt-proxy.settings = {
           listen_addresses = [ "127.0.0.1:${toString localProxyPort}" ];
           sources.public-resolvers = {
             urls = [ "https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md" ];
@@ -32,7 +32,7 @@ in
 
   testScript = ''
     client.wait_for_unit("dnsmasq")
-    client.wait_for_unit("dnscrypt-proxy2")
+    client.wait_for_unit("dnscrypt-proxy")
     client.wait_until_succeeds("ss --numeric --udp --listening | grep -q ${toString localProxyPort}")
   '';
 }
