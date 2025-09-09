@@ -55,7 +55,7 @@ lib:
   kmod,
   lib,
   libseccomp,
-  makeWrapper,
+  makeBinaryWrapper,
   nixosTests,
   overrideBundleAttrs ? { }, # An attrSet/function to override the `k3sBundle` derivation.
   overrideCniPluginsAttrs ? { }, # An attrSet/function to override the `k3sCNIPlugins` derivation.
@@ -391,7 +391,7 @@ buildGoModule (finalAttrs: {
   buildInputs = finalAttrs.k3sRuntimeDeps;
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     rsync
     yq-go
     zstd
