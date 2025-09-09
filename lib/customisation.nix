@@ -300,7 +300,7 @@ rec {
         else
           ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
 
-      errorForArg =
+      missingErrorForArg =
         arg:
         let
           loc = builtins.unsafeGetAttrPos arg fargs;
@@ -309,17 +309,17 @@ rec {
         + "${loc.file}:${toString loc.line}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
-      error = errorForArg (head (attrNames missingArgs));
+      missingError = missingErrorForArg (head (attrNames missingArgs));
 
     in
-    if missingArgs == { } then
-      makeOverridable f allArgs
     # This needs to be an abort so it can't be caught with `builtins.tryEval`,
     # which is used by nix-env and ofborg to filter out packages that don't evaluate.
     # This way we're forced to fix such errors in Nixpkgs,
     # which is especially relevant with allowAliases = false
+    if missingArgs != { } then
+      abort "lib.customisation.callPackageWith: ${missingError}"
     else
-      abort "lib.customisation.callPackageWith: ${error}";
+      makeOverridable f allArgs;
 
   /**
     Like callPackage, but for a function that returns an attribute
