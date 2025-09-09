@@ -127,6 +127,10 @@ with pkgs;
 
   compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
+  darwin.installBinaryPackage = recurseIntoAttrs (
+    callPackage ../os-specific/darwin/install-binary-package/tests { }
+  );
+
   fetchurl = recurseIntoAttrs (callPackages ../build-support/fetchurl/tests.nix { });
   fetchtorrent = recurseIntoAttrs (callPackages ../build-support/fetchtorrent/tests.nix { });
   fetchpatch = recurseIntoAttrs (callPackages ../build-support/fetchpatch/tests.nix { });
