@@ -255,7 +255,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     web = frigate-web;
-    inherit python;
+    inherit python ssdlite_mobilenet_v2_coco-openvino;
     pythonPath = (python3Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
