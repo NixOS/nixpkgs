@@ -283,7 +283,6 @@ with pkgs;
   cve = with python3Packages; toPythonApplication cvelib;
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    cereal = cereal_1_3_2;
     opencv = opencv.override { enableGtk3 = true; };
   };
 
@@ -327,7 +326,7 @@ with pkgs;
     practiceMod = true;
   };
 
-  cereal = cereal_1_3_0;
+  cereal = cereal_1_3_2;
 
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
