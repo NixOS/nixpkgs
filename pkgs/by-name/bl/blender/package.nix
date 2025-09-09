@@ -350,7 +350,6 @@ stdenv'.mkDerivation (finalAttrs: {
   postFixup =
     lib.optionalString cudaSupport ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
-        isELF "$program" || continue
         addDriverRunpath "$program"
       done
     ''
