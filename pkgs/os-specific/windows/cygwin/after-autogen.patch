@@ -1,0 +1,158 @@
+--- winsup/configure.old	2024-11-01 22:38:21.005768397 +1100
++++ winsup/configure	2024-11-01 22:39:33.247435255 +1100
+@@ -3970,155 +3970,6 @@
+ _ACEOF
+ ac_clean_files_save=$ac_clean_files
+ ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
+-# Try to create an executable without -o first, disregard a.out.
+-# It will help us diagnose broken compilers, and finding out an intuition
+-# of exeext.
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether the C compiler works" >&5
+-printf %s "checking whether the C compiler works... " >&6; }
+-ac_link_default=`printf "%s\n" "$ac_link" | sed 's/ -o *conftest[^ ]*//'`
+-
+-# The possible output files:
+-ac_files="a.out conftest.exe conftest a.exe a_out.exe b.out conftest.*"
+-
+-ac_rmfiles=
+-for ac_file in $ac_files
+-do
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj ) ;;
+-    * ) ac_rmfiles="$ac_rmfiles $ac_file";;
+-  esac
+-done
+-rm -f $ac_rmfiles
+-
+-if { { ac_try="$ac_link_default"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-printf "%s\n" "$ac_try_echo"; } >&5
+-  (eval "$ac_link_default") 2>&5
+-  ac_status=$?
+-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-then :
+-  # Autoconf-2.13 could set the ac_cv_exeext variable to 'no'.
+-# So ignore a value of 'no', otherwise this would lead to 'EXEEXT = no'
+-# in a Makefile.  We should not override ac_cv_exeext if it was cached,
+-# so that the user can short-circuit this test for compilers unknown to
+-# Autoconf.
+-for ac_file in $ac_files ''
+-do
+-  test -f "$ac_file" || continue
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj )
+-	;;
+-    [ab].out )
+-	# We found the default executable, but exeext='' is most
+-	# certainly right.
+-	break;;
+-    *.* )
+-	if test ${ac_cv_exeext+y} && test "$ac_cv_exeext" != no;
+-	then :; else
+-	   ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
+-	fi
+-	# We set ac_cv_exeext here because the later test for it is not
+-	# safe: cross compilers may not add the suffix if given an '-o'
+-	# argument, so we may need to know it at that point already.
+-	# Even if this section looks crufty: it has the advantage of
+-	# actually working.
+-	break;;
+-    * )
+-	break;;
+-  esac
+-done
+-test "$ac_cv_exeext" = no && ac_cv_exeext=
+-
+-else case e in #(
+-  e) ac_file='' ;;
+-esac
+-fi
+-if test -z "$ac_file"
+-then :
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-printf "%s\n" "no" >&6; }
+-printf "%s\n" "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-{ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+-printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+-as_fn_error 77 "C compiler cannot create executables
+-See 'config.log' for more details" "$LINENO" 5; }
+-else case e in #(
+-  e) { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-printf "%s\n" "yes" >&6; } ;;
+-esac
+-fi
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for C compiler default output file name" >&5
+-printf %s "checking for C compiler default output file name... " >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_file" >&5
+-printf "%s\n" "$ac_file" >&6; }
+-ac_exeext=$ac_cv_exeext
+-
+-rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
+-ac_clean_files=$ac_clean_files_save
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for suffix of executables" >&5
+-printf %s "checking for suffix of executables... " >&6; }
+-if { { ac_try="$ac_link"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-printf "%s\n" "$ac_try_echo"; } >&5
+-  (eval "$ac_link") 2>&5
+-  ac_status=$?
+-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-then :
+-  # If both 'conftest.exe' and 'conftest' are 'present' (well, observable)
+-# catch 'conftest.exe'.  For instance with Cygwin, 'ls conftest' will
+-# work properly (i.e., refer to 'conftest.exe'), while it won't with
+-# 'rm'.
+-for ac_file in conftest.exe conftest conftest.*; do
+-  test -f "$ac_file" || continue
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj ) ;;
+-    *.* ) ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
+-	  break;;
+-    * ) break;;
+-  esac
+-done
+-else case e in #(
+-  e) { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+-printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+-as_fn_error $? "cannot compute suffix of executables: cannot compile and link
+-See 'config.log' for more details" "$LINENO" 5; } ;;
+-esac
+-fi
+-rm -f conftest conftest$ac_cv_exeext
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_exeext" >&5
+-printf "%s\n" "$ac_cv_exeext" >&6; }
+-
+-rm -f conftest.$ac_ext
+-EXEEXT=$ac_cv_exeext
+-ac_exeext=$EXEEXT
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <stdio.h>
+-int
+-main (void)
+-{
+-FILE *f = fopen ("conftest.out", "w");
+- if (!f)
+-  return 1;
+- return ferror (f) || fclose (f) != 0;
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-ac_clean_files="$ac_clean_files conftest.out"
+ # Check that the compiler produces executables we can run.  If not, either
+ # the compiler is broken, or we cross compile.
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether we are cross compiling" >&5

@@ -1,20 +1,19 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  buildPackages,
   fetchpatch,
   mingw_w64_headers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cygwin-headers";
-  version = "3.5.4";
+  version = "3.6.4";
 
-  src = fetchFromGitHub {
-    owner = "mirror";
-    repo = "newlib-cygwin";
+  src = buildPackages.fetchgit {
+    url = "https://cygwin.com/git/newlib-cygwin.git";
     rev = "cygwin-${finalAttrs.version}";
-    hash = "sha256-ZfT6JhOXLCJOY0vSVz6aKShmtuTN9/0NZ1k1RMSZX4Q=";
+    hash = "sha256-+WYKwqcDAc7286GzbgKKAxNJCOf3AeNnF8XEVPoor+g=";
   };
 
   patches = [
