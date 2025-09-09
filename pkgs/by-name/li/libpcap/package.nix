@@ -4,6 +4,8 @@
   fetchurl,
   flex,
   bison,
+  bash,
+  bashNonInteractive,
   bluez,
   libnl,
   libxcrypt,
@@ -26,13 +28,25 @@ stdenv.mkDerivation rec {
   pname = "libpcap";
   version = "1.10.5";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
     hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
   };
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libnl ] ++ lib.optionals withRemote [ libxcrypt ];
+  outputs = [
+    "out"
+    "lib"
+  ];
+
+  strictDeps = true;
+
+  buildInputs = [
+    bash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+  ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [
     flex
@@ -61,6 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  outputChecks.lib.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
 
   passthru.tests = {
     inherit

@@ -1,0 +1,25 @@
+Sandboxed builds need a fallback value for the version of the Command Line Tools
+being used.
+
+--- a/tools/gyp/pylib/gyp/xcode_emulation.py
++++ b/tools/gyp/pylib/gyp/xcode_emulation.py
+@@ -1552,7 +1552,7 @@ def CLTVersion():
+         output = GetStdout(["/usr/sbin/softwareupdate", "--history"])
+         return re.search(regex, output).groupdict()["version"]
+     except (GypError, OSError):
+-        return None
++        return "11.0.0.0.1.1567737322"
+ 
+ 
+ def GetStdoutQuiet(cmdlist):
+--- a/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
++++ b/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+@@ -1552,7 +1552,7 @@ def CLTVersion():
+         output = GetStdout(["/usr/sbin/softwareupdate", "--history"])
+         return re.search(regex, output).groupdict()["version"]
+     except (GypError, OSError):
+-        return None
++        return "11.0.0.0.1.1567737322"
+ 
+ 
+ def GetStdoutQuiet(cmdlist):

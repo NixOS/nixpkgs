@@ -346,6 +346,10 @@ with self;
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.80.tar.gz";
       hash = "sha256-2e3JNrBnBbtcte5aLqi89hEaPogVkU8XfhXjwP7TAfM=";
     };
+
+    # override default postPatch to avoid patchShebangs breaking tests
+    postPatch = "";
+
     propagatedBuildInputs = [
       CaptureTiny
       FFICheckLib
@@ -7430,10 +7434,10 @@ with self;
 
   CryptURandom = buildPerlPackage {
     pname = "Crypt-URandom";
-    version = "0.39";
+    version = "0.54";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.39.tar.gz";
-      hash = "sha256-Jol7PPualWAJFRLWCHMaPVv08pn20Pj3LIXzmQEkQSI=";
+      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.54.tar.gz";
+      hash = "sha256-SnPNOUkzMo2khKrrhkXXNbNUZd9gEJ5VngoosGYFOlc=";
     };
     meta = {
       description = "Provide non blocking randomness";
@@ -10740,10 +10744,10 @@ with self;
 
   DigestHMAC = buildPerlPackage {
     pname = "Digest-HMAC";
-    version = "1.04";
+    version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Digest-HMAC-1.04.tar.gz";
-      hash = "sha256-1ryBVqonXETXlLfBj0TNrEpYFAJFyVnmsZssODiwjtQ=";
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Digest-HMAC-1.05.tar.gz";
+      hash = "sha256-IVy1nLphB0XPstSz+O91bVkOV+OteYapkuh8SWn83Ho=";
     };
     meta = {
       description = "Keyed-Hashing for Message Authentication";
@@ -28495,6 +28499,10 @@ with self;
       url = "mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.277.tar.gz";
       hash = "sha256-h8efg7aHbiBgUZZdUBnSUHxVH4GahnUAgOx+xDsuCvg=";
     };
+
+    # override default postPatch to avoid patchShebangs breaking tests
+    postPatch = "";
+
     buildInputs = [
       ClassInspector
       TestDeep

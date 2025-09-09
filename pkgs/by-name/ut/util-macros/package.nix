@@ -1,44 +1,34 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  pkg-config,
-  automake,
-  autoconf,
-  libtool,
+  fetchFromGitLab,
   testers,
-  writeScript,
+  gitUpdater,
+  autoreconfHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-macros";
   version = "1.20.2";
 
-  src = fetchurl {
-    url = "mirror://xorg/individual/util/util-macros-${finalAttrs.version}.tar.xz";
-    hash = "sha256-msJp66JPZy19ezV05L5fMz0T8Ep3EjA7GCGypRrILo4=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    group = "xorg";
+    owner = "util";
+    repo = "macros";
+    tag = "util-macros-${finalAttrs.version}";
+    hash = "sha256-COIWe7GMfbk76/QUIRsN5yvjd6MEarI0j0M+Xa0WoKQ=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ];
-
-  # not needed for releases, we propagate the needed tools
-  propagatedNativeBuildInputs = [
-    automake
-    autoconf
-    libtool
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
-        --url https://xorg.freedesktop.org/releases/individual/util/ \
-        | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
-    '';
+    updateScript = gitUpdater {
+      rev-prefix = "util-macros-";
+      ignoredVersions = "1_0_2";
+    };
   };
 
   meta = {
@@ -48,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariant
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      raboof
+      jopejoe1
+    ];
     pkgConfigModules = [ "xorg-macros" ];
     platforms = lib.platforms.unix;
   };

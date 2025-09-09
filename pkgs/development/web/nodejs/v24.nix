@@ -14,6 +14,15 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches =
+    if stdenv.buildPlatform.isDarwin then
+      callPackage ./gyp-patches.nix { patch_tools_catch_oserror = false; }
+      ++ [
+        ./gyp-patches-set-fallback-value-for-CLT.patch
+      ]
+    else
+      [ ];
 in
 buildNodejs {
   inherit enableNpm;
@@ -46,20 +55,12 @@ buildNodejs {
     ]
     ++ [
       ./configure-armv6-vfpv2.patch
-      ./disable-darwin-v8-system-instrumentation-node19.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
-
-      # TODO: newer GYP versions have been patched to be more compatible with Nix sandbox. We need
-      # to adapt our patch to this newer version, see https://github.com/NixOS/nixpkgs/pull/434742.
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/886e4b3b534a9f3ad2facbc99097419e06615900.patch?full_index=1";
-        hash = "sha256-HFTabl92NPkBwXD0mUGDN+Gzabyi+Ph0kL0FEHHknbk=";
-        revert = true;
-      })
-      ./bypass-darwin-xcrun-node16.patch
+      ./use-nix-codesign.patch
     ]
+    ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts
       (fetchpatch2 {

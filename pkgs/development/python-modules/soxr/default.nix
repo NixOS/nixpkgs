@@ -46,8 +46,8 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  pypaBuildFlags = [
-    "--config-setting=cmake.define.USE_SYSTEM_LIBSOXR=ON"
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_LIBSOXR" true)
   ];
 
   build-system = [

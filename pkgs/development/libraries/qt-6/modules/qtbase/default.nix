@@ -80,7 +80,6 @@
   libinput,
   # options
   qttranslations ? null,
-  fetchpatch,
 }:
 
 let
@@ -218,13 +217,6 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
-
-    # Backport patch recommended by KDE to fix HTTP2 stream corruption issues
-    # FIXME: remove in 6.9.2
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/904aec2f372e2981af19bf762583a0ef42ec6bb9.diff";
-      hash = "sha256-bSf4TgYUk7Ariu37NHGQKv6wFArVpQLlnHCTbCFzAfI=";
-    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

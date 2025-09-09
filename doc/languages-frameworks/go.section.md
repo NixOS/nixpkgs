@@ -192,6 +192,12 @@ Specifies the contents of the `go.sum` file and triggers rebuilds when it change
 
 Defaults to `null`
 
+### `buildTestBinaries` {#var-go-buildTestBinaries}
+
+This option allows to compile test binaries instead of the usual binaries produced by a package.
+Go can [compile test into binaries](https://pkg.go.dev/cmd/go#hdr-Test_packages) using the `go test -c` command.
+These binaries can then be executed at a later point (outside the Nix sandbox) to run the tests.
+This is mostly useful for downstream consumers to run integration or end-to-end tests that won't work in the Nix sandbox, for example because they require network access.
 
 ## Versioned toolchains and builders {#ssec-go-toolchain-versions}
 
