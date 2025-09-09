@@ -242,6 +242,12 @@
   sonusmix = throw "'sonusmix' has been removed due to lack of maintenance"; # Added 2025-08-27
   sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   station = throw "station has been removed from nixpkgs, as there were no committers among its maintainers to unblock security issues"; # added 2025-06-16
+  steamPackages = {
+    steam = throw "`steamPackages.steam` has been moved to top level as `steam-unwrapped`";
+    steam-fhsenv = throw "`steamPackages.steam-fhsenv` has been moved to top level as `steam`";
+    steam-fhsenv-small = throw "`steamPackages.steam-fhsenv-small` has been moved to top level as `steam`. There is no longer a -small variant";
+    steamcmd = throw "`steamPackages.steamcmd` has been moved to top level as `steamcmd`";
+  };
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Added 2024-11-22 and updated 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
   sumaclust = throw "'sumaclust' has been removed as it was archived upstream and broken with GCC 14"; # Added 2025-06-14

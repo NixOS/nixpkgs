@@ -415,9 +415,13 @@
   srvc = throw "'srvc' has been removed, as it was broken and unmaintained"; # Added 2024-09-09
   starspace = throw "starspace has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
   steamPackages = {
-    steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable"; # Added 2024-10-23
+    steam = throw "`steamPackages.steam` has been moved to top level as `steam-unwrapped`";
+    steam-fhsenv = throw "`steamPackages.steam-fhsenv` has been moved to top level as `steam`";
+    steam-fhsenv-small = throw "`steamPackages.steam-fhsenv-small` has been moved to top level as `steam`. There is no longer a -small variant";
     steam-runtime = throw "`steamPackages.steam-runtime` has been removed, as it's no longer supported or necessary"; # Added 2024-10-23
     steam-runtime-wrapped = throw "`steamPackages.steam-runtime-wrapped` has been removed, as it's no longer supported or necessary"; # Added 2024-10-23
+    steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable"; # Added 2024-10-23
+    steamcmd = throw "`steamPackages.steamcmd` has been moved to top level as `steamcmd`";
   };
   sumokoin = throw "sumokoin has been removed as it was abandoned upstream"; # Added 2024-11-23
   swig1 = throw "swig1 has been removed as it is obsolete"; # Added 2024-08-23
