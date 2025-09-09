@@ -3601,6 +3601,13 @@
     githubId = 103979114;
     keys = [ { fingerprint = "17C7 95D4 871C 2F87 83C8  053D 0C61 C4E5 907F 76C8"; } ];
   };
+  boomshroom = {
+    name = "Angel Bulfone";
+    email = "mbulfone@gmail.com";
+    github = "boomshroom";
+    githubId = 628488;
+    keys = [ { fingerprint = "F9BA 86D2 B7AF FFF8 67A1  7313 23AC 71B9 B528 09FB"; } ];
+  };
   booniepepper = {
     name = "J.R. Hill";
     email = "justin@so.dang.cool";
