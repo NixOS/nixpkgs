@@ -129,13 +129,6 @@ optionals noSysDirs (
   atLeast15 && stdenv.hostPlatform.isDarwin
 ) ../patches/15/libgcc-darwin-fix-reexport.patch
 
-# Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-++ optional (stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
-
-# Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
-++ optional (
-  atLeast14 && stdenv.hostPlatform.isDarwin && langAda
-) ../patches/14/gcc-darwin-remove-coreservices.patch
 
 # Here we apply patches by Iains (https://github.com/iains)
 # GitHub's "compare" API produces unstable diffs, so we resort to reusing
