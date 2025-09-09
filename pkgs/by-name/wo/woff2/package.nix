@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+    # Fix the build with CMake 4.
+    #
+    # See: <https://github.com/google/woff2/issues/183>
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ]
   ++ lib.optional static "-DCMAKE_SKIP_RPATH:BOOL=TRUE";
 
