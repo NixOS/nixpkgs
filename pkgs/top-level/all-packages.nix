@@ -414,9 +414,7 @@ with pkgs;
     name = "die-hook";
   } ../build-support/setup-hooks/die.sh;
 
-  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
   devShellTools = callPackage ../build-support/dev-shell-tools { };
 

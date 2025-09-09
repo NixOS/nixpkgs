@@ -57,10 +57,9 @@ buildPythonPackage rec {
     uproot
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
     # requires uproot4
-    "test_inputs_uproot"
-    "test_uproot_versions"
+    "tests/test_inputs.py"
   ];
 
   pythonImportsCheck = [ "mplhep" ];
