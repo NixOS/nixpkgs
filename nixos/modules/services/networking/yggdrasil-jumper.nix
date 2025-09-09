@@ -73,9 +73,7 @@ in
           default = { };
           example = {
             listen_port = 9999;
-            whitelist = [
-              "<IPv6 address of a remote node>"
-            ];
+            whitelist = [ "<IPv6 address of a remote node>" ];
             wireguard = true;
           };
           description = ''
@@ -129,7 +127,15 @@ in
       cfg = config.services.yggdrasil-jumper;
 
       wg = cfg.detectWireguard && (cfg.settings ? wireguard) && cfg.settings.wireguard;
-      wgExtraPkgs = ifEnable wg (with pkgs; [ iproute2 iptables wireguard-tools conntrack-tools ]);
+      wgExtraPkgs = ifEnable wg (
+        with pkgs;
+        [
+          iproute2
+          iptables
+          wireguard-tools
+          conntrack-tools
+        ]
+      );
 
       # Generate, concatenate and validate config file
       jumperSettings = format.generate "yggdrasil-jumper-settings" cfg.settings;
@@ -198,7 +204,12 @@ in
           MemoryDenyWriteExecute = true;
           ProtectControlGroups = true;
           ProtectHome = "tmpfs";
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ] ++ optional wg "AF_NETLINK";
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ]
+          ++ optional wg "AF_NETLINK";
           RestrictNamespaces = true;
           RestrictRealtime = true;
           AmbientCapabilities = optional wg "CAP_NET_ADMIN";
