@@ -21,7 +21,7 @@
 with lib;
 
 let
-  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix (
+  rootfsImage = pkgs.callPackage config.sdImage.rootFilesystemCreator (
     {
       inherit (config.sdImage) storePaths;
       compressImage = config.sdImage.compressImage;
@@ -125,6 +125,20 @@ in
         Label for the NixOS root volume.
         Usually used when creating a recovery NixOS media installation
         that avoids conflicting with previous instalation label.
+      '';
+    };
+
+    rootFilesystemCreator = mkOption {
+      type = types.oneOf [
+        types.package
+        types.path
+      ];
+      default = ../../../lib/make-ext4-fs.nix;
+      example = ''
+        nixpkgs/nixos/lib/make-btrfs-fs.nix
+      '';
+      description = ''
+        The filesystem creator used for the root partition.
       '';
     };
 
