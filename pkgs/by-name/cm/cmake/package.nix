@@ -176,12 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
   ];
 
-  # `pkgsCross.musl64.cmake.override { stdenv = pkgsCross.musl64.llvmPackages_16.libcxxStdenv; }`
-  # fails with `The C++ compiler does not support C++11 (e.g.  std::unique_ptr).`
-  # The cause is a compiler warning `warning: argument unused during compilation: '-pie' [-Wunused-command-line-argument]`
-  # interfering with the feature check.
-  env.NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
-
   # make install attempts to use the just-built cmake
   preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
