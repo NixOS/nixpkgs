@@ -374,22 +374,12 @@ in
   # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
   forceSystem = system: _: (import self.path { localSystem = { inherit system; }; });
 
-  ### _ ###
-  _1password = lib.warnOnInstantiate "_1password has been renamed to _1password-cli to better follow upstream name usage" _1password-cli; # Added 2024-10-24
-
   ### A ###
 
   AusweisApp2 = ausweisapp; # Added 2023-11-08
   a4term = a4; # Added 2023-10-06
   adminer-pematon = adminneo; # Added 2025-02-20
   adminerneo = adminneo; # Added 2025-02-27
-  akkoma-emoji = recurseIntoAttrs {
-    blobs_gg = lib.warnOnInstantiate "'akkoma-emoji.blobs_gg' has been renamed to 'blobs_gg'" blobs_gg; # Added 2025-03-14
-  };
-  akkoma-frontends = recurseIntoAttrs {
-    admin-fe = lib.warnOnInstantiate "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'" akkoma-admin-fe; # Added 2025-03-14
-    akkoma-fe = lib.warnOnInstantiate "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'" akkoma-fe; # Added 2025-03-14
-  };
   ao = libfive; # Added 2024-10-11
   apacheAnt = ant; # Added 2024-11-28
   appthreat-depscan = dep-scan; # Added 2024-04-10
@@ -407,15 +397,8 @@ in
   banking = saldo; # added 2025-08-29
   BeatSaberModManager = beatsabermodmanager; # Added 2024-06-12
   bitwarden = bitwarden-desktop; # Added 2024-02-25
-  blender-with-packages =
-    args:
-    lib.warnOnInstantiate
-      "blender-with-packages is deprecated in favor of blender.withPackages, e.g. `blender.withPackages(ps: [ ps.foobar ])`"
-      (blender.withPackages (_: args.packages)).overrideAttrs
-      (lib.optionalAttrs (args ? name) { pname = "blender-" + args.name; }); # Added 2023-10-30
   blockbench-electron = blockbench; # Added 2024-03-16
   bmap-tools = bmaptool; # Added 2024-08-05
-  brasero-original = lib.warnOnInstantiate "Use 'brasero-unwrapped' instead of 'brasero-original'" brasero-unwrapped; # Added 2024-09-29
 
   bwidget = tclPackages.bwidget; # Added 2024-10-02
 
@@ -530,8 +513,6 @@ in
   EmptyEpsilon = empty-epsilon; # Added 2024-07-14
   enyo-doom = enyo-launcher; # Added 2022-09-09
 
-  eww-wayland = lib.warnOnInstantiate "eww now can build for X11 and wayland simultaneously, so `eww-wayland` is deprecated, use the normal `eww` package instead." eww;
-
   ### F ###
 
   f3d_egl = lib.warnOnInstantiate "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # added 2025-07-18
@@ -543,9 +524,8 @@ in
   FIL-plugins = fil-plugins; # Added 2024-06-12
   finger_bsd = bsd-finger;
   fingerd_bsd = bsd-fingerd;
-  fira-code-nerdfont = lib.warnOnInstantiate "fira-code-nerdfont is redundant. Use nerd-fonts.fira-code instead." nerd-fonts.fira-code; # Added 2024-11-10
-  firefox-beta-bin = lib.warnOnInstantiate "`firefox-beta-bin` is removed.  Please use `firefox-beta` or `firefox-bin` instead." firefox-beta;
-  firefox-devedition-bin = lib.warnOnInstantiate "`firefox-devedition-bin` is removed.  Please use `firefox-devedition` or `firefox-bin` instead." firefox-devedition;
+  firefox-beta-bin = lib.warnOnInstantiate "`firefox-beta-bin` is removed.  Please use `firefox-beta` or `firefox-bin` instead." firefox-beta; # Added 2025-07-14
+  firefox-devedition-bin = lib.warnOnInstantiate "`firefox-devedition-bin` is removed.  Please use `firefox-devedition` or `firefox-bin` instead." firefox-devedition; # Added 2025-07-14
   firefox-wayland = firefox; # Added 2022-11-15
   firmwareLinuxNonfree = linux-firmware; # Added 2022-01-09
   fishfight = jumpy; # Added 2022-08-03
@@ -553,7 +533,6 @@ in
   flashrom-stable = flashprog; # Added 2024-03-01
   flatbuffers_2_0 = flatbuffers; # Added 2022-05-12
   flow-editor = flow-control; # Added 2025-03-05
-  follow = lib.warnOnInstantiate "follow has been renamed to folo" folo; # Added 2025-05-18
   forgejo-actions-runner = forgejo-runner; # Added 2024-04-04
 
   fractal-next = fractal; # added 2023-11-25
@@ -591,7 +570,6 @@ in
     svn_all_fast_export = svn-all-fast-export;
     topGit = top-git;
   }; # Added 2021-01-14
-  glew-egl = lib.warnOnInstantiate "'glew-egl' is now provided by 'glew' directly" glew; # Added 2024-08-11
   glfw-wayland = glfw; # Added 2024-04-19
   glfw-wayland-minecraft = glfw3-minecraft; # Added 2024-05-08
   glxinfo = mesa-demos; # Added 2024-07-04
@@ -614,12 +592,6 @@ in
   gnome-firmware-updater = gnome-firmware; # added 2022-04-14
   gnome-passwordsafe = gnome-secrets; # added 2022-01-30
   gnome-resources = resources; # added 2023-12-10
-
-  #godot
-  godot_4_3-export-templates = lib.warnOnInstantiate "godot_4_3-export-templates has been renamed to godot_4_3-export-templates-bin" godot_4_3-export-templates-bin;
-  godot_4_4-export-templates = lib.warnOnInstantiate "godot_4_4-export-templates has been renamed to godot_4_4-export-templates-bin" godot_4_4-export-templates-bin;
-  godot_4-export-templates = lib.warnOnInstantiate "godot_4-export-templates has been renamed to godot_4-export-templates-bin" godot_4-export-templates-bin;
-  godot-export-templates = lib.warnOnInstantiate "godot-export-templates has been renamed to godot-export-templates-bin" godot-export-templates-bin;
 
   go-thumbnailer = thud; # Added 2023-09-21
   go-upower-notify = upower-notify; # Added 2024-07-21
@@ -644,15 +616,12 @@ in
   ### I ###
 
   i3-gaps = i3; # Added 2023-01-03
-  immersed-vr = lib.warnOnInstantiate "'immersed-vr' has been renamed to 'immersed'" immersed; # Added 2024-08-11
-  inconsolata-nerdfont = lib.warnOnInstantiate "inconsolata-nerdfont is redundant. Use nerd-fonts.inconsolata instead." nerd-fonts.inconsolata; # Added 2024-11-10
   incrtcl = tclPackages.incrtcl; # Added 2024-10-02
   inotifyTools = inotify-tools;
   ipfs = kubo; # Added 2022-09-27
   ipfs-migrator-all-fs-repo-migrations = kubo-fs-repo-migrations; # Added 2022-09-27
   ipfs-migrator-unwrapped = kubo-migrator-unwrapped; # Added 2022-09-27
   ipfs-migrator = kubo-migrator; # Added 2022-09-27
-  iso-flags-png-320x420 = lib.warnOnInstantiate "iso-flags-png-320x420 has been renamed to iso-flags-png-320x240" iso-flags-png-320x240; # Added 2024-07-17
   itktcl = tclPackages.itktcl; # Added 2024-10-02
 
   ### J ###
@@ -701,7 +670,6 @@ in
   libbencodetools = bencodetools; # Added 2022-07-30
   libbpf_1 = libbpf; # Added 2022-12-06
   libbson = mongoc; # Added 2024-03-11
-  libgda = lib.warnOnInstantiate "‘libgda’ has been renamed to ‘libgda5’" libgda5; # Added 2025-01-21
   libgme = game-music-emu; # Added 2022-07-20
   libgnome-keyring3 = libgnome-keyring; # Added 2024-06-22
   libheimdal = heimdal; # Added 2022-11-18
@@ -722,13 +690,11 @@ in
   librewolf-wayland = librewolf; # Added 2022-11-15
   libsForQt515 = libsForQt5; # Added 2022-11-24
   libsmartcols = lib.warnOnInstantiate "'util-linux' should be used instead of 'libsmartcols'" util-linux; # Added 2025-09-03
-  libsoup = lib.warnOnInstantiate "‘libsoup’ has been renamed to ‘libsoup_2_4’" libsoup_2_4; # Added 2024-12-02
   libtensorflow-bin = libtensorflow; # Added 2022-09-25
   libwnck3 = libwnck;
   libyamlcpp = yaml-cpp; # Added 2023-01-29
   libyamlcpp_0_3 = yaml-cpp_0_3; # Added 2023-01-29
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
-  lima-bin = lib.warnOnInstantiate "lima-bin has been replaced by lima" lima; # Added 2025-05-13
   Literate = literate; # Added 2024-06-12
   llama = walk; # Added 2023-01-23
 
@@ -831,9 +797,6 @@ in
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git;
 
   loco-cli = loco; # Added 2025-02-24
-  lxd = lib.warnOnInstantiate "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01
-
-  lxd-unwrapped = lib.warnOnInstantiate "lxd-unwrapped has been renamed to lxd-unwrapped-lts" lxd-unwrapped-lts; # Added 2024-04-01
 
   ### M ###
 
@@ -841,15 +804,7 @@ in
   MACS2 = macs2; # Added 2023-06-12
   mariadb-client = hiPrio mariadb.client; # added 2019.07.28
 
-  marwaita-manjaro = lib.warnOnInstantiate "marwaita-manjaro has been renamed to marwaita-teal" marwaita-teal; # Added 2024-07-08
-  marwaita-peppermint = lib.warnOnInstantiate "marwaita-peppermint has been renamed to marwaita-red" marwaita-red; # Added 2024-07-01
-  marwaita-ubuntu = lib.warnOnInstantiate "marwaita-ubuntu has been renamed to marwaita-orange" marwaita-orange; # Added 2024-07-08
-  marwaita-pop_os = lib.warnOnInstantiate "marwaita-pop_os has been renamed to marwaita-yellow" marwaita-yellow; # Added 2024-10-29
   matomo_5 = matomo; # Added 2024-12-12
-  matrix-synapse-tools = recurseIntoAttrs {
-    rust-synapse-compress-state = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-compress-state;
-    synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm;
-  }; # Added 2025-02-20
   mcomix3 = mcomix; # Added 2022-06-05
   mdt = md-tui; # Added 2024-09-03
   microcodeAmd = microcode-amd; # Added 2024-09-08
@@ -871,7 +826,6 @@ in
   mpdWithFeatures = lib.warnOnInstantiate "mpdWithFeatures has been replaced by mpd.override" mpd.override; # Added 2025-08-08
   mpdevil = plattenalbum; # Added 2024-05-22
   msp430NewlibCross = msp430Newlib; # Added 2024-09-06
-  mumps_par = lib.warnOnInstantiate "mumps_par has been renamed to mumps-mpi" mumps-mpi; # Added 2025-05-07
   mustache-tcl = tclPackages.mustache-tcl; # Added 2024-10-02
   mutt-with-sidebar = mutt; # Added 2022-09-17
   mysql-client = hiPrio mariadb.client;
@@ -909,14 +863,11 @@ in
   noto-fonts-emoji = noto-fonts-color-emoji; # Added 2023-09-09
   noto-fonts-extra = noto-fonts; # Added 2023-04-08
   NSPlist = nsplist; # Added 2024-01-05
-  nushellFull = lib.warnOnInstantiate "`nushellFull` has has been replaced by `nushell` as its features no longer exist" nushell; # Added 2024-05-30
 
   ### O ###
 
   o = orbiton; # Added 2023-04-09
   oathToolkit = oath-toolkit; # Added 2022-04-04
-  oil = lib.warnOnInstantiate "Oil has been replaced with the faster native C++ version and renamed to 'oils-for-unix'. See also https://github.com/oils-for-unix/oils/wiki/Oils-Deployments" oils-for-unix; # Added 2024-10-22
-  onevpl-intel-gpu = lib.warnOnInstantiate "onevpl-intel-gpu has been renamed to vpl-gpu-rt" vpl-gpu-rt; # Added 2024-06-04
   openai-triton-llvm = triton-llvm; # added 2024-07-18
   openai-whisper-cpp = whisper-cpp; # Added 2024-12-13
   openafs_1_8 = openafs; # Added 2022-08-22
@@ -924,8 +875,6 @@ in
   openexr_3 = openexr; # Added 2025-03-12
   openimageio2 = openimageio; # Added 2023-01-05
   openssl_3_0 = openssl_3; # Added 2022-06-27
-  opensycl = lib.warnOnInstantiate "'opensycl' has been renamed to 'adaptivecpp'" adaptivecpp; # Added 2024-12-04
-  opensyclWithRocm = lib.warnOnInstantiate "'opensyclWithRocm' has been renamed to 'adaptivecppWithRocm'" adaptivecppWithRocm; # Added 2024-12-04
   open-timeline-io = lib.warnOnInstantiate "'open-timeline-io' has been renamed to 'opentimelineio'" opentimelineio; # Added 2025-08-10
   opentofu-ls = lib.warnOnInstantiate "'opentofu-ls' has been renamed to 'tofu-ls'" tofu-ls; # Added 2025-06-10
   onlyoffice-bin = onlyoffice-desktopeditors; # Added 2024-09-20
@@ -946,9 +895,7 @@ in
   pds = lib.warnOnInstantiate "'pds' has been renamed to 'bluesky-pds'" bluesky-pds; # Added 2025-08-20
   pdsadmin = lib.warnOnInstantiate "'pdsadmin' has been renamed to 'bluesky-pdsadmin'" bluesky-pdsadmin; # Added 2025-08-20
   peach = asouldocs; # Added 2022-08-28
-  percona-server_innovation = lib.warnOnInstantiate "Percona upstream has decided to skip all Innovation releases of MySQL and only release LTS versions." percona-server; # Added 2024-10-13
   percona-server_lts = percona-server; # Added 2024-10-13
-  percona-xtrabackup_innovation = lib.warnOnInstantiate "Percona upstream has decided to skip all Innovation releases of MySQL and only release LTS versions." percona-xtrabackup; # Added 2024-10-13
   percona-xtrabackup_lts = percona-xtrabackup; # Added 2024-10-13
   pentablet-driver = xp-pen-g430-driver; # Added 2022-06-23
   pgadmin = pgadmin4;
@@ -1002,9 +949,6 @@ in
   protobuf3_23 = protobuf_23;
   protobuf3_21 = protobuf_21;
   protonup = protonup-ng; # Added 2022-11-06
-  proton-vpn-local-agent = lib.warnOnInstantiate "'proton-vpn-local-agent' has been renamed to 'python3Packages.proton-vpn-local-agent'" (
-    python3Packages.toPythonApplication python3Packages.proton-vpn-local-agent
-  ); # Added 2025-04-23
   proxmark3-rrg = proxmark3; # Added 2023-07-25
   pyo3-pack = maturin;
   pypolicyd-spf = spf-engine; # Added 2022-10-09
@@ -1027,7 +971,6 @@ in
   radicale3 = radicale; # Added 2024-11-29
   railway-travel = diebahn; # Added 2024-04-01
   rambox-pro = rambox; # Added 2022-12-12
-  rapidjson-unstable = lib.warnOnInstantiate "'rapidjson-unstable' has been renamed to 'rapidjson'" rapidjson; # Added 2024-07-28
   redocly-cli = redocly; # Added 2024-04-14
   redpanda = redpanda-client; # Added 2023-10-14
   retroarchBare = retroarch-bare; # Added 2024-11-23
@@ -1058,7 +1001,6 @@ in
   sexp = sexpp; # Added 2023-07-03
   shipyard = jumppad; # Added 2023-06-06
   siduck76-st = st-snazzy; # Added 2024-12-24
-  signal-desktop-source = lib.warnOnInstantiate "'signal-desktop-source' is now exposed at 'signal-desktop'." signal-desktop; # Added 2025-04-16
   shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   SkypeExport = skypeexport; # Added 2024-06-12
   sladeUnstable = slade-unstable; # Added 2025-08-26
@@ -1100,8 +1042,6 @@ in
   steam-run-native = steam-run; # added 2022-02-21
   StormLib = stormlib; # Added 2024-01-21
   sumneko-lua-language-server = lua-language-server; # Added 2023-02-07
-  swiProlog = lib.warnOnInstantiate "swiProlog has been renamed to swi-prolog" swi-prolog; # Added 2024-09-07
-  swiPrologWithGui = lib.warnOnInstantiate "swiPrologWithGui has been renamed to swi-prolog-gui" swi-prolog-gui; # Added 2024-09-07
   swig4 = swig; # Added 2024-09-12
   Sylk = sylk; # Added 2024-06-12
   symbiyosys = sby; # Added 2024-08-18
@@ -1110,7 +1050,6 @@ in
 
   ### T ###
 
-  taskwarrior = lib.warnOnInstantiate "taskwarrior was replaced by taskwarrior3, which requires manual transition from taskwarrior 2.6, read upstream's docs: https://taskwarrior.org/docs/upgrade-3/" taskwarrior2;
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
   targetcli = targetcli-fb; # Added 2025-03-14
@@ -1127,7 +1066,6 @@ in
   tdom = tclPackages.tdom; # Added 2024-10-02
   teamspeak_client = teamspeak3; # Added 2024-11-07
   teamspeak5_client = teamspeak6-client; # Added 2025-01-29
-  terminus-nerdfont = lib.warnOnInstantiate "terminus-nerdfont is redundant. Use nerd-fonts.terminess-ttf instead." nerd-fonts.terminess-ttf; # Added 2024-11-10
   tepl = libgedit-tepl; # Added 2024-04-29
   testVersion = testers.testVersion; # Added 2022-04-20
   tezos-rust-libs = ligo; # Added 2025-06-03
@@ -1148,13 +1086,10 @@ in
   transmission-qt = lib.warnOnInstantiate (transmission3Warning {
     suffix = "-qt";
   }) transmission_3-qt; # Added 2024-06-10
-  treefmt2 = lib.warnOnInstantiate "treefmt2 has been renamed to treefmt" treefmt; # 2025-03-06
   libtransmission = lib.warnOnInstantiate (transmission3Warning {
     prefix = "lib";
   }) libtransmission_3; # Added 2024-06-10
   LPCNet = lpcnet; # Added 2025-05-05
-  tracker = lib.warnOnInstantiate "tracker has been renamed to tinysparql" tinysparql; # Added 2024-09-30
-  tracker-miners = lib.warnOnInstantiate "tracker-miners has been renamed to localsearch" localsearch; # Added 2024-09-30
   transfig = fig2dev; # Added 2022-02-15
   transifex-client = transifex-cli; # Added 2023-12-29
   trezor_agent = trezor-agent; # Added 2024-01-07
@@ -1210,7 +1145,6 @@ in
   wlroots = wlroots_0_19; # wlroots is unstable, we must keep depending on 'wlroots_0_*', convert to package after a stable(1.x) release
   wordpress6_5 = wordpress_6_5; # Added 2024-08-03
   wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
-  wpa_supplicant_ro_ssids = lib.warnOnInstantiate "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!" wpa_supplicant;
   wmii_hg = wmii;
   wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
   write_stylus = styluslabs-write-bin; # Added 2024-10-09
@@ -1234,11 +1168,6 @@ in
 
   zeal-qt5 = lib.warnOnInstantiate "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = lib.warnOnInstantiate "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
-  zeroadPackages = recurseIntoAttrs {
-    zeroad = lib.warnOnInstantiate "'zeroadPackages.zeroad' has been renamed to 'zeroad'" zeroad; # Added 2025-03-22
-    zeroad-data = lib.warnOnInstantiate "'zeroadPackages.zeroad-data' has been renamed to 'zeroad-data'" zeroad-data; # Added 2025-03-22
-    zeroad-unwrapped = lib.warnOnInstantiate "'zeroadPackages.zeroad-unwrapped' has been renamed to 'zeroad-unwrapped'" zeroad-unwrapped; # Added 2025-03-22
-  };
   zeromq4 = zeromq; # Added 2024-11-03
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26

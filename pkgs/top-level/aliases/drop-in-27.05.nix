@@ -1,9 +1,17 @@
 {
   _0verkill = throw "'_0verkill' has been removed due to lack of maintenance"; # Added 2025-08-27
+  _1password = throw "_1password has been renamed to _1password-cli to better follow upstream name usage"; # Added 2024-10-24
   _2048-cli = throw "'_2048-cli' has been removed due to archived upstream. Consider using '_2048-in-terminal' instead."; # Added 2025-06-07
   _2048-cli-curses = throw "'_2048-cli-curses' has been removed due to archived upstream. Consider using '_2048-in-terminal' instead."; # Added 2025-06-07
   _2048-cli-terminal = throw "'_2048-cli-curses' has been removed due to archived upstream. Consider using '_2048-in-terminal' instead."; # Added 2025-06-07
   abseil-cpp_202301 = throw "abseil-cpp_202301 has been removed as it was unused in tree"; # Added 2025-08-09
+  akkoma-emoji = {
+    blobs_gg = throw "'akkoma-emoji.blobs_gg' has been renamed to 'blobs_gg'"; # Added 2025-03-14
+  };
+  akkoma-frontends = {
+    admin-fe = throw "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'"; # Added 2025-03-14
+    akkoma-fe = throw "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'"; # Added 2025-03-14
+  };
   amazon-qldb-shell = throw "'amazon-qldb-shell' has been removed due to being unmaintained upstream"; # Added 2025-07-30
   animeko = throw "'animeko' has been removed since it is unmaintained"; # Added 2025-08-20
   ansible-later = throw "ansible-later has been discontinued. The author recommends switching to ansible-lint"; # Added 2025-08-24
@@ -28,7 +36,9 @@
   bazel_6 = throw "bazel_6 has been removed as it will be EOL by the release of Nixpkgs 25.11"; # Added 2025-08-19
   bitcoin-abc = throw "bitcoin-abc has been removed due to a lack of maintanance"; # Added 2025-06-17
   bitcoind-abc = throw "bitcoind-abc has been removed due to a lack of maintanance"; # Added 2025-06-17
+  blender-with-packages = throw "blender-with-packages is deprecated in favor of blender.withPackages, e.g. `blender.withPackages(ps: [ ps.foobar ])`"; # Added 2023-10-30
   bloomeetunes = throw "bloomeetunes is unmaintained and has been removed"; # Added 2025-08-26
+  brasero-original = throw "Use 'brasero-unwrapped' instead of 'brasero-original'"; # Added 2024-09-29
   breath-theme = throw "'breath-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   cargonode = throw "'cargonode' has been removed due to lack of upstream maintenance"; # Added 2025-06-18
   catalyst-browser = throw "'catalyst-browser' has been removed due to a lack of maintenance and not satisfying our security criteria for browsers."; # Added 2025-06-25
@@ -86,10 +96,13 @@
   epapirus-icon-theme = throw "'epapirus-icon-theme' has been removed because 'papirus-icon-theme' no longer supports building with elementaryOS icon support"; # Added 2025-06-15
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   eriscmd = throw "'eriscmd' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
+  eww-wayland = throw "eww now can build for X11 and wayland simultaneously, so `eww-wayland` is deprecated, use the normal `eww` package instead.";
   fbjni = throw "fbjni has been removed, as it was broken"; # Added 2025-08-25
+  fira-code-nerdfont = throw "fira-code-nerdfont is redundant. Use nerd-fonts.fira-code instead."; # Added 2024-11-10
   firebird_2_5 = throw "'firebird_2_5' has been removed as it has reached end-of-life and does not build."; # Added 2025-06-10
   firefox-esr-128 = throw "The Firefox 128 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-140` instead."; # Added 2025-08-20
   firefox-esr-128-unwrapped = throw "The Firefox 128 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-140-unwrapped` instead."; # Added 2025-08-20
+  follow = throw "follow has been renamed to folo"; # Added 2025-05-18
   flut-renamer = throw "flut-renamer is unmaintained and has been removed"; # Added 2025-08-26
   flutter326 = throw "flutter326 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-06-08
   fmsynth = throw "'fmsynth' has been removed as it was broken and unmaintained both upstream and in nixpkgs."; # Added 2025-09-01
@@ -114,6 +127,7 @@
   gfortran11 = throw "gfortran11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gfortran12 = throw "gfortran12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gitversion = throw "'gitversion' has been removed because it produced a broken build and was unmaintained"; # Added 2025-08-30
+  glew-egl = throw "'glew-egl' is now provided by 'glew' directly"; # Added 2024-08-11
   gmnisrv = throw "'gmnisrv' has been removed due to lack of maintenance upstream"; # Added 2025-06-07
   gnat11 = throw "gnat11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnat-bootstrap11 = throw "gnat-bootstrap11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
@@ -122,6 +136,10 @@
   gnat-bootstrap12 = throw "gnat-bootstrap12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnatboot12 = throw "gnatboot12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnat12Packages = throw "gnat12Packages has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  godot_4_3-export-templates = throw "godot_4_3-export-templates has been renamed to godot_4_3-export-templates-bin";
+  godot_4_4-export-templates = throw "godot_4_4-export-templates has been renamed to godot_4_4-export-templates-bin";
+  godot_4-export-templates = throw "godot_4-export-templates has been renamed to godot_4-export-templates-bin";
+  godot-export-templates = throw "godot-export-templates has been renamed to godot-export-templates-bin";
   graphite-kde-theme = throw "'graphite-kde-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   gr-framework = throw "gr-framework has been removed, as it was broken"; # Added 2025-08-25
   gtkextra = throw "'gtkextra' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
@@ -131,7 +149,10 @@
   hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # added 2025-08-20
   ibm-sw-tpm2 = throw "ibm-sw-tpm2 has been removed, as it was broken"; # Added 2025-08-25
   imaginer = throw "'imaginer' has been removed due to lack of upstream maintenance"; # Added 2025-08-15
+  immersed-vr = throw "'immersed-vr' has been renamed to 'immersed'"; # Added 2024-08-11
+  inconsolata-nerdfont = throw "inconsolata-nerdfont is redundant. Use nerd-fonts.inconsolata instead."; # Added 2024-11-10
   ioccheck = throw "ioccheck was dropped since it was unmaintained."; # Added 2025-07-06
+  iso-flags-png-320x420 = throw "iso-flags-png-320x420 has been renamed to iso-flags-png-320x240"; # Added 2024-07-17
   itpp = throw "itpp has been removed, as it was broken"; # Added 2025-08-25
   jack_rack = throw "'jack_rack' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
@@ -148,13 +169,18 @@
   layan-kde = throw "'layan-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   libast = throw "'libast' has been removed due to lack of maintenance upstream."; # Added 2025-06-09
   libdwarf-lite = throw "`libdwarf-lite` has been replaced by `libdwarf` as it's mostly a mirror"; # Added 2025-06-16
+  libgda = throw "‘libgda’ has been renamed to ‘libgda5’"; # Added 2025-01-21
   lightly-boehs = throw "'lightly-boehs' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   lightly-qt = throw "'lightly-qt' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   libpromhttp = throw "'libpromhttp' has been removed as it is broken and unmaintained upstream."; # Added 2025-06-16
   libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
+  libsoup = throw "‘libsoup’ has been renamed to ‘libsoup_2_4’"; # Added 2024-12-02
   ligo = throw "ligo has been removed from nixpkgs for lack of maintainance"; # Added 2025-06-03
+  lima-bin = throw "lima-bin has been replaced by lima"; # Added 2025-05-13
   littlenavmap = throw "littlenavmap has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
+  lxd = throw "lxd has been renamed to lxd-lts"; # Added 2024-04-01
+  lxd-unwrapped = throw "lxd-unwrapped has been renamed to lxd-unwrapped-lts"; # Added 2024-04-01
   lxde = {
     gtk2-x11 = throw "'lxde.gtk2-x11' has been removed. Use 'gtk2-x11' directly."; # added 2025-08-31
     lxappearance = throw "'lxappearance' has been moved to top-level. Use 'lxappearance' directly"; # added 2025-08-31
@@ -168,10 +194,18 @@
   lxdvdrip = throw "'lxdvdrip' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   magma_2_6_2 = throw "'magma_2_6_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
   magma_2_7_2 = throw "'magma_2_7_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
+  marwaita-manjaro = throw "marwaita-manjaro has been renamed to marwaita-teal"; # Added 2024-07-08
+  marwaita-peppermint = throw "marwaita-peppermint has been renamed to marwaita-red"; # Added 2024-07-01
+  marwaita-ubuntu = throw "marwaita-ubuntu has been renamed to marwaita-orange"; # Added 2024-07-08
+  marwaita-pop_os = throw "marwaita-pop_os has been renamed to marwaita-yellow"; # Added 2024-10-29
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
   material-kwin-decoration = throw "'material-kwin-decoration' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   mathlibtools = throw "mathlibtools has been removed as it was archived upstream in 2023"; # Added 2025-07-09
+  matrix-synapse-tools = {
+    rust-synapse-compress-state = throw "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`";
+    synadm = throw "`matrix-synapse-tools.synadm` has been renamed to `synadm`";
+  }; # Added 2025-02-20
   mihomo-party = throw "'mihomo-party' has been removed due to upstream license violation"; # Added 2025-08-20
   minecraft = throw "'minecraft' has been removed because the package was broken. Consider using 'prismlauncher' instead"; # Added 2025-09-06
   miru = throw "'miru' has been removed due to lack maintenance"; # Added 2025-08-21
@@ -181,6 +215,7 @@
   mongodb-6_0 = throw "mongodb-6_0 has been removed, it's end of life since July 2025"; # Added 2025-07-23
   moralerspace-nf = throw "moralerspace-nf has been removed, use moralerspace instead."; # Added 2025-08-30
   moralerspace-hwnf = throw "moralerspace-hwnf has been removed, use moralerspace-hw instead."; # Added 2025-08-30
+  mumps_par = throw "mumps_par has been renamed to mumps-mpi"; # Added 2025-05-07
   mx-puppet-discord = throw "mx-puppet-discord was removed since the packaging was unmaintained and was the sole user of sha1 hashes in nixpkgs"; # Added 2025-07-24
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
   notify-sharp = throw "'notify-sharp' has been removed as it was unmaintained and depends on deprecated dbus-sharp versions"; # Added 2025-08-25
@@ -190,9 +225,16 @@
   nix_2_3 = throw "'nix_2_3' has been removed, because it was unmaintained and insecure."; # Converted to throw 2025-07-24
   nm-tray = throw "'nm-tray' has been removed, as it only works with Plasma 5"; # Added 2025-08-30
   nuget-to-nix = throw "nuget-to-nix has been removed as it was deprecated in favor of nuget-to-json. Please use nuget-to-json instead"; # Added 2025-08-28
+  nushellFull = throw "`nushellFull` has has been replaced by `nushell` as its features no longer exist"; # Added 2024-05-30
   obliv-c = throw "obliv-c has been removed from Nixpkgs, as it has been unmaintained upstream for 4 years and does not build with supported GCC versions"; # Added 2025-08-18
+  oil = throw "Oil has been replaced with the faster native C++ version and renamed to 'oils-for-unix'. See also https://github.com/oils-for-unix/oils/wiki/Oils-Deployments"; # Added 2024-10-22
   oneDNN_2 = throw "oneDNN_2 has been removed as it was only used by rocmPackages.migraphx"; # added 2025-07-18
+  onevpl-intel-gpu = throw "onevpl-intel-gpu has been renamed to vpl-gpu-rt"; # Added 2024-06-04
+  opensycl = throw "'opensycl' has been renamed to 'adaptivecpp'"; # Added 2024-12-04
+  opensyclWithRocm = throw "'opensyclWithRocm' has been renamed to 'adaptivecppWithRocm'"; # Added 2024-12-04
   pal = throw "pal has been removed, as it was broken"; # Added 2025-08-25
+  percona-server_innovation = throw "Percona upstream has decided to skip all Innovation releases of MySQL and only release LTS versions."; # Added 2024-10-13
+  percona-xtrabackup_innovation = throw "Percona upstream has decided to skip all Innovation releases of MySQL and only release LTS versions."; # Added 2024-10-13
   peruse = throw "'peruse' has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
@@ -208,6 +250,7 @@
   pgtap = throw "'pgtap' has been removed. Use 'postgresqlPackages.pgtap' instead."; # Added 2025-07-19
   plv8 = throw "'plv8' has been removed. Use 'postgresqlPackages.plv8' instead."; # Added 2025-07-19
   postgis = throw "'postgis' has been removed. Use 'postgresqlPackages.postgis' instead."; # Added 2025-07-19
+  proton-vpn-local-agent = "'proton-vpn-local-agent' has been renamed to 'python3Packages.proton-vpn-local-agent'"; # Added 2025-04-23
   timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
   thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
   plasma-applet-volumewin7mixer = throw "'plasma-applet-volumewin7mixer' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
@@ -223,6 +266,7 @@
   qtchan = throw "'qtchan' has been removed due to lack of maintenance upstream"; # Added 2025-07-01
   quicksynergy = throw "'quicksynergy' has been removed due to lack of maintenance upstream. Consider using 'deskflow' instead."; # Added 2025-06-18
   qv2ray = throw "'qv2ray' has been removed as it was unmaintained"; # Added 2025-06-03
+  rapidjson-unstable = "'rapidjson-unstable' has been renamed to 'rapidjson'"; # Added 2024-07-28
   rewind-ai = throw "'rewind-ai' has been removed due to lack of of maintenance upstream"; # Added 2025-08-03
   responsively-app = throw "'responsively-app' has been removed due to lack of maintainance upstream."; # Added 2025-06-25
   river = throw "'river' has been renamed to/replaced by 'river-classic'"; # Added 2025-08-30
@@ -233,6 +277,7 @@
   seafile-server = throw "'seafile-server' has been removed as it is unmaintained"; # Added 2025-08-21
   seahub = throw "'seahub' has been removed as it is unmaintained"; # Added 2025-08-21
   sierra-breeze-enhanced = throw "'sierra-breeze-enhanced' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
+  signal-desktop-source = throw "'signal-desktop-source' is now exposed at 'signal-desktop'."; # Added 2025-04-16
   sisco.lv2 = throw "'sisco.lv2' has been removed as it was unmaintained and broken"; # Added 2025-08-26
   slic3r = throw "'slic3r' has been removed because it is unmaintained"; # Added 2025-08-26
   slrn = throw "'slrn' has been removed because it is unmaintained upstream and broken."; # Added 2025-06-11
@@ -253,11 +298,18 @@
   sumaclust = throw "'sumaclust' has been removed as it was archived upstream and broken with GCC 14"; # Added 2025-06-14
   sumalibs = throw "'sumalibs' has been removed as it was archived upstream and broken with GCC 14"; # Added 2025-06-14
   sumatra = throw "'sumatra' has been removed as it was archived upstream and broken with GCC 14"; # Added 2025-06-14
+  swiProlog = throw "swiProlog has been renamed to swi-prolog"; # Added 2024-09-07
+  swiPrologWithGui = throw "swiPrologWithGui has been renamed to swi-prolog-gui"; # Added 2024-09-07
   syn2mas = throw "'syn2mas' has been removed. It has been integrated into the main matrix-authentication-service CLI as a subcommand: 'mas-cli syn2mas'."; # Added 2025-07-07
   syndicate_utils = throw "'syndicate_utils' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
+  taskwarrior = throw "taskwarrior was replaced by taskwarrior3, which requires manual transition from taskwarrior 2.6, read upstream's docs: https://taskwarrior.org/docs/upgrade-3/";
   t1lib = throw "'t1lib' has been removed as it was broken and unmaintained upstream."; # Added 2025-06-11
   temporalite = throw "'temporalite' has been removed as it is obsolete and unmaintained, please use 'temporal-cli' instead (with `temporal server start-dev`)"; # Added 2025-06-26
+  terminus-nerdfont = throw "terminus-nerdfont is redundant. Use nerd-fonts.terminess-ttf instead."; # Added 2024-11-10
   texinfo4 = throw "'texinfo4' has been removed in favor of the latest version"; # Added 2025-06-08
+  tracker = throw "tracker has been renamed to tinysparql"; # Added 2024-09-30
+  tracker-miners = throw "tracker-miners has been renamed to localsearch"; # Added 2024-09-30
+  treefmt2 = throw "treefmt2 has been renamed to treefmt"; # 2025-03-06
   trojita = throw "'trojita' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
   uae = throw "'uae' has been removed due to lack of upstream maintenance. Consider using 'fsuae' instead."; # Added 2025-06-11
   vbetool = throw "'vbetool' has been removed as it is broken and not maintained upstream."; # Added 2025-06-11
@@ -272,6 +324,7 @@
   wifi-password = throw "'wifi-password' has been removed as it was unmaintained upstream"; # Added 2025-08-29
   winhelpcgi = throw "'winhelpcgi' has been removed as it was unmaintained upstream and broken with GCC 14"; # Added 2025-06-14
   win-pvdrivers = throw "'win-pvdrivers' has been removed as it was subject to the Xen build machine compromise (XSN-01) and has open security vulnerabilities (XSA-468)"; # Added 2025-08-29
+  wpa_supplicant_ro_ssids = throw "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!";
   woof = throw "'woof' has been removed as it is broken and unmaintained upstream"; # Added 2025-09-04
   wdomirror = throw "'wdomirror' has been removed as it is unmaintained upstream, Consider using 'wl-mirror' instead"; # Added 2025-09-04
   xbrightness = throw "'xbrightness' has been removed as it is unmaintained"; # Added 2025-08-28
@@ -285,6 +338,11 @@
   yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   yubikey-personalization-gui = throw "'yubikey-personalization-gui' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   zbackup = throw "'zbackup' has been removed due to being unmaintained upstream"; # Added 2025-08-22
+  zeroadPackages = {
+    zeroad = throw "'zeroadPackages.zeroad' has been renamed to 'zeroad'"; # Added 2025-03-22
+    zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to 'zeroad-data'"; # Added 2025-03-22
+    zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to 'zeroad-unwrapped'"; # Added 2025-03-22
+  };
   zig_0_12 = throw "zig 0.12 has been removed, upgrade to a newer version instead"; # Added 2025-08-18
   zigbee2mqtt_1 = throw "Zigbee2MQTT 1.x has been removed, upgrade to the unversioned attribute."; # Added 2025-08-11
   zombietrackergps = throw "'zombietrackergps' has been dropped, as it depends on KDE Gear 5 and is unmaintained"; # Added 2025-08-20
