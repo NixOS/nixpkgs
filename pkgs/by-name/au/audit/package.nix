@@ -7,15 +7,12 @@
   bashNonInteractive,
   buildPackages,
   linuxHeaders,
-  python3,
+  python3Packages,
   swig,
   libcap_ng,
   installShellFiles,
 
-  # Enabling python support while cross compiling would be possible, but the
-  # configure script tries executing python to gather info instead of relying on
-  # python3-config exclusively
-  enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
+  enablePython ? !stdenv.hostPlatform.isStatic,
 
   # passthru
   nix-update-script,
@@ -63,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ]
   ++ lib.optionals enablePython [
-    python3
+    python3Packages.python # for python3-config
     swig
   ];
 
@@ -89,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     # capability dropping, currently mostly for plugins as those get spawned as root
     # see auditd-plugins(5)
     "--with-libcap-ng=yes"
-    (if enablePython then "--with-python" else "--without-python")
+    (lib.withFeature enablePython "python3")
   ];
 
   __structuredAttrs = true;
@@ -99,6 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     bash
     bashNonInteractive
   ];
+
+  nativeCheckInputs = lib.optionals enablePython [
+    python3Packages.pythonImportsCheckHook
+  ];
+
+  pythonImportsCheck = [ "audit" ];
 
   doCheck = true;
 
