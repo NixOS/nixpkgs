@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.1-unstable-2025-08-01";
+  version = "4.1.2-unstable-2025-09-06"; # fixes to non-static builds right after 4.1.2 release
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
-    rev = "bee5984843d0b38992a369825a87a65fb54b18fc"; # musl fixes, --disable-legacy-actions and --runstatedir support
-    hash = "sha256-l3JHWEHz2xGrYxEvfCUD29W8xm5llUnXwX5hLymRG74=";
+    rev = "cb13fe75ee2c36d5c525ed9de22aae10dbc8caf4";
+    hash = "sha256-NX0TWA+LtcZgbM9aQfokWv2rGNAAb3ksGqAH8URAkYM=";
   };
 
   postPatch = ''
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";
     description = "Audit Library";
-    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.1";
+    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.2";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
     pkgConfigModules = [
