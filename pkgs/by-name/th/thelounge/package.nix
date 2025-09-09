@@ -8,11 +8,11 @@
   fixup-yarn-lock,
   python3,
   npmHooks,
-  cctools,
   sqlite,
   srcOnly,
   buildPackages,
   nixosTests,
+  xcbuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.distutils
     npmHooks.npmInstallHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''
