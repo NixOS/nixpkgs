@@ -41,7 +41,6 @@ lib:
   ethtool,
   fetchFromGitHub,
   fetchgit,
-  fetchpatch,
   fetchurl,
   fetchzip,
   findutils,
