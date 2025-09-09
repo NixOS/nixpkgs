@@ -9,13 +9,20 @@
   libarchive,
   libpkgconf,
   pkgconf,
-  python3,
   samurai,
-  scdoc,
-  writableTmpDirAsHomeHook,
   zlib,
   embedSamurai ? false,
+  # docs
   buildDocs ? true,
+  scdoc,
+  # tests
+  runTests ? false,
+  gettext,
+  muon,
+  nasm,
+  pkg-config,
+  python3,
+  writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
@@ -23,16 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
-  sourceRoot = "./muon-src";
+  sourceRoot = "muon-src";
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
 
   nativeBuildInputs = [
     pkgconf
-    (python3.withPackages (ps: [ ps.pyyaml ]))
   ]
   ++ lib.optionals (!embedSamurai) [ samurai ]
-  ++ lib.optionals buildDocs [ scdoc ];
+  ++ lib.optionals buildDocs [
+    scdoc
+  ]
+  ++ lib.optionals (buildDocs || finalAttrs.doCheck) [
+    (python3.withPackages (ps: [ ps.pyyaml ]))
+  ];
 
   buildInputs = [
     curl
@@ -44,19 +55,25 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postUnpack = ''
-    for subproject in ${lib.optionalString buildDocs "meson-docs"} meson-tests; do
-      cp -r "$subproject" "$sourceRoot/subprojects/$subproject"
-      chmod +w -R "$sourceRoot/subprojects/$subproject"
-      rm "$sourceRoot/subprojects/$subproject.wrap"
+    for src in $srcs; do
+      name=$(stripHash $src)
+
+      # skip the main project, only move subprojects
+      [ "$name" == "$sourceRoot" ] && continue
+
+      cp -r "$name" "$sourceRoot/subprojects/$name"
+      chmod +w -R "$sourceRoot/subprojects/$name"
+      rm "$sourceRoot/subprojects/$name.wrap"
     done
   '';
 
   patches = [ ./darwin-clang.patch ];
 
   postPatch = ''
-    find subprojects/meson-tests -name "*.py" -exec chmod +x {} \;
-    patchShebangs .
-
+    find subprojects -name "*.py" -exec chmod +x {} \;
+    patchShebangs subprojects
+  ''
+  + lib.optionalString finalAttrs.doCheck ''
     substituteInPlace \
       "subprojects/meson-tests/common/14 configure file/test.py.in" \
       "subprojects/meson-tests/common/274 customtarget exe for test/generate.py" \
@@ -76,12 +93,22 @@ stdenv.mkDerivation (finalAttrs: {
       muonEnable = lib.mesonEnable;
       muonOption = lib.mesonOption;
 
+      # see `muon options -a` to see built-in options
       cmdlineForMuon = lib.concatStringsSep " " [
         (muonOption "prefix" (placeholder "out"))
+        # don't let muon override stdenv C flags
+        (muonEnable "auto_features" true)
+        (muonOption "buildtype" "plain")
+        (muonOption "optimization" "plain")
+        (muonOption "wrap_mode" "nodownload")
+        # muon features
         (muonBool "static" stdenv.targetPlatform.isStatic)
+        (muonEnable "man-pages" buildDocs)
         (muonEnable "meson-docs" buildDocs)
+        (muonEnable "meson-tests" finalAttrs.doCheck)
         (muonEnable "samurai" embedSamurai)
         (muonEnable "tracy" false)
+        (muonEnable "website" false)
       ];
       cmdlineForSamu = "-j$NIX_BUILD_CORES";
     in
@@ -102,11 +129,19 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   # tests only pass when samurai is embedded
-  doCheck = embedSamurai;
+  doCheck = embedSamurai && runTests;
 
   nativeCheckInputs = [
-    # needed for "common/220 fs module"
+    # "common/220 fs module"
     writableTmpDirAsHomeHook
+    # "common/44 pkgconfig-gen"
+    pkg-config
+    # "frameworks/6 gettext"
+    gettext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # "nasm/*" tests
+    nasm
   ];
 
   checkPhase = ''
@@ -151,6 +186,15 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
     };
   };
+
+  # tests are run here in package tests, rather than enabling doCheck by
+  # default, to reduce the number of required dependencies.
+  passthru.tests.test = (muon.overrideAttrs { pname = "muon-tests"; }).override {
+    buildDocs = false;
+    embedSamurai = true;
+    runTests = true;
+  };
+
   passthru.updateScript = callPackage ./update.nix { };
 
   meta = {
