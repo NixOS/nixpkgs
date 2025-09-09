@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_snowflake";
     inherit version;
-    hash = "sha256-Y5H7ATm8bntl4YaF5l9DZiRhHt2q2/XaICp+PR9ywIw=";
+    hash = "sha256-EsZLR0j51M4KjgFiG8LACx4k8/DDetCdeVAPRR0E4xQ=";
   };
 
   pythonRelaxDeps = [
