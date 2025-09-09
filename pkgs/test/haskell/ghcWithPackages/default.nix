@@ -22,16 +22,19 @@ lib.recurseIntoAttrs {
 
   # See: https://github.com/NixOS/nixpkgs/pull/224542
   regression-224542 =
+    let
+      ghc = haskellPackages.ghcWithPackages (hsPkgs: [
+        hsPkgs.hspec
+      ]);
+    in
     runCommand "regression-224542"
       {
-        buildInputs = [
-          (haskellPackages.ghcWithPackages (hsPkgs: [
-            hsPkgs.hspec
-          ]))
+        nativeBuildInputs = [
+          ghc
         ];
       }
       ''
-        ghc --interactive \
+        ${ghc.targetPrefix}ghc --interactive \
           -Werror=unrecognised-warning-flags \
           -Werror=missed-extra-shared-lib \
           2>&1 \
