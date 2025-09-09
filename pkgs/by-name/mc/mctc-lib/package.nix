@@ -22,13 +22,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "mctc-lib";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
     rev = "v${version}";
-    hash = "sha256-Qd7mpNE23Z+LuiUwhUzfVzVZEQ+sdnkxMm+W7Hlrss4=";
+    hash = "sha256-MWqvFxFGnFrGppiSy97oUWz7p1sD6GkTrMEZTFgSExg=";
   };
 
   patches = [
