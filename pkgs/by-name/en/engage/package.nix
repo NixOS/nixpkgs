@@ -4,11 +4,21 @@
   rustPlatform,
   fetchFromGitLab,
   stdenv,
+  mdbook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "engage";
   version = "0.2.1";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  env = {
+    ENGAGE_DOCS_LINK = "file://${builtins.placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
+  };
 
   src = fetchFromGitLab {
     domain = "gitlab.computer.surgery";
@@ -24,16 +34,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-    "installShellCompletion --cmd engage "
-    + builtins.concatStringsSep " " (
-      builtins.map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
-        "bash"
-        "fish"
-        "zsh"
-      ]
-    )
-  );
+  checkFlags = [
+    # Upstream doesn't set `ENGAGE_DOCS_LINK` during tests so the output differs.
+    "--skip=long_help"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd engage ${
+      builtins.concatStringsSep " " (
+        builtins.map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      )
+    }
+
+    ${lib.getExe mdbook} build
+    mkdir -p "$doc/share/doc"
+    mv public "$doc/share/doc/${finalAttrs.pname}"
+  '';
 
   meta = {
     description = "Task runner with DAG-based parallelism";
