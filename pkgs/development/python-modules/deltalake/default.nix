@@ -15,6 +15,7 @@
   pytest-cov-stub,
   pytest-mock,
   pandas,
+  polars,
   azure-storage-blob,
 }:
 
