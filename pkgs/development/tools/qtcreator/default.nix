@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.qt.io/Qt_Creator";
     license = lib.licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
     maintainers = with lib.maintainers; [
-      rewine
+      wineee
       zatm8
     ];
     platforms = lib.platforms.linux;

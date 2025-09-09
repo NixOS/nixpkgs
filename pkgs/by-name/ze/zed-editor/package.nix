@@ -323,6 +323,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       extraArgs = [
         "--version-regex"
         "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+
+        # use github releases instead of git tags
+        # zed sometimes moves git tags, making them unreliable
+        # see: https://github.com/NixOS/nixpkgs/pull/439893#issuecomment-3250497178
+        "--use-github-releases"
       ];
     };
     fhs = fhs { zed-editor = finalAttrs.finalPackage; };

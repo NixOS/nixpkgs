@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.46";
+  version = "0.0.47";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
     tag = version;
-    hash = "sha256-QI+OhhV+jKw3g2erSCdTj10JW+XFQQyXuAC0LAnts7c=";
+    hash = "sha256-z7krly5X5OlrmAlm4bZZ3eP8lvx3HUY3Z8K/6AiBOfQ=";
   };
 
   postPatch = ''

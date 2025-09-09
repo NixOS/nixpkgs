@@ -73,7 +73,7 @@ in
     port = lib.mkOption {
       description = "Port that stats listens for messages on over UDP";
       default = 8125;
-      type = lib.types.int;
+      type = lib.types.port;
     };
 
     mgmt_address = lib.mkOption {
@@ -85,7 +85,7 @@ in
     mgmt_port = lib.mkOption {
       description = "Port to run the management TCP interface on";
       default = 8126;
-      type = lib.types.int;
+      type = lib.types.port;
     };
 
     backends = lib.mkOption {

@@ -850,6 +850,31 @@ runBuildTests {
     '';
   };
 
+  nixConfAtoms = shouldPass {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = ''ignore-try = false'';
+    };
+    input = {
+      auto-optimise-store = true;
+      cores = 0;
+      store = "auto";
+    };
+    # note that null type is hard to test here,
+    # as it involves a trailing space our formatter will remove here
+    expected = ''
+      # WARNING: this file is generated from the nix.* options in
+      # your NixOS configuration, typically
+      # /etc/nixos/configuration.nix.  Do not edit it!
+      auto-optimise-store = true
+      cores = 0
+      store = auto
+
+      ignore-try = false
+    '';
+  };
+
   phpAtoms = shouldPass rec {
     format = formats.php { finalVariable = "config"; };
     input = {
