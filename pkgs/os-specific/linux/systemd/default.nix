@@ -905,7 +905,7 @@ stdenv.mkDerivation (finalAttrs: {
         )
       );
 
-  disallowedRequisites = [
+  disallowedRequisites = lib.optionals (!withUkify) [
     bash
     bashNonInteractive
   ];
