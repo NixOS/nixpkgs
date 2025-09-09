@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "engage";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.computer.surgery";
     owner = "charles";
     repo = "engage";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
+    hash = "sha256-n7ypFJBYT712Uzh1NnWWSOIpEDKR0e6sQxbiIN6pZgo=";
   };
 
-  cargoHash = "sha256-0r5MIoitmFxUODxzi0FBLsUpdGrG1pY8Lo+gy7HeJU8=";
+  cargoHash = "sha256-UTIxxPBtxzsZilxriAT8ksl2ovoDzIhB+8f+b2cGN3k=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Task runner with DAG-based parallelism";
     mainProgram = "engage";
     homepage = "https://gitlab.computer.surgery/charles/engage";
-    changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://charles.gitlab-pages.computer.surgery/engage/changelog.html";
     license = with lib.licenses; [
       asl20
       mit
