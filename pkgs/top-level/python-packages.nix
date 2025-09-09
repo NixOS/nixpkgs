@@ -7721,6 +7721,8 @@ self: super: with self; {
 
   kanidm = callPackage ../development/python-modules/kanidm { };
 
+  kantoku = callPackage ../development/python-modules/kantoku { };
+
   kaptan = callPackage ../development/python-modules/kaptan { };
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
