@@ -160,6 +160,7 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DWITH_CODEC_FFMPEG=ON"
     "-DWITH_CODEC_SNDFILE=ON"
     "-DWITH_CPU_CHECK=OFF"
+    "-DWITH_CYCLES_DEVICE_HIP=${if hipSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_OSL=OFF"
