@@ -229,7 +229,7 @@ in
         path = lib.getExe' pkgs.audit "audisp-af_unix";
         args = [
           "0640"
-          "/var/run/audispd_events"
+          "/run/audit/audispd_events"
           "string"
         ];
         format = "binary";

@@ -40,7 +40,7 @@
       t.assertIn("backlog_limit 512", audit_status)
 
     with subtest("unix socket plugin activated"):
-      machine.succeed("stat /var/run/audispd_events")
+      machine.succeed("stat /run/audit/audispd_events")
 
     with subtest("Custom rule produces audit traces"):
       machine.succeed("hello")
