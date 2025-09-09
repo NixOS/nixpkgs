@@ -4,6 +4,7 @@
   makeSetupHook,
   _7zz,
   libarchive,
+  callPackage,
 }:
 
 {
@@ -45,12 +46,14 @@ stdenvNoCC.mkDerivation (
 
         mkdir -p $out/Applications
         cp -R "${appName}" $out/Applications \
-          || (echo "ERROR: Missing ${appName} directory:"; find . -depth 2 | head -100)
+          || (echo "ERROR: Missing ${appName} directory:"; find . -maxdepth 2 | head -100)
 
         runHook postInstall
       '';
 
     installCheckPhase = args.installCheckPhase or null;
+
+    passthru.tests = callPackage ./tests/tests.nix { };
 
     meta = {
       sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
