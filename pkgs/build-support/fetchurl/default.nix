@@ -191,7 +191,7 @@ let
         outputHash = "";
       }
     else
-      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty urls_}";
+      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
   resolvedUrl =
     let
