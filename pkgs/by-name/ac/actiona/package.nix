@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bluez
     libnotify
-    opencv
+    opencv.cxxdev
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qttools
