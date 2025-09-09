@@ -66,6 +66,33 @@ let
     "wireguard" = [ "wireguard" ];
     "xfrm" = [ "xfrm_interface" ];
   };
+  # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
+  commonServiceConfig = {
+    after = [
+      "systemd-udevd.service"
+      "network-pre.target"
+      "systemd-sysusers.service"
+      "systemd-sysctl.service"
+    ];
+    before = [
+      "network.target"
+      "multi-user.target"
+      "shutdown.target"
+      "initrd-switch-root.target"
+    ];
+    conflicts = [
+      "shutdown.target"
+      "initrd-switch-root.target"
+    ];
+    wants = [
+      "network.target"
+    ];
+
+    unitConfig = {
+      # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
+      DefaultDependencies = "no";
+    };
+  };
 in
 {
   meta.maintainers = with lib.maintainers; [ marcel ];
@@ -150,36 +177,12 @@ in
         etc."ifstate/ifstate.yaml".source = settingsFormat.generate "ifstate.yaml" cfg.settings cfg.package;
       };
 
-      systemd.services.ifstate = {
+      systemd.services.ifstate = commonServiceConfig // {
         description = "IfState";
 
         wantedBy = [
           "multi-user.target"
         ];
-        after = [
-          "systemd-udevd.service"
-          "network-pre.target"
-          "systemd-sysusers.service"
-          "systemd-sysctl.service"
-        ];
-        before = [
-          "network.target"
-          "multi-user.target"
-          "shutdown.target"
-          "initrd-switch-root.target"
-        ];
-        conflicts = [
-          "shutdown.target"
-          "initrd-switch-root.target"
-        ];
-        wants = [
-          "network.target"
-        ];
-
-        unitConfig = {
-          # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
-          DefaultDependencies = "no";
-        };
 
         # mount is always available on nixos, avoid adding additional store paths to the closure
         path = [ "/run/wrappers" ];
@@ -270,36 +273,12 @@ in
             "remote-fs.target"
           ];
 
-          services.ifstate-initrd = {
+          services.ifstate-initrd = commonServiceConfig // {
             description = "IfState initrd";
 
             wantedBy = [
               "initrd.target"
             ];
-            after = [
-              "systemd-udevd.service"
-              "network-pre.target"
-              "systemd-sysusers.service"
-              "systemd-sysctl.service"
-            ];
-            before = [
-              "network.target"
-              "multi-user.target"
-              "shutdown.target"
-              "initrd-switch-root.target"
-            ];
-            conflicts = [
-              "shutdown.target"
-              "initrd-switch-root.target"
-            ];
-            wants = [
-              "network.target"
-            ];
-
-            unitConfig = {
-              # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
-              DefaultDependencies = "no";
-            };
 
             # mount is always available on nixos, avoid adding additional store paths to the closure
             # https://github.com/NixOS/nixpkgs/blob/2b8e2457ebe576ebf41ddfa8452b5b07a8d493ad/nixos/modules/system/boot/systemd/initrd.nix#L550-L551
