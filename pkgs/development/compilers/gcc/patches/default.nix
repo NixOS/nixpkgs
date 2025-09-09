@@ -35,12 +35,6 @@ let
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
 
-  # We only apply these patches when building a native toolchain for
-  # aarch64-darwin, as it breaks building a foreign one:
-  # https://github.com/iains/gcc-12-branch/issues/18
-  canApplyIainsDarwinPatches =
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildIsHost && hostIsTarget;
-
   inherit (lib) optionals optional;
 in
 
@@ -108,7 +102,7 @@ optionals noSysDirs (
 # Needed to build llvm-18 and later
 # See https://github.com/NixOS/nixpkgs/pull/354107/commits/2de1b4b14e17f42ba8b4bf43a29347c91511e008
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
-++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
+++ optional (atLeast14 && !stdenv.targetPlatform.isDarwin) ./cfi_startproc-reorder-label-14-1.diff
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
@@ -116,13 +110,6 @@ optionals noSysDirs (
 ## 2. Patches relevant on specific platforms ####################################
 
 ## Darwin
-
-# Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (
-  # this one would conflict with gcc-14-darwin-aarch64-support.patch
-  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/14/libgcc-darwin-detection.patch
-++ optional (atLeast15 && stdenv.hostPlatform.isDarwin) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
 ++ optional (
@@ -133,7 +120,7 @@ optionals noSysDirs (
 # Here we apply patches by Iains (https://github.com/iains)
 # GitHub's "compare" API produces unstable diffs, so we resort to reusing
 # diffs from the Homebrew repo.
-++ optionals canApplyIainsDarwinPatches (
+++ optionals stdenv.targetPlatform.isDarwin (
   {
     "15" = [
       # Patches from https://github.com/iains/gcc-15-branch/compare/releases/gcc-15..gcc-15.1-darwin-rc1
@@ -166,20 +153,10 @@ optionals noSysDirs (
   .${majorVersion} or [ ]
 )
 
-# Use absolute path in GNAT dylib install names on Darwin
-++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
-  {
-    "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-    "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-    # After the Iains patch, GCC 13 and 14 share the same patch.
-    "13" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-  }
-  .${majorVersion} or [ ]
-)
-
+# Fixes detection of Darwin deployment target.
 ++ optional (
-  langAda && is13 && canApplyIainsDarwinPatches
-) ./13/gnat13-aarch64-darwin-trampoline.patch
+  atLeast14 && stdenv.targetPlatform.isDarwin
+) ../patches/14/libgcc-darwin-detection.patch
 
 ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";
