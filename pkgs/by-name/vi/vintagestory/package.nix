@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -19,13 +19,13 @@
   dotnet-runtime_8,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
   version = "1.21.0";
 
-  src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-90YQOur7UhXxDBkGLSMnXQK7iQ6+Z8Mqx9PEG6FEXBs=";
+  src = fetchzip {
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
+    hash = "sha256-Adp6rOuJcjRHNjDm/nP/t8koYFgv6mRdHuvg0fuKzbA=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  runtimeLibs = lib.makeLibraryPath (
+  env.runtimeLibs = lib.makeLibraryPath (
     [
       gtk2
       sqlite
@@ -82,25 +82,32 @@ stdenv.mkDerivation rec {
     cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
+    rm -rvf $out/share/vintagestory/{install,run,server}.sh
+
     runHook postInstall
   '';
 
-  preFixup = ''
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set-default mesa_glthread true \
-      --add-flags $out/share/vintagestory/Vintagestory.dll
+  preFixup =
+    let
+      wrapperFlags = lib.trim ''
+        --prefix LD_LIBRARY_PATH : "''${runtimeLibs[@]}" \
+        --set-default mesa_glthread true
+      '';
+    in
+    ''
+      makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory \
+        ${wrapperFlags} \
+        --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set-default mesa_glthread true \
-      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+      makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+        ${wrapperFlags} \
+        --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
-    find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-      local filename="$(basename -- "$file")"
-      ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-    done
-  '';
+      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+        local filename="$(basename -- "$file")"
+        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+      done
+    '';
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
@@ -116,4 +123,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "vintagestory";
   };
-}
+})
