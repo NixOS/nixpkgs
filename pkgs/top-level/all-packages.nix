@@ -13741,7 +13741,9 @@ with pkgs;
   amoeba = callPackage ../games/amoeba { };
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 
-  anki = callPackage ../games/anki { };
+  anki = callPackage ../games/anki {
+    protobuf = protobuf_31;
+  };
   anki-utils = callPackage ../games/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../games/anki/addons { });
   anki-bin = callPackage ../games/anki/bin.nix { };
