@@ -194,6 +194,9 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DOPTIX_ROOT_DIR=${optix}"
     "-DWITH_CYCLES_CUDA_BINARIES=ON"
   ]
+  ++ lib.optionals hipSupport [
+    "-DWITH_CYCLES_HIP_BINARIES=ON"
+  ]
   ++ lib.optionals waylandSupport [
     "-DWITH_GHOST_WAYLAND=ON"
     "-DWITH_GHOST_WAYLAND_DBUS=ON"
@@ -268,6 +271,7 @@ stdenv'.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional embreeSupport embree
+  ++ lib.optional hipSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
   ++ (
     if (!stdenv.hostPlatform.isDarwin) then
