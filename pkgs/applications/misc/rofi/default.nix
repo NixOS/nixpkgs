@@ -62,6 +62,10 @@ stdenv.mkDerivation rec {
     ninja
     pandoc
     pkg-config
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland-protocols
+    wayland-scanner
   ];
   buildInputs = [
     cairo
@@ -76,7 +80,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals waylandSupport [
     wayland
     wayland-protocols
-    wayland-scanner
   ]
   ++ lib.optionals x11Support [
     libxcb
