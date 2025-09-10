@@ -12,6 +12,7 @@
   git,
   gbenchmark,
   nghttp2,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_DIST=ON"
     "-DTARANTOOL_VERSION=${finalAttrs.version}.builtByNix" # expects the commit hash as well
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "In-memory computing platform consisting of a database and an application server";
