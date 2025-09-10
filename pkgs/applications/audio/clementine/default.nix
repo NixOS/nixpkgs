@@ -32,7 +32,7 @@
   config,
   wrapQtAppsHook,
   gst_plugins,
-  util-linux,
+  util-linuxMinimal,
   libunwind,
   libselinux,
   elfutils,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     wrapQtAppsHook
-    util-linux
+    util-linuxMinimal
     libunwind
     libselinux
     elfutils
