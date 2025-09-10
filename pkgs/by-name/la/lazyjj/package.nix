@@ -1,41 +1,57 @@
 {
   lib,
+  rustPlatform,
   fetchFromGitHub,
   makeWrapper,
   jujutsu,
-  rustPlatform,
-  testers,
-  lazyjj,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazyjj";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "lazyjj";
-    rev = "v${version}";
-    hash = "sha256-Pz2q+uyr8r5G5Zs5mC/nvHdK6hTpiLBzjgUmvd5dwZw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BmME+LpYv3Ynpbo/k9pA5qcNmv7XLPXasPvHW4QalwY=";
   };
 
-  cargoHash = "sha256-70xKyzRFMyAKhSwEsdNBK2afs0UpVoTvIXuQJgeqYY8=";
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail \
+        'version = "0.5.0"' \
+        'version = "0.6.0"'
+  '';
+
+  cargoHash = "sha256-bQNLhQAUw2JgThC+RiNC5ap8D6a4JgflV2whXKu7QF8=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  nativeCheckInputs = [
+    jujutsu
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/lazyjj \
       --prefix PATH : ${lib.makeBinPath [ jujutsu ]}
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  nativeCheckInputs = [ jujutsu ];
-
-  passthru.tests.version = testers.testVersion { package = lazyjj; };
-
-  meta = with lib; {
+  meta = {
     description = "TUI for Jujutsu/jj";
     homepage = "https://github.com/Cretezy/lazyjj";
+    changelog = "https://github.com/Cretezy/lazyjj/releases/tag/v${finalAttrs.version}";
     mainProgram = "lazyjj";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ colemickens ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      colemickens
+      GaetanLepage
+    ];
   };
-}
+})
