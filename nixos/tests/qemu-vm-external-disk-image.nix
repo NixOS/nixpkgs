@@ -23,6 +23,7 @@ let
 
       fileSystems = {
         "/".device = rootFsDevice;
+        "/".fsType = "ext4";
       };
 
       system.switch.enable = true;

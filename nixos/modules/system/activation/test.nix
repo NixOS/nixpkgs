@@ -13,7 +13,10 @@ let
         text = "${expect.dev}";
       };
       documentation.enable = false;
-      fileSystems."/".device = "ignore-root-device";
+      fileSystems."/" = {
+        device = "ignore-root-device";
+        fsType = "none";
+      };
       boot.loader.grub.enable = false;
     }
   );
@@ -23,7 +26,10 @@ let
       system.forbiddenDependenciesRegexes = [ "-dev$" ];
       system.extraDependencies = [ expect.dev ];
       documentation.enable = false;
-      fileSystems."/".device = "ignore-root-device";
+      fileSystems."/" = {
+        device = "ignore-root-device";
+        fsType = "none";
+      };
       boot.loader.grub.enable = false;
     }
   );

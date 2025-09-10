@@ -538,7 +538,10 @@ rec {
           modules = singleton (
             { ... }:
             {
-              fileSystems."/".device = mkDefault "/dev/sda1";
+              fileSystems."/" = {
+                device = mkDefault "/dev/sda1";
+                fsType = "ext4";
+              };
               boot.loader.grub.device = mkDefault "/dev/sda";
               system.stateVersion = mkDefault lib.trivial.release;
             }

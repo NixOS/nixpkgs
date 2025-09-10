@@ -122,7 +122,6 @@ let
         };
 
         fsType = mkOption {
-          default = "auto";
           example = "ext3";
           type = nonEmptyStr;
           description = ''
