@@ -270,6 +270,7 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       Profpatsch
       uncenter
+      amaanq
     ];
   };
 }
