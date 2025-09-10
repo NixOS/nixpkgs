@@ -10194,8 +10194,6 @@ with pkgs;
     stalwartEnterprise = true;
   };
 
-  ruby-zoom = callPackage ../tools/text/ruby-zoom { };
-
   inherit (callPackages ../servers/monitoring/sensu-go { })
     sensu-go-agent
     sensu-go-backend
