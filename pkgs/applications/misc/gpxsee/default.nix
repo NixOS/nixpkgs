@@ -6,17 +6,13 @@
   nix-update-script,
   qtbase,
   qttools,
-  qtlocation ? null, # qt5 only
-  qtpositioning ? null, # qt6 only
+  qtpositioning,
   qtserialport,
   qtsvg,
   wrapQtAppsHook,
   wrapGAppsHook3,
 }:
 
-let
-  isQt6 = lib.versions.major qtbase.version == "6";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
   version = "13.47";
@@ -29,20 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
+    qtbase
+    qtpositioning
     qtserialport
-  ]
-  ++ (
-    if isQt6 then
-      [
-        qtbase
-        qtpositioning
-        qtsvg
-      ]
-    else
-      [
-        qtlocation
-      ]
-  );
+    qtsvg
+  ];
 
   nativeBuildInputs = [
     qmake
