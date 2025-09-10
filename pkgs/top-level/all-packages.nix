@@ -9543,7 +9543,7 @@ with pkgs;
   redland = librdf_redland; # added 2018-04-25
 
   renovate = callPackage ../by-name/re/renovate/package.nix {
-    nodejs = nodejs_22;
+    nodejs = nodejs_20;
   };
 
   qradiolink = callPackage ../applications/radio/qradiolink {
@@ -16535,9 +16535,7 @@ with pkgs;
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
-  pgadmin4 = callPackage ../tools/admin/pgadmin { };
-
-  pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
+  pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
 
   pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 

@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.1.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-lISDy721e3bfWMl56DlIxVKN2bW8Yonc5XSVL072OQk=";
+    hash = "sha256-LMYgWXzzVBaUBJnVacWPZPeNe1EasJjS5A0ouRlLxNo=";
   };
 
-  npmDepsHash = "sha256-QcjXJcEIi/sUJLUF+wMqhXyLYPgjZKK6n4ngyvrH9NA=";
+  npmDepsHash = "sha256-3OqiXbLeFnOx/tdv+A0fxtUZLYTaNuOAJwtF71cljFw=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -61,7 +61,8 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_37.version}
+        -c.electronVersion=${electron_37.version} \
+        -c.mac.identity=null
 
     runHook postBuild
   '';
