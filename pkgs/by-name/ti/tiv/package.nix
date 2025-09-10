@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ imagemagick ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stefanhaustein/TerminalImageViewer";
     description = "Small C++ program to display images in a (modern) terminal using RGB ANSI codes and unicode block graphics characters";
     mainProgram = "tiv";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ magnetophon ];
     platforms = [ "x86_64-linux" ];
   };
 })
