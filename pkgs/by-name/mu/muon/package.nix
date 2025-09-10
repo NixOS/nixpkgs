@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
   version = "0.5.0";
 
-  srcs = builtins.attrValues finalAttrs.passthru.srcs;
+  srcs = builtins.attrValues (lib.filterAttrs (_: v: v.use or true) finalAttrs.passthru.srcsAttrs);
 
   sourceRoot = "muon-src";
 
@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       muonEnable = lib.mesonEnable;
       muonOption = lib.mesonOption;
 
+      bootstrapFlags = lib.optionalString (!embedSamurai) "CFLAGS=\"$CFLAGS -DBOOTSTRAP_NO_SAMU\"";
       # see `muon options -a` to see built-in options
       cmdlineForMuon = lib.concatStringsSep " " [
         (muonOption "prefix" (placeholder "out"))
@@ -115,15 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preBuild
 
-      ${
-        lib.optionalString (!embedSamurai) "CFLAGS=\"$CFLAGS -DBOOTSTRAP_NO_SAMU\""
-      } ./bootstrap.sh stage-1
-
+      ${bootstrapFlags} ./bootstrap.sh stage-1
       ./stage-1/muon-bootstrap setup ${cmdlineForMuon} stage-2
       ${lib.optionalString embedSamurai "./stage-1/muon-bootstrap"} samu ${cmdlineForSamu} -C stage-2
-
-      ./stage-2/muon setup ${cmdlineForMuon} stage-3
-      ${lib.optionalString embedSamurai "./stage-2/muon"} samu ${cmdlineForSamu} -C stage-3
 
       runHook postBuild
     '';
@@ -147,10 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ${lib.optionalString (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-    ) "NIX_BUILD_CORES=1"}
-    ./stage-3/muon -C stage-3 test -d dots -S -j$NIX_BUILD_CORES
+    ./stage-2/muon -C stage-2 test -d dots -S -j$NIX_BUILD_CORES
 
     runHook postCheck
   '';
@@ -158,12 +150,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    stage-3/muon -C stage-3 install
+    stage-2/muon -C stage-2 install
 
     runHook postInstall
   '';
 
-  passthru.srcs = {
+  passthru.srcsAttrs = {
     muon-src = fetchFromSourcehut {
       name = "muon-src";
       owner = "~lattis";
@@ -177,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "muon-build";
       rev = "1017b3413601044fb41ad04977445e68a80e8181";
       hash = "sha256-aFpyJFIqybLNKhm/kyfCjYylj7DE6muI1+OUh4Cq4WY=";
+      passthru.use = buildDocs;
     };
     meson-tests = fetchFromGitHub {
       name = "meson-tests";
@@ -184,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "muon-build";
       rev = "db92588773a24f67cda2f331b945825ca3a63fa7";
       hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
+      passthru.use = finalAttrs.doCheck;
     };
   };
 

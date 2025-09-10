@@ -16,20 +16,20 @@ lib.getExe (writeShellApplication {
   ];
 
   text = ''
-    REPO=$(nix-instantiate --raw --eval -E "with import ./. {}; muon.passthru.srcs.muon-src.meta.homepage")
+    REPO=$(nix-instantiate --raw --eval -E "with import ./. {}; muon.srcsAttrs.muon-src.meta.homepage")
     MUON_VERSION=$(list-git-tags --url="$REPO" | tail -1)
 
     update-source-version "muon" \
       "$MUON_VERSION" \
       --version-key=version \
-      --source-key=passthru.srcs.muon-src
+      --source-key=srcsAttrs.muon-src
     update-source-version "muon" \
       "$(curl -s "$REPO/blob/$MUON_VERSION/subprojects/meson-docs.wrap" | grep -oP "revision = \K.+$")" \
-      --version-key=passthru.srcs.meson-docs.rev \
-      --source-key=passthru.srcs.meson-docs
+      --version-key=srcsAttrs.meson-docs.rev \
+      --source-key=srcsAttrs.meson-docs
     update-source-version "muon" \
       "$(curl -s "$REPO/blob/$MUON_VERSION/subprojects/meson-tests.wrap" | grep -oP "revision = \K.+$")" \
-      --version-key=passthru.srcs.meson-tests.rev \
-      --source-key=passthru.srcs.meson-tests
+      --version-key=srcsAttrs.meson-tests.rev \
+      --source-key=srcsAttrs.meson-tests
   '';
 })
