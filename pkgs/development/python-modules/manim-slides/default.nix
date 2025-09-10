@@ -34,7 +34,7 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.5.1";
+  version = "5.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     tag = "v${version}";
-    hash = "sha256-V1uopwyA6y+oTofaezA4pR+ewrh0TRmCwoYhIR/iH7I=";
+    hash = "sha256-eCtV3xo6PxB6Nha4XuQmmlkAscmeN0O9tgUZ5L4ZroU=";
   };
 
   build-system = [
