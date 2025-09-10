@@ -17169,6 +17169,8 @@ self: super: with self; {
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
+  spandrel = callPackage ../development/python-modules/spandrel { };
+
   spark-parser = callPackage ../development/python-modules/spark-parser { };
 
   sparklines = callPackage ../development/python-modules/sparklines { };
