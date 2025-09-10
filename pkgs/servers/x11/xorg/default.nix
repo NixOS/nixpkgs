@@ -73,6 +73,7 @@
   libxrender,
   libxres,
   libxscrnsaver,
+  libxshmfence,
   libxt,
   libxv,
   libxvmc,
@@ -147,6 +148,7 @@ self: with self; {
     libxcb
     libxcvt
     libxkbfile
+    libxshmfence
     listres
     lndir
     luit
@@ -986,38 +988,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtst" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libxshmfence = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libxshmfence";
-      version = "1.3.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libxshmfence-1.3.3.tar.xz";
-        sha256 = "046y7zn8agp8kdr1lg11yyvpx90i9sjf77h25jhgx5msd84xz96l";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ xorgproto ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xshmfence" ];
         platforms = lib.platforms.unix;
       };
     })

@@ -178,13 +178,6 @@ self: super:
     };
   });
 
-  libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall = ''
       mkdir -p $out/share/man/man7

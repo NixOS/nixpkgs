@@ -83,6 +83,7 @@ $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
 $pcMap{"xres"} = "libXres";
 $pcMap{"xscrnsaver"} = "libXScrnSaver";
+$pcMap{"xshmfence"} = "libxshmfence";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
@@ -402,6 +403,7 @@ print OUT <<EOF;
   libxrender,
   libxres,
   libxscrnsaver,
+  libxshmfence,
   libxt,
   libxv,
   libxvmc,
@@ -476,6 +478,7 @@ self: with self; {
     libxcb
     libxcvt
     libxkbfile
+    libxshmfence
     listres
     lndir
     luit
