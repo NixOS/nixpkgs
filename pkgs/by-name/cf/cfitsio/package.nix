@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      returntoreality
       xbreak
       hjones2199
     ];

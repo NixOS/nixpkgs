@@ -70,7 +70,10 @@ stdenv.mkDerivation rec {
     mainProgram = "celestia";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ hjones2199 ];
+    maintainers = with lib.maintainers; [
+      hjones2199
+      returntoreality
+    ];
     platforms = lib.platforms.linux;
   };
 }
