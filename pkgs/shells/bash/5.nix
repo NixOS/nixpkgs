@@ -5,7 +5,7 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   bison,
-  util-linux,
+  util-linuxMinimal,
 
   interactive ? true,
   readline,
@@ -137,7 +137,7 @@ lib.warnIf (withDocs != null)
       "SHOBJ_LIBS=-lbash"
     ];
 
-    nativeCheckInputs = [ util-linux ];
+    nativeCheckInputs = [ util-linuxMinimal ];
     doCheck = false; # dependency cycle, needs to be interactive
 
     postInstall = ''
