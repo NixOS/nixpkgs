@@ -36,20 +36,16 @@ buildNpmPackage (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+    mkdir -p $out/{bin,share/gemini-cli}
 
-    mkdir -p "$out/lib"
+    cp -r node_modules $out/share/gemini-cli/
 
-    cp -r node_modules "$out/lib/"
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
+    cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
 
-    rm -f "$out/lib/node_modules/@google/gemini-cli"
-    rm -f "$out/lib/node_modules/@google/gemini-cli-core"
-
-    cp -r packages/cli "$out/lib/node_modules/@google/gemini-cli"
-    cp -r packages/core "$out/lib/node_modules/@google/gemini-cli-core"
-
-    mkdir -p "$out/bin"
-    ln -s ../lib/node_modules/@google/gemini-cli/dist/index.js "$out/bin/gemini"
-
+    ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
     runHook postInstall
   '';
 
