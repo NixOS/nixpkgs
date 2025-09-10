@@ -1,30 +1,32 @@
 # Note: this is rakshasa's version of libtorrent, used mainly by rtorrent.
 # *Do not* mistake it by libtorrent-rasterbar, used by Deluge, qbitttorent etc.
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   autoreconfHook,
   cppunit,
+  curl,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
   openssl,
   pkg-config,
+  stdenv,
   zlib,
-  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rakshasa-libtorrent";
-  version = "0.15.6";
+  pname = "libtorrent-rakshasa";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-udEe9VyUzPXuCTrB3U3+XCbVWvfTT7xNvJJkLSQrRt4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CtLRZK384IlfXoXLIpdXWa8s9M0n0EopKrJGrK6xq3c=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    curl
     pkg-config
   ];
 
@@ -36,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-aligned=yes" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "https://github.com/rakshasa/libtorrent";
     description = "BitTorrent library written in C++ for *nix, with focus on high performance and good code";
+    homepage = "https://github.com/rakshasa/libtorrent";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       ebzzry
