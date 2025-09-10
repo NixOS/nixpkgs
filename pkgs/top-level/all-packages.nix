@@ -12351,10 +12351,6 @@ with pkgs;
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
   rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
-  rofi-emoji-wayland =
-    (callPackage ../applications/misc/rofi-emoji {
-      rofi-unwrapped = rofi-wayland-unwrapped;
-    }).v4;
 
   rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
     waylandSupport = false;
@@ -12844,10 +12840,6 @@ with pkgs;
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
-  rofi-wayland-unwrapped = callPackage ../applications/misc/rofi/wayland.nix { };
-  rofi-wayland = callPackage ../applications/misc/rofi/wrapper.nix {
-    rofi-unwrapped = rofi-wayland-unwrapped;
-  };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
   rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {
