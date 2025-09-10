@@ -1628,11 +1628,13 @@ assertNoAdditions {
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
-    checkInputs = [ self.snacks-nvim ];
+    checkInputs = with self; [
+      snacks-nvim
+      telescope-nvim
+    ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
-      telescope-nvim
     ];
 
     doInstallCheck = true;
