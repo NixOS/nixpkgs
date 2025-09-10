@@ -67,6 +67,7 @@
         directBoot.enable = false;
         mountHostNixStore = false;
         useEFIBoot = true;
+        diskImage = "${config.system.build.finalImage}/${config.image.repart.imageFile}";
       };
 
       boot = {
@@ -86,28 +87,8 @@
     };
 
   testScript =
-    { nodes, ... }: # python
+    # python
     ''
-      import os
-      import subprocess
-      import tempfile
-
-      tmp_disk_image = tempfile.NamedTemporaryFile()
-
-      subprocess.run([
-        "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
-        "create",
-        "-f",
-        "qcow2",
-        "-b",
-        "${nodes.machine.system.build.finalImage}/${nodes.machine.image.repart.imageFile}",
-        "-F",
-        "raw",
-        tmp_disk_image.name,
-      ])
-
-      os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
-
       machine.wait_for_unit("default.target")
 
       with subtest("Running with volatile root"):
