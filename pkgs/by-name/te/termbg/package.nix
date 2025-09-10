@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +23,10 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
 
   meta = {
     description = "Program for terminal background color detection";
