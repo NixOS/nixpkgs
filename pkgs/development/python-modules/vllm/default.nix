@@ -5,6 +5,7 @@
   buildPythonPackage,
   pythonAtLeast,
   fetchFromGitHub,
+  fetchpatch,
   symlinkJoin,
   autoAddDriverRunpath,
 
@@ -144,6 +145,20 @@ let
       rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
       hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
     };
+
+    patches = [
+      # fix Hopper build failure
+      # https://github.com/Dao-AILab/flash-attention/pull/1719
+      # https://github.com/Dao-AILab/flash-attention/pull/1723
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/dad67c88d4b6122c69d0bed1cebded0cded71cea.patch";
+        hash = "sha256-JSgXWItOp5KRpFbTQj/cZk+Tqez+4mEz5kmH5EUeQN4=";
+      })
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/e26dd28e487117ee3e6bc4908682f41f31e6f83a.patch";
+        hash = "sha256-NkCEowXSi+tiWu74Qt+VPKKavx0H9JeteovSJKToK9A=";
+      })
+    ];
 
     dontConfigure = true;
 
