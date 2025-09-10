@@ -10,7 +10,7 @@
   boost,
   eigen,
   python,
-  catch,
+  catch2,
   numpy,
   pytestCheckHook,
   libxcrypt,
@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+    "-DCATCH_INCLUDE_DIR=${lib.getDev catch2}/include/catch2"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
   ]
   ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
@@ -76,7 +77,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    catch
+    catch2
     numpy
     pytestCheckHook
   ];
@@ -98,6 +99,10 @@ buildPythonPackage rec {
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"
   ];
+
+  postCheck = ''
+    make cpptest
+  '';
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
