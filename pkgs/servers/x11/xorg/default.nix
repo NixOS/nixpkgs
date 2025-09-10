@@ -2522,11 +2522,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xcb-util-cursor";
-      version = "0.1.5";
+      version = "0.1.6";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/lib/xcb-util-cursor-0.1.5.tar.xz";
-        sha256 = "0mrwcrm6djbd5zdvqb5v4wr87bzawnaacyqwwhfghw09ssq9kbqc";
+        url = "mirror://xorg/individual/lib/xcb-util-cursor-0.1.6.tar.xz";
+        sha256 = "0cx9yzccmzarba9gj03jhxkvccsx7c6ws3f7bjz1jdc74z8qpszx";
       };
       hardeningDisable = [
         "bindnow"
