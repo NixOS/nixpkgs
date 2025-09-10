@@ -381,13 +381,12 @@ let
       clangNoLibcxx = tools.clangWithLibcAndBasicRt;
 
       mlir = callPackage ./mlir { };
+
+      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt {
       };
-    }
-    // lib.optionalAttrs (lib.versionOlder metadata.release_version "22") {
-      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
       flang = callPackage ./flang {
