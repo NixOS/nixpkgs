@@ -6,6 +6,7 @@
   util-linux,
   bash,
   udevCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +51,10 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/sbin" "$out/lib/udev/rules.d" "$out/share/man/man8"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) bcache;
+  };
 
   meta = {
     description = "User-space tools required for bcache (Linux block layer cache)";
