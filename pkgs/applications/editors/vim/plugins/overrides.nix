@@ -2641,14 +2641,10 @@ assertNoAdditions {
   };
 
   nvim-tinygit = super.nvim-tinygit.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
-
     checkInputs = [
       gitMinimal
-      # transitive dependency (telescope-nvim) not properly propagated to the test environment
-      self.plenary-nvim
+      # interactive staging support
+      self.telescope-nvim
     ];
   };
 
