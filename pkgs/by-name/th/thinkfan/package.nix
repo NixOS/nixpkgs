@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  lm_sensors,
   yaml-cpp,
   pkg-config,
   procps,
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thinkfan";
-  version = "1.3.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
-    rev = version;
-    sha256 = "sha256-aREZv+t4QhtfLKOMrneLiRxgnu0fzB8UV8dvr1dnhx4=";
+    tag = version;
+    hash = "sha256-QqDWPOXy8E+TY5t0fFRAS8BGA7ZH90xecv5UsFfDssk=";
   };
 
   postPatch = ''
@@ -48,7 +49,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ yaml-cpp ] ++ lib.optional smartSupport libatasmart;
+  buildInputs = [
+    lm_sensors
+    yaml-cpp
+  ]
+  ++ lib.optional smartSupport libatasmart;
 
   meta = {
     description = "Simple, lightweight fan control program";
