@@ -12713,6 +12713,12 @@
     githubId = 954536;
     name = "Jean-Pierre PRUNARET";
   };
+  jpinz = {
+    email = "nix@jpinzer.me";
+    github = "jpinz";
+    githubId = 8357054;
+    name = "Julian Pinzer";
+  };
   jpotier = {
     email = "jpo.contributes.to.nixos@marvid.fr";
     github = "jpotier";
