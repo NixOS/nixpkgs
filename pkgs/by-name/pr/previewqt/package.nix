@@ -6,6 +6,7 @@
   fetchFromGitLab,
   imagemagick,
   libarchive,
+  libdevil,
   libraw,
   mpv,
   pkg-config,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     imagemagick
     libarchive
+    libdevil
     libraw
     mpv
     resvg

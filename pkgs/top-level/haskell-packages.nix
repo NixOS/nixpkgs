@@ -48,9 +48,6 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
-  buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_20;
-  llvmPackages = pkgs.llvmPackages_20;
-
 in
 {
   lib = haskellLibUncomposable;
@@ -75,7 +72,7 @@ in
     {
       # Required to bootstrap 9.4.8.
       ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
-        inherit llvmPackages;
+        llvmPackages = pkgs.llvmPackages_20;
       };
 
       ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix { };
@@ -94,7 +91,9 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # Support range >= 10 && < 14
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+        llvmPackages = pkgs.llvmPackages_12;
       };
       ghc94 = compiler.ghc948;
       ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
@@ -104,7 +103,9 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # Support range >= 11 && < 16
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+        llvmPackages = pkgs.llvmPackages_15;
       };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
         bootPkgs = bb.packages.ghc924Binary;
@@ -113,7 +114,9 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # Support range >= 11 && < 16
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+        llvmPackages = pkgs.llvmPackages_15;
       };
       ghc96 = compiler.ghc967;
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
@@ -127,46 +130,12 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # Support range >= 11 && < 16
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+        llvmPackages = pkgs.llvmPackages_15;
       };
       ghc98 = compiler.ghc984;
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
-      };
-      ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
-      };
-      ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
         bootPkgs =
           if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
@@ -186,28 +155,52 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
         llvmPackages = pkgs.llvmPackages_15;
       };
-      ghc910 = compiler.ghc9103;
-      ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
+      ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
-          # No suitable bindist packaged yet
-          bb.packages.ghc9103;
+          if stdenv.buildPlatform.isDarwin then
+            # it seems like the GHC 9.6.* bindists are built with a different
+            # toolchain than we are using (which I'm guessing from the fact
+            # that 9.6.4 bindists pass linker flags our ld doesn't support).
+            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
+            # the clock package (probably a hsc2hs problem).
+            bb.packages.ghc963
+          else
+            bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # 2023-01-15: Support range >= 11 && < 16
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+        llvmPackages = pkgs.llvmPackages_15;
+      };
+      ghc910 = compiler.ghc9102;
+      ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
+        bootPkgs =
+          # No suitable bindist packaged yet
+          bb.packages.ghc9102;
+        inherit (buildPackages.python3Packages) sphinx;
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        # 2024-12-21: Support range >= 13 && < 20
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
+        llvmPackages = pkgs.llvmPackages_19;
       };
       ghc9122 = callPackage ../development/compilers/ghc/9.12.2.nix {
         bootPkgs =
           # No suitable bindist packaged yet
-          bb.packages.ghc9103;
+          bb.packages.ghc9102;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # 2024-12-21: Support range >= 13 && < 20
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
+        llvmPackages = pkgs.llvmPackages_19;
       };
       ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
@@ -217,7 +210,9 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
+        # 2023-01-15: Support range >= 11 && < 16
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_18;
+        llvmPackages = pkgs.llvmPackages_18;
       };
 
       # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
@@ -310,12 +305,7 @@ in
         ghc = bh.compiler.ghc9102;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
       };
-      ghc9103 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc9103;
-        ghc = bh.compiler.ghc9103;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
-      };
-      ghc910 = packages.ghc9103;
+      ghc910 = packages.ghc9102;
       ghc9121 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9121;
         ghc = bh.compiler.ghc9121;

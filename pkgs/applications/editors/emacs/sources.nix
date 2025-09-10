@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromBitbucket,
   fetchzip,
 }:
 
@@ -32,8 +32,8 @@ let
             }
           );
           "macport" = (
-            fetchFromGitHub {
-              owner = "jdtsmith";
+            fetchFromBitbucket {
+              owner = "mituharu";
               repo = "emacs-mac";
               inherit rev hash;
             }
@@ -68,14 +68,13 @@ let
         ''
         + lib.optionalString (variant == "macport") ''
 
-          This release initially was built from Mitsuharu Yamamoto's patched source code
-          tailored for macOS. Moved to a fork of the latter starting with emacs v30 as the
-          original project seems to be currently dormant.
+          This release is built from Mitsuharu Yamamoto's patched source code
+          tailored for macOS.
         '';
         changelog =
           {
             "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
-            "macport" = "https://github.com/jdtsmith/emacs-mac/blob/${rev}/NEWS-mac";
+            "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
           }
           .${variant};
         license = lib.licenses.gpl3Plus;
@@ -89,9 +88,7 @@ let
               matthewbauer
               panchoh
             ];
-            "macport" = with lib.maintainers; [
-              kfiz
-            ];
+            "macport" = with lib.maintainers; [ ];
           }
           .${variant};
         platforms =
@@ -120,11 +117,26 @@ in
     ];
   });
 
-  emacs30-macport = import ./make-emacs.nix (mkArgs {
+  emacs29-macport = import ./make-emacs.nix (mkArgs {
     pname = "emacs-mac";
-    version = "30.2.50";
+    version = "29.4";
     variant = "macport";
-    rev = "emacs-mac-30.2";
-    hash = "sha256-i/W2Xa6Vk1+T1fs6fa4wJVMLLB6BK8QAPcdmPrU8NwM=";
+    rev = "emacs-29.4-mac-10.1";
+    hash = "sha256-8OQ+fon9tclbh/eUJ09uqKfMaz9M77QnLIp2R8QB6Ic=";
+    patches = fetchpatch: [
+      # CVE-2024-53920
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/29.4/07_all_trusted-content.patch?id=f24370de4de0a37304958ec1569d5c50c1745b7f";
+        hash = "sha256-zUWM2HDO5MHEB5fC5TCUxzmSafMvXO5usRzCyp9Q7P4=";
+      })
+
+      # CVE-2025-1244
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/29.4/06_all_man.patch?id=f24370de4de0a37304958ec1569d5c50c1745b7f";
+        hash = "sha256-Vdf6GF5YmGoHTkxiD9mdYH0hgvfovZwrqYN1NQ++U1w=";
+      })
+    ];
+
+    meta.knownVulnerabilities = [ ];
   });
 }

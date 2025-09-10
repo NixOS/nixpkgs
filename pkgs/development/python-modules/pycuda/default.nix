@@ -23,12 +23,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2025.1.2";
+  version = "2025.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DdgpEdctjgPGMSiuROmc+3tGiQlKumzFGT2OlEcXqvo=";
+    hash = "sha256-urBnjUP0achl9f5gJPSBx4HsUf7+Zoas1mxnK/q+o08=";
   };
 
   preConfigure = with lib.versions; ''
@@ -76,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ artuuge ];
   };
 }

@@ -7,10 +7,8 @@
   gitUpdater,
   graphviz,
   gst_all_1,
-  perl,
   pkg-config,
   testers,
-  sox,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,13 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "man"
   ];
-
-  nativeCheckInputs = [
-    perl
-    sox
-  ];
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

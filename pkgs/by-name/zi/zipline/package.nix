@@ -28,6 +28,22 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
+
+  vips' = vips.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "8.17.1";
+      src = fetchFromGitHub {
+        inherit (prevAttrs.src) owner repo;
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
+        postFetch = ''
+          rm -r $out/test/test-suite/images/
+        '';
+      };
+      outputs = lib.remove "devdoc" prevAttrs.outputs;
+      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
+    }
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    vips
+    vips'
   ];
 
   nativeBuildInputs = [
@@ -85,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    CI=true pnpm prune --prod
+    pnpm prune --prod
     find node_modules -xtype l -delete
 
     mkdir -p $out/{bin,share/zipline}

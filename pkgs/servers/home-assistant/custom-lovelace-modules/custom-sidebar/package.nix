@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.entrypoint = "custom-sidebar-yaml.js";
 
-  meta = {
+  meta = with lib; {
     description = "Custom plugin that allows you to personalise the Home Assistant's sidebar per user or device basis";
     homepage = "https://elchininet.github.io/custom-sidebar";
     downloadPage = "https://github.com/elchininet/custom-sidebar";
-    changelog = "https://github.com/elchininet/custom-sidebar/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/elchininet/custom-sidebar/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes ];
   };
 })

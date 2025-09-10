@@ -367,15 +367,15 @@ in
     };
   };
 
-  gruvbox = mkTmuxPlugin rec {
+  gruvbox = mkTmuxPlugin {
     pluginName = "gruvbox";
     rtpFilePath = "gruvbox-tpm.tmux";
-    version = "2.0.1";
+    version = "unstable-2022-04-19";
     src = fetchFromGitHub {
       owner = "egel";
       repo = "tmux-gruvbox";
-      tag = "v${version}";
-      hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
+      rev = "3f9e38d7243179730b419b5bfafb4e22b0a969ad";
+      hash = "sha256-jvGCrV94vJroembKZLmvGO8NknV1Hbgz2IuNmc/BE9A=";
     };
   };
 
@@ -1065,12 +1065,12 @@ in
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2025-07-15";
+    version = "unstable-2025-04-25";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
-      rev = "c45243dc1f32ac6bcf6068e5300f3b2b237e576a";
-      hash = "sha256-IEPnr/GdsAnHzdTjFnXCuMyoNLm3/Jz4cBAM0AJBrj8=";
+      rev = "33afa80db65113561dc53fa732b7f5e53d5ecfd0";
+      hash = "sha256-h3c5ki8N4kiNzbgjxHwLh625un6GqbLZv/4dPVW3vCI=";
     };
   };
 

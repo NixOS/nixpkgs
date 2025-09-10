@@ -6,22 +6,22 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cxx-rs";
-  version = "1.0.175";
+  version = "1.0.158";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";
-    tag = finalAttrs.version;
-    sha256 = "sha256-haAcBBI5ol+gcqKzasyHU43ewGA0L4FlL4o1QlJJukc=";
+    rev = version;
+    sha256 = "sha256-cihF9VWAvqQxwvRJRfDIVxf56ajgFaOEv0vBvSQd2WY=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-JxSWct7lx1oDVQ4QnqC9qRJg86XNppn+s4n5ZX0JXIQ=";
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoPatches = [
+    ./add-Cargo.lock.patch
+  ];
 
   cargoBuildFlags = [
     "--workspace"
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ centromere ];
   };
-})
+}

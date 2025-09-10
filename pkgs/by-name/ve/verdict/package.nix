@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "verdict";
-  version = "1.4.4";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "sandialabs";
     repo = "verdict";
     tag = finalAttrs.version;
-    hash = "sha256-8RUFag3XsWsrvVXsz/+ARTHfmGAJ6giQApn+XDwslMQ=";
+    hash = "sha256-VrjyAMou5BajOIb13RjEqVgOsDcllfzI/OJ81fyILjs=";
   };
 
   nativeBuildInputs = [

@@ -54,13 +54,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2509";
+  version = "2506a";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
+    hash = "sha256-xYGq2Yt4Gqb/QDA6HZajs7JCwETufuqigk3bZbsgdEM=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''

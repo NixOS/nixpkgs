@@ -133,7 +133,5 @@ with lib;
     ] "Zeronet will log by default in /var/lib/zeronet")
   ];
 
-  meta = {
-    inherit (pkgs.zeronet) maintainers;
-  };
+  meta.maintainers = with maintainers; [ Madouura ];
 }

@@ -2,6 +2,7 @@
   lib,
   mkKdeDerivation,
   fetchurl,
+  fetchpatch,
   qtspeech,
   qttools,
   kxmlgui,

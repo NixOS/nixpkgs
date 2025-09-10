@@ -118,12 +118,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.5.3";
+  version = "4.5.2";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DNVZUZpysCyB/Xt8yB352gO+UK8Cd4aDFGYuUDKyIrs=";
+    hash = "sha256-6blXwp3DeWNM5Q6M5gWj4O+K/gFxEOj41lzlc5biEYQ=";
   };
 
   postPatch =
@@ -257,7 +257,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libsndfile
     libtiff
     libwebp
-    manifold
+    (manifold.override { tbb_2021 = tbb; })
     opencolorio
     openexr
     openimageio

@@ -47,8 +47,6 @@ buildGoModule rec {
     "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${version}'"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
     description = "Command line tool for Shopware 6";
     mainProgram = "shopware-cli";

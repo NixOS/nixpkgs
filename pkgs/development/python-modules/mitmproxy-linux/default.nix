@@ -44,6 +44,8 @@ buildPythonPackage {
 
   meta = {
     inherit (mitmproxy-rs.meta) changelog license maintainers;
+  }
+  // {
     description = "Linux Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-linux";
     platforms = lib.platforms.linux;

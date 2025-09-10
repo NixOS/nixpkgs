@@ -1,39 +1,28 @@
 {
   lib,
   stdenv,
-  makeBinaryWrapper,
+  makeWrapper,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  gitMinimal,
+  git,
   gnupg,
   xclip,
   wl-clipboard,
   passAlias ? false,
   apple-sdk_14,
+  testers,
   nix-update-script,
-  versionCheckHook,
+  gopass,
 }:
 
-let
-  wrapperPath = lib.makeBinPath (
-    [
-      gitMinimal
-      gnupg
-      xclip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wl-clipboard
-    ]
-  );
-in
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "gopass";
   version = "1.15.16";
 
   nativeBuildInputs = [
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -44,7 +33,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-oZeik172VBSxuO3DfD5t8cKPl3AYjlyEw5x4/7g9h6o=";
   };
 
@@ -55,9 +44,18 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
-    "-X main.commit=${finalAttrs.src.rev}"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
   ];
+
+  wrapperPath = lib.makeBinPath (
+    [
+      git
+      gnupg
+      xclip
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux wl-clipboard
+  );
 
   postInstall = ''
     installManPage gopass.1
@@ -75,26 +73,25 @@ buildGoModule (finalAttrs: {
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-
   passthru = {
     inherit wrapperPath;
+
+    tests.version = testers.testVersion {
+      package = gopass;
+    };
 
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       rvolosatovs
       sikmir
     ];
-    changelog = "https://github.com/gopasspw/gopass/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of
@@ -107,4 +104,4 @@ buildGoModule (finalAttrs: {
     '';
     mainProgram = "gopass";
   };
-})
+}

@@ -246,15 +246,14 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals =
-        [
-          pkgs.xdg-desktop-portal-gtk
-        ]
-        ++ (with pkgs.pantheon; [
-          elementary-files
-          elementary-settings-daemon
-          xdg-desktop-portal-pantheon
-        ]);
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-gtk
+      ]
+      ++ (with pkgs.pantheon; [
+        elementary-files
+        elementary-settings-daemon
+        xdg-desktop-portal-pantheon
+      ]);
 
       xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 

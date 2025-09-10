@@ -29,14 +29,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
-  version = "1.7.3";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     tag = "v${version}";
-    hash = "sha256-eN0dn2TNVEPSfIiJM0NA+HT1l4DnFq1mrSOOUF0h9xY=";
+    hash = "sha256-Vtrxpb6nTTR5a9sFi1NrhEflhPOwv1gt6i7DnggJwMs=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''

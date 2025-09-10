@@ -6,7 +6,6 @@ let
   common = {
     services.userborn.enable = true;
     boot.initrd.systemd.enable = true;
-    networking.useNetworkd = true;
     system.etc.overlay = {
       enable = true;
       mutable = false;

@@ -26,12 +26,12 @@ let
     };
   };
 
-  version = "3.6.0";
+  version = "3.4.2";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-8bD+rBEN0GEQz3tiPEQYmf/mpijPefFmQchGhYkVBVY=";
+    hash = "sha256-uo49y+tJXdc8gfFIHSIEk0DEowMsHWA64IxlHpFHUTU=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -40,7 +40,10 @@ let
 
     sourceRoot = "source/src/mail";
 
-    env.DOCS_DIR_MAILS = "${placeholder "out"}";
+    patches = [ ./mjml-mail-dir.patch ];
+    patchFlags = [ "-p3" ];
+
+    env.DIR_MAILS = "${placeholder "out"}";
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";

@@ -87,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       "loongarch64-linux"
       "mips64el-linux"
       "mipsel-linux"
-      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv64-linux"

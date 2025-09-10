@@ -37,7 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://looking-glass.io/docs/stable/obs/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ babbaj ];
-    # Hard coded x86_64 support
     platforms = [ "x86_64-linux" ];
   };
 }

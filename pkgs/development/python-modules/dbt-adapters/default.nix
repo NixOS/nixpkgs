@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.16.7";
+  version = "1.16.6";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_adapters";
     inherit version;
-    hash = "sha256-I3bE6RP0Udp4bO+OXlRdXM2H+TaXvNFJiHIrqgb0i4A=";
+    hash = "sha256-XSyJBzDXw0hozTie7BKN4Zmshm5sidkz3KQ9Jet8Mwc=";
   };
 
   build-system = [ hatchling ];

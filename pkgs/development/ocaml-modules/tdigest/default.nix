@@ -9,16 +9,16 @@
 
 buildDunePackage rec {
   pname = "tdigest";
-  version = "2.2.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "SGrondin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-faJ8ZQ7AWDHWfyQ2jq6+8TMe4G4NLjqHxYzLzt2LGh4=";
+    sha256 = "sha256-Z2rOaiNGvVDbRwf5XfoNIcenQdrE3fxHnfzyi6Ki2Ic=";
   };
 
-  minimalOCamlVersion = "5.1";
+  minimalOCamlVersion = "4.14";
 
   # base v0.17 compatibility
   patches = [ ./tdigest.patch ];

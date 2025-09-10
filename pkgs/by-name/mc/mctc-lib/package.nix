@@ -9,6 +9,7 @@
   cmake,
   pkg-config,
   python3,
+  toml-f,
   jonquil,
 }:
 
@@ -21,13 +22,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "mctc-lib";
-  version = "0.5.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
     rev = "v${version}";
-    hash = "sha256-MWqvFxFGnFrGppiSy97oUWz7p1sD6GkTrMEZTFgSExg=";
+    hash = "sha256-Qd7mpNE23Z+LuiUwhUzfVzVZEQ+sdnkxMm+W7Hlrss4=";
   };
 
   patches = [
@@ -60,10 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
 
   postPatch = ''
     patchShebangs --build config/install-mod.py

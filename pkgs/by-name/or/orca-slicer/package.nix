@@ -34,7 +34,7 @@
   opencv,
   pcre,
   systemd,
-  tbb_2022,
+  tbb_2021,
   webkitgtk_4_1,
   wxGTK31,
   xorg,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2022
+    tbb_2021
     webkitgtk_4_1
     wxGTK'
     xorg.libX11
@@ -210,10 +210,6 @@ stdenv.mkDerivation (finalAttrs: {
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     )
-  '';
-
-  postInstall = ''
-    rm $out/LICENSE.txt
   '';
 
   meta = {

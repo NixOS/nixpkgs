@@ -2,17 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
-  onnxruntime,
   autoPatchelfHook,
-
-  # buildInputs
-  oneDNN,
-  re2,
-
-  # dependencies
+  onnxruntime,
   coloredlogs,
   numpy,
   packaging,
+  oneDNN,
+  re2,
+
 }:
 
 # onnxruntime requires an older protobuf.
@@ -72,10 +69,13 @@ buildPythonPackage {
     ]
   );
 
-  dependencies = [
+  propagatedBuildInputs = [
     coloredlogs
+    # flatbuffers
     numpy
     packaging
+    # protobuf
+    # sympy
   ];
 
   meta = onnxruntime.meta;

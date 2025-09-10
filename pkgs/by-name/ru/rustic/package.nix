@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.10.0";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     tag = "v${version}";
-    hash = "sha256-KyJce0pTTpPv3K0WXWQv2MPx8dDGhUVYEIjTeYH1KPY=";
+    hash = "sha256-HYPzgynCeWDRRNyACHqnzkjn6uZWS0TDHuJE9STJxbQ=";
   };
 
-  cargoHash = "sha256-Axiq1Yu5pg3fZ/E8aYFGAuPi3KVIlotQ2TZs0pczG+4=";
+  cargoHash = "sha256-+BlLVnvI2qBfwEtyxmZFNhR9MEzs0/a1Ce6ALOKtoPU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

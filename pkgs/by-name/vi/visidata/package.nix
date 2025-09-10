@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "visidata";
-  version = "3.3";
+  version = "3.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    hash = "sha256-y+HqRww/Fm+YeiNYH0a2TcUYOc72qL+9tC0PRudptrA=";
+    hash = "sha256-kOg9OypWNGStNYFctPIwzVa1CsZBySY2IpA3eDrS7eY=";
   };
 
   propagatedBuildInputs =

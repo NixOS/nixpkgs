@@ -21,23 +21,20 @@
   pythonOlder,
   vacuum-map-parser-roborock,
   pyshark,
-  pyyaml,
-  click-shell,
-  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.44.1";
+  version = "2.39.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = "Python-roborock";
+    owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-HXQqaXsbjzJ52yxP7m3Edc5HijwcGhZ6suu7QAcBu4A=";
+    hash = "sha256-V0zuUlJ0wPpxOKtY7ydbJ7mhWT5xGSLv19csmpWCO1Q=";
   };
 
   postPatch = ''
@@ -60,9 +57,7 @@ buildPythonPackage rec {
     pycryptodome
     pyrate-limiter
     vacuum-map-parser-roborock
-    pyyaml
     pyshark
-    click-shell
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
@@ -71,15 +66,14 @@ buildPythonPackage rec {
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy
   ];
 
   pythonImportsCheck = [ "roborock" ];
 
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
-    homepage = "https://github.com/Python-roborock/python-roborock";
-    changelog = "https://github.com/Python-roborock/python-roborock/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/humbertogontijo/python-roborock";
+    changelog = "https://github.com/humbertogontijo/python-roborock/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "roborock";

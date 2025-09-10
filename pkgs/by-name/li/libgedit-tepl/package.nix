@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
   ];
 
-  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";

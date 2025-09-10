@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       llvm-exception
     ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -20,6 +20,7 @@
   python-dotenv,
 
   # tests
+  greenlet,
   pytestCheckHook,
 
   # reverse dependencies
@@ -66,9 +67,9 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = {
-    changelog = "https://flask.palletsprojects.com/en/stable/changes/#version-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+  meta = with lib; {
+    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
+      replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
     description = "Python micro framework for building web applications";
@@ -80,7 +81,7 @@ buildPythonPackage rec {
       around Werkzeug and Jinja and has become one of the most popular
       Python web application frameworks.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nickcao ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

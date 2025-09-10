@@ -36,6 +36,26 @@ let
       rev = "v${version}";
       hash = "sha256-rt3RTZut41uDEh0YmpOzH3sOezeEVWtAIGMKCHLSJBw=";
     };
+    "17" = rec {
+      version = "17.0.15";
+      rev = "v${version}";
+      hash = "sha256-ETpTQYMMApECDfuRY87HrO/PUxZ13x9dBRJ3ychslUI=";
+    };
+    "16" = rec {
+      version = "16.0.15";
+      rev = "v${version}";
+      hash = "sha256-30i73tGl+1KlP92XA0uxdMTydd9EtaQ4SZ0W1kdm1fQ=";
+    };
+    "15" = rec {
+      version = "15.0.15";
+      rev = "v${version}";
+      hash = "sha256-kFVDS+qwoG1AXrZ8LytoiLVbZkTGR9sO+Wrq3VGgWNQ=";
+    };
+    "14" = rec {
+      version = "14.0.14";
+      rev = "v${version}";
+      hash = "sha256-PW+5w93omLYPZXjRtU4BNY2ztZ86pcjgUQZkrktMq+4=";
+    };
   };
 
   branch = versions."${llvmMajor}" or (throw "Incompatible LLVM version ${llvmMajor}");
@@ -50,8 +70,14 @@ stdenv.mkDerivation {
     inherit (branch) rev hash;
   };
 
-  # TODO: Remove.
-  patches = [ ];
+  patches = lib.optionals (llvmMajor == "14") [
+    (fetchpatch {
+      # tries to install llvm-spirv into llvm nix store path
+      url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/cce9a2f130070d799000cac42fe24789d2b777ab.patch";
+      revert = true;
+      hash = "sha256-GbFacttZRDCgA0jkUoFA4/B3EDn3etweKvM09OwICJ8=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

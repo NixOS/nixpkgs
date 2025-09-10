@@ -23,5 +23,6 @@ buildGoModule rec {
     description = "Fast JSON serializer for Go";
     mainProgram = "easyjson";
     license = licenses.mit;
+    maintainers = with maintainers; [ Madouura ];
   };
 }

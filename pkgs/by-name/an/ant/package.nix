@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h/SNGLoRwRVojDfvl1g+xv+J6mAz+J2BimckjaRxDEs=";
   };
 
+  contrib = fetchurl {
+    url = "mirror://sourceforge/ant-contrib/ant-contrib-1.0b3-bin.tar.bz2";
+    sha256 = "1l8say86bz9gxp4yy777z7nm4j6m905pg342li1aphc14p5grvwn";
+  };
+
   installPhase = ''
     mkdir -p $out/bin $out/share/ant
     mv * $out/share/ant/
@@ -31,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/share/ant/{manual,bin,WHATSNEW}
     mkdir $out/share/ant/bin
     mv $out/bin/antRun $out/share/ant/bin/
+
+    # Install ant-contrib.
+    unpackFile $contrib
+    cp -p ant-contrib/ant-contrib-*.jar $out/share/ant/lib/
 
     cat >> $out/bin/ant <<EOF
     #! ${stdenv.shell} -e

@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openapv";
-  version = "0.2.0.4";
+  version = "0.2.0.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openapv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IkzZnf2/JZJIwg9g/6SvWTAcUkAQ/C36xXC+t44VejU=";
+    hash = "sha256-Eam53Fc0oYOE2YH+Q1Cx6TxClMoUaDZuRhrC8LX6S7g=";
   };
 
   postPatch = ''

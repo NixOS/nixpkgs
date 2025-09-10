@@ -73,7 +73,7 @@ stdenv.mkDerivation {
           nssmdns4 = true;
         };'';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ artuuge ];
     platforms = platforms.linux;
   };
 }

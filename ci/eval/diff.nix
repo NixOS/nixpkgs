@@ -11,14 +11,6 @@
 }:
 
 let
-  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
-  # nix store paths around. These need to be turned into (fake) derivations again to track
-  # dependencies properly.
-  # We use two steps for evaluation, because we compare results from two different checkouts.
-  # CI additionalls spreads evaluation across multiple workers.
-  before = if lib.isDerivation beforeDir then beforeDir else lib.toDerivation beforeDir;
-  after = if lib.isDerivation afterDir then afterDir else lib.toDerivation afterDir;
-
   /*
     Computes the key difference between two attrs
 
@@ -72,15 +64,15 @@ let
     in
     builtins.fromJSON data;
 
-  beforeAttrs = getAttrs before;
-  afterAttrs = getAttrs after;
+  beforeAttrs = getAttrs beforeDir;
+  afterAttrs = getAttrs afterDir;
   diffAttrs = diff beforeAttrs afterAttrs;
   diffJson = writeText "diff.json" (builtins.toJSON diffAttrs);
 in
 runCommand "diff" { } ''
   mkdir -p $out/${evalSystem}
 
-  cp -r ${before} $out/before
-  cp -r ${after} $out/after
+  cp -r ${beforeDir} $out/before
+  cp -r ${afterDir} $out/after
   cp ${diffJson} $out/${evalSystem}/diff.json
 ''

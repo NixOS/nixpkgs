@@ -18,7 +18,6 @@ runCommand "mcat"
   }
   ''
     mkdir -p $out/bin
-    ln -s "${mcat-unwrapped}/share" "$out/share"
     makeWrapper ${lib.getExe mcat-unwrapped} $out/bin/mcat --prefix PATH : ${
       lib.makeBinPath ((lib.optional useChromium chromium) ++ (lib.optional useFfmpeg ffmpeg-headless))
     }

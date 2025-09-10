@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "geticons";
     homepage = "https://git.sr.ht/~zethra/geticons";
     license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }

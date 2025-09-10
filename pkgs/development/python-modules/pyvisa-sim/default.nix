@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-sim";
-  version = "0.7.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyvisa_sim";
     inherit version;
-    hash = "sha256-EbEGWOIVJwjuraDIZifYlMTRFIQxLwLTzzhRlrS8hw8=";
+    hash = "sha256-fVpnLKSK25SL5hbwYSuFMrHu5mSvZ8Gt8Qv/Tjv7+NA=";
   };
 
   build-system = [

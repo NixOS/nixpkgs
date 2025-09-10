@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgbackrest";
-  version = "2.56.0";
+  version = "2.55.1";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-GDHpeTz85cgKTbcuaTlwJ1SUNMedSylqKWdrgH8Zp8Q=";
+    hash = "sha256-A1dTywcCHBu7Ml0Q9k//VVPFN1C3kmmMkq4ok9T4g94=";
   };
 
   strictDeps = true;
@@ -58,9 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/pgbackrest/pgbackrest/releases/tag/release%2F${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "pgbackrest";
-    maintainers = with lib.maintainers; [
-      zaninime
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ zaninime ];
   };
 })

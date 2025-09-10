@@ -24,11 +24,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy_macos" ];
 
-  meta = {
-    inherit (mitmproxy-rs.meta) changelog license maintainers;
+  meta = with lib; {
     description = "MacOS Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-macos";
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ boltzmannrain ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

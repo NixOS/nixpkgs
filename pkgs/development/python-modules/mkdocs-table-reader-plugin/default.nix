@@ -9,7 +9,7 @@
   pyyaml,
   pytestCheckHook,
   openpyxl,
-  mkdocs-macros-plugin,
+  mkdocs-macros,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     openpyxl
-    mkdocs-macros-plugin
+    mkdocs-macros
   ];
 
   pythonImportsCheck = [

@@ -30,7 +30,7 @@ in
         Additional config entries for the fw-fanctrl service (documentation: <https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md>)
       '';
       type = lib.types.submodule {
-        freeformType = lib.types.attrsOf configFormat.type;
+        freeformType = configFormat.type;
         options = {
           defaultStrategy = lib.mkOption {
             type = lib.types.str;

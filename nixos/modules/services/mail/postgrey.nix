@@ -10,6 +10,9 @@ let
 
   cfg = config.services.postgrey;
 
+  natural = with types; addCheck int (x: x >= 0);
+  natural' = with types; addCheck int (x: x > 0);
+
   socket =
     with types;
     addCheck (either (submodule unixSocket) (submodule inetSocket)) (x: x ? path || x ? port);
@@ -124,17 +127,17 @@ in
         description = "Prepend header to greylisted mails; use %%t for seconds delayed due to greylisting, %%v for the version of postgrey, %%d for the date, and %%h for the host";
       };
       delay = mkOption {
-        type = ints.unsigned;
+        type = natural;
         default = 300;
         description = "Greylist for N seconds";
       };
       maxAge = mkOption {
-        type = ints.unsigned;
+        type = natural;
         default = 35;
         description = "Delete entries from whitelist if they haven't been seen for N days";
       };
       retryWindow = mkOption {
-        type = either str ints.unsigned;
+        type = either str natural;
         default = 2;
         example = "12h";
         description = "Allow N days for the first retry. Use string with appended 'h' to specify time in hours";
@@ -145,12 +148,12 @@ in
         description = "Strip the last N bits from IP addresses, determined by IPv4CIDR and IPv6CIDR";
       };
       IPv4CIDR = mkOption {
-        type = ints.unsigned;
+        type = natural;
         default = 24;
         description = "Strip N bits from IPv4 addresses if lookupBySubnet is true";
       };
       IPv6CIDR = mkOption {
-        type = ints.unsigned;
+        type = natural;
         default = 64;
         description = "Strip N bits from IPv6 addresses if lookupBySubnet is true";
       };
@@ -160,7 +163,7 @@ in
         description = "Store data using one-way hash functions (SHA1)";
       };
       autoWhitelist = mkOption {
-        type = nullOr ints.positive;
+        type = nullOr natural';
         default = 5;
         description = "Whitelist clients after successful delivery of N messages";
       };

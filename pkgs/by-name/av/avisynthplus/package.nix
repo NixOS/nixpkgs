@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   gitUpdater,
+  libdevil,
   soundtouch,
 }:
 
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
+    libdevil
     soundtouch
   ];
 

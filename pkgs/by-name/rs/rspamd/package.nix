@@ -15,7 +15,6 @@
   ragel,
   fasttext,
   icu,
-  hyperscan,
   vectorscan,
   jemalloc,
   blas,
@@ -28,14 +27,9 @@
   # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
   # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
   withBlas ? false,
-  withHyperscan ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
-  withVectorscan ? true,
   nixosTests,
 }:
-
-assert withHyperscan -> stdenv.hostPlatform.isx86_64;
-assert (!withHyperscan) || (!withVectorscan);
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
@@ -72,15 +66,14 @@ stdenv.mkDerivation rec {
     xxHash
     zstd
     libarchive
+    vectorscan
   ]
   ++ lib.optionals withBlas [
     blas
     lapack
   ]
-  ++ lib.optional withHyperscan hyperscan
   ++ lib.optional withLuaJIT luajit
-  ++ lib.optional (!withLuaJIT) lua
-  ++ lib.optional withVectorscan vectorscan;
+  ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908

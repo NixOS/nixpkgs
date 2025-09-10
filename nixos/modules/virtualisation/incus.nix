@@ -449,9 +449,6 @@ in
       requires = [ "incus.socket" ];
       wantedBy = config.systemd.services.incus.wantedBy;
 
-      # restarting this service will affect instances
-      restartIfChanged = false;
-
       serviceConfig = {
         ExecStart = "${incus-startup} start";
         ExecStop = "${incus-startup} stop";

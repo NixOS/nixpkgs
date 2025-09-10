@@ -6,12 +6,11 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron_37,
+  electron_35,
   httptoolkit-server,
 }:
-
 let
-  electron = electron_37;
+  electron = electron_35;
 in
 buildNpmPackage rec {
   pname = "httptoolkit";
@@ -24,12 +23,7 @@ buildNpmPackage rec {
     hash = "sha256-6iiXOBVtPLdW9MWUcu2Hggm7uPHudASebRPQ34JJTMQ=";
   };
 
-  patches = [
-    # generated via running: `npm update node-abi`
-    ./bump-node-abi.patch
-  ];
-
-  npmDepsHash = "sha256-WtnL9Gf1zGWnIjMifh0l3fwaeur+iI1l/Vwta+X6EAM=";
+  npmDepsHash = "sha256-n4he0Z9XPQIZ8vZcWA7Vo36Oz5RGPGdnV2VJVu5OZRg=";
 
   makeCacheWritable = true;
 

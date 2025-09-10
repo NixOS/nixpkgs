@@ -3,10 +3,8 @@
   buildPythonPackage,
   callPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytest,
   setuptools-scm,
-  backports-asyncio-runner,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +27,6 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    backports-asyncio-runner
-  ];
 
   postInstall = ''
     mkdir $testout

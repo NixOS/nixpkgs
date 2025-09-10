@@ -36,6 +36,7 @@ gccStdenv.mkDerivation rec {
     homepage = "https://www.drive5.com/muscle/";
     maintainers = with maintainers; [
       unode
+      thyol
     ];
   };
 }

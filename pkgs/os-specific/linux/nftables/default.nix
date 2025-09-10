@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
+    lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
   };
 

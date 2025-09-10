@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   which,
   zip,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.63.3";
+  version = "0.63.2";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = "rehex";
     tag = version;
-    hash = "sha256-o/ff0V0pMomXRu1DrD/m+M6364NisUI+8+RwryIsSLc=";
+    hash = "sha256-de92lBnn0tp7Awm6PLJw12GfYohXY9m59XPmw7npvOg=";
   };
 
   nativeBuildInputs = [

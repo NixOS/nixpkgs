@@ -1,9 +1,7 @@
 { pkgs, ... }:
 {
   name = "bcachefs";
-  meta = {
-    inherit (pkgs.bcachefs-tools.meta) maintainers;
-  };
+  meta.maintainers = with pkgs.lib.maintainers; [ Madouura ];
 
   nodes.machine =
     { pkgs, ... }:

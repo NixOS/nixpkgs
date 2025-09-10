@@ -262,7 +262,6 @@ package-set { inherit pkgs lib callPackage; } self
       pkg,
       ver,
       sha256,
-      candidate ? false,
       rev ? {
         revision = null;
         sha256 = null;
@@ -272,11 +271,7 @@ package-set { inherit pkgs lib callPackage; } self
     let
       pkgver = "${pkg}-${ver}";
       firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
-        url =
-          if candidate then
-            "mirror://hackage/${pkgver}/candidate/${pkgver}.tar.gz"
-          else
-            "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+        url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
         inherit sha256;
       }) args;
     in
@@ -739,13 +734,6 @@ package-set { inherit pkgs lib callPackage; } self
   */
   forceLlvmCodegenBackend = overrideCabal (drv: {
     configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
-    buildTools =
-      drv.buildTools or [ ]
-      ++ [ self.ghc.llvmPackages.llvm ]
-      # GHC >= 9.10 needs LLVM specific assembler, i.e. clang
-      # On Darwin clang is always required
-      ++ lib.optionals (lib.versionAtLeast self.ghc.version "9.10" || stdenv.hostPlatform.isDarwin) [
-        self.ghc.llvmPackages.clang
-      ];
+    buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
   });
 }

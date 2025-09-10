@@ -8,22 +8,23 @@
   boost,
   curl,
   fuse,
-  gtest,
   openssl,
   range-v3,
   spdlog,
+  # cryptopp and gtest on standby - using the vendored ones for now
+  # see https://github.com/cryfs/cryfs/issues/369
   llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
-  version = "1.0.1";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "cryfs";
     repo = "cryfs";
     rev = version;
-    hash = "sha256-QzxJUh6nD6243x443b0tIb1v2Zs8jRUk8IVarNqs47M=";
+    hash = "sha256-OkJhLg+YzS3kDhlpUQe9A+OiVBPG/iKs6OU7aKFJ5wY=";
   };
 
   postPatch = ''
@@ -58,19 +59,20 @@ stdenv.mkDerivation rec {
     boost
     curl
     fuse
-    gtest
     openssl
     range-v3
     spdlog
   ]
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
+  #nativeCheckInputs = [ gtest ];
+
   cmakeFlags = [
     "-DDEPENDENCY_CONFIG='../cmake-utils/DependenciesFromLocalSystem.cmake'"
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
     "-DBoost_USE_STATIC_LIBS:BOOL=FALSE" # this option is case sensitive
     "-DBUILD_TESTING:BOOL=${if doCheck then "TRUE" else "FALSE"}"
-  ];
+  ]; # ++ lib.optional doCheck "-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake";
 
   # macFUSE needs to be installed for the test to succeed on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

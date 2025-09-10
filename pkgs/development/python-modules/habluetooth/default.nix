@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "5.6.4";
+  version = "5.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -30,8 +30,13 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     tag = "v${version}";
-    hash = "sha256-j3g0MLVfA8r02EM3rT5GuNE70TdYtdT+5XzqWqi/JM0=";
+    hash = "sha256-9T6GvNHHxOpoPkN1Blyd/ErqYFei5UcaKQbd5gog6qM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'Cython>=3,<3.1' 'Cython'
+  '';
 
   build-system = [
     cython

@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/Rerumu/Wasynth";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ wackbyte ];
   };
 })

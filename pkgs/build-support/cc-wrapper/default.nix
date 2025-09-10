@@ -106,7 +106,7 @@ let
     versionAtLeast
     ;
 
-  inherit (stdenvNoCC) buildPlatform hostPlatform targetPlatform;
+  inherit (stdenvNoCC) hostPlatform targetPlatform;
 
   includeFortifyHeaders' =
     if includeFortifyHeaders != null then
@@ -445,13 +445,6 @@ stdenvNoCC.mkDerivation {
     inherit nixSupport;
 
     inherit defaultHardeningFlags;
-  }
-  // optionalAttrs cc.langGo or false {
-    # So gccgo looks more like go for buildGoModule
-
-    inherit (targetPlatform.go) GOOS GOARCH GOARM;
-
-    CGO_ENABLED = 1;
   };
 
   dontBuild = true;
@@ -878,9 +871,6 @@ stdenvNoCC.mkDerivation {
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
     ''
     + optionalString cc.langFortran or false ''
-      hardening_unsupported_flags+=" format"
-    ''
-    + optionalString cc.langGo or false ''
       hardening_unsupported_flags+=" format"
     ''
     + optionalString targetPlatform.isWasm ''

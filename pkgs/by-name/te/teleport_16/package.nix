@@ -2,8 +2,6 @@
   buildTeleport,
   buildGoModule,
   wasm-bindgen-cli_0_2_95,
-  withRdpClient ? true,
-  extPatches ? [ ],
 }:
 buildTeleport rec {
   version = "16.5.15";
@@ -13,5 +11,5 @@ buildTeleport rec {
   cargoHash = "sha256-04zykCcVTptEPGy35MIWG+tROKFzEepLBmn04mSbt7I=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
-  inherit buildGoModule withRdpClient extPatches;
+  inherit buildGoModule;
 }

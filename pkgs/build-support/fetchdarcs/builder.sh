@@ -12,8 +12,8 @@ elif test -n "$context"; then
     tagflags="--context=$context"
 fi
 
-echo "Cloning $url $partial ${tagtext} into $out"
+echo "getting $url $partial ${tagtext} into $out"
 
-darcs clone --lazy $tagflags "$url" "$out"
+darcs get --lazy $tagflags "$url" "$out"
 # remove metadata, because it can change
 rm -rf "$out/_darcs"
