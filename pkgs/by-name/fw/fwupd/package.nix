@@ -47,6 +47,7 @@
   libgudev,
   libjcat,
   libmbim,
+  libmnl,
   libqmi,
   libuuid,
   libxmlb,
@@ -234,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     libjcat
     libmbim
+    libmnl
     libqmi
     libuuid
     libxmlb
