@@ -23,19 +23,19 @@ let
       inherit sha256;
     }
   );
+  patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 in
 lib.warnIf (withDocs != null)
   ''
     bash: `.override { withDocs = true; }` is deprecated, the docs are always included.
   ''
   stdenv.mkDerivation
-  rec {
+  (finalAttrs: {
     pname = "bash${lib.optionalString interactive "-interactive"}";
     version = "5.3${patch_suffix}";
-    patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
     src = fetchurl {
-      url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
+      url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix finalAttrs.version}.tar.gz";
       hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
     };
 
@@ -184,4 +184,4 @@ lib.warnIf (withDocs != null)
       maintainers = [ ];
       mainProgram = "bash";
     };
-  }
+  })
