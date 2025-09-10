@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  applyPatches,
+  fetchpatch,
   cmake,
   python3,
   spirv-headers,
@@ -11,11 +13,24 @@ stdenv.mkDerivation rec {
   pname = "spirv-tools";
   version = "1.4.321.0";
 
-  src = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "SPIRV-Tools";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-yAdd/mXY8EJnE0vCu0n/aVxMH9059T/7cAdB9nP1vQQ=";
+  # Several downstream derivations consume `spirv-tools.src`; apply
+  # relevant patches here rather than in the main derivation.
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "SPIRV-Tools";
+      rev = "vulkan-sdk-${version}";
+      hash = "sha256-yAdd/mXY8EJnE0vCu0n/aVxMH9059T/7cAdB9nP1vQQ=";
+    };
+
+    patches = [
+      # Fix the build with the corresponding backport in the headers.
+      (fetchpatch {
+        name = "spirv-tools-SPV_INTEL_function_variants.patch";
+        url = "https://github.com/KhronosGroup/SPIRV-Tools/commit/28a883ba4c67f58a9540fb0651c647bb02883622.patch";
+        hash = "sha256-zH8wI7Ilir0FEbJ3RzHn9b29Etn7ahMUWCFz0o7R6hE=";
+      })
+    ];
   };
 
   # The cmake options are sufficient for turning on static building, but not
