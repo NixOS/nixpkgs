@@ -81,7 +81,7 @@ in
   cudaPackages_13_0 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
       cublasmp = "0.6.0";
-      cuda = "13.0.0";
+      cuda = "13.0.1";
       cudnn = "9.8.0";
       cudss = "0.5.0";
       cuquantum = "25.03.0";
