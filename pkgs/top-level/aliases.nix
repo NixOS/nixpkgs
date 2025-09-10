@@ -575,6 +575,7 @@ mapAliases {
   callPackage_i686 = pkgsi686Linux.callPackage;
   cargo-asm = throw "'cargo-asm' has been removed due to lack of upstream maintenance. Consider 'cargo-show-asm' as an alternative.";
   cask = emacs.pkgs.cask; # Added 2022-11-12
+  catch = throw "catch has been removed. Please upgrade to catch2 or catch2_3"; # Added 2025-08-21
   catcli = throw "catcli has been superseded by gocatcli"; # Added 2025-04-19
   canonicalize-jars-hook = stripJavaArchivesHook; # Added 2024-03-17
   cargo-deps = throw "cargo-deps has been removed as the repository is deleted"; # Added 2024-04-09
