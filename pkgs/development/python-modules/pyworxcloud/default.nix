@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyworxcloud";
-  version = "4.1.43";
+  version = "4.1.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MTrab";
     repo = "pyworxcloud";
     tag = "v${version}";
-    hash = "sha256-DMkyek9Y3vQnzcds5MUALVH3o1dW6X6eIkurFC8rLO4=";
+    hash = "sha256-JRmAARfmGRWdUj4J2CqUaRd+S9itZgCxqbRl78Iub+o=";
   };
 
   build-system = [ poetry-core ];

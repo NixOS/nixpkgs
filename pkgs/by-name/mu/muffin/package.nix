@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   cairo,
   cinnamon-desktop,
@@ -61,6 +62,13 @@ stdenv.mkDerivation rec {
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit zenity;
+    })
+
+    # Fix Qt apps crashing on wayland
+    # https://github.com/linuxmint/muffin/pull/739
+    (fetchpatch {
+      url = "https://github.com/linuxmint/muffin/commit/760e2a3046e13610c4fda1291a9a28e589d2bd93.patch";
+      hash = "sha256-D0u8UxW5USzMW9KlP3Y4XCWxrQ1ySufDv+eCbrAP71c=";
     })
   ];
 

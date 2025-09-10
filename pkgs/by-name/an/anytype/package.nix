@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
@@ -13,27 +14,27 @@
 
 let
   pname = "anytype";
-  version = "0.46.5";
+  version = "0.49.2";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-gDlxyHxBLWVBLnaI6rFclfjwqkw9gneBEC7ssmWDKYU=";
+    hash = "sha256-8+x2FmyR5x9Zrm3t71RSyxAKcJCvnR98+fqHXjBE7aU=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "1d7ca0073bdd02d0145b8da3b1b956ca0652a108";
-    hash = "sha256-aL79DOIFH3CocbcLW0SJ472mYPZJXrPJyRKy8zXiF4o=";
+    rev = "873b42df7320ebbbc80d7e2477914dac70363ef7";
+    hash = "sha256-Mr0KfXn9NO86QqgBhVjSs2przN/GtjuhJHJ9djo8Feg=";
   };
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-WEw3RCi7dWs2eMYxLH7DcmWBrN4T8T6beIyplcXgJAA=";
+  npmDepsHash = "sha256-fuNTSZl+4DG/YL34f/+bYK26ruRFAc1hyHVAm256LiE=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -52,7 +53,7 @@ buildNpmPackage {
 
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
-    ./0001-fix-single-instance-detection-when-not-packaged.patch
+    ./0002-remove-grpc-devtools.patch
   ];
 
   buildPhase = ''
@@ -132,5 +133,6 @@ buildNpmPackage {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   nix-update-script,
+  versionCheckHook,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
@@ -20,6 +21,8 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
+  npmFlags = [ "--ignore-scripts" ];
+
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
 
   passthru.updateScript = nix-update-script { };
@@ -33,6 +36,11 @@ buildNpmPackage (finalAttrs: {
   env = {
     PUPPETEER_SKIP_DOWNLOAD = 1;
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/task-master";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Node.js agentic AI workflow orchestrator";

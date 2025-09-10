@@ -12,7 +12,7 @@
 }:
 runCommand "sddm-wrapped"
   {
-    inherit (unwrapped) version;
+    inherit (unwrapped) version outputs;
 
     buildInputs =
       unwrapped.buildInputs
@@ -45,4 +45,7 @@ runCommand "sddm-wrapped"
     for i in bin/*; do
       makeQtWrapper ${unwrapped}/$i $out/$i --set SDDM_GREETER_DIR $out/bin
     done
+
+    mkdir -p $man
+    ln -s ${lib.getMan unwrapped}/* $man/
   ''

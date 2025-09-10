@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "8.0.3";
+  version = "8.0.4";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lhoEgfYaqaZfrfVgyHSwl/algqjnvAc/pnVPwK8YdCc=";
+    hash = "sha256-16QDzsZCquAPH3FPyBjxeXGcvSdjYLZFTXN0ASneROU=";
   };
 
   build-system = [ setuptools ];

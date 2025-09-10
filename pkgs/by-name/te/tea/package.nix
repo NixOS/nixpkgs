@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitea,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -28,4 +29,20 @@ buildGoModule rec {
     ];
     mainProgram = "tea";
   };
+
+  ldflags = [
+    "-X code.gitea.io/tea/cmd.Version=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd tea \
+      --bash <($out/bin/tea completion bash) \
+      --fish <($out/bin/tea completion fish) \
+      --zsh <($out/bin/tea completion zsh)
+
+    mkdir $out/share/powershell/ -p
+    $out/bin/tea completion pwsh > $out/share/powershell/tea.Completion.ps1
+  '';
 }

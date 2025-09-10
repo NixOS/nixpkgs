@@ -23,7 +23,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.24";
+  version = "4.0.26";
 
   format = "other";
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-3rZiqg8Uuta3kI2m+2rBZ1XzN9bFds+emhivH5X7sJg=";
+        hash = "sha256-yY3OFZVHxhVurfjSEeR+UUNHQdpc08jhgaDEvMWRsLA=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     '';
 
   patches = [
-    ./Port-to-paramiko-3.x.patch
+    ./Port-to-paramiko-4.x.patch
   ];
 
   postPatch = ''

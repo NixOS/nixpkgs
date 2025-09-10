@@ -1,4 +1,5 @@
-# Tests whether container images are imported and auto deploying Helm charts work
+# Tests whether container images are imported and auto deploying Helm charts,
+# including the bundled traefik, work
 import ../make-test-python.nix (
   {
     k3s,
@@ -64,11 +65,10 @@ import ../make-test-python.nix (
             "--disable local-storage"
             "--disable metrics-server"
             "--disable servicelb"
-            "--disable traefik"
           ];
           images = [
             # Provides the k3s Helm controller
-            k3s.airgapImages
+            k3s.airgap-images
             testImage
           ];
           autoDeployCharts = {
@@ -148,6 +148,8 @@ import ../make-test-python.nix (
         assert hello_output.rstrip() == "Hello, world!", f"unexpected output of hello job: {hello_output}"
         assert values_file_output.rstrip() == "Hello, file!", f"unexpected output of values file job: {values_file_output}"
         assert advanced_output.rstrip() == "advanced hello", f"unexpected output of advanced job: {advanced_output}"
+        # wait for bundled traefik deployment
+        machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik", timeout=180)
       '';
   }
 )

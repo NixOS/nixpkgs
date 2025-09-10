@@ -29,6 +29,7 @@
   armTrustedFirmwareS905,
   opensbi,
   buildPackages,
+  callPackages,
   darwin,
 }@pkgs:
 
@@ -198,8 +199,10 @@ in
 
     filesToInstall = [
       "tools/dumpimage"
+      "tools/fdt_add_pubkey"
       "tools/fdtgrep"
       "tools/kwboot"
+      "tools/mkeficapsule"
       "tools/mkenvimage"
       "tools/mkimage"
       "tools/env/fw_printenv"
@@ -210,6 +213,8 @@ in
       "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
     };
   };
+
+  ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";

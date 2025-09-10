@@ -7,6 +7,7 @@
   # python dependencies
   docling,
   docling-jobkit,
+  docling-mcp,
   fastapi,
   httpx,
   pydantic-settings,
@@ -16,7 +17,7 @@
   websockets,
   tesserocr,
   typer,
-  rapidocr-onnxruntime,
+  rapidocr,
   onnxruntime,
   torch,
   torchvision,
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   dependencies = [
     docling
     (docling-jobkit.override { inherit withTesserocr withRapidocr; })
+    docling-mcp
     fastapi
     httpx
     pydantic-settings
@@ -81,7 +83,7 @@ buildPythonPackage rec {
       tesserocr
     ];
     rapidocr = [
-      rapidocr-onnxruntime
+      rapidocr
       onnxruntime
     ];
     cpu = [

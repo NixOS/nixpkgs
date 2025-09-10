@@ -32,6 +32,8 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
+  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
+  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
   version = "2.19.1";
   pyproject = true;
 
@@ -50,16 +52,11 @@ buildPythonPackage rec {
     patchShebangs --build packaging/cli-doc/build.py
 
     SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
-    PYPROJECT=$(cat pyproject.toml)
-    if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
-      echo "setuptools replace: ''${BASH_REMATCH[0]}"
-      echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
-    else
-      exit 2
-    fi
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "wheel == 0.45.1" wheel
+    WHEEL_PATTERN='"wheel[0-9 <>=.,]+"'
+    echo "Patching pyproject.toml"
+    # print replaced patterns to stdout
+    sed -r -i -e 's/'"$SETUPTOOLS_PATTERN"'/"setuptools"/w /dev/stdout' \
+      -e 's/'"$WHEEL_PATTERN"'/"wheel"/w /dev/stdout' pyproject.toml
   '';
 
   nativeBuildInputs = [

@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       marcusramberg
       max06
-      rewine
+      wineee
     ];
     platforms = [
       "x86_64-linux"

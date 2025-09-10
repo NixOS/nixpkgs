@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feh";
-  version = "3.11";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = "feh";
     rev = finalAttrs.version;
-    hash = "sha256-3QKKXgwrDXVn8ahIG+NfP60GezFrZiHWOFoM2T0OoqU=";
+    hash = "sha256-gzMlPyuQft39U1hNs9PojohESqsjVxcPGuUbNRFMQBU=";
   };
 
   outputs = [

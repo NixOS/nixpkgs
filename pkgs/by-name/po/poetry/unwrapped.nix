@@ -60,7 +60,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "dulwich"
     "keyring"
-    "virtualenv"
   ];
 
   dependencies = [

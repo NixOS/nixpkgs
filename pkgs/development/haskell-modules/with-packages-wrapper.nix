@@ -13,7 +13,6 @@
   installDocumentation ? true,
   hoogleWithPackages,
   postBuild ? "",
-  ghcLibdir ? null, # only used by ghcjs, when resolving plugins
 }:
 
 # This argument is a function which selects a list of Haskell packages from any
@@ -51,9 +50,8 @@ let
 
   packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
 
-  isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
-  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand' = "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps = lib.toUpper ghcCommand';
   libDir =
@@ -77,8 +75,6 @@ let
   );
 in
 
-assert ghcLibdir != null -> (ghc.isGhcjs or false);
-
 if paths == [ ] && !useLLVM then
   ghc
 else
@@ -101,9 +97,6 @@ else
             --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
             --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
             --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
-            ${
-              lib.optionalString (ghc.isGhcjs or false) ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
-            } \
             ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
         fi
       done
@@ -136,39 +129,37 @@ else
       fi
 
     ''
-    + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS)
-      ''
-        # Work around a linker limit in macOS Sierra (see generic-builder.nix):
-        local packageConfDir="${packageCfgDir}";
-        local dynamicLinksDir="$out/lib/links";
-        mkdir -p $dynamicLinksDir
-        # Clean up the old links that may have been (transitively) included by
-        # symlinkJoin:
-        rm -f $dynamicLinksDir/*
+    + (lib.optionalString (stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isiOS) ''
+      # Work around a linker limit in macOS Sierra (see generic-builder.nix):
+      local packageConfDir="${packageCfgDir}";
+      local dynamicLinksDir="$out/lib/links";
+      mkdir -p $dynamicLinksDir
+      # Clean up the old links that may have been (transitively) included by
+      # symlinkJoin:
+      rm -f $dynamicLinksDir/*
 
-        dynamicLibraryDirs=()
+      dynamicLibraryDirs=()
 
-        for pkg in $($out/bin/ghc-pkg list --simple-output); do
-          dynamicLibraryDirs+=($($out/bin/ghc-pkg --simple-output field "$pkg" dynamic-library-dirs))
-        done
+      for pkg in $($out/bin/ghc-pkg list --simple-output); do
+        dynamicLibraryDirs+=($($out/bin/ghc-pkg --simple-output field "$pkg" dynamic-library-dirs))
+      done
 
-        for dynamicLibraryDir in $(echo "''${dynamicLibraryDirs[@]}" | tr ' ' '\n' | sort -u); do
-          echo "Linking $dynamicLibraryDir/*.dylib from $dynamicLinksDir"
-          find "$dynamicLibraryDir" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
-        done
+      for dynamicLibraryDir in $(echo "''${dynamicLibraryDirs[@]}" | tr ' ' '\n' | sort -u); do
+        echo "Linking $dynamicLibraryDir/*.dylib from $dynamicLinksDir"
+        find "$dynamicLibraryDir" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
+      done
 
-        for f in $packageConfDir/*.conf; do
-          # Initially, $f is a symlink to a read-only file in one of the inputs
-          # (as a result of this symlinkJoin derivation).
-          # Replace it with a copy whose dynamic-library-dirs points to
-          # $dynamicLinksDir
-          cp $f $f-tmp
-          rm $f
-          sed "N;s,dynamic-library-dirs:\s*.*\n,dynamic-library-dirs: $dynamicLinksDir\n," $f-tmp > $f
-          rm $f-tmp
-        done
-      ''
-    )
+      for f in $packageConfDir/*.conf; do
+        # Initially, $f is a symlink to a read-only file in one of the inputs
+        # (as a result of this symlinkJoin derivation).
+        # Replace it with a copy whose dynamic-library-dirs points to
+        # $dynamicLinksDir
+        cp $f $f-tmp
+        rm $f
+        sed "N;s,dynamic-library-dirs:\s*.*\n,dynamic-library-dirs: $dynamicLinksDir\n," $f-tmp > $f
+        rm $f-tmp
+      done
+    '')
     + ''
       ${lib.optionalString hasLibraries ''
         # GHC 8.10 changes.
@@ -182,14 +173,6 @@ else
 
         $out/bin/${ghcCommand}-pkg recache
       ''}
-      ${
-        # ghcjs will read the ghc_libdir file when resolving plugins.
-        lib.optionalString (isGhcjs && ghcLibdir != null) ''
-          mkdir -p "${libDir}"
-          rm -f "${libDir}/ghc_libdir"
-          printf '%s' '${ghcLibdir}' > "${libDir}/ghc_libdir"
-        ''
-      }
       $out/bin/${ghcCommand}-pkg check
     ''
     + postBuild;

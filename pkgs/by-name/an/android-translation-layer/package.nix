@@ -25,20 +25,23 @@
   makeWrapper,
   replaceVars,
   nixosTests,
+  bintools,
 }:
 
 stdenv.mkDerivation {
   pname = "android-translation-layer";
-  version = "0-unstable-2025-07-14";
+  version = "0-unstable-2025-08-06";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "android_translation_layer";
-    rev = "828f779c4f7170f608047c500d6d3b64b480df7f";
-    hash = "sha256-1KYZWlzES3tbskqvA8qSQCegE0uLTLCq4q2CX6uix4o=";
+    rev = "d52985a6df81d73a8f6dfbdee337f7ff90b724cb";
+    hash = "sha256-fJ8S04YucoCzHiIQdiQd+Il0YGNFsOkSiGWjZKNMTIM=";
   };
 
   patches = [
+    # meson: use pkg-config from art-standalone instead of manual library search
+    # See: https://gitlab.com/android_translation_layer/android_translation_layer/-/merge_requests/164
     (replaceVars ./configure-art-path.patch {
       artStandalonePackageDir = "${art-standalone}";
     })
@@ -84,7 +87,8 @@ stdenv.mkDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/android-translation-layer \
-      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art
+      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art \
+      --prefix PATH : ${lib.makeBinPath [ bintools ]}
   '';
 
   passthru.tests = {

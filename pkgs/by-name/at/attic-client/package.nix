@@ -21,13 +21,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2025-08-16";
+  version = "0-unstable-2025-08-28";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "c1cfee9b63e48d9cee18e538ca32f1721078de91";
-    hash = "sha256-cKw1bfEwW+pQWsvzOAe0GfsSNXTSFS+5MYcZFQB5dFc=";
+    rev = "2524dd1c007bc7a0a9e9c863a1b02de8d54b319b";
+    hash = "sha256-S4SJDmVTtbcXaJkYrMFkcA5SDrpfRHlBbzwp6IRRPAw=";
   };
 
   nativeBuildInputs = [

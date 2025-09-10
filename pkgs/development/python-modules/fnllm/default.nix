@@ -17,6 +17,7 @@
   pythonOlder,
   tenacity,
   tiktoken,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,10 @@ buildPythonPackage rec {
     hash = "sha256-q7aeFXuXIrwjjXEHVpACohWommIxJZo9PRUgh4uLtfA=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     aiolimiter

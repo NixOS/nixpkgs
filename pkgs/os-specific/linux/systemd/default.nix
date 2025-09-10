@@ -63,8 +63,8 @@
   libseccomp,
   withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools,
   kexec-tools,
-  bashInteractive,
   bash,
+  bashNonInteractive,
   libmicrohttpd,
   libfido2,
   p11-kit,
@@ -114,7 +114,6 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? !stdenv.hostPlatform.isMusl,
-  withIptables ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -196,7 +195,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.7";
+  version = "257.8";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -216,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-9OnjeMrfV5DSAoX/aetI4r/QLPYITUd2aOY0DYfkTzQ=";
+    hash = "sha256-XQ+IyRar74qQij96CKClHXW0kkPnGeKUgA8ULiWh5YY=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -246,19 +245,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
 
-    # https://github.com/systemd/systemd/issues/33392
-    # https://github.com/systemd/systemd/pull/33400
-    ./0018-bootctl-do-not-fail-when-the-same-file-is-updated-mu.patch
-
     # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
     # if the install prefix is not /usr, but that does not work for us
     # because we include the config snippet manually
-    ./0019-meson-Don-t-link-ssh-dropins.patch
+    ./0018-meson-Don-t-link-ssh-dropins.patch
 
-    ./0020-install-unit_file_exists_full-follow-symlinks.patch
+    ./0019-install-unit_file_exists_full-follow-symlinks.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isPower64) [
     # Auto-detect ELF ABI instead of hardcoding ELFv2 for BPF build
@@ -401,7 +396,6 @@ stdenv.mkDerivation (finalAttrs: {
     (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
-    bashInteractive # for patch shebangs
   ]
 
   ++ lib.optionals withGcrypt [
@@ -427,7 +421,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
   ++ lib.optional withLibseccomp libseccomp
-  ++ lib.optional withIptables iptables
   ++ lib.optional withPam pam
   ++ lib.optional withPCRE2 pcre2
   ++ lib.optional withSelinux libselinux
@@ -466,10 +459,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version-tag" version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
-    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
+
+    # /bin/sh is also the upstream default. Explicitly set this so that we're
+    # independent of upstream changes to the default.
+    (lib.mesonOption "debug-shell" "/bin/sh")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
@@ -516,6 +512,10 @@ stdenv.mkDerivation (finalAttrs: {
     # SSH
     (lib.mesonOption "sshconfdir" "")
     (lib.mesonOption "sshdconfdir" "no")
+
+    # RPM
+    # This stops building/installing RPM specific tools.
+    (lib.mesonOption "rpmmacrosdir" "no")
 
     # Features
 
@@ -566,7 +566,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libcurl" wantCurl)
     (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
-    (lib.mesonEnable "libiptc" withIptables)
+    (lib.mesonEnable "libiptc" false)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
@@ -904,6 +904,11 @@ stdenv.mkDerivation (finalAttrs: {
           builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
         )
       );
+
+  disallowedRequisites = lib.optionals (!withUkify) [
+    bash
+    bashNonInteractive
+  ];
 
   passthru = {
     # The `interfaceVersion` attribute below points out the incompatibilities

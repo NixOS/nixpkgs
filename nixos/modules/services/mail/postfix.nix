@@ -357,6 +357,8 @@ in
         description = "Whether to run the Postfix mail server.";
       };
 
+      package = lib.mkPackageOption pkgs "postfix" { };
+
       enableSmtp = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -882,12 +884,12 @@ in
           etc.postfix.source = "/var/lib/postfix/conf";
 
           # This makes it comfortable to run 'postqueue/postdrop' for example.
-          systemPackages = [ pkgs.postfix ];
+          systemPackages = [ cfg.package ];
         };
 
         services.mail.sendmailSetuidWrapper = lib.mkIf config.services.postfix.setSendmail {
           program = "sendmail";
-          source = "${pkgs.postfix}/bin/sendmail";
+          source = lib.getExe' cfg.package "sendmail";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -896,7 +898,7 @@ in
 
         security.wrappers.mailq = {
           program = "mailq";
-          source = "${pkgs.postfix}/bin/mailq";
+          source = lib.getExe' cfg.package "mailq";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -905,7 +907,7 @@ in
 
         security.wrappers.postqueue = {
           program = "postqueue";
-          source = "${pkgs.postfix}/bin/postqueue";
+          source = lib.getExe' cfg.package "postqueue";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -914,7 +916,7 @@ in
 
         security.wrappers.postdrop = {
           program = "postdrop";
-          source = "${pkgs.postfix}/bin/postdrop";
+          source = lib.getExe' cfg.package "postdrop";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -948,7 +950,7 @@ in
               mv /var/postfix /var/lib/postfix
             fi
 
-            # All permissions set according ${pkgs.postfix}/etc/postfix/postfix-files script
+            # All permissions set according ${cfg.package}/etc/postfix/postfix-files script
             mkdir -p /var/lib/postfix /var/lib/postfix/queue/{pid,public,maildrop}
             chmod 0755 /var/lib/postfix
             chown root:root /var/lib/postfix
@@ -956,20 +958,20 @@ in
             rm -rf /var/lib/postfix/conf
             mkdir -p /var/lib/postfix/conf
             chmod 0755 /var/lib/postfix/conf
-            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
+            ln -sf ${cfg.package}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
 
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postalias -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postalias"} -o -p /var/lib/postfix/conf/${to}
               '') cfg.aliasFiles
             )}
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postmap -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postmap"} -o -p /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
@@ -979,7 +981,7 @@ in
             ln -sf /var/spool/mail /var/
 
             #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
-            ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
+            ${lib.getExe' cfg.package "postfix"} set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
 
@@ -993,15 +995,15 @@ in
             "postfix-setup.service"
           ];
           requires = [ "postfix-setup.service" ];
-          path = [ pkgs.postfix ];
+          path = [ cfg.package ];
 
           serviceConfig = {
             Type = "forking";
             Restart = "always";
             PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-            ExecStart = "${pkgs.postfix}/bin/postfix start";
-            ExecStop = "${pkgs.postfix}/bin/postfix stop";
-            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+            ExecStart = "${lib.getExe' cfg.package "postfix"} start";
+            ExecStop = "${lib.getExe' cfg.package "postfix"} stop";
+            ExecReload = "${lib.getExe' cfg.package "postfix"} reload";
 
             # Hardening
             PrivateTmp = true;
@@ -1025,7 +1027,7 @@ in
 
         services.postfix.settings.main =
           (lib.mapAttrs (_: v: lib.mkDefault v) {
-            compatibility_level = pkgs.postfix.version;
+            compatibility_level = cfg.package.version;
             mail_owner = cfg.user;
             default_privs = "nobody";
 
@@ -1034,16 +1036,16 @@ in
             queue_directory = "/var/lib/postfix/queue";
 
             # Default location of everything in package
-            meta_directory = "${pkgs.postfix}/etc/postfix";
-            command_directory = "${pkgs.postfix}/bin";
+            meta_directory = "${cfg.package}/etc/postfix";
+            command_directory = "${cfg.package}/bin";
             sample_directory = "/etc/postfix";
-            newaliases_path = "${pkgs.postfix}/bin/newaliases";
-            mailq_path = "${pkgs.postfix}/bin/mailq";
+            newaliases_path = lib.getExe' cfg.package "newaliases";
+            mailq_path = lib.getExe' cfg.package "mailq";
             readme_directory = false;
-            sendmail_path = "${pkgs.postfix}/bin/sendmail";
-            daemon_directory = "${pkgs.postfix}/libexec/postfix";
-            manpage_directory = "${pkgs.postfix}/share/man";
-            html_directory = "${pkgs.postfix}/share/postfix/doc/html";
+            sendmail_path = lib.getExe' cfg.package "sendmail";
+            daemon_directory = "${cfg.package}/libexec/postfix";
+            manpage_directory = "${cfg.package}/share/man";
+            html_directory = "${cfg.package}/share/postfix/doc/html";
             shlib_directory = false;
             mail_spool_directory = "/var/spool/mail/";
             setgid_group = cfg.setgidGroup;

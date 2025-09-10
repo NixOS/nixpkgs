@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-d1kpkBKuc30oIT1dRac8gkzh36Yyg80cizNRbyZ4424=";
   };
 
+  patches = [
+    # https://github.com/pi-hole/FTL/pull/2610: Fix authentication redirect when webhome is /
+    ./disable-redirect-root.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     xxd

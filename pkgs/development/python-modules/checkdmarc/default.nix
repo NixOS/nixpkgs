@@ -6,6 +6,7 @@
   expiringdict,
   fetchFromGitHub,
   hatchling,
+  importlib-resources,
   pem,
   publicsuffixlist,
   pyleri,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     cryptography
     dnspython
     expiringdict
+    importlib-resources
     pem
     publicsuffixlist
     pyleri

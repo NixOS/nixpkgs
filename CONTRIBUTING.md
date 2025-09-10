@@ -91,7 +91,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
    Use the branch from step 1 as the PR's base branch.
-   Go through the [pull request template](#pull-request-template).
+   Go through the [pull request template][pr-template].
 
 7. Respond to review comments and potentially to CI failures and merge conflicts by updating the PR.
    Always keep it in a mergeable state.
@@ -210,7 +210,7 @@ The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.
 This document details our standards for commit messages, reviews, licensing of contributions, etc...
 Everyone should read and understand these standards before submitting a pull request.
 
-### Rebasing between branches (i.e. from master to staging)
+### Rebasing between branches (i.e. from `master` to `staging`)
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
 Sometimes, changes must be rebased between branches.
@@ -271,8 +271,8 @@ To manually create a backport, follow [the standard pull request process][pr-cre
   Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8).
 
 > [!Warning]
-> Ensure the commits exist on the master branch.
-> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
+> Ensure the commits exist on the `master` branch.
+> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the `master` pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
@@ -460,7 +460,7 @@ Is the change [acceptable for releases][release-acceptable] and do you wish to h
   - Yes: Use the `master` branch and [backport the pull request](#how-to-backport-pull-requests).
   - No: Create separate pull requests to the `master` and `release-YY.MM` branches.
 
-If the change causes a [mass rebuild][mass-rebuild], use the staging branch instead:
+If the change causes a [mass rebuild][mass-rebuild], use the `staging` branch instead:
 - Mass rebuilds to `master` should go to `staging` instead.
 - Mass rebuilds to `release-YY.MM` should go to `staging-YY.MM` instead.
 
@@ -492,8 +492,8 @@ In addition, major package version updates with breaking changes are also accept
 
 Which changes cause mass rebuilds is not formally defined.
 In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
-As a rule of thumb, if the number of rebuilds is **over 500**, it can be considered a mass rebuild.
-To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
+As a rule of thumb, if the number of rebuilds is **500 or more**, consider targeting the `staging` branch instead of `master`; if the number is **1000 or more**, the pull request causes a mass rebuild, and should target the `staging` branch.
+See [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged) to get a sense for what changes are considered mass rebuilds.
 
 ## Commit conventions
 [commit-conventions]: #commit-conventions
@@ -526,8 +526,23 @@ While this potentially can be understood by reading code, PR discussion or upstr
 Simple package version updates need to include the attribute name, old and new versions, as well as a reference to the release notes or changelog.
 Package upgrades with more extensive changes require more verbose commit messages.
 
-Pull requests should not be squash-merged, as this discards information including detail from commit messages, GPG signatures, and authorship.
-Many pull requests don't make sense as a single commit anyway.
+## Review and Merge conventions
+
+Comments on Pull Requests are considered non-blocking by default.
+Every blocking comment must be explicitly marked as such by using GitHub's "Request Changes" review type.
+A reviewer who submits a blocking review should be available for discussion and re-review.
+An abandoned review may be dismissed after reasonable time was given at the discretion of the merger.
+
+All suggestions for change, blocking or not, should be acknowledged before merge.
+This can happen implicitly by applying the suggestion, or explicitly by rejecting it.
+
+To make changes on commit structure and commit messages or apply simple suggestions, committers are encouraged to [checkout the PR](https://cli.github.com/manual/gh_pr_checkout) and push directly to the contributor's branch before merging.
+Committers will carefully weigh the cost of another review cycle against the feelings of the contributor when pushing to their branch.
+They should also transparently communicate which changes they made.
+If a contributor does not want committers to push to their branch, they must uncheck the "Allow edits and access to secrets by maintainers" box explicitly.
+
+> [!WARNING]
+> Committers: Branches created via `gh pr checkout` can't be pushed with `--force-with-lease`, so do a sanity check before pushing.
 
 ## Code conventions
 [code-conventions]: #code-conventions

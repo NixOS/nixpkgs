@@ -38,14 +38,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.19.0";
+    version = "0.19.1";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-0ROwETpIa0j7gRhvLMFI9Sz2HEsAuUkQGg0jZef6o/g=";
+      hash = "sha256-1BvjKlpUD4gJJOlrc2wsl9Pv2x1TBcejYsGiliMrwao=";
     };
 
     nativeBuildInputs = [
@@ -156,6 +156,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       nezia
       jaspersurmont
+      iedame
     ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";

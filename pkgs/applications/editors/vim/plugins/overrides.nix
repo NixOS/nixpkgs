@@ -638,6 +638,9 @@ assertNoAdditions {
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "codecompanion.providers.actions.fzf_lua"
       # Test
       "minimal"
     ];
@@ -1225,7 +1228,7 @@ assertNoAdditions {
     ];
     # Patch libgit2 library dependency
     postPatch = ''
-      substituteInPlace lua/fugit2/libgit2.lua \
+      substituteInPlace lua/fugit2/core/libgit2.lua \
         --replace-fail \
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
@@ -2909,14 +2912,6 @@ assertNoAdditions {
     ];
   });
 
-  perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
-    dependencies = [ gperf ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ fredeb ];
-    };
-  });
-
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
       # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)
@@ -3952,6 +3947,13 @@ assertNoAdditions {
     };
   });
 
+  vim-textobj-line = super.vim-textobj-line.overrideAttrs (old: {
+    dependencies = [ self.vim-textobj-user ];
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ llakala ];
+    };
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";
@@ -4111,10 +4113,17 @@ assertNoAdditions {
   });
 
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
+    checkInputs = with self; [
+      # Optional lush-nvim integration
+      lush-nvim
+    ];
     nvimSkipModules = [
       # Requires global variable set
       "randombones"
       "randombones.palette"
+      "randombones_dark.palette"
+      "randombones_light"
+      "randombones_light.palette"
       # Optional shipwright
       "zenbones.shipwright.runners.alacritty"
       "zenbones.shipwright.runners.foot"
@@ -4126,33 +4135,7 @@ assertNoAdditions {
       "zenbones.shipwright.runners.vim"
       "zenbones.shipwright.runners.wezterm"
       "zenbones.shipwright.runners.windows_terminal"
-      # Optional lush-nvim integration
-      "duckbones"
-      "duckbones.palette"
-      "forestbones"
-      "forestbones.palette"
-      "kanagawabones"
-      "kanagawabones.palette"
-      "neobones"
-      "neobones.palette"
-      "nordbones"
-      "nordbones.palette"
-      "rosebones"
-      "rosebones.palette"
-      "seoulbones"
-      "seoulbones.palette"
-      "tokyobones"
-      "tokyobones.palette"
-      "vimbones"
-      "vimbones.palette"
-      "zenbones"
-      "zenbones.palette"
-      "zenbones.specs.dark"
-      "zenbones.specs.light"
-      "zenburned"
-      "zenburned.palette"
-      "zenwritten"
-      "zenwritten.palette"
+      "randombones_dark"
     ];
   };
 

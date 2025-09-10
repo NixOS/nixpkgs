@@ -8,7 +8,7 @@ let
   cfg = config.programs.wayfire;
 in
 {
-  meta.maintainers = with lib.maintainers; [ rewine ];
+  meta.maintainers = with lib.maintainers; [ wineee ];
 
   options.programs.wayfire = {
     enable = lib.mkEnableOption "Wayfire, a wayland compositor based on wlroots";

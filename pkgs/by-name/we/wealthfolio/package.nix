@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-M1HaExPwm0T2EgKqOEubikIJ1tnR8qHCrmsgudY6GHY=";
+    hash = "sha256-XuZy1D8SMIHGTQ6XY6jFUnVWXvaAXtUBMMPCz8TakSA=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-3PRIHQLYpJ91Xkkv8ktfsWBsRfta6wMu+MuYlL5CYD0=";
+    hash = "sha256-918Sr5bVKfvdMrHqLTyUbH0tH52YFcKZCQDRQslAcW4=";
   };
 
   nativeBuildInputs = [

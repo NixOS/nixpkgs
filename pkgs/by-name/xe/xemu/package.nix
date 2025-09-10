@@ -4,6 +4,7 @@
   SDL2_image,
   fetchFromGitHub,
   gettext,
+  git,
   glib,
   gtk3,
   cmake,
@@ -31,27 +32,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.96";
+  version = "0.8.97";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-42DnlnaSWVazmct9AL1/QaVqNgYe5NCMVHRJY6axo98=";
-    fetchSubmodules = true;
+    hash = "sha256-xx3f4khNV4CwtM9R2NQ2usDc/ScGEaZ3EbyDv1jaHtQ=";
 
+    nativeBuildInputs = [
+      git
+      meson
+    ];
     # also fetch required git submodules
     postFetch = ''
       cd "$out"
       export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
-      ${lib.getExe meson} subprojects download \
+      meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
         implot json keycodemapdb nv2a_vsh_cpu tomlplusplus volk xxhash || true
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
-
+  __structuredAttrs = true;
   nativeBuildInputs = [
     SDL2
     meson
@@ -65,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (with python3Packages; [
     python
     pyyaml
+    distlib
   ]);
 
   buildInputs = [
@@ -104,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs scripts
 
     substituteInPlace ./scripts/xemu-version.sh \
       --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
@@ -122,33 +127,21 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
 
-  installPhase =
-    let
-      installIcon = resolution: ''
-        install -Dm644 -T ../ui/icons/xemu_${resolution}.png \
-          $out/share/icons/hicolor/${resolution}/apps/xemu.png
-      '';
-    in
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      install -Dm755 -T qemu-system-i386 $out/bin/xemu
-    ''
-    + (lib.concatMapStringsSep "\n" installIcon [
-      "16x16"
-      "24x24"
-      "32x32"
-      "48x48"
-      "128x128"
-      "256x256"
-      "512x512"
-    ])
-    + "\n"
-    + ''
-      install -Dm644 -T ../ui/xemu.desktop $out/share/applications/xemu.desktop
+    install -Dm755 -T qemu-system-i386 $out/bin/xemu
 
-      runHook postInstall
-    '';
+    for resolution in 16x16 24x24 32x32 48x48 128x128 256x256 512x512
+    do
+      install -Dm644 -T ../ui/icons/xemu_$resolution.png \
+        $out/share/icons/hicolor/$resolution/apps/xemu.png
+    done
+
+    install -Dm644 -T ../ui/xemu.desktop $out/share/applications/xemu.desktop
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://xemu.app/";
@@ -165,4 +158,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
-# TODO: investigate failure when using __structuredAttrs

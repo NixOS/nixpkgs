@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runtimeShell,
   nixosTests,
   autoreconfHook,
   bison,
@@ -49,8 +48,6 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  RUNTIME_SHELL = runtimeShell;
-
   nativeBuildInputs = [
     autoreconfHook
     bison
@@ -74,13 +71,17 @@ stdenv.mkDerivation rec {
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
-    ./runtime-shell.patch
     ./fix-install-with-tcb.patch
   ];
 
-  # The nix daemon often forbids even creating set[ug]id files.
   postPatch = ''
+    # The nix daemon often forbids even creating set[ug]id files
     sed 's/^\(s[ug]idperms\) = [0-9]755/\1 = 0755/' -i src/Makefile.am
+
+    # The default shell is not defined at build time of the package. It is
+    # decided at build time of the NixOS configration. Thus, don't decide this
+    # here but just point to the location of the shell on the system.
+    substituteInPlace configure.ac --replace-fail '$SHELL' /bin/sh
   '';
 
   # `AC_FUNC_SETPGRP' is not cross-compilation capable.

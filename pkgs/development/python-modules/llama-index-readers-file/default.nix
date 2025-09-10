@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
-  version = "0.5.2";
+  version = "0.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit version;
-    hash = "sha256-BJ2XGsTJNu2/SDKRW6cSjP7o9erUNSZnkrce3Yf1MFw=";
+    hash = "sha256-XnZvMll2IuZlKUZBAZFFSK1oN3CgpdK9ye6E6zoRAzI=";
   };
 
   pythonRelaxDeps = [

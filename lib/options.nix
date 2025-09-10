@@ -267,9 +267,9 @@ rec {
 
     mkPackageOption pkgs "GHC" {
       default = [ "ghc" ];
-      example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+      example = "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
     }
-    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
+    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
 
     mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
       extraDescription = "This is an example and doesn't actually do anything.";

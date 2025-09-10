@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  click,
   click-shell,
+  click,
   fetchFromGitHub,
+  hatchling,
   iterfzf,
-  poetry-core,
   pythonOlder,
   pyyaml,
   rich,
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "typer-shell";
-  version = "0.2.1";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "FergusFettes";
     repo = "typer-shell";
     tag = "v${version}";
-    hash = "sha256-ch5xElSIIIYNtE1Wb6aWUvbV0gT5MU1sLIY+suYzjHE=";
+    hash = "sha256-vjinzBCaEPWbroxT7OmUQIvtwlPivYO0soGqvyRXVc4=";
   };
 
   pythonRelaxDeps = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click

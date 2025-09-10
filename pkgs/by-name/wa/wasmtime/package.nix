@@ -9,20 +9,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "33.0.0";
+  version = "36.0.2";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/i//5kPN1/zQnfDZWuJldKdFWk/DKAf5b5P4F58rgPI=";
+    hash = "sha256-tcG78WubEm1zZXfNsDCwtw4QF5ip3ZjkxaLu8D4qBc4=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
 
-  cargoHash = "sha256-4ziMGmBbQ4anXvF6wwK1ezYXHY7JBvMRmPDreNME0H8=";
+  cargoHash = "sha256-iCYZLKjO1kD753S1CiwTHa9qVxg9Y2ZMCKg0wod7GbQ=";
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
@@ -48,15 +48,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # error: linker `rust-lld` not found
       !isAarch64;
 
+  # prevent $out from being propagated to $dev:
+  # the library and header files are not dependent on the binaries
+  propagatedBuildOutputs = [ ];
+
   postInstall =
     let
       inherit (stdenv.targetPlatform.rust) cargoShortTarget;
     in
     ''
-      # move libs from out to dev
-      install -d -m 0755 $dev/lib
-      install -m 0644 ''${!outputLib}/lib/* $dev/lib
-      rm -r ''${!outputLib}/lib
+      moveToOutput lib $dev
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
@@ -89,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       ereslibre
       matthewbauer
+      nekowinston
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${finalAttrs.version}/RELEASES.md";

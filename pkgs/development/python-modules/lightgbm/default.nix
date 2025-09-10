@@ -87,9 +87,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pypaBuildFlags =
-    lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
-    ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "USE_GPU" gpuSupport)
+    (lib.cmakeBool "USE_CUDA" cudaSupport)
+  ];
 
   optional-dependencies = {
     arrow = [

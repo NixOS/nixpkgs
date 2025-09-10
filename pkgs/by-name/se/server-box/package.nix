@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -12,16 +12,16 @@
 }:
 
 let
-  version = "1.0.1201";
+  version = "1.0.1241";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-ScPpEL2YxWw1aKEyzhoa0b931WF4hrdren4aSAlMpoU=";
+    hash = "sha256-qiMCOd6U66VNo5NRUwOh0Pvb84g2v9V/DIWAy7/bCuk=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
@@ -52,7 +52,7 @@ flutter332.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm0644 assets/app_icon.png $out/share/pixmaps/server-box.png
+    install -D --mode=0644 assets/app_icon.png $out/share/icons/hicolor/512x512/apps/server-box.png
   '';
 
   passthru = {

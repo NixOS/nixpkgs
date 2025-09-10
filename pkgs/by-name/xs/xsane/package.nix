@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "frontend";
     group = "sane-project";
-    repo = pname;
+    repo = "xsane";
     rev = version;
     hash = "sha256-oOg94nUsT9LLKnHocY0S5g02Y9a1UazzZAjpEI/s+yM=";
   };

@@ -1,46 +1,30 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoconf,
-  automake,
+  fetchFromGitLab,
   puredata,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zexy";
-  version = "2.2.4";
+  version = "2.4.3";
 
-  src = fetchurl {
-    url = "https://puredata.info/downloads/zexy/releases/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1xpgl82c2lc6zfswjsa7z10yhv5jb7a4znzh3nc7ffrzm1z8vylp";
+  src = fetchFromGitLab {
+    domain = "git.iem.at";
+    owner = "pd";
+    repo = "zexy";
+    tag = "v${version}";
+    hash = "sha256-9f0uYBDBq5lcN/N0uJwC/HBEFcj9b8ZtBHnPAce2s/A=";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
   buildInputs = [ puredata ];
 
-  preBuild = ''
-    export LD=$CXX
-    cd src/
-    for i in ${puredata}/include/pd/*; do
-      ln -s $i .
-    done
-    ./bootstrap.sh
-    ./configure --enable-lpt=no --prefix=$out
-  '';
-
-  postInstall = ''
-    mv $out/lib/pd/extra/zexy $out
-    rm -rf $out/lib
-  '';
+  makeFlags = [ "PDLIBDIR=$(out)" ];
 
   meta = {
     description = "Swiss army knife for puredata";
-    homepage = "http://puredata.info/downloads/zexy";
-    license = lib.licenses.gpl2;
+    homepage = "https://git.iem.at/pd/zexy";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };

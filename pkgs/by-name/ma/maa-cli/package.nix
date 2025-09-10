@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maa-cli";
-  version = "0.5.7";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
     rev = "v${version}";
-    hash = "sha256-/V694xQAsZpag54Q/FWeW4yWHadz33XqBIFk0K/G98w=";
+    hash = "sha256-kQw4s9EPKSaVPJRSiMXcW0KNUaXGaYrio/3z3ud0lLA=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ "git2" ];
 
-  cargoHash = "sha256-jgRSBnmrS25qOXkpR4ieBlfUt1LfPdhEOHpePQUVxcI=";
+  cargoHash = "sha256-urw26D0aKXvW98LjrK9rYEeMsv4L6qVSlGaNptFw5M0=";
 
   # maa-cli would only search libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67

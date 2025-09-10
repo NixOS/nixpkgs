@@ -1,56 +1,57 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   bash,
   coreutils,
+  debtcollector,
   eventlet,
   fasteners,
   fixtures,
   iana-etc,
   libredirect,
   oslo-config,
+  oslo-i18n,
   oslo-utils,
   oslotest,
   pbr,
   setuptools,
+  stdenv,
   stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo_concurrency";
-    inherit version;
-    hash = "sha256-34qHf4ACsH1p8dDnDbzvSSDTkkmqpi5Hj60haz3UFMs=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.concurrency";
+    tag = version;
+    hash = "sha256-72KatSWTCx4hyUel2Fu5yiqrdYveRGruvJDWWo1hkIk=";
   };
 
   postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
+      --replace-fail "/usr" "" \
       --replace-fail "/bin/bash" "${bash}/bin/bash" \
-      --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
       --replace-fail "/bin/true" "${coreutils}/bin/true" \
-      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
+      --replace-fail "/bin/env" "${coreutils}/bin/env"
   '';
+
+  env.PBR_VERSION = version;
 
   build-system = [ setuptools ];
 
   dependencies = [
+    debtcollector
     fasteners
     oslo-config
+    oslo-i18n
     oslo-utils
     pbr
   ];
-
-  # tests hang for unknown reason and time the build out
-  doCheck = false;
 
   nativeCheckInputs = [
     eventlet
@@ -67,7 +68,14 @@ buildPythonPackage rec {
     stestr run -e <(echo "
     oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn
     oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n
-    ")
+    oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn
+    oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn_n
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      oslo_concurrency.tests.unit.test_lockutils.FileBasedLockingTestCase.test_interprocess_nonblocking_external_lock
+      oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally
+      oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally_lock_dir_not_exist
+      oslo_concurrency.tests.unit.test_processutils.PrlimitTestCase.test_stack_size
+    ''}")
   '';
 
   pythonImportsCheck = [ "oslo_concurrency" ];

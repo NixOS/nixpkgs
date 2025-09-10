@@ -28,6 +28,7 @@
   runtimeShell,
   gnupg,
   installShellFiles,
+  darwin,
 }:
 
 {
@@ -298,6 +299,11 @@ let
 
       inherit patches;
 
+      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        substituteInPlace test/parallel/test-macos-app-sandbox.js \
+          --subst-var-by codesign '${darwin.sigtool}/bin/codesign'
+      '';
+
       __darwinAllowLocalNetworking = true; # for tests
 
       doCheck = canExecute;
@@ -361,7 +367,6 @@ let
               "test-process-initgroups"
               "test-process-setgroups"
               "test-process-uid-gid"
-              "test-setproctitle"
               # This is a bit weird, but for some reason fs watch tests fail with
               # sandbox.
               "test-fs-promises-watch"
@@ -392,7 +397,7 @@ let
             ]
             ++ lib.optionals stdenv.buildPlatform.isDarwin [
               # Disable tests that don’t work under macOS sandbox.
-              "test-macos-app-sandbox"
+              # uv_os_setpriority returned EPERM (operation not permitted)
               "test-os"
               "test-os-process-priority"
 
@@ -425,6 +430,27 @@ let
           )
         }"
       ];
+
+      sandboxProfile = ''
+        (allow file-read*
+          (literal "/Library/Keychains/System.keychain")
+          (literal "/private/var/db/mds/system/mdsDirectory.db")
+          (literal "/private/var/db/mds/system/mdsObject.db"))
+
+        ; Allow files written by Module Directory Services (MDS), which is used
+        ; by Security.framework: https://apple.stackexchange.com/a/411476
+        ; These rules are based on the system sandbox profiles found in
+        ; /System/Library/Sandbox/Profiles.
+        (allow file-write*
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mdsDirectory\.db$")
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mdsObject\.db_?$")
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mds\.lock$"))
+
+        (allow mach-lookup
+          (global-name "com.apple.FSEvents")
+          (global-name "com.apple.SecurityServer")
+          (global-name "com.apple.system.opendirectoryd.membership"))
+      '';
 
       postInstall =
         let

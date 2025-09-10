@@ -71,6 +71,11 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.pytestCheckHook
   ];
 
+  # Enable when https://github.com/containers/ramalama/pull/1891 is released
+  disabledTests = [
+    "test_ollama_model_pull"
+  ];
+
   passthru = {
     tests = {
       withoutPodman = ramalama.override {

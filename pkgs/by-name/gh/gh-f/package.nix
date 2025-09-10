@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gh-f";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "gennaro-tedesco";
     repo = "gh-f";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kldhK5ChwHRv7joD9uyCAk1Gdc8+2IyubAB04j8/LPA=";
+    hash = "sha256-rMGyiXniW3M4JnsWufXcsU8mL8KlrIRGGgbQT6utnuc=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

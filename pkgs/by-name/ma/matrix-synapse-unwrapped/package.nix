@@ -29,6 +29,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-qpgDErV1VVzaUHHQX4ReXCPihdrSKI/4HtbDeQIblR8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_rust>=1.3,<=1.11.1" "setuptools_rust<=1.12,>=1.3"
+  '';
+
   build-system = with python3Packages; [
     poetry-core
     setuptools-rust

@@ -28,13 +28,13 @@ let
 in
 buildGoModule rec {
   pname = "opencloud";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
     tag = "v${version}";
-    hash = "sha256-ekOqKJxXTEClHfVZ5VDzKgEG3imK7ec/bnpqduL4LOQ=";
+    hash = "sha256-uoGgsz0BUUVuSEZrTX8b294FbVqL2YPFg7JoyRpH8Do=";
   };
 
   postPatch = ''
@@ -85,6 +85,12 @@ buildGoModule rec {
     libxcrypt
     vips
   ];
+
+  # wants testcontainers and docker, and we don't have a good way to skip tests
+  # based on package name and not test name
+  preCheck = ''
+    rm services/search/pkg/opensearch/*_test.go
+  '';
 
   env = {
     # avoids 'make generate' calling `git`, otherwise no-op

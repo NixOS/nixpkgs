@@ -563,6 +563,16 @@ with haskellLib;
           # TODO(@sternenseemann): submit upstreamable patch resolving this
           # (this should be possible by also taking PREFIX into account).
           ./patches/git-annex-no-usr-prefix.patch
+          # https://git-annex.branchable.com/bugs/flaky_test_failure_add_dup/
+          (pkgs.fetchpatch {
+            name = "git-annex-workaround-for-git-2.50_bis.patch";
+            url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=cf449837ea9ab7687d8a157f21cad31ddf5bbfb6";
+            sha256 = "sha256-HmNJ85dLht5Hy85AUkjACnET9YLPP2MshYHsApUax+I=";
+            excludes = [
+              "doc/**"
+              "CHANGELOG"
+            ];
+          })
         ];
 
         postPatch = ''
@@ -1831,16 +1841,6 @@ with haskellLib;
   # https://github.com/biocad/servant-openapi3/issues/30
   servant-openapi3 = dontCheck super.servant-openapi3;
 
-  # Point hspec 2.7.10 to correct dependencies
-  hspec_2_7_10 = super.hspec_2_7_10.override {
-    hspec-discover = self.hspec-discover_2_7_10;
-    hspec-core = self.hspec-core_2_7_10;
-  };
-  hspec-discover_2_7_10 = super.hspec-discover_2_7_10.override {
-    hspec-meta = self.hspec-meta_2_7_8;
-  };
-  hspec-core_2_7_10 = doJailbreak (dontCheck super.hspec-core_2_7_10);
-
   # Disable test cases that were broken by insignificant changes in icu 76
   # https://github.com/haskell/text-icu/issues/108
   text-icu = overrideCabal (drv: {
@@ -1980,32 +1980,6 @@ with haskellLib;
   # Test suite doesn't support base16-bytestring >= 1.0
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
-
-  # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
-  ghc-bignum = super.ghc-bignum or self.mkDerivation {
-    pname = "ghc-bignum";
-    version = "1.0";
-    sha256 = "0xl848q8z6qx2bi6xil0d35lra7wshwvysyfblki659d7272b1im";
-    description = "GHC BigNum library";
-    license = lib.licenses.bsd3;
-    # ghc-bignum is not buildable if none of the three backends
-    # is explicitly enabled. We enable Native for now as it doesn't
-    # depend on anything else as opposed to GMP and FFI.
-    # Apply patch which fixes a compilation failure we encountered.
-    # Will need to be kept until we can drop ghc-bignum entirely,
-    # i. e. if GHC 8.10.* and 8.8.* have been removed.
-    configureFlags = [
-      "-f"
-      "Native"
-    ];
-    patches = [
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
-        sha256 = "sha256-Y9WW0KDQ/qY2L9ObPvh1i/6lxXIlprbxzdSBDfiaMtE=";
-        relative = "libraries/ghc-bignum";
-      })
-    ];
-  };
 
   # 2021-04-09: too strict time bound
   # PR pending https://github.com/zohl/cereal-time/pull/2
@@ -2625,7 +2599,6 @@ with haskellLib;
   # 2025-02-06: Allow tasty-quickcheck == 0.11.*
   # https://github.com/google/ghc-source-gen/issues/120
   ghc-source-gen = doJailbreak super.ghc-source-gen;
-  ghc-source-gen_0_4_5_0 = doJailbreak super.ghc-source-gen_0_4_5_0;
   # https://github.com/byteverse/bytebuild/issues/20#issuecomment-2652113837
   bytebuild = doJailbreak super.bytebuild;
   # https://github.com/haskellari/lattices/issues/132

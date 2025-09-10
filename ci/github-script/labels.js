@@ -93,6 +93,13 @@ module.exports = async ({ github, context, core, dry }) => {
     log('Last eval run', run_id ?? '<n/a>')
 
     if (conclusion === 'success') {
+      // Check for any human reviews other than GitHub actions and other GitHub apps.
+      // Accounts could be deleted as well, so don't count them.
+      const humanReviews = reviews.filter(
+        (r) =>
+          r.user && !r.user.login.endsWith('[bot]') && r.user.type !== 'Bot',
+      )
+
       Object.assign(prLabels, {
         // We only set this label if the latest eval run was successful, because if it was not, it
         // *could* have requested reviewers. We will let the PR author fix CI first, before "escalating"
@@ -105,7 +112,7 @@ module.exports = async ({ github, context, core, dry }) => {
         '9.needs: reviewer':
           !pull_request.draft &&
           pull_request.requested_reviewers.length === 0 &&
-          reviews.length === 0,
+          humanReviews.length === 0,
       })
     }
 

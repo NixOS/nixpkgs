@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.6";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-GQkyJaYvwRbjDR0Rfen7/X5hFhY2+WU74B6/9Ufhpo4=";
+    hash = "sha256-BOXYyisEU/Hwf1/IymIrlK6ALL8DD3vBAXuDdb9eM9c=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";

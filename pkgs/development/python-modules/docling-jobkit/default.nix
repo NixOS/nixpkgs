@@ -19,7 +19,7 @@
 
   # optional dependencies
   tesserocr,
-  rapidocr-onnxruntime,
+  rapidocr,
   onnxruntime,
   ray,
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     tesserocr = [ tesserocr ];
     rapidocr = [
-      rapidocr-onnxruntime
+      rapidocr
       onnxruntime
     ];
     ray = [ ray ];

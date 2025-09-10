@@ -29,8 +29,6 @@ default-package-overrides:
   # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
   - diagrams-input < 0.1.4
   - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
-  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
-  - ghc-bignum == 1.0
   # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
   - hiedb < 0.7
   # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
@@ -45,14 +43,9 @@ default-package-overrides:
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
 extra-packages:
-  - aeson < 2                           # required by pantry-0.5.2
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
-  - ansi-terminal < 1.1                 # 2025-02-27: required for ghcjs
-  - ansi-terminal-types == 0.11.5       # 2025-02-27: required for ghcjs
-  - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
-  - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
+  - ansi-wl-pprint >= 0.6 && < 0.7      # 2025-07-07: used by gren <= 0.5.4
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
-  - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal == 3.10.*
   - Cabal == 3.12.*                     # version required for cabal-install and other packages
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
@@ -65,7 +58,6 @@ extra-packages:
   - fourmolu == 0.16.0.0                # 2025-01-27: for ghc 9.10 compat
   - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
-  - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
@@ -81,11 +73,9 @@ extra-packages:
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.2, 9.4
   - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for 9.10 HLS
-  - ghc-source-gen < 0.4.6.0            # 2024-12-31: support GHC < 9.0
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
-  - happy == 1.19.12                    # for ghcjs
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
   - hasql-dynamic-statements < 0.3.1.6  # 2025-01-19: Needed for building postgrest
@@ -93,20 +83,14 @@ extra-packages:
   - hasql-notifications < 0.2.3         # 2025-01-19: Needed for building postgrest
   - hasql-pool < 1.1                    # 2025-01-19: Needed for building postgrest
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
-  - hlint == 3.4.1                      # 2022-09-21: preserve for ghc 8.10
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
-  - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0
-  - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
   - language-javascript == 0.7.0.0      # required by purescript
   - lsp < 2.5                           # 2024-07-08: need for koka
   - lsp == 2.1.*                        # 2024-02-28: need for dhall-lsp-server
   - lsp-types == 2.1.*                  # 2024-02-28: need for dhall-lsp-server and koka
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
-  - optparse-applicative < 0.16         # needed for niv-0.2.19
   - ormolu == 0.5.2.0                   # 2023-08-08: preserve for ghc 9.0
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.7.0                   # 2025-01-27: for ghc 9.10 compat
@@ -120,10 +104,8 @@ extra-packages:
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
   - tar == 0.6.0.0                      # 2025-02-08: last version to not require os-string (which can't be built with GHC < 9.2)
-  - text == 2.0.2                       # 2023-09-14: Needed for elm (which is currently on ghc-8.10)
   - text-metrics < 0.3.3                # 2025-02-08: >= 0.3.3 uses GHC2021
   - versions < 6                        # 2024-04-22: required by spago-0.21
-  - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
 # keep-sorted end

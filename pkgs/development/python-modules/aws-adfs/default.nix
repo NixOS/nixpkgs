@@ -37,6 +37,8 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "configparser"
+    "fido2"
+    "lxml"
     "requests-kerberos"
   ];
 

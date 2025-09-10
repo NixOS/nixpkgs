@@ -37,16 +37,16 @@
    "jar": "sha256-a9QQVOJuuuiLDaWNxj7BEKcO+tXxLYcESTRwx8VJcZA=",
    "pom": "sha256-uFQ5wq04pYG40n+nWy+zC3HN4dT8A8ZE4yMvhN8kWqE="
   },
-  "io/freefair/gradle#lombok-plugin/8.14": {
-   "jar": "sha256-NiigQcRX+SJZnyy+9Gq7OitAUmqBQ5FurJFe756wnCY=",
-   "module": "sha256-a+nB6Xh7bS68ZrkwgSw5s1zAshuxOhMbgmqt2j9r+cI=",
-   "pom": "sha256-/LTz+DpyuyF6VjWEfAWzWzjgHufzS6gV28PFiuGV5Zo="
+  "io/freefair/gradle#lombok-plugin/8.14.2": {
+   "jar": "sha256-RIQV1/8vImNj813kxhix6Tr78NdFBRUUu0cbIvm1jy4=",
+   "module": "sha256-QIzhHR3PUEV4oli/obkCfo0zRgScjdqxQ6wtebqKAJE=",
+   "pom": "sha256-l7zUYFZjH9+YzMEwgxFkf71USZWWLXAoZLGmJn9/0XQ="
   },
   "io/freefair/jsass-java#io.freefair.jsass-java.gradle.plugin/6.5.0.2": {
    "pom": "sha256-hoEYwHzaHj3q/o0bF3HzOgyN0lEIEAu/pjFl3hzTvmg="
   },
-  "io/freefair/lombok#io.freefair.lombok.gradle.plugin/8.14": {
-   "pom": "sha256-x7YYhUGNcUl2rj2dKku2ETagfKgg3N/9MjXMUT+NtJg="
+  "io/freefair/lombok#io.freefair.lombok.gradle.plugin/8.14.2": {
+   "pom": "sha256-OKIER1//te7+8mJmN+ZtdKjo5reqEZ3SRXpwcZ3oVvU="
   },
   "jakarta/platform#jakarta.jakartaee-bom/9.1.0": {
    "pom": "sha256-35jgJmIZ/buCVigm15o6IHdqi6Aqp4fw8HZaU4ZUyKQ="
@@ -153,18 +153,21 @@
    "pom": "sha256-D3mEND0EU+Y5uoyNTXwNGFLfA8ye4UkoQgi/5KPnH44="
   },
   "org/bouncycastle#bcprov-lts8on/2.73.7": {
-   "jar": "sha256-LIzWo/7zyhSubiig3gDBbWJ2d9KML/AqAFE/rrK3/7E=",
    "pom": "sha256-4MwaYuJQsJ+WbzbXnGUU82JXnb+cNy8t3qlXrd7C+qw="
   },
-  "org/bouncycastle#bcutil-lts8on/2.73.7": {
-   "jar": "sha256-03ALDCPuKZzSRYYhZyIGpfNIlR84t+iOk7IaHxu+Zxg=",
-   "pom": "sha256-J4GHqnKeqbOMnpcHM5JeJNCsqT+j3yQ1iZ4SZKUDVrU="
+  "org/bouncycastle#bcprov-lts8on/2.73.8": {
+   "jar": "sha256-SSBJuSj4uqtTWvAYW7q4c00U4cdkiuKiA31YSGyvtnY=",
+   "pom": "sha256-6PCmhF6WFe84gsLRU+ODBMGPpssc4+dC6O2Z+5dnOYs="
+  },
+  "org/bouncycastle#bcutil-lts8on/2.73.8": {
+   "jar": "sha256-6e94GRbugMR9GTYV2oXHvf7baNDeStqHEpPlDVgBWvc=",
+   "pom": "sha256-LDElCcPBJdLgHviCmBxFFuq+dgozRleHz7cVi+UbTLQ="
   },
   "org/bouncycastle/bcutil-lts8on/maven-metadata": {
    "xml": {
     "groupId": "org.bouncycastle",
-    "lastUpdated": "20241107225957",
-    "release": "2.73.7"
+    "lastUpdated": "20250827055500",
+    "release": "2.73.8"
    }
   },
   "org/eclipse/ee4j#project/1.0.7": {
@@ -488,16 +491,16 @@
    "module": "sha256-iNmRuo7VjChtey18CPn2Mg/5novWYXPDaDkhAEb8f2I=",
    "pom": "sha256-oYHFieNi4sRp6IRc/PIKFaiQ9ISUoPny4T9ZSglq0Kk="
   },
-  "io/freefair/gradle#lombok-plugin/8.14": {
-   "jar": "sha256-NiigQcRX+SJZnyy+9Gq7OitAUmqBQ5FurJFe756wnCY=",
-   "module": "sha256-a+nB6Xh7bS68ZrkwgSw5s1zAshuxOhMbgmqt2j9r+cI=",
-   "pom": "sha256-/LTz+DpyuyF6VjWEfAWzWzjgHufzS6gV28PFiuGV5Zo="
+  "io/freefair/gradle#lombok-plugin/8.14.2": {
+   "jar": "sha256-RIQV1/8vImNj813kxhix6Tr78NdFBRUUu0cbIvm1jy4=",
+   "module": "sha256-QIzhHR3PUEV4oli/obkCfo0zRgScjdqxQ6wtebqKAJE=",
+   "pom": "sha256-l7zUYFZjH9+YzMEwgxFkf71USZWWLXAoZLGmJn9/0XQ="
   },
   "io/freefair/jsass-java#io.freefair.jsass-java.gradle.plugin/6.5.0.2": {
    "pom": "sha256-1C1ePfUKHTe6qhRrpb0ai7I5YZksPt9Fw6M5zqCTLd8="
   },
-  "io/freefair/lombok#io.freefair.lombok.gradle.plugin/8.14": {
-   "pom": "sha256-m4nw9rMWc+4eiHy6RoAkO/fHKv7Gs4tg0Osy6vfp7uM="
+  "io/freefair/lombok#io.freefair.lombok.gradle.plugin/8.14.2": {
+   "pom": "sha256-KVgYYy7l/xiWwKYPuI2ghuPXyFHGxIUcQU/VSETWfYI="
   },
   "io/github/classgraph#classgraph/4.8.181": {
    "jar": "sha256-YqZDbWlxDvX6tuwkN4HOTFspkEftGEG1+SdGroUs5UU=",

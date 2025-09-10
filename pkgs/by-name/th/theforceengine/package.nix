@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "theforceengine";
-  version = "1.22.300";
+  version = "1.22.410";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
+    hash = "sha256-ydZ/S6u3UQNeVRTfzjshlNzLRc1y3FXsTY2NXbUoJBA=";
   };
 
   nativeBuildInputs = [

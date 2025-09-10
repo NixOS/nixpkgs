@@ -1,71 +1,46 @@
 {
   lib,
   stdenvNoCC,
-  buildFHSEnv,
+  makeWrapper,
   fetchzip,
   nix-update-script,
+  nodejs,
+
+  testers,
 }:
-
-let
-  arch =
-    {
-      aarch64-darwin = "arm64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
-      x86_64-linux = "x64";
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-  os =
-    {
-      aarch64-darwin = "darwin";
-      aarch64-linux = "linux";
-      x86_64-darwin = "darwin";
-      x86_64-linux = "linux";
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-
-  executableName = "copilot-language-server";
-  fhs =
-    { package }:
-    buildFHSEnv {
-      name = package.meta.mainProgram;
-      version = package.version;
-      targetPkgs = pkgs: [ pkgs.stdenv.cc.cc.lib ];
-      runScript = lib.getExe package;
-
-      meta = package.meta // {
-        description =
-          package.meta.description
-          + " (FHS-wrapped, expand package details for further information when to use it)";
-        longDescription = "Use this version if you encounter an error like `Could not start dynamically linked executable` or `SyntaxError: Invalid or unexpected token` (see nixpkgs issue [391730](https://github.com/NixOS/nixpkgs/issues/391730)).";
-      };
-    };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.357.0";
+  version = "1.367.0";
 
   src = fetchzip {
-    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-uVfQk26a/huFxsAtYKPfaJyYSWH17+8PqDh/HFecsdA=";
+    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
+    hash = "sha256-JQf6pQChQQOjJmdoL6DvLxajLfbEZi50p5FeJny0/Ss=";
     stripRoot = false;
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    nodejs
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    install "${os}-${arch}/${executableName}" -Dm755 -t "$out"/bin
+    mkdir -p $out/share/copilot-language-server
+    cp -r ./* $out/share/copilot-language-server/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/copilot-language-server \
+      --add-flags $out/share/copilot-language-server/main.js
 
     runHook postInstall
   '';
 
-  dontStrip = true;
-
   passthru = {
     updateScript = nix-update-script { };
-    fhs = fhs { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
@@ -79,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       shortName = "GitHub Copilot License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
-    mainProgram = executableName;
+    mainProgram = "copilot-language-server";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

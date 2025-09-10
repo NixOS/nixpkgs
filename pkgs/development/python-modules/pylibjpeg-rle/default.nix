@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-rle";
-  version = "2.2.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-rle";
     tag = "v${version}";
-    hash = "sha256-hAtseH4akBCKhlWsPGXeQRYUK0BiytFrLFCmeg7nUXY=";
+    hash = "sha256-S9QBZEYfM9cwhwycF9TDpHv44z6fXTu3wBr4ZZHxXR8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-QprjrR/AelrC+6n7uWZicO9QH0OAJCR7DSE1JuQOMCI=";
+    hash = "sha256-ZkaDnG7wXQeaefASdsUFxuDKxjLukczyJeUgfG9uIyo=";
   };
 
   build-system = [

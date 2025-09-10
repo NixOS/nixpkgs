@@ -1,44 +1,21 @@
 {
   lib,
-  pkgs,
   newScope,
-  darwin,
+  stdenv,
   llvmPackages,
-  llvmPackages_15,
-  overrideCC,
-  overrideLibcxx,
+  darwin,
 }:
 
 let
-  swiftLlvmPackages = llvmPackages_15;
-
   self = rec {
 
     callPackage = newScope self;
 
-    # Swift builds its own Clang for internal use. We wrap that clang with a
-    # cc-wrapper derived from the clang configured below. Because cc-wrapper
-    # applies a specific resource-root, the two versions are best matched, or
-    # we'll often run into compilation errors.
-    #
-    # The following selects the correct Clang version, matching the version
-    # used in Swift.
-    inherit (swiftLlvmPackages) clang;
-
-    # Overrides that create a useful environment for swift packages, allowing
-    # packaging with `swiftPackages.callPackage`.
-    inherit (clang) bintools;
-    stdenv =
-      let
-        stdenv' = overrideCC pkgs.stdenv clang;
-      in
-      # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
-      # default clang’s stdenv. Using the default libc++ avoids issues (such as crashes)
-      # that can happen when a Swift application dynamically links different versions
-      # of libc++ and libc++abi than libraries it links are using.
-      if stdenv'.cc.libcxx != null then overrideLibcxx stdenv' else stdenv';
+    # Provided for backwards compatibility.
+    inherit stdenv;
 
     swift-unwrapped = callPackage ./compiler {
+      inherit (llvmPackages) stdenv;
       inherit (darwin) DarwinTools sigtool;
     };
 
@@ -51,13 +28,19 @@ let
       if stdenv.hostPlatform.isDarwin then
         null # part of apple-sdk
       else
-        callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
+        callPackage ./libdispatch {
+          inherit (llvmPackages) stdenv;
+          swift = swiftNoSwiftDriver;
+        };
 
     Foundation =
       if stdenv.hostPlatform.isDarwin then
         null # part of apple-sdk
       else
-        callPackage ./foundation { swift = swiftNoSwiftDriver; };
+        callPackage ./foundation {
+          inherit (llvmPackages) stdenv;
+          swift = swiftNoSwiftDriver;
+        };
 
     # TODO: Apple distributes a binary XCTest with Xcode, but it is not part of
     # CLTools (or SUS), so would have to figure out how to fetch it. The binary
@@ -68,11 +51,13 @@ let
     };
 
     swiftpm = callPackage ./swiftpm {
+      inherit (llvmPackages) stdenv;
       inherit (darwin) DarwinTools;
       swift = swiftNoSwiftDriver;
     };
 
     swift-driver = callPackage ./swift-driver {
+      inherit (llvmPackages) stdenv;
       swift = swiftNoSwiftDriver;
     };
 
@@ -80,11 +65,17 @@ let
       swift = swift-unwrapped;
     };
 
-    sourcekit-lsp = callPackage ./sourcekit-lsp { };
+    sourcekit-lsp = callPackage ./sourcekit-lsp {
+      inherit (llvmPackages) stdenv;
+    };
 
-    swift-docc = callPackage ./swift-docc { };
+    swift-docc = callPackage ./swift-docc {
+      inherit (llvmPackages) stdenv;
+    };
 
-    swift-format = callPackage ./swift-format { };
+    swift-format = callPackage ./swift-format {
+      inherit (llvmPackages) stdenv;
+    };
 
     swiftpm2nix = callPackage ./swiftpm2nix { };
 

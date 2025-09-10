@@ -33,9 +33,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-AdatJNDqIoRHfaf81iFhOs2JGLIxy7agFJj96bFPj00=";
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-izCl3pE15ocEGYOYCUR1iTR+82nDB06Ed4YOGRGByfI=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    hash = "sha256-ehXGLpCCN+BNqtwjEatcfR0kQHj5WOofTDR5mLSVW0U=";
   };
+
+  patches = [
+    # Remove after https://github.com/gulbanana/gg/pull/68 is released
+    ./update-tauri-npm-to-match-cargo.patch
+  ];
 
   nativeBuildInputs = [
     cargo-tauri.hook

@@ -145,6 +145,8 @@ let
 
         brr = callPackage ../development/ocaml-modules/brr { };
 
+        bstr = callPackage ../development/ocaml-modules/bstr { };
+
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
         bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
@@ -546,7 +548,7 @@ let
           in
           {
             ppx_deriving_0_15 = ppx_deriving_ "0.15";
-            ppx_deriving = ppx_deriving_ "0.33.0";
+            ppx_deriving_0_33 = ppx_deriving_ "0.33.0";
           }
         );
 

@@ -5,6 +5,7 @@
   cmake,
   clr,
   gcc,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gcc # required for replacing easy-encryption binary
     cmake
+    python3
   ];
 
   buildInputs = [

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   autoreconfHook,
   glib,
-  db,
+  kyotocabinet,
   pkg-config,
   nix-update-script,
 }:
@@ -40,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    db
+    kyotocabinet
+  ];
+
+  configureFlags = [
+    "--with-dbm=KyotoCabinet"
   ];
 
   passthru.updateScript = nix-update-script { };

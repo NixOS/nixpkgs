@@ -55,8 +55,8 @@
     a.wait_for_open_port(22000)
     b.wait_for_open_port(22000)
 
-    aDeviceID = a.succeed("syncthing -home=%s -device-id" % confdir).strip()
-    bDeviceID = b.succeed("syncthing -home=%s -device-id" % confdir).strip()
+    aDeviceID = a.succeed("syncthing --home=%s device-id" % confdir).strip()
+    bDeviceID = b.succeed("syncthing --home=%s device-id" % confdir).strip()
     addPeer(a, "b", bDeviceID)
     addPeer(b, "a", aDeviceID)
 

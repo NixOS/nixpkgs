@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pbek/qmarkdowntextedit";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
   };
 }

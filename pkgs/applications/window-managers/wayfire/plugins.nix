@@ -1,4 +1,8 @@
-{ lib, pkgs }:
+{
+  config,
+  lib,
+  pkgs,
+}:
 
 lib.makeScope pkgs.newScope (
   self:
@@ -6,7 +10,6 @@ lib.makeScope pkgs.newScope (
     inherit (self) callPackage;
   in
   {
-    firedecor = callPackage ./firedecor.nix { };
     focus-request = callPackage ./focus-request.nix { };
     wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };
     wayfire-shadows = callPackage ./wayfire-shadows.nix { };
@@ -16,3 +19,6 @@ lib.makeScope pkgs.newScope (
     wwp-switcher = callPackage ./wwp-switcher.nix { };
   }
 )
+// lib.optionalAttrs config.allowAliases {
+  firedecor = throw "wayfirePlugins.firedecor has been removed as it is unmaintained and no longer used by mate-wayland-session."; # Added 2025-09-03
+}

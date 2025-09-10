@@ -95,7 +95,10 @@ let
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
-  pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
+  pyPkgsOpenusd = python3Packages.openusd.override (old: {
+    opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
+    withOsl = false;
+  });
 
   libdecor' = libdecor.overrideAttrs (old: {
     # Blender uses private APIs, need to patch to expose them

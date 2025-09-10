@@ -10,16 +10,16 @@
 }:
 buildGoModule rec {
   pname = "clive";
-  version = "0.12.11";
+  version = "0.12.12";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "clive";
     tag = "v${version}";
-    hash = "sha256-BAKZTWcC8EzDTlQZUJBzVQNF0kDBY7Lx+8ZFAYgoWlQ=";
+    hash = "sha256-gycxHlNbwPLpR/ATxAsQ68Fetp/hptOUsRc+D3P7x1k=";
   };
 
-  vendorHash = "sha256-ljjSopfKGSotJx52SScl7KwFyKbFF9uxQMODjuZH4vc=";
+  vendorHash = "sha256-S2MR3eDfAiEz7boUetdPmOf0rQe7QrV6yO1RfMAEj4o=";
   subPackages = [ "." ];
   buildInputs = [ ttyd ];
   nativeBuildInputs = [

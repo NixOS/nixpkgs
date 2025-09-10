@@ -4,10 +4,9 @@
   fetchFromGitHub,
 
   ## wandb-core
-  buildGoModule,
-  git,
+  buildGo125Module,
+  gitMinimal,
   versionCheckHook,
-  fetchpatch2,
 
   ## gpu-stats
   rustPlatform,
@@ -44,6 +43,7 @@
   azure-storage-blob,
   bokeh,
   boto3,
+  cloudpickle,
   coverage,
   flask,
   google-cloud-artifact-registry,
@@ -78,22 +78,22 @@
 }:
 
 let
-  version = "0.19.11";
+  version = "0.21.3";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-JsciaNN1l3Ldty8dB2meRXWz62JdLRXeG09b7PNrQx4=";
+    hash = "sha256-GJk+Q/PY3/jo/yeetYRgqgMdXdYSlGt7Ny1NqdfHF0Q=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.4.0";
+    version = "0.6.0";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    cargoHash = "sha256-q8csheytw57C6+wPPaANkMkW1Smoo+IViiA6Cdrag4Q=";
+    cargoHash = "sha256-iZinowkbBc3nuE0uRS2zLN2y97eCMD1mp/MKVKdnXaE=";
 
     checkFlags = [
       # fails in sandbox
@@ -103,7 +103,6 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgram = "${placeholder "out"}/bin/gpu_stats";
     versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
@@ -112,32 +111,15 @@ let
     };
   };
 
-  wandb-core = buildGoModule rec {
+  wandb-core = buildGo125Module rec {
     pname = "wandb-core";
     inherit src version;
 
     sourceRoot = "${src.name}/core";
 
-    # x86_64-darwin fails with:
-    # "link: duplicated definition of symbol dlopen, from github.com/ebitengine/purego and github.com/ebitengine/purego"
-    # This is fixed in purego 0.8.3, but wandb-core uses 0.8.2, so we pull in the fix here.
-    patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      (fetchpatch2 {
-        url = "https://github.com/ebitengine/purego/commit/1638563e361522e5f63511d84c4541ae1c5fd704.patch";
-        stripLen = 1;
-        extraPrefix = "vendor/github.com/ebitengine/purego/";
-        # These are not vendored by wandb-core
-        excludes = [
-          "vendor/github.com/ebitengine/purego/.github/workflows/test.yml"
-          "vendor/github.com/ebitengine/purego/internal/fakecgo/gen.go"
-        ];
-        hash = "sha256-GoT/OL6r3rJY5zoUyl3kGzSRpX3PoI7Yjpe7oRb0cFc=";
-      })
-    ];
-
     # hardcode the `gpu_stats` binary path.
     postPatch = ''
-      substituteInPlace pkg/monitor/gpuresourcemanager.go \
+      substituteInPlace internal/monitor/gpuresourcemanager.go \
         --replace-fail \
           'cmdPath, err := getGPUCollectorCmdPath()' \
           'cmdPath, err := "${lib.getExe gpu-stats}", error(nil)'
@@ -146,7 +128,7 @@ let
     vendorHash = null;
 
     nativeBuildInputs = [
-      git
+      gitMinimal
     ];
 
     nativeInstallCheckInputs = [
@@ -182,17 +164,23 @@ buildPythonPackage rec {
   patches = [
     # Replace git paths
     (replaceVars ./hardcode-git-path.patch {
-      git = lib.getExe git;
+      git = lib.getExe gitMinimal;
     })
   ];
 
-  # Hard-code the path to the `wandb-core` binary in the code.
-  postPatch = ''
-    substituteInPlace wandb/util.py \
-      --replace-fail \
-        'bin_path = pathlib.Path(__file__).parent / "bin" / "wandb-core"' \
-        'bin_path = pathlib.Path("${lib.getExe wandb-core}")'
-  '';
+  postPatch =
+    # Prevent hatch from building wandb-core
+    ''
+      substituteInPlace hatch_build.py \
+        --replace-fail "artifacts.extend(self._build_wandb_core())" ""
+    ''
+    # Hard-code the path to the `wandb-core` binary in the code.
+    + ''
+      substituteInPlace wandb/util.py \
+        --replace-fail \
+          'bin_path = pathlib.Path(__file__).parent / "bin" / "wandb-core"' \
+          'bin_path = pathlib.Path("${lib.getExe wandb-core}")'
+    '';
 
   env = {
     # Prevent the install script to try building and embedding the `gpu_stats` and `wandb-core`
@@ -237,8 +225,9 @@ buildPythonPackage rec {
     azure-containerregistry
     azure-identity
     azure-storage-blob
-    boto3
     bokeh
+    boto3
+    cloudpickle
     coverage
     flask
     google-cloud-artifact-registry

@@ -70,7 +70,7 @@ let
   grimmeCmake = lib.makeScope newScope (self: {
     mctc-lib = mctc-lib.override {
       buildType = "cmake";
-      inherit (self) jonquil;
+      inherit (self) jonquil toml-f;
     };
 
     toml-f = toml-f.override {
@@ -248,11 +248,6 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit mpi;
   };
-
-  outputs = [
-    "out"
-    "dev"
-  ];
 
   postInstall = ''
     mkdir -p $out/share/cp2k
