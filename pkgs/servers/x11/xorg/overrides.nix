@@ -720,7 +720,6 @@ self: super:
   });
 
   xclock = addMainProgram super.xclock { };
-  xcompmgr = addMainProgram super.xcompmgr { };
 
   xinit =
     (super.xinit.override {

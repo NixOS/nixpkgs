@@ -422,6 +422,7 @@ print OUT <<EOF;
   xcalc,
   xcb-proto,
   xcmsdb,
+  xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
@@ -488,6 +489,7 @@ self: with self; {
     xbitmaps
     xcalc
     xcmsdb
+    xcompmgr
     xconsole
     xcursorgen
     xdriinfo

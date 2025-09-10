@@ -95,6 +95,7 @@
   xcalc,
   xcb-proto,
   xcmsdb,
+  xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
@@ -161,6 +162,7 @@ self: with self; {
     xbitmaps
     xcalc
     xcmsdb
+    xcompmgr
     xconsole
     xcursorgen
     xdriinfo
@@ -1260,50 +1262,6 @@ self: with self; {
         xorgproto
         libXrender
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcompmgr = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXcomposite,
-      libXdamage,
-      libXext,
-      libXfixes,
-      xorgproto,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcompmgr";
-      version = "1.1.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xcompmgr-1.1.10.tar.xz";
-        sha256 = "13xrn0ii8widz0pw31fbdy7x8paf729yqhkmxbm3497jqh4zf93q";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libXcomposite
-        libXdamage
-        libXext
-        libXfixes
-        xorgproto
-        libXrender
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

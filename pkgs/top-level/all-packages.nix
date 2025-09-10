@@ -13357,8 +13357,6 @@ with pkgs;
 
   xca = qt6Packages.callPackage ../applications/misc/xca { };
 
-  inherit (xorg) xcompmgr;
-
   xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
 
   xdg-desktop-portal-hyprland =
