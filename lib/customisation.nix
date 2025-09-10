@@ -154,6 +154,7 @@ rec {
   makeOverridable =
     f:
     let
+      fargs = functionArgs f;
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
     in
@@ -178,11 +179,21 @@ rec {
         );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
+
+        overrideResultAndArgs = g: newArgs: makeOverridable (mirrorArgs (args: g (f args))) (overrideWith newArgs);
       in
       if isAttrs result then
         result
         // {
-          override = overrideArgs;
+          override = newArgs:
+            if result ? override then
+              let
+                outerArgs = intersectAttrs fargs newArgs;
+                innerArgs = removeAttrs newArgs (attrNames fargs);
+              in
+              overrideResultAndArgs (x: x.override innerArgs) outerArgs
+            else
+              overrideArgs newArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
             /**
