@@ -1107,11 +1107,11 @@ assertNoAdditions {
   easy-dotnet-nvim = super.easy-dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
-      telescope-nvim
     ];
     checkInputs = with self; [
-      # Pickers, can use telescope or fzf-lua
+      # Pickers, can use telescope, fzf-lua, or snacks
       fzf-lua
+      telescope-nvim
     ];
   };
 
