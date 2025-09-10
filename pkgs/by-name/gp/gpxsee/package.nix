@@ -2,14 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
   nix-update-script,
-  qtbase,
-  qttools,
-  qtpositioning,
-  qtserialport,
-  qtsvg,
-  wrapQtAppsHook,
+  qt6,
   wrapGAppsHook3,
 }:
 
@@ -25,16 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    qtbase
-    qtpositioning
-    qtserialport
-    qtsvg
+    qt6.qtbase
+    qt6.qtpositioning
+    qt6.qtserialport
+    qt6.qtsvg
   ];
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    qt6.qmake
+    qt6.qttools
+    qt6.wrapQtAppsHook
     wrapGAppsHook3
   ];
 

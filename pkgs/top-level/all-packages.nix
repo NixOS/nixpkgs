@@ -11764,8 +11764,6 @@ with pkgs;
     withDoc = true;
   };
 
-  gpxsee = qt6Packages.callPackage ../applications/misc/gpxsee { };
-
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   hachoir = with python3Packages; toPythonApplication hachoir;
