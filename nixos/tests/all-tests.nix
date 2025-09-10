@@ -1373,6 +1373,7 @@ in
   sslh = handleTest ./sslh.nix { };
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
   ssh-audit = runTest ./ssh-audit.nix;
+  sshwifty = runTest ./web-apps/sshwifty/default.nix;
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   stalwart-mail = runTest ./stalwart/stalwart-mail.nix;
