@@ -261,6 +261,18 @@ rec {
       f = if isFunction fn then fn else import fn;
       fargs = functionArgs f;
 
+      aliasArgs = filterAttrs (name: _: autoArgs._isAlias or (_: false) name) fargs;
+
+      aliasErrorForArg =
+        arg:
+        let
+          loc = builtins.unsafeGetAttrPos arg fargs;
+        in
+        "Function expects alias \"${arg}\" at ${loc.file}:${toString loc.line}.";
+
+      # Only show the error for the first alias
+      aliasError = aliasErrorForArg (head (attrNames aliasArgs));
+
       # All arguments that will be passed to the function
       # This includes automatic ones and ones passed explicitly
       allArgs = intersectAttrs fargs autoArgs // args;
@@ -312,11 +324,12 @@ rec {
       missingError = missingErrorForArg (head (attrNames missingArgs));
 
     in
-    # This needs to be an abort so it can't be caught with `builtins.tryEval`,
-    # which is used by nix-env and ofborg to filter out packages that don't evaluate.
-    # This way we're forced to fix such errors in Nixpkgs,
-    # which is especially relevant with allowAliases = false
-    if missingArgs != { } then
+    # These need to be abort so they can't be caught with `builtins.tryEval`,
+    # which is used by nix-env and CI to filter out packages that don't evaluate.
+    # This way we're forced to fix such errors in Nixpkgs.
+    if aliasArgs != { } then
+      abort "lib.customisation.callPackageWith: ${aliasError}"
+    else if missingArgs != { } then
       abort "lib.customisation.callPackageWith: ${missingError}"
     else
       makeOverridable f allArgs;

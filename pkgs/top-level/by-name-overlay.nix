@@ -51,6 +51,8 @@ in
 # and ideally https://github.com/NixOS/nix/pull/8895
 self: super:
 {
+  _isAlias = name: packages.${name}.type or null == "alias";
+
   # This attribute is necessary to allow CI to ensure that all packages defined in `pkgs/by-name`
   # don't have an overriding definition in `all-packages.nix` with an empty (`{ }`) second `callPackage` argument.
   # It achieves that with an overlay that modifies both `callPackage` and this attribute to signal whether `callPackage` is used
