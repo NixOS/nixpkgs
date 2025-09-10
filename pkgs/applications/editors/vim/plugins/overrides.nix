@@ -2187,11 +2187,14 @@ assertNoAdditions {
   };
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
+    checkInputs = with self; [
+      # Optional picker integration
+      telescope-nvim
+    ];
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
-      telescope-nvim
     ];
     # Unit test assert
     nvimSkipModules = "neotest-playwright-assertions";
