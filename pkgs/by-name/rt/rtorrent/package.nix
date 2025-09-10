@@ -7,7 +7,7 @@
   fetchFromGitHub,
   installShellFiles,
   libtool,
-  libtorrent,
+  libtorrent-rakshasa,
   ncurses,
   openssl,
   pkg-config,
@@ -19,14 +19,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rakshasa-rtorrent";
-  version = "0.15.6";
+  pname = "rtorrent";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-B/5m1JXdUpczUMNN4cy5p6YurjmRFxMQHG3cQFSmZSs=";
+    hash = "sha256-+lpivm3MXbuJ4XYhK5OaASpqpDKcCdW7JCFjQYBYCSA=";
   };
 
   outputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    inherit libtorrent;
+    inherit libtorrent-rakshasa;
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cppunit
     curl
     libtool
-    libtorrent
+    libtorrent-rakshasa
     ncurses
     openssl
     zlib
