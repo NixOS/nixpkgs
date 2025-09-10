@@ -2,28 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiv";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "stefanhaustein";
     repo = "TerminalImageViewer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xuJpl/tGWlyo8aKKy0yYzGladLs3ayKcRCodDNyZI9w=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [ imagemagick ];
-
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postFixup = ''
     wrapProgram $out/bin/tiv \
@@ -38,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ magnetophon ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
