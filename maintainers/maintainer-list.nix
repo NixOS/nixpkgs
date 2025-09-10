@@ -1341,6 +1341,13 @@
     githubId = 373;
     name = "Alexandre Girard Davila";
   };
+  amaanq = {
+    email = "contact@amaanq.com";
+    github = "amaanq";
+    githubId = 29718261;
+    matrix = "@amaan:amaanq.com";
+    name = "Amaan Qureshi";
+  };
   amadaluzia = {
     email = "amad@atl.tools";
     github = "amadaluzia";
