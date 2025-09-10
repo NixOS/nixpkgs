@@ -88,6 +88,7 @@
   transset,
   util-macros,
   viewres,
+  x11perf,
   xauth,
   xbacklight,
   xbitmaps,
@@ -153,6 +154,7 @@ self: with self; {
     smproxy
     transset
     viewres
+    x11perf
     xauth
     xbacklight
     xbitmaps
@@ -1204,50 +1206,6 @@ self: with self; {
         libX11
         libxkbfile
         libXrandr
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  x11perf = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      libXft,
-      libXmu,
-      xorgproto,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "x11perf";
-      version = "1.6.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/x11perf-1.6.1.tar.bz2";
-        sha256 = "0d3wh6z6znwhfdiv0zaggfj0xgish98xa10yy76b9517zj7hnzhw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        libXft
-        libXmu
-        xorgproto
-        libXrender
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

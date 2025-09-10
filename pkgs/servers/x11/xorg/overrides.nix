@@ -217,16 +217,6 @@ self: super:
 
   oclock = addMainProgram super.oclock { };
 
-  x11perf = super.x11perf.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [
-      freetype
-      fontconfig
-    ];
-    meta = attrs.meta // {
-      mainProgram = "x11perf";
-    };
-  });
-
   xcalc = addMainProgram super.xcalc { };
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
