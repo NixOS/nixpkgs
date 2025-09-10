@@ -145,7 +145,6 @@ stdenv.mkDerivation rec {
       ./vmr-compiler-opt-v8.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "10") [
-      ./mscordac-fix-missing-libunwind-symbols-on-linux.patch
       ./bundler-fix-file-size-estimation-when-bundling-symli.patch
     ];
 
@@ -372,7 +371,6 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString (lib.versionAtLeast version "10") ''
       dotnet nuget add source "${bootstrapSdk.artifacts}"
-      dotnet nuget add source "${bootstrapSdk.artifacts}/SourceBuildReferencePackages"
     ''
     + ''
       ${prepScript} $prepFlags
@@ -405,6 +403,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "10") [
+    "--branding default"
   ]
   ++ [
     "--"
