@@ -365,14 +365,20 @@ print OUT <<EOF;
   libxxf86dga,
   libxxf86misc,
   libxxf86vm,
+  listres,
   lndir,
   luit,
   makedepend,
   mkfontscale,
   pixman,
   sessreg,
+  smproxy,
+  tab-window-manager,
   transset,
   util-macros,
+  viewres,
+  xauth,
+  xbacklight,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -416,13 +422,18 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    listres
     lndir
     luit
     makedepend
     mkfontscale
     pixman
     sessreg
+    smproxy
     transset
+    viewres
+    xauth
+    xbacklight
     xbitmaps
     xcmsdb
     xcursorgen
@@ -480,6 +491,7 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  twm = tab-window-manager;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
