@@ -143,13 +143,13 @@ in
 assertNoAdditions {
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
+      fzf-lua
       snacks-nvim
+      telescope-nvim
     ];
     dependencies = with self; [
-      telescope-nvim
       vim-fugitive
       vim-rhubarb
-      fzf-lua
       plenary-nvim
     ];
   };
