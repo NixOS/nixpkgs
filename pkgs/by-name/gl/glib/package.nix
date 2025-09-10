@@ -37,9 +37,7 @@
   libsysprof-capture,
   mesonEmulatorHook,
   withIntrospection ?
-    stdenv.hostPlatform.emulatorAvailable buildPackages
-    && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
+    false,
 }:
 
 assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
