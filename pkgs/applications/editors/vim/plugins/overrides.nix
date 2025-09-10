@@ -4010,9 +4010,12 @@ assertNoAdditions {
   };
 
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
+    checkInputs = [
+      # Optional telescope integration
+      self.telescope-nvim
+    ];
+    dependencies = [
+      self.plenary-nvim
     ];
   };
 
