@@ -194,6 +194,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-foP2OXUL6ttgYvCxLsxUiVdkPoTvGiHomdNudbSUmSE=";
   };
 
+  patches = [
+    # Remove this once https://github.com/OpenMathLib/OpenBLAS/issues/5414 is
+    # resolved.
+    ./disable-sme-sgemm-kernel.patch
+  ];
+
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
     substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
@@ -274,6 +280,9 @@ stdenv.mkDerivation rec {
       USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
     })
   );
+
+  # The default "all" target unconditionally builds the "tests" target.
+  buildFlags = lib.optionals (!doCheck) [ "shared" ];
 
   doCheck = true;
   checkTarget = "tests";
