@@ -1,6 +1,7 @@
 # Note: this is rakshasa's version of libtorrent, used mainly by rtorrent.
 # *Do not* mistake it by libtorrent-rasterbar, used by Deluge, qbitttorent etc.
 {
+  curl,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -14,17 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-libtorrent";
-  version = "0.15.6";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-udEe9VyUzPXuCTrB3U3+XCbVWvfTT7xNvJJkLSQrRt4=";
+    hash = "sha256-CtLRZK384IlfXoXLIpdXWa8s9M0n0EopKrJGrK6xq3c=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    curl
     pkg-config
   ];
 
