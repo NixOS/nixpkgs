@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "2.7.4";
+  version = "2.8.2";
 in
 rustPlatform.buildRustPackage {
   pname = "turnon";
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage {
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-RTLFajUMJHZoXKhy83G3c7a2fZ+P6CZXadFpbcPFLY8=";
+    hash = "sha256-5L7Ewvh1XOPto4shLUFpfOrYWcY4qJQ7ndUI3Yr9T2M=";
   };
 
-  cargoHash = "sha256-8vqsQPbl3c2++8T5bjDjAWzm00qSDogT1YaumOC7qzk=";
+  cargoHash = "sha256-Cuv7rJ+/l6vG0hkdMzxVVMpZS8OqM8FCrCl8ypSvyiI=";
 
   doCheck = true;
 
