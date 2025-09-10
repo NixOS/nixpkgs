@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl wget jq common-updater-scripts yarn-berry_3 yarn-berry_3.yarn-berry-fetcher
+#!nix-shell -i bash -p curl wget jq common-updater-scripts yarn-berry_4 yarn-berry_4.yarn-berry-fetcher
 
 set -eu -o pipefail
 
@@ -43,8 +43,8 @@ tar -xzf "pgadmin4-$newest_version.tar.gz"
 cd "pgadmin4-$newest_version/web"
 
 printf "Will now generate the hash. This will download the packages to the nix store and also take some time\n"
-yarn-berry-fetcher missing-hashes yarn.lock
-if [[ -f missing-hashes.json ]]; then
+yarn-berry-fetcher missing-hashes yarn.lock > missing-hashes.json
+if [[ $(wc -l <missing-hashes.json) -ge 2 ]]; then
   YARN_HASH=$(yarn-berry-fetcher prefetch yarn.lock missing-hashes.json)
 else
   YARN_HASH=$(yarn-berry-fetcher prefetch yarn.lock)
@@ -52,18 +52,18 @@ fi
 printf "Done\n"
 
 if [[ -f missing-hashes.json ]]; then
-  if [[ ! -f "$nixpkgs/pkgs/tools/admin/pgadmin/missing-hashes.json" ]]; then
+  if [[ ! -f "$nixpkgs/pkgs/by-name/pg/pgadmin4/missing-hashes.json" ]]; then
     printf "PLEASE NOTE: FIRST TIME OF FINDING MISSING HASHES!"
     printf "Please add \"missingHashes = ./missing-hashes.json\" to pgadmin derivation"
   fi
   printf "Copy files to nixpkgs\n"
-  cp missing-hashes.json "$nixpkgs/pkgs/tools/admin/pgadmin/"
+  cp missing-hashes.json "$nixpkgs/pkgs/by-name/pg/pgadmin4"
 fi
 
 printf "Done\n"
 popd
 
-sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$YARN_HASH\"#" ${scriptDir}/default.nix
+sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$YARN_HASH\"#" ${scriptDir}/package.nix
 
 update-source-version pgadmin4 "$newest_version" --print-changes
 touch $TMPDIR/.done

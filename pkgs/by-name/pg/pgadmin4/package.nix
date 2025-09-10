@@ -6,37 +6,28 @@
   nixosTests,
   postgresqlTestHook,
   postgresql,
-  yarn-berry_3,
+  yarn-berry_4,
   nodejs,
   autoconf,
   automake,
   libtool,
   libpng,
   nasm,
-  cmake,
   pkg-config,
   stdenv,
-  srcOnly,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.3";
-  yarnHash = "sha256-T6RKWuAAoJgbzJKef4ioOoUDtoGM9s9BFqxFdy5EtyQ=";
+  version = "9.8";
+  yarnHash = "sha256-NvQlrDXn9sa4MpytFYPsC4bKO8Thx/MuqG8M6VIa2ig=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-4uupF1dw6OE/briAI5PWiQ7h6RPx1sUqf8PB8cJsNSU=";
-  };
-
-  mozjpeg-bin = fetchFromGitHub {
-    owner = "imagemin";
-    repo = "mozjpeg-bin";
-    rev = "c0587fbc00b21ed8cad8bae499a0827baeaf7ffa";
-    hash = "sha256-D/pXQBlIIyk7KAgxJ1gKqxYxtlfBbLzUSmYZbH659cA=";
+    hash = "sha256-gnVrMuxWV7lAol1gyONbhtuUL4EEOfOPkRUM2esMgi0=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -58,16 +49,10 @@ in
 
 pythonPackages.buildPythonApplication rec {
   inherit pname version src;
+  missingHashes = ./missing-hashes.json;
 
-  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    # mozjpeg fails to build on darwin due to a hardocded path
-    # this has been fixed upstream on master but no new version
-    # has been released. We therefore point yarn to upstream
-    # see https://github.com/imagemin/mozjpeg-bin/issues/64
-    # and https://github.com/imagemin/mozjpeg-bin/issues/81
-    patches = [
-      ./mozjpeg.patch
-    ];
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit missingHashes;
     src = src + "/web";
     hash = yarnHash;
   };
@@ -85,11 +70,6 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    # the patch needs to be executed inside the /web subfolder
-    # therefore it is included here and not in `patches`
-    cd web
-    patch -u yarn.lock ${./mozjpeg.patch}
-    cd ..
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
@@ -111,9 +91,6 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   dontYarnBerryInstallDeps = true;
-  env.YARN_ENABLE_SCRIPTS = "0";
-  dontUseCmakeConfigure = true;
-
   preBuild = ''
     # Adapted from pkg/pip/build.sh
     echo Creating required directories...
@@ -141,25 +118,6 @@ pythonPackages.buildPythonApplication rec {
     export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
     yarnBerryConfigHook
     )
-    # mozjpeg vendored source isn't included in the checkout for yarn. If we copy it before the
-    # yarnConfigHook it will just get overwritten. So we first run the configHook without build,
-    # then copy the vendored source and then build the dependencies
-    # This has the disadvantage of repeating some of the yarnConfigHooks logic here
-    mkdir -p node_modules/mozjpeg/vendor/source
-    cp ${mozjpeg-bin}/vendor/source/mozjpeg.tar.gz node_modules/mozjpeg/vendor/source/
-    (
-    # https://github.com/mozilla/mozjpeg/issues/438
-    substituteInPlace node_modules/mozjpeg/lib/install.js --replace-fail "cmake -DCMAKE" "cmake -DENABLE_STATIC=FALSE -DCMAKE"
-    substituteInPlace node_modules/mozjpeg/lib/install.js --replace-fail "cp cjpeg-static" "cp cjpeg"
-    export LD=$CC
-    export HOME=$(mktemp -d)
-    export YARN_ENABLE_SCRIPTS=1
-    YARN_IGNORE_PATH=1 ${yarn-berry_3.yarn-berry-offline}/bin/yarn config set enableTelemetry false
-    YARN_IGNORE_PATH=1 ${yarn-berry_3.yarn-berry-offline}/bin/yarn config set enableGlobalCache false
-    export npm_config_nodedir="${srcOnly nodejs}"
-    export npm_config_node_gyp="${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js"
-    YARN_IGNORE_PATH=1 ${yarn-berry_3.yarn-berry-offline}/bin/yarn install --inline-builds
-    )
     yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
@@ -185,24 +143,14 @@ pythonPackages.buildPythonApplication rec {
     cython
     pip
     sphinx
-    yarn-berry_3
-    yarn-berry_3.yarnBerryConfigHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
     nodejs
-
-    # for building mozjpeg2
-    cmake
-    autoconf
-    automake
-    libtool
-    nasm
-    pkg-config
   ];
 
   buildInputs = [
     zlib
     pythonPackages.wheel
-    # for mozjpeg2
-    libpng
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -247,7 +195,6 @@ pythonPackages.buildPythonApplication rec {
     azure-identity
     sphinxcontrib-youtube
     dnspython
-    speaklater3
     google-auth-oauthlib
     google-api-python-client
     keyring
