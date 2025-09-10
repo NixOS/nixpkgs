@@ -3232,6 +3232,10 @@ runTests {
                 type = lib.types.submodule submodule;
                 visible = "shallow";
               };
+              transparent = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "transparent";
+              };
               "true" = lib.mkOption {
                 type = lib.types.submodule submodule;
                 visible = true;
@@ -3265,6 +3269,18 @@ runTests {
       ];
     expected = {
       shallow = {
+        visible = true;
+        internal = false;
+      };
+      transparent = {
+        visible = false;
+        internal = false;
+      };
+      "transparent.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "transparent.<name>.bar" = {
         visible = true;
         internal = false;
       };
