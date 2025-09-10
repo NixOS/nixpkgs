@@ -2281,13 +2281,6 @@ assertNoAdditions {
     ];
   };
 
-  neuron-nvim = super.neuron-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
-    ];
-  };
-
   neovim-trunk = super.neovim-trunk.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
