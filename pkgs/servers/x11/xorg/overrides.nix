@@ -928,9 +928,6 @@ self: super:
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
   xload = addMainProgram super.xload { };
-  xmag = addMainProgram super.xmag { };
-  xmessage = addMainProgram super.xmessage { };
-  xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
 

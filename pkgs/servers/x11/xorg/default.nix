@@ -83,7 +83,10 @@
   xlsatoms,
   xlsclients,
   xlsfonts,
+  xmag,
+  xmessage,
   xmodmap,
+  xmore,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -137,7 +140,10 @@ self: with self; {
     xlsatoms
     xlsclients
     xlsfonts
+    xmag
+    xmessage
     xmodmap
+    xmore
     xorgproto
     xprop
     xrandr
@@ -4787,134 +4793,6 @@ self: with self; {
         libX11
         libXaw
         libXmu
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmag = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXaw,
-      libXmu,
-      xorgproto,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xmag";
-      version = "1.0.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xmag-1.0.8.tar.xz";
-        sha256 = "0clm0vm35lkcir5w3bkypax9j57vyzkl9l89qqxbanvr7mc3qv9j";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libX11
-        libXaw
-        libXmu
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmessage = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXaw,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xmessage";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xmessage-1.0.7.tar.xz";
-        sha256 = "0mh3lclzh82l4wkwg1d9gflnm1irjydihg30gqfxcwmpl2vwqgvh";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libXaw
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmore = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXaw,
-      xorgproto,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xmore";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xmore-1.0.4.tar.xz";
-        sha256 = "16havfffngvx5kc9lam8rhsdfabsj1rsv4g49z346knyq7dn1dby";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libXaw
         xorgproto
         libXt
       ];
