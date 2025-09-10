@@ -152,6 +152,11 @@ buildGoModule (finalAttrs: {
 
         # Fails because we vendor dependencies
         "TestLicenseHeaders"
+
+        # seek /proc/net/tcp: illegal seek
+        "TestGetList"
+        "TestIgnoreLocallyBoundPorts"
+        "TestPoller"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
