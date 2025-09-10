@@ -14,14 +14,14 @@
   nghttp2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tarantool";
   version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "tarantool";
     repo = "tarantool";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NU+0R07Qrnew7+HeeJu6QnGfktEXFRxSZFwl48vjGZE=";
     fetchSubmodules = true;
   };
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_DIST=ON"
-    "-DTARANTOOL_VERSION=${version}.builtByNix" # expects the commit hash as well
+    "-DTARANTOOL_VERSION=${finalAttrs.version}.builtByNix" # expects the commit hash as well
   ];
 
   meta = {
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tarantool";
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})
