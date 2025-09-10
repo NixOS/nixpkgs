@@ -563,6 +563,7 @@ mapAliases ({
   pycontracts = throw "pycontracts has been removed, since upstream is no longer active and it is broken on modern Python versions."; # added 2024-08-09
   pydns = py3dns; # added 2024-10-25
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
+  pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
   pyephember = throw "pyephember was removed because Home Assistant switched to pyephember2"; # added 2025-05-07
   pyezviz = throw "pyeziz has been removed in favor of pyevizapi, where development continues"; # added 2025-06-11
   pyjet = throw "pyjet is deprecated, use fastjet instead"; # added 2023-05-10
