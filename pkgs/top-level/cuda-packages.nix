@@ -48,7 +48,7 @@ in
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
-      cusparselt = "0.7.1";
+      cusparselt = "0.8.1";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
@@ -67,7 +67,7 @@ in
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
-      cusparselt = "0.7.1";
+      cusparselt = "0.8.1";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
@@ -86,7 +86,7 @@ in
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
-      cusparselt = "0.7.1";
+      cusparselt = "0.8.1";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
