@@ -70,7 +70,7 @@ in
       mkEUI64Suffix :: String -> String
       ```
 
-      # Argumemts
+      # Inputs
 
       mac
       : The MAC address (may contain these delimiters: `:`, `-` or `.` but it's not necessary)
@@ -82,14 +82,25 @@ in
         (match "^([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})$")
 
         # check if there are matches
-        (matches: if matches == null then throw ''"${mac}" doesn't meet MAC address criteria'' else matches)
+        (
+          matches:
+          if matches == null then
+            throw ''"${mac}" is not a valid MAC address (expected 6 octets of hex digits with optional delimiters)''
+          else
+            matches
+        )
 
         # transform to result hextets
-        (mac: [
-          (toHexString (bitXor 512 (fromHexString ((elemAt mac 0) + (elemAt mac 1)))))
-          "${elemAt mac 2}ff"
-          "fe${elemAt mac 3}"
-          ((elemAt mac 4) + (elemAt mac 5))
+        (octets: [
+          # combine 1st and 2nd octets into first hextet, flip U/L bit, 512 = 0x200
+          (toHexString (bitXor 512 (fromHexString ((elemAt octets 0) + (elemAt octets 1)))))
+
+          # combine 3rd and 4th octets, combine them, insert fffe pattern in between to get next two hextets
+          "${elemAt octets 2}ff"
+          "fe${elemAt octets 3}"
+
+          # combine 5th and 6th octets into the last hextet
+          ((elemAt octets 4) + (elemAt octets 5))
         ])
 
         # concat to result suffix
