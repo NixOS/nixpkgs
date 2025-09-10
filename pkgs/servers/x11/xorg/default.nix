@@ -65,6 +65,7 @@
   libxscrnsaver,
   libxshmfence,
   libxt,
+  libxtst,
   libxv,
   libxvmc,
   libxxf86dga,
@@ -229,6 +230,7 @@ self: with self; {
   libXres = libxres;
   libXScrnSaver = libxscrnsaver;
   libXt = libxt;
+  libXtst = libxtst;
   libXv = libxv;
   libXvMC = libxvmc;
   libXxf86dga = libxxf86dga;
@@ -1328,46 +1330,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXtst = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXi,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXtst";
-      version = "1.2.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXtst-1.2.5.tar.xz";
-        sha256 = "0hljblisw72fk60y7zf9214ydn7lk32kj43cf12af2bhp4jlq3dm";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXi
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xtst" ];
         platforms = lib.platforms.unix;
       };
     })

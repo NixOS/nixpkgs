@@ -86,6 +86,7 @@ $pcMap{"xscrnsaver"} = "libXScrnSaver";
 $pcMap{"xshmfence"} = "libxshmfence";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
+$pcMap{"xtst"} = "libXtst";
 $pcMap{"xv"} = "libXv";
 $pcMap{"xvmc"} = "libXvMC";
 $pcMap{"xvmc-wrapper"} = "libXvMC";
@@ -395,6 +396,7 @@ print OUT <<EOF;
   libxscrnsaver,
   libxshmfence,
   libxt,
+  libxtst,
   libxv,
   libxvmc,
   libxxf86dga,
@@ -559,6 +561,7 @@ self: with self; {
   libXres = libxres;
   libXScrnSaver = libxscrnsaver;
   libXt = libxt;
+  libXtst = libxtst;
   libXv = libxv;
   libXvMC = libxvmc;
   libXxf86dga = libxxf86dga;
