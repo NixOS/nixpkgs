@@ -3,6 +3,7 @@
   boost,
   bzip2,
   cmake,
+  enablePython ? true,
   fetchFromGitHub,
   fmt,
   giflib,
@@ -17,6 +18,7 @@
   openexr,
   openjph,
   ptex,
+  python3Packages,
   robin-map,
   stdenv,
   unzip,
@@ -61,14 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     openjph
     ptex
     robin-map
-  ];
+  ]
+  ++ lib.optional enablePython python3Packages.pybind11;
 
   propagatedBuildInputs = [
     fmt
   ];
 
   cmakeFlags = [
-    "-DUSE_PYTHON=OFF"
+    (lib.cmakeBool "USE_PYTHON" enablePython)
     "-DUSE_QT=OFF"
     # GNUInstallDirs
     "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkg-config
