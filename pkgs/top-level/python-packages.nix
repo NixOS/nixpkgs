@@ -3120,7 +3120,11 @@ self: super: with self; {
 
   cometx = callPackage ../development/python-modules/cometx { };
 
+  comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
+
+  comfyui-workflow-templates = callPackage ../development/python-modules/comfyui-workflow-templates { };
 
   comicon = callPackage ../development/python-modules/comicon { };
 
