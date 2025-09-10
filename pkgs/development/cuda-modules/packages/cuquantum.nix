@@ -1,7 +1,10 @@
 {
   buildRedist,
   cuda_cudart,
+  cuda_nvml_dev,
+  lib,
   libcublas,
+  libcurand,
   libcusolver,
   libcutensor,
 }:
@@ -19,7 +22,9 @@ buildRedist {
 
   buildInputs = [
     cuda_cudart
+    (lib.getOutput "stubs" cuda_nvml_dev) # for libnvidia-ml.so
     libcublas
+    libcurand
     libcusolver
     libcutensor
   ];
