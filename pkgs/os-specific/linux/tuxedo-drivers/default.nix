@@ -23,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./no-cp-etc-usr.patch ];
 
+  postInstall = ''
+    echo "Running postInstallhook"
+    install -Dm 0644 -t $out/etc/udev/rules.d usr/lib/udev/rules.d/*
+  '';
+
   buildInputs = [ pahole ];
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
