@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+
+    # Fix the build with CMake 4.
+    #
+    # See: <https://github.com/google/zopfli/pull/207>
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   postInstall = ''
