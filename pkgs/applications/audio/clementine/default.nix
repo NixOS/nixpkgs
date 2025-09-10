@@ -119,9 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DFORCE_GIT_REVISION=1.3.1"
-    "-DUSE_SYSTEM_PROJECTM=ON"
-    "-DSPOTIFY_BLOB=OFF"
+    (lib.cmakeFeature "FORCE_GIT_REVISION" "1.3.1")
+    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
+    (lib.cmakeBool "SPOTIFY_BLOB" false)
   ];
 
   dontWrapQtApps = true;
