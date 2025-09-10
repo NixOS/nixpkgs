@@ -49,6 +49,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/Cretezy/lazyjj/releases/tag/v${finalAttrs.version}";
     mainProgram = "lazyjj";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ colemickens ];
+    maintainers = with lib.maintainers; [
+      colemickens
+      GaetanLepage
+    ];
   };
 })
