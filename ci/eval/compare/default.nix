@@ -13,6 +13,8 @@
   byName ? false,
 }:
 let
+  combined = builtins.storePath combinedDir;
+
   /*
     Derivation that computes which packages are affected (added, changed or removed) between two revisions of nixpkgs.
     Note: "platforms" are "x86_64-linux", "aarch64-darwin", ...
@@ -75,7 +77,7 @@ let
   # Attrs
   # - keys: "added", "changed", "removed" and "rebuilds"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = builtins.fromJSON (builtins.readFile "${combinedDir}/combined-diff.json");
+  diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
 
   changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
@@ -139,8 +141,8 @@ runCommand "compare"
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
     env = {
-      BEFORE_DIR = "${combinedDir}/before";
-      AFTER_DIR = "${combinedDir}/after";
+      BEFORE_DIR = "${combined}/before";
+      AFTER_DIR = "${combined}/after";
     };
   }
   ''
