@@ -1453,6 +1453,7 @@ in
             else
               {
                 device = "/nix/.ro-store";
+                fsType = "none";
                 options = [ "bind" ];
               }
           );
