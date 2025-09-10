@@ -877,8 +877,8 @@ rec {
       "sha256-T3Ba5a0ogaaNqOs93jww/OT2UgHZzy9k6YGpkN9DlYY=";
 
   mypy-boto3-mediapackagev2 =
-    buildMypyBoto3Package "mediapackagev2" "1.40.0"
-      "sha256-NRpCHPEXgFazLRtyvzkztliGFtm2eIq4b1CVNaxIXQ0=";
+    buildMypyBoto3Package "mediapackagev2" "1.40.27"
+      "sha256-wJZ7kfDwF+GLMvkLfOHTrW/fIPsMKD2mJJJmirEpApY=";
 
   mypy-boto3-mediastore =
     buildMypyBoto3Package "mediastore" "1.40.17"
