@@ -249,11 +249,22 @@ with haskellLib;
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
-  # All jailbreaks in this section due to: https://github.com/haskell/haskell-language-server/pull/4316#discussion_r1667684895
-  haskell-language-server =
-    lib.pipe
-      (super.haskell-language-server.overrideScope (
-        lself: lsuper: {
+  inherit
+    (
+      let
+        hls_overlay = lself: lsuper: {
+          # For fourmolu 0.18 and ormolu 0.7.7
+          Cabal-syntax = lself.Cabal-syntax_3_14_2_0;
+          Cabal = lself.Cabal_3_14_2_0;
+          # Jailbreaking cabal-install-parsers to make it pick Cabal 3.14 instead of 3.12.
+          cabal-install-parsers = doJailbreak lsuper.cabal-install-parsers;
+          # hls 2.11 needs older cabal-add than in stackage. Also copying over test fix override from configuration-nix.nix
+          cabal-add = overrideCabal (drv: {
+            # tests depend on executable
+            preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
+          }) lself.cabal-add_0_1;
+          # Need a newer version of extensions to be compatible with the newer Cabal
+          extensions = doJailbreak lself.extensions_0_1_0_3;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
           # because some packages, like ormolu, need a newer Cabal version.
           # ghc-paths is special because it depends on Cabal for building
@@ -264,16 +275,28 @@ with haskellLib;
           # otherwise we have different versions of ghc-paths
           # around which have the same abi-hash, which can lead to confusions and conflicts.
           ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
+        };
+      in
+      lib.mapAttrs (_: pkg: pkg.overrideScope hls_overlay) (
+        super
+        // {
+          # HLS 2.11: Too strict bound on Diff 1.0.
+          haskell-language-server = dontCheck (doJailbreak super.haskell-language-server);
         }
-      ))
-      [
-        dontCheck
-      ];
+      )
+    )
+    fourmolu
+    ormolu
+    haskell-language-server
+    ;
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
+
+  hls-plugin-api = doJailbreak super.hls-plugin-api; # HLS 2.11: Too strict bound on Diff 1.0.
+  ghcide = doJailbreak super.ghcide; # HLS 2.11: Too strict bound on Diff 1.0.
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
