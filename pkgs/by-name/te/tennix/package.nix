@@ -9,6 +9,7 @@
   SDL_ttf,
   SDL_net,
   python3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,8 @@ stdenv.mkDerivation rec {
 
     runHook postConfigure
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "tennix-"; };
 
   meta = with lib; {
     homepage = "https://icculus.org/tennix/";
