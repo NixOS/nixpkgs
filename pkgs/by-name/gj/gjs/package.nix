@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   lib,
   stdenv,
   meson,
@@ -64,6 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable introspection test in installed tests
     # (minijasmine:1317): GLib-GIO-WARNING **: 17:33:39.556: Error creating IO channel for /proc/self/mountinfo: No such file or directory (g-io-error-quark, 1)
     ./disable-introspection-test.patch
+
+    # Fix gjs:JS / Package test
+    # https://gitlab.gnome.org/GNOME/gjs/-/issues/711
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gjs/-/commit/054f78c756b631c347c6f64ab5b7349331f5f420.patch";
+      hash = "sha256-gnOD+WU+JTzetnyGyGJKQZbaLX22yZuBhCmhJd2Hha8=";
+    })
+
+    # Fix gjs:Scripts / Gtk4Warnings test
+    # https://gitlab.gnome.org/GNOME/gjs/-/issues/712
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gjs/-/commit/48b00ae16d97ae213dbaef6dee8ffd56e1667a64.patch";
+      hash = "sha256-u7P/dV9mtx3AldrnbDhGGMVQ61GmD54TXFhS4FRh4yc=";
+    })
   ];
 
   nativeBuildInputs = [
