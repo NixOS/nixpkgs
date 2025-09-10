@@ -4,6 +4,7 @@
   cuda_cudart,
   libcublas,
   libcusolver,
+  nccl,
 }:
 buildRedist {
   redistName = "cusolvermp";
@@ -20,6 +21,7 @@ buildRedist {
     cuda_cudart
     libcublas
     libcusolver
+    nccl
   ];
 
   meta = {
