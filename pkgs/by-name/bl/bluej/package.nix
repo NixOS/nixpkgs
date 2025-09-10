@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       classpathException20
     ];
     mainProgram = "bluej";
-    maintainers = with lib.maintainers; [ chvp ];
+    maintainers = with lib.maintainers; [ weirdrock ];
     platforms = lib.platforms.linux;
   };
 
