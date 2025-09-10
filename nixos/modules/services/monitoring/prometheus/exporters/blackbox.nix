@@ -47,8 +47,6 @@ let
         ln -s ${coerceConfigFile file} $out
         blackbox_exporter --config.check --config.file $out
       '';
-
-  yamlFormat = pkgs.formats.yaml { };
 in
 {
   port = 9115;
@@ -57,19 +55,6 @@ in
       type = types.path;
       description = ''
         Path to configuration file.
-      '';
-    };
-    config = mkOption {
-      type = yamlFormat.type;
-      default = null;
-      description = ''
-        Blackbox Exporter YAML configuration as a nix attrset
-
-        Documentation assoicated with the configuration schema and layout, see:
-        [Blackbox Exporter Configuration Docs](https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md)
-
-        Secrets can be handled using `_path` options, but require that the service has access to the files.
-        This can be achieved by either giving the blackbox-exporter user read perms to the secret file or adding the credentials to the systemd service
       '';
     };
     enableConfigCheck = mkOption {
@@ -85,18 +70,11 @@ in
 
   serviceOpts =
     let
-      configFileToUse =
-        if cfg.config != null then
-          yamlFormat.generate "blackbox-exporter-config.yaml" cfg.config
-        else
-          cfg.configFile;
-
       adjustedConfigFile =
-        if cfg.enableConfigCheck then checkConfig configFileToUse else checkConfigLocation configFileToUse;
+        if cfg.enableConfigCheck then checkConfig cfg.configFile else checkConfigLocation cfg.configFile;
     in
     {
       serviceConfig = {
-        DynamicUser = false;
         AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
         ExecStart = ''
           ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \

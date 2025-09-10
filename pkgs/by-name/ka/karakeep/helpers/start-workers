@@ -2,10 +2,13 @@
 set -eu -o pipefail
 KARAKEEP_LIB_PATH=
 RELEASE=
+NODEJS=
 NODE_ENV=production
 NODE_PATH="$KARAKEEP_LIB_PATH/apps/workers"
 
 [[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
 
+cd "$KARAKEEP_LIB_PATH/apps/workers"
+
 export RELEASE NODE_ENV NODE_PATH
-exec "$KARAKEEP_LIB_PATH/node_modules/.bin/tsx" "$KARAKEEP_LIB_PATH/apps/workers/index.ts"
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/workers/dist/index.js"

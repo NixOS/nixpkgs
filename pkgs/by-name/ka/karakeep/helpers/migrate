@@ -6,5 +6,8 @@ NODE_ENV=production
 
 [[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
 
+# Drizzle will look for configuration in the working directory
+cd "$KARAKEEP_LIB_PATH/packages/db"
+
 export RELEASE NODE_ENV
-exec "$KARAKEEP_LIB_PATH/node_modules/.bin/tsx" "$KARAKEEP_LIB_PATH/packages/db/migrate.ts" "$@"
+exec "$KARAKEEP_LIB_PATH/node_modules/.bin/drizzle-kit" migrate
