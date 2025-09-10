@@ -2,7 +2,6 @@
   _cuda,
   buildRedist,
   cuda_cudart,
-  libcal,
   libcublas,
   libcusolver,
 }:
@@ -19,7 +18,6 @@ buildRedist {
 
   buildInputs = [
     cuda_cudart
-    libcal
     libcublas
     libcusolver
   ];

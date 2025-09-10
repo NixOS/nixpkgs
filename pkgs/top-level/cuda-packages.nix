@@ -23,12 +23,12 @@ in
 {
   cudaPackages_12_6 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
-      cublasmp = "0.4.0";
+      cublasmp = "0.6.0";
       cuda = "12.6.3";
       cudnn = "9.8.0";
       cudss = "0.5.0";
       cuquantum = "25.03.0";
-      cusolvermp = "0.6.0";
+      cusolvermp = "0.7.0";
       cusparselt = "0.6.3";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
@@ -42,12 +42,12 @@ in
 
   cudaPackages_12_8 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
-      cublasmp = "0.4.0";
+      cublasmp = "0.6.0";
       cuda = "12.8.1";
       cudnn = "9.8.0";
       cudss = "0.5.0";
       cuquantum = "25.03.0";
-      cusolvermp = "0.6.0";
+      cusolvermp = "0.7.0";
       cusparselt = "0.7.1";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
@@ -61,12 +61,12 @@ in
 
   cudaPackages_12_9 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
-      cublasmp = "0.4.0";
+      cublasmp = "0.6.0";
       cuda = "12.9.1";
       cudnn = "9.8.0";
       cudss = "0.5.0";
       cuquantum = "25.03.0";
-      cusolvermp = "0.6.0";
+      cusolvermp = "0.7.0";
       cusparselt = "0.7.1";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
@@ -80,12 +80,12 @@ in
 
   cudaPackages_13_0 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
-      cublasmp = "0.4.0";
+      cublasmp = "0.6.0";
       cuda = "13.0.0";
       cudnn = "9.8.0";
       cudss = "0.5.0";
       cuquantum = "25.03.0";
-      cusolvermp = "0.6.0";
+      cusolvermp = "0.7.0";
       cusparselt = "0.7.1";
       cutensor = "2.2.0";
       nppplus = "0.10.0";
