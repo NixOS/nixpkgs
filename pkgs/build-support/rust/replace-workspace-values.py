@@ -44,17 +44,17 @@ def replace_key(
 
             final: dict[str, Any] = workspace_dep.copy()
 
-            merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
+            merged_features = local_dep.pop("features", []) + workspace_dep.get(
+                "features", []
+            )
             if merged_features:
                 final["features"] = merged_features
 
             local_default_features = local_dep.pop(
-                "default-features",
-                local_dep.pop("default_features", None)
+                "default-features", local_dep.pop("default_features", None)
             )
             workspace_default_features = workspace_dep.get(
-                "default-features",
-                workspace_dep.get("default_features")
+                "default-features", workspace_dep.get("default_features")
             )
 
             if not workspace_default_features and local_default_features:
@@ -68,7 +68,9 @@ def replace_key(
                 final["package"] = local_dep.pop("package")
 
             if local_dep:
-                raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
+                raise Exception(
+                    f"Unhandled keys in inherited dependency {key}: {local_dep}"
+                )
 
             table[key] = final
         elif section == "package":
