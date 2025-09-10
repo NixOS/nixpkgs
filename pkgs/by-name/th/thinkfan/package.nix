@@ -12,14 +12,14 @@
   libatasmart,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thinkfan";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QqDWPOXy8E+TY5t0fFRAS8BGA7ZH90xecv5UsFfDssk=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
+    "-DCMAKE_INSTALL_DOCDIR=share/doc/thinkfan"
     "-DUSE_NVML=OFF"
     # force install unit files
     "-DSYSTEMD_FOUND=ON"
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "thinkfan";
   };
-}
+})
