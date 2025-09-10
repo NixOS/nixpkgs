@@ -8,22 +8,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tiv";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "stefanhaustein";
     repo = "TerminalImageViewer";
-    rev = "v${version}";
-    sha256 = "sha256-mCgybL4af19zqECN1pBV+WnxMq2ZtlK5GDTQO3u9CK0=";
+    tag = "v${version}";
+    hash = "sha256-xuJpl/tGWlyo8aKKy0yYzGladLs3ayKcRCodDNyZI9w=";
   };
+
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ imagemagick ];
 
   makeFlags = [ "prefix=$(out)" ];
-
-  preConfigure = "cd src/main/cpp";
 
   postFixup = ''
     wrapProgram $out/bin/tiv \
