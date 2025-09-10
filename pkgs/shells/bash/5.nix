@@ -5,7 +5,7 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   bison,
-  util-linux,
+  util-linuxMinimal,
   coreutils,
   libredirect,
   glibcLocales,
@@ -167,7 +167,7 @@ lib.warnIf (withDocs != null)
         doCheck = true;
 
         nativeCheckInputs = attrs.nativeCheckInputs or [ ] ++ [
-          util-linux
+          util-linuxMinimal
           libredirect.hook
           glibcLocales
           gnused
