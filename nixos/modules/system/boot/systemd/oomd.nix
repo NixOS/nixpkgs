@@ -52,7 +52,6 @@ in
 
     systemd.services.systemd-oomd.after = [
       "swap.target" # TODO: drop after systemd v258
-      "systemd-sysusers.service" # TODO: drop after systemd v257.8
     ];
     systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
 
