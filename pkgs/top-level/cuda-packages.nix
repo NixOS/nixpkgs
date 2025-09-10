@@ -30,7 +30,7 @@ in
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
       cusparselt = "0.6.3";
-      cutensor = "2.2.0";
+      cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
       nvjpeg2000 = "0.8.1";
@@ -49,7 +49,7 @@ in
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
       cusparselt = "0.8.1";
-      cutensor = "2.2.0";
+      cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
       nvjpeg2000 = "0.8.1";
@@ -68,7 +68,7 @@ in
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
       cusparselt = "0.8.1";
-      cutensor = "2.2.0";
+      cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
       nvjpeg2000 = "0.8.1";
@@ -87,7 +87,7 @@ in
       cuquantum = "25.09.0";
       cusolvermp = "0.7.0";
       cusparselt = "0.8.1";
-      cutensor = "2.2.0";
+      cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "4.2.0.11";
       nvjpeg2000 = "0.8.1";
