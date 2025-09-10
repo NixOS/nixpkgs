@@ -7,7 +7,6 @@
   yaml-cpp,
   pkg-config,
   procps,
-  coreutils,
   smartSupport ? false,
   libatasmart,
 }:
@@ -23,17 +22,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QqDWPOXy8E+TY5t0fFRAS8BGA7ZH90xecv5UsFfDssk=";
   };
 
-  postPatch = ''
-    # fix hardcoded install path
-    substituteInPlace CMakeLists.txt --replace /etc $out/etc
-
-    # fix command paths in unit files
-    for unit in rcscripts/systemd/*; do
-      substituteInPlace "$unit" \
-        --replace /bin/kill ${procps}/bin/kill \
-        --replace /usr/bin/pkill ${procps}/bin/pkill \
-        --replace /usr/bin/sleep ${coreutils}/bin/sleep
-    done
+  postPatch = # fix hardcoded install path
+  ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "/etc" "$out/etc"
+  ''
+  # fix command paths in unit files
+  + ''
+    substituteInPlace rcscripts/systemd/thinkfan-sleep.service \
+      --replace-fail "/usr/bin/pkill" "${lib.getExe' procps "pkill"}"
+    substituteInPlace rcscripts/systemd/thinkfan-wakeup.service \
+      --replace-fail "/usr/bin/pkill" "${lib.getExe' procps "pkill"}"
+    substituteInPlace rcscripts/systemd/thinkfan.service.cmake \
+      --replace-fail "/bin/kill" "${lib.getExe' procps "kill"}"
   '';
 
   cmakeFlags = [
