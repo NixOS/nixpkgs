@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
       standard library for this purpose in astronomy.
     '';
     maintainers = with lib.maintainers; [
-      hjones2199
       returntoreality
     ];
     license = lib.licenses.lgpl3Plus;
