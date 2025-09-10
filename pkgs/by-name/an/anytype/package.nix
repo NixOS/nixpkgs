@@ -12,17 +12,16 @@
   commandLineArgs ? "",
 }:
 
-let
+buildNpmPackage (finalAttrs: {
   pname = "anytype";
   version = "0.49.2";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8+x2FmyR5x9Zrm3t71RSyxAKcJCvnR98+fqHXjBE7aU=";
   };
-  description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
@@ -30,9 +29,6 @@ let
     rev = "873b42df7320ebbbc80d7e2477914dac70363ef7";
     hash = "sha256-Mr0KfXn9NO86QqgBhVjSs2przN/GtjuhJHJ9djo8Feg=";
   };
-in
-buildNpmPackage {
-  inherit pname version src;
 
   npmDepsHash = "sha256-fuNTSZl+4DG/YL34f/+bYK26ruRFAc1hyHVAm256LiE=";
 
@@ -62,7 +58,7 @@ buildNpmPackage {
     cp -r ${anytype-heart}/lib dist/
     cp -r ${anytype-heart}/bin/anytypeHelper dist/
 
-    for lang in ${locales}/locales/*; do
+    for lang in ${finalAttrs.locales}/locales/*; do
       cp "$lang" "dist/lib/json/lang/$(basename $lang)"
     done
 
@@ -106,7 +102,7 @@ buildNpmPackage {
       exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
-      comment = description;
+      comment = finalAttrs.meta.description;
       mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"
@@ -118,14 +114,20 @@ buildNpmPackage {
     })
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    inherit description;
+    description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
+    changelog = "https://community.anytype.io/t/anytype-desktop-${
+      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
+    }-0-released";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
       autrimpo
       adda
+      kira-bruneau
     ];
     platforms = [
       "x86_64-linux"
@@ -135,4 +137,4 @@ buildNpmPackage {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
