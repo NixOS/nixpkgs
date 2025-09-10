@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  electron_36,
+  electron_37,
   typescript,
   nodejs,
   pnpm,
@@ -13,23 +13,23 @@
   ...
 }:
 let
-  electron = electron_36;
+  electron = electron_37;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feishin";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2Jry/wulzkS1P4tughDlH5klqNngPNmFuC5Nqe9sakM=";
+    hash = "sha256-+pBN23IKdUVBlfm6Sydg78RYFSfzwX/Sc86FWjB0Nzg=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-4cbrK+3nFD2NgoaGoAQdQ0+/07WiUiFUAyJFOsge8X8=";
+    hash = "sha256-toVWebJoh2PB4mWTulEs1iVrzEtnWtbBd6Ga2uTxU8k=";
   };
 
   nativeBuildInputs = [
