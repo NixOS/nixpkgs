@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rakshasa-libtorrent";
+  pname = "libtorrent-rakshasa";
   version = "0.16.0";
 
   src = fetchFromGitHub {
