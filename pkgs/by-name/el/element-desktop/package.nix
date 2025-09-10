@@ -105,7 +105,6 @@ stdenv.mkDerivation (
       mkdir -p "$out/share/element"
       ln -s '${element-web}' "$out/share/element/webapp"
       cp -r '.' "$out/share/element/electron"
-      cp -r './res/img' "$out/share/element"
       chmod -R "a+w" "$out/share/element/electron/node_modules"
       rm -rf "$out/share/element/electron/node_modules"
       cp -r './node_modules' "$out/share/element/electron"
