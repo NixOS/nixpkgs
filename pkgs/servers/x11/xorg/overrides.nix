@@ -938,10 +938,6 @@ self: super:
     };
   });
 
-  xset = addMainProgram super.xset { };
-  xsetroot = addMainProgram super.xsetroot { };
-  xsm = addMainProgram super.xsm { };
-  xstdcmap = addMainProgram super.xstdcmap { };
   xwd = addMainProgram super.xwd { };
 
   # convert Type1 vector fonts to OpenType fonts
