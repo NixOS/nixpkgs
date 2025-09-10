@@ -37,7 +37,7 @@ in
     manifests = selectManifests {
       cuda = "12.8.1";
       cudnn = "9.13.0";
-      cusparselt = "0.7.1";
+      cusparselt = "0.8.1";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
@@ -47,7 +47,7 @@ in
     manifests = selectManifests {
       cuda = "12.9.1";
       cudnn = "9.13.0";
-      cusparselt = "0.7.1";
+      cusparselt = "0.8.1";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
@@ -57,7 +57,7 @@ in
     manifests = selectManifests {
       cuda = "13.0.1";
       cudnn = "9.13.0";
-      cusparselt = "0.7.1";
+      cusparselt = "0.8.1";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
