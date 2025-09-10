@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termbg";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "termbg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JVRl0BCuU6duFcFZr3Rs8dgS+ikwCKe5/z3JgjAikiw=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Program for terminal background color detection";
     homepage = "https://github.com/dalance/termbg";
-    changelog = "https://github.com/dalance/termbg/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dalance/termbg/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pinpox ];
     mainProgram = "termbg";
   };
-}
+})
