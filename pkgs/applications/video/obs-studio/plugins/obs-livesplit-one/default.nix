@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ maintainers.Bauke ];
-    platforms = obs-studio.meta.platforms;
+    inherit (obs-studio.meta) platforms;
   };
 }
