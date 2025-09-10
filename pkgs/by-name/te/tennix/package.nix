@@ -13,13 +13,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tennix";
   version = "1.3.4";
 
   src = fetchgit {
     url = "git://repo.or.cz/tennix.git";
-    tag = "tennix-${version}";
+    tag = "tennix-${finalAttrs.version}";
     hash = "sha256-siGfnpZPMYMTgYzaPVhNXEuA/OSWmEl891cLhvgGr7o=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})
