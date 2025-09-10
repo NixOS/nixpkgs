@@ -85,7 +85,7 @@ in
         (
           matches:
           if matches == null then
-            throw ''"${mac}" is not a valid MAC address (expected 6 octets of hex digits with optional delimiters)''
+            throw ''"${mac}" is not a valid MAC address (expected 6 octets of hex digits)''
           else
             matches
         )
