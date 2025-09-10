@@ -1665,6 +1665,7 @@ mapAliases {
   ### N ###
 
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
+  nanoblogger = throw "nanoblogger has been removed as upstream stopped developement in 2013"; # Added 2025-09-10
   ncdu_2 = ncdu; # Added 2022-07-22
   neocities-cli = neocities; # Added 2024-07-31
   neocomp = throw "neocomp has been remove because it fails to build and was unmaintained upstream"; # Added 2025-04-28
