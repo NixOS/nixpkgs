@@ -1,0 +1,71 @@
+{
+    "release_date": "2025-09-04",
+    "release_label": "0.8.1",
+    "release_product": "cusparselt",
+    "libcusparse_lt": {
+        "name": "NVIDIA cuSPARSELt",
+        "license": "cuSPARSELt",
+        "license_path": "libcusparse_lt/LICENSE.txt",
+        "version": "0.8.1.1",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcusparse_lt/linux-x86_64/libcusparse_lt-linux-x86_64-0.8.1.1_cuda12-archive.tar.xz",
+                "sha256": "b34272e683e9f798435af05dc124657d1444cd0e13802c3d2f3152e31cd898a3",
+                "md5": "8e6d6454a2ac514c592f18fe7e77f84c",
+                "size": "311599728"
+            },
+            "cuda13": {
+                "relative_path": "libcusparse_lt/linux-x86_64/libcusparse_lt-linux-x86_64-0.8.1.1_cuda13-archive.tar.xz",
+                "sha256": "82dd3e5ebc199a27011f58857a80cd825e77bba634ab2286ba3d4e13115db89a",
+                "md5": "90e40a8bffe304d14578eb8f2173dee1",
+                "size": "317355908"
+            }
+        },
+        "cuda_variant": [
+            "12",
+            "13"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcusparse_lt/linux-sbsa/libcusparse_lt-linux-sbsa-0.8.1.1_cuda12-archive.tar.xz",
+                "sha256": "e87c2e1a8615aa588864915a05c42309869c96d4046b07a50a7a729af2c1ff22",
+                "md5": "504742ec72d48e75954d1a31e30aebcb",
+                "size": "310432728"
+            },
+            "cuda13": {
+                "relative_path": "libcusparse_lt/linux-sbsa/libcusparse_lt-linux-sbsa-0.8.1.1_cuda13-archive.tar.xz",
+                "sha256": "d3ce9fb25961540291c6dc6c7292a1ea7cb886590bf896fdc2564cb2a261a3de",
+                "md5": "032ce0fc1decdca18652ce3fcf05b14e",
+                "size": "425143780"
+            }
+        },
+        "windows-x86_64": {
+            "cuda12": {
+                "relative_path": "libcusparse_lt/windows-x86_64/libcusparse_lt-windows-x86_64-0.8.1.1_cuda12-archive.zip",
+                "sha256": "1a1a4be5c2da47e242d3fbab35b66077916aeb2b8175bc6a0a6691e11972951c",
+                "md5": "78f5c274b42ff56b1b74427d89372a14",
+                "size": "223735080"
+            },
+            "cuda13": {
+                "relative_path": "libcusparse_lt/windows-x86_64/libcusparse_lt-windows-x86_64-0.8.1.1_cuda13-archive.zip",
+                "sha256": "d83c3a9c34df98aa999e6a64278a36eb837b411af593d41fe74746a2915e379d",
+                "md5": "ece8942a85c1706547da6c11ed4e48b2",
+                "size": "156765306"
+            }
+        },
+        "linux-aarch64": {
+            "cuda12": {
+                "relative_path": "libcusparse_lt/linux-aarch64/libcusparse_lt-linux-aarch64-0.8.1.1_cuda12-archive.tar.xz",
+                "sha256": "5426a897c73a9b98a83c4e132d15abc63dc4a00f7e38266e7b82c42cd58a01e1",
+                "md5": "fffc61b32112a6c09046bfb3300c840f",
+                "size": "127531168"
+            },
+            "cuda13": {
+                "relative_path": "libcusparse_lt/linux-aarch64/libcusparse_lt-linux-aarch64-0.8.1.1_cuda13-archive.tar.xz",
+                "sha256": "0fcf5808f66c71f755b4a73af2e955292e4334fec6a851eea1ac2e20878602b7",
+                "md5": "eb6eb4a96f82ff42e0be38f8486fb5d7",
+                "size": "124707896"
+            }
+        }
+    }
+}
