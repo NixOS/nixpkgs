@@ -64,12 +64,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "iredis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
     changelog = "https://github.com/laixintao/iredis/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://iredis.xbin.io/";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "iredis";
   };
 }
