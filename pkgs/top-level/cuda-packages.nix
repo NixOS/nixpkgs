@@ -32,7 +32,7 @@ in
       cusparselt = "0.6.3";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
-      nvcomp = "4.2.0.11";
+      nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.8.1";
       nvpl = "25.1.1";
       nvtiff = "0.5.1";
@@ -51,7 +51,7 @@ in
       cusparselt = "0.8.1";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
-      nvcomp = "4.2.0.11";
+      nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.8.1";
       nvpl = "25.1.1";
       nvtiff = "0.5.1";
@@ -70,7 +70,7 @@ in
       cusparselt = "0.8.1";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
-      nvcomp = "4.2.0.11";
+      nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.8.1";
       nvpl = "25.1.1";
       nvtiff = "0.5.1";
@@ -89,7 +89,7 @@ in
       cusparselt = "0.8.1";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
-      nvcomp = "4.2.0.11";
+      nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.8.1";
       nvpl = "25.1.1";
       nvtiff = "0.5.1";
