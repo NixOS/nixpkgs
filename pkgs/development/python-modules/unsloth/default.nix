@@ -27,7 +27,29 @@
   hf-transfer,
   diffusers,
   torchvision,
+
+  # tests
+  cudaPackages,
+  python,
+  fetchFromGitHub,
+  stdenv,
 }:
+
+let
+  # Test files are absent from the PyPI package, so we fetch them separately.
+  testSrc = fetchFromGitHub {
+    owner = "unslothai";
+    repo = "unsloth";
+    rev = "cb78f0e83dc2d61fb1571b6e904eb2f064510d63";
+    hash = "sha256-0oR3m8jnjSdfjH+NslW6SsVj+0cQ4VUhKXZ38U/VBy0=";
+    # Keep only the tests directory, use the PyPI package for everything else.
+    postFetch = ''
+      mv $out/tests $TMPDIR/tests
+      rm -rf $out/*
+      mv $TMPDIR/tests $out/tests
+    '';
+  };
+in
 
 buildPythonPackage rec {
   pname = "unsloth";
@@ -78,12 +100,46 @@ buildPythonPackage rec {
     "torch"
   ];
 
+  # Provide C compiler at runtime for Triton JIT.
+  propagatedBuildInputs = [
+    stdenv.cc
+  ];
+
   # The source repository contains no test
   doCheck = false;
 
   # Importing requires a GPU, else the following error is raised:
   # NotImplementedError: Unsloth: No NVIDIA GPU found? Unsloth currently only supports GPUs!
   dontUsePythonImportsCheck = true;
+
+  passthru.tests = {
+    qlora-train-and-merge =
+      let
+        cudaPackages312 = cudaPackages.overrideScope (
+          final: prev: {
+            python3Packages = python.pkgs;
+          }
+        );
+      in
+      cudaPackages312.writeGpuTestPython
+        {
+          libraries = ps: [
+            ps.unsloth
+            ps.unsloth-zoo
+          ];
+        }
+        # Triton JIT requires a C compiler at runtime and imports files from the test directory.
+        ''
+          import os
+          os.environ["CC"] = "${stdenv.cc}/bin/gcc"
+          os.environ["CXX"] = "${stdenv.cc}/bin/g++"
+
+          import sys
+          sys.path.insert(0, "${testSrc}")
+
+          ${builtins.readFile "${testSrc}/tests/qlora/test_unsloth_qlora_train_and_merge.py"}
+        '';
+  };
 
   meta = {
     description = "Finetune Llama 3.3, DeepSeek-R1 & Reasoning LLMs 2x faster with 70% less memory";
