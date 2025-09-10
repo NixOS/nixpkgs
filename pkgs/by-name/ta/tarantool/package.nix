@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoreconfHook,
   cmake,
   zlib,
   openssl,
@@ -15,15 +16,23 @@
 
 stdenv.mkDerivation rec {
   pname = "tarantool";
-  version = "2.10.4";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "tarantool";
     repo = "tarantool";
     tag = version;
-    hash = "sha256-yCRU5IxC6gNS+O2KYtKWjFk35EHkBnnzWy5UnyuB9f4=";
+    hash = "sha256-NU+0R07Qrnew7+HeeJu6QnGfktEXFRxSZFwl48vjGZE=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    cat <<'EOF' > third_party/luajit/test/cmake/GetLinuxDistro.cmake
+    macro(GetLinuxDistro output)
+      set(''${output} linux)
+    endmacro()
+    EOF
+  '';
 
   buildInputs = [
     nghttp2
@@ -37,7 +46,18 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ gbenchmark ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    autoreconfHook
+    cmake
+  ];
+
+  preAutoreconf = ''
+    pushd third_party/libunwind
+  '';
+
+  postAutoreconf = ''
+    popd
+  '';
 
   cmakeBuildType = "RelWithDebInfo";
 
