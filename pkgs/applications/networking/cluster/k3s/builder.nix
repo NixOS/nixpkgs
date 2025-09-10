@@ -201,13 +201,9 @@ let
     sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
 
     # Let killall expect "containerd-shim" in the Nix store
-    to_replace="/data/\[\^/\]\*/bin/containerd-shim"
-    replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
-    changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
-    if [ -z "$changes" ]; then
-      echo "failed to replace \"$to_replace\" in k3s installer script (install.sh)"
-      exit 1
-    fi
+    substituteInPlace install.sh \
+      --replace-fail '/data/[^/]*/bin/containerd-shim' \
+        '/nix/store/.*k3s-containerd.*/bin/containerd-shim'
 
     remove_matching_line() {
       line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
