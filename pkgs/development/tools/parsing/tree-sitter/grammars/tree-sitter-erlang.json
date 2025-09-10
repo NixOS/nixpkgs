@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/WhatsApp/tree-sitter-erlang",
+  "rev": "5dba13dcd531c19bf99829e2e0bb31f2e08e16fe",
+  "date": "2023-06-16T04:39:42-07:00",
+  "path": "/nix/store/m6f3qpkrcvj9ccmybq55ip3x33f3wkh5-tree-sitter-erlang",
+  "sha256": "123n9yb3g8fh27104n5bsmqpykv9wiqqj6hwn5cxx4rp9ls06zql",
+  "hash": "sha256-FH8DNE03k95ZsRwaiXHkaU9/cdWrWALCEdChN5ZPdog=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

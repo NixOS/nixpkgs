@@ -1,0 +1,5 @@
+---
+type:       "job"
+name:       "nixos"
+interface:  "python"
+script:     "main.py"

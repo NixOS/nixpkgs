@@ -1,0 +1,129 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Mon, 19 Jun 2023 02:13:42 +0200
+Subject: [PATCH] Add some NixOS-specific unit directories
+
+Look in `/nix/var/nix/profiles/default/lib/systemd/{system,user}` for
+units provided by packages installed into the default profile via
+`nix-env -iA nixos.$package`.
+
+Also, remove /usr and /lib as these don't exist on NixOS.
+
+Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
+---
+ src/core/systemd.pc.in               |  8 ++++----
+ src/libsystemd/sd-path/path-lookup.c | 20 +++-----------------
+ 2 files changed, 7 insertions(+), 21 deletions(-)
+
+diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
+index f3b85b0190..f7aa5fca50 100644
+--- a/src/core/systemd.pc.in
++++ b/src/core/systemd.pc.in
+@@ -43,10 +43,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
+ systemd_user_conf_dir=${sysconfdir}/systemd/user
+ systemduserconfdir=${systemd_user_conf_dir}
+ 
+-systemd_system_unit_path=${systemd_system_conf_dir}:/etc/systemd/system:/run/systemd/system:/usr/local/lib/systemd/system:${systemd_system_unit_dir}:/usr/lib/systemd/system:/lib/systemd/system
++systemd_system_unit_path=${systemd_system_conf_dir}:/etc/systemd/system:/nix/var/nix/profiles/default/lib/systemd/system:/run/systemd/system:${systemd_system_unit_dir}
+ systemdsystemunitpath=${systemd_system_unit_path}
+ 
+-systemd_user_unit_path=${systemd_user_conf_dir}:/etc/systemd/user:/run/systemd/user:/usr/local/lib/systemd/user:/usr/local/share/systemd/user:${systemd_user_unit_dir}:/usr/lib/systemd/user:/usr/share/systemd/user
++systemd_user_unit_path=${systemd_user_conf_dir}:/etc/systemd/user:/nix/var/nix/profiles/default/lib/systemd/user:/run/systemd/user:${systemd_user_unit_dir}
+ systemduserunitpath=${systemd_user_unit_path}
+ 
+ systemd_system_generator_dir=${prefix}/lib/systemd/system-generators
+@@ -55,10 +55,10 @@ systemdsystemgeneratordir=${systemd_system_generator_dir}
+ systemd_user_generator_dir=${prefix}/lib/systemd/user-generators
+ systemdusergeneratordir=${systemd_user_generator_dir}
+ 
+-systemd_system_generator_path=/run/systemd/system-generators:/etc/systemd/system-generators:/usr/local/lib/systemd/system-generators:${systemd_system_generator_dir}
++systemd_system_generator_path=/run/systemd/system-generators:/etc/systemd/system-generators:${systemd_system_generator_dir}
+ systemdsystemgeneratorpath=${systemd_system_generator_path}
+ 
+-systemd_user_generator_path=/run/systemd/user-generators:/etc/systemd/user-generators:/usr/local/lib/systemd/user-generators:${systemd_user_generator_dir}
++systemd_user_generator_path=/run/systemd/user-generators:/etc/systemd/user-generators:${systemd_user_generator_dir}
+ systemdusergeneratorpath=${systemd_user_generator_path}
+ 
+ systemd_sleep_dir=${prefix}/lib/systemd/system-sleep
+diff --git a/src/libsystemd/sd-path/path-lookup.c b/src/libsystemd/sd-path/path-lookup.c
+index a3b09208cb..91a085c6bc 100644
+--- a/src/libsystemd/sd-path/path-lookup.c
++++ b/src/libsystemd/sd-path/path-lookup.c
+@@ -69,11 +69,7 @@ int runtime_directory(RuntimeScope scope, const char *suffix, char **ret) {
+ }
+ 
+ static const char* const user_data_unit_paths[] = {
+-        "/usr/local/lib/systemd/user",
+-        "/usr/local/share/systemd/user",
+         USER_DATA_UNIT_DIR,
+-        "/usr/lib/systemd/user",
+-        "/usr/share/systemd/user",
+         NULL
+ };
+ 
+@@ -481,16 +477,13 @@ int lookup_paths_init(
+                                        persistent_config,
+                                        SYSTEM_CONFIG_UNIT_DIR,
+                                        "/etc/systemd/system",
++                                       "/nix/var/nix/profiles/default/lib/systemd/system",
+                                        ASSERT_PTR(persistent_attached),
+                                        ASSERT_PTR(runtime_config),
+                                        "/run/systemd/system",
+                                        ASSERT_PTR(runtime_attached),
+                                        STRV_IFNOTNULL(generator),
+-                                       "/usr/local/lib/systemd/system",
+                                        SYSTEM_DATA_UNIT_DIR,
+-                                       "/usr/lib/systemd/system",
+-                                       /* To be used ONLY for images which might be legacy split-usr */
+-                                       FLAGS_SET(flags, LOOKUP_PATHS_SPLIT_USR) ? "/lib/systemd/system" : STRV_IGNORE,
+                                        STRV_IFNOTNULL(generator_late));
+                         break;
+ 
+@@ -508,13 +501,10 @@ int lookup_paths_init(
+                         add = strv_new(persistent_config,
+                                        USER_CONFIG_UNIT_DIR,
+                                        "/etc/systemd/user",
++                                       "/nix/var/nix/profiles/default/lib/systemd/user",
+                                        ASSERT_PTR(runtime_config),
+                                        "/run/systemd/user",
+-                                       "/usr/local/share/systemd/user",
+-                                       "/usr/share/systemd/user",
+-                                       "/usr/local/lib/systemd/user",
+-                                       USER_DATA_UNIT_DIR,
+-                                       "/usr/lib/systemd/user");
++                                       USER_DATA_UNIT_DIR);
+                         break;
+ 
+                 case RUNTIME_SCOPE_USER:
+@@ -653,7 +643,6 @@ void lookup_paths_log(LookupPaths *lp) {
+ static const char* const system_generator_paths[] = {
+         "/run/systemd/system-generators",
+         "/etc/systemd/system-generators",
+-        "/usr/local/lib/systemd/system-generators",
+         SYSTEM_GENERATOR_DIR,
+         NULL,
+ };
+@@ -661,7 +650,6 @@ static const char* const system_generator_paths[] = {
+ static const char* const user_generator_paths[] = {
+         "/run/systemd/user-generators",
+         "/etc/systemd/user-generators",
+-        "/usr/local/lib/systemd/user-generators",
+         USER_GENERATOR_DIR,
+         NULL,
+ };
+@@ -669,7 +657,6 @@ static const char* const user_generator_paths[] = {
+ static const char* const system_env_generator_paths[] = {
+         "/run/systemd/system-environment-generators",
+         "/etc/systemd/system-environment-generators",
+-        "/usr/local/lib/systemd/system-environment-generators",
+         SYSTEM_ENV_GENERATOR_DIR,
+         NULL,
+ };
+@@ -677,7 +664,6 @@ static const char* const system_env_generator_paths[] = {
+ static const char* const user_env_generator_paths[] = {
+         "/run/systemd/user-environment-generators",
+         "/etc/systemd/user-environment-generators",
+-        "/usr/local/lib/systemd/user-environment-generators",
+         USER_ENV_GENERATOR_DIR,
+         NULL,
+ };

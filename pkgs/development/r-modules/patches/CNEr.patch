@@ -1,0 +1,48 @@
+diff --git a/src/ucsc/common.c b/src/ucsc/common.c
+index a3fc893..e4198d3 100644
+--- a/src/ucsc/common.c
++++ b/src/ucsc/common.c
+@@ -341,7 +341,7 @@ if (count > 1)
+     }
+ }
+ 
+-void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem2), void (*free)())
++void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem2), void (*freeFunc)())
+ /* Return sorted list with duplicates removed.
+  * Compare should be same type of function as slSort's compare (taking
+  * pointers to pointers to elements.  Free should take a simple
+@@ -356,7 +356,7 @@ while ((el = slPopHead(&oldList)) != NULL)
+     {
+     if ((newList == NULL) || (compare(&newList, &el) != 0))
+         slAddHead(&newList, el);
+-    else if (free != NULL)
++    else if (freeFunc != NULL)
+         free(el);
+     }
+ slReverse(&newList);
+diff --git a/src/ucsc/hash.c b/src/ucsc/hash.c
+index 320b360..6ed9c70 100644
+--- a/src/ucsc/hash.c
++++ b/src/ucsc/hash.c
+@@ -611,7 +611,7 @@ if ((hash = *pHash) != NULL)
+     }
+ }
+ 
+-void hashFreeWithVals(struct hash **pHash, void (freeFunc)())
++void hashFreeWithVals(struct hash **pHash, void (*freeFunc)(void **))
+ /* Free up hash table and all values associated with it. freeFunc is a
+  * function to free an entry, should take a pointer to a pointer to an
+  * entry. */
+diff --git a/src/ucsc/hash.h b/src/ucsc/hash.h
+index a7fc017..0d06bb9 100644
+--- a/src/ucsc/hash.h
++++ b/src/ucsc/hash.h
+@@ -244,7 +244,7 @@ void freeHashAndVals(struct hash **pHash);
+ /* Free up hash table and all values associated with it.
+  * (Just calls freeMem on each hel->val) */
+ 
+-void hashFreeWithVals(struct hash **pHash, void (freeFunc)());
++void hashFreeWithVals(struct hash **pHash, void (*freeFunc)(void **));
+ /* Free up hash table and all values associated with it. freeFunc is a
+  * function to free an entry, should take a pointer to a pointer to an
+  * entry. */

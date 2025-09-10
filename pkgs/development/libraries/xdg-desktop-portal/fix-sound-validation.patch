@@ -1,0 +1,30 @@
+--- a/src/validate-sound.c
++++ b/src/validate-sound.c
+@@ -234,7 +234,7 @@ flatpak_get_bwrap (void)
+ static int
+ rerun_in_sandbox (int input_fd)
+ {
+-  const char * const usrmerged_dirs[] = { "bin", "lib32", "lib64", "lib", "sbin" };
++  const char * const usrmerged_dirs[] = { };
+   int i;
+   g_autoptr(GPtrArray) args = g_ptr_array_new_with_free_func (g_free);
+   char validate_sound[PATH_MAX + 1];
+@@ -255,8 +255,7 @@ rerun_in_sandbox (int input_fd)
+             "--tmpfs", "/tmp",
+             "--proc", "/proc",
+             "--dev", "/dev",
+-            "--ro-bind", "/usr", "/usr",
+-            "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
++            "--ro-bind", "@storeDir@", "@storeDir@",
+             "--ro-bind", validate_sound, validate_sound,
+             NULL);
+ 
+@@ -299,6 +298,8 @@ rerun_in_sandbox (int input_fd)
+   if (g_getenv ("G_MESSAGES_PREFIXED"))
+     add_args (args, "--setenv", "G_MESSAGES_PREFIXED", g_getenv ("G_MESSAGES_PREFIXED"), NULL);
+ 
++  if (g_getenv ("GST_PLUGIN_SYSTEM_PATH_1_0"))
++    add_args (args, "--setenv", "GST_PLUGIN_SYSTEM_PATH_1_0", g_getenv ("GST_PLUGIN_SYSTEM_PATH_1_0"), NULL);
+ 
+   arg_input_fd = g_strdup_printf ("%d", input_fd);
+   add_args (args, validate_sound, "--fd", arg_input_fd, NULL);

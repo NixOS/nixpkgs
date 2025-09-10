@@ -1,0 +1,122 @@
+From 229165abe5be596fc2be8e285884813a1b5a38c8 Mon Sep 17 00:00:00 2001
+From: oddlama <oddlama@oddlama.org>
+Date: Fri, 21 Mar 2025 16:08:15 +0100
+Subject: [PATCH 2/2] recover account
+
+---
+ server/core/src/actors/internal.rs |  5 +++--
+ server/core/src/admin.rs           |  6 +++---
+ server/daemon/src/main.rs          | 23 ++++++++++++++++++++++-
+ server/daemon/src/opt.rs           |  7 +++++++
+ 4 files changed, 35 insertions(+), 6 deletions(-)
+
+diff --git a/server/core/src/actors/internal.rs b/server/core/src/actors/internal.rs
+index 420e72c6c..e252bca51 100644
+--- a/server/core/src/actors/internal.rs
++++ b/server/core/src/actors/internal.rs
+@@ -172,17 +172,18 @@ impl QueryServerWriteV1 {
+ 
+     #[instrument(
+         level = "info",
+-        skip(self, eventid),
++        skip(self, password, eventid),
+         fields(uuid = ?eventid)
+     )]
+     pub(crate) async fn handle_admin_recover_account(
+         &self,
+         name: String,
++        password: Option<String>,
+         eventid: Uuid,
+     ) -> Result<String, OperationError> {
+         let ct = duration_from_epoch_now();
+         let mut idms_prox_write = self.idms.proxy_write(ct).await?;
+-        let pw = idms_prox_write.recover_account(name.as_str(), None)?;
++        let pw = idms_prox_write.recover_account(name.as_str(), password.as_deref())?;
+ 
+         idms_prox_write.commit().map(|()| pw)
+     }
+diff --git a/server/core/src/admin.rs b/server/core/src/admin.rs
+index 90ccb1927..85e31ddef 100644
+--- a/server/core/src/admin.rs
++++ b/server/core/src/admin.rs
+@@ -24,7 +24,7 @@ pub use kanidm_proto::internal::{
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+ pub enum AdminTaskRequest {
+-    RecoverAccount { name: String },
++    RecoverAccount { name: String, password: Option<String> },
+     DisableAccount { name: String },
+     ShowReplicationCertificate,
+     RenewReplicationCertificate,
+@@ -309,8 +309,8 @@ async fn handle_client(
+ 
+         let resp = async {
+             match req {
+-                AdminTaskRequest::RecoverAccount { name } => {
+-                    match server_rw.handle_admin_recover_account(name, eventid).await {
++                AdminTaskRequest::RecoverAccount { name, password } => {
++                    match server_rw.handle_admin_recover_account(name, password, eventid).await {
+                         Ok(password) => AdminTaskResponse::RecoverAccount { password },
+                         Err(e) => {
+                             error!(err = ?e, "error during recover-account");
+diff --git a/server/daemon/src/main.rs b/server/daemon/src/main.rs
+index c3b40faa0..2a57a307c 100644
+--- a/server/daemon/src/main.rs
++++ b/server/daemon/src/main.rs
+@@ -923,13 +923,34 @@ async fn kanidm_main(config: Configuration, opt: KanidmdParser) -> ExitCode {
+                 .await;
+             }
+         }
+-        KanidmdOpt::RecoverAccount { name, commonopts } => {
++        KanidmdOpt::RecoverAccount { name, from_environment, commonopts } => {
+             info!("Running account recovery ...");
+             let output_mode: ConsoleOutputMode = commonopts.output_mode.to_owned().into();
++            let password = if *from_environment {
++                match std::env::var("KANIDM_RECOVER_ACCOUNT_PASSWORD_FILE") {
++                    Ok(path) => match tokio::fs::read_to_string(&path).await {
++                        Ok(contents) => Some(contents),
++                        Err(e) => {
++                            error!("Failed to read password file '{}': {}", path, e);
++                            return ExitCode::FAILURE;
++                        }
++                    },
++                    Err(_) => match std::env::var("KANIDM_RECOVER_ACCOUNT_PASSWORD") {
++                        Ok(val) => Some(val),
++                        Err(_) => {
++                            error!("Neither KANIDM_RECOVER_ACCOUNT_PASSWORD_FILE nor KANIDM_RECOVER_ACCOUNT_PASSWORD was set");
++                            return ExitCode::FAILURE;
++                        }
++                    }
++                }
++            } else {
++                None
++            };
+             submit_admin_req(
+                 config.adminbindpath.as_str(),
+                 AdminTaskRequest::RecoverAccount {
+                     name: name.to_owned(),
++                    password,
+                 },
+                 output_mode,
+             )
+diff --git a/server/daemon/src/opt.rs b/server/daemon/src/opt.rs
+index f1b45a5b3..ca19fb6a5 100644
+--- a/server/daemon/src/opt.rs
++++ b/server/daemon/src/opt.rs
+@@ -236,6 +236,13 @@ enum KanidmdOpt {
+         #[clap(value_parser)]
+         /// The account name to recover credentials for.
+         name: String,
++        /// Use a password given via an environment variable.
++        /// - `KANIDM_RECOVER_ACCOUNT_PASSWORD_FILE` takes precedence and reads the desired
++        ///    password from the given file
++        /// - `KANIDM_RECOVER_ACCOUNT_PASSWORD` directly takes a
++        ///    password - beware that this will leave the password in the environment
++        #[clap(long = "from-environment")]
++        from_environment: bool,
+         #[clap(flatten)]
+         commonopts: CommonOpt,
+     },
+-- 
+2.49.0
+

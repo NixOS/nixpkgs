@@ -1,0 +1,40 @@
+Fortify catches a possible strcpy overcopy, throw more space at it
+
+--- a/src/server/contact.c	2010-05-24 14:51:41.000000000 +0200
++++ b/src/server/contact.c	2025-03-23 12:15:36.426805646 +0100
+@@ -58,11 +58,11 @@
+ 
+ struct queued_player {
+ 	struct queued_player *next;
+-	char real_name[MAX_CHARS];
+-	char nick_name[MAX_CHARS];
+-	char disp_name[MAX_CHARS];
+-	char host_name[MAX_CHARS];
+-	char host_addr[24];
++	char real_name[MAX_CHARS + 32];
++	char nick_name[MAX_CHARS + 32];
++	char disp_name[MAX_CHARS + 32];
++	char host_name[MAX_CHARS + 32];
++	char host_addr[1056];
+ 	int32_t port;
+ 	team_t *team;
+ 	uint32_t version;
+@@ -271,12 +271,12 @@
+ 	uint32_t my_magic;
+ 	uint16_t port;
+ 	char ch;
+-	char real_name[MAX_CHARS];
+-	char disp_name[MAX_CHARS];
+-	char nick_name[MAX_CHARS];
+-	char host_name[MAX_CHARS];
+-	char host_addr[24];
+-	char str[MSG_LEN];
++	char real_name[MAX_CHARS + 32 ];
++	char disp_name[MAX_CHARS + 32 ];
++	char nick_name[MAX_CHARS + 32 ];
++	char host_name[MAX_CHARS + 32 ];
++	char host_addr[1056];
++	char str[MSG_LEN + 32];
+ 
+ 	/*
+ 	 * Someone connected to us, now try and decipher the message :)

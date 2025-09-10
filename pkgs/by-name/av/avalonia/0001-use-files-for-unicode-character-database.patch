@@ -1,0 +1,136 @@
+From 8682dcc3fd46658a9d11b4370ca76881efc69c07 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sat, 10 Aug 2024 23:14:12 -0300
+Subject: [PATCH 1/2] use files for unicode character database
+
+---
+ .../BiDiClassTestDataGenerator.cs             |  1 -
+ .../TextFormatting/BiDiTestDataGenerator.cs   |  1 -
+ .../GraphemeBreakClassTrieGenerator.cs        |  1 -
+ .../GraphemeBreakTestDataGenerator.cs         |  1 -
+ .../LineBreakEnumeratorTests.cs               |  1 -
+ .../TextFormatting/UnicodeDataGenerator.cs    | 28 +++++++++++++++++--
+ .../TextFormatting/UnicodeEnumsGenerator.cs   |  1 -
+ 7 files changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs
+index d944a6cf5..9ddf500c1 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs
+@@ -3,7 +3,6 @@
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Linq;
+-using System.Net.Http;
+ using Avalonia.Base.UnitTests.Media.TextFormatting;
+ 
+ namespace Avalonia.Visuals.UnitTests.Media.TextFormatting
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs
+index bdaa8274e..e41f0b08e 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs
+@@ -3,7 +3,6 @@
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Linq;
+-using System.Net.Http;
+ using Avalonia.Base.UnitTests.Media.TextFormatting;
+ using Avalonia.Media.TextFormatting.Unicode;
+ 
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakClassTrieGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakClassTrieGenerator.cs
+index 1a8d41caa..185b6ea62 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakClassTrieGenerator.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakClassTrieGenerator.cs
+@@ -1,7 +1,6 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.IO;
+-using System.Net.Http;
+ using System.Text.RegularExpressions;
+ using Avalonia.Media.TextFormatting.Unicode;
+ 
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs
+index 891c70b7d..a04eb8b41 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs
+@@ -3,7 +3,6 @@
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Linq;
+-using System.Net.Http;
+ using System.Runtime.InteropServices;
+ using System.Text;
+ using Avalonia.Base.UnitTests.Media.TextFormatting;
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs
+index 38df949d1..cb050d5f4 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs
+@@ -3,7 +3,6 @@
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Linq;
+-using System.Net.Http;
+ using Avalonia.Media.TextFormatting.Unicode;
+ using Xunit;
+ using Xunit.Abstractions;
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs
+index 3a0255f56..557ff6ea8 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs
+@@ -1,15 +1,39 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.IO;
+-using System.Net.Http;
+ using System.Text.RegularExpressions;
++using System.Threading.Tasks;
+ using Avalonia.Media.TextFormatting.Unicode;
+ 
+ namespace Avalonia.Base.UnitTests.Media.TextFormatting
+ {
++    class HttpContent : IDisposable {
++        readonly string url;
++        public HttpContent(string url) => this.url = url;
++
++        public void Dispose() {}
++        public Task<Stream> ReadAsStreamAsync() =>
++            Task.FromResult<Stream>(File.OpenRead(url));
++    }
++
++    class HttpResponseMessage : IDisposable {
++        HttpContent content;
++        public HttpResponseMessage(string url) => Content = new(url);
++
++        public void Dispose() {}
++        public bool IsSuccessStatusCode => true;
++        public HttpContent Content { get; init; }
++    }
++
++    class HttpClient : IDisposable {
++        public void Dispose() {}
++        public Task<HttpResponseMessage> GetAsync(string url) =>
++            Task.FromResult<HttpResponseMessage>(new (url));
++    }
++
+     internal static class UnicodeDataGenerator
+     {
+-        public const string Ucd = "https://www.unicode.org/Public/16.0.0/ucd/";
++        public static readonly string Ucd = Environment.GetEnvironmentVariable("UNICODE_CHARACTER_DATABASE");
+ 
+         public static UnicodeTrie GenerateBiDiTrie(out BiDiDataEntries biDiDataEntries, out Dictionary<int, BiDiDataItem> biDiData)
+         {
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs
+index 74fe70978..b82808ffc 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs
+@@ -2,7 +2,6 @@
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Linq;
+-using System.Net.Http;
+ 
+ namespace Avalonia.Base.UnitTests.Media.TextFormatting
+ {
+-- 
+2.49.0
+

@@ -1,0 +1,11 @@
+--- a/src/aurorae.cpp
++++ b/src/aurorae.cpp
+@@ -201,7 +201,7 @@ void Helper::init()
+     // so let's try to locate our plugin:
+     QString pluginPath;
+     for (const QString &path : m_engine->importPathList()) {
+-        QDirIterator it(path, QDirIterator::Subdirectories);
++        QDirIterator it(path, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+         while (it.hasNext()) {
+             it.next();
+             QFileInfo fileInfo = it.fileInfo();

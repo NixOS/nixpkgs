@@ -1,0 +1,68 @@
+From 6df275df3b8694daf16302b407520e3b1dee6724 Mon Sep 17 00:00:00 2001
+From: Philip Hayes <philiphayes9@gmail.com>
+Date: Thu, 12 Sep 2024 13:23:00 -0700
+Subject: [PATCH] fix: cleanup xcode_backend.sh to fix iOS build w/
+ `NixOS/nixpkgs` flutter
+
+This patch cleans up `xcode_backend.sh`. It now effectively just runs
+`exec $FLUTTER_ROOT/bin/dart ./xcode_backend.dart`.
+
+The previous `xcode_backend.sh` tries to discover `$FLUTTER_ROOT` from
+argv[0], even though its presence is already guaranteed (the wrapped
+`xcode_backend.dart` also relies on this env).
+
+When using nixpkgs flutter, the flutter SDK directory is composed of several
+layers, joined together using symlinks (called a `symlinkJoin`). Without this
+patch, the auto-discover traverses the symlinks into the wrong layer, and so it
+uses an "unwrapped" `dart` command instead of a "wrapped" dart that sets some
+important envs/flags (like `$FLUTTER_ROOT`).
+
+Using the "unwrapped" dart then manifests in this error when compiling, since
+it doesn't see the ios build-support artifacts:
+
+```
+$ flutter run -d iphone
+Running Xcode build...
+Xcode build done.                                            6.4s
+Failed to build iOS app
+Error (Xcode): Target debug_unpack_ios failed: Error: Flutter failed to create a directory at "/<nix-store>/XXXX-flutter-3.24.1-unwrapped/bin/cache/artifacts".
+```
+---
+ packages/flutter_tools/bin/xcode_backend.sh | 25 ++++-----------------
+ 1 file changed, 4 insertions(+), 21 deletions(-)
+
+diff --git a/packages/flutter_tools/bin/xcode_backend.sh b/packages/flutter_tools/bin/xcode_backend.sh
+index 2889d7c8e4..48b9d06c6e 100755
+--- a/packages/flutter_tools/bin/xcode_backend.sh
++++ b/packages/flutter_tools/bin/xcode_backend.sh
+@@ -13,24 +13,7 @@
+ # exit on error, or usage of unset var
+ set -euo pipefail
+
+-# Needed because if it is set, cd may print the path it changed to.
+-unset CDPATH
+-
+-function follow_links() (
+-  cd -P "$(dirname -- "$1")"
+-  file="$PWD/$(basename -- "$1")"
+-  while [[ -h "$file" ]]; do
+-    cd -P "$(dirname -- "$file")"
+-    file="$(readlink -- "$file")"
+-    cd -P "$(dirname -- "$file")"
+-    file="$PWD/$(basename -- "$file")"
+-  done
+-  echo "$file"
+-)
+-
+-PROG_NAME="$(follow_links "${BASH_SOURCE[0]}")"
+-BIN_DIR="$(cd "${PROG_NAME%/*}" ; pwd -P)"
+-FLUTTER_ROOT="$BIN_DIR/../../.."
+-DART="$FLUTTER_ROOT/bin/dart"
+-
+-"$DART" "$BIN_DIR/xcode_backend.dart" "$@" "ios"
++# Run `dart ./xcode_backend.dart` with the dart from $FLUTTER_ROOT.
++dart="${FLUTTER_ROOT}/bin/dart"
++xcode_backend_dart="${BASH_SOURCE[0]%.sh}.dart"
++exec "${dart}" "${xcode_backend_dart}" "$@" "ios"
+-- 
+2.46.0

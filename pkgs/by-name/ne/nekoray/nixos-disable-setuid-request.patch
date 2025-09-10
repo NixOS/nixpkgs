@@ -1,0 +1,47 @@
+diff --git a/src/global/NekoGui.cpp b/src/global/NekoGui.cpp
+index 7943d7a..5bb20cc 100644
+--- a/src/global/NekoGui.cpp
++++ b/src/global/NekoGui.cpp
+@@ -355,6 +355,12 @@ namespace NekoGui {
+     // System Utils
+ 
+     QString FindNekoBoxCoreRealPath() {
++        // find in PATH first
++        QString path = QStandardPaths::findExecutable("nekobox_core");
++        if (!path.isEmpty()) {
++            return path;
++        }
++
+         auto fn = QApplication::applicationDirPath() + "/nekobox_core";
+         auto fi = QFileInfo(fn);
+         if (fi.isSymLink()) return fi.symLinkTarget();
+diff --git a/src/ui/mainwindow.cpp b/src/ui/mainwindow.cpp
+index 9aa46b2..ba7137a 100644
+--- a/src/ui/mainwindow.cpp
++++ b/src/ui/mainwindow.cpp
+@@ -125,8 +125,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
+     NekoGui::dataStore->core_port = MkPort();
+     if (NekoGui::dataStore->core_port <= 0) NekoGui::dataStore->core_port = 19810;
+ 
+-    auto core_path = QApplication::applicationDirPath() + "/";
+-    core_path += "nekobox_core";
++    auto core_path = NekoGui::FindNekoBoxCoreRealPath();
+ 
+     QStringList args;
+     args.push_back("nekobox");
+@@ -844,6 +843,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
+         return true;
+     }
+     if (NekoGui::IsAdmin()) return true;
++    QMessageBox::critical(
++        GetMessageBoxParent(),
++        tr("Unable to elevate privileges when installed with Nix"),
++        tr("Due to the read-only property of Nix store, we cannot set suid for nekobox_core. If you are using NixOS, please set `programs.nekoray.tunMode.enable` option to elevate privileges."),
++        QMessageBox::Ok
++    );
++    return false;
++    // The following code isn't effective, preserve to avoid merge conflict
++
+ #ifdef Q_OS_LINUX
+     if (!Linux_HavePkexec()) {
+         MessageBoxWarning(software_name, "Please install \"pkexec\" first.");

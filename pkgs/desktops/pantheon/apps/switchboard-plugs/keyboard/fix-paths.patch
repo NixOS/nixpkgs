@@ -1,0 +1,26 @@
+diff --git a/src/Behavior/Behavior.vala b/src/Behavior/Behavior.vala
+index bd461685..b6371096 100644
+--- a/src/Behavior/Behavior.vala
++++ b/src/Behavior/Behavior.vala
+@@ -252,7 +252,7 @@ public class Keyboard.Behaviour.Page : Gtk.Box {
+ 
+         onscreen_keyboard_settings.clicked.connect (() => {
+             try {
+-                var appinfo = GLib.AppInfo.create_from_commandline ("onboard-settings", null, NONE);
++                var appinfo = GLib.AppInfo.create_from_commandline ("@onboard@/bin/onboard-settings", null, NONE);
+                 appinfo.launch (null, null);
+             } catch (Error e) {
+                 critical ("Unable to launch onboard-settings: %s", e.message);
+diff --git a/src/Layout/Widgets/AddLayoutDialog.vala b/src/Layout/Widgets/AddLayoutDialog.vala
+index 25cc0fe9..b3e350bb 100644
+--- a/src/Layout/Widgets/AddLayoutDialog.vala
++++ b/src/Layout/Widgets/AddLayoutDialog.vala
+@@ -206,7 +206,7 @@ public class Keyboard.LayoutPage.AddLayoutDialog : Granite.Dialog {
+         });
+ 
+         keyboard_map_button.clicked.connect (() => {
+-            string command = "gkbd-keyboard-display \"--layout=" + layout_id + "\"";
++            string command = "@libgnomekbd@/bin/gkbd-keyboard-display \"--layout=" + layout_id + "\"";
+             try {
+                 AppInfo.create_from_commandline (command, null, AppInfoCreateFlags.NONE).launch (null, null);
+             } catch (Error e) {

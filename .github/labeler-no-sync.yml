@@ -1,0 +1,33 @@
+# This file is used by .github/workflows/labels.yml
+# This version uses `sync-labels: false`, meaning that a non-match will NOT remove the label
+
+# keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
+
+"6.topic: policy discussion":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - .github/**/*
+              - CONTRIBUTING.md
+              - pkgs/README.md
+              - nixos/README.md
+              - maintainers/README.md
+              - lib/README.md
+              - doc/README.md
+
+"8.has: documentation":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/**/*
+              - nixos/doc/**/*
+
+"backport release-25.05":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - .github/actions/*
+              - .github/workflows/*
+              - ci/**/*.*
+
+# keep-sorted end

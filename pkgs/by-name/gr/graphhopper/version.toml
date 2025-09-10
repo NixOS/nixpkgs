@@ -1,0 +1,8 @@
+major = "10.0"
+patch = "10.2"
+mapsBundle = "0.0.0-4718098d1db1798841a4d12f1727e8e8f7eab202"
+
+[hash]
+src = "sha256-E6G9JR1lrXhNJ4YgMM0n0RsQcMZQM2QldGc74f5FALo="
+mapsBundle = "sha256-jZTNJfmMWJQHpJ8um3yTBx/KtIfdr0EwKJ9kSFalWJQ="
+mvnDeps = "sha256-KidbIBnW//IiKPFy3plFWOED8gP/ZCg4buwMgzttaY8="
