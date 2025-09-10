@@ -16139,6 +16139,12 @@
     githubId = 1472826;
     name = "Max Smolin";
   };
+  maxmosk = {
+    email = "maximmosk4@gmail.com";
+    github = "maxmosk";
+    githubId = 89240935;
+    name = "Maxim Moskalets";
+  };
   maxstrid = {
     email = "mxwhenderson@gmail.com";
     github = "maxstrid";
