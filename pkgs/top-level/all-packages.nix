@@ -6454,12 +6454,14 @@ with pkgs;
     electron_35-bin
     electron_36-bin
     electron_37-bin
+    electron_38-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_35
     electron-chromedriver_36
     electron-chromedriver_37
+    electron-chromedriver_38
     ;
 
   electron_35 =
@@ -6477,6 +6479,11 @@ with pkgs;
       electron-source.electron_37
     else
       electron_37-bin;
+  electron_38 =
+    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_38 then
+      electron-source.electron_38
+    else
+      electron_38-bin;
   electron = electron_37;
   electron-bin = electron_37-bin;
   electron-chromedriver = electron-chromedriver_37;
@@ -12351,10 +12358,6 @@ with pkgs;
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
   rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
-  rofi-emoji-wayland =
-    (callPackage ../applications/misc/rofi-emoji {
-      rofi-unwrapped = rofi-wayland-unwrapped;
-    }).v4;
 
   rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
     waylandSupport = false;
@@ -12844,10 +12847,6 @@ with pkgs;
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
-  rofi-wayland-unwrapped = callPackage ../applications/misc/rofi/wayland.nix { };
-  rofi-wayland = callPackage ../applications/misc/rofi/wrapper.nix {
-    rofi-unwrapped = rofi-wayland-unwrapped;
-  };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
   rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {

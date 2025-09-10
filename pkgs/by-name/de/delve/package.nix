@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   stdenv,
 }:
 
-buildGo125Module rec {
+buildGoModule rec {
   pname = "delve";
   version = "1.25.1";
 
