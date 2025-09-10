@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # Workaround for upstream not using GNUInstallDirs.
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   meta = with lib; {
