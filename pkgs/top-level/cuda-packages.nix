@@ -26,7 +26,7 @@ in
   cudaPackages_12_6 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
       cuda = "12.6.3";
-      cudnn = "9.8.0";
+      cudnn = "9.13.0";
       cusparselt = "0.6.3";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
@@ -36,7 +36,7 @@ in
   cudaPackages_12_8 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
       cuda = "12.8.1";
-      cudnn = "9.8.0";
+      cudnn = "9.13.0";
       cusparselt = "0.7.1";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
@@ -46,7 +46,7 @@ in
   cudaPackages_12_9 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
       cuda = "12.9.1";
-      cudnn = "9.8.0";
+      cudnn = "9.13.0";
       cusparselt = "0.7.1";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
@@ -56,7 +56,7 @@ in
   cudaPackages_13_0 = callPackage ../development/cuda-modules {
     manifests = selectManifests {
       cuda = "13.0.1";
-      cudnn = "9.8.0";
+      cudnn = "9.13.0";
       cusparselt = "0.7.1";
       cutensor = "2.2.0";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
