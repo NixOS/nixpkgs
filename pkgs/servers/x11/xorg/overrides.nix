@@ -140,12 +140,6 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
-  libXtst = super.libXtst.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      pkgConfigModules = [ "xtst" ];
-    };
-  });
-
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
     preConfigure =
