@@ -11,6 +11,9 @@
 }:
 
 let
+  before = builtins.storePath beforeDir;
+  after = builtins.storePath afterDir;
+
   /*
     Computes the key difference between two attrs
 
@@ -64,15 +67,15 @@ let
     in
     builtins.fromJSON data;
 
-  beforeAttrs = getAttrs beforeDir;
-  afterAttrs = getAttrs afterDir;
+  beforeAttrs = getAttrs before;
+  afterAttrs = getAttrs after;
   diffAttrs = diff beforeAttrs afterAttrs;
   diffJson = writeText "diff.json" (builtins.toJSON diffAttrs);
 in
 runCommand "diff" { } ''
   mkdir -p $out/${evalSystem}
 
-  cp -r ${beforeDir} $out/before
-  cp -r ${afterDir} $out/after
+  cp -r ${before} $out/before
+  cp -r ${after} $out/after
   cp ${diffJson} $out/${evalSystem}/diff.json
 ''
