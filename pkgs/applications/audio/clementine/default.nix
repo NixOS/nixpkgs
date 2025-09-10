@@ -136,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multiplatform music player";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "clementine";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })
