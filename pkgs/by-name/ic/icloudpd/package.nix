@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "icloudpd";
     maintainers = with maintainers; [
       anpin
+      jnsgruk
     ];
   };
 }

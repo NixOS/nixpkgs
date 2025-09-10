@@ -8164,10 +8164,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "01wi1csw4kjmlxmd1igx5hj2wrwkslay1xamg4cv8l7imr27l3hv";
+      sha256 = "0vgsvdaglz1spx9gxrr6xh7qqhi4qd8jd06h2ihwxmazj9ajld6y";
       type = "gem";
     };
-    version = "1.18.1";
+    version = "1.18.0";
   };
   ruby-statistics = {
     groups = [

@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
   };
 })

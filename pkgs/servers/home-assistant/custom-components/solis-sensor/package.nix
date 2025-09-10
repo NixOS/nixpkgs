@@ -29,6 +29,6 @@ buildHomeAssistantComponent rec {
     changelog = "https://github.com/hultenvp/solis-sensor/releases/tag/v${version}";
     homepage = "https://github.com/hultenvp/solis-sensor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ jnsgruk ];
   };
 }

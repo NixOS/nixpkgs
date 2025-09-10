@@ -1737,7 +1737,7 @@ GEM
     ruby-magic (0.6.0)
       mini_portile2 (~> 2.8)
     ruby-progressbar (1.11.0)
-    ruby-saml (1.18.1)
+    ruby-saml (1.18.0)
       nokogiri (>= 1.13.10)
       rexml
     ruby-statistics (4.1.0)
