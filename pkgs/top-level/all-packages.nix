@@ -12077,7 +12077,6 @@ with pkgs;
     llvmPackages = llvmPackages_18;
   };
 
-  alkimia = kdePackages.callPackage ../development/libraries/alkimia { };
   kmymoney = kdePackages.callPackage ../applications/office/kmymoney { };
 
   kotatogram-desktop =
