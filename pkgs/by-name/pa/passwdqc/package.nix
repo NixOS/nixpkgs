@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     "DEVEL_LIBDIR=$(out)/lib"
     "INCLUDEDIR=$(out)/include"
     "LOCALEDIR=$(out)/share/locale"
-    "MANDIR=$(man)/man"
+    "MANDIR=$(man)/share/man"
     "PKGCONFIGDIR=$(out)/lib/pkgconfig"
     "SECUREDIR=$(out)/lib/security"
     "SECUREDIR_DARWIN=$(out)/lib/security"
