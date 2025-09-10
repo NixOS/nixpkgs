@@ -128,6 +128,8 @@ let
             && !stdenv.hostPlatform.isStatic
             # LTO breaks exception handling on x86-64-darwin.
             && stdenv.system != "x86_64-darwin"
+            # LTO breaks cross-compiling to ELFv1 powerpc64 (why? gold linker says "could not decompress section .debug_{str,line_str}")
+            && !((stdenv.buildPlatform.config != stdenv.hostPlatform.config) && stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1)
           )
           ''
             case "$mesonBuildType" in
@@ -156,6 +158,7 @@ let
       // lib.optionalAttrs (
         stdenv.isLinux
         && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
+        && !((stdenv.buildPlatform.config != stdenv.hostPlatform.config) && stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1)
         && !(stdenv.system == "loongarch64-linux")
         && !(stdenv.hostPlatform.useLLVM or false)
       ) { LDFLAGS = "-fuse-ld=gold"; };
