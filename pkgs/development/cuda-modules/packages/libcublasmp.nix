@@ -1,7 +1,6 @@
 {
   _cuda,
   buildRedist,
-  libcal,
   libcublas,
   nvshmem ? null, # TODO(@connorbaker): package this
 }:
@@ -19,7 +18,6 @@ buildRedist {
   # TODO: Looks like the minimum supported capability is 7.0 as of the latest:
   # https://docs.nvidia.com/cuda/cublasmp/getting_started/index.html
   buildInputs = [
-    libcal
     libcublas
   ];
 
