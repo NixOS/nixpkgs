@@ -79,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  propagatedBuildInputs = [
+    python3Packages.openimageio
+  ];
+
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/*.pc \
       --replace '=''${exec_prefix}//' '=/'
