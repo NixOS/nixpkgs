@@ -12077,8 +12077,6 @@ with pkgs;
     llvmPackages = llvmPackages_18;
   };
 
-  kmymoney = kdePackages.callPackage ../applications/office/kmymoney { };
-
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };
