@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
-    inherit stable testing baseName;
+    inherit stable testing;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
     inherit withNgspice withScripting withI18n;

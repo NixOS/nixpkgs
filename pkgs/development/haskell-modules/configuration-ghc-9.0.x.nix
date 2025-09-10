@@ -172,8 +172,6 @@ self: super: {
 
   retrie = dontCheck self.retrie_1_1_0_0;
 
-  apply-refact = self.apply-refact_0_9_3_0;
-
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 
