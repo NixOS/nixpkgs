@@ -7,18 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termbg";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "termbg";
-    rev = "v${version}";
-    hash = "sha256-KLWfdA7TArJqYoxIXQavaTNw/lmWQN9aeltxssIUEvk=";
+    tag = "v${version}";
+    hash = "sha256-JVRl0BCuU6duFcFZr3Rs8dgS+ikwCKe5/z3JgjAikiw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoLock.lockFile = ./Cargo.lock;
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
