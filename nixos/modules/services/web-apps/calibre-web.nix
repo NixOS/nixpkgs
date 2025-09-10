@@ -159,6 +159,7 @@ in
         description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        environment.CACHE_DIR = "/var/cache/calibre-web";
 
         serviceConfig = {
           Type = "simple";
@@ -181,7 +182,6 @@ in
 
           CacheDirectory = "calibre-web";
           CacheDirectoryMode = "0750";
-          environment.CACHE_DIR = "/var/cache/calibre-web";
         }
         // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
           StateDirectory = cfg.dataDir;
