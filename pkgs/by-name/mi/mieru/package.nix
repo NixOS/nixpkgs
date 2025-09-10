@@ -1,18 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "mieru";
-  version = "3.19.1";
+  version = "3.19.2";
 
   src = fetchFromGitHub {
     owner = "enfein";
     repo = "mieru";
     rev = "v${version}";
-    hash = "sha256-x8rddxjhmHw7J7majt4qdkXRPsfm8SATFsMxN2stN14=";
+    hash = "sha256-s5e1P9dixcvbCFqNF/dztX93sh63Wiwa052VQ3XVHI4=";
   };
 
   vendorHash = "sha256-pKcdvP38fZ2KFYNDx6I4TfmnnvWKzFDvz80xMkUojqM=";
@@ -22,6 +23,9 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  # `__darwinAllowLocalNetworking` doesn't help
+  doCkeck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Socks5 / HTTP / HTTPS proxy to bypass censorship";
