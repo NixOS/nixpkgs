@@ -411,8 +411,6 @@ self: super:
     };
   });
 
-  xeyes = addMainProgram super.xeyes { };
-
   xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
     configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
     meta = attrs.meta // {
