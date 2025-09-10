@@ -26909,12 +26909,6 @@
     githubId = 223833;
     name = "Klaas van Schelven";
   };
-  vanzef = {
-    email = "vanzef@gmail.com";
-    github = "vanzef";
-    githubId = 12428837;
-    name = "Ivan Solyankin";
-  };
   varunpatro = {
     email = "varun.kumar.patro@gmail.com";
     github = "varunpatro";
