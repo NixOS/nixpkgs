@@ -3607,9 +3607,6 @@ assertNoAdditions {
   };
 
   uv-nvim = super.uv-nvim.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
     runtimeDeps = [ uv ];
   };
 
