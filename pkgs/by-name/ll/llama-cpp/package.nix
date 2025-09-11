@@ -195,6 +195,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "llama";
     maintainers = with lib.maintainers; [
+      booxter
       dit7ya
       philiptaron
       xddxdd
