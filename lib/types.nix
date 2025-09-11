@@ -1052,6 +1052,22 @@ let
           };
         };
 
+      # A value produced by `lib.ron.mkMap`
+      ronMap = mkOptionType {
+        name = "ronMap";
+        description = "RON map";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-map";
+        emptyValue.value = {
+          _type = "ron-map";
+          value = [ ];
+        };
+        merge = _loc: defs: {
+          _type = "ron-map";
+          value = concatLists (map (def: def.value.value) defs);
+        };
+      };
+
       uniq = unique { message = ""; };
 
       unique =
