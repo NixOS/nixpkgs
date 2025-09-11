@@ -11,8 +11,13 @@
 }:
 
 let
-  before = builtins.storePath beforeDir;
-  after = builtins.storePath afterDir;
+  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
+  # nix store paths around. These need to be turned into (fake) derivations again to track
+  # dependencies properly.
+  # We use two steps for evaluation, because we compare results from two different checkouts.
+  # CI additionalls spreads evaluation across multiple workers.
+  before = if lib.isDerivation beforeDir then beforeDir else lib.toDerivation beforeDir;
+  after = if lib.isDerivation afterDir then afterDir else lib.toDerivation afterDir;
 
   /*
     Computes the key difference between two attrs
