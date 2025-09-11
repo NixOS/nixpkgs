@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   dependencies = [
     docling
-    (docling-jobkit.override { inherit withTesserocr withRapidocr; })
+    docling-jobkit
     docling-mcp
     fastapi
     httpx
