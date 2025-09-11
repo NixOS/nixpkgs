@@ -526,19 +526,6 @@ index 9c5bc63272..539d3ad10b 100644
              $ENV{GTKMM_BASEPATH}/lib
              [HKEY_CURRENT_USER\\SOFTWARE\\gtkmm\\2.4;Path]/lib
              [HKEY_LOCAL_MACHINE\\SOFTWARE\\gtkmm\\2.4;Path]/lib
-diff --git a/Modules/FindGnuplot.cmake b/Modules/FindGnuplot.cmake
-index abbb681551..af1afa032f 100644
---- a/Modules/FindGnuplot.cmake
-+++ b/Modules/FindGnuplot.cmake
-@@ -53,7 +53,7 @@
-   wgnupl32
-   PATHS
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- 
- if (GNUPLOT_EXECUTABLE)
 diff --git a/Modules/FindIce.cmake b/Modules/FindIce.cmake
 index 82156747d3..6ce5d9db47 100644
 --- a/Modules/FindIce.cmake
@@ -1196,19 +1183,6 @@ index c6ca07b1d8..385622e453 100644
      DOC ${_doc}
      )
  endif()
-diff --git a/Modules/FindPerl.cmake b/Modules/FindPerl.cmake
-index 06a2e62d18..daf37e66c1 100644
---- a/Modules/FindPerl.cmake
-+++ b/Modules/FindPerl.cmake
-@@ -43,7 +43,7 @@
- 
- set(PERL_POSSIBLE_BIN_PATHS
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
-   )
- 
- if(WIN32)
 diff --git a/Modules/FindPerlLibs.cmake b/Modules/FindPerlLibs.cmake
 index 330700e183..53f793ccfd 100644
 --- a/Modules/FindPerlLibs.cmake
@@ -1558,97 +1532,6 @@ index 954303f3d3..ea5b262290 100644
            PATH_SUFFIXES lib
            )
          if(OGG_LIBRARY)
-diff --git a/Modules/FindSelfPackers.cmake b/Modules/FindSelfPackers.cmake
-index dd50ba4697..18bb8e6c00 100644
---- a/Modules/FindSelfPackers.cmake
-+++ b/Modules/FindSelfPackers.cmake
-@@ -44,13 +44,13 @@
- find_program(SELF_PACKER_FOR_EXECUTABLE
-   upx
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- 
- find_program(SELF_PACKER_FOR_SHARED_LIB
-   upx
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- 
- mark_as_advanced(
-diff --git a/Modules/FindUnixCommands.cmake b/Modules/FindUnixCommands.cmake
-index 12f1169c4f..e08646d0c2 100644
---- a/Modules/FindUnixCommands.cmake
-+++ b/Modules/FindUnixCommands.cmake
-@@ -22,7 +22,7 @@
- find_program(BASH
-   bash
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- mark_as_advanced(
-   BASH
-@@ -31,7 +31,7 @@
- find_program(CP
-   cp
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- mark_as_advanced(
-   CP
-@@ -40,7 +40,7 @@
- find_program(GZIP
-   gzip
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- mark_as_advanced(
-   GZIP
-@@ -49,7 +49,7 @@
- find_program(MV
-   mv
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- mark_as_advanced(
-   MV
-@@ -58,7 +58,7 @@
- find_program(RM
-   rm
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- mark_as_advanced(
-   RM
-@@ -70,7 +70,7 @@
-   gtar
-   PATH
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- mark_as_advanced(
-   TAR
-diff --git a/Modules/FindWget.cmake b/Modules/FindWget.cmake
-index ef63d1eb32..a32b1e0d8e 100644
---- a/Modules/FindWget.cmake
-+++ b/Modules/FindWget.cmake
-@@ -49,7 +49,7 @@
- find_program(WGET_EXECUTABLE
-   wget
-   ${CYGWIN_INSTALL_PATH}/bin
--  ${MSYS_INSTALL_PATH}/usr/bin
-+  ${MSYS_INSTALL_PATH}/var/empty/bin
- )
- 
- include(FindPackageHandleStandardArgs)
 diff --git a/Modules/FindX11.cmake b/Modules/FindX11.cmake
 index b2f23bd1dd..5e21d9c15a 100644
 --- a/Modules/FindX11.cmake
