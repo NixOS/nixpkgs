@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastchess";
-  version = "1.4.0-alpha";
+  version = "1.5.0-alpha";
 
   src = fetchFromGitHub {
     owner = "Disservin";
