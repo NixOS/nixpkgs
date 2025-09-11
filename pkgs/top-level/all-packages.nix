@@ -1892,8 +1892,6 @@ with pkgs;
       '';
     });
 
-  candle = libsForQt5.callPackage ../applications/misc/candle { };
-
   capstone = callPackage ../development/libraries/capstone { };
   capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
