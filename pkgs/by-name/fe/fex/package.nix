@@ -10,6 +10,7 @@
   nix-update-script,
   xxHash,
   fmt,
+  range-v3,
   nasm,
   buildEnv,
   writeText,
@@ -90,14 +91,14 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2508.1";
+  version = "2509";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-yWUZF/Chgi9bd5gF9qU1jiiIvHOHBUw7tLWxyNUZy9g=";
+    hash = "sha256-Dq87cx7tv+HJvpy57L8dcApE+3E8VEyyTYKhDyoUfVU=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -175,6 +176,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xxHash
     fmt
+    range-v3
     pkgsCross64.buildPackages.clang
     pkgsCross32.buildPackages.clang
     libclang

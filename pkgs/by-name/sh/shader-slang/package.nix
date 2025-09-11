@@ -10,6 +10,7 @@
   libxml2,
   libX11,
   glslang,
+  unordered_dense,
   llvmPackages_14,
   versionCheckHook,
   gitUpdater,
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     miniz
     lz4
     libxml2
+    unordered_dense
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
@@ -109,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
     "-DSLANG_USE_SYSTEM_MINIZ=ON"
     "-DSLANG_USE_SYSTEM_LZ4=ON"
+    (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
     "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
     # slang-rhi tries to download headers and precompiled binaries for these backends
     "-DSLANG_RHI_ENABLE_OPTIX=OFF"

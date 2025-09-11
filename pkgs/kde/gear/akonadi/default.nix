@@ -1,7 +1,6 @@
 {
   lib,
   mkKdeDerivation,
-  fetchpatch,
   qttools,
   accounts-qt,
   kaccounts-integration,
@@ -25,13 +24,6 @@ mkKdeDerivation {
   patches = [
     # Always regenerate MySQL config, as the store paths don't have accurate timestamps
     ./ignore-mysql-config-timestamp.patch
-
-    # Backport fix for Merkuro account settings not opening
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://invent.kde.org/pim/akonadi/-/commit/8a2dfd13b3c4730636a962121368d49c57f79273.patch";
-      hash = "sha256-r3jQUxbKvZbpKWg6SUQTyFpos7aLC5cNoByl22vpaR8=";
-    })
   ];
 
   extraCmakeFlags = [
