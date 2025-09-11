@@ -73,7 +73,7 @@ buildPythonPackage {
   checkPhase = ''
     runHook preCheck
     xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
-      python -m unittest test.test_tkinter
+      python -m unittest test.test_tcl test.test_tkinter test.test_ttk test.test_ttk_textonly
 
     runHook postCheck
   '';
