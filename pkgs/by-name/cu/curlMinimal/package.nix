@@ -103,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
   };
 
+  patches = [
+    ./CVE-2025-9086.patch
+    ./CVE-2025-10148.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
