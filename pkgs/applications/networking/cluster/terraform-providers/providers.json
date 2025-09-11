@@ -768,13 +768,13 @@
     "vendorHash": "sha256-fP6brpY/wRI1Yjgapzi+FfOci65gxWeOZulXbGdilrE="
   },
   "linode": {
-    "hash": "sha256-zqMknrd8W49RijEVn1TlsV3PT1KGmtdAZUE+Gj8AI5g=",
+    "hash": "sha256-CSxYyKDHYCAZyVQaPabQ/qks4aEIxN/Oc109luEcaXc=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v3.1.1",
+    "rev": "v3.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ormU5oDUFb0FQK2L6NDGD/GRy4XXuoFTnq6VKSDVtSw="
+    "vendorHash": "sha256-nRJmUQW9vCmqnVgsw4JGozLbxkVVDYUa0Hot5mA4vaM="
   },
   "linuxbox": {
     "hash": "sha256-svQRz1/PdVLpHoxOam1sfRTwHqgqs4ohJQs3IPMMAM4=",
@@ -885,13 +885,13 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-4l7q9umrbic4lOKMtTWwBDRHMJUlVyrl5un7KAYYiAM=",
+    "hash": "sha256-Lmt3ZIrFW/NPLlWlOlXH/sxh4CpBPAJfsJOjjQy9uZA=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.66.0",
+    "rev": "v3.68.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-+ogtadT0zekeaynXQCwDBrD+bBnKUsyzLGPQyLsCSR8="
+    "vendorHash": "sha256-7eRDz/MAKYnUsBAJOSssqzdSfsRSboQX4E/8qBjnGDk="
   },
   "nexus": {
     "hash": "sha256-Lm5CZ+eBDUNIL2KuK/iKc5dTif7P+E9II714vwvYuyU=",

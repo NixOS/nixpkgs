@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "9.5.4";
+  version = "9.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${version}";
-    hash = "sha256-iqa2OviyAfpKDM6ghfo5FcCqEacY7vxSra2ePPvm2D0=";
+    hash = "sha256-Pwl6fCEBj+eUXYEf4wCTw1fpKZh3j4IVC6SW0Vqcmf4=";
   };
 
   build-system = [ setuptools ];
