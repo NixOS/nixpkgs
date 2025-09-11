@@ -6303,6 +6303,8 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
+  glog = ng-log;
+
   ansible = ansible_2_19;
   ansible_2_19 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_18 = python3Packages.toPythonApplication (

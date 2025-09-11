@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   boost,
-  glog,
+  glog_0_7,
   leveldb,
   marisa,
   opencc,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    glog
+    glog_0_7
     leveldb
     marisa
     opencc

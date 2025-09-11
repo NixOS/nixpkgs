@@ -11,7 +11,7 @@
   gbenchmark,
   gtest,
   protobuf,
-  glog,
+  glog_0_7,
   nlohmann_json,
   zlib,
   openssl,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     bubblewrap
     fuse3
     gbenchmark
-    glog
+    glog_0_7
     grpc
     gtest
     libuuid

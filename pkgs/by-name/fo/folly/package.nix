@@ -12,7 +12,7 @@
   double-conversion,
   fast-float,
   gflags,
-  glog,
+  glog_0_7,
   libevent,
   zlib,
   openssl,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     double-conversion
     fast-float
     gflags
-    glog
+    glog_0_7
     libevent
     zlib
     openssl
