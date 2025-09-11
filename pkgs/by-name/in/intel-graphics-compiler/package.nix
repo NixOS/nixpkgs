@@ -8,7 +8,8 @@
   bison,
   flex,
   intel-compute-runtime,
-  llvmPackages_15,
+  #llvmPackages_15,
+  llvmPackages,
   opencl-clang,
   python3,
   spirv-tools,
@@ -26,8 +27,10 @@ let
     hash = "sha256-7coQegLcgIKiqnonZmgrKlw6FCB3ltSh6oMMvdopeQc=";
   };
 
-  inherit (llvmPackages_15) lld llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPackages_15) clang libclang;
+  #inherit (llvmPackages_15) lld llvm;
+  #inherit (if buildWithPatches then opencl-clang else llvmPackages_15) clang libclang;
+  inherit (llvmPackages) lld llvm;
+  inherit (if buildWithPatches then opencl-clang else llvmPackages) clang libclang;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
 
   # Handholding the braindead build script
@@ -106,5 +109,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    # Needs `llvmPackages_15` dependency resolving; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/pull/440272>
+    # * <https://github.com/NixOS/nixpkgs/pull/440534>
+    broken = true;
   };
 }
