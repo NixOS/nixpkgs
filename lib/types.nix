@@ -1026,6 +1026,32 @@ let
         merge = mergeEqualOption;
       };
 
+      # A value produced by `lib.ron.mkEnum`
+      ronEnum =
+        variants:
+        assert lib.assertMsg (builtins.all isString variants) "All variants in the enum must be strings.";
+        mkOptionType {
+          name = "ronEnum";
+          description =
+            let
+              show = v: ''"${v}"'';
+            in
+            if variants == [ ] then
+              "impossible (empty RON enum)"
+            else if length variants == 1 then
+              "RON enum variant ${show (head variants)} (singular RON enum)"
+            else
+              "one of the following RON enum variants: ${concatMapStringsSep ", " show variants}";
+          descriptionClass = if length variants < 2 then "noun" else "conjunction";
+          check = x: x._type or null == "ron-enum" && builtins.elem x.variant variants;
+          merge = mergeEqualOption;
+          functor = defaultFunctor "ronEnum" // {
+            payload = { inherit variants; };
+            type = payload: types.ronEnum payload.variants;
+            binOp = a: b: { variants = unique (a.variants + b.variants); };
+          };
+        };
+
       uniq = unique { message = ""; };
 
       unique =
