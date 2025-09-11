@@ -6,7 +6,7 @@
 }:
 let
   version = "2.8.3";
-  versionSuffix = "-master";
+  versionSuffix = "-unstable-2025-05-27";
 in
 python3Packages.buildPythonApplication {
   pname = "grott";
