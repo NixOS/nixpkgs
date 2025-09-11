@@ -67,9 +67,7 @@ let
     ];
 
     cmakeFlags = [
-      "-D CMAKE_BUILD_TYPE=Release"
       "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-      "-G Ninja"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
       (lib.cmakeFeature "PROJECT_ARCH" "arm64")
@@ -89,19 +87,17 @@ let
       cp ../icon/256.png $out/share/icons/hicolor/256x256/apps/${finalAttrs.pname}.png
     '';
 
-    desktopItems = [
-      (makeDesktopItem {
-        type = "Application";
-        terminal = false;
-        name = "Bolt";
-        desktopName = "Bolt Launcher";
-        genericName = finalAttrs.pname;
-        comment = "An alternative launcher for RuneScape";
-        exec = "bolt-launcher";
-        icon = "bolt-launcher";
-        categories = [ "Game" ];
-      })
-    ];
+    desktopItem = makeDesktopItem {
+      type = "Application";
+      terminal = false;
+      name = "Bolt";
+      desktopName = "Bolt Launcher";
+      genericName = finalAttrs.pname;
+      comment = "An alternative launcher for RuneScape";
+      exec = "bolt-launcher";
+      icon = "bolt-launcher";
+      categories = [ "Game" ];
+    };
   });
 in
 buildFHSEnv {
@@ -159,6 +155,6 @@ buildFHSEnv {
       iedame
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "bolt-launcher";
   };
 }
