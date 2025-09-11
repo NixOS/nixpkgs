@@ -14,6 +14,10 @@ stdenv.mkDerivation {
   version = "1.2.72.438";
 
   src =
+    # WARNING: This Wayback Machine URL redirects to the closest timestamp.
+    # Future maintainers must manually check the timestamp exists and exactly matches at:
+    # https://web.archive.org/web/*/https://download.scdn.co/SpotifyARM64.dmg
+    # https://web.archive.org/web/*/https://download.scdn.co/Spotify.dmg
     if stdenv.hostPlatform.isAarch64 then
       (fetchurl {
         url = "https://web.archive.org/web/20250912003756/https://download.scdn.co/SpotifyARM64.dmg";
