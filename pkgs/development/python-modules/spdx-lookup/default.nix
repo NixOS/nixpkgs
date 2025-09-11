@@ -35,6 +35,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/bbqsrc/spdx-lookup-python";
     changelog = "https://github.com/bbqsrc/spdx-lookup-python/releases/tag/v${version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
   };
 }

@@ -27,6 +27,8 @@
   vulkan-headers,
   vulkan-loader,
   shaderc,
+  protobuf,
+  libzip,
 
   testers,
   warzone2100,
@@ -47,11 +49,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "4.5.5";
+  version = "4.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-B/YbrnIWh+3rYtpId+hQMKA6BTpZPWRRlPxld44EgP8=";
+    hash = "sha256-kL8dfXN6ku6778Yu3M969ZMGSU5sQm6mp1k+MQKSk48=";
   };
 
   buildInputs = [
@@ -69,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     harfbuzz
     sqlite
+    protobuf
+    libzip
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     vulkan-headers

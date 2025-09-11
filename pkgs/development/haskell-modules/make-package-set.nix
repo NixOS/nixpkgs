@@ -734,6 +734,6 @@ package-set { inherit pkgs lib callPackage; } self
   */
   forceLlvmCodegenBackend = overrideCabal (drv: {
     configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
-    buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    buildTools = drv.buildTools or [ ] ++ [ self.ghc.llvmPackages.llvm ];
   });
 }

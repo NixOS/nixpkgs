@@ -11405,10 +11405,10 @@ with pkgs;
     emacs30-nox
     emacs30-pgtk
 
-    emacs29-macport
+    emacs30-macport
     ;
 
-  emacs-macport = emacs29-macport;
+  emacs-macport = emacs30-macport;
   emacs = emacs30;
   emacs-gtk = emacs30-gtk3;
   emacs-nox = emacs30-nox;
@@ -11632,18 +11632,6 @@ with pkgs;
     ];
   };
 
-  floorp-unwrapped = import ../applications/networking/browsers/floorp {
-    inherit
-      stdenv
-      lib
-      fetchFromGitHub
-      buildMozillaMach
-      nixosTests
-      ;
-  };
-
-  floorp = wrapFirefox floorp-unwrapped { };
-
   formiko =
     with python3Packages;
     callPackage ../applications/editors/formiko {
@@ -11734,11 +11722,11 @@ with pkgs;
 
   manim = python3Packages.toPythonApplication python3Packages.manim;
 
-  manim-slides = python3Packages.toPythonApplication (
-    python3Packages.manim-slides.override {
-      withGui = true;
-    }
-  );
+  manim-slides =
+    (python3Packages.toPythonApplication python3Packages.manim-slides).overridePythonAttrs
+      (oldAttrs: {
+        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.pyqt6-full;
+      });
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
@@ -12076,9 +12064,6 @@ with pkgs;
   klee = callPackage ../applications/science/logic/klee {
     llvmPackages = llvmPackages_18;
   };
-
-  alkimia = kdePackages.callPackage ../development/libraries/alkimia { };
-  kmymoney = kdePackages.callPackage ../applications/office/kmymoney { };
 
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop

@@ -53,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # minimal replacement for systemd notification library
     "--with-libsystemd"
+
+    # monitor kernel events, like ac power status
+    "--with-keventd"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
