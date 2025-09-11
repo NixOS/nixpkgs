@@ -9,7 +9,7 @@
   gnused,
   installShellFiles,
   iproute2,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   systemd,
   udevCheckHook,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     udevCheckHook
   ];
 
