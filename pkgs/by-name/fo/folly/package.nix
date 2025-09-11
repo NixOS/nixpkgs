@@ -26,6 +26,8 @@
   fmt,
   jemalloc,
 
+  ctestCheckHook,
+
   gtest,
 
   follyMobile ? false,
@@ -87,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   checkInputs = [
     gtest
   ];
@@ -121,6 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
     || stdenv.hostPlatform.isPower64
     || stdenv.hostPlatform.isRiscV64;
 
+  dontUseNinjaCheck = true;
+
   patches = [
     # The base template for std::char_traits has been removed in LLVM 19
     # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
@@ -145,49 +153,36 @@ stdenv.mkDerivation (finalAttrs: {
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
-  # TODO: Figure out why `GTEST_FILTER` doesn’t work to skip these.
-  checkPhase = ''
-    runHook preCheck
+  disabledtests = [
+    "concurrency_concurrent_hash_map_test.*/ConcurrentHashMapTest/*.StressTestReclamation"
+    "io_async_ssl_session_test.SSLSessionTest.BasicTest"
+    "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
+    "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
 
-    ctest -j $NIX_BUILD_CORES --output-on-failure --exclude-regex ${
-      lib.escapeShellArg (
-        lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") (
-          [
-            "concurrency_concurrent_hash_map_test.*/ConcurrentHashMapTest/*.StressTestReclamation"
-            "io_async_ssl_session_test.SSLSessionTest.BasicTest"
-            "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
-            "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
-
-            # very strict timing constraints, will fail under load
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DestroyTimeoutSet"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.FireOnce"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.GetTimeRemaining"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.IntrusivePtr"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.Level1"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.NegativeTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
-            "concurrency_cache_locality_test.CacheLocality.LinuxActual"
-            "futures_future_test.Future.NoThrow"
-            "futures_retrying_test.RetryingTest.largeRetries"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
-            "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
-            "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
-          ]
-        )
-      )
-    }
-
-    runHook postCheck
-  '';
+    # very strict timing constraints, will fail under load
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.DestroyTimeoutSet"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.FireOnce"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.GetTimeRemaining"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.IntrusivePtr"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.Level1"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.NegativeTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
+    "concurrency_cache_locality_test.CacheLocality.LinuxActual"
+    "futures_future_test.Future.NoThrow"
+    "futures_retrying_test.RetryingTest.largeRetries"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
+    "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
+    "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
+  ];
 
   passthru = {
     inherit boost fmt;
