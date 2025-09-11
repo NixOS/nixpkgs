@@ -113,7 +113,7 @@ rec {
       : Optional boolean indicating whether the option is for NixOS developers only.
 
       `visible`
-      : Optional boolean indicating whether the option shows up in the manual.
+      : Optional, whether the option and/or sub-options show up in the manual.
         Use false to hide the option and any sub-options from submodules.
         Use "shallow" to hide only sub-options.
         Default: true.
