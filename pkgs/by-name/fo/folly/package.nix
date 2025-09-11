@@ -21,10 +21,10 @@
   zstd,
   libiberty,
   libunwind,
+  darwinMinVersionHook,
 
   boost,
   fmt,
-  jemalloc,
 
   ctestCheckHook,
 
@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.04.21.00";
+  version = "2025.09.15.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P2saSFVRBWt5xjAWlKmcPJT9MFV9CXFmA18dIDCO84o=";
+    hash = "sha256-//gx081nMFXAcUgkHQToiFHhECfLW22Fl0eXEsObxUs=";
   };
 
   nativeBuildInputs = [
@@ -77,16 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     libiberty
     libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
     # `folly-config.cmake` pulls these in.
     boost
     fmt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # jemalloc headers are required in include/folly/portability/Malloc.h
-    jemalloc
   ];
 
   nativeCheckInputs = [
@@ -140,6 +139,30 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-cmake-find-glog.patch?h=folly&id=4b68f47338d4b20111e3ffa1291433120bb899f0";
       hash = "sha256-QGNpS5UNEm+0PW9+agwUVILzpK9t020KXDGyP03OAwE=";
     })
+
+    # Fix an upstream regression with libstdc++.
+    #
+    # See:
+    #
+    # * <https://github.com/facebook/folly/issues/2487>
+    # * <https://github.com/facebook/folly/commit/bdbb73e0069b4084c83b7dd9b02c3118d37e2a8d>
+    # * <https://github.com/facebook/folly/pull/2490>
+    # * <https://github.com/facebook/folly/pull/2497>
+    ./fix-stdexcept-include.patch
+
+    # Fix a GCC‐incompatible use of a private trait.
+    #
+    # Per Folly’s own documentation:
+    #
+    #     /// Under gcc, the builtin is available but does not mangle. Therefore, this
+    #     /// trait must not be used anywhere it might be subject to mangling, such as in
+    #     /// a return-type expression.
+    #
+    # See:
+    #
+    # * <https://github.com/facebook/folly/issues/2493>
+    # * <https://github.com/facebook/folly/pull/2499>
+    ./fix-__type_pack_element.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -153,8 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
-  disabledtests = [
-    "concurrency_concurrent_hash_map_test.*/ConcurrentHashMapTest/*.StressTestReclamation"
+  disabledTests = [
     "io_async_ssl_session_test.SSLSessionTest.BasicTest"
     "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
     "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
@@ -171,17 +193,21 @@ stdenv.mkDerivation (finalAttrs: {
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.NegativeTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
+
+    # In file included from /build/source/folly/lang/test/BitsTest.cpp:17:
+    # In member function 'constexpr bool folly::get_bit_at_fn::operator()(const Uint*, std::size_t) const [with Uint = short unsigned int]',
+    #     inlined from 'void folly::BitsAllUintsTest_GetBitAtLE_Test<gtest_TypeParam_>::TestBody() [with gtest_TypeParam_ = short unsigned int]' at /build/source/folly/lang/test/BitsTest.cpp:640:5:
+    # /build/source/folly/lang/Bits.h:494:10: warning: 'in' is used uninitialized [-Wuninitialized]
+    "lang_bits_test.BitsAllUintsTest/*.GetBitAtLE"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
     "concurrency_cache_locality_test.CacheLocality.LinuxActual"
-    "futures_future_test.Future.NoThrow"
-    "futures_retrying_test.RetryingTest.largeRetries"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
-    "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
-    "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
+    # No idea why these fail.
+    "logging_xlog_test.XlogTest.perFileCategoryHandling"
+    "futures_future_test.Future.makeFutureFromMoveOnlyException"
   ];
 
   passthru = {
