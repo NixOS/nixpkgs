@@ -37,7 +37,7 @@ in
         Specify the bypass parameters for Zapret binary.
         There are no universal parameters as they vary between different networks, so you'll have to find them yourself.
 
-        This can be done by running the `blockcheck` binary from zapret package, i.e. `nix-shell -p zapret --command blockcheck`.
+        This can be done by running the `blockcheck` binary from zapret package, i.e. `nix-shell -p iptables -p zapret --command blockcheck`.
         It'll try different params and then tell you which params are working for your network.
       '';
     };
