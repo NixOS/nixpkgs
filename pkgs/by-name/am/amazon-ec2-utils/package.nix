@@ -13,7 +13,7 @@
   python3,
   stdenv,
   udevCheckHook,
-  util-linux,
+  util-linuxMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           coreutils
           curl
-          util-linux
+          util-linuxMinimal
         ]
       }
 
