@@ -9983,19 +9983,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  neuron-nvim = buildVimPlugin {
-    pname = "neuron.nvim";
-    version = "2022-02-27";
-    src = fetchFromGitHub {
-      owner = "oberblastmeister";
-      repo = "neuron.nvim";
-      rev = "c44032ece3cb71a9ce45043d246828cd1cef002c";
-      sha256 = "0r8qybg1pikp49v9v0zh79q7fxx8kh8rwafvyqghf5yb0ixcjiis";
-    };
-    meta.homepage = "https://github.com/oberblastmeister/neuron.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   neuron-vim = buildVimPlugin {
     pname = "neuron.vim";
     version = "2023-07-06";

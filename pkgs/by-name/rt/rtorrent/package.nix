@@ -1,42 +1,39 @@
 {
-  lib,
-  stdenv,
   autoreconfHook,
   cppunit,
   curl,
   fetchFromGitHub,
   installShellFiles,
+  lib,
   libtool,
-  libtorrent,
+  libtorrent-rakshasa,
+  lua5_4_compat,
   ncurses,
+  nixosTests,
+  nix-update-script,
   openssl,
   pkg-config,
-  zlib,
-  nixosTests,
-  gitUpdater,
+  stdenv,
+  versionCheckHook,
   withLua ? false,
-  lua5_4_compat,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rakshasa-rtorrent";
-  version = "0.15.6";
+  pname = "rtorrent";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-B/5m1JXdUpczUMNN4cy5p6YurjmRFxMQHG3cQFSmZSs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+lpivm3MXbuJ4XYhK5OaASpqpDKcCdW7JCFjQYBYCSA=";
   };
 
   outputs = [
     "out"
     "man"
   ];
-
-  passthru = {
-    inherit libtorrent;
-  };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -48,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cppunit
     curl
     libtool
-    libtorrent
+    libtorrent-rakshasa
     ncurses
     openssl
     zlib
@@ -61,13 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLua [ "--with-lua" ];
 
-  passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
-    tests = {
-      inherit (nixosTests) rtorrent;
-    };
-  };
-
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -75,16 +65,26 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
+
+  passthru = {
+    inherit libtorrent-rakshasa;
+    tests = { inherit (nixosTests) rtorrent; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
+    homepage = "https://rakshasa.github.io/rtorrent/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "rtorrent";
     maintainers = with lib.maintainers; [
       ebzzry
       codyopel
       thiagokokada
     ];
     platforms = lib.platforms.unix;
-    mainProgram = "rtorrent";
   };
 })

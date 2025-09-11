@@ -8,23 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazyjj";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "lazyjj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BmME+LpYv3Ynpbo/k9pA5qcNmv7XLPXasPvHW4QalwY=";
+    hash = "sha256-xpRuXefP2agcZojvAUvODDOFJoEyTiMztJM3VNCeryA=";
   };
 
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail \
-        'version = "0.5.0"' \
-        'version = "0.6.0"'
-  '';
-
-  cargoHash = "sha256-bQNLhQAUw2JgThC+RiNC5ap8D6a4JgflV2whXKu7QF8=";
+  cargoHash = "sha256-LLbMR3FT5Ci7A9TlhRtU0rpMilXZXb4DH85/R776OQY=";
 
   nativeBuildInputs = [ makeWrapper ];
 
