@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gDBLnDBup5kyfwHZp1Sb2ygxd4kYJjHxtU9FEbQgbdY=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isCygwin [
+    ./cygwin-fix-symver.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''

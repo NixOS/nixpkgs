@@ -1,0 +1,42 @@
+From c3afeaaa5a715380caa7209d4596ff2b8aeb73a0 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Thu, 11 Sep 2025 16:58:06 -0300
+Subject: [PATCH] cygwin: fix symver
+
+---
+ lib/crypt-port.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/lib/crypt-port.h b/lib/crypt-port.h
+index a707939..25ad957 100644
+--- a/lib/crypt-port.h
++++ b/lib/crypt-port.h
+@@ -213,6 +213,7 @@ extern size_t strcpy_or_abort (void *dst, size_t d_size, const void *src);
+ 
+ /* Starting with GCC 10, we can use the symver attribute, which is also
+    needed at the point we decide to enable link-time optimization.  */
++#ifdef __ELF__
+ # if defined HAVE_FUNC_ATTRIBUTE_SYMVER
+ 
+ /* Set the symbol version for EXTNAME, which uses INTNAME as its
+@@ -234,10 +235,17 @@ extern size_t strcpy_or_abort (void *dst, size_t d_size, const void *src);
+ 
+ # endif
+ 
++#else
++#define symver_set(...) symver_nop()
++#endif
++
+ #else
+ # error "Don't know how to do symbol versioning with this compiler"
+ #endif
+ 
++
++
++
+ /* A construct with the same syntactic role as the expansion of symver_set,
+    but which does nothing.  */
+ #define symver_nop() __asm__ ("")
+-- 
+2.50.1
+
