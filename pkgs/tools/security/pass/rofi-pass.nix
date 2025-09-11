@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   unstableGitUpdater,
   coreutils,
-  util-linux,
+  util-linuxMinimal,
   gnugrep,
   libnotify,
   pwgen,
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
       libnotify
       pwgen
       rofi
-      util-linux
+      util-linuxMinimal
     ]
     ++ lib.optionals (backend == "x11") [
       (pass.withExtensions (ext: [ ext.pass-otp ]))
