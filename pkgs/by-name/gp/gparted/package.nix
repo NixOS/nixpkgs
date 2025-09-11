@@ -5,7 +5,6 @@
   gettext,
   coreutils,
   gnused,
-  gnome,
   adwaita-icon-theme,
   gnugrep,
   parted,
