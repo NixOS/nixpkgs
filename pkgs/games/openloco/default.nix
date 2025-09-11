@@ -17,25 +17,25 @@ let
   sfl-src = fetchFromGitHub {
     owner = "slavenf";
     repo = "sfl-library";
-    tag = "1.9.0";
-    hash = "sha256-Udry/Y753l274PU6RvpPgkIr85wSCnz3mLQ0xzerUAc=";
+    tag = "1.9.2";
+    hash = "sha256-/3++CtSuZJ5Sdg8U8mJ/gT+FTatKhBx8QeYjUVQCDWA=";
   };
 
   openloco-objects = fetchurl {
-    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.1/objects.zip";
-    sha256 = "e75ad13a8e8d58458e0c54e5ce62902a073d7bb025ef8fb97cb56108ff7c57c3";
+    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.3/objects.zip";
+    sha256 = "c08937691b9d7a956305864b535c6e4537a84b81a9dc5d4c9016edff83dcceb6";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "25.02";
+  version = "25.08";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     tag = "v${version}";
-    hash = "sha256-RsiEYBNx+Lf7OyyyCShQmgtwBuxDrZkRCYCbMmZ8ZMM=";
+    hash = "sha256-f4GZxLibQM/od0tJoszaG94FkRH5vb9qwQ7OqVdt1cU=";
   };
 
   postPatch = ''
