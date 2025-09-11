@@ -303,17 +303,24 @@ index 64600c6c64..cea48852ac 100644
      endif()
    endif()
 diff --git a/Modules/FindDCMTK.cmake b/Modules/FindDCMTK.cmake
-index 4e0ff47f52..c7ef2a89e0 100644
+index 4e0ff47f52..6db26cb855 100644
 --- a/Modules/FindDCMTK.cmake
 +++ b/Modules/FindDCMTK.cmake
-@@ -93,7 +93,7 @@
- # It also overwrite the value of DCMTK_DIR after this one has been
- # set by a successful discovery of DCMTK by the unpatched FindDCMTK.cmake module
- # distributed with CMake (as of 0167cea)
+@@ -88,14 +88,7 @@
+ 
+ set(_dcmtk_dir_description "The directory of DCMTK build or install tree.")
+ 
+-# Ensure that DCMTK_DIR is set to a reasonable default value
+-# so that DCMTK libraries can be found on a standard Unix distribution.
+-# It also overwrite the value of DCMTK_DIR after this one has been
+-# set by a successful discovery of DCMTK by the unpatched FindDCMTK.cmake module
+-# distributed with CMake (as of 0167cea)
 -if(NOT DCMTK_DIR OR DCMTK_DIR STREQUAL "/usr/include/dcmtk")
-+if(NOT DCMTK_DIR OR DCMTK_DIR STREQUAL "/var/empty/include/dcmtk")
-   set(DCMTK_DIR "/usr" CACHE PATH ${_dcmtk_dir_description} FORCE)
- endif()
+-  set(DCMTK_DIR "/usr" CACHE PATH ${_dcmtk_dir_description} FORCE)
+-endif()
++set(DCMTK_DIR CACHE PATH ${_dcmtk_dir_description})
+ 
+ set(_SAVED_DCMTK_DIR ${DCMTK_DIR})
  
 diff --git a/Modules/FindDart.cmake b/Modules/FindDart.cmake
 index 96cce45590..9676e3a4e1 100644
