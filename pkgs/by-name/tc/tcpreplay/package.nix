@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
+  # Allow having different prefix for header files (default output
+  # "out") and libraries ("lib" output)
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail 'ls ''${testdir}/$dir/libpcap' 'ls ${lib.getLib libpcap}/$dir/libpcap'
+  '';
+
   configureFlags = [
     "--disable-local-libopts"
     "--disable-libopts-install"
