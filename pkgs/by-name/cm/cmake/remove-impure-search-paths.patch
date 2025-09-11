@@ -1,16 +1,3 @@
-diff --git a/Modules/CMakeBackwardCompatibilityC.cmake b/Modules/CMakeBackwardCompatibilityC.cmake
-index 2076cf9986..f5f4fe570d 100644
---- a/Modules/CMakeBackwardCompatibilityC.cmake
-+++ b/Modules/CMakeBackwardCompatibilityC.cmake
-@@ -35,7 +35,7 @@
-   test_big_endian(CMAKE_WORDS_BIGENDIAN)
-   include (FindX11)
- 
--  if("${X11_X11_INCLUDE_PATH}" STREQUAL "/usr/include")
-+  if("${X11_X11_INCLUDE_PATH}" STREQUAL "/var/empty/include")
-     set (CMAKE_X_CFLAGS "" CACHE STRING "X11 extra flags.")
-   else()
-     set (CMAKE_X_CFLAGS "-I${X11_X11_INCLUDE_PATH}" CACHE STRING
 diff --git a/Modules/CMakeDetermineCompilerId.cmake b/Modules/CMakeDetermineCompilerId.cmake
 index 2b7d797920..0ad8cf3d06 100644
 --- a/Modules/CMakeDetermineCompilerId.cmake
@@ -1498,7 +1485,7 @@ index b2f23bd1dd..5e21d9c15a 100644
  
    find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
 diff --git a/Modules/GetPrerequisites.cmake b/Modules/GetPrerequisites.cmake
-index f1f5db7b7b..4b83830300 100644
+index f1f5db7b7b..550b76936e 100644
 --- a/Modules/GetPrerequisites.cmake
 +++ b/Modules/GetPrerequisites.cmake
 @@ -458,11 +458,11 @@
@@ -1515,23 +1502,6 @@ index f1f5db7b7b..4b83830300 100644
  
      if(ri)
        #message(STATUS "info: 'find_file' in exepath/dirs (${ri})")
-@@ -581,14 +581,14 @@
-     string(TOLOWER "${resolved_file}" lower)
- 
-     if(UNIX)
--      if(resolved_file MATCHES "^/*(/lib/|/lib32/|/libx32/|/lib64/|/usr/lib/|/usr/lib32/|/usr/libx32/|/usr/lib64/|/usr/X11R6/|/usr/bin/)" OR
-+      if(resolved_file MATCHES "^/*(/lib/|/lib32/|/libx32/|/lib64/|/var/empty/lib/|/var/empty/lib32/|/var/empty/libx32/|/var/empty/lib64/|/var/empty/X11R6/|/var/empty/bin/)" OR
-          resolved_file MATCHES "/cce/.*/lib/lib[^/]+\.so\\.[0-9][^/]*$")
-         set(is_system 1)
-       endif()
-     endif()
- 
-     if(APPLE)
--      if(resolved_file MATCHES "^(/System/Library/|/usr/lib/)")
-+      if(resolved_file MATCHES "^(/System/Library/|/var/empty/lib/)")
-         set(is_system 1)
-       endif()
-     endif()
 diff --git a/Modules/Internal/CMakeCUDAFindToolkit.cmake b/Modules/Internal/CMakeCUDAFindToolkit.cmake
 index 8fd408994f..9ee9593f3c 100644
 --- a/Modules/Internal/CMakeCUDAFindToolkit.cmake
