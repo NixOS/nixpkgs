@@ -1829,87 +1829,19 @@ index 8fd408994f..9ee9593f3c 100644
    else()
      set(${lang_var_}TOOLKIT_LIBRARY_ROOT "${${lang_var_}TOOLKIT_ROOT}")
    endif()
-diff --git a/Modules/Internal/CPack/CPackDeb.cmake b/Modules/Internal/CPack/CPackDeb.cmake
-index 873c7bc332..ad0e3fd4b4 100644
---- a/Modules/Internal/CPack/CPackDeb.cmake
-+++ b/Modules/Internal/CPack/CPackDeb.cmake
-@@ -288,7 +288,7 @@
-       endif()
- 
-       # Split out the debug symbols from the binaries
--      set(_FILE_DBGSYM ${_DBGSYM_ROOT}/usr/lib/debug/.build-id/${_BUILD_ID_START}/${_BUILD_ID_REMAINING}.debug)
-+      set(_FILE_DBGSYM ${_DBGSYM_ROOT}/var/empty/lib/debug/.build-id/${_BUILD_ID_START}/${_BUILD_ID_REMAINING}.debug)
-       get_filename_component(_OUT_DIR "${_FILE_DBGSYM}" DIRECTORY)
-       file(MAKE_DIRECTORY "${CPACK_TEMPORARY_DIRECTORY}/${_OUT_DIR}")
-       execute_process(COMMAND ${CPACK_OBJCOPY_EXECUTABLE} --only-keep-debug "${_FILE}" "${_FILE_DBGSYM}"
-@@ -754,7 +754,7 @@
-   # add ldconfig call in default postrm and postint
-   set(CPACK_ADD_LDCONFIG_CALL 0)
-   # all files in CPACK_DEB_SHARED_OBJECT_FILES have dot at the beginning
--  set(_LDCONF_DEFAULTS "./lib" "./usr/lib")
-+  set(_LDCONF_DEFAULTS "./lib" "./var/empty/lib")
-   foreach(_FILE IN LISTS CPACK_DEB_SHARED_OBJECT_FILES)
-     get_filename_component(_DIR ${_FILE} DIRECTORY)
-     get_filename_component(_PARENT_DIR ${_DIR} DIRECTORY)
 diff --git a/Modules/Internal/CPack/CPackRPM.cmake b/Modules/Internal/CPack/CPackRPM.cmake
-index b733cfe964..566b0d03a2 100644
+index b733cfe964..90709f48e8 100644
 --- a/Modules/Internal/CPack/CPackRPM.cmake
 +++ b/Modules/Internal/CPack/CPackRPM.cmake
-@@ -238,9 +238,9 @@
-   endif()
- 
-   if(NOT DEFINED CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST)
--    set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /etc /etc/init.d /usr /usr/bin
--        /usr/include /usr/lib /usr/libx32 /usr/lib64
--        /usr/share /usr/share/aclocal /usr/share/doc )
-+    set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /etc /etc/init.d /var/empty /var/empty/bin
-+        /var/empty/include /var/empty/lib /var/empty/libx32 /var/empty/lib64
-+        /var/empty/share /var/empty/share/aclocal /var/empty/share/doc )
-     if(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION)
-       if(CPACK_RPM_PACKAGE_DEBUG)
-         message("CPackRPM:Debug: Adding ${CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION} to builtin omit list.")
-@@ -265,10 +265,10 @@
-   # add man paths that will be compressed
-   # (copied from /usr/lib/rpm/brp-compress - script that does the actual
-   # compressing)
--  list(APPEND MAN_LOCATIONS "/usr/man/man.*" "/usr/man/.*/man.*" "/usr/info.*"
--    "/usr/share/man/man.*" "/usr/share/man/.*/man.*" "/usr/share/info.*"
--    "/usr/kerberos/man.*" "/usr/X11R6/man/man.*" "/usr/lib/perl5/man/man.*"
--    "/usr/share/doc/.*/man/man.*" "/usr/lib/.*/man/man.*")
-+  list(APPEND MAN_LOCATIONS "/var/empty/man/man.*" "/var/empty/man/.*/man.*" "/var/empty/info.*"
-+    "/var/empty/share/man/man.*" "/var/empty/share/man/.*/man.*" "/var/empty/share/info.*"
-+    "/var/empty/kerberos/man.*" "/var/empty/X11R6/man/man.*" "/var/empty/lib/perl5/man/man.*"
-+    "/var/empty/share/doc/.*/man/man.*" "/var/empty/lib/.*/man/man.*")
- 
-   if(CPACK_RPM_ADDITIONAL_MAN_DIRS)
-     if(CPACK_RPM_PACKAGE_DEBUG)
 @@ -640,7 +640,7 @@
    endif()
  
    # With debugedit we prepare source files list
 -  find_program(DEBUGEDIT_EXECUTABLE debugedit "/usr/lib/rpm/")
-+  find_program(DEBUGEDIT_EXECUTABLE debugedit "/var/empty/lib/rpm/")
++  find_program(DEBUGEDIT_EXECUTABLE debugedit)
    if(NOT DEBUGEDIT_EXECUTABLE)
      message(FATAL_ERROR "CPackRPM: debugedit binary could not be found!"
        " Required for debuginfo packaging. See documentation of"
-@@ -751,7 +751,7 @@
-   endif()
- 
-   if(NOT DEFINED CPACK_RPM_DEBUGINFO_EXCLUDE_DIRS)
--    set(CPACK_RPM_DEBUGINFO_EXCLUDE_DIRS /usr /usr/src /usr/src/debug)
-+    set(CPACK_RPM_DEBUGINFO_EXCLUDE_DIRS /var/empty /var/empty/src /var/empty/src/debug)
-     if(CPACK_RPM_DEBUGINFO_EXCLUDE_DIRS_ADDITION)
-       if(CPACK_RPM_PACKAGE_DEBUG)
-         message("CPackRPM:Debug: Adding ${CPACK_RPM_DEBUGINFO_EXCLUDE_DIRS_ADDITION} to builtin omit list.")
-@@ -1398,7 +1398,7 @@
-       "CPACK_RPM_${CPACK_RPM_PACKAGE_COMPONENT_UPPER}_BUILD_SOURCE_DIRS_PREFIX"
-       "CPACK_RPM_BUILD_SOURCE_DIRS_PREFIX")
-     if(NOT CPACK_RPM_BUILD_SOURCE_DIRS_PREFIX)
--      set(CPACK_RPM_BUILD_SOURCE_DIRS_PREFIX "/usr/src/debug/${CPACK_PACKAGE_FILE_NAME}${CPACK_RPM_PACKAGE_COMPONENT_PART_PATH}")
-+      set(CPACK_RPM_BUILD_SOURCE_DIRS_PREFIX "/var/empty/src/debug/${CPACK_PACKAGE_FILE_NAME}${CPACK_RPM_PACKAGE_COMPONENT_PART_PATH}")
-     endif()
- 
-     # handle cases where path contains extra slashes (e.g. /a//b/ instead of
 diff --git a/Modules/Platform/ADSP-Determine.cmake b/Modules/Platform/ADSP-Determine.cmake
 index 1588c92687..556415c681 100644
 --- a/Modules/Platform/ADSP-Determine.cmake
