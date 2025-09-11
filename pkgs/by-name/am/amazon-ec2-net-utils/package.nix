@@ -16,14 +16,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-net-utils";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-net-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PtnRgNmVrIGndLjYjXWWx85z4oxjn637iZqXd6OSiQg=";
   };
 
@@ -121,4 +121,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sielicki ];
   };
-}
+})
