@@ -3,6 +3,7 @@
   stdenv,
   testers,
   fetchgit,
+  fetchpatch,
   replaceVars,
 
   # Xen
@@ -184,6 +185,30 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-makefile-efi-output-directory.patch
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
+
+    # XSA 472
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa472-1.patch";
+      hash = "sha256-6k/X7KFno9uBG0mUtJxl7TMavaRs2Xlj9JlW9ai6p0k=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa472-2.patch";
+      hash = "sha256-BisdztU9Wa5nIGmHo4IikqYPHdEhBehHaNqj1IuBe6I=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa472-3.patch";
+      hash = "sha256-rikOofQeuLNMBkdQS3xzmwh7BlgMOTMSsQcAOEzNOso=";
+    })
+
+    # XSA 473
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa473-1.patch";
+      hash = "sha256-594tTalWcGJSLj3++4QB/ADkHH1qJNrdvg7FG6kOuB8=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa473-2.patch";
+      hash = "sha256-tGuIGxJFBXbckIruSUeTyrM6GabdIj6Pr3cVxeDvNNY=";
+    })
   ];
 
   outputs = [
