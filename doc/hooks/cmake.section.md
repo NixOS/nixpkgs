@@ -16,9 +16,31 @@ You can disable this hook’s behavior by setting `configurePhase` to a custom v
 
 ### CMake Exclusive Variables {#cmake-exclusive-variables}
 
+#### `cmakeEntries` and `cmakeEntryTypes` {#cmake-entries}
+
+Bash associative arrays of CMake variable cache entries and their types.
+Flags like `-D<key>:<type>=<value>` will be prepended to the CMake command-line arguments.
+
+Empty type will be treated the same way as `"UNINITIALIZED"`,
+which won't present in the flag string (i.e., `-D<key>=<value>`).
+
+Given that `cmakeEntries[WITH_FOO]` is defined and `[[ cmakeEntryTypes[WITH_FOO] == BOOL ]]`,
+one can determine the condition with `[[ -n "${cmakeEntries[WITH_FOO]}" ]]`.
+When prepending to the flags, however, the value will become converted to either `ON` or `OFF`.
+
+One can specify their initial values via the Nix derivation attribute of the same name,
+given that `__structuredAttrs` is set to `true`.
+
+When command `jq` is available,
+`cmakeEntries` values specified as Nix Language boolean go through additional canonicalization:
+1. If the types are not specified in `cmakeEntryTypes`,
+   the types are specified as `BOOL`.
+2. If the types are specified in `cmakeEntryTypes` but is not `BOOL`,
+   the `cmakeEntries` values will be cast in-place into `ON` or `OFF`.
+
 #### `cmakeFlags` {#cmake-flags}
 
-Controls the flags passed to `cmake setup` during configure phase.
+Extra flags to pass to `cmake setup` during configure phase.
 
 #### `cmakeBuildDir` {#cmake-build-dir}
 
