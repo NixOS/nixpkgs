@@ -14,6 +14,10 @@ mkCoqDerivation {
     with lib.versions;
     lib.switch coq.coq-version [
       {
+        case = range "9.0" "9.0";
+        out = "9.0.0+rocq${coq.coq-version}";
+      }
+      {
         case = range "8.13" "8.20";
         out = "9.0.0+coq${coq.coq-version}";
       }
@@ -23,6 +27,7 @@ mkCoqDerivation {
       }
     ] null;
 
+  release."9.0.0+rocq9.0".sha256 = "sha256-ctnwpyNVhryEUA5YEsAImrcJsNMhtBgDSOz+z5Z4R78=";
   release."9.0.0+coq8.20".sha256 = "sha256-pkvyDaMXRalc6Uu1eBTuiqTpRauRrzu946c6TavyTKY=";
   release."9.0.0+coq8.19".sha256 = "sha256-02uL+qWbUveHe67zKfc8w3U0iN3X2DKBsvP3pKpW8KQ=";
   release."9.0.0+coq8.18".sha256 = "sha256-vLeJ0GNKl4M84Uj2tAwlrxJOSR6VZoJQvdlDhxJRge8=";

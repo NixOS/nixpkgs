@@ -203,7 +203,7 @@ in
       type = types.nullOr types.path;
       visible = false;
       description = ''
-        The env(1) executable that is linked system-wide to
+        The {manpage}`env(1)` executable that is linked system-wide to
         `/usr/bin/env`.
       '';
     };

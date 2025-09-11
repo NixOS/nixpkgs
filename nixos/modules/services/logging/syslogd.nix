@@ -70,7 +70,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Accept logging through UDP. Option -r of syslogd(8).
+          Accept logging through UDP. Option -r of {manpage}`syslogd(8)`.
         '';
       };
 

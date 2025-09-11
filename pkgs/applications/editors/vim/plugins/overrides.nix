@@ -2255,7 +2255,7 @@ in
 
   nvim-java = super.nvim-java.overrideAttrs {
     dependencies = with self; [
-      lua-async-await
+      lua-async
       mason-nvim
       nui-nvim
       nvim-dap

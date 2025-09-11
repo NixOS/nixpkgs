@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel ? false,
+  kernelModuleMakeFlags ? [],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = kernel.moduleBuildDependencies;
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
     "prefix=$(out)"

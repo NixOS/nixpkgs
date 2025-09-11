@@ -200,7 +200,7 @@ in
         '';
         description = ''
           Grant capabilities to the uWSGI instance. See the
-          `capabilities(7)` for available values.
+          {manpage}`capabilities(7)` for available values.
 
           ::: {.note}
           uWSGI runs as an unprivileged user (even as Emperor) with the minimal

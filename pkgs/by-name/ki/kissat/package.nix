@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-+y9TlSEgnMTtRT9F6OBSle9OqGfljChcHOFJ5lgwjyk=";
+    sha256 = "sha256-XVaWO1zHMXM83Qih3HnmIsOvM1zpefF6u9lBP420/mQ=";
   };
 
   outputs = [

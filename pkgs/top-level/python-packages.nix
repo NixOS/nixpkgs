@@ -3133,6 +3133,10 @@ self: super: with self; {
 
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
+  deepsearch-glm = callPackage ../development/python-modules/deepsearch-glm {
+    inherit (pkgs) loguru sentencepiece fasttext;
+  };
+
   deepsearch-toolkit = callPackage ../development/python-modules/deepsearch-toolkit { };
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
@@ -12362,6 +12366,8 @@ self: super: with self; {
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
   pypdf3 = callPackage ../development/python-modules/pypdf3 { };
+
+  pypdfium2 = callPackage ../development/python-modules/pypdfium2 { };
 
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 

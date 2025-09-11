@@ -65,7 +65,7 @@ in
         defaultText = lib.literalExpression ''"csl:''${config.networking.hostName}"'';
         example = "csl:example.com,mydomain.net";
         description = ''
-          Local domains set (see `opendkim(8)` for more information on datasets).
+          Local domains set (see {manpage}`opendkim(8)` for more information on datasets).
           Messages from them are signed, not verified.
         '';
       };

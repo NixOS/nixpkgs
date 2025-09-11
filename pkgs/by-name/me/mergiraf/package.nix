@@ -26,6 +26,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     git
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
