@@ -18,14 +18,7 @@ clangStdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    clang -o testbinary \
-            -x objective-c -Xclang \
-            -fobjc-runtime=objfw \
-            -funwind-tables \
-            -fconstant-string-class=OFConstantString \
-            -Xclang -fno-constant-cfstrings \
-            helloworld.m \
-            -lobjfw -lobjfwrt
+    clang -o testbinary $(objfw-config --objcflags) helloworld.m $(objfw-config --libs)
     runHook postBuild
   '';
 

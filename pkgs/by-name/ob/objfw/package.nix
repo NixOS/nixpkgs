@@ -30,6 +30,9 @@ clangStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional openSslSupport openssl;
 
+  # ObjFW relies on codesign on darwin. It doesn't exist with Nix, and this works around it
+  ac_cv_prog_CODESIGN = true;
+
   preConfigure = "./autogen.sh";
   configureFlags = [
     "--without-tls"
@@ -49,6 +52,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://objfw.nil.im";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.steeleduncan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
