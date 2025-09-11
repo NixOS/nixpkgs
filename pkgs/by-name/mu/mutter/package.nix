@@ -142,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libadwaita
     libgbm
     libei
     libepoxy
