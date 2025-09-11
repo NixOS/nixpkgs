@@ -370,24 +370,21 @@ stdenv.mkDerivation (
 
     inherit passthru;
 
-    postFixup = ''
-      # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
-      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-    ''
-    + lib.optionalString strip2to3 ''
-      rm -R $out/bin/2to3 $out/lib/python*/lib2to3
-    ''
-    + lib.optionalString stripConfig ''
-      rm -R $out/bin/python*-config $out/lib/python*/config*
-    ''
-    + lib.optionalString stripIdlelib ''
-      # Strip IDLE
-      rm -R $out/bin/idle* $out/lib/python*/idlelib
-    ''
-    + lib.optionalString stripTests ''
-      # Strip tests
-      rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
-    '';
+    postFixup =
+      lib.optionalString strip2to3 ''
+        rm -R $out/bin/2to3 $out/lib/python*/lib2to3
+      ''
+      + lib.optionalString stripConfig ''
+        rm -R $out/bin/python*-config $out/lib/python*/config*
+      ''
+      + lib.optionalString stripIdlelib ''
+        # Strip IDLE
+        rm -R $out/bin/idle* $out/lib/python*/idlelib
+      ''
+      + lib.optionalString stripTests ''
+        # Strip tests
+        rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
+      '';
 
     enableParallelBuilding = true;
 
