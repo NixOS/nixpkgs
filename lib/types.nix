@@ -1008,6 +1008,15 @@ let
         merge = mergeEqualOption;
       };
 
+      # A value produced by `lib.ron.mkRaw`
+      rawRon = mkOptionType {
+        name = "rawRon";
+        description = "raw RON";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-raw";
+        merge = mergeEqualOption;
+      };
+
       uniq = unique { message = ""; };
 
       unique =
