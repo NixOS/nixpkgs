@@ -16,7 +16,7 @@
   gpart,
   hdparm,
   procps,
-  util-linux,
+  util-linuxMinimal,
   polkit,
   wrapGAppsHook3,
   replaceVars,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
          lib.makeBinPath [
            gpart
            hdparm
-           util-linux
+           util-linuxMinimal
            procps
            coreutils
            gnused
