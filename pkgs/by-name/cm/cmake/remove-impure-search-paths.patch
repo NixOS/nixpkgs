@@ -91,7 +91,7 @@ index 95ca9b57b6..ac1660d898 100644
          OUTPUT_STRIP_TRAILING_WHITESPACE
          ERROR_QUIET
 diff --git a/Modules/CMakeFindPackageMode.cmake b/Modules/CMakeFindPackageMode.cmake
-index 6e2762cf41..0ab3e518c4 100644
+index 6e2762cf41..5135c3e327 100644
 --- a/Modules/CMakeFindPackageMode.cmake
 +++ b/Modules/CMakeFindPackageMode.cmake
 @@ -64,7 +64,7 @@
@@ -103,6 +103,29 @@ index 6e2762cf41..0ab3e518c4 100644
        set(CMAKE_SIZEOF_VOID_P 8)
      else()
        # use the file utility to check whether itself is 64 bit:
+@@ -79,22 +79,6 @@
+     endif()
+   endif()
+ 
+-  # guess Debian multiarch if it has not been set:
+-  if(EXISTS /etc/debian_version)
+-    if(NOT CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE )
+-      file(GLOB filesInLib RELATIVE /lib /lib/*-linux-gnu* )
+-      foreach(file ${filesInLib})
+-        if("${file}" MATCHES "${CMAKE_LIBRARY_ARCHITECTURE_REGEX}")
+-          set(CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE ${file})
+-          break()
+-        endif()
+-      endforeach()
+-    endif()
+-    if(NOT CMAKE_LIBRARY_ARCHITECTURE)
+-      set(CMAKE_LIBRARY_ARCHITECTURE ${CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE})
+-    endif()
+-  endif()
+-
+ endif()
+ 
+ set(CMAKE_${LANGUAGE}_COMPILER "dummy")
 diff --git a/Modules/CMakeFindSublimeText2.cmake b/Modules/CMakeFindSublimeText2.cmake
 index fc0ec313b8..4033f40614 100644
 --- a/Modules/CMakeFindSublimeText2.cmake
@@ -1248,6 +1271,19 @@ index 1894498d9d..a1b0509b4b 100644
  )
  
  include(FindPackageHandleStandardArgs)
+diff --git a/Modules/FindPkgConfig.cmake b/Modules/FindPkgConfig.cmake
+index b230eb5ef5..bf7b204406 100644
+--- a/Modules/FindPkgConfig.cmake
++++ b/Modules/FindPkgConfig.cmake
+@@ -391,7 +391,7 @@
+     if(NOT DEFINED CMAKE_SYSTEM_NAME
+         OR (CMAKE_SYSTEM_NAME MATCHES "^(Linux|GNU)$"
+             AND NOT CMAKE_CROSSCOMPILING))
+-      if(EXISTS "/etc/debian_version") # is this a debian system ?
++      if(FALSE) # is this a debian system ?
+         if(CMAKE_LIBRARY_ARCHITECTURE)
+           list(APPEND _lib_dirs "lib/${CMAKE_LIBRARY_ARCHITECTURE}/pkgconfig")
+         endif()
 diff --git a/Modules/FindProducer.cmake b/Modules/FindProducer.cmake
 index 1d034bc207..6ad44d9c37 100644
 --- a/Modules/FindProducer.cmake
@@ -1584,6 +1620,28 @@ index b2f23bd1dd..5e21d9c15a 100644
    )
  
    find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
+diff --git a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
+index ff9c11a9d7..706b34b087 100644
+--- a/Modules/GNUInstallDirs.cmake
++++ b/Modules/GNUInstallDirs.cmake
+@@ -336,17 +336,6 @@
+       set(${out_var} "conda")
+     endif()
+   endif()
+-  # If we didn't detect conda from the previous step, check
+-  # for the linux variant
+-  if(NOT ${out_var})
+-    if (EXISTS "/etc/alpine-release")
+-      set(${out_var} "alpine")
+-    elseif (EXISTS "/etc/arch-release")
+-      set(${out_var} "arch linux")
+-    elseif (EXISTS "/etc/debian_version")
+-      set(${out_var} "debian")
+-    endif()
+-  endif()
+   return(PROPAGATE ${out_var})
+ endfunction()
+ 
 diff --git a/Modules/GetPrerequisites.cmake b/Modules/GetPrerequisites.cmake
 index f1f5db7b7b..a02ba99938 100644
 --- a/Modules/GetPrerequisites.cmake
@@ -1805,6 +1863,58 @@ index 42c6b35424..13b082eb0c 100644
 -  /sw        # Fink
 -  /opt/local # MacPorts
 -  )
+diff --git a/Modules/Platform/GNU.cmake b/Modules/Platform/GNU.cmake
+index 6a25b00b81..2430bdb7e4 100644
+--- a/Modules/Platform/GNU.cmake
++++ b/Modules/Platform/GNU.cmake
+@@ -48,13 +48,8 @@
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  else()
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ endif()
+ 
+ include(Platform/UnixPaths)
+diff --git a/Modules/Platform/Linux.cmake b/Modules/Platform/Linux.cmake
+index 5b61dd6b61..d324b903ed 100644
+--- a/Modules/Platform/Linux.cmake
++++ b/Modules/Platform/Linux.cmake
+@@ -45,25 +45,8 @@
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  else()
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ endif()
+ 
+ include(Platform/UnixPaths)
+-
+-# Debian has lib32 and lib64 paths only for compatibility so they should not be
+-# searched.
+-if(NOT CMAKE_CROSSCOMPILING AND NOT CMAKE_COMPILER_SYSROOT)
+-  if (EXISTS "/etc/debian_version")
+-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
+-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-  endif()
+-  if (EXISTS "/etc/arch-release")
+-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-  endif()
+-endif()
 diff --git a/Modules/Platform/OpenBSD.cmake b/Modules/Platform/OpenBSD.cmake
 index 97e2a6a83e..922e019e36 100644
 --- a/Modules/Platform/OpenBSD.cmake
