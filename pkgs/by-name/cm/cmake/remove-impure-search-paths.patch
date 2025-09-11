@@ -133,19 +133,6 @@ index fc0ec313b8..16e06c7e96 100644
      DOC "The Sublime Text executable")
  
  if(CMAKE_SUBLIMETEXT_EXECUTABLE)
-diff --git a/Modules/CMakeGenericSystem.cmake b/Modules/CMakeGenericSystem.cmake
-index ac5da58490..aeb012b113 100644
---- a/Modules/CMakeGenericSystem.cmake
-+++ b/Modules/CMakeGenericSystem.cmake
-@@ -196,7 +196,7 @@
-   # If CMAKE_INSTALL_PREFIX env variable is not set,
-   # choose a default install prefix for this platform.
-   if(CMAKE_HOST_UNIX)
--    set(CMAKE_INSTALL_PREFIX "/usr/local"
-+    set(CMAKE_INSTALL_PREFIX "/var/empty/local"
-       CACHE PATH "Install path prefix, prepended onto install directories.")
-   else()
-     GetDefaultWindowsPrefixBase(CMAKE_GENERIC_PROGRAM_FILES)
 diff --git a/Modules/CPackIFW.cmake b/Modules/CPackIFW.cmake
 index 2a2f478fd7..b922af83db 100644
 --- a/Modules/CPackIFW.cmake
@@ -1510,60 +1497,6 @@ index b2f23bd1dd..5e21d9c15a 100644
    )
  
    find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
-diff --git a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
-index ff9c11a9d7..73280bbe30 100644
---- a/Modules/GNUInstallDirs.cmake
-+++ b/Modules/GNUInstallDirs.cmake
-@@ -331,8 +331,8 @@
-     set(conda_prefix "$ENV{CONDA_PREFIX}")
-     cmake_path(ABSOLUTE_PATH conda_prefix NORMALIZE)
-     if("${CMAKE_INSTALL_PREFIX}" STREQUAL conda_prefix AND
--        NOT ("${CMAKE_INSTALL_PREFIX}" MATCHES "^/usr/?$" OR
--             "${CMAKE_INSTALL_PREFIX}" MATCHES "^/usr/local/?$"))
-+        NOT ("${CMAKE_INSTALL_PREFIX}" MATCHES "^/var/empty/?$" OR
-+             "${CMAKE_INSTALL_PREFIX}" MATCHES "^/var/empty/local/?$"))
-       set(${out_var} "conda")
-     endif()
-   endif()
-@@ -355,9 +355,9 @@
- function(_GNUInstallDirs_special_absolute out_var original_path install_prefix)
-   set(${out_var} "${original_path}")
- 
--  if(install_prefix MATCHES "^/usr/?$")
-+  if(install_prefix MATCHES "^/var/empty/?$")
-     set(${out_var} "/${original_path}")
--  elseif(install_prefix MATCHES "^/opt/" AND NOT install_prefix MATCHES "^/opt/homebrew/")
-+  elseif(install_prefix MATCHES "^/var/empty/" AND NOT install_prefix MATCHES "^/var/empty/homebrew/")
-     set(${out_var} "/${original_path}/${install_prefix}")
-   endif()
- 
-@@ -401,7 +401,7 @@
- set(_GNUInstallDirs_LOCALSTATEDIR_DEFAULT "var")
- set(_GNUInstallDirs_LIBDIR_DEFAULT "lib")
- set(_GNUInstallDirs_INCLUDEDIR_DEFAULT "include")
--set(_GNUInstallDirs_OLDINCLUDEDIR_DEFAULT "/usr/include")
-+set(_GNUInstallDirs_OLDINCLUDEDIR_DEFAULT "/var/empty/include")
- set(_GNUInstallDirs_DATAROOTDIR_DEFAULT "share")
- 
- # Define the special defaults handling
-@@ -436,7 +436,7 @@
-     _GNUInstallDirs_get_system_type_for_install(system_type)
-     if(system_type STREQUAL "debian")
-       if(CMAKE_LIBRARY_ARCHITECTURE)
--        if("${install_prefix}" MATCHES "^/usr/?$")
-+        if("${install_prefix}" MATCHES "^/var/empty/?$")
-           set(${out_var} "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
-         endif()
-       endif()
-@@ -474,7 +474,7 @@
-   if(_GNUInstallDirs_CMP0192 STREQUAL "NEW")
-     # In the /opt/ case we want the install_prefix to be appended as
-     # LOCALSTATEDIR/run/PREFIX
--    if(install_prefix MATCHES "^/opt/" AND NOT install_prefix MATCHES "^/opt/homebrew/")
-+    if(install_prefix MATCHES "^/var/empty/" AND NOT install_prefix MATCHES "^/var/empty/homebrew/")
-         string(REPLACE "${install_prefix}" "/run${install_prefix}"
-           ${out_var} "${CMAKE_INSTALL_LOCALSTATEDIR}"
-         )
 diff --git a/Modules/GetPrerequisites.cmake b/Modules/GetPrerequisites.cmake
 index f1f5db7b7b..4b83830300 100644
 --- a/Modules/GetPrerequisites.cmake
