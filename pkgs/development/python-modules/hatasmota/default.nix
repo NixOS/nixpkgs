@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "hatasmota";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = "hatasmota";
     tag = version;
-    hash = "sha256-T4C0lgVKmlHHuVPzrqC3Mm089TfzY2JCZK73be1W5+w=";
+    hash = "sha256-Be6W7+DMpMXezEQDkEN9+ei7cJXP1bGIURuXlMNyR0Y=";
   };
 
   build-system = [ setuptools ];
