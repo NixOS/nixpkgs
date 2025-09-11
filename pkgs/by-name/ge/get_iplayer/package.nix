@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   stdenv,
-  shortenPerlShebang,
   perl,
   atomicparsley,
   ffmpeg,
@@ -23,7 +22,7 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-O/mVtbudrYw0jKeSckZlgonFDiWxfeiVc8gdcy4iNBw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     LWP
@@ -52,10 +51,6 @@ perlPackages.buildPerlPackage rec {
     install -Dm444 get_iplayer.1 -t $out/share/man/man1
 
     runHook postInstall
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/.get_iplayer-wrapped
   '';
 
   passthru.tests.version = testers.testVersion {

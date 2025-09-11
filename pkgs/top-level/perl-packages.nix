@@ -20,7 +20,6 @@
   fetchFromGitHub,
   fetchFromGitLab,
   perl,
-  shortenPerlShebang,
   nixosTests,
 }:
 
@@ -126,11 +125,7 @@ with self;
       "man"
     ];
 
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/ack
-    '';
 
     # tests fails on nixos and hydra because of different purity issues
     doCheck = false;
@@ -1192,10 +1187,6 @@ with self;
         --replace-fail http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
     '';
     propagatedBuildInputs = [ IOSocketSSL ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/cpanm
-    '';
     meta = {
       description = "Get, unpack, build and install modules from CPAN";
       homepage = "https://github.com/miyagawa/cpanminus";
@@ -1233,10 +1224,6 @@ with self;
       ParallelPipes
       locallib
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/cpm
-    '';
     meta = {
       description = "Fast CPAN module installer";
       homepage = "https://github.com/skaji/cpm";
@@ -1284,7 +1271,6 @@ with self;
       TextLayout
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ Wx ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
     # Delete tests that fail when version env var is set, see
     # https://github.com/ChordPro/chordpro/issues/293
@@ -1293,7 +1279,6 @@ with self;
     '';
 
     postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/chordpro
       rm $out/bin/wxchordpro # Wx not supported on darwin
     '';
     meta = {
@@ -6621,14 +6606,10 @@ with self;
       url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111017.tar.gz";
       hash = "sha256-8gQpO+JqyEGsyHBEoYjbD1kegIgTFseiiK7A7s4wYVU=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       FileHomeDir
       LWPProtocolHttps
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/minicpan
-    '';
 
     meta = {
       description = "Create a minimal mirror of CPAN";
@@ -7094,7 +7075,6 @@ with self;
       url = "mirror://cpan/authors/id/B/BA/BARTB/Crypt-HSXKPasswd-v3.6.tar.gz";
       hash = "sha256-lZ3MX58BG/ALha0i31ZrerK/XqHTYrDeD7WuKfvEWLM=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       Clone
       DateTime
@@ -7109,9 +7089,6 @@ with self;
       TextUnidecode
       TypeTiny
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/hsxkpasswd
-    '';
 
     meta = {
       description = "Secure memorable password generator";
@@ -7563,10 +7540,6 @@ with self;
       LWP
     ];
 
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/pgplet
-    '';
     doCheck = false; # test fails with 'No random source available!'
 
     meta = {
@@ -10594,10 +10567,6 @@ with self;
       CaptureTiny
       TestDifferences
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/*
-    '';
     meta = {
       description = "Powerful fast feature-rich Perl source code profiler";
       homepage = "https://code.google.com/p/perl-devel-nytprof";
@@ -10998,10 +10967,6 @@ with self;
       TermUI
       YAMLTiny
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/dzil
-    '';
     doCheck = false;
     meta = {
       description = "Distribution builder; installer not included";
@@ -11859,12 +11824,8 @@ with self;
       Throwable
       TryTiny
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs --build util
-    '';
-    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang util/sendmail
     '';
     meta = {
       description = "Library for sending email";
@@ -14775,10 +14736,6 @@ with self;
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004007.tar.gz";
       hash = "sha256-2pe/dnKAlbO27nHaGfC/GUMBsvRd9HietU23Tt0hCjs=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/git-autofixup
-    '';
     meta = {
       description = "Create fixup commits for topic branches";
       license = with lib.licenses; [ artistic2 ];
@@ -15557,15 +15514,11 @@ with self;
       TermSk
       namespaceclean
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     patches = [
       ../development/perl-modules/Hailo-fix-test-gld.patch
     ];
     postPatch = ''
       patchShebangs bin
-    '';
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/hailo
     '';
     meta = {
       description = "Pluggable Markov engine analogous to MegaHAL";
@@ -17281,10 +17234,6 @@ with self;
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/treescan
-    '';
     meta = {
       description = "Asynchronous/Advanced Input/Output";
       license = with lib.licenses; [
@@ -18425,8 +18374,7 @@ with self;
     ];
     nativeBuildInputs = [
       pkgs.makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    ];
     makeMakerFlags = [
       "TEXMF=\${tex}"
       "NOMKTEXLSR"
@@ -18434,11 +18382,6 @@ with self;
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for file in bin/*; do
-        shortenPerlShebang "$file"
-      done
     '';
     postInstall = ''
       for file in latexmlc latexmlmath latexmlpost ; do
@@ -27732,7 +27675,6 @@ with self;
       hash = "sha256-5c2V3j5DvOcHdRdidLqkBfMm/IdA3wBUu4FpdcyNNJs=";
     };
     buildInputs = [ TestDeep ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       BKeywords
       ConfigTiny
@@ -27750,9 +27692,6 @@ with self;
       Readonly
       StringFormat
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/perlcritic
-    '';
     preCheck = ''
       # Remove tests with hardcoded line numbers.
       rm t/20_policy_require_tidy_code.t
@@ -28472,10 +28411,6 @@ with self;
       PodMarkdown
       URI
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/pls
-    '';
     preCheck = ''
       # Remove tests with hardcoded line numbers.
       rm t/02document-new.t
@@ -29707,10 +29642,6 @@ with self;
       url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
       hash = "sha256-TxOa01+q8t4GI9wLsd2J+lpDHlSL/sh97hlM8OJcyX0=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/rainbarf
-    '';
     meta = {
       description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
       homepage = "https://github.com/creaktive/rainbarf";
@@ -31185,13 +31116,6 @@ with self;
       patchShebangs script
     '';
 
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for file in $out/bin/*; do
-        shortenPerlShebang $file
-      done
-    '';
-
     meta = {
       description = "SQL DDL transformations and more";
       license = with lib.licenses; [
@@ -31279,7 +31203,6 @@ with self;
       TestRequires
       TestTCP
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       DataDump
       HTTPParserXS
@@ -31288,9 +31211,6 @@ with self;
       NetServerSSPrefork
       IOSocketINET6
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/starman
-    '';
 
     doCheck = false; # binds to various TCP ports
     meta = {
@@ -36130,15 +36050,11 @@ with self;
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz";
       hash = "sha256-wZHG1ezrjLdcBWUZI2BmLSAtcWutB6IzxLMppChNxxs=";
     };
-    nativeBuildInputs = [ shortenPerlShebang ];
     nativeCheckInputs = [
       ListMoreUtils
       TestDifferences
       TestException
     ];
-    postInstall = ''
-      shortenPerlShebang $out/bin/Markdown.pl
-    '';
     meta = {
       description = "Convert Markdown syntax to (X)HTML";
       license = with lib.licenses; [ bsd3 ];
@@ -38452,11 +38368,7 @@ with self;
       url = "mirror://cpan/authors/id/S/SI/SIXTEASE/XML-Entities-1.0002.tar.gz";
       hash = "sha256-wyqk8wlXPXZIqy5Bb2K2sgZS8q2c/T7sgv1REB/nMQ0=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ LWP ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/download-entities.pl
-    '';
     meta = {
       description = "Mapping of XML entities to Unicode";
       license = with lib.licenses; [
@@ -38542,14 +38454,10 @@ with self;
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Filter-Sort-1.01.tar.gz";
       hash = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       XMLSAX
       XMLSAXWriter
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/xmlsort
-    '';
     meta = {
       description = "SAX filter for sorting elements in XML";
       license = with lib.licenses; [
