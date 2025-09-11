@@ -48,6 +48,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/NowanIlfideme/pydantic-yaml";
     changelog = "https://github.com/NowanIlfideme/pydantic-yaml/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
   };
 }

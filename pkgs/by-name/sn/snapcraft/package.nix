@@ -203,7 +203,11 @@ python312Packages.buildPythonApplication rec {
     homepage = "https://github.com/canonical/snapcraft";
     changelog = "https://github.com/canonical/snapcraft/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

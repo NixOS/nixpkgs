@@ -36,7 +36,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/facundobatista/logassert";
     changelog = "https://github.com/facundobatista/logassert/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }
