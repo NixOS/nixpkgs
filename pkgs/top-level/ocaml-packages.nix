@@ -272,6 +272,8 @@ let
 
         conan = callPackage ../development/ocaml-modules/conan { };
 
+        conan-cli = callPackage ../development/ocaml-modules/conan/cli.nix { };
+
         conan-database = callPackage ../development/ocaml-modules/conan/database.nix { };
 
         conan-lwt = callPackage ../development/ocaml-modules/conan/lwt.nix { };
