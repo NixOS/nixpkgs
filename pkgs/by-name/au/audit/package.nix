@@ -11,6 +11,10 @@
   swig,
   libcap_ng,
   installShellFiles,
+  makeWrapper,
+  gawk,
+  gnugrep,
+  coreutils,
 
   enablePython ? !stdenv.hostPlatform.isStatic,
 
@@ -58,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     installShellFiles
+    makeWrapper
   ]
   ++ lib.optionals enablePython [
     python3Packages.python # for python3-config
@@ -107,6 +112,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     installShellCompletion --bash init.d/audit.bash_completion
+  '';
+
+  postFixup = ''
+    substituteInPlace $bin/bin/augenrules \
+      --replace-fail "/sbin/auditctl" "$bin/bin/auditctl" \
+      --replace-fail "/bin/ls" "ls"
+    wrapProgram $bin/bin/augenrules \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gawk
+          gnugrep
+          coreutils
+        ]
+      }
   '';
 
   enableParallelBuilding = true;
