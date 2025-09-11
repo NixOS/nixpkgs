@@ -336,11 +336,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cope = callPackage ../by-name/co/cope/package.nix {
-    perl = perl538;
-    perlPackages = perl538Packages;
-  };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   copilot-language-server-fhs = copilot-language-server.fhs;
@@ -9412,13 +9407,12 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
-  inherit (perlInterpreters) perl538 perl540;
+  inherit (perlInterpreters) perl5;
 
-  perl538Packages = recurseIntoAttrs perl538.pkgs;
-  perl540Packages = recurseIntoAttrs perl540.pkgs;
+  perl5Packages = recurseIntoAttrs perl5.pkgs;
 
-  perl = perl540;
-  perlPackages = perl540Packages;
+  perl = perl5;
+  perlPackages = perl5Packages;
 
   ack = perlPackages.ack;
 

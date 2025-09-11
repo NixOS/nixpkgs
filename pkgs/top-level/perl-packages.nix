@@ -2578,10 +2578,10 @@ with self;
 
   BKeywords = buildPerlPackage {
     pname = "B-Keywords";
-    version = "1.27";
+    version = "1.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.27.tar.gz";
-      hash = "sha256-7xC5CF5nTqpBfMt9aS+2zZj3u2feKhJ+ujRX2K5YfP8=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.28.tar.gz";
+      hash = "sha256-nn62dpWSlIfGGq8trouvndoa2HYCu1oJTxB0SxJ2Xj4=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
@@ -3365,7 +3365,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
     ];
@@ -3786,7 +3785,6 @@ with self;
     buildInputs = [
       CatalystRuntime
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
     ];
@@ -4160,7 +4158,6 @@ with self;
     buildInputs = [
       CatalystRuntime
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
       TextCSV
@@ -6421,7 +6418,6 @@ with self;
     };
     buildInputs = [
       TestException
-      TestSimple13
     ];
     meta = {
       description = "Run code after a subroutine call, preserving the context the subroutine would have seen if it were the last statement in the caller";
@@ -7299,7 +7295,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       CaptureTiny
@@ -10033,7 +10028,6 @@ with self;
     };
     buildInputs = [
       DBIxClass
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DBDSQLite
@@ -10653,7 +10647,6 @@ with self;
       namespaceclean
     ];
     buildInputs = [
-      TestSimple13
       TestWarnings
     ];
     meta = {
@@ -12222,10 +12215,10 @@ with self;
 
   Error = buildPerlModule {
     pname = "Error";
-    version = "0.17029";
+    version = "0.17030";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17029.tar.gz";
-      hash = "sha256-GiP3kTAyrtbUtoMhNzo4mcpmWQ9HJzkaCR7BnJW/etw=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17030.tar.gz";
+      hash = "sha256-NNOCJ2wPsNazg1W5TJajCxLYNNVmLrU/CI7iXj5xKSQ=";
     };
     meta = {
       description = "Error/exception handling in an OO-ish way";
@@ -12243,6 +12236,13 @@ with self;
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.34.tar.gz";
       hash = "sha256-EhFoPc57Z3H0q3EMwVNxK913umFXoTKU0LtzSR/QZWA=";
     };
+    patches = [
+      (fetchpatch {
+        name = "EV-4.34-perl-5.42.patch";
+        url = "https://free.nchc.org.tw/gentoo-portage/dev-perl/EV/files/EV-4.34-perl-5.42.patch";
+        hash = "sha256-GiQ89pk3EZ3b6oxB7jDTY5C62qqKsZUjJ4Ag2JVwGFw=";
+      })
+    ];
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
     meta = {
@@ -14423,10 +14423,10 @@ with self;
 
   FutureAsyncAwait = buildPerlModule {
     pname = "Future-AsyncAwait";
-    version = "0.66";
+    version = "0.70";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.66.tar.gz";
-      hash = "sha256-xqD03kYr8yS1usoXddGZ7DJGo1jBPbm2Ssv82+bl7CE=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.70.tar.gz";
+      hash = "sha256-hCiZBJyXf7IyaoCWkmRB5XvsqRK7K0kY1c4JDfTUprc=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [
@@ -15569,7 +15569,6 @@ with self;
       hash = "sha256-vJpKo47JjwqYKJ41q/mhfC8qMjmiIJoymADglwqi4MU=";
     };
     propagatedBuildInputs = [ HashMerge ];
-    buildInputs = [ TestSimple13 ];
 
     meta = {
       description = "Return difference between two hashes as a hash";
@@ -17451,7 +17450,6 @@ with self;
     ];
     buildInputs = [
       ModuleBuildTiny
-      TestSimple13
     ];
     meta = {
       description = "Functions for working with IO::Handle like objects";
@@ -24089,7 +24087,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
       TestTableDriven
     ];
     propagatedBuildInputs = [
@@ -24242,7 +24239,6 @@ with self;
       MooseXRoleParameterized
       TestFatal
       TestRequires
-      TestSimple13
     ];
     propagatedBuildInputs = [
       Moose
@@ -24341,7 +24337,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DateTime
@@ -24367,7 +24362,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DateTimeXEasy
@@ -24614,10 +24608,10 @@ with self;
 
   Mouse = buildPerlModule {
     pname = "Mouse";
-    version = "2.5.10";
+    version = "2.5.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.10.tar.gz";
-      hash = "sha256-zo3COUYVOkZ/8JdlFn7iWQ9cUCEg9IotlEFzPzmqMu4=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.11.tar.gz";
+      hash = "sha256-4qDQkwGQwhpES5YHk6ouNp7yih3QuPNIKXlfhqGRWVY=";
     };
     buildInputs = [
       ModuleBuildXSUtil
@@ -25009,6 +25003,12 @@ with self;
       url = "mirror://cpan/authors/id/B/BA/BARNEY/Net-Amazon-S3-0.991.tar.gz";
       hash = "sha256-+3r4umSUjRo/MdgJ13EFImiA8GmYrH8Rn4JITmijI9M=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/rustyconover/net-amazon-s3/commit/233cb0f2812c4f71b4fecd4058dbf34fe8d6824d.patch";
+        hash = "sha256-lVx1CoAFY37KIkDdl2Inqb16aZ9D0lXt475/7LyjOLM=";
+      })
+    ];
     buildInputs = [
       TestDeep
       TestException
@@ -27707,18 +27707,18 @@ with self;
 
   PerlCriticCommunity = buildPerlModule {
     pname = "Perl-Critic-Community";
-    version = "1.0.3";
+    version = "1.0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.3.tar.gz";
-      hash = "sha256-Ed3bt5F5/mIp8zPKOS+U/firXNmJzJfZk1IaidXEetU=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.4.tar.gz";
+      hash = "sha256-OzFiTqDPQ5K49Dl6UpUVJIgUohZml/GkU9WKtvES0gk=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [
       PPI
       PathTiny
       PerlCritic
+      PerlCriticPolicyPliceaseProhibitArrayAssignAref
       PerlCriticPolicyVariablesProhibitLoopOnHash
-      PerlCriticPulp
     ];
     meta = {
       description = "Community-inspired Perl::Critic policies";
@@ -27743,6 +27743,21 @@ with self;
       description = "Policies for Perl::Critic concerned with using Moose";
       homepage = "https://metacpan.org/release/Perl-Critic-Moose";
       license = with lib.licenses; [ artistic1 ];
+    };
+  };
+
+  PerlCriticPolicyPliceaseProhibitArrayAssignAref = buildPerlPackage {
+    pname = "Perl-Critic-Policy-Plicease-ProhibitArrayAssignAref";
+    version = "100.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Perl-Critic-Policy-Plicease-ProhibitArrayAssignAref-100.00.tar.gz";
+      hash = "sha256-2LcyMNK4vyuAEE/Ap1jHSLn/N7CL+Buqc/jXCeIM/r4=";
+    };
+    propagatedBuildInputs = [ PerlCritic ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Perl::Critic::Policy::Plicease::ProhibitArrayAssignAref";
+      description = "Don't assign an anonymous arrayref to an array";
+      license = lib.licenses.gpl3Plus;
     };
   };
 
@@ -28001,10 +28016,10 @@ with self;
 
   PerlTidy = buildPerlPackage {
     pname = "Perl-Tidy";
-    version = "20230912";
+    version = "20250711";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20230912.tar.gz";
-      hash = "sha256-DFeIjyBvmHd34WZA5yV0qgp3eEZxn44+0EE8NTJfVUA=";
+      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20250711.tar.gz";
+      hash = "sha256-NHqpC8773itZDa9I04fvH9m3pzqZawQCafEatvuLpEg=";
     };
     meta = {
       description = "Indent and reformat perl scripts";
@@ -31756,7 +31771,6 @@ with self;
     };
     buildInputs = [
       TestException
-      TestSimple13
       TestTableDriven
     ];
     propagatedBuildInputs = [
@@ -32225,10 +32239,10 @@ with self;
 
   SyntaxKeywordTry = buildPerlModule {
     pname = "Syntax-Keyword-Try";
-    version = "0.29";
+    version = "0.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.29.tar.gz";
-      hash = "sha256-zDIHGdNgjaqVFHQ6Q9rCvpnLjM2Ymx/vooUpDLHVnY8=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.30.tar.gz";
+      hash = "sha256-8Gjwuccf/4/vbYqentaVHLelK5djIr2VUYHMXnsX5pI=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ XSParseKeyword ];
@@ -33177,10 +33191,10 @@ with self;
 
   Test2Harness = buildPerlPackage {
     pname = "Test2-Harness";
-    version = "1.000155";
+    version = "1.000161";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000155.tar.gz";
-      hash = "sha256-Hvi/euDKALaHu24RXzq4yVBI5ICsmuUylzabxpSkc4s=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000161.tar.gz";
+      hash = "sha256-SXO3mx7tUwVxXuc9itySNtp5XH1AkNg7FQ6hMc1ltBQ=";
     };
 
     checkPhase = ''
@@ -33258,7 +33272,6 @@ with self;
       IPCRun3
       Test2Suite
     ];
-    propagatedBuildInputs = [ TestSimple13 ];
     meta = {
       description = "Fail if tests warn";
       homepage = "https://metacpan.org/release/Test2-Plugin-NoWarnings";
@@ -33278,7 +33291,6 @@ with self;
       ScopeGuard
       SubInfo
       TermTable
-      TestSimple13
     ];
     meta = {
       description = "Distribution with a rich set of tools built upon the Test2 framework";
@@ -35129,22 +35141,6 @@ with self;
     meta = {
       description = "Fork test";
       homepage = "https://github.com/tokuhirom/Test-SharedFork";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
-
-  TestSimple13 = buildPerlPackage {
-    pname = "Test-Simple";
-    version = "1.302195";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302195.tar.gz";
-      hash = "sha256-s5C7I1kuC5Rsla27PDCxG8Y0ooayhHvmEa2SnFfjmmw=";
-    };
-    meta = {
-      description = "Basic utilities for writing tests";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -38937,7 +38933,6 @@ with self;
     buildInputs = [
       ExtUtilsDepends
       TestFatal
-      TestSimple13
     ];
     meta = {
       description = "Opaque, extensible XS pointer backed objects using sv_magic";
@@ -38973,10 +38968,10 @@ with self;
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.29";
+    version = "0.37";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.29.tar.gz";
-      hash = "sha256-UnX1w457gFe6cuzRzAcpO26TOadzdA51pse+lSAfHjw=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.37.tar.gz";
+      hash = "sha256-c2UoyIjqe2phkQEeXVp4JOw4pWIFB95u9F5LxuHPDak=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ FileShareDir ];
