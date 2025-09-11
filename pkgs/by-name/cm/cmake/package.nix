@@ -60,8 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Add NIXPKGS_CMAKE_PREFIX_PATH to cmake which is like CMAKE_PREFIX_PATH
     # except it is not searched for programs
     ./nixpkgs-cmake-prefix-path.patch
-    # Don't search in non-Nix locations such as /usr, but do search in our libc.
-    ./search-path.patch
+
+    # Add the libc paths from the compiler wrapper.
+    ./add-nixpkgs-libc-paths.patch
+
+    # Remove references to non‐Nix search paths.
+    ./remove-impure-search-paths.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-binary-paths.patch {
