@@ -942,11 +942,6 @@ with haskellLib;
   CLI = dontCheck super.CLI; # Upstream has no issue tracker.
   command-qq = dontCheck super.command-qq; # http://hydra.cryp.to/build/499042/log/raw
   conduit-connection = dontCheck super.conduit-connection;
-  conduit-concurrent-map = super.conduit-concurrent-map.override {
-    # say has test failures with GHC 9.10.2: https://github.com/fpco/say/issues/5
-    # Since say is only a test dependency of conduit-concurrent-map, the latter's output is unaffected.
-    say = dontCheck super.say;
-  };
   craftwerk = dontCheck super.craftwerk;
   crc = dontCheck super.crc; # https://github.com/MichaelXavier/crc/issues/2
   damnpacket = dontCheck super.damnpacket; # http://hydra.cryp.to/build/496923/log
