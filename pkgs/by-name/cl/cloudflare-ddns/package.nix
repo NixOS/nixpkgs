@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflare-ddns";
   version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "favonia";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cloudflare-ddns";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/806eUsuWhiCnvO1DasPW2xVFYYxnmki3KIDre7gjrg=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ shokerplz ];
     platforms = lib.platforms.unix ++ lib.platforms.darwin;
   };
-}
+})
