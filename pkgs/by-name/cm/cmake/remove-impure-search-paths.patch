@@ -1029,19 +1029,10 @@ index 3be945ba1b..140f522625 100644
          lib/x86_64
          lib/x64
 diff --git a/Modules/FindOpenGL.cmake b/Modules/FindOpenGL.cmake
-index a842756fcf..feeddc8368 100644
+index a842756fcf..fb1274e4cd 100644
 --- a/Modules/FindOpenGL.cmake
 +++ b/Modules/FindOpenGL.cmake
-@@ -252,18 +252,18 @@
-     )
- else()
-   if (CMAKE_ANDROID_NDK)
--    set(_OPENGL_INCLUDE_PATH ${CMAKE_ANDROID_NDK}/sysroot/usr/include)
--    set(_OPENGL_LIB_PATH ${CMAKE_ANDROID_NDK}/platforms/android-${CMAKE_SYSTEM_VERSION}/arch-${CMAKE_ANDROID_ARCH}/usr/lib)
-+    set(_OPENGL_INCLUDE_PATH ${CMAKE_ANDROID_NDK}/sysroot/var/empty/include)
-+    set(_OPENGL_LIB_PATH ${CMAKE_ANDROID_NDK}/platforms/android-${CMAKE_SYSTEM_VERSION}/arch-${CMAKE_ANDROID_ARCH}/var/empty/lib)
-   elseif (CMAKE_SYSTEM_NAME MATCHES "HP-UX")
-     # Handle HP-UX cases where we only want to find OpenGL in either hpux64
+@@ -259,11 +259,11 @@
      # or hpux32 depending on if we're doing a 64 bit build.
      if(CMAKE_SIZEOF_VOID_P EQUAL 4)
        set(_OPENGL_LIB_PATH
@@ -1724,84 +1715,6 @@ index dcc9837259..cfdbb6980f 100644
  endif()
  
  # Files named "libfoo.a" may actually be shared libraries.
-diff --git a/Modules/Platform/Android-Common.cmake b/Modules/Platform/Android-Common.cmake
-index 60e16170f9..5d9318dbe2 100644
---- a/Modules/Platform/Android-Common.cmake
-+++ b/Modules/Platform/Android-Common.cmake
-@@ -219,11 +219,11 @@
-     endif()
-     if(NOT CMAKE_ANDROID_NDK_DEPRECATED_HEADERS)
-       list(APPEND CMAKE_${lang}_STANDARD_INCLUDE_DIRECTORIES
--        "${_cmake_sysroot_compile}/usr/include"
--        "${_cmake_sysroot_compile}/usr/include/${CMAKE_ANDROID_ARCH_TRIPLE}"
-+        "${_cmake_sysroot_compile}/var/empty/include"
-+        "${_cmake_sysroot_compile}/var/empty/include/${CMAKE_ANDROID_ARCH_TRIPLE}"
-         )
-     else()
--      list(APPEND CMAKE_${lang}_STANDARD_INCLUDE_DIRECTORIES "${_cmake_sysroot_compile}/usr/include")
-+      list(APPEND CMAKE_${lang}_STANDARD_INCLUDE_DIRECTORIES "${_cmake_sysroot_compile}/var/empty/include")
-     endif()
-     unset(_cmake_sysroot_compile)
-   endif()
-diff --git a/Modules/Platform/Android-Determine.cmake b/Modules/Platform/Android-Determine.cmake
-index b7981d9aa1..2f80e4db35 100644
---- a/Modules/Platform/Android-Determine.cmake
-+++ b/Modules/Platform/Android-Determine.cmake
-@@ -152,12 +152,12 @@
-       "does not exist."
-       )
-   endif()
--  if(NOT EXISTS "${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/usr/include/android/api-level.h")
-+  if(NOT EXISTS "${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/var/empty/include/android/api-level.h")
-     message(FATAL_ERROR
-       "Android: The standalone toolchain directory specified by CMAKE_ANDROID_STANDALONE_TOOLCHAIN:\n"
-       "  ${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}\n"
-       "does not contain a sysroot with a known layout.  The file:\n"
--      "  ${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/usr/include/android/api-level.h\n"
-+      "  ${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/var/empty/include/android/api-level.h\n"
-       "does not exist."
-       )
-   endif()
-@@ -197,7 +197,7 @@
-     # The compiler launcher does not know __ANDROID_API__.  Assume this
-     # is not unified headers and look for it in the api-level.h header.
-     set(_ANDROID_API_LEVEL_H_REGEX "^[\t ]*#[\t ]*define[\t ]+__ANDROID_API__[\t ]+([0-9]+)")
--    file(STRINGS "${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/usr/include/android/api-level.h"
-+    file(STRINGS "${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/var/empty/include/android/api-level.h"
-       _ANDROID_API_LEVEL_H_CONTENT REGEX "${_ANDROID_API_LEVEL_H_REGEX}")
-     if(_ANDROID_API_LEVEL_H_CONTENT MATCHES "${_ANDROID_API_LEVEL_H_REGEX}")
-       set(_ANDROID_STANDALONE_TOOLCHAIN_API "${CMAKE_MATCH_1}")
-@@ -208,7 +208,7 @@
-       "Android: Did not detect API level from\n"
-       "  ${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/bin/clang\n"
-       "or\n"
--      "  ${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/usr/include/android/api-level.h\n"
-+      "  ${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}/sysroot/var/empty/include/android/api-level.h\n"
-       )
-   endif()
- endif()
-@@ -559,7 +559,7 @@
- endif()
- 
- if(CMAKE_ANDROID_NDK AND NOT DEFINED CMAKE_ANDROID_NDK_DEPRECATED_HEADERS)
--  if(IS_DIRECTORY "${CMAKE_ANDROID_NDK}/sysroot/usr/include/${CMAKE_ANDROID_ARCH_TRIPLE}")
-+  if(IS_DIRECTORY "${CMAKE_ANDROID_NDK}/sysroot/var/empty/include/${CMAKE_ANDROID_ARCH_TRIPLE}")
-     # Unified headers exist so we use them by default.
-     set(CMAKE_ANDROID_NDK_DEPRECATED_HEADERS 0)
-   else()
-diff --git a/Modules/Platform/Android-Initialize.cmake b/Modules/Platform/Android-Initialize.cmake
-index 75851acad0..28ee708afb 100644
---- a/Modules/Platform/Android-Initialize.cmake
-+++ b/Modules/Platform/Android-Initialize.cmake
-@@ -69,7 +69,7 @@
-   # So we can add the API level specific directory directly.
-   # https://github.com/android/ndk/issues/929
-   list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
--    "/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/${CMAKE_SYSTEM_VERSION}"
-+    "/var/empty/lib/${CMAKE_LIBRARY_ARCHITECTURE}/${CMAKE_SYSTEM_VERSION}"
-     )
- 
-   list(APPEND CMAKE_SYSTEM_PROGRAM_PATH "${CMAKE_ANDROID_NDK_TOOLCHAIN_UNIFIED}/bin")
 diff --git a/Modules/Platform/BlueGeneP-base.cmake b/Modules/Platform/BlueGeneP-base.cmake
 index 7552fad7b9..52fad6236a 100644
 --- a/Modules/Platform/BlueGeneP-base.cmake
