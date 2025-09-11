@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     hash = "sha512-cfzhuF4EnGmLJf5EGSIbWqJItY3npbRSALm+GarZ7SMU7Hr1xw0gtBFMpOdi5PBar4TgtvbnG4oRPh+COINGlA==";
   };
 
+  patches = lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
+
   nativeBuildInputs = [
     which
     dieHook
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isCygwin "-D_GNU_SOURCE";
   # Fix rpath change on darwin to avoid failure like:
   #     error: install_name_tool: changing install names or
   #     rpaths can't be redone for: liblowdown.1.dylib (for architecture
@@ -80,10 +83,11 @@ stdenv.mkDerivation rec {
     in
 
     # Check that soVersion is up to date even if we are not on darwin
-    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
-      test -f $lib/lib/liblowdown.so.${soVersion} || \
-        die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
-    ''
+    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isCygwin)
+      ''
+        test -f $lib/lib/liblowdown.so.${soVersion} || \
+          die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
+      ''
     # Fix lib extension so that fixDarwinDylibNames detects it, see
     # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
     + lib.optionalString (enableShared && stdenv.hostPlatform.isDarwin) ''
