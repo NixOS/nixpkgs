@@ -1017,6 +1017,15 @@ let
         merge = mergeEqualOption;
       };
 
+      # A value produced by `lib.ron.mkChar`
+      ronChar = mkOptionType {
+        name = "ronChar";
+        description = "RON char";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-char";
+        merge = mergeEqualOption;
+      };
+
       uniq = unique { message = ""; };
 
       unique =
