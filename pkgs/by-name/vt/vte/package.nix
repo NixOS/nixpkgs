@@ -59,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
     })
+
+    # Fix compilation with gcc 14
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/e297ba0507d0e7863edd411dfc5264bbc490e4f6.patch";
+      hash = "sha256-uTaeb7bLUBefgF5Uxl7Qxlcp5Uj7pqW8XiR/5rsjuTI=";
+    })
   ];
 
   nativeBuildInputs = [
