@@ -1077,6 +1077,15 @@ let
         merge = mergeEqualOption;
       };
 
+      # A value produced by `lib.ron.mkOptional`
+      ronOptional = mkOptionType {
+        name = "ronOptional";
+        description = "raw RON";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-optional";
+        merge = mergeEqualOption;
+      };
+
       uniq = unique { message = ""; };
 
       unique =
