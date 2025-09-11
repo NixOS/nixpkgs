@@ -10,6 +10,8 @@
   zstd,
   stdenv,
   wayland,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,6 +56,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "3D Reconstruction for all";
     homepage = "https://github.com/ArthurBrussee/brush";
@@ -61,6 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ matthewcroughan ];
-    mainProgram = "brush";
+    mainProgram = "brush_app";
   };
 })
