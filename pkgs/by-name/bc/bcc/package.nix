@@ -21,6 +21,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
+  __structuredAttrs = true;
   pname = "bcc";
   version = "0.35.0";
   pyproject = false;
