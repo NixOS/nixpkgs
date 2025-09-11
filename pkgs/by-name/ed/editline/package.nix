@@ -49,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/troglobit/editline/commit/fb4d7268de024ed31ad2417f533cc0cbc2cd9b29.diff";
       hash = "sha256-5zMsmpU5zFoffRUwFhI/vP57pEhGotcMPgn9AfI1SNg=";
     })
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./no-undefined.patch;
 
   configureFlags = [
     # Enable SIGSTOP (Ctrl-Z) behavior.
