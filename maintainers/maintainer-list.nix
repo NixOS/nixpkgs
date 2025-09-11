@@ -16777,6 +16777,12 @@
     githubId = 34864484;
     name = "Mikael Fangel";
   };
+  mikansoro = {
+    email = "michael@mikansystems.com";
+    github = "mikansoro";
+    githubId = 41764397;
+    name = "Michael";
+  };
   mikecm = {
     email = "mikecmcleod@gmail.com";
     github = "MaxwellDupre";
