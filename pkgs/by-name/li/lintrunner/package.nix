@@ -19,9 +19,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/kNySvqCwfWPRITJEZ+8akQa+ZW7gfo2aOGDyvsRs9E=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-dv/CznOB/VFx1PM+cYmdHuiK7d8z/HUQbDt5iy5LUTI=";
+    hash = "sha256-+ZuOWIbN5+ZfzpMu5AC449sXrC3ohw1+tNb681VgCww=";
   };
 
   # Adding maturninBuildHook will automatically build and install the executable
