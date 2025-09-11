@@ -121,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional qt5UI qtbase;
 
   preConfigure = ''
-    fixCmakeFiles .
     substituteInPlace Modules/Platform/UnixPaths.cmake \
       --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
