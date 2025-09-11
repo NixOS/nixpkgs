@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Add NIXPKGS_CMAKE_PREFIX_PATH to cmake which is like CMAKE_PREFIX_PATH
     # except it is not searched for programs
-    ./000-nixpkgs-cmake-prefix-path.diff
+    ./nixpkgs-cmake-prefix-path.patch
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
-    ./001-search-path.diff
+    ./search-path.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-binary-paths.patch {
@@ -71,14 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
   ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
-    replaceVars ./007-darwin-bsd-ps-abspath.diff {
+    replaceVars ./darwin-bsd-ps-abspath.patch {
       ps = lib.getExe ps;
     }
   )
   ++ [
     # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/11134
-    # Fixes build against curl 8.16 and later
-    ./009-cmCTestCurl-Avoid-using-undocumented-type-for-CURLOPT_PROXYTYPE-values.diff
+    ./fix-curl-8.16.patch
   ];
 
   outputs = [
