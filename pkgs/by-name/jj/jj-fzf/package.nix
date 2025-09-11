@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jj-fzf";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "tim-janik";
     repo = "jj-fzf";
     tag = "v${version}";
-    hash = "sha256-xcPLFrCpncK+RYw7BnT7BR4zfvCYnatIF0YU0wYc3iI=";
+    hash = "sha256-iVgX2Lu06t1pCQl5ZGgl3+lTv4HAPKbD/83STDtYhdU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
