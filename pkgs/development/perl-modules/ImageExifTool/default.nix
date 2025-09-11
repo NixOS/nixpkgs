@@ -3,9 +3,7 @@
   fetchFromGitHub,
   gitUpdater,
   lib,
-  shortenPerlShebang,
-  stdenv,
-  versionCheckHook,
+  testers,
 }:
 
 buildPerlPackage rec {
@@ -19,19 +17,9 @@ buildPerlPackage rec {
     hash = "sha256-GPm3HOt7fNMbXRrV5V+ykJAfhww1O6NrD0l/7hA2i28=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-
   postPatch = ''
     patchShebangs exiftool
   '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/exiftool
-  '';
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "-ver";
 
   passthru = {
     updateScript = gitUpdater { };
