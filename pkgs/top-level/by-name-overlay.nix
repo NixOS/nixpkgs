@@ -14,6 +14,7 @@ let
     ;
 
   inherit (lib.attrsets)
+    isAttrs
     mapAttrs
     mapAttrsToList
     mergeAttrsList
@@ -55,4 +56,13 @@ self: super:
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
   _internalCallByNamePackageFile = file: self.callPackage file { };
 }
-// mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
+// mapAttrs (
+  name: file:
+  let
+    value = import file;
+  in
+  if isAttrs value && value.type == "alias" then
+    lib.customisation.makeAlias self name value
+  else
+    self._internalCallByNamePackageFile file
+) packageFiles

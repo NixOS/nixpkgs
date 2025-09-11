@@ -207,6 +207,35 @@ rec {
         result
     );
 
+  makeAlias =
+    let
+      currentRelease = lib.versions.majorMinor lib.version;
+    in
+    self:
+    name:
+    {
+      type,
+      package ? null,
+      reason ? null,
+      release ? null,
+    }:
+    assert type == "alias";
+    if release == null then
+      self.${package}
+    else if release != currentRelease then
+      if package == null then
+        abort "Throw for '${name}' was added in ${release}. The alias must now be removed."
+      else
+        abort "Warning for '${name}' was added in ${release}. The alias must now be converted to a throw."
+    else if package == null || !self.config.allowAliases then
+      {
+        type = "error";
+        meta = throw "'${name}' was removed because it was ${reason}.";
+      }
+    else
+      lib.warnOnInstantiate "'${name}' was renamed to '${package}'. The alias will be removed in the next release." self.${package}
+    ;
+
   /**
     Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
