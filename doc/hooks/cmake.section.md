@@ -38,6 +38,10 @@ When command `jq` is available,
 2. If the types are specified in `cmakeEntryTypes` but is not `BOOL`,
    the `cmakeEntries` values will be cast in-place into `ON` or `OFF`.
 
+To enable the above-mentioned canonicalization whenever available,
+non-minimal-build `cmake` packages propagate the `jq` native build inputs.
+To opt out such propagation, override as `cmake.override { jq = null; }` or use `cmakeMinimal`.
+
 #### `cmakeFlags` {#cmake-flags}
 
 Extra flags to pass to `cmake setup` during configure phase.
