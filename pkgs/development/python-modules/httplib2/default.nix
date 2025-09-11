@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httplib2";
     repo = "httplib2";
     tag = "v${version}";
-    hash = "sha256-A5bPkBx1wyOG8SuV5Bm0OdP9W1LOHKHUMrgwpGhRMzU=";
+    hash = "sha256-faeanUBpNmhBEffENP9hl9tnZoRmKf3Fq1s4FdPs8LQ=";
   };
 
   build-system = [ setuptools ];
