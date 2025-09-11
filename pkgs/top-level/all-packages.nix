@@ -8528,9 +8528,11 @@ with pkgs;
   nss = nss_esr;
   nssTools = nss.tools;
 
-  nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts =
-    dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
+    dicts:
+    lib.warn "nuspellWithDicts is deprecated, please use nuspell.withDicts instead." nuspell.withDicts (
+      _: dicts
+    );
 
   nv-codec-headers-9 = nv-codec-headers.override { majorVersion = "9"; };
   nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
