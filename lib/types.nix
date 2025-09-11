@@ -1086,6 +1086,28 @@ let
         merge = mergeEqualOption;
       };
 
+      # A value produced by `lib.ron.mkTuple`
+      ronTuple =
+        size:
+        mkOptionType {
+          name = "ronTuple";
+          description = "RON tuple";
+          descriptionClass = "noun";
+          check = x: x._type or null == "ron-tuple";
+          merge = mergeEqualOption;
+          emptyValue.value = {
+            _type = "ron-tuple";
+            value = [ ];
+          };
+          functor = defaultFunctor "ronTuple" // {
+            payload = { inherit size; };
+            type = payload: types.ronTuple payload.size;
+            binOp = a: b: {
+              size = if a.size == b.size then a.size else throw "The tuple sizes do not match.";
+            };
+          };
+        };
+
       uniq = unique { message = ""; };
 
       unique =
