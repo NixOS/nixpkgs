@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   replaceVars,
   setuptools,
@@ -63,20 +64,42 @@ buildPythonPackage {
     ];
   };
 
-  nativeCheckInputs = [ xvfb-run ];
+  nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux xvfb-run;
 
   preCheck = ''
     cd $NIX_BUILD_TOP/Python-*/Lib
     export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
-      python -m unittest test.test_tcl test.test_tkinter test.test_ttk test.test_ttk_textonly
-
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      testsNoGui = [
+        "test.test_tcl"
+        "test.test_ttk_textonly"
+      ];
+      testsGui =
+        if pythonOlder "3.12" then
+          [
+            "test.test_tk"
+            # "test.test_ttk_guionly"  # https://github.com/python/cpython/issues/124378
+          ]
+        else
+          [
+            "test.test_tkinter"
+            "test.test_ttk"
+          ];
+    in
+    ''
+      runHook preCheck
+      ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsNoGui}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
+        ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsGui}
+    ''
+    + ''
+      runHook postCheck
+    '';
 
   pythonImportsCheck = [ "tkinter" ];
 
