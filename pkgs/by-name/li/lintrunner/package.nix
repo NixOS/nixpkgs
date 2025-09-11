@@ -12,14 +12,11 @@ python3Packages.buildPythonApplication rec {
   version = "0.12.7";
   pyproject = true;
 
-  # NOTE: there is a PR open on the upstream repository for the Cargo.lock file.
-  # After that is merged we can change the owner and rev to the upstream
-  # repository instead of a fork.
   src = fetchFromGitHub {
-    owner = "PrestonHager";
+    owner = "suo";
     repo = "lintrunner";
-    tag = "v${version}";
-    hash = "sha256-CYSNEDT9RO7bnVW8zcDDJOva4GOKGMNs1CcU//IbBrc=";
+    rev = "main";
+    hash = "sha256-/kNySvqCwfWPRITJEZ+8akQa+ZW7gfo2aOGDyvsRs9E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
