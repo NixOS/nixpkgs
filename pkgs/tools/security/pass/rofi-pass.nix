@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   unstableGitUpdater,
   coreutils,
   util-linux,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     hash = "sha256-1lPNj47vTPLBK7mVm+PngV8C/ZsjJ2EN4ffXGU2TlQo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontBuild = true;
 
