@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
@@ -127,6 +128,12 @@ let
           };
         };
     };
+
+  removedMessage = version: ''
+    Lix ${version} is now removed from this revision of Nixpkgs. Consider upgrading to stable or the latest version.
+
+          If you notice a problem while upgrading disrupting your workflows which did not occur in version ${version}, please reach out to the Lix team.
+  '';
 in
 lib.makeExtensible (
   self:
@@ -147,53 +154,66 @@ lib.makeExtensible (
           hash = "sha256-Oqw04eboDM8rrUgAXiT7w5F2uGrQdt8sGX+Mk6mVXZQ=";
         };
 
-      cargoDeps = rustPlatform.fetchCargoVendor {
-        name = "lix-${version}";
-        inherit src;
-        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          name = "lix-${version}";
+          inherit src;
+          hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+        };
       };
     };
-  };
 
-  git = self.makeLixScope {
-    attrName = "git";
+    git = self.makeLixScope {
+      attrName = "git";
 
-    lix-args = rec {
-      version = "2.94.0-pre-20250807_${builtins.substring 0 12 src.rev}";
+      lix-args = rec {
+        version = "2.94.0-pre-20250807_${builtins.substring 0 12 src.rev}";
 
-      src = fetchFromGitea {
-        domain = "git.lix.systems";
-        owner = "lix-project";
-        repo = "lix";
-        rev = "8bbd5e1d0df9c31b4d86ba07bc85beb952e42ccb";
-        hash = "sha256-P+WiN95OjCqHhfygglS/VOFTSj7qNdL5XQDo2wxhQqg=";
-      };
+        src = fetchFromGitea {
+          domain = "git.lix.systems";
+          owner = "lix-project";
+          repo = "lix";
+          rev = "8bbd5e1d0df9c31b4d86ba07bc85beb952e42ccb";
+          hash = "sha256-P+WiN95OjCqHhfygglS/VOFTSj7qNdL5XQDo2wxhQqg=";
+        };
 
-      cargoDeps = rustPlatform.fetchCargoVendor {
-        name = "lix-${version}";
-        inherit src;
-        hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          name = "lix-${version}";
+          inherit src;
+          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+        };
       };
     };
-  };
 
-  latest = self.lix_2_93;
+    latest = self.lix_2_93;
 
-  stable = self.lix_2_93;
+    stable = self.lix_2_93;
 
-  # Previously, `nix-eval-jobs` was not packaged here, so we export an
-  # attribute with the previously-expected structure for compatibility. This
-  # is also available (for now) as `pkgs.lixVersions`.
-  renamedDeprecatedLixVersions =
-    let
-      mkAlias =
-        version:
-        lib.warnOnInstantiate "'lixVersions.${version}' has been renamed to 'lixPackageSets.${version}.lix'"
-          self.${version}.lix;
-    in
-    lib.dontRecurseIntoAttrs {
-      # NOTE: Do not add new versions of Lix here.
-      stable = mkAlias "stable";
-      latest = mkAlias "latest";
-    };
-})
+    # Previously, `nix-eval-jobs` was not packaged here, so we export an
+    # attribute with the previously-expected structure for compatibility. This
+    # is also available (for now) as `pkgs.lixVersions`.
+    renamedDeprecatedLixVersions =
+      let
+        mkAlias =
+          version:
+          lib.warnOnInstantiate "'lixVersions.${version}' has been renamed to 'lixPackageSets.${version}.lix'"
+            self.${version}.lix;
+      in
+      lib.dontRecurseIntoAttrs {
+        # NOTE: Do not add new versions of Lix here.
+        stable = mkAlias "stable";
+        latest = mkAlias "latest";
+      }
+      // lib.optionalAttrs config.allowAliases {
+        # Legacy removed versions. We keep their aliases until the lixPackageSets one is dropped.
+        lix_2_90 = mkAlias "lix_2_90";
+        lix_2_91 = mkAlias "lix_2_91";
+      };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    # Removed versions.
+    # When removing a version, add an alias with a date attached to it so we can clean it up after a while.
+    lix_2_90 = throw (removedMessage "2.90"); # added in 2025-09-11
+    lix_2_91 = throw (removedMessage "2.91"); # added in 2025-09-11
+    lix_2_92 = throw (removedMessage "2.92"); # added in 2025-09-11
+  }
+)
