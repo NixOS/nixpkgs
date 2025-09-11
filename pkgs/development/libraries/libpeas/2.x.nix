@@ -15,7 +15,7 @@
   glib,
   lua5_1,
   python3,
-  spidermonkey_128,
+  spidermonkey_140,
   gnome,
 }:
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     luaEnv
     python3
     python3.pkgs.pygobject3
-    spidermonkey_128
+    spidermonkey_140
   ];
 
   propagatedBuildInputs = [
