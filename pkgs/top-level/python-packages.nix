@@ -13162,6 +13162,8 @@ self: super: with self; {
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
 
+  pyiceberg-core = callPackage ../development/python-modules/pyiceberg-core { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   pyicu = callPackage ../development/python-modules/pyicu { };
