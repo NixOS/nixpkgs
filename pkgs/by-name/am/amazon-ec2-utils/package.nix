@@ -8,7 +8,7 @@
   gnugrep,
   gnused,
   installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   python3,
   stdenv,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     udevCheckHook
   ];
 
