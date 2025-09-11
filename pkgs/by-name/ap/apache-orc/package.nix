@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-orc";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "orc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hNKzqNOagBJOWQRebkVHIuvqfpk9Mi30bu4z7dGbsxk=";
+    hash = "sha256-tRUCO7SPlHuGffXJx/rQXvQdEfgCCQAtUZP7OQcjqpU=";
   };
 
   nativeBuildInputs = [
