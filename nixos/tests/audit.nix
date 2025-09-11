@@ -31,7 +31,7 @@
   };
 
   testScript = ''
-    machine.wait_for_unit("audit-rules.service")
+    machine.wait_for_unit("audit-rules-nixos.service")
     machine.wait_for_unit("auditd.service")
 
     with subtest("Audit subsystem gets enabled"):
@@ -46,8 +46,8 @@
       machine.succeed("hello")
       print(machine.succeed("ausearch -k nixos-test -sc exit_group"))
 
-    with subtest("Stopping audit-rules.service disables the audit subsystem"):
-      machine.succeed("systemctl stop audit-rules.service")
+    with subtest("Stopping audit-rules-nixos.service disables the audit subsystem"):
+      machine.succeed("systemctl stop audit-rules-nixos.service")
       t.assertIn("enabled 0", machine.succeed("auditctl -s"))
   '';
 
