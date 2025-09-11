@@ -1,0 +1,59 @@
+diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
+index bdf4155232..588064821d 100644
+--- a/Modules/Platform/UnixPaths.cmake
++++ b/Modules/Platform/UnixPaths.cmake
+@@ -29,9 +29,6 @@
+ # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
+ # synchronized
+ list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  # Standard
+-  /usr/local /usr /
+-
+   # CMake install location
+   "${_CMAKE_INSTALL_DIR}"
+   )
+@@ -49,28 +46,6 @@
+ endif()
+ _cmake_record_install_prefix()
+ 
+-# Non "standard" but common install prefixes
+-list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  /usr/X11R6
+-  /usr/pkg
+-  /opt
+-  )
+-
+-# List common include file locations not under the common prefixes.
+-list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+-  # X11
+-  /usr/include/X11
+-  )
+-
+-list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+-  # X11
+-  /usr/lib/X11
+-  )
+-
+-list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+-  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
+-  )
+-
+ # Add the Nix C library paths.
+ if(DEFINED ENV{NIX_CC}
+   AND IS_DIRECTORY "$ENV{NIX_CC}"
+diff --git a/Modules/Platform/WindowsPaths.cmake b/Modules/Platform/WindowsPaths.cmake
+index c56dfaf9ac..4e0b250c1a 100644
+--- a/Modules/Platform/WindowsPaths.cmake
++++ b/Modules/Platform/WindowsPaths.cmake
+@@ -69,11 +69,6 @@
+ endif()
+ _cmake_record_install_prefix()
+ 
+-if(CMAKE_CROSSCOMPILING AND NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+-  # MinGW (useful when cross compiling from linux with CMAKE_FIND_ROOT_PATH set)
+-  list(APPEND CMAKE_SYSTEM_PREFIX_PATH /)
+-endif()
+-
+ list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+   )
+ 

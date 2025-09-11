@@ -1,0 +1,50 @@
+diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
+index e95da44ea4..bdf4155232 100644
+--- a/Modules/Platform/UnixPaths.cmake
++++ b/Modules/Platform/UnixPaths.cmake
+@@ -71,28 +71,38 @@
+   /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
+   )
+ 
+-if(CMAKE_SYSROOT_COMPILE)
+-  set(_cmake_sysroot_compile "${CMAKE_SYSROOT_COMPILE}")
++# Add the Nix C library paths.
++if(DEFINED ENV{NIX_CC}
++  AND IS_DIRECTORY "$ENV{NIX_CC}"
++  AND EXISTS "$ENV{NIX_CC}/nix-support/orig-libc"
++  AND EXISTS "$ENV{NIX_CC}/nix-support/orig-libc-dev")
++  file(STRINGS "$ENV{NIX_CC}/nix-support/orig-libc" _nix_cmake_libc)
++  file(STRINGS "$ENV{NIX_CC}/nix-support/orig-libc-dev" _nix_cmake_libc_dev)
+ else()
+-  set(_cmake_sysroot_compile "${CMAKE_SYSROOT}")
++  set(_nix_cmake_libc @libc_lib@)
++  set(_nix_cmake_libc_dev @libc_dev@)
+ endif()
++list(APPEND CMAKE_SYSTEM_INCLUDE_PATH "${_nix_cmake_libc_dev}/include")
++list(APPEND CMAKE_SYSTEM_LIBRARY_PATH "${_nix_cmake_libc}/lib")
++list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${_nix_cmake_libc}/lib")
+ 
+ # Default per-language values.  These may be later replaced after
+ # parsing the implicit directory information from compiler output.
+ set(_CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES_INIT
+   ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}
+-  "${_cmake_sysroot_compile}/usr/include"
++  "${_nix_cmake_libc_dev}/include"
+   )
+ set(_CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES_INIT
+   ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}
+-  "${_cmake_sysroot_compile}/usr/include"
++  "${_nix_cmake_libc_dev}/include"
+   )
+ set(_CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES_INIT
+   ${CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES}
+-  "${_cmake_sysroot_compile}/usr/include"
++  "${_nix_cmake_libc_dev}/include"
+   )
+ 
+-unset(_cmake_sysroot_compile)
++unset(_nix_cmake_libc)
++unset(_nix_cmake_libc_dev)
+ 
+ # Reminder when adding new locations computed from environment variables
+ # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
