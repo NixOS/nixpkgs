@@ -6,7 +6,9 @@
   fetchFromGitea,
   lib,
   objfw,
+  openssl,
   writeTextDir,
+  openSslSupport ? false,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -25,7 +27,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     automake
     autogen
     autoconf
-  ];
+  ]
+  ++ lib.optional openSslSupport openssl;
 
   preConfigure = "./autogen.sh";
   configureFlags = [
@@ -36,6 +39,9 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     build-hello-world = (import ./test-build-and-run.nix) { inherit clangStdenv objfw writeTextDir; };
+    build-hello-world-ssl = (import ./test-build-and-run-ssl.nix) {
+      inherit clangStdenv objfw writeTextDir;
+    };
   };
 
   meta = {
