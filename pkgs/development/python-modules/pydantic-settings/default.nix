@@ -9,6 +9,7 @@
   pytestCheckHook,
   pytest-examples,
   pytest-mock,
+  pyyaml,
 }:
 
 let
@@ -32,6 +33,10 @@ let
       pydantic
       python-dotenv
     ];
+
+    optional-dependencies = {
+      yaml = [ pyyaml ];
+    };
 
     pythonImportsCheck = [ "pydantic_settings" ];
 
