@@ -13,7 +13,12 @@
   byName ? false,
 }:
 let
-  combined = builtins.storePath combinedDir;
+  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
+  # nix store paths around. These need to be turned into (fake) derivations again to track
+  # dependencies properly.
+  # We use two steps for evaluation, because we compare results from two different checkouts.
+  # CI additionalls spreads evaluation across multiple workers.
+  combined = if lib.isDerivation combinedDir then combinedDir else lib.toDerivation combinedDir;
 
   /*
     Derivation that computes which packages are affected (added, changed or removed) between two revisions of nixpkgs.
