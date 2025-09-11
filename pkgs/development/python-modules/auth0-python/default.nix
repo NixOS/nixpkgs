@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.10.0";
+  version = "4.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "auth0";
     repo = "auth0-python";
     tag = version;
-    hash = "sha256-qQbZBuwn2P2ocDjwGeVR7z7rKNHud/gfzNItiliW1P8=";
+    hash = "sha256-KJsuBDN0FppDxwjaskb7BkpjENyg5XE1J1yXwuyq+ZM=";
   };
 
   nativeBuildInputs = [
