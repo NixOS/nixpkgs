@@ -6,7 +6,7 @@
   fetchpatch,
   tbb_2022,
 
-  useTBB ? true,
+  useTBB ? !stdenv.hostPlatform.isCygwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
       relative = "c";
     })
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isCygwin ''
+    substituteInPlace \
+      blake3_impl.h \
+      blake3_dispatch.c \
+      --replace-fail 'defined(_WIN32)' '(defined(_WIN32) || defined(__CYGWIN__))'
+  '';
 
   sourceRoot = finalAttrs.src.name + "/c";
 
