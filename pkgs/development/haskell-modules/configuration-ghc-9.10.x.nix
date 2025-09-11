@@ -76,8 +76,8 @@ in
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
 
-  # 2025-08-10: Tests fail, but fix is not released yet https://github.com/clash-lang/ghc-typelits-natnormalise/issues/89
-  ghc-typelits-natnormalise = doDistribute (doJailbreak self.ghc-typelits-natnormalise_0_7_12);
+  # 2025-09-11: Tests fail, were fixed in 0.7.12, but Stackage is still at 0.7.10.
+  ghc-typelits-natnormalise = doDistribute self.ghc-typelits-natnormalise_0_8_0;
 
   #
   # Jailbreaks

@@ -1845,7 +1845,7 @@ with haskellLib;
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_3_0 = doDistribute (dontCheck super.haskeline_0_8_3_0);
+  haskeline_0_8_4_0 = doDistribute (dontCheck super.haskeline_0_8_4_0);
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -3064,20 +3064,6 @@ with haskellLib;
   # https://github.com/snoyberg/http-client/pull/563
   http-client-tls = doJailbreak super.http-client-tls;
 
-  # agda2hs 1.3 is not compatible with Agda 2.8.0
-  agda2hs = lib.pipe super.agda2hs [
-    (warnAfterVersion "1.3")
-    (overrideSrc {
-      version = "1.3-unstable-2025-07-25";
-      src = pkgs.fetchFromGitHub {
-        owner = "agda";
-        repo = "agda2hs";
-        rev = "01cc0532b522f64223782617cbde1a6f21b8880e";
-        hash = "sha256-SXhnkZa8OmgpYRTb2IVTfebtX+GG5mkVcqKchl2Noic=";
-      };
-    })
-  ];
-
   # 2025-09-03: allow bytestring 0.12
   # https://github.com/wangbj/hashing/issues/4
   hashing = lib.pipe super.hashing [
@@ -3174,7 +3160,7 @@ with haskellLib;
   pipes-text = warnAfterVersion "1.0.1" (doJailbreak super.pipes-text);
 
   # 2025-04-09: jailbreak to allow bytestring >= 0.12
-  array-builder = warnAfterVersion "0.1.4.1" (doJailbreak super.array-builder);
+  array-builder = warnAfterVersion "0.2.0.0" (doJailbreak super.array-builder);
 
   # 2025-04-09: missing dependency - somehow it's not listed on hackage
   broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
