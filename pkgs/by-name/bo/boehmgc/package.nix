@@ -22,6 +22,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
   version = "8.2.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bdwgc";
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
   ];
+
   separateDebugInfo = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "musl";
 
   nativeBuildInputs = [
