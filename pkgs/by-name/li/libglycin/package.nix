@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [ normalcea ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "glycin-1"
