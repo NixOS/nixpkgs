@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://citpsite.s3.amazonaws.com/memory-content/src/aeskeyfind-${version}.tar.gz";
-    sha256 = "sha256-FBflwbYehruVJ9sfW+4ZlaDuqCR12zy8iA4Ev3Bgg+Q=";
+    hash = "sha256-FBflwbYehruVJ9sfW+4ZlaDuqCR12zy8iA4Ev3Bgg+Q=";
   };
 
   installPhase = ''

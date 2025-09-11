@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rcoh";
     repo = "angle-grinder";
     tag = "v${version}";
-    sha256 = "sha256-1SZho04qJcNi84ZkDmxoVkLx9VJX04QINZQ6ZEoCq+c=";
+    hash = "sha256-1SZho04qJcNi84ZkDmxoVkLx9VJX04QINZQ6ZEoCq+c=";
   };
 
   cargoHash = "sha256-B7JFwFzE8ZvbTjCUZ6IEtjavPGkx3Nb9FMSPbNFqiuU=";

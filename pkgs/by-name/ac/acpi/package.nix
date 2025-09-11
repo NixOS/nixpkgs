@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/acpiclient/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5kxuALU815dCfqMqFgUTQlsD7U8HdzP3Hx8J/zQPIws=";
+    hash = "sha256-5kxuALU815dCfqMqFgUTQlsD7U8HdzP3Hx8J/zQPIws=";
   };
 
   meta = {

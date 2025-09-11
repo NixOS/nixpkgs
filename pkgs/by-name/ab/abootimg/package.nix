@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "ggrandou";
     repo = "abootimg";
     rev = "7e127fee6a3981f6b0a50ce9910267cd501e09d4";
-    sha256 = "1qgx9fxwhylgnixzkz2mzv2707f65qq7rar2rsqak536vhig1z9a";
+    hash = "sha256-Kv3wItxmlKmwziKrfDAuxh1wxP5V/Pl7tI96yLtL/eE=";
   };
 
   strictDeps = true;

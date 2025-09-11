@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://915resolution.mango-lang.org/915resolution-${version}.tar.gz";
-    sha256 = "0hmmy4kkz3x6yigz6hk99416ybznd67dpjaxap50nhay9f1snk5n";
+    hash = "sha256-tkyrg0teQQvKVV3J245p9i9vAklpQvNf9KaPPyfxtUI=";
   };
 
   patchPhase = "rm *.o";
