@@ -32,6 +32,7 @@
   rpcSupport ? false,
   apple-sdk_14,
   curl,
+  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
@@ -175,12 +176,17 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # the tests are failing as of 2025-08
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "llama-cpp";
-    extraArgs = [
-      "--version-regex"
-      "b(.*)"
-    ];
+  passthru = {
+    tests = {
+      metal = llama-cpp.override { metalSupport = true; };
+    };
+    updateScript = nix-update-script {
+      attrPath = "llama-cpp";
+      extraArgs = [
+        "--version-regex"
+        "b(.*)"
+      ];
+    };
   };
 
   meta = {
