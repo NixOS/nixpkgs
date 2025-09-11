@@ -1016,24 +1016,9 @@ index 3be945ba1b..140f522625 100644
          lib/x86_64
          lib/x64
 diff --git a/Modules/FindOpenGL.cmake b/Modules/FindOpenGL.cmake
-index a842756fcf..fb1274e4cd 100644
+index a842756fcf..856017afde 100644
 --- a/Modules/FindOpenGL.cmake
 +++ b/Modules/FindOpenGL.cmake
-@@ -259,11 +259,11 @@
-     # or hpux32 depending on if we're doing a 64 bit build.
-     if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-       set(_OPENGL_LIB_PATH
--        /opt/graphics/OpenGL/lib/hpux32/)
-+        /var/empty/graphics/OpenGL/lib/hpux32/)
-     else()
-       set(_OPENGL_LIB_PATH
--        /opt/graphics/OpenGL/lib/hpux64/
--        /opt/graphics/OpenGL/lib/pa20_64)
-+        /var/empty/graphics/OpenGL/lib/hpux64/
-+        /var/empty/graphics/OpenGL/lib/pa20_64)
-     endif()
-   elseif(CMAKE_SYSTEM_NAME STREQUAL Haiku)
-     set(_OPENGL_LIB_PATH
 @@ -275,8 +275,8 @@
      file(GLOB _OPENGL_LIB_PATH
        # The NVidia driver installation tool on Linux installs libraries to a
@@ -1678,76 +1663,6 @@ index b733cfe964..90709f48e8 100644
    if(NOT DEBUGEDIT_EXECUTABLE)
      message(FATAL_ERROR "CPackRPM: debugedit binary could not be found!"
        " Required for debuginfo packaging. See documentation of"
-diff --git a/Modules/Platform/ADSP-Determine.cmake b/Modules/Platform/ADSP-Determine.cmake
-index 1588c92687..556415c681 100644
---- a/Modules/Platform/ADSP-Determine.cmake
-+++ b/Modules/Platform/ADSP-Determine.cmake
-@@ -22,5 +22,5 @@
-   _find_adsp_root("C:/Program Files (x86)/Analog Devices/VisualDSP *")
- endif()
- if(NOT CMAKE_ADSP_ROOT)
--  _find_adsp_root("/opt/analog/cces *")
-+  _find_adsp_root("/var/empty/analog/cces *")
- endif()
-diff --git a/Modules/Platform/AIX.cmake b/Modules/Platform/AIX.cmake
-index dcc9837259..cfdbb6980f 100644
---- a/Modules/Platform/AIX.cmake
-+++ b/Modules/Platform/AIX.cmake
-@@ -12,7 +12,7 @@
- # When our own RPATH is to be added it may be inserted before the
- # "always" paths.
- if(NOT DEFINED CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH)
--  set(CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH /usr/lib /lib)
-+  set(CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH /var/empty/lib /lib)
- endif()
- 
- # Files named "libfoo.a" may actually be shared libraries.
-diff --git a/Modules/Platform/BlueGeneP-base.cmake b/Modules/Platform/BlueGeneP-base.cmake
-index 7552fad7b9..52fad6236a 100644
---- a/Modules/Platform/BlueGeneP-base.cmake
-+++ b/Modules/Platform/BlueGeneP-base.cmake
-@@ -41,12 +41,12 @@
- #
- set(CMAKE_SYSTEM_IGNORE_PATH
-   /lib             /lib64             /include
--  /usr/lib         /usr/lib64         /usr/include
--  /usr/local/lib   /usr/local/lib64   /usr/local/include
--  /usr/X11/lib     /usr/X11/lib64     /usr/X11/include
--  /usr/lib/X11     /usr/lib64/X11     /usr/include/X11
--  /usr/X11R6/lib   /usr/X11R6/lib64   /usr/X11R6/include
--  /usr/X11R7/lib   /usr/X11R7/lib64   /usr/X11R7/include
-+  /var/empty/lib         /var/empty/lib64         /var/empty/include
-+  /var/empty/local/lib   /var/empty/local/lib64   /var/empty/local/include
-+  /var/empty/X11/lib     /var/empty/X11/lib64     /var/empty/X11/include
-+  /var/empty/lib/X11     /var/empty/lib64/X11     /var/empty/include/X11
-+  /var/empty/X11R6/lib   /var/empty/X11R6/lib64   /var/empty/X11R6/include
-+  /var/empty/X11R7/lib   /var/empty/X11R7/lib64   /var/empty/X11R7/include
- )
- 
- #
-diff --git a/Modules/Platform/BlueGeneQ-base.cmake b/Modules/Platform/BlueGeneQ-base.cmake
-index 9f316a4af2..179ba03775 100644
---- a/Modules/Platform/BlueGeneQ-base.cmake
-+++ b/Modules/Platform/BlueGeneQ-base.cmake
-@@ -31,12 +31,12 @@
- #
- set(CMAKE_SYSTEM_IGNORE_PATH
-   /lib             /lib64             /include
--  /usr/lib         /usr/lib64         /usr/include
--  /usr/local/lib   /usr/local/lib64   /usr/local/include
--  /usr/X11/lib     /usr/X11/lib64     /usr/X11/include
--  /usr/lib/X11     /usr/lib64/X11     /usr/include/X11
--  /usr/X11R6/lib   /usr/X11R6/lib64   /usr/X11R6/include
--  /usr/X11R7/lib   /usr/X11R7/lib64   /usr/X11R7/include
-+  /var/empty/lib         /var/empty/lib64         /var/empty/include
-+  /var/empty/local/lib   /var/empty/local/lib64   /var/empty/local/include
-+  /var/empty/X11/lib     /var/empty/X11/lib64     /var/empty/X11/include
-+  /var/empty/lib/X11     /var/empty/lib64/X11     /var/empty/include/X11
-+  /var/empty/X11R6/lib   /var/empty/X11R6/lib64   /var/empty/X11R6/include
-+  /var/empty/X11R7/lib   /var/empty/X11R7/lib64   /var/empty/X11R7/include
- )
- 
- #
 diff --git a/Modules/Platform/CYGWIN.cmake b/Modules/Platform/CYGWIN.cmake
 index cf5e732833..fb12faa7ec 100644
 --- a/Modules/Platform/CYGWIN.cmake
@@ -1765,61 +1680,6 @@ index cf5e732833..fb12faa7ec 100644
 -  /usr/lib/w32api
 +  /var/empty/lib/w32api
    )
-diff --git a/Modules/Platform/CrayLinuxEnvironment.cmake b/Modules/Platform/CrayLinuxEnvironment.cmake
-index daff647591..64893df66d 100644
---- a/Modules/Platform/CrayLinuxEnvironment.cmake
-+++ b/Modules/Platform/CrayLinuxEnvironment.cmake
-@@ -5,15 +5,15 @@
-   set(CMAKE_SYSTEM_VERSION "$ENV{CRAYOS_VERSION}")
- elseif(DEFINED ENV{XTOS_VERSION})
-   set(CMAKE_SYSTEM_VERSION "$ENV{XTOS_VERSION}")
--elseif(EXISTS /etc/opt/cray/release/cle-release)
-+elseif(EXISTS /etc/var/empty/cray/release/cle-release)
-   cmake_policy(PUSH)
-   cmake_policy(SET CMP0159 NEW) # file(STRINGS) with REGEX updates CMAKE_MATCH_<n>
--  file(STRINGS /etc/opt/cray/release/cle-release release REGEX "^RELEASE=.*")
-+  file(STRINGS /etc/var/empty/cray/release/cle-release release REGEX "^RELEASE=.*")
-   cmake_policy(POP)
-   string(REGEX REPLACE "^RELEASE=(.*)$" "\\1" CMAKE_SYSTEM_VERSION "${release}")
-   unset(release)
--elseif(EXISTS /etc/opt/cray/release/clerelease)
--  file(READ /etc/opt/cray/release/clerelease CMAKE_SYSTEM_VERSION)
-+elseif(EXISTS /etc/var/empty/cray/release/clerelease)
-+  file(READ /etc/var/empty/cray/release/clerelease CMAKE_SYSTEM_VERSION)
- endif()
- 
- # Guard against multiple messages
-@@ -52,7 +52,7 @@
- # search types.
- list(APPEND CMAKE_SYSTEM_PREFIX_PATH
-   # Standard
--  $ENV{SYSROOT_DIR}/usr/local $ENV{SYSROOT_DIR}/usr $ENV{SYSROOT_DIR}/
-+  $ENV{SYSROOT_DIR}/var/empty/local $ENV{SYSROOT_DIR}/var/empty $ENV{SYSROOT_DIR}/
- 
-   # CMake install location
-   "${__cmake_install_dir}"
-@@ -72,16 +72,16 @@
- _cmake_record_install_prefix()
- 
- list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
--  $ENV{SYSROOT_DIR}/usr/include/X11
-+  $ENV{SYSROOT_DIR}/var/empty/include/X11
- )
- list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
--  $ENV{SYSROOT_DIR}/usr/local/lib64
--  $ENV{SYSROOT_DIR}/usr/lib64
-+  $ENV{SYSROOT_DIR}/var/empty/local/lib64
-+  $ENV{SYSROOT_DIR}/var/empty/lib64
-   $ENV{SYSROOT_DIR}/lib64
- )
- list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
--  $ENV{SYSROOT_DIR}/usr/local/lib64
--  $ENV{SYSROOT_DIR}/usr/lib64
-+  $ENV{SYSROOT_DIR}/var/empty/local/lib64
-+  $ENV{SYSROOT_DIR}/var/empty/lib64
-   $ENV{SYSROOT_DIR}/lib64
- )
- 
 diff --git a/Modules/Platform/Darwin-Initialize.cmake b/Modules/Platform/Darwin-Initialize.cmake
 index 196ab18b0b..0bce622cb2 100644
 --- a/Modules/Platform/Darwin-Initialize.cmake
@@ -1889,66 +1749,6 @@ index 42c6b35424..dd24ee7fa3 100644
 -  /opt/local # MacPorts
 +  /var/empty/local # MacPorts
    )
-diff --git a/Modules/Platform/GHS-MULTI-Determine.cmake b/Modules/Platform/GHS-MULTI-Determine.cmake
-index 9fb4b8a9e2..c50571be3d 100644
---- a/Modules/Platform/GHS-MULTI-Determine.cmake
-+++ b/Modules/Platform/GHS-MULTI-Determine.cmake
-@@ -16,7 +16,7 @@
-   # Setup MULTI toolset selection variables
-   if((NOT DEFINED GHS_TOOLSET_ROOT) OR (DEFINED CACHE{GHS_TOOLSET_ROOT}))
-     if(CMAKE_HOST_UNIX)
--      set(_ts_root "/usr/ghs")
-+      set(_ts_root "/var/empty/ghs")
-     else()
-       set(_ts_root "C:/ghs")
-     endif()
-@@ -50,7 +50,7 @@
- # Settings for OS selection
- if((NOT DEFINED GHS_OS_ROOT) OR (DEFINED CACHE{GHS_OS_ROOT}))
-   if(CMAKE_HOST_UNIX)
--    set(_os_root "/usr/ghs")
-+    set(_os_root "/var/empty/ghs")
-   else()
-     set(_os_root "C:/ghs")
-   endif()
-diff --git a/Modules/Platform/HP-UX-HP.cmake b/Modules/Platform/HP-UX-HP.cmake
-index 11f5caa836..1de5b59c16 100644
---- a/Modules/Platform/HP-UX-HP.cmake
-+++ b/Modules/Platform/HP-UX-HP.cmake
-@@ -11,7 +11,7 @@
- macro(__hpux_compiler_hp lang)
-   set(CMAKE_${lang}_COMPILE_OPTIONS_PIC "+Z")
-   set(CMAKE_SHARED_LIBRARY_${lang}_FLAGS "+Z")
--  set(CMAKE_SHARED_LIBRARY_CREATE_${lang}_FLAGS "-Wl,-E,+nodefaultrpath -b -L/usr/lib")
-+  set(CMAKE_SHARED_LIBRARY_CREATE_${lang}_FLAGS "-Wl,-E,+nodefaultrpath -b -L/var/empty/lib")
-   set(CMAKE_SHARED_LIBRARY_LINK_${lang}_FLAGS "-Wl,-E")
-   set(CMAKE_SHARED_LIBRARY_RUNTIME_${lang}_FLAG "-Wl,+b")
-   set(CMAKE_SHARED_LIBRARY_RUNTIME_${lang}_FLAG_SEP ":")
-diff --git a/Modules/Platform/HP-UX.cmake b/Modules/Platform/HP-UX.cmake
-index 7aa6aa41fd..16e5333a4d 100644
---- a/Modules/Platform/HP-UX.cmake
-+++ b/Modules/Platform/HP-UX.cmake
-@@ -1,5 +1,5 @@
- if(NOT DEFINED CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH)
--  set(CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH /usr/lib)
-+  set(CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH /var/empty/lib)
- endif()
- 
- if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "ia64")
-@@ -29,10 +29,10 @@
- # CMAKE_SIZEOF_VOID_P is not set until after this file executes, we
- # would need to append to CMAKE_SYSTEM_LIBRARY_PATH at a later point
- # (after CMakeTest(LANG)Compiler.cmake runs for at least one language).
--list(APPEND CMAKE_SYSTEM_LIBRARY_PATH /usr/lib/hpux32)
--list(APPEND CMAKE_SYSTEM_LIBRARY_PATH /usr/lib/hpux64)
-+list(APPEND CMAKE_SYSTEM_LIBRARY_PATH /var/empty/lib/hpux32)
-+list(APPEND CMAKE_SYSTEM_LIBRARY_PATH /var/empty/lib/hpux64)
- list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
--  /usr/lib/hpux32 /usr/lib/hpux64)
-+  /var/empty/lib/hpux32 /var/empty/lib/hpux64)
- 
- # Initialize C and CXX link type selection flags.  These flags are
- # used when building a shared library, shared module, or executable
 diff --git a/Modules/Platform/OpenBSD.cmake b/Modules/Platform/OpenBSD.cmake
 index 97e2a6a83e..922e019e36 100644
 --- a/Modules/Platform/OpenBSD.cmake
@@ -2042,16 +1842,6 @@ index c56dfaf9ac..4e0b250c1a 100644
  list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
    )
  
-diff --git a/Modules/Platform/syllable.cmake b/Modules/Platform/syllable.cmake
-index 69c108db08..99b2b535c1 100644
---- a/Modules/Platform/syllable.cmake
-+++ b/Modules/Platform/syllable.cmake
-@@ -30,4 +30,4 @@
- include(Platform/UnixPaths)
- 
- # these are Syllable specific:
--list(APPEND CMAKE_SYSTEM_PREFIX_PATH /usr/indexes)
-+list(APPEND CMAKE_SYSTEM_PREFIX_PATH /var/empty/indexes)
 diff --git a/Modules/ProcessorCount.cmake b/Modules/ProcessorCount.cmake
 index 260b6631c0..2186a27b45 100644
 --- a/Modules/ProcessorCount.cmake
