@@ -113,8 +113,6 @@ stdenv.mkDerivation (
       ./system_rplugin_manifest.patch
     ];
 
-    dontFixCmake = true;
-
     inherit lua;
     treesitter-parsers =
       treesitter-parsers
