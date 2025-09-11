@@ -3105,6 +3105,23 @@ let
 
       mkhl.shfmt = callPackage ./mkhl.shfmt { };
 
+      mkxml.vscode-filesize = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-filesize";
+          publisher = "mkxml";
+          version = "3.2.2";
+          sha256 = "sha256-RVhgCt/zY155oeL7EbVBokNFFBB9xvGL3j3zySdjGRg=";
+        };
+        meta = {
+          description = "filesize package for Visual Studio Code";
+          license = lib.licenses.mit;
+          homepage = "https://github.com/mkxml/vscode-filesize";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkxml.vscode-filesize";
+          changelog = "https://marketplace.visualstudio.com/items?itemName=mkxml.vscode-filesize&ssr=false#version-history";
+          maintainers = [ ];
+        };
+      };
+
       mongodb.mongodb-vscode = callPackage ./mongodb.mongodb-vscode { };
 
       moshfeu.compare-folders = buildVscodeMarketplaceExtension {
