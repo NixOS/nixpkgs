@@ -394,6 +394,7 @@ let
         makeOverridable
         callPackageWith
         callPackagesWith
+        makeAlias
         extendDerivation
         hydraJob
         makeScope

@@ -19,8 +19,12 @@ let
     mergeAttrsList
     ;
 
-  # Package files for a single shard
-  # Type: String -> String -> AttrsOf Path
+  inherit (lib.customisation)
+    makeAlias
+    ;
+
+  # Package imports for a single shard
+  # Type: String -> String -> AttrsOf Any
   namesForShard =
     shard: type:
     if type != "directory" then
@@ -32,14 +36,14 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
+      mapAttrs (name: _: import (baseDirectory + "/${shard}/${name}/package.nix")) (
         readDir (baseDirectory + "/${shard}")
       );
 
-  # The attribute set mapping names to the package files defining them
+  # The attribute set mapping names to the package expressions defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
   # if the overlay has to be applied multiple times
-  packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
+  packages = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
 in
 # TODO: Consider optimising this using `builtins.deepSeq packageFiles`,
 # which could free up the above thunks and reduce GC times.
@@ -53,6 +57,12 @@ self: super:
   # and whether it's defined by this file here or `all-packages.nix`.
   # TODO: This can be removed once `pkgs/by-name` can handle custom `callPackage` arguments without `all-packages.nix` (or any other way of achieving the same result).
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
-  _internalCallByNamePackageFile = file: self.callPackage file { };
+  _internalCallByNamePackageFile = fn: self.callPackage fn { };
 }
-// mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
+// mapAttrs (
+  name: value:
+  if value.type or null == "alias" then
+    makeAlias self name value
+  else
+    self._internalCallByNamePackageFile value
+) packages
