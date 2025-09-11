@@ -8,6 +8,21 @@
   "chap-toolchains": [
     "index.html#chap-toolchains"
   ],
+  "cmake-bash-helper-canonicalizeCMakeBool": [
+    "index.html#cmake-bash-helper-canonicalizeCMakeBool"
+  ],
+  "cmake-bash-helper-cmakeBoolToBash": [
+    "index.html#cmake-bash-helper-cmakeBoolToBash"
+  ],
+  "cmake-bash-helper-concatCMakeEntryFlagsTo": [
+    "index.html#cmake-bash-helper-concatCMakeEntryFlagsTo"
+  ],
+  "cmake-bash-helper-testCMakeBool": [
+    "index.html#cmake-bash-helper-testCMakeBool"
+  ],
+  "cmake-bash-helpers": [
+    "index.html#cmake-bash-helpers"
+  ],
   "cmake-ctest": [
     "index.html#cmake-ctest"
   ],
@@ -2400,6 +2415,9 @@
   ],
   "cmake-exclusive-variables": [
     "index.html#cmake-exclusive-variables"
+  ],
+  "cmake-entries": [
+    "index.html#cmake-entries"
   ],
   "cmake-flags": [
     "index.html#cmake-flags"

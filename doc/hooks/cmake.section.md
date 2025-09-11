@@ -16,9 +16,20 @@ You can disable this hook’s behavior by setting `configurePhase` to a custom v
 
 ### CMake Exclusive Variables {#cmake-exclusive-variables}
 
+#### `cmakeEntries` {#cmake-entries}
+
+Bash associative array of CMake variable cache entries.
+Flags like `-D<key>=<value>` will be prepended to the CMake command-line arguments.
+One can specify its initial values via the `stdenv.mkDerivation` argument of the same name, given that `__structuredAttrs` is set to `true`.
+
+We choose `ON` and `OFF` as the canonical CMake boolean values for consistency in this setup hook.
+Nevertheless, we don't strictly enforce this policy, but accommodate other CMake-supported boolean values with a set of helper Bash functions, such as [`canonicalizeCMakeBool`](#cmake-bash-helper-canonicalizeCMakeBool), [`cmakeBoolToBash`](#cmake-bash-helper-cmakeBoolToBash), and [`testCMakeBool`](#cmake-bash-helper-testCMakeBool).
+
+Boolean values from the `stdenv.mkDerivation` argument are automatically canonicalized when the command `jq` is available.
+
 #### `cmakeFlags` {#cmake-flags}
 
-Controls the flags passed to `cmake setup` during configure phase.
+Extra flags to pass to `cmake setup` during configure phase.
 
 #### `cmakeBuildDir` {#cmake-build-dir}
 
@@ -59,3 +70,23 @@ it can be combined with `--exclude-regex` option.
 #### `ctestFlags` {#cmake-ctest-flags}
 
 Additional options passed to `ctest` together with `checkFlags`.
+
+## Bash helper functions provided by CMake {#cmake-bash-helpers}
+
+### `concatCMakeEntryFlagsTo` {#cmake-bash-helper-concatCMakeEntryFlagsTo}
+
+`concatCMakeEntryFlagsTo` takes the variable names of the flags array and CMake entries associative array, and append the flags array with `-D<key>=<value>` flags constructed with the provided CMake entries.
+
+### `canonicalizeCMakeBool` {#cmake-bash-helper-canonicalizeCMakeBool}
+
+`canonicalizeCMakeBool` takes any supported CMake boolean value and prints either `ON` or `OFF`.
+If the input value is not supported, it returns 1 after showing an error message.
+
+### `cmakeBoolToBash` {#cmake-bash-helper-cmakeBoolToBash}
+
+`cmakeBoolToBash` takes any supported CMake boolean value and prints either `1` or an empty string, the latter two are the typical values assigned when a derivation attribute with boolean value is passed into a Bash builder.
+
+### `testCMakeBool` {#cmake-bash-helper-testCMakeBool}
+
+`testCMakeBool` takes any supported CMake boolean value and acts as Bash's `true` or `false` command, handy to construct Bash conditional expressions.
+If the input value is not supported, it exits the current process with exit status 1.
