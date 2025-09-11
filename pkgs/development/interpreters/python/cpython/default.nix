@@ -846,7 +846,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # mingw patches only apply to Python 3.11 currently
     broken =
-      (lib.versions.minor version != "11" && stdenv.hostPlatform.isWindows)
+      (
+        lib.versions.minor version != "11" && (stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isUnix)
+      )
       || (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin);
   };
 })
