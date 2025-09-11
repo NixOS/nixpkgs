@@ -26,6 +26,8 @@ We choose `ON` and `OFF` as the canonical CMake boolean values for consistency i
 Nevertheless, we don't strictly enforce this policy, but accommodate other CMake-supported boolean values with a set of helper Bash functions, such as [`canonicalizeCMakeBool`](#cmake-bash-helper-canonicalizeCMakeBool), [`cmakeBoolToBash`](#cmake-bash-helper-cmakeBoolToBash), and [`testCMakeBool`](#cmake-bash-helper-testCMakeBool).
 
 Boolean values from the `stdenv.mkDerivation` argument are automatically canonicalized when the command `jq` is available.
+To enable such canonicalization, non-minimal-build `cmake` packages propagate the `jq` native build inputs.
+To opt out such propagation, override as `cmake.override { jq = null; }` or use `cmakeMinimal`.
 
 #### `cmakeFlags` {#cmake-flags}
 
