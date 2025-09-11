@@ -126,7 +126,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-parts";
     changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }
