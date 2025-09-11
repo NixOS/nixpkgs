@@ -3197,6 +3197,12 @@
     github = "benwis";
     githubId = 6953353;
   };
+  bepri = {
+    email = "imani.pelton@canonical.com";
+    github = "bepri";
+    githubId = 17732342;
+    name = "Imani Pelton";
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
