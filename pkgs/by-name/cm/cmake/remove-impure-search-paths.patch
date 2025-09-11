@@ -3009,17 +3009,12 @@ index 196ab18b0b..245a0a7780 100644
    )
  endif()
 diff --git a/Modules/Platform/Darwin.cmake b/Modules/Platform/Darwin.cmake
-index 42c6b35424..d873b4bb48 100644
+index 42c6b35424..dd24ee7fa3 100644
 --- a/Modules/Platform/Darwin.cmake
 +++ b/Modules/Platform/Darwin.cmake
-@@ -190,11 +190,11 @@
-     endif()
-   endforeach()
- 
--  if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/lib)
--    list(INSERT CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES 0 ${_CMAKE_OSX_SYSROOT_PATH}/usr/lib)
-+  if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/var/empty/lib)
-+    list(INSERT CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES 0 ${_CMAKE_OSX_SYSROOT_PATH}/var/empty/lib)
+@@ -193,8 +193,8 @@
+   if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/lib)
+     list(INSERT CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES 0 ${_CMAKE_OSX_SYSROOT_PATH}/usr/lib)
    endif()
 -  if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/local/lib)
 -    list(INSERT CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES 0 ${_CMAKE_OSX_SYSROOT_PATH}/usr/local/lib)
@@ -3042,16 +3037,8 @@ index 42c6b35424..d873b4bb48 100644
        )
    endif()
    unset(_cmake_homebrew_prefix)
-@@ -272,20 +272,20 @@
- endif()
- 
- if(_CMAKE_OSX_SYSROOT_PATH)
--  if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/include)
-+  if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/var/empty/include)
-     list(INSERT CMAKE_SYSTEM_PREFIX_PATH 0 ${_CMAKE_OSX_SYSROOT_PATH}/usr)
-     foreach(lang C CXX OBJC OBJCXX Swift)
--      list(APPEND _CMAKE_${lang}_IMPLICIT_INCLUDE_DIRECTORIES_INIT ${_CMAKE_OSX_SYSROOT_PATH}/usr/include)
-+      list(APPEND _CMAKE_${lang}_IMPLICIT_INCLUDE_DIRECTORIES_INIT ${_CMAKE_OSX_SYSROOT_PATH}/var/empty/include)
+@@ -278,14 +278,14 @@
+       list(APPEND _CMAKE_${lang}_IMPLICIT_INCLUDE_DIRECTORIES_INIT ${_CMAKE_OSX_SYSROOT_PATH}/usr/include)
      endforeach()
    endif()
 -  if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/local/include)
