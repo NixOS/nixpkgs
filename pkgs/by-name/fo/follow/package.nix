@@ -1,5 +1,5 @@
 {
   type = "alias";
-  release = "25.05";
-  package = "folo";
+  release = "25.11";
+  reason = "renamed to folo";
 }
