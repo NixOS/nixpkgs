@@ -18444,6 +18444,8 @@ self: super: with self; {
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
+  tonalite = callPackage ../development/python-modules/tonalite { };
+
   toolz = callPackage ../development/python-modules/toolz { };
 
   toonapi = callPackage ../development/python-modules/toonapi { };
