@@ -8,15 +8,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "yEd";
-  version = "3.25.1";
+  version = "3.25";
 
-  # nixpkgs-update: no auto update
   src = fetchzip {
     # to update: archive https://www.yworks.com/resources/yed/demo/yEd-${version}.zip
-    url = "https://web.archive.org/web/20250322075239/https://www.yworks.com/resources/yed/demo/yEd-3.25.1.zip";
-    sha256 = "sha256-CDciM2IW+nocbFMVmTXMWh2eYcDAMZ+lxsg/Rb7KRgo=";
+    url = "https://web.archive.org/web/20250212125159/https://www.yworks.com/resources/yed/demo/yEd-${version}.zip";
+    sha256 = "sha256-6Z24XmFPK+aomO7hImN4AdN08kjOsyn9PvHToyQj8sk=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +42,9 @@ stdenv.mkDerivation {
   '';
   dontWrapGApps = true;
 
-  meta = {
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+  meta = with lib; {
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     homepage = "https://www.yworks.com/products/yed";
     description = "Powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;

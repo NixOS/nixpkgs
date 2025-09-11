@@ -532,7 +532,6 @@ stdenv.mkDerivation {
     # - We can further reduce targets to just our targetPlatform.
     cmakeFlags="
       -GNinja
-      -DLLVM_BUILD_TOOLS=NO
       -DLLVM_ENABLE_PROJECTS=clang
       -DLLVM_TARGETS_TO_BUILD=${
         {

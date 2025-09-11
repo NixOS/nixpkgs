@@ -1,29 +1,28 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   ffmpeg,
-  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.4.2";
+  version = "4.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     tag = "v${version}";
-    hash = "sha256-guQ8fIA20wtCkB5CkU7zg/INE+g8/fvQfIs5TNteQGo=";
+    hash = "sha256-9PlqnpUlV5b8g+lctGjVL1Xgf25SS5xqkDaa1bSlxpk=";
   };
 
-  build-system = with python3Packages; [ hatchling ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = true;
 
   dependencies =
-    with python3Packages;
+    with python3.pkgs;
     [
       beautifulsoup4
       fastapi
@@ -46,14 +45,17 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ python-slugify.optional-dependencies.unidecode;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     pyfakefs
     pytest-mock
     pytest-subprocess
     pytest-vcr
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   disabledTestPaths = [
     # Tests require networking
@@ -89,7 +91,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Download your Spotify playlists and songs along with album art and metadata";
     homepage = "https://github.com/spotDL/spotify-downloader";
-    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/${src.tag}";
+    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "spotdl";

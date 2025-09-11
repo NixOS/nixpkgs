@@ -3,66 +3,38 @@
   stdenv,
   fetchFromGitHub,
   testers,
-
-  cmake,
-  ninja,
-
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
-  libvorbis,
-  opusfile,
-  sndio,
-
-  alsaSupport ? true,
-  pulseSupport ? true,
-  jackSupport ? true,
-  sndioSupport ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudio";
-  version = "0.11.23";
+  version = "0.11.22";
 
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
-    tag = finalAttrs.version;
-    hash = "sha256-ZrfKw5a3AtIER2btCKWhuvygasNaHNf9EURf1Kv96Vc=";
+    rev = finalAttrs.version;
+    hash = "sha256-o/7sfBcrhyXEakccOAogQqm8dO4Szj1QSpaIHg6OSt4=";
   };
 
-  outputs = [
-    "out"
-    "dev"
-  ];
+  postInstall = ''
+    mkdir -p $out/include
+    mkdir -p $out/lib/pkgconfig
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+    cp $src/miniaudio.h $out/include
+    ln -s $out/include/miniaudio.h $out
 
-  buildInputs = [
-    libvorbis
-    opusfile
-  ]
-  ++ lib.optional pulseSupport libpulseaudio
-  ++ lib.optional jackSupport libjack2
-  ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional sndioSupport sndio;
+    cp -r $src/extras $out/
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "MINIAUDIO_NO_RUNTIME_LINKING" true)
-    (lib.cmakeBool "MINIAUDIO_BUILD_TESTS" true)
-    (lib.cmakeBool "MINIAUDIO_BUILD_EXAMPLES" true)
+    cat <<EOF >$out/lib/pkgconfig/miniaudio.pc
+    prefix=$out
+    includedir=$out/include
 
-    (lib.cmakeBool "MINIAUDIO_ENABLE_ONLY_SPECIFIC_BACKENDS" true)
-    (lib.cmakeBool "MINIAUDIO_ENABLE_PULSEAUDIO" pulseSupport)
-    (lib.cmakeBool "MINIAUDIO_ENABLE_JACK" jackSupport)
-    (lib.cmakeBool "MINIAUDIO_ENABLE_SNDIO" alsaSupport)
-    (lib.cmakeBool "MINIAUDIO_ENABLE_ALSA" sndioSupport)
-  ];
-
-  doCheck = true;
+    Name: miniaudio
+    Description: An audio playback and capture library in a single source file.
+    Version: $version
+    Cflags: -I$out/include
+    Libs: -lm -lpthread -latomic
+    EOF
+  '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
@@ -76,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ maintainers.jansol ];
     pkgConfigModules = [ "miniaudio" ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 })

@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   meson,
   ninja,

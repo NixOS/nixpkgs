@@ -66,33 +66,6 @@ let
     "wireguard" = [ "wireguard" ];
     "xfrm" = [ "xfrm_interface" ];
   };
-  # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
-  commonServiceConfig = {
-    after = [
-      "systemd-udevd.service"
-      "network-pre.target"
-      "systemd-sysusers.service"
-      "systemd-sysctl.service"
-    ];
-    before = [
-      "network.target"
-      "multi-user.target"
-      "shutdown.target"
-      "initrd-switch-root.target"
-    ];
-    conflicts = [
-      "shutdown.target"
-      "initrd-switch-root.target"
-    ];
-    wants = [
-      "network.target"
-    ];
-
-    unitConfig = {
-      # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
-      DefaultDependencies = "no";
-    };
-  };
 in
 {
   meta.maintainers = with lib.maintainers; [ marcel ];
@@ -177,11 +150,30 @@ in
         etc."ifstate/ifstate.yaml".source = settingsFormat.generate "ifstate.yaml" cfg.settings cfg.package;
       };
 
-      systemd.services.ifstate = commonServiceConfig // {
+      systemd.services.ifstate = {
         description = "IfState";
 
         wantedBy = [
           "multi-user.target"
+        ];
+        after = [
+          "systemd-udevd.service"
+          "network-pre.target"
+          "systemd-sysusers.service"
+          "systemd-sysctl.service"
+        ];
+        before = [
+          "network.target"
+          "multi-user.target"
+          "shutdown.target"
+          "initrd-switch-root.target"
+        ];
+        conflicts = [
+          "shutdown.target"
+          "initrd-switch-root.target"
+        ];
+        wants = [
+          "network.target"
         ];
 
         # mount is always available on nixos, avoid adding additional store paths to the closure
@@ -262,22 +254,30 @@ in
             )
           ];
 
-          # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/boot/networkd.nix#L3444
-          additionalUpstreamUnits = [
-            "network-online.target"
-            "network-pre.target"
-            "network.target"
-            "nss-lookup.target"
-            "nss-user-lookup.target"
-            "remote-fs-pre.target"
-            "remote-fs.target"
-          ];
-
-          services.ifstate-initrd = commonServiceConfig // {
+          services.ifstate-initrd = {
             description = "IfState initrd";
 
             wantedBy = [
               "initrd.target"
+            ];
+            after = [
+              "systemd-udevd.service"
+              "network-pre.target"
+              "systemd-sysusers.service"
+              "systemd-sysctl.service"
+            ];
+            before = [
+              "network.target"
+              "multi-user.target"
+              "shutdown.target"
+              "initrd-switch-root.target"
+            ];
+            conflicts = [
+              "shutdown.target"
+              "initrd-switch-root.target"
+            ];
+            wants = [
+              "network.target"
             ];
 
             # mount is always available on nixos, avoid adding additional store paths to the closure
@@ -291,6 +291,9 @@ in
               # Otherwise systemd starts ifstate again, after the encryption password was entered by the user
               # and we are able to implement the cleanup using ExecStop rather than a separate unit.
               RemainAfterExit = true;
+              # When using network namespaces pyroute2 expects this directory to exists.
+              # @liske is currently investigating whether this should be considered a bug in pyroute2.
+              ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} /var/run";
               ExecStart = "${lib.getExe initrdCfg.package} --config ${
                 config.environment.etc."ifstate/ifstate.initrd.yaml".source
               } apply";

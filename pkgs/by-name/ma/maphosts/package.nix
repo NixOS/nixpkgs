@@ -13,7 +13,7 @@ let
     gemdir = ./.;
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "maphosts";
   version = env.gems.maphosts.version;
 
@@ -26,16 +26,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = bundlerUpdateScript "maphosts";
 
-  meta = {
+  meta = with lib; {
     description = "Small command line application for keeping your project hostnames in sync with /etc/hosts";
     homepage = "https://github.com/mpscholten/maphosts";
-    changelog = "https://github.com/mpscholten/maphosts/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/mpscholten/maphosts/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
       mpscholten
       nicknovitski
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "maphosts";
   };
-})
+}

@@ -22,14 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/lld "$out"
-        mkdir -p "$out/libunwind"
-        cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
-        mkdir -p "$out/llvm"
-      '')
+      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (
+        ''
+          mkdir -p "$out"
+        ''
+        + lib.optionalString (lib.versionAtLeast release_version "14") ''
+          cp -r ${monorepoSrc}/cmake "$out"
+        ''
+        + ''
+          cp -r ${monorepoSrc}/lld "$out"
+          mkdir -p "$out/libunwind"
+          cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+          mkdir -p "$out/llvm"
+        ''
+      )
     else
       src;
 
@@ -38,6 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (getVersionFile "lld/gnu-install-dirs.patch")
   ]
+  ++ lib.optional (lib.versions.major release_version == "14") (
+    getVersionFile "lld/fix-root-src-dir.patch"
+  )
+  ++ lib.optional (lib.versionAtLeast release_version "16" && lib.versionOlder release_version "18") (
+    getVersionFile "lld/add-table-base.patch"
+  )
   ++ lib.optional (lib.versions.major release_version == "18") (
     # https://github.com/llvm/llvm-project/pull/97122
     fetchpatch {
@@ -48,23 +60,30 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ] ++ lib.optional (lib.versionAtLeast release_version "15") ninja;
   buildInputs = [
     libllvm
     libxml2
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-  ]
-  ++ devExtraCmakeFlags;
+  cmakeFlags =
+    lib.optionals (lib.versionOlder release_version "14") [
+      (lib.cmakeFeature "LLVM_CONFIG_PATH" "${libllvm.dev}/bin/llvm-config${
+        lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"
+      }")
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
+    ]
+    ++ [
+      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+    ]
+    ++ devExtraCmakeFlags;
 
-  # TODO: Remove on `staging`.
-  postPatch = "";
+  postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
+    substituteInPlace MachO/CMakeLists.txt --replace-fail \
+      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
+  '';
 
   # Musl's default stack size is too small for lld to be able to link Firefox.
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";

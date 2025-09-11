@@ -85,11 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp*-target.cmake \
-      --replace-quiet "\''${_IMPORT_PREFIX}/include" "$dev/include"
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

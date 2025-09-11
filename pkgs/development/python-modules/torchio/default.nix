@@ -10,7 +10,7 @@
   # dependencies
   deprecated,
   einops,
-  humanize,
+  matplotlib,
   nibabel,
   numpy,
   packaging,
@@ -21,28 +21,22 @@
   tqdm,
   typer,
 
-  # optional dependencies
-  colorcet,
-  matplotlib,
-  pandas,
-  ffmpeg-python,
-  scikit-learn,
-
   # tests
+  humanize,
   parameterized,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.22";
+  version = "0.20.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-LP0hlle8BCoZrJWs5aX/xvI+EPHdOGBARoKwQRqswQc=";
+    hash = "sha256-l2KQLZDxsP8Bjk/vPG2YbU+8Z6/lOvNvy9NYKTdW+cY=";
   };
 
   build-system = [
@@ -63,16 +57,6 @@ buildPythonPackage rec {
     tqdm
     typer
   ];
-
-  optional-dependencies = {
-    csv = [ pandas ];
-    plot = [
-      colorcet
-      matplotlib
-    ];
-    video = [ ffmpeg-python ];
-    sklearn = [ scikit-learn ];
-  };
 
   nativeCheckInputs = [
     matplotlib

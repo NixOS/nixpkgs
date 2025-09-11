@@ -58,42 +58,34 @@ let
   passthru = { inherit tesseractBase languages tessdata; };
 
   # Only run test when all languages are available
-  test =
-    runCommand "tesseract-test-ocr"
-      {
-        buildInputs = [
-          tesseractWithData
-          imagemagick
-        ];
-      }
-      ''
-        text="hello nix"
+  test = lib.optionalAttrs (enableLanguages == null) {
+    tests.default =
+      runCommand "tesseract-test-ocr"
+        {
+          buildInputs = [
+            tesseractWithData
+            imagemagick
+          ];
+        }
+        ''
+          text="hello nix"
 
-        convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 \
-          -fill black -annotate +5+20 "$text" /tmp/test-img.png 2>/dev/null
-        ocrResult=$(tesseract /tmp/test-img.png - | tr -d "\f")
+          convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 \
+            -fill black -annotate +5+20 "$text" /tmp/test-img.png 2>/dev/null
+          ocrResult=$(tesseract /tmp/test-img.png - | tr -d "\f")
 
-        if [[ $ocrResult != $text ]]; then
-          echo "OCR test failed"
-          echo "expected: '$text'"
-          echo "actual: '$ocrResult'"
-          exit 1
-        fi
-        touch $out
-      '';
+          if [[ $ocrResult != $text ]]; then
+            echo "OCR test failed"
+            echo "expected: '$text'"
+            echo "actual: '$ocrResult'"
+            exit 1
+          fi
+          touch $out
+        '';
+  };
 
   tesseract =
-    (if enableLanguages == [ ] then tesseractBase else tesseractWithData).overrideAttrs
-      (old: {
-        passthru =
-          (old.passthru or { })
-          // passthru
-          // lib.optionalAttrs (enableLanguages == null) {
-            tests = (old.passthru.tests or { }) // {
-              default = test;
-            };
-          };
-      });
+    (if enableLanguages == [ ] then tesseractBase else tesseractWithData) // passthru // test;
 in
 if enableLanguagesHash == null then
   tesseract

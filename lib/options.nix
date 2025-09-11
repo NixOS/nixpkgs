@@ -113,11 +113,7 @@ rec {
       : Optional boolean indicating whether the option is for NixOS developers only.
 
       `visible`
-      : Optional, whether the option and/or sub-options show up in the manual.
-        Use false to hide the option and any sub-options from submodules.
-        Use "shallow" to hide only sub-options.
-        Use "transparent" to hide this option, but not its sub-options.
-        Default: true.
+      : Optional boolean indicating whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
 
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
@@ -576,14 +572,13 @@ rec {
       opt:
       let
         name = showOption opt.loc;
-        visible = opt.visible or true;
         docOption = {
           loc = opt.loc;
           inherit name;
           description = opt.description or null;
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
-          visible = if isBool visible then visible else visible == "shallow";
+          visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
@@ -606,7 +601,7 @@ rec {
             ss = opt.type.getSubOptions opt.loc;
           in
           if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = if isBool visible then visible else visible == "transparent";
+        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
       # To find infinite recursion in NixOS option docs:
       # builtins.trace opt.loc

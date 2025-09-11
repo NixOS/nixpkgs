@@ -90,6 +90,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/locaal-ai/obs-urlsource";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Only;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

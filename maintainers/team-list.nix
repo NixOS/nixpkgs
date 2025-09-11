@@ -31,7 +31,6 @@
 { lib }:
 with lib.maintainers;
 {
-  # keep-sorted start case=no numeric=no block=yes newline_separated=yes
   acme = {
     members = [
       aanderse
@@ -170,16 +169,6 @@ with lib.maintainers;
     shortName = "c3d2";
   };
 
-  cachix = {
-    # Verify additions to this team with at least one existing member of the team.
-    members = [
-      domenkozar
-      sandydoo
-    ];
-    scope = "Group registration for packages maintained by Cachix.";
-    shortName = "Cachix employees";
-  };
-
   categorization = {
     members = [
       aleksana
@@ -269,19 +258,9 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  cosmopolitan = {
-    members = [
-      bbjubjub
-      tomberek
-    ];
-    scope = "Maintain the Cosmopolitan LibC and related programs.";
-    shortName = "Cosmopolitan";
-  };
-
   cuda = {
     members = [
       connorbaker
-      GaetanLepage
       prusnak
       samuela
       SomeoneSerge
@@ -312,6 +291,29 @@ with lib.maintainers;
     scope = "Maintain core platform support and packages for macOS and other Apple platforms.";
     shortName = "Darwin";
     enableFeatureFreezePing = true;
+  };
+
+  cosmopolitan = {
+    members = [
+      bbjubjub
+      tomberek
+    ];
+    scope = "Maintain the Cosmopolitan LibC and related programs.";
+    shortName = "Cosmopolitan";
+  };
+
+  dotnet = {
+    members = [
+      mdarocha
+      corngood
+      ggg
+      raphaelr
+      jamiemagee
+      anpin
+      meenzen
+    ];
+    scope = "Maintainers of the .NET build tools and packages";
+    shortName = "dotnet";
   };
 
   deepin = {
@@ -366,20 +368,6 @@ with lib.maintainers;
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
     enableFeatureFreezePing = true;
-  };
-
-  dotnet = {
-    members = [
-      mdarocha
-      corngood
-      ggg
-      raphaelr
-      jamiemagee
-      anpin
-      meenzen
-    ];
-    scope = "Maintainers of the .NET build tools and packages";
-    shortName = "dotnet";
   };
 
   emacs = {
@@ -509,6 +497,21 @@ with lib.maintainers;
     shortName = "gitlab";
   };
 
+  golang = {
+    members = [
+      kalbasit
+      katexochen
+      mic92
+      zowoq
+      qbit
+      mfrw
+    ];
+    githubTeams = [ "golang" ];
+    scope = "Maintain Golang compilers.";
+    shortName = "Go";
+    enableFeatureFreezePing = true;
+  };
+
   gnome = {
     members = [
       bobby285271
@@ -530,21 +533,6 @@ with lib.maintainers;
     ];
     scope = "Maintain GNOME Circle applications.";
     shortName = "GNOME Circle";
-  };
-
-  golang = {
-    members = [
-      kalbasit
-      katexochen
-      mic92
-      zowoq
-      qbit
-      mfrw
-    ];
-    githubTeams = [ "golang" ];
-    scope = "Maintain Golang compilers.";
-    shortName = "Go";
-    enableFeatureFreezePing = true;
   };
 
   graalvm-ce = {
@@ -684,6 +672,17 @@ with lib.maintainers;
     shortName = "K3s";
   };
 
+  kubernetes = {
+    members = [
+      johanot
+      offline
+      saschagrunert
+      srhb
+    ];
+    scope = "Maintain the Kubernetes package and module";
+    shortName = "Kubernetes";
+  };
+
   kodi = {
     members = [
       aanderse
@@ -696,17 +695,6 @@ with lib.maintainers;
     ];
     scope = "Maintain Kodi and related packages.";
     shortName = "Kodi";
-  };
-
-  kubernetes = {
-    members = [
-      johanot
-      offline
-      saschagrunert
-      srhb
-    ];
-    scope = "Maintain the Kubernetes package and module";
-    shortName = "Kubernetes";
   };
 
   libretro = {
@@ -743,19 +731,6 @@ with lib.maintainers;
     githubTeams = [ "lisp" ];
     scope = "Maintain the Lisp ecosystem.";
     shortName = "lisp";
-    enableFeatureFreezePing = true;
-  };
-
-  lix = {
-    members = [
-      raitobezarius
-      qyriad
-      _9999years
-      lf-
-      alois31
-    ];
-    scope = "Maintain the Lix package manager inside of Nixpkgs.";
-    shortName = "Lix ecosystem";
     enableFeatureFreezePing = true;
   };
 
@@ -797,13 +772,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  lua = {
-    githubTeams = [ "lua" ];
-    scope = "Maintain the lua ecosystem.";
-    shortName = "lua";
-    enableFeatureFreezePing = true;
-  };
-
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [
@@ -812,6 +780,13 @@ with lib.maintainers;
     ];
     scope = "Group registration for LumiGuide employees who collectively maintain packages.";
     shortName = "Lumiguide employees";
+  };
+
+  lua = {
+    githubTeams = [ "lua" ];
+    scope = "Maintain the lua ecosystem.";
+    shortName = "lua";
+    enableFeatureFreezePing = true;
   };
 
   lumina = {
@@ -829,7 +804,7 @@ with lib.maintainers;
       megheaiulian
       mkg20001
     ];
-    scope = "All things linuxcontainers. Incus, LXC, and related packages.";
+    scope = "All things linuxcontainers. LXC, Incus, LXD and related packages.";
     shortName = "lxc";
   };
 
@@ -874,6 +849,19 @@ with lib.maintainers;
     shortName = "Matrix";
   };
 
+  minimal-bootstrap = {
+    members = [
+      alejandrosame
+      artturin
+      emilytrau
+      ericson2314
+      jk
+      siraben
+    ];
+    scope = "Maintain the minimal-bootstrap toolchain and related packages.";
+    shortName = "Minimal Bootstrap";
+  };
+
   mercury = {
     members = [
       _9999years
@@ -886,17 +874,31 @@ with lib.maintainers;
     shortName = "Mercury Employees";
   };
 
-  minimal-bootstrap = {
+  # same as https://github.com/orgs/NixOS/teams/nix-team
+  nix = {
     members = [
-      alejandrosame
-      artturin
-      emilytrau
+      eelco
+      mic92
+      tomberek
+      roberth
       ericson2314
-      jk
-      siraben
     ];
-    scope = "Maintain the minimal-bootstrap toolchain and related packages.";
-    shortName = "Minimal Bootstrap";
+    scope = "Maintain the Nix package manager.";
+    shortName = "Nix/nix-cli ecosystem";
+    enableFeatureFreezePing = true;
+  };
+
+  lix = {
+    members = [
+      raitobezarius
+      qyriad
+      _9999years
+      lf-
+      alois31
+    ];
+    scope = "Maintain the Lix package manager inside of Nixpkgs.";
+    shortName = "Lix ecosystem";
+    enableFeatureFreezePing = true;
   };
 
   module-system = {
@@ -945,20 +947,6 @@ with lib.maintainers;
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";
-  };
-
-  # same as https://github.com/orgs/NixOS/teams/nix-team
-  nix = {
-    members = [
-      eelco
-      mic92
-      tomberek
-      roberth
-      ericson2314
-    ];
-    scope = "Maintain the Nix package manager.";
-    shortName = "Nix/nix-cli ecosystem";
-    enableFeatureFreezePing = true;
   };
 
   nixos-rebuild = {
@@ -1178,17 +1166,17 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  sphinx = {
+    members = [ ];
+    scope = "Maintain Sphinx related packages.";
+    shortName = "Sphinx";
+  };
+
   serokell = {
     # Verify additions by approval of an already existing member of the team.
     members = [ balsoft ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";
-  };
-
-  sphinx = {
-    members = [ ];
-    scope = "Maintain Sphinx related packages.";
-    shortName = "Sphinx";
   };
 
   stdenv = {
@@ -1274,16 +1262,6 @@ with lib.maintainers;
     shortName = "Uzinfocom Open Source";
   };
 
-  wdz = {
-    members = [
-      n0emis
-      johannwagner
-      yuka
-    ];
-    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
-    shortName = "WDZ GmbH";
-  };
-
   windows = {
     members = [
       RossSmyth
@@ -1293,6 +1271,16 @@ with lib.maintainers;
     ];
     scope = "Maintains the windows package set";
     shortName = "Windows";
+  };
+
+  wdz = {
+    members = [
+      n0emis
+      johannwagner
+      yuka
+    ];
+    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
+    shortName = "WDZ GmbH";
   };
 
   xen = {
@@ -1328,5 +1316,4 @@ with lib.maintainers;
     shortName = "Zig";
     enableFeatureFreezePing = true;
   };
-  # keep-sorted end
 }

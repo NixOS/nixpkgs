@@ -1,7 +1,7 @@
 {
   buildah-unwrapped,
   runCommand,
-  makeBinaryWrapper,
+  makeWrapper,
   symlinkJoin,
   lib,
   stdenv,
@@ -11,7 +11,7 @@
   conmon, # Container runtime monitor
   slirp4netns, # User-mode networking for unprivileged namespaces
   fuse-overlayfs, # CoW for images, much faster than default vfs
-  util-linuxMinimal, # nsenter
+  util-linux, # nsenter
   iptables,
   aardvark-dns,
   netavark,
@@ -28,7 +28,7 @@ let
       conmon
       slirp4netns
       fuse-overlayfs
-      util-linuxMinimal
+      util-linux
       iptables
     ]
     ++ extraPackages
@@ -63,14 +63,14 @@ runCommand buildah-unwrapped.name
     ];
 
     nativeBuildInputs = [
-      makeBinaryWrapper
+      makeWrapper
     ];
 
   }
   ''
     ln -s ${buildah-unwrapped.man} $man
 
-    mkdir -p $out
+    mkdir -p $out/bin
     ln -s ${buildah-unwrapped}/share $out/share
     makeWrapper ${buildah-unwrapped}/bin/buildah $out/bin/buildah \
       --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \

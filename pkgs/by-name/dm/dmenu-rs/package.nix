@@ -15,7 +15,6 @@
   fontconfig,
   libXft,
   libXinerama,
-  libxcb,
   aspell,
   xclip,
   xdg-utils,
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
     fontconfig
     libXft
     libXinerama
-    libxcb
   ]
   ++ lib.optionals enablePlugins [
     aspell

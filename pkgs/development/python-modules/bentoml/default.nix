@@ -1,42 +1,40 @@
 {
   lib,
   stdenv,
-  a2wsgi,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
   aiohttp,
   aiosqlite,
   attrs,
-  buildPythonPackage,
   cattrs,
   circus,
-  click-option-group,
   click,
+  click-option-group,
   cloudpickle,
   deepmerge,
-  fetchFromGitHub,
-  fs-s3fs,
   fs,
-  fsspec,
+  fs-s3fs,
+  grpcio,
   grpcio-channelz,
   grpcio-health-checking,
   grpcio-reflection,
-  grpcio,
-  hatch-vcs,
-  hatchling,
-  httpx-ws,
   httpx,
+  httpx-ws,
   inflection,
   inquirerpy,
   jinja2,
-  kantoku,
   numpy,
   nvidia-ml-py,
   opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
   opentelemetry-exporter-otlp,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-instrumentation,
   opentelemetry-instrumentation-aiohttp-client,
   opentelemetry-instrumentation-asgi,
   opentelemetry-instrumentation-grpc,
-  opentelemetry-instrumentation,
   opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   opentelemetry-util-http,
@@ -53,15 +51,13 @@
   python-dateutil,
   python-json-logger,
   python-multipart,
-  pythonOlder,
   pyyaml,
-  questionary,
   rich,
   schema,
   simple-di,
   starlette,
-  tomli-w,
   tomli,
+  tomli-w,
   tritonclient,
   uv,
   uvicorn,
@@ -75,11 +71,10 @@
   orjson,
   pytest-asyncio,
   fastapi,
-  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "1.4.23";
+  version = "1.4.19";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -129,7 +124,7 @@ let
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-p9d8TyN09jJ2VotaAvbC9jxJ5kNC2S7VhkatzrDJ1TY=";
+    hash = "sha256-sRQfjB3K5F6lYeW92O7BV2slQ+DRCuMTVqRG8vT+9wc=";
   };
 in
 buildPythonPackage {
@@ -139,7 +134,6 @@ buildPythonPackage {
 
   pythonRelaxDeps = [
     "cattrs"
-    "fsspec"
     "nvidia-ml-py"
     "opentelemetry-api"
     "opentelemetry-instrumentation-aiohttp-client"
@@ -156,7 +150,6 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    a2wsgi
     aiohttp
     aiosqlite
     attrs
@@ -167,13 +160,11 @@ buildPythonPackage {
     cloudpickle
     deepmerge
     fs
-    fsspec
     httpx
     httpx-ws
     inflection
     inquirerpy
     jinja2
-    kantoku
     numpy
     nvidia-ml-py
     opentelemetry-api
@@ -193,7 +184,6 @@ buildPythonPackage {
     python-json-logger
     python-multipart
     pyyaml
-    questionary
     rich
     schema
     simple-di
@@ -218,15 +208,11 @@ buildPythonPackage {
   disabledTestPaths = [
     "tests/e2e"
     "tests/integration"
-    "tests/unit/grpc"
-    "tests/unit/_internal/"
   ];
 
   disabledTests = [
     # flaky test
     "test_store"
-    #
-    "test_log_collection"
   ];
 
   nativeCheckInputs = [
@@ -240,7 +226,6 @@ buildPythonPackage {
     pytest-xdist
     pytestCheckHook
     scikit-learn
-    writableTmpDirAsHomeHook
   ]
   ++ optional-dependencies.grpc;
 
@@ -253,5 +238,8 @@ buildPythonPackage {
       happysalada
       natsukium
     ];
+    # AttributeError: 'dict' object has no attribute 'schemas'
+    # https://github.com/bentoml/BentoML/issues/4290
+    broken = versionAtLeast cattrs.version "23.2";
   };
 }

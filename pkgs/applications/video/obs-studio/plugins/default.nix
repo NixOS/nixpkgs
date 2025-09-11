@@ -64,6 +64,8 @@
 
   obs-noise = callPackage ./obs-noise.nix { };
 
+  obs-nvfbc = callPackage ./obs-nvfbc.nix { };
+
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };

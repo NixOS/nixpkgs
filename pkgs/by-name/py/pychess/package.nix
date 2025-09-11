@@ -44,7 +44,6 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     pexpect
     psutil
-    standard-telnetlib
     websockets
     ptyprocess
   ];

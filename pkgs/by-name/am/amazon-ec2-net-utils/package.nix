@@ -9,21 +9,21 @@
   gnused,
   installShellFiles,
   iproute2,
-  makeBinaryWrapper,
+  makeWrapper,
   nix-update-script,
   systemd,
   udevCheckHook,
-  util-linuxMinimal,
+  util-linux,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "amazon-ec2-net-utils";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-net-utils";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-PtnRgNmVrIGndLjYjXWWx85z4oxjn637iZqXd6OSiQg=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
     udevCheckHook
   ];
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
+    mkdir $out
 
     for file in bin/*.sh; do
       install -D -m 755 "$file" $out/bin/$(basename --suffix ".sh" "$file")
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
           gnused
           iproute2
           systemd
-          util-linuxMinimal
+          util-linux
         ]
       }
 
@@ -121,4 +121,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sielicki ];
   };
-})
+}

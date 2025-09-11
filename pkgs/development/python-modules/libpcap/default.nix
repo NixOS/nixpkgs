@@ -13,17 +13,18 @@
 
 buildPythonPackage rec {
   pname = "libpcap";
-  version = "1.11.0b25";
-  pyproject = true;
+  version = "1.11.0b8";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GzrTqpkiKJjWBuZ7ez707BGZez9wXB96psygDQykO6c=";
+    extension = "zip";
+    hash = "sha256-6XhEVOO2Z2rFZiMz4d32tTR+xUu1KdMdDjChmt2wsQo=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   # tox is listed in build requirements but not actually used to build
   # keeping it as a requirement breaks the build unnecessarily
@@ -31,11 +32,11 @@ buildPythonPackage rec {
     sed -i "/requires/s/, 'tox>=[^']*'//" pyproject.toml
     cat <<EOF >src/libpcap/libpcap.cfg
     [libpcap]
-    LIBPCAP = ${lib.getLib pkgsLibpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}
+    LIBPCAP = ${pkgsLibpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}
     EOF
   '';
 
-  buildInputs = [
+  propagatedBuildInputs = [
     dbus.lib
     pkgsLibpcap
     pkg-about

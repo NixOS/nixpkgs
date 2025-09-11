@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/royshil/obs-backgroundremoval";
     maintainers = with maintainers; [ zahrun ];
     license = licenses.mit;
-    inherit (obs-studio.meta) platforms;
+    platforms = [ "x86_64-linux" ];
   };
 }

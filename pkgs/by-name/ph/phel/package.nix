@@ -7,16 +7,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phel";
-  version = "0.21.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "phel-lang";
     repo = "phel-lang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4s3PCgaJfJR9+XXqT2WLrEwNUSLLCIOb+nJ8w9SbKps=";
+    hash = "sha256-uJnxCReo/GR/zAwQEV1Gp9Hv6ydGbf4EiVNL7q0cRRw=";
   };
 
-  vendorHash = "sha256-4/J3TJPdbj+eAneMwxP73N1cI53hJSEQg4G+LlQOJeE=";
+  vendorHash = "sha256-/7A71XQdMfirqfN9VIKFZxJ1HNBva5c2NOsbo6NMRzQ=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -127,7 +127,6 @@ let
         bitXor
         bitNot
         boolToString
-        boolToYesNo
         mergeAttrs
         flip
         defaultTo

@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ arezvov ];
+    teams = [ teams.c3d2 ];
   };
 }

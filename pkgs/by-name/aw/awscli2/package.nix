@@ -119,14 +119,6 @@ py.pkgs.buildPythonApplication rec {
     less
   ];
 
-  # Prevent breakage when running in a Python environment: https://github.com/NixOS/nixpkgs/issues/47900
-  makeWrapperArgs = [
-    "--unset"
-    "NIX_PYTHONPATH"
-    "--unset"
-    "PYTHONPATH"
-  ];
-
   nativeCheckInputs = with py.pkgs; [
     addBinToPathHook
     jsonschema

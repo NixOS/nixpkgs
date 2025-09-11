@@ -6,13 +6,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "rename";
-  version = "1.16.3";
+  version = "1.11";
   outputs = [ "out" ];
   src = fetchFromGitHub {
     owner = "pstray";
     repo = "rename";
     rev = "v${version}";
-    sha256 = "KQsBO94fsa4CbTHNyJxOD96AwUfKNLa9p44odlNgQao=";
+    sha256 = "SK6wS3IxjCftuDiiZU27TFnn9GVd137zmzvGH88cNLI=";
   };
   meta = with lib; {
     description = "Rename files according to a Perl rewrite expression";
@@ -20,7 +20,6 @@ perlPackages.buildPerlPackage rec {
     maintainers = with maintainers; [
       mkg
       cyplo
-      cfouche
     ];
     license = with licenses; [ gpl1Plus ];
     mainProgram = "rename";

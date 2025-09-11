@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
       mpl11
     ];
     platforms = platforms.unix;
-    teams = [ teams.geospatial ];
+    maintainers = with maintainers; [ sikmir ];
   };
 }

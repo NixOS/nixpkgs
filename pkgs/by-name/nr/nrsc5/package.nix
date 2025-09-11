@@ -12,22 +12,24 @@
 }:
 let
   src_faad2 = fetchFromGitHub {
-    owner = "knik0";
+    owner = "dsvensson";
     repo = "faad2";
-    tag = "2.11.2";
-    hash = "sha256-JvmblrmE3doUMUwObBN2b+Ej+CDBWNemBsyYSCXGwo8=";
+    rev = "b7aa099fd3220b71180ed2b0bc19dc6209a1b418";
+    sha256 = "0pcw2x9rjgkf5g6irql1j4m5xjb4lxj6468z8v603921bnir71mf";
   };
 
+  version = "1.0";
+
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "nrsc5";
-  version = "3.0.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "theori-io";
     repo = "nrsc5";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-chLoCXbEQaIrSHLQAm0++NGNYuQNCseSCR37qjXwW04=";
+    rev = "v${version}";
+    sha256 = "09zzh3h1zzf2lwrbz3i7rif2hw36d9ska8irvxaa9lz6xc1y68pg";
   };
 
   postUnpack = ''
@@ -42,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/GIT_REPOSITORY/d' CMakeLists.txt
     sed -i '/GIT_TAG/d' CMakeLists.txt
     sed -i "s:set (FAAD2_PREFIX .*):set (FAAD2_PREFIX \"$srcRoot/faad2-prefix\"):" CMakeLists.txt
+    # see https://github.com/dsvensson/faad2/pull/2
+    substituteInPlace $faadSrc/libfaad/pns.c \
+      --replace-fail 'r1_dep = __r1;' 'r1_dep = *__r1;' \
+      --replace-fail 'r2_dep = __r2;' 'r2_dep = *__r2;'
   '';
 
   nativeBuildInputs = [
@@ -69,4 +75,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ markuskowa ];
     mainProgram = "nrsc5";
   };
-})
+}

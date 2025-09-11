@@ -68,14 +68,10 @@ let
     )
   );
   hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
-  # Clang is needed on Darwin for -fllvm to work.
-  # GHC >= 9.10 needs an LLVM specific assembler which we use clang for.
+  # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
   llvm = lib.makeBinPath (
-    [ ghc.llvmPackages.llvm ]
-    ++ lib.optionals (lib.versionAtLeast ghc.version "9.10" || stdenv.targetPlatform.isDarwin) [
-      ghc.llvmPackages.clang
-    ]
+    [ ghc.llvmPackages.llvm ] ++ lib.optional stdenv.targetPlatform.isDarwin ghc.llvmPackages.clang
   );
 in
 
@@ -182,7 +178,7 @@ else
     + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version targetPrefix;
+      inherit (ghc) version meta targetPrefix;
 
       hoogle = hoogleWithPackages';
 
@@ -202,10 +198,5 @@ else
 
           Also note that withLLVM has been renamed to useLLVM for consistency with
           the GHC Nix expressions.'';
-    };
-    pos = __curPos;
-    meta = ghc.meta // {
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
   }

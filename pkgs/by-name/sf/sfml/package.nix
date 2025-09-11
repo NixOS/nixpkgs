@@ -6,7 +6,6 @@
 
   # nativeBuildInputs
   cmake,
-  pkg-config,
 
   # buildInputs
   flac,
@@ -14,7 +13,6 @@
   glew,
   libjpeg,
   libvorbis,
-  miniaudio,
   udev,
   libXi,
   libX11,
@@ -22,6 +20,12 @@
   libXrandr,
   libXrender,
   xcbutilimage,
+
+  # miniaudio
+  alsa-lib,
+  libjack2,
+  libpulseaudio,
+  sndio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,22 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/SFML/SFML/commit/a87763becbc4672b38f1021418ed94caa0f6540a.patch?full_index=1";
       hash = "sha256-tJmXTdhwtWq6XfUPBzw47yTrc6EzwmSiVj9n6jQwHig=";
     })
-
-    # Not upstreamble in the near future, see https://github.com/SFML/SFML/pull/3555
-    ./unvendor-miniaudio.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     flac
     freetype
     glew
     libjpeg
     libvorbis
-    miniaudio
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -68,12 +65,25 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilimage
   ];
 
+  # We rely on RUNPATH
+  dontPatchELF = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
     (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
     (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)
     (lib.cmakeBool "SFML_USE_SYSTEM_DEPS" true)
+
+    # FIXME: Unvendor miniaudio and move these deps there
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (
+      lib.makeLibraryPath [
+        alsa-lib
+        libjack2
+        libpulseaudio
+        sndio
+      ]
+    ))
   ];
 
   meta = {

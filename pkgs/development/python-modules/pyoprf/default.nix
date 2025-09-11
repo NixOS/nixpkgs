@@ -4,11 +4,7 @@
   buildPythonPackage,
   liboprf,
   setuptools,
-  ble-serial,
-  pyserial,
-  pyserial-asyncio,
   pysodium,
-  pyudev,
   securestring,
   pytestCheckHook,
 }:
@@ -36,11 +32,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    ble-serial
-    pyserial
-    pyserial-asyncio
     pysodium
-    pyudev
     securestring
   ];
 

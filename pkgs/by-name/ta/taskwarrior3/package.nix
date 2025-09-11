@@ -122,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
       oxalica
       mlaradji
       doronbehar
-      Necior
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;
