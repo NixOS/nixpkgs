@@ -8,7 +8,6 @@
   tcl,
   tclPackages,
   tk,
-  tkinter,
   xvfb-run,
 }:
 
@@ -64,8 +63,6 @@ buildPythonPackage {
     ];
   };
 
-  doCheck = false;
-
   nativeCheckInputs = [ xvfb-run ];
 
   preCheck = ''
@@ -80,8 +77,6 @@ buildPythonPackage {
 
     runHook postCheck
   '';
-
-  passthru.tests.unittests = tkinter.overridePythonAttrs { doCheck = true; };
 
   pythonImportsCheck = [ "tkinter" ];
 
