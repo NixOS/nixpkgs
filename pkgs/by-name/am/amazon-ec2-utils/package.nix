@@ -41,7 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    mkdir $out
+    runHook preInstall
+
+    mkdir -p $out
 
     for file in {ebsnvme-id,ec2-metadata,ec2nvme-nsid,ec2udev-vbd}; do
       install -D -m 755 -t $out/bin "$file"
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail /bin/awk ${gawk}/bin/awk
 
     installManPage doc/*.8
+
+    runHook postInstall
   '';
 
   outputs = [
