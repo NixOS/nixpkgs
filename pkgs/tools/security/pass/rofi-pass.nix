@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   unstableGitUpdater,
   coreutils,
-  util-linux,
+  util-linuxMinimal,
   gnugrep,
   libnotify,
   pwgen,
@@ -41,16 +41,20 @@ stdenv.mkDerivation {
     hash = "sha256-1lPNj47vTPLBK7mVm+PngV8C/ZsjJ2EN4ffXGU2TlQo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a rofi-pass $out/bin/rofi-pass
 
     mkdir -p $out/share/doc/rofi-pass/
     cp -a config.example $out/share/doc/rofi-pass/config.example
+
+    runHook postInstall
   '';
 
   wrapperPath = lib.makeBinPath (
@@ -63,7 +67,7 @@ stdenv.mkDerivation {
       libnotify
       pwgen
       rofi
-      util-linux
+      util-linuxMinimal
     ]
     ++ lib.optionals (backend == "x11") [
       (pass.withExtensions (ext: [ ext.pass-otp ]))
@@ -78,6 +82,8 @@ stdenv.mkDerivation {
   );
 
   fixupPhase = ''
+    runHook preFixup
+
     patchShebangs $out/bin
 
     wrapProgram $out/bin/rofi-pass \
@@ -86,6 +92,8 @@ stdenv.mkDerivation {
       --set-default ROFI_PASS_CLIPBOARD_BACKEND ${
         if backend == "wayland" then "wl-clipboard" else "xclip"
       }
+
+    runHook postFixup
   '';
 
   passthru.updateScript = unstableGitUpdater { };
