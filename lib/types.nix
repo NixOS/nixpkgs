@@ -1068,6 +1068,15 @@ let
         };
       };
 
+      # A value produced by `lib.ron.mkNamedStruct`
+      ronNamedStruct = mkOptionType {
+        name = "ronNamedStruct";
+        description = "RON named struct";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-named-struct";
+        merge = mergeEqualOption;
+      };
+
       uniq = unique { message = ""; };
 
       unique =
