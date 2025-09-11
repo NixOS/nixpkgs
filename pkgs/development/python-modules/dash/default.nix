@@ -111,8 +111,8 @@ buildPythonPackage rec {
     pytest-mock
     mock
     pyyaml
-    psutil
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     "tests/unit/test_browser.py"
