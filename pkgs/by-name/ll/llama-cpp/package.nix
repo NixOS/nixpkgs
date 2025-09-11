@@ -30,6 +30,7 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
+  apple-sdk_14,
   curl,
   shaderc,
   vulkan-headers,
@@ -119,6 +120,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
+    ++ optionals metalSupport [ apple-sdk_14 ]
     ++ [ curl ];
 
   preConfigure = ''
