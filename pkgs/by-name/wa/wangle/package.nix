@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2025.04.21.00";
+  version = "2025.09.08.00";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t3b+R2tb4VTsjDL9Jzjcaehs5k+BLNLilm3+nXxyjj0=";
+    hash = "sha256-F6h0IXCsmVFJHfLzGaFvRy55I096RHnog1dzGxuSw00=";
   };
 
   patches = [
@@ -76,21 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
     (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/wangle")
   ];
-
-  env.GTEST_FILTER =
-    "-"
-    + lib.concatStringsSep ":" (
-      [
-        # these depend on example pem files from the folly source tree (?)
-        "SSLContextManagerTest.TestSingleClientCAFileSet"
-        "SSLContextManagerTest.TestMultipleClientCAsSet"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # flaky
-        "BroadcastPoolTest.ThreadLocalPool"
-        "Bootstrap.UDPClientServerTest"
-      ]
-    );
 
   __darwinAllowLocalNetworking = true;
 
