@@ -24,6 +24,7 @@
   libspelling,
   libsysprof-capture,
   libxml2,
+  libyaml,
   meson,
   ninja,
   ostree,
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libspelling
     libsysprof-capture
     libxml2
+    libyaml
     ostree
     pcre2
     python3
