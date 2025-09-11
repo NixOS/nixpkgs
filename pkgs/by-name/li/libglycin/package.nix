@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patch -p2 < ${finalAttrs.passthru.glycinPathsPatch}
+    patch -p2 < ${finalAttrs.passthru.glycin3PathsPatch}
 
     patchShebangs \
       build-aux/crates-version.py
@@ -113,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
     glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
+      bwrap = "${bubblewrap}/bin/bwrap";
+    };
+
+    glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
   };
