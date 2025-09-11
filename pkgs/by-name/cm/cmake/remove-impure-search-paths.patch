@@ -146,19 +146,6 @@ index ac5da58490..aeb012b113 100644
        CACHE PATH "Install path prefix, prepended onto install directories.")
    else()
      GetDefaultWindowsPrefixBase(CMAKE_GENERIC_PROGRAM_FILES)
-diff --git a/Modules/CMakeParseImplicitIncludeInfo.cmake b/Modules/CMakeParseImplicitIncludeInfo.cmake
-index a6d1335b36..1fad6be4e7 100644
---- a/Modules/CMakeParseImplicitIncludeInfo.cmake
-+++ b/Modules/CMakeParseImplicitIncludeInfo.cmake
-@@ -83,7 +83,7 @@
-     if(rv)
-       if (lang STREQUAL "C" OR lang STREQUAL "CXX")
-         # /usr/include appears to be hardwired in
--        list(APPEND rv "/usr/include")
-+        list(APPEND rv "/var/empty/include")
-       endif()
-       string(APPEND log "  got implicit includes via sunpro parser!\n")
-     else()
 diff --git a/Modules/CPackIFW.cmake b/Modules/CPackIFW.cmake
 index 2a2f478fd7..b922af83db 100644
 --- a/Modules/CPackIFW.cmake
