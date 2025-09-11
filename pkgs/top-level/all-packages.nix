@@ -12874,7 +12874,7 @@ with pkgs;
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
-  seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
+  seafile-client = qt6Packages.callPackage ../applications/networking/seafile-client { };
 
   seq66 = qt5.callPackage ../applications/audio/seq66 { };
 

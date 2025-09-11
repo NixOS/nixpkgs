@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   pkg-config,
   cmake,
   qttools,
+  qt5compat,
   libuuid,
   seafile-shared,
   jansson,
@@ -25,6 +27,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZMhU0uXAC3tH1e3ktiHhC5YCDwFOnILretPgjYYa9DQ=";
   };
 
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/442063
+    (fetchpatch {
+      name = "fix_build_with_QT6.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_QT6.diff?h=seafile-client&id=8bbd6e5017f03dbb368603b4313738b0d783ca2a";
+      hash = "sha256-N1fepqjTm/M17+TgwNTUecP/wGVlBuZEtTezFgJEeVM=";
+    })
+  ];
+
   nativeBuildInputs = [
     libuuid
     pkg-config
@@ -34,6 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qt5compat
     seafile-shared
     jansson
     libsearpc
