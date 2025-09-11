@@ -14881,6 +14881,8 @@ with pkgs;
 
   j2cli = with python311Packages; toPythonApplication j2cli;
 
+  j2lint = with python3Packages; toPythonApplication j2lint;
+
   kmonad = haskellPackages.kmonad.bin;
 
   # In general we only want keep the last three minor versions around that
