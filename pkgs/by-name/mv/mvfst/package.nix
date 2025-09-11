@@ -13,6 +13,8 @@
 
   fizz,
 
+  ctestCheckHook,
+
   gtest,
 
   nix-update-script,
@@ -54,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     fizz
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   checkInputs = [
     gtest
   ];
@@ -84,41 +90,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  dontUseNinjaCheck = true;
+
   postPatch = ''
     # Make sure the libraries the `tperf` binary uses are installed.
     printf 'install(TARGETS mvfst_test_utils)\n' >> quic/common/test/CMakeLists.txt
     printf 'install(TARGETS mvfst_dsr_backend)\n' >> quic/dsr/CMakeLists.txt
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -j $NIX_BUILD_CORES --output-on-failure ${
-      lib.optionalString stdenv.hostPlatform.isLinux (
-        lib.escapeShellArgs [
-          "--exclude-regex"
-          (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
-            "*/QuicClientTransportIntegrationTest.NetworkTest/*"
-            "*/QuicClientTransportIntegrationTest.FlowControlLimitedTest/*"
-            "*/QuicClientTransportIntegrationTest.NetworkTestConnected/*"
-            "*/QuicClientTransportIntegrationTest.SetTransportSettingsAfterStart/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttSuccess/*"
-            "*/QuicClientTransportIntegrationTest.ZeroRttRetryPacketTest/*"
-            "*/QuicClientTransportIntegrationTest.NewTokenReceived/*"
-            "*/QuicClientTransportIntegrationTest.UseNewTokenThenReceiveRetryToken/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttRejection/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttNotAttempted/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttInvalidAppParams/*"
-            "*/QuicClientTransportIntegrationTest.ChangeEventBase/*"
-            "*/QuicClientTransportIntegrationTest.ResetClient/*"
-            "*/QuicClientTransportIntegrationTest.TestStatelessResetToken/*"
-          ])
-        ]
-      )
-    }
-
-    runHook postCheck
-  '';
+  disabledTests = [
+    "*/QuicClientTransportIntegrationTest.NetworkTest/*"
+    "*/QuicClientTransportIntegrationTest.FlowControlLimitedTest/*"
+    "*/QuicClientTransportIntegrationTest.NetworkTestConnected/*"
+    "*/QuicClientTransportIntegrationTest.SetTransportSettingsAfterStart/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttSuccess/*"
+    "*/QuicClientTransportIntegrationTest.ZeroRttRetryPacketTest/*"
+    "*/QuicClientTransportIntegrationTest.NewTokenReceived/*"
+    "*/QuicClientTransportIntegrationTest.UseNewTokenThenReceiveRetryToken/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttRejection/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttNotAttempted/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttInvalidAppParams/*"
+    "*/QuicClientTransportIntegrationTest.ChangeEventBase/*"
+    "*/QuicClientTransportIntegrationTest.ResetClient/*"
+    "*/QuicClientTransportIntegrationTest.TestStatelessResetToken/*"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
