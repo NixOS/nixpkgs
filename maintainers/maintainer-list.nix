@@ -641,6 +641,12 @@
     githubId = 8026586;
     name = "Adrien Faure";
   };
+  adhityaravi = {
+    email = "adhitya.ravi@canonical.com";
+    github = "adhityaravi";
+    githubId = 34714491;
+    name = "Adhitya Ravi";
+  };
   adisbladis = {
     email = "adisbladis@gmail.com";
     matrix = "@adis:blad.is";
