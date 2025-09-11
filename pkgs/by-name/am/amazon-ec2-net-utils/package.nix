@@ -13,7 +13,7 @@
   nix-update-script,
   systemd,
   udevCheckHook,
-  util-linux,
+  util-linuxMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
+    mkdir -p $out
 
     for file in bin/*.sh; do
       install -D -m 755 "$file" $out/bin/$(basename --suffix ".sh" "$file")
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
           gnused
           iproute2
           systemd
-          util-linux
+          util-linuxMinimal
         ]
       }
 
