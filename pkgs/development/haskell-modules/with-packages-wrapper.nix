@@ -44,7 +44,7 @@ selectPackages:
 #   fi
 
 let
-  inherit (haskellPackages) llvmPackages ghc;
+  inherit (haskellPackages) ghc;
 
   hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
 
@@ -71,7 +71,7 @@ let
   # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
   llvm = lib.makeBinPath (
-    [ llvmPackages.llvm ] ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang
+    [ ghc.llvmPackages.llvm ] ++ lib.optional stdenv.targetPlatform.isDarwin ghc.llvmPackages.clang
   );
 in
 
@@ -178,7 +178,7 @@ else
     + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version meta;
+      inherit (ghc) version meta targetPrefix;
 
       hoogle = hoogleWithPackages';
 

@@ -47,6 +47,7 @@
   libgudev,
   libjcat,
   libmbim,
+  libmnl,
   libqmi,
   libuuid,
   libxmlb,
@@ -133,7 +134,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.14";
+  version = "2.0.15";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -151,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-VUpLYl7SKJqwbM3Lna22txTeMwqtpQieiw1DLX/4xtA=";
+    hash = "sha256-p0ZpbthjUaEKAn1UwzoW2gxqiBTsC4GMoXTmV3zKN2o=";
   };
 
   patches = [
@@ -234,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     libjcat
     libmbim
+    libmnl
     libqmi
     libuuid
     libxmlb

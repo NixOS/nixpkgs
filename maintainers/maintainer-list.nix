@@ -641,6 +641,12 @@
     githubId = 8026586;
     name = "Adrien Faure";
   };
+  adhityaravi = {
+    email = "adhitya.ravi@canonical.com";
+    github = "adhityaravi";
+    githubId = 34714491;
+    name = "Adhitya Ravi";
+  };
   adisbladis = {
     email = "adisbladis@gmail.com";
     matrix = "@adis:blad.is";
@@ -3190,6 +3196,12 @@
     email = "ben@benw.is";
     github = "benwis";
     githubId = 6953353;
+  };
+  bepri = {
+    email = "imani.pelton@canonical.com";
+    github = "bepri";
+    githubId = 17732342;
+    name = "Imani Pelton";
   };
   berberman = {
     email = "berberman@yandex.com";
@@ -6964,6 +6976,12 @@
     email = "nix@dany.dev";
     github = "dsluijk";
     githubId = 8537327;
+  };
+  dstathis = {
+    email = "dylan.stephano-shachter@canonical.com";
+    github = "dstathis";
+    githubId = 2110777;
+    name = "Dylan Stephano-Shachter";
   };
   dstengele = {
     name = "Dennis Stengele";
@@ -13359,6 +13377,13 @@
     matrix = "@keyzox:matrix.org";
     githubId = 18579667;
     name = "Adam J.";
+  };
+  kfiz = {
+    email = "doroerose@gmail.com";
+    github = "kfiz";
+    githubId = 5100646;
+    name = "kfiz";
+    matrix = "@kfiz:matrix.sopado.de";
   };
   kfollesdal = {
     email = "kfollesdal@gmail.com";

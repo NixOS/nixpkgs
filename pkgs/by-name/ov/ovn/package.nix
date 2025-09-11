@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libbpf
     libcap_ng
     numactl
     openssl
     unbound
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    libbpf
     xdp-tools
   ];
 
@@ -58,7 +60,8 @@ stdenv.mkDerivation rec {
     "--with-dbdir=/var/lib/ovn"
     "--sbindir=$(out)/bin"
     "--enable-ssl"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "--with-openssl=${lib.getLib openssl.dev}";
 
   enableParallelBuilding = true;
 

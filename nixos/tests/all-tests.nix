@@ -559,10 +559,6 @@ in
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
   flaresolverr = runTest ./flaresolverr.nix;
   flood = runTest ./flood.nix;
-  floorp = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.floorp;
-  };
   fluent-bit = runTest ./fluent-bit.nix;
   fluentd = runTest ./fluentd.nix;
   fluidd = runTest ./fluidd.nix;
