@@ -32,15 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mkREIVtD1b2YUyW0CK4lC0S4Arb/SeGvCCXXAAi5Zz8=";
   };
 
-  patches = [
-    # Fix paths in glycin library.
-    # Not actually needed for this package since we are only building loaders
-    # and this patch is relevant just to apps that use the loaders
-    # but apply it here to ensure the patch continues to apply.
-    finalAttrs.passthru.glycinPathsPatch
-  ];
-
-  cargoVendorDir = "vendor";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    name = "glycin-loaders-deps-${finalAttrs.version}";
+    hash = "sha256-omxOAZggqBzMKKg6NP8BnjnGwqIkn0fbOI3Vfwa+j1A=";
+    dontConfigure = true;
+  };
 
   nativeBuildInputs = [
     cargo
@@ -67,13 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dglycin-loaders=true"
     "-Dlibglycin=false"
+    "-Dlibglycin-gtk4=false"
     "-Dvapi=false"
   ];
 
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace loaders/meson.build \
+    substituteInPlace glycin-loaders/meson.build \
       --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
   '';
 
