@@ -43,6 +43,7 @@
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
+  libglycin,
   atk,
   gtk4,
   fribidi,
@@ -132,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     egl-wayland
     glib
+    libglycin
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
