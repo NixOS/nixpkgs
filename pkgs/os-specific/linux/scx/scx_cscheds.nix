@@ -56,8 +56,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./meson-scripts
     cp ${finalAttrs.fetchBpftool} meson-scripts/fetch_bpftool
     cp ${finalAttrs.fetchLibbpf} meson-scripts/fetch_libbpf
-    substituteInPlace meson.build \
-      --replace-fail '[build_bpftool' "['${lib.getExe bash}', build_bpftool"
+    substituteInPlace ./meson-scripts/build_bpftool \
+      --replace-fail '/bin/bash' '${lib.getExe bash}'
   '';
 
   nativeBuildInputs = [
