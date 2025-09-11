@@ -41,7 +41,6 @@ lib:
   ethtool,
   fetchFromGitHub,
   fetchgit,
-  fetchpatch,
   fetchurl,
   fetchzip,
   findutils,
@@ -55,7 +54,7 @@ lib:
   kmod,
   lib,
   libseccomp,
-  makeWrapper,
+  makeBinaryWrapper,
   nixosTests,
   overrideBundleAttrs ? { }, # An attrSet/function to override the `k3sBundle` derivation.
   overrideCniPluginsAttrs ? { }, # An attrSet/function to override the `k3sCNIPlugins` derivation.
@@ -69,10 +68,11 @@ lib:
   socat,
   sqlite,
   stdenv,
-  systemd,
+  systemdMinimal,
   util-linuxMinimal,
   yq-go,
   zstd,
+  versionCheckHook,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -328,7 +328,7 @@ let
     }).overrideAttrs
       overrideContainerdAttrs;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k3s";
   version = k3sVersion;
   pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
@@ -345,15 +345,13 @@ buildGoModule rec {
     # Nix prefers dynamically linked binaries over static binary.
 
     substituteInPlace scripts/package-cli \
-      --replace '"$LDFLAGS $STATIC" -o' \
-                '"$LDFLAGS" -o' \
-      --replace "STATIC=\"-extldflags \'-static\'\"" \
-                ""
+      --replace-fail '"$LDFLAGS $STATIC" -o' \
+                '"$LDFLAGS" -o'
 
     # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
 
     substituteInPlace scripts/package-cli \
-      --replace '"''${GO}" generate' \
+      --replace-fail '"''${GO}" generate' \
                 'GOFLAGS="" \
                  GOOS="${pkgsBuildBuild.go.GOOS}" \
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \
@@ -381,7 +379,7 @@ buildGoModule rec {
 
   k3sKillallDeps = [
     bash
-    systemd
+    systemdMinimal
     procps
     coreutils
     gnugrep
@@ -389,10 +387,10 @@ buildGoModule rec {
     gnused
   ];
 
-  buildInputs = k3sRuntimeDeps;
+  buildInputs = finalAttrs.k3sRuntimeDeps;
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     rsync
     yq-go
     zstd
@@ -439,23 +437,20 @@ buildGoModule rec {
     # wildcard to match the arm64 build too
     install -m 0755 dist/artifacts/k3s* -D $out/bin/k3s
     wrapProgram $out/bin/k3s \
-      --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
     install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
     wrapProgram $out/bin/k3s-killall.sh \
-      --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
+      --prefix PATH : ${lib.makeBinPath (finalAttrs.k3sRuntimeDeps ++ finalAttrs.k3sKillallDeps)}
     runHook postInstall
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/k3s --version | grep -F "v${k3sVersion}" >/dev/null
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit airgap-images;
@@ -464,13 +459,16 @@ buildGoModule rec {
     k3sRepo = k3sRepo;
     k3sRoot = k3sRoot;
     k3sBundle = k3sBundle;
-    mkTests =
-      version:
+    tests =
       let
-        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+        mkTests =
+          version:
+          let
+            k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+          in
+          lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
       in
-      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-    tests = passthru.mkTests k3sVersion;
+      mkTests k3sVersion;
     updateScript = updateScript;
     imagesList = throw "k3s.imagesList was removed";
     airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
@@ -481,4 +479,4 @@ buildGoModule rec {
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
   meta = baseMeta;
-}
+})

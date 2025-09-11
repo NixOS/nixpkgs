@@ -132,6 +132,9 @@ buildPythonPackage rec {
     # Racy tex file creation
     "test_literalinclude_namedlink_latex"
     "test_literalinclude_caption_latex"
+    # Racy local networking
+    "test_load_mappings_cache"
+    "test_load_mappings_cache_update"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/sphinx-doc/sphinx/issues/12430

@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = {
     changelog = "https://github.com/dlvhdr/gh-dash/releases/tag/${src.rev}";
     description = "Github Cli extension to display a dashboard with pull requests and issues";
-    homepage = "https://github.com/dlvhdr/gh-dash";
+    homepage = "https://www.gh-dash.dev";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
     mainProgram = "gh-dash";

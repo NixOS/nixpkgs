@@ -65,9 +65,8 @@ buildPythonPackage rec {
     pyproject-metadata
   ];
 
-  pypaBuildFlags = [
-    "-C"
-    "cmake.args=--preset=sysdeps"
+  cmakeFlags = [
+    "--preset=sysdeps"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

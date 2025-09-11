@@ -543,8 +543,22 @@ builtins.intersectAttrs super {
       )
     );
 
-  # Needs help finding LLVM.
-  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
+  # Forces the LLVM backend; upstream signalled intent to remove this
+  # in 2017: <https://github.com/SeanRBurton/spaceprobe/issues/1>.
+  spaceprobe = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace spaceprobe.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.spaceprobe;
+
+  # Forces the LLVM backend.
+  GlomeVec = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace GlomeVec.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.GlomeVec;
 
   # Tries to run GUI in tests
   leksah = dontCheck (
@@ -818,15 +832,6 @@ builtins.intersectAttrs super {
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
   spatial-rotations = dontCheck super.spatial-rotations;
-
-  # This package is marked broken, but it causes some evail failures for nixpkgs-review.
-  # cabal2nix still adds opencv3, which has been removed. It makes no sense to add opencv4,
-  # because the haskell package is only targeting opencv 3.x specifically.
-  # TODO: Remove this package entirely from hackage-packages.nix. It's broken and has been last
-  # updated in 2018.
-  opencv = overrideCabal (drv: {
-    libraryPkgconfigDepends = [ ];
-  }) super.opencv;
 
   LDAP = dontCheck (
     overrideCabal (drv: {

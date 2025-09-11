@@ -6,15 +6,20 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  version = "7.0.1";
+in
+python3Packages.buildPythonApplication {
   pname = "tortoisehg";
-  version = "6.9";
-  format = "setuptools";
+  inherit version;
+  pyproject = true;
 
   src = fetchurl {
     url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
-    hash = "sha256-j+HuAq/elnXIOoX4eoqMeOyGq3qjbdoJw6pcZsSa+AI=";
+    hash = "sha256-rCDLZ2ppD3Y71c31UNir/1pW1QBJViMP9JdoJiWf0nk=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
@@ -39,6 +44,7 @@ python3Packages.buildPythonApplication rec {
   # Convenient alias
   postInstall = ''
     ln -s $out/bin/thg $out/bin/tortoisehg
+    install -D --mode=0644 contrib/thg.desktop --target-directory $out/share/applications/
   '';
 
   # In python3Packages.buildPythonApplication doCheck is always true, and we

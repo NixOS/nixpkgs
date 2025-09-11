@@ -62,7 +62,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/go-macaroon-bakery/py-macaroon-bakery";
     changelog = "https://github.com/go-macaroon-bakery/py-macaroon-bakery/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1039,6 +1039,7 @@ in
       zlib
     ];
     dontUseCmakeConfigure = true;
+    buildFlags = [ "--with-ssh" ];
   };
 
   sassc = attrs: {

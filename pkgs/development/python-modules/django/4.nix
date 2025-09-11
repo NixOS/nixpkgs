@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.23";
+  version = "4.2.24";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-h6VkMLg2XAVC0p+ItTs/2EqpYdZn9uNvv6ZwQHXP0bI=";
+    hash = "sha256-zDPK30u2QFbHCqnlTMqF1w9iN2sPDphhyKU1u+Mp5ho=";
   };
 
   patches = [
@@ -80,11 +80,6 @@ buildPythonPackage rec {
       hash = "sha256-8YwdOBNJq6+GNoxzdLyN9HEEIWRXGQk9YbyfPwYVkwU=";
     })
 
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://code.djangoproject.com/ticket/36499
-    # https://github.com/django/django/pull/19639
-    ./3.13.6-html-parser.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_4_set_geos_gdal_lib.patch {

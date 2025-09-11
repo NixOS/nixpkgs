@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     g++ contrib/easy-encryption/cl.cpp -o contrib/easy-encryption/bin/linux/ee64 #replacing prebuilt binary
+    substituteInPlace contrib/Orochi/contrib/hipew/src/hipew.cpp --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib'
+    substituteInPlace hiprt/hiprt_libpath.h --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib/'
   '';
 
   nativeBuildInputs = [

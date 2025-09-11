@@ -7,15 +7,15 @@
 
 stdenv.mkDerivation {
   pname = "ma";
-  version = "11";
+  version = "13";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20250511210225/http://call-with-current-continuation.org/ma/ma.tar.gz";
-    hash = "sha256-1UVxXbN2jSNm13BjyoN3jbKtkO3DUEEHaDOC2Ibbxf4=";
+    url = "https://web.archive.org/web/20250829110226/http://call-with-current-continuation.org/ma/ma.tar.gz";
+    hash = "sha256-QNt4ctcu4/xJY2eud+kp5paPUnLsRhK7D2nJ0LBIvIo=";
   };
 
   postPatch = ''
-    substituteInPlace ./build --replace-fail gcc ${lib.getExe stdenv.cc}
+    substituteInPlace ./build --replace-fail cc ${lib.getExe stdenv.cc}
   '';
 
   buildInputs = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation {
     description = "Minimalistic variant of the Acme editor";
     homepage = "http://call-with-current-continuation.org/ma/ma.html";
     mainProgram = "ma";
+    maintainers = [ lib.maintainers.sternenseemann ];
     # Per the README:
     # > All of MA's source code is hereby placed in the public domain
     license = lib.licenses.publicDomain;

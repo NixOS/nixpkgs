@@ -143,13 +143,13 @@ in
 assertNoAdditions {
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
+      fzf-lua
       snacks-nvim
+      telescope-nvim
     ];
     dependencies = with self; [
-      telescope-nvim
       vim-fugitive
       vim-rhubarb
-      fzf-lua
       plenary-nvim
     ];
   };
@@ -1107,11 +1107,11 @@ assertNoAdditions {
   easy-dotnet-nvim = super.easy-dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
-      telescope-nvim
     ];
     checkInputs = with self; [
-      # Pickers, can use telescope or fzf-lua
+      # Pickers, can use telescope, fzf-lua, or snacks
       fzf-lua
+      telescope-nvim
     ];
   };
 
@@ -1228,7 +1228,7 @@ assertNoAdditions {
     ];
     # Patch libgit2 library dependency
     postPatch = ''
-      substituteInPlace lua/fugit2/libgit2.lua \
+      substituteInPlace lua/fugit2/core/libgit2.lua \
         --replace-fail \
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
@@ -1628,11 +1628,13 @@ assertNoAdditions {
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
-    checkInputs = [ self.snacks-nvim ];
+    checkInputs = with self; [
+      snacks-nvim
+      telescope-nvim
+    ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
-      telescope-nvim
     ];
 
     doInstallCheck = true;
@@ -2185,11 +2187,14 @@ assertNoAdditions {
   };
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
+    checkInputs = with self; [
+      # Optional picker integration
+      telescope-nvim
+    ];
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
-      telescope-nvim
     ];
     # Unit test assert
     nvimSkipModules = "neotest-playwright-assertions";
@@ -2278,13 +2283,6 @@ assertNoAdditions {
       # FIXME: propagate `neo-tree` dependencies
       nui-nvim
       plenary-nvim
-    ];
-  };
-
-  neuron-nvim = super.neuron-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
     ];
   };
 
@@ -2636,14 +2634,10 @@ assertNoAdditions {
   };
 
   nvim-tinygit = super.nvim-tinygit.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
-
     checkInputs = [
       gitMinimal
-      # transitive dependency (telescope-nvim) not properly propagated to the test environment
-      self.plenary-nvim
+      # interactive staging support
+      self.telescope-nvim
     ];
   };
 
@@ -3602,9 +3596,6 @@ assertNoAdditions {
   };
 
   uv-nvim = super.uv-nvim.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
     runtimeDeps = [ uv ];
   };
 
@@ -4008,9 +3999,12 @@ assertNoAdditions {
   };
 
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
+    checkInputs = [
+      # Optional telescope integration
+      self.telescope-nvim
+    ];
+    dependencies = [
+      self.plenary-nvim
     ];
   };
 
@@ -4113,10 +4107,17 @@ assertNoAdditions {
   });
 
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
+    checkInputs = with self; [
+      # Optional lush-nvim integration
+      lush-nvim
+    ];
     nvimSkipModules = [
       # Requires global variable set
       "randombones"
       "randombones.palette"
+      "randombones_dark.palette"
+      "randombones_light"
+      "randombones_light.palette"
       # Optional shipwright
       "zenbones.shipwright.runners.alacritty"
       "zenbones.shipwright.runners.foot"
@@ -4128,33 +4129,7 @@ assertNoAdditions {
       "zenbones.shipwright.runners.vim"
       "zenbones.shipwright.runners.wezterm"
       "zenbones.shipwright.runners.windows_terminal"
-      # Optional lush-nvim integration
-      "duckbones"
-      "duckbones.palette"
-      "forestbones"
-      "forestbones.palette"
-      "kanagawabones"
-      "kanagawabones.palette"
-      "neobones"
-      "neobones.palette"
-      "nordbones"
-      "nordbones.palette"
-      "rosebones"
-      "rosebones.palette"
-      "seoulbones"
-      "seoulbones.palette"
-      "tokyobones"
-      "tokyobones.palette"
-      "vimbones"
-      "vimbones.palette"
-      "zenbones"
-      "zenbones.palette"
-      "zenbones.specs.dark"
-      "zenbones.specs.light"
-      "zenburned"
-      "zenburned.palette"
-      "zenwritten"
-      "zenwritten.palette"
+      "randombones_dark"
     ];
   };
 

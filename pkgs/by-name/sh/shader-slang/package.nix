@@ -10,6 +10,7 @@
   libxml2,
   libX11,
   glslang,
+  unordered_dense,
   llvmPackages_14,
   versionCheckHook,
   gitUpdater,
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.16";
+  version = "2025.16.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ovGrwngcnKN8FJ1PummXHxnGtPatV2Unb6t2Q1f144I=";
+    hash = "sha256-9kCqE/jwnQrwbKXdcY3rp8YoPju+/ZupH1HBc5qu53o=";
     fetchSubmodules = true;
   };
 
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     miniz
     lz4
     libxml2
+    unordered_dense
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
@@ -109,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
     "-DSLANG_USE_SYSTEM_MINIZ=ON"
     "-DSLANG_USE_SYSTEM_LZ4=ON"
+    (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
     "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
     # slang-rhi tries to download headers and precompiled binaries for these backends
     "-DSLANG_RHI_ENABLE_OPTIX=OFF"

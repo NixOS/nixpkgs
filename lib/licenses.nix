@@ -64,6 +64,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    adobeUtopia = {
+      fullName = "Adobe Utopia Font License";
+      spdxId = "Adobe-Utopia";
+    };
+
     afl20 = {
       spdxId = "AFL-2.0";
       fullName = "Academic Free License v2.0";
@@ -690,6 +695,11 @@ lib.mapAttrs mkLicense (
     hpndSellVariant = {
       fullName = "Historical Permission Notice and Disclaimer - sell variant";
       spdxId = "HPND-sell-variant";
+    };
+
+    hpndDec = {
+      fullName = "Historical Permission Notice and Disclaimer - DEC variant";
+      spdxId = "HPND-DEC";
     };
 
     hpndDoc = {

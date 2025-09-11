@@ -16,8 +16,6 @@ in
 with haskellLib;
 
 {
-  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
-
   # Disable GHC core libraries
   array = null;
   base = null;

@@ -13,7 +13,7 @@ set -euo pipefail
 #   https://github.com/postgres/postgres/blob/7510ac6203bc8e3c56eae95466feaeebfc1b4f31/src/bin/pg_config/pg_config.sh
 #   https://github.com/postgres/postgres/blob/master/src/bin/pg_config/pg_config.c
 
-source @postgresql-dev@/nix-support/pg_config.env
+source @pg_config.env@
 
 help="
 pg_config provides information about the installed version of PostgreSQL.
