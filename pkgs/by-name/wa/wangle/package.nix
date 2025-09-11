@@ -15,6 +15,8 @@
   libevent,
   double-conversion,
 
+  ctestCheckHook,
+
   gtest,
 
   nix-update-script,
@@ -55,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     double-conversion
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   checkInputs = [
     gtest
   ];
@@ -90,22 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
+  dontUseNinjaCheck = true;
 
-    ctest -j $NIX_BUILD_CORES --output-on-failure ${
-      # Deterministic glibc abort 🫠
-      # SSLContextManagerTest uses 15+ GB of RAM
-      lib.optionalString stdenv.hostPlatform.isLinux (
-        lib.escapeShellArgs [
-          "--exclude-regex"
-          "^(BootstrapTest|BroadcastPoolTest|SSLContextManagerTest)$"
-        ]
-      )
-    }
+  disabledTests = [
+    # Deterministic glibc abort 🫠
+    "BootstrapTest"
+    "BroadcastPoolTest"
 
-    runHook postCheck
-  '';
+    # SSLContextManagerTest uses 15+ GB of RAM
+    "SSLContextManagerTest"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
