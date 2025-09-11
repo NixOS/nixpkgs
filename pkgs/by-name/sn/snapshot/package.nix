@@ -17,6 +17,7 @@
   gtk4,
   libadwaita,
   libcamera,
+  libglycin,
   lcms2,
   libseccomp,
   pipewire,
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix paths in glycin library
-    glycin-loaders.passthru.glycinPathsPatch
+    libglycin.passthru.glycinPathsPatch
   ];
 
   nativeBuildInputs = [

@@ -84,10 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
       attrPath = "glycin-loaders";
       packageName = "glycin";
     };
-
-    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
-      bwrap = "${bubblewrap}/bin/bwrap";
-    };
   };
 
   meta = with lib; {

@@ -16,6 +16,8 @@
   gtk4,
   gobject-introspection,
   gnome,
+  replaceVars,
+  bubblewrap,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -75,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    patch -p2 < ${finalAttrs.passthru.glycinPathsPatch}
+
     patchShebangs \
       build-aux/crates-version.py
   '';
@@ -107,6 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+
+    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
+      bwrap = "${bubblewrap}/bin/bwrap";
+    };
   };
 
   meta = {
