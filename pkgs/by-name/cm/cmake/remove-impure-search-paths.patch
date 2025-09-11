@@ -49,10 +49,10 @@ index dc26258eac..5f3855a862 100644
      if(CMAKE_HOST_SYSTEM_NAME STREQUAL "AIX")
        execute_process(COMMAND ${CMAKE_UNAME} -v
 diff --git a/Modules/CMakeFindFrameworks.cmake b/Modules/CMakeFindFrameworks.cmake
-index 87ad38b46b..849b2c37b1 100644
+index 87ad38b46b..e2ab4e43fd 100644
 --- a/Modules/CMakeFindFrameworks.cmake
 +++ b/Modules/CMakeFindFrameworks.cmake
-@@ -41,9 +41,9 @@
+@@ -41,20 +41,16 @@
      if(APPLE)
        # 'Frameworks' directory from Brew (Apple Silicon and Intel)
        if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
@@ -64,6 +64,17 @@ index 87ad38b46b..849b2c37b1 100644
        endif()
  
        file(TO_CMAKE_PATH "$ENV{CMAKE_FRAMEWORK_PATH}" _cmff_CMAKE_FRAMEWORK_PATH)
+       set(_cmff_search_paths
+             ${CMAKE_FRAMEWORK_PATH}
+             ${_cmff_CMAKE_FRAMEWORK_PATH}
+-            ~/Library/Frameworks
+             ${_brew_framework_path}
+-            /Library/Frameworks
+-            /System/Library/Frameworks
+-            /Network/Library/Frameworks
+             ${CMAKE_SYSTEM_FRAMEWORK_PATH})
+ 
+       # For backwards compatibility reasons,
 diff --git a/Modules/CMakeFindJavaCommon.cmake b/Modules/CMakeFindJavaCommon.cmake
 index 95ca9b57b6..ac1660d898 100644
 --- a/Modules/CMakeFindJavaCommon.cmake
@@ -93,13 +104,19 @@ index 6e2762cf41..0ab3e518c4 100644
      else()
        # use the file utility to check whether itself is 64 bit:
 diff --git a/Modules/CMakeFindSublimeText2.cmake b/Modules/CMakeFindSublimeText2.cmake
-index fc0ec313b8..16e06c7e96 100644
+index fc0ec313b8..4033f40614 100644
 --- a/Modules/CMakeFindSublimeText2.cmake
 +++ b/Modules/CMakeFindSublimeText2.cmake
-@@ -14,8 +14,8 @@
-         "$ENV{HOME}/Applications/Sublime Text.app/Contents/SharedSupport/bin"
-         "$ENV{HOME}/Applications/Sublime Text 3.app/Contents/SharedSupport/bin"
-         "$ENV{HOME}/Applications/Sublime Text 2.app/Contents/SharedSupport/bin"
+@@ -8,14 +8,8 @@
+ find_program(CMAKE_SUBLIMETEXT_EXECUTABLE
+     NAMES subl3 subl sublime_text
+     PATHS
+-        "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+-        "/Applications/Sublime Text 3.app/Contents/SharedSupport/bin"
+-        "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin"
+-        "$ENV{HOME}/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+-        "$ENV{HOME}/Applications/Sublime Text 3.app/Contents/SharedSupport/bin"
+-        "$ENV{HOME}/Applications/Sublime Text 2.app/Contents/SharedSupport/bin"
 -        "/opt/sublime_text"
 -        "/opt/sublime_text_3"
 +        "/var/empty/sublime_text"
@@ -140,7 +157,7 @@ index b45a279b94..7ef7f19f2e 100644
    list(GET _ACML_ROOT 0 _ACML_ROOT)
    list(GET _ACML_GPU_ROOT 0 _ACML_GPU_ROOT)
 diff --git a/Modules/FindCUDA.cmake b/Modules/FindCUDA.cmake
-index bceb615ca0..e573ccaae3 100644
+index bceb615ca0..db7f67755e 100644
 --- a/Modules/FindCUDA.cmake
 +++ b/Modules/FindCUDA.cmake
 @@ -854,7 +854,7 @@
@@ -170,8 +187,25 @@ index bceb615ca0..e573ccaae3 100644
    endif()
  else()
    list(APPEND CUDA_LIBRARIES ${CUDA_CUDART_LIBRARY})
+@@ -1223,8 +1223,6 @@
+   "$ENV{NVSDKCOMPUTE_ROOT}/C"
+   ENV NVSDKCUDA_ROOT
+   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NVIDIA Corporation\\Installed Products\\NVIDIA SDK 10\\Compute;InstallDir]"
+- PATHS
+-  "/Developer/GPU\ Computing/C"
+   )
+ 
+ # Keep the CUDA_SDK_ROOT_DIR first in order to be able to override the
+@@ -1236,7 +1234,6 @@
+   "${CUDA_TOOLKIT_ROOT_DIR}/NV_CUDA_SDK"
+   "$ENV{HOME}/NVIDIA_CUDA_SDK"
+   "$ENV{HOME}/NVIDIA_CUDA_SDK_MACOSX"
+-  "/Developer/CUDA"
+   )
+ 
+ # Example of how to find an include file from the CUDA_SDK_ROOT_DIR
 diff --git a/Modules/FindCUDAToolkit.cmake b/Modules/FindCUDAToolkit.cmake
-index b00cd26b7e..900a0e9206 100644
+index b00cd26b7e..d43f34f0b6 100644
 --- a/Modules/FindCUDAToolkit.cmake
 +++ b/Modules/FindCUDAToolkit.cmake
 @@ -776,11 +776,11 @@
@@ -190,16 +224,20 @@ index b00cd26b7e..900a0e9206 100644
          break()
        endif()
      endforeach()
-@@ -866,7 +866,7 @@
+@@ -865,11 +865,7 @@
+   # directory is the desired location.
    if(NOT CUDAToolkit_ROOT_DIR)
      if(UNIX)
-       if(NOT APPLE)
+-      if(NOT APPLE)
 -        set(platform_base "/usr/local/cuda-")
-+        set(platform_base "/var/empty/local/cuda-")
-       else()
-         set(platform_base "/Developer/NVIDIA/CUDA-")
-       endif()
-@@ -897,7 +897,7 @@
+-      else()
+-        set(platform_base "/Developer/NVIDIA/CUDA-")
+-      endif()
++      set(platform_base "/var/empty/local/cuda-")
+     else()
+       set(platform_base "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v")
+     endif()
+@@ -897,7 +893,7 @@
  
      # Force the global default /usr/local/cuda to the front on Unix.
      if(UNIX)
@@ -208,6 +246,21 @@ index b00cd26b7e..900a0e9206 100644
      endif()
  
      # Now search for the toolkit again using the platform default search paths.
+diff --git a/Modules/FindCoin3D.cmake b/Modules/FindCoin3D.cmake
+index 1d89c604e0..5b70e71a87 100644
+--- a/Modules/FindCoin3D.cmake
++++ b/Modules/FindCoin3D.cmake
+@@ -76,10 +76,8 @@
+ else ()
+   if(APPLE)
+     find_path(COIN3D_INCLUDE_DIRS Inventor/So.h
+-     /Library/Frameworks/Inventor.framework/Headers
+     )
+     find_library(COIN3D_LIBRARIES Coin
+-      /Library/Frameworks/Inventor.framework/Libraries
+     )
+     set(COIN3D_LIBRARIES "-framework Coin3d" CACHE STRING "Coin3D library for OSX")
+   else()
 diff --git a/Modules/FindCurses.cmake b/Modules/FindCurses.cmake
 index 64600c6c64..cea48852ac 100644
 --- a/Modules/FindCurses.cmake
@@ -252,6 +305,34 @@ index 96cce45590..9676e3a4e1 100644
        C:/
        "C:/Program Files"
        ${PROJECT_SOURCE_DIR}/..
+diff --git a/Modules/FindDoxygen.cmake b/Modules/FindDoxygen.cmake
+index 2d430994e8..335c733150 100644
+--- a/Modules/FindDoxygen.cmake
++++ b/Modules/FindDoxygen.cmake
+@@ -755,10 +755,6 @@
+         NAMES doxygen
+         PATHS
+             "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\doxygen_is1;Inno Setup: App Path]/bin"
+-            /Applications/Doxygen.app/Contents/Resources
+-            /Applications/Doxygen.app/Contents/MacOS
+-            /Applications/Utilities/Doxygen.app/Contents/Resources
+-            /Applications/Utilities/Doxygen.app/Contents/MacOS
+         DOC "Doxygen documentation generation tool (https://www.doxygen.nl)"
+         VALIDATOR _Doxygen_version_validator
+     )
+@@ -845,12 +841,6 @@
+             "$ENV{ProgramFiles}/ATT/Graphviz/bin"
+             "C:/Program Files/ATT/Graphviz/bin"
+             [HKEY_LOCAL_MACHINE\\SOFTWARE\\ATT\\Graphviz;InstallPath]/bin
+-            /Applications/Graphviz.app/Contents/MacOS
+-            /Applications/Utilities/Graphviz.app/Contents/MacOS
+-            /Applications/Doxygen.app/Contents/Resources
+-            /Applications/Doxygen.app/Contents/MacOS
+-            /Applications/Utilities/Doxygen.app/Contents/Resources
+-            /Applications/Utilities/Doxygen.app/Contents/MacOS
+         DOC "Dot tool for use with Doxygen"
+     )
+     mark_as_advanced(DOXYGEN_DOT_EXECUTABLE)
 diff --git a/Modules/FindFontconfig.cmake b/Modules/FindFontconfig.cmake
 index 218ad2fbfa..dceac47ef1 100644
 --- a/Modules/FindFontconfig.cmake
@@ -415,7 +496,7 @@ index 6e39f5a989..d3369f6df9 100644
  
    if(GTK_gtk_INCLUDE_PATH
 diff --git a/Modules/FindGTK2.cmake b/Modules/FindGTK2.cmake
-index 9c5bc63272..539d3ad10b 100644
+index 9c5bc63272..16d0fbd7b5 100644
 --- a/Modules/FindGTK2.cmake
 +++ b/Modules/FindGTK2.cmake
 @@ -378,7 +378,7 @@
@@ -427,7 +508,7 @@ index 9c5bc63272..539d3ad10b 100644
        if(GTK2_DEBUG)
          message(STATUS "Adding ${_gtk2_arch_dir} to search path for multiarch support")
        endif()
-@@ -390,21 +390,21 @@
+@@ -390,21 +390,20 @@
              ${PC_GTK2_INCLUDEDIR}
              ${PC_GTK2_LIBDIR}
              ${_gtk2_arch_dir}
@@ -441,6 +522,11 @@ index 9c5bc63272..539d3ad10b 100644
 -            /opt/gnome/lib
 -            /opt/openwin/include
 -            /usr/openwin/lib
+-            /sw/lib
+-            /opt/local/lib
+-            /opt/homebrew/lib
+-            /usr/pkg/lib
+-            /usr/pkg/include/glib
 +            /var/empty/local/libx32
 +            /var/empty/local/lib64
 +            /var/empty/local/lib
@@ -451,11 +537,6 @@ index 9c5bc63272..539d3ad10b 100644
 +            /var/empty/gnome/lib
 +            /var/empty/openwin/include
 +            /var/empty/openwin/lib
-             /sw/lib
--            /opt/local/lib
--            /opt/homebrew/lib
--            /usr/pkg/lib
--            /usr/pkg/include/glib
 +            /var/empty/local/lib
 +            /var/empty/homebrew/lib
 +            /var/empty/pkg/lib
@@ -463,7 +544,7 @@ index 9c5bc63272..539d3ad10b 100644
              $ENV{GTKMM_BASEPATH}/include
              $ENV{GTKMM_BASEPATH}/lib
              [HKEY_CURRENT_USER\\SOFTWARE\\gtkmm\\2.4;Path]/include
-@@ -509,8 +509,8 @@
+@@ -509,8 +508,8 @@
      find_library(GTK2_${_var}_LIBRARY_RELEASE
          NAMES ${_lib_list}
          PATHS
@@ -828,28 +909,32 @@ index e272770af3..d00f544236 100644
  if (HTLATEX_COMPILER)
    set(LATEX_HTLATEX_FOUND TRUE)
 diff --git a/Modules/FindLua50.cmake b/Modules/FindLua50.cmake
-index ac36c86640..af679ad720 100644
+index ac36c86640..d1afc5f2be 100644
 --- a/Modules/FindLua50.cmake
 +++ b/Modules/FindLua50.cmake
-@@ -87,7 +87,7 @@
+@@ -85,9 +85,7 @@
+     ENV LUA_DIR
+   PATH_SUFFIXES lua50 lua5.0 lua5 lua
    PATHS
-   ~/Library/Frameworks
-   /Library/Frameworks
+-  ~/Library/Frameworks
+-  /Library/Frameworks
 -  /opt
 +  /var/empty
  )
  
  find_library(LUA_LIBRARY_lua
-@@ -98,7 +98,7 @@
+@@ -96,9 +94,7 @@
+     ENV LUA_DIR
+   PATH_SUFFIXES lib
    PATHS
-   ~/Library/Frameworks
-   /Library/Frameworks
+-  ~/Library/Frameworks
+-  /Library/Frameworks
 -  /opt
 +  /var/empty
  )
  
  # In an OS X framework, lualib is usually included as part of the framework
-@@ -113,7 +113,7 @@
+@@ -113,7 +109,7 @@
        ENV LUA_DIR
      PATH_SUFFIXES lib
      PATHS
@@ -859,22 +944,26 @@ index ac36c86640..af679ad720 100644
    if(LUA_LIBRARY_lualib AND LUA_LIBRARY_lua)
      # include the math library for Unix
 diff --git a/Modules/FindLua51.cmake b/Modules/FindLua51.cmake
-index cba30e4b58..331b3b8b7a 100644
+index cba30e4b58..965c6f5711 100644
 --- a/Modules/FindLua51.cmake
 +++ b/Modules/FindLua51.cmake
-@@ -90,7 +90,7 @@
+@@ -88,9 +88,7 @@
+     ENV LUA_DIR
+   PATH_SUFFIXES lua51 lua5.1 lua-5.1 lua
    PATHS
-   ~/Library/Frameworks
-   /Library/Frameworks
+-  ~/Library/Frameworks
+-  /Library/Frameworks
 -  /opt
 +  /var/empty
  )
  
  find_library(LUA_LIBRARY
-@@ -101,7 +101,7 @@
+@@ -99,9 +97,7 @@
+     ENV LUA_DIR
+   PATH_SUFFIXES lib
    PATHS
-   ~/Library/Frameworks
-   /Library/Frameworks
+-  ~/Library/Frameworks
+-  /Library/Frameworks
 -  /opt
 +  /var/empty
  )
@@ -898,6 +987,19 @@ index 78b1c5c915..fd77559f1b 100644
  endif()
  
  # Most MPI distributions have some form of mpiexec or mpirun which gives us something we can look for.
+diff --git a/Modules/FindMatlab.cmake b/Modules/FindMatlab.cmake
+index 8a7bd80957..74009fbebc 100644
+--- a/Modules/FindMatlab.cmake
++++ b/Modules/FindMatlab.cmake
+@@ -1529,7 +1529,7 @@
+   endif()
+ 
+   foreach(_matlab_current_release IN LISTS _matlab_releases)
+-    foreach(_macos_app_base IN ITEMS "$ENV{HOME}/Applications" "/Applications")
++    foreach(_macos_app_base IN ITEMS)
+       matlab_get_version_from_release_name("${_matlab_current_release}" _matlab_current_version)
+       string(REPLACE "." "" _matlab_current_version_without_dot "${_matlab_current_version}")
+       set(_matlab_base_path "${_macos_app_base}/MATLAB_${_matlab_current_release}.app")
 diff --git a/Modules/FindMotif.cmake b/Modules/FindMotif.cmake
 index d72b19309e..ddc2583ee2 100644
 --- a/Modules/FindMotif.cmake
@@ -918,22 +1020,26 @@ index d72b19309e..ddc2583ee2 100644
  
  endif()
 diff --git a/Modules/FindOpenAL.cmake b/Modules/FindOpenAL.cmake
-index dad9ada128..d89ee0573e 100644
+index dad9ada128..683d47919f 100644
 --- a/Modules/FindOpenAL.cmake
 +++ b/Modules/FindOpenAL.cmake
-@@ -97,7 +97,7 @@
+@@ -95,9 +95,7 @@
+   HINTS
+     ENV OPENALDIR
    PATHS
-     ~/Library/Frameworks
-     /Library/Frameworks
+-    ~/Library/Frameworks
+-    /Library/Frameworks
 -    /opt
 +    /var/empty
      [HKEY_LOCAL_MACHINE\\SOFTWARE\\Creative\ Labs\\OpenAL\ 1.1\ Software\ Development\ Kit\\1.00.0000;InstallDir]
    PATH_SUFFIXES include/AL include/OpenAL include AL OpenAL
    )
-@@ -115,7 +115,7 @@
+@@ -113,9 +111,7 @@
+   HINTS
+     ENV OPENALDIR
    PATHS
-     ~/Library/Frameworks
-     /Library/Frameworks
+-    ~/Library/Frameworks
+-    /Library/Frameworks
 -    /opt
 +    /var/empty
      [HKEY_LOCAL_MACHINE\\SOFTWARE\\Creative\ Labs\\OpenAL\ 1.1\ Software\ Development\ Kit\\1.00.0000;InstallDir]
@@ -1117,41 +1223,47 @@ index 330700e183..53f793ccfd 100644
  
  endif ()
 diff --git a/Modules/FindPhysFS.cmake b/Modules/FindPhysFS.cmake
-index 1894498d9d..9e51ba9c4f 100644
+index 1894498d9d..a1b0509b4b 100644
 --- a/Modules/FindPhysFS.cmake
 +++ b/Modules/FindPhysFS.cmake
-@@ -55,7 +55,7 @@
+@@ -53,9 +53,7 @@
+     ENV PHYSFSDIR
+   PATH_SUFFIXES include/physfs include
    PATHS
-   ~/Library/Frameworks
-   /Library/Frameworks
+-  ~/Library/Frameworks
+-  /Library/Frameworks
 -  /opt
 +  /var/empty
  )
  
  find_library(PHYSFS_LIBRARY
-@@ -66,7 +66,7 @@
+@@ -64,9 +62,7 @@
+     ENV PHYSFSDIR
+   PATH_SUFFIXES lib
    PATHS
-   ~/Library/Frameworks
-   /Library/Frameworks
+-  ~/Library/Frameworks
+-  /Library/Frameworks
 -  /opt
 +  /var/empty
  )
  
  include(FindPackageHandleStandardArgs)
 diff --git a/Modules/FindProducer.cmake b/Modules/FindProducer.cmake
-index 1d034bc207..ecaf1c6213 100644
+index 1d034bc207..6ad44d9c37 100644
 --- a/Modules/FindProducer.cmake
 +++ b/Modules/FindProducer.cmake
-@@ -102,7 +102,7 @@
+@@ -100,9 +100,7 @@
+     ENV OSGDIR
+   PATH_SUFFIXES include
    PATHS
-     ~/Library/Frameworks
-     /Library/Frameworks
+-    ~/Library/Frameworks
+-    /Library/Frameworks
 -    /opt
 +    /var/empty
      [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]
      [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]
  )
-@@ -115,7 +115,7 @@
+@@ -115,7 +113,7 @@
      ENV OSGDIR
    PATH_SUFFIXES lib
    PATHS
@@ -1161,13 +1273,14 @@ index 1d034bc207..ecaf1c6213 100644
  
  include(FindPackageHandleStandardArgs)
 diff --git a/Modules/FindPython/Support.cmake b/Modules/FindPython/Support.cmake
-index a9441646d1..4ca1d705a3 100644
+index a9441646d1..e973314ecb 100644
 --- a/Modules/FindPython/Support.cmake
 +++ b/Modules/FindPython/Support.cmake
-@@ -163,8 +163,8 @@
+@@ -162,9 +162,8 @@
+     file(TO_CMAKE_PATH "$ENV{CMAKE_FRAMEWORK_PATH}" _pff_CMAKE_FRAMEWORK_PATH)
      set (_pff_frameworks ${CMAKE_FRAMEWORK_PATH}
                           ${_pff_CMAKE_FRAMEWORK_PATH}
-                          ~/Library/Frameworks
+-                         ~/Library/Frameworks
 -                         /usr/local/Frameworks
 -                         /opt/homebrew/Frameworks
 +                         /var/empty/local/Frameworks
@@ -1472,7 +1585,7 @@ index b2f23bd1dd..5e21d9c15a 100644
  
    find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
 diff --git a/Modules/GetPrerequisites.cmake b/Modules/GetPrerequisites.cmake
-index f1f5db7b7b..550b76936e 100644
+index f1f5db7b7b..a02ba99938 100644
 --- a/Modules/GetPrerequisites.cmake
 +++ b/Modules/GetPrerequisites.cmake
 @@ -458,11 +458,11 @@
@@ -1489,20 +1602,48 @@ index f1f5db7b7b..550b76936e 100644
  
      if(ri)
        #message(STATUS "info: 'find_file' in exepath/dirs (${ri})")
+@@ -472,23 +472,6 @@
+     endif()
+   endif()
+ 
+-  if(NOT resolved)
+-    if(item MATCHES "[^/]+\\.framework/")
+-      set(fw "fw-NOTFOUND")
+-      find_file(fw "${item}"
+-        "~/Library/Frameworks"
+-        "/Library/Frameworks"
+-        "/System/Library/Frameworks"
+-      )
+-      if(fw)
+-        #message(STATUS "info: 'find_file' found framework (${fw})")
+-        set(resolved 1)
+-        set(resolved_item "${fw}")
+-        set(fw "fw-NOTFOUND")
+-      endif()
+-    endif()
+-  endif()
+-
+   # Using find_program on Windows will find dll files that are in the PATH.
+   # (Converting simple file names into full path names if found.)
+   #
 diff --git a/Modules/Internal/CMakeCUDAFindToolkit.cmake b/Modules/Internal/CMakeCUDAFindToolkit.cmake
-index 8fd408994f..9ee9593f3c 100644
+index 8fd408994f..b8ad01850e 100644
 --- a/Modules/Internal/CMakeCUDAFindToolkit.cmake
 +++ b/Modules/Internal/CMakeCUDAFindToolkit.cmake
-@@ -52,7 +52,7 @@
+@@ -51,11 +51,7 @@
+     # directory is the desired location.
      if(NOT _CUDA_NVCC_EXECUTABLE)
        if(UNIX)
-         if(NOT APPLE)
+-        if(NOT APPLE)
 -          set(platform_base "/usr/local/cuda-")
-+          set(platform_base "/var/empty/local/cuda-")
-         else()
-           set(platform_base "/Developer/NVIDIA/CUDA-")
-         endif()
-@@ -83,7 +83,7 @@
+-        else()
+-          set(platform_base "/Developer/NVIDIA/CUDA-")
+-        endif()
++        set(platform_base "/var/empty/local/cuda-")
+       else()
+         set(platform_base "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v")
+       endif()
+@@ -83,7 +79,7 @@
  
        # Force the global default /usr/local/cuda to the front on Unix.
        if(UNIX)
@@ -1511,7 +1652,7 @@ index 8fd408994f..9ee9593f3c 100644
        endif()
  
        # Now search for nvcc again using the platform default search paths.
-@@ -140,20 +140,20 @@
+@@ -140,20 +136,20 @@
      set(${lang_var_}LIBRARY_ROOT "${_CUDA_COMPILER_LIBRARY_ROOT_FROM_NVVMIR_LIBRARY_DIR}")
    elseif(EXISTS "${${lang_var_}TOOLKIT_ROOT}/nvvm/libdevice")
      set(${lang_var_}LIBRARY_ROOT "${${lang_var_}TOOLKIT_ROOT}")
@@ -1570,31 +1711,100 @@ index cf5e732833..fb12faa7ec 100644
 -  /usr/lib/w32api
 +  /var/empty/lib/w32api
    )
+diff --git a/Modules/Platform/Darwin-Initialize.cmake b/Modules/Platform/Darwin-Initialize.cmake
+index 196ab18b0b..4e87af9aba 100644
+--- a/Modules/Platform/Darwin-Initialize.cmake
++++ b/Modules/Platform/Darwin-Initialize.cmake
+@@ -1,19 +1,7 @@
+ set(APPLE 1)
+ set(UNIX 1)
+ 
+-# Ask xcode-select where to find /Developer or fall back to ancient location.
+-execute_process(COMMAND xcode-select -print-path
+-  OUTPUT_VARIABLE _stdout
+-  OUTPUT_STRIP_TRAILING_WHITESPACE
+-  ERROR_VARIABLE _stderr
+-  RESULT_VARIABLE _failed)
+-if(NOT _failed AND IS_DIRECTORY ${_stdout})
+-  set(OSX_DEVELOPER_ROOT ${_stdout})
+-elseif(IS_DIRECTORY "/Developer")
+-  set(OSX_DEVELOPER_ROOT "/Developer")
+-else()
+-  set(OSX_DEVELOPER_ROOT "")
+-endif()
++set(OSX_DEVELOPER_ROOT "")
+ 
+ if(NOT CMAKE_CROSSCOMPILING)
+   execute_process(COMMAND sw_vers -productVersion
 diff --git a/Modules/Platform/Darwin.cmake b/Modules/Platform/Darwin.cmake
-index 42c6b35424..93fa1fbe74 100644
+index 42c6b35424..13b082eb0c 100644
 --- a/Modules/Platform/Darwin.cmake
 +++ b/Modules/Platform/Darwin.cmake
-@@ -260,11 +260,11 @@
-     list(PREPEND CMAKE_SYSTEM_PREFIX_PATH "${_cmake_homebrew_prefix}")
-   elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
-     list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
--      /opt/homebrew # Brew on Apple Silicon
-+      /var/empty/homebrew # Brew on Apple Silicon
-       )
-   else()
-     list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
--      /usr/local # Brew on Intel
-+      /var/empty/local # Brew on Intel
-       )
-   endif()
-   unset(_cmake_homebrew_prefix)
-@@ -287,5 +287,5 @@
- endif()
- list(APPEND CMAKE_SYSTEM_PREFIX_PATH
-   /sw        # Fink
--  /opt/local # MacPorts
-+  /var/empty/local # MacPorts
+@@ -166,7 +166,6 @@
+ 
+ # set up the default search directories for frameworks
+ set(CMAKE_SYSTEM_FRAMEWORK_PATH
+-  ~/Library/Frameworks
    )
+ if(_CMAKE_OSX_SYSROOT_PATH)
+   list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH
+@@ -201,10 +200,6 @@
+   list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH
+     ${OSX_DEVELOPER_ROOT}/Library/Frameworks)
+ endif()
+-list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH
+-  /Library/Frameworks
+-  /Network/Library/Frameworks
+-  /System/Library/Frameworks)
+ 
+ # Warn about known system misconfiguration case.
+ if(CMAKE_OSX_SYSROOT)
+@@ -230,8 +225,6 @@
+ # set up the default search directories for application bundles
+ set(_apps_paths)
+ foreach(_path
+-  "~/Applications"
+-  "/Applications"
+   "${OSX_DEVELOPER_ROOT}/../Applications" # Xcode 4.3+
+   "${OSX_DEVELOPER_ROOT}/Applications"    # pre-4.3
+   )
+@@ -249,28 +242,6 @@
+ 
+ include(Platform/UnixPaths)
+ 
+-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+-  execute_process(
+-    COMMAND brew --prefix
+-    OUTPUT_VARIABLE _cmake_homebrew_prefix
+-    RESULT_VARIABLE _brew_result
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-  )
+-  if (_brew_result EQUAL 0 AND IS_DIRECTORY "${_cmake_homebrew_prefix}")
+-    list(PREPEND CMAKE_SYSTEM_PREFIX_PATH "${_cmake_homebrew_prefix}")
+-  elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+-    list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
+-      /opt/homebrew # Brew on Apple Silicon
+-      )
+-  else()
+-    list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
+-      /usr/local # Brew on Intel
+-      )
+-  endif()
+-  unset(_cmake_homebrew_prefix)
+-  unset(_brew_result)
+-endif()
+-
+ if(_CMAKE_OSX_SYSROOT_PATH)
+   if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/include)
+     list(INSERT CMAKE_SYSTEM_PREFIX_PATH 0 ${_CMAKE_OSX_SYSROOT_PATH}/usr)
+@@ -285,7 +256,3 @@
+     endforeach()
+   endif()
+ endif()
+-list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  /sw        # Fink
+-  /opt/local # MacPorts
+-  )
 diff --git a/Modules/Platform/OpenBSD.cmake b/Modules/Platform/OpenBSD.cmake
 index 97e2a6a83e..922e019e36 100644
 --- a/Modules/Platform/OpenBSD.cmake
