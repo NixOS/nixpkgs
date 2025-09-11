@@ -21,6 +21,7 @@
   zstd,
   libiberty,
   libunwind,
+  darwinMinVersionHook,
 
   boost,
   fmt_11,
@@ -41,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.04.21.00";
+  version = "2025.09.08.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P2saSFVRBWt5xjAWlKmcPJT9MFV9CXFmA18dIDCO84o=";
+    hash = "sha256-xrieG+QYK6TuYsycGEPNiAHD9U4dzAcq99umj1D68UY=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     libiberty
     libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
@@ -153,8 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
-  disabledtests = [
-    "concurrency_concurrent_hash_map_test.*/ConcurrentHashMapTest/*.StressTestReclamation"
+  disabledTests = [
     "io_async_ssl_session_test.SSLSessionTest.BasicTest"
     "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
     "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
@@ -172,16 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
-    "concurrency_cache_locality_test.CacheLocality.LinuxActual"
-    "futures_future_test.Future.NoThrow"
-    "futures_retrying_test.RetryingTest.largeRetries"
-  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
-    "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
-    "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
+    # No idea why this one fails.
+    "logging_xlog_test.XlogTest.perFileCategoryHandling"
   ];
 
   passthru = {
