@@ -1158,31 +1158,6 @@ index edef791cb8..3926d7a08a 100644
    )
  
  find_path(PHP4_FOUND_INCLUDE_PATH main/php.h
-diff --git a/Modules/FindPatch.cmake b/Modules/FindPatch.cmake
-index c6ca07b1d8..385622e453 100644
---- a/Modules/FindPatch.cmake
-+++ b/Modules/FindPatch.cmake
-@@ -76,9 +76,9 @@
- if(CMAKE_HOST_WIN32)
-   set(_patch_path
-     "$ENV{LOCALAPPDATA}/Programs/Git/bin"
--    "$ENV{LOCALAPPDATA}/Programs/Git/usr/bin"
-+    "$ENV{LOCALAPPDATA}/Programs/Git/var/empty/bin"
-     "$ENV{APPDATA}/Programs/Git/bin"
--    "$ENV{APPDATA}/Programs/Git/usr/bin"
-+    "$ENV{APPDATA}/Programs/Git/var/empty/bin"
-     )
- endif()
- 
-@@ -94,7 +94,7 @@
-   # prefixes on Windows.
-   find_program(Patch_EXECUTABLE
-     NAMES patch
--    PATH_SUFFIXES Git/usr/bin Git/bin GnuWin32/bin
-+    PATH_SUFFIXES Git/var/empty/bin Git/bin GnuWin32/bin
-     DOC ${_doc}
-     )
- endif()
 diff --git a/Modules/FindPerlLibs.cmake b/Modules/FindPerlLibs.cmake
 index 330700e183..53f793ccfd 100644
 --- a/Modules/FindPerlLibs.cmake
