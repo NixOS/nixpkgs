@@ -256,41 +256,23 @@ in
       };
     };
 
-    systemd.services.auditd = {
-      description = "Security Audit Logging Service";
-      documentation = [ "man:auditd(8)" ];
-      wantedBy = [ "sysinit.target" ];
-      after = [
-        "local-fs.target"
-        "systemd-tmpfiles-setup.service"
-      ];
-      before = [
-        "sysinit.target"
-        "shutdown.target"
-      ];
-      conflicts = [ "shutdown.target" ];
+    systemd.tmpfiles.packages = [ pkgs.audit.out ];
+    systemd.packages = [ pkgs.audit.out ];
 
-      unitConfig = {
-        DefaultDependencies = false;
-        RefuseManualStop = true;
-        ConditionVirtualization = "!container";
-        ConditionKernelCommandLine = [
-          "!audit=0"
-          "!audit=off"
-        ];
-      };
+    # will try to look in /etc for rules to load, which we don't set up
+    systemd.services.audit-rules.enable = lib.mkDefault false;
+
+    systemd.services.auditd = {
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         LogsDirectory = "audit";
-        ExecStart = "${pkgs.audit}/bin/auditd -l -n -s nochange";
-        Restart = "on-failure";
-        # Do not restart for intentional exits. See EXIT CODES section in auditd(8).
-        RestartPreventExitStatus = "2 4 6";
-
-        # Upstream hardening settings
-        MemoryDenyWriteExecute = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
+        RuntimeDirectory = "audit";
+        ExecStart = [
+          # the upstream unit does not allow symlinks, so clear and rewrite the ExecStart
+          ""
+          "${lib.getExe' pkgs.audit "auditd"} -l -s nochange"
+        ];
       };
     };
   };
