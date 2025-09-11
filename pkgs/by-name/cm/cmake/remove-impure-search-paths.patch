@@ -2064,20 +2064,53 @@ index b977d955ca..ffc4d8e6d2 100644
      set(_jar_doc "NOTSET")
  
 diff --git a/Utilities/cmcurl/CMakeLists.txt b/Utilities/cmcurl/CMakeLists.txt
-index ddc975c202..a3320a5812 100644
+index ddc975c202..b87dac5450 100644
 --- a/Utilities/cmcurl/CMakeLists.txt
 +++ b/Utilities/cmcurl/CMakeLists.txt
-@@ -1837,8 +1837,8 @@
-       foreach(_search_ca_bundle_path IN ITEMS
-           "/etc/ssl/certs/ca-certificates.crt"
-           "/etc/pki/tls/certs/ca-bundle.crt"
+@@ -1826,43 +1826,6 @@
+   endif()
+   mark_as_advanced(CURL_CA_PATH_SET)
+ 
+-  if(CURL_CA_BUNDLE_SET AND _curl_ca_path_autodetect)
+-    # Skip auto-detection of unset CA path because CA bundle is set explicitly
+-  elseif(CURL_CA_PATH_SET AND _curl_ca_bundle_autodetect)
+-    # Skip auto-detection of unset CA bundle because CA path is set explicitly
+-  elseif(_curl_ca_bundle_autodetect OR _curl_ca_path_autodetect)
+-    # First try auto-detecting a CA bundle, then a CA path
+-
+-    if(_curl_ca_bundle_autodetect)
+-      foreach(_search_ca_bundle_path IN ITEMS
+-          "/etc/ssl/certs/ca-certificates.crt"
+-          "/etc/pki/tls/certs/ca-bundle.crt"
 -          "/usr/share/ssl/certs/ca-bundle.crt"
 -          "/usr/local/share/certs/ca-root-nss.crt"
-+          "/var/empty/share/ssl/certs/ca-bundle.crt"
-+          "/var/empty/local/share/certs/ca-root-nss.crt"
-           "/etc/ssl/cert.pem")
-         if(EXISTS "${_search_ca_bundle_path}")
-           message(STATUS "Found CA bundle: ${_search_ca_bundle_path}")
+-          "/etc/ssl/cert.pem")
+-        if(EXISTS "${_search_ca_bundle_path}")
+-          message(STATUS "Found CA bundle: ${_search_ca_bundle_path}")
+-          set(CURL_CA_BUNDLE "${_search_ca_bundle_path}" CACHE
+-            STRING "Path to the CA bundle. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
+-          set(CURL_CA_BUNDLE_SET TRUE CACHE BOOL "Path to the CA bundle has been set")
+-          break()
+-        endif()
+-      endforeach()
+-    endif()
+-
+-    if(_curl_ca_path_autodetect AND NOT CURL_CA_PATH_SET)
+-      set(_search_ca_path "/etc/ssl/certs")
+-      file(GLOB _curl_ca_files_found "${_search_ca_path}/[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].0")
+-      if(_curl_ca_files_found)
+-        unset(_curl_ca_files_found)
+-        message(STATUS "Found CA path: ${_search_ca_path}")
+-        set(CURL_CA_PATH "${_search_ca_path}" CACHE
+-          STRING "Location of default CA path. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
+-        set(CURL_CA_PATH_SET TRUE CACHE BOOL "Path to the CA bundle has been set")
+-      endif()
+-    endif()
+-  endif()
+-
+   set(CURL_CA_EMBED_SET FALSE)
+   if(BUILD_CURL_EXE AND NOT CURL_CA_EMBED STREQUAL "")
+     if(EXISTS "${CURL_CA_EMBED}")
 diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
 index e6ab5de99b..1d16d60bbd 100644
 --- a/Utilities/cmlibarchive/CMakeLists.txt
