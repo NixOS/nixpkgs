@@ -7,6 +7,7 @@
   pkg-config,
   rustc,
   cargo,
+  python3,
   rustPlatform,
   vala,
   gi-docgen,
@@ -24,14 +25,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "1.2.3";
+  version = "2.0.rc";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "glycin";
     tag = finalAttrs.version;
-    hash = "sha256-O7Z7kzC0BU7FAF1UZC6LbXVIXPDertsAUNYwHAjkzPI=";
+    hash = "sha256-eFWHYDWaC8kMYeJZZcoUYyF/TvEqY2iVyjvfMVSRQvA=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     cargo
+    python3
     rustPlatform.cargoSetupHook
   ]
   ++ lib.optionals withIntrospection [
@@ -49,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-g2tsQ6q+sUxn3itu3IgZ5EGtDorPzhaO5B1hlEW5xzs=";
+    hash = "sha256-i7vuLpAzDp9mPTb3XwiZq70T744m/VVp5he7Cgf1leY=";
   };
 
   buildInputs = [
@@ -71,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "vapi" withIntrospection)
     (lib.mesonBool "capi_docs" withIntrospection)
   ];
+
+  postPatch = ''
+    patchShebangs \
+      build-aux/crates-version.py
+  '';
 
   passthru = {
     updateScript =
