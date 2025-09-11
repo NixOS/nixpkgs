@@ -64,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheck = true;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/libunwind";
     description = "Portable and efficient API to determine the call-chain of a program";
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
     pkgConfigModules = [
       "libunwind"
       "libunwind-coredump"
@@ -95,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "x86_64-solaris"
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 })
