@@ -15686,6 +15686,8 @@ self: super: with self; {
     };
   };
 
+  rds2py = callPackage ../development/python-modules/rds2py { };
+
   re-assert = callPackage ../development/python-modules/re-assert { };
 
   reactionmenu = callPackage ../development/python-modules/reactionmenu { };
