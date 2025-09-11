@@ -82,5 +82,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${src.tag}";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
