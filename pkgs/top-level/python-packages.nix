@@ -15900,6 +15900,8 @@ self: super: with self; {
 
   restfly = callPackage ../development/python-modules/restfly { };
 
+  restinstance = callPackage ../development/python-modules/restinstance { };
+
   restrictedpython = callPackage ../development/python-modules/restrictedpython { };
 
   restructuredtext-lint = callPackage ../development/python-modules/restructuredtext-lint { };
