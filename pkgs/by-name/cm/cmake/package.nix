@@ -97,7 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
 
   setupHooks = [
-    ./setup-hook.sh
+    (buildPackages.replaceVars ./setup-hook.sh {
+      ParseCMakeEntryAttrs = "${./ParseCMakeEntryAttrs.cmake}";
+    })
     ./check-pc-files-hook.sh
   ];
 
