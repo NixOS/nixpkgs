@@ -1,6 +1,6 @@
 {
   lib,
-  python3Packages,
+  python312Packages,
   fetchFromGitHub,
   pkg-config,
   gobject-introspection,
@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "pychess";
   version = "1.0.5";
   pyproject = true;
@@ -36,9 +36,9 @@ python3Packages.buildPythonApplication rec {
     gtksourceview
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python312Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python312Packages; [
     pygobject3
     pycairo
     sqlalchemy
