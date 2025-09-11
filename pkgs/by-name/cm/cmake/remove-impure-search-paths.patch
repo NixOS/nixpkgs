@@ -1,65 +1,3 @@
-diff --git a/Auxiliary/bash-completion/CMakeLists.txt b/Auxiliary/bash-completion/CMakeLists.txt
-index 93b6ffd0e3..71d4dc9bb3 100644
---- a/Auxiliary/bash-completion/CMakeLists.txt
-+++ b/Auxiliary/bash-completion/CMakeLists.txt
-@@ -2,7 +2,7 @@
- # accomplish anything at all, and packagers won't even know it exists. Use the
- # `<sharedir>/bash-completion/completions/` hierarchy by default, rooted in
- # CMake's XDGDATA_DIR definition of the sharedir. This works with installation
--# to `/usr` or `/usr/local` (or any prefix which bash-completion is configured
-+# to `/usr` or `/var/empty/local` (or any prefix which bash-completion is configured
- # with) as well as a simple installation by a local user into their home
- # directory *if* the prefix is `$HOME/.local` since `.local/share/` is part of
- # the bash-completion search path too.
-diff --git a/Modules/BundleUtilities.cmake b/Modules/BundleUtilities.cmake
-index 4df5bb9f95..8f7c0bf33f 100644
---- a/Modules/BundleUtilities.cmake
-+++ b/Modules/BundleUtilities.cmake
-@@ -80,7 +80,7 @@
-   ``<dirs>``
-     A list of paths where libraries might be found.  These paths are searched
-     first when a target without any path info is given.  Then standard system
--    locations are also searched: ``PATH``, Framework locations, ``/usr/lib``,
-+    locations are also searched: ``PATH``, Framework locations, ``/var/empty/lib``,
-     etc.
- 
-   ``IGNORE_ITEM <files>...``
-@@ -118,7 +118,7 @@
-   ``<dirs>``
-     A list of paths where libraries might be found.  These paths are searched
-     first when a target without any path info is given.  Then standard system
--    locations are also searched: ``PATH``, Framework locations, ``/usr/lib``,
-+    locations are also searched: ``PATH``, Framework locations, ``/var/empty/lib``,
-     etc.
- 
- .. command:: verify_app
-@@ -294,7 +294,7 @@
-   ``<dirs>``
-     A list of paths where libraries might be found.  These paths are searched
-     first when a target without any path info is given.  Then standard system
--    locations are also searched: ``PATH``, Framework locations, ``/usr/lib``,
-+    locations are also searched: ``PATH``, Framework locations, ``/var/empty/lib``,
-     etc.
- 
-   ``<copyflag>``
-@@ -334,7 +334,7 @@
-   ``<dirs>``
-     A list of paths where libraries might be found.  These paths are searched
-     first when a target without any path info is given.  Then standard system
--    locations are also searched: ``PATH``, Framework locations, ``/usr/lib``,
-+    locations are also searched: ``PATH``, Framework locations, ``/var/empty/lib``,
-     etc.
- 
-   ``<keys-var>``
-@@ -416,7 +416,7 @@
-   ``<dirs>``
-     A list of paths where libraries might be found.  These paths are searched
-     first when a target without any path info is given.  Then standard system
--    locations are also searched: ``PATH``, Framework locations, ``/usr/lib``,
-+    locations are also searched: ``PATH``, Framework locations, ``/var/empty/lib``,
-     etc.
- 
-   The following variables can be set before invoking this command:
 diff --git a/Modules/CMakeBackwardCompatibilityC.cmake b/Modules/CMakeBackwardCompatibilityC.cmake
 index 2076cf9986..f5f4fe570d 100644
 --- a/Modules/CMakeBackwardCompatibilityC.cmake
@@ -73,19 +11,6 @@ index 2076cf9986..f5f4fe570d 100644
      set (CMAKE_X_CFLAGS "" CACHE STRING "X11 extra flags.")
    else()
      set (CMAKE_X_CFLAGS "-I${X11_X11_INCLUDE_PATH}" CACHE STRING
-diff --git a/Modules/CMakeDetermineCUDACompiler.cmake b/Modules/CMakeDetermineCUDACompiler.cmake
-index edb3cc8cfb..c04bbe7459 100644
---- a/Modules/CMakeDetermineCUDACompiler.cmake
-+++ b/Modules/CMakeDetermineCUDACompiler.cmake
-@@ -255,7 +255,7 @@
-   endif()
- 
-   # _CUDA_TARGET_DIR always points to the directory containing the include directory.
--  # On a scattered installation /usr, on a non-scattered something like /usr/local/cuda or /usr/local/cuda-10.2/targets/aarch64-linux.
-+  # On a scattered installation /usr, on a non-scattered something like /var/empty/local/cuda or /var/empty/local/cuda-10.2/targets/aarch64-linux.
-   if(EXISTS "${_CUDA_TARGET_DIR}/include/cuda_runtime.h")
-     set(_CUDA_INCLUDE_DIRS "${_CUDA_TARGET_DIR}/include")
-   else()
 diff --git a/Modules/CMakeDetermineCompilerId.cmake b/Modules/CMakeDetermineCompilerId.cmake
 index 2b7d797920..0ad8cf3d06 100644
 --- a/Modules/CMakeDetermineCompilerId.cmake
@@ -221,83 +146,19 @@ index ac5da58490..aeb012b113 100644
        CACHE PATH "Install path prefix, prepended onto install directories.")
    else()
      GetDefaultWindowsPrefixBase(CMAKE_GENERIC_PROGRAM_FILES)
-diff --git a/Modules/CMakePackageConfigHelpers.cmake b/Modules/CMakePackageConfigHelpers.cmake
-index ba030805eb..0833f39c32 100644
---- a/Modules/CMakePackageConfigHelpers.cmake
-+++ b/Modules/CMakePackageConfigHelpers.cmake
-@@ -466,10 +466,10 @@
- ")
- 
-   if("${absInstallDir}" MATCHES "^(/usr)?/lib(64)?/.+")
--    # Handle "/usr move" symlinks created by some Linux distros.
-+    # Handle "/var/empty move" symlinks created by some Linux distros.
-     string(APPEND PACKAGE_INIT "
--# Use original install prefix when loaded through a \"/usr move\"
--# cross-prefix symbolic link such as /lib -> /usr/lib.
-+# Use original install prefix when loaded through a \"/var/empty move\"
-+# cross-prefix symbolic link such as /lib -> /var/empty/lib.
- get_filename_component(_realCurr \"\${CMAKE_CURRENT_LIST_DIR}\" REALPATH)
- get_filename_component(_realOrig \"${absInstallDir}\" REALPATH)
- if(_realCurr STREQUAL _realOrig)
 diff --git a/Modules/CMakeParseImplicitIncludeInfo.cmake b/Modules/CMakeParseImplicitIncludeInfo.cmake
-index a6d1335b36..135fecbbd9 100644
+index a6d1335b36..1fad6be4e7 100644
 --- a/Modules/CMakeParseImplicitIncludeInfo.cmake
 +++ b/Modules/CMakeParseImplicitIncludeInfo.cmake
-@@ -82,8 +82,8 @@
-     endforeach()
+@@ -83,7 +83,7 @@
      if(rv)
        if (lang STREQUAL "C" OR lang STREQUAL "CXX")
--        # /usr/include appears to be hardwired in
+         # /usr/include appears to be hardwired in
 -        list(APPEND rv "/usr/include")
-+        # /var/empty/include appears to be hardwired in
 +        list(APPEND rv "/var/empty/include")
        endif()
        string(APPEND log "  got implicit includes via sunpro parser!\n")
      else()
-diff --git a/Modules/CMakePrintHelpers.cmake b/Modules/CMakePrintHelpers.cmake
-index 4025dc3b7e..e20df5a8df 100644
---- a/Modules/CMakePrintHelpers.cmake
-+++ b/Modules/CMakePrintHelpers.cmake
-@@ -66,11 +66,11 @@
- 
-   --
-    Properties for TARGET foo:
--     foo.LOCATION = "/usr/lib/libfoo.so"
--     foo.INTERFACE_INCLUDE_DIRECTORIES = "/usr/include;/usr/include/foo"
-+     foo.LOCATION = "/var/empty/lib/libfoo.so"
-+     foo.INTERFACE_INCLUDE_DIRECTORIES = "/var/empty/include;/var/empty/include/foo"
-    Properties for TARGET bar:
--     bar.LOCATION = "/usr/lib/libbar.so"
--     bar.INTERFACE_INCLUDE_DIRECTORIES = "/usr/include;/usr/include/bar"
-+     bar.LOCATION = "/var/empty/lib/libbar.so"
-+     bar.INTERFACE_INCLUDE_DIRECTORIES = "/var/empty/include;/var/empty/include/bar"
- 
- Printing given variables:
- 
-@@ -82,7 +82,7 @@
- 
- Gives::
- 
--  -- CMAKE_C_COMPILER="/usr/bin/cc" ; CMAKE_MAJOR_VERSION="3" ; NOT_EXISTS=""
-+  -- CMAKE_C_COMPILER="/var/empty/bin/cc" ; CMAKE_MAJOR_VERSION="3" ; NOT_EXISTS=""
- #]=======================================================================]
- 
- function(cmake_print_variables)
-diff --git a/Modules/CMakePrintSystemInformation.cmake b/Modules/CMakePrintSystemInformation.cmake
-index 4a539bcc11..63751ce026 100644
---- a/Modules/CMakePrintSystemInformation.cmake
-+++ b/Modules/CMakePrintSystemInformation.cmake
-@@ -20,8 +20,8 @@
- 
-   CMAKE_SYSTEM is Linux-6.11.0-17-generic Linux 6.11.0-17-generic x86_64
-   CMAKE_SYSTEM file is Platform/Linux
--  CMAKE_C_COMPILER is /usr/bin/cc
--  CMAKE_CXX_COMPILER is /usr/bin/c++
-+  CMAKE_C_COMPILER is /var/empty/bin/cc
-+  CMAKE_CXX_COMPILER is /var/empty/bin/c++
-   CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS is -shared
-   CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS is -shared
-   ...
 diff --git a/Modules/CPackIFW.cmake b/Modules/CPackIFW.cmake
 index 2a2f478fd7..b922af83db 100644
 --- a/Modules/CPackIFW.cmake
@@ -311,139 +172,10 @@ index 2a2f478fd7..b922af83db 100644
  endif()
  list(REMOVE_DUPLICATES _CPACK_IFW_PATHS)
  
-diff --git a/Modules/CheckLibraryExists.cmake b/Modules/CheckLibraryExists.cmake
-index bd75bd1f6f..bfb8066032 100644
---- a/Modules/CheckLibraryExists.cmake
-+++ b/Modules/CheckLibraryExists.cmake
-@@ -95,7 +95,7 @@
- .. code-block:: cmake
- 
-   include(CheckLibraryExists)
--  check_library_exists(curl curl_easy_perform "/opt/curl/lib" HAVE_LIBRARY_CURL)
-+  check_library_exists(curl curl_easy_perform "/var/empty/curl/lib" HAVE_LIBRARY_CURL)
- 
- Also :ref:`Imported Targets` (for example, from the ``find_package()`` call)
- can be used:
-diff --git a/Modules/Compiler/Clang-FindBinUtils.cmake b/Modules/Compiler/Clang-FindBinUtils.cmake
-index f4f35e63be..95b79856d5 100644
---- a/Modules/Compiler/Clang-FindBinUtils.cmake
-+++ b/Modules/Compiler/Clang-FindBinUtils.cmake
-@@ -3,14 +3,14 @@
- endif()
- 
- # Ubuntu:
--# * /usr/bin/llvm-ar-9
--# * /usr/bin/llvm-ranlib-9
-+# * /var/empty/bin/llvm-ar-9
-+# * /var/empty/bin/llvm-ranlib-9
- string(REGEX MATCH "^([0-9]+)" __version_x
-     "${CMAKE_${_CMAKE_PROCESSING_LANGUAGE}_COMPILER_VERSION}")
- 
- # Debian:
--# * /usr/bin/llvm-ar-4.0
--# * /usr/bin/llvm-ranlib-4.0
-+# * /var/empty/bin/llvm-ar-4.0
-+# * /var/empty/bin/llvm-ranlib-4.0
- string(REGEX MATCH "^([0-9]+\\.[0-9]+)" __version_x_y
-     "${CMAKE_${_CMAKE_PROCESSING_LANGUAGE}_COMPILER_VERSION}")
- 
-diff --git a/Modules/Compiler/GNU-FindBinUtils.cmake b/Modules/Compiler/GNU-FindBinUtils.cmake
-index 39417157f6..e3a31a6c6a 100644
---- a/Modules/Compiler/GNU-FindBinUtils.cmake
-+++ b/Modules/Compiler/GNU-FindBinUtils.cmake
-@@ -3,8 +3,8 @@
- endif()
- 
- # Ubuntu 16.04:
--# * /usr/bin/gcc-ar-5
--# * /usr/bin/gcc-ranlib-5
-+# * /var/empty/bin/gcc-ar-5
-+# * /var/empty/bin/gcc-ranlib-5
- string(REGEX MATCH "^([0-9]+)" __version_x
-     "${CMAKE_${_CMAKE_PROCESSING_LANGUAGE}_COMPILER_VERSION}")
- 
-diff --git a/Modules/Compiler/IntelLLVM-FindBinUtils.cmake b/Modules/Compiler/IntelLLVM-FindBinUtils.cmake
-index a4445f7c57..168aa55446 100644
---- a/Modules/Compiler/IntelLLVM-FindBinUtils.cmake
-+++ b/Modules/Compiler/IntelLLVM-FindBinUtils.cmake
-@@ -3,14 +3,14 @@
- endif()
- 
- # Ubuntu:
--# * /usr/bin/llvm-ar-9
--# * /usr/bin/llvm-ranlib-9
-+# * /var/empty/bin/llvm-ar-9
-+# * /var/empty/bin/llvm-ranlib-9
- string(REGEX MATCH "^([0-9]+)" __version_x
-     "${CMAKE_${_CMAKE_PROCESSING_LANGUAGE}_COMPILER_VERSION}")
- 
- # Debian:
--# * /usr/bin/llvm-ar-4.0
--# * /usr/bin/llvm-ranlib-4.0
-+# * /var/empty/bin/llvm-ar-4.0
-+# * /var/empty/bin/llvm-ranlib-4.0
- string(REGEX MATCH "^([0-9]+\\.[0-9]+)" __version_x_y
-     "${CMAKE_${_CMAKE_PROCESSING_LANGUAGE}_COMPILER_VERSION}")
- 
-diff --git a/Modules/Compiler/LCC-FindBinUtils.cmake b/Modules/Compiler/LCC-FindBinUtils.cmake
-index 4dcdd5377e..b747d2b3b2 100644
---- a/Modules/Compiler/LCC-FindBinUtils.cmake
-+++ b/Modules/Compiler/LCC-FindBinUtils.cmake
-@@ -3,8 +3,8 @@
- endif()
- 
- # Ubuntu 16.04:
--# * /usr/bin/gcc-ar-5
--# * /usr/bin/gcc-ranlib-5
-+# * /var/empty/bin/gcc-ar-5
-+# * /var/empty/bin/gcc-ranlib-5
- string(REGEX MATCH "^([0-9]+)" __version_x
-     "${CMAKE_${_CMAKE_PROCESSING_LANGUAGE}_COMPILER_VERSION}")
- 
 diff --git a/Modules/FindBLAS.cmake b/Modules/FindBLAS.cmake
-index b45a279b94..4b63868725 100644
+index b45a279b94..7ef7f19f2e 100644
 --- a/Modules/FindBLAS.cmake
 +++ b/Modules/FindBLAS.cmake
-@@ -232,26 +232,26 @@
- 
-   .. code-block:: shell
- 
--    . /opt/intel/oneapi/setvars.sh
-+    . /var/empty/intel/oneapi/setvars.sh
- 
-   Or, source the MKL component environment script:
- 
-   .. code-block:: shell
- 
--    . /opt/intel/oneapi/mkl/latest/env/vars.sh
-+    . /var/empty/intel/oneapi/mkl/latest/env/vars.sh
- 
- Intel Classic
-   Source the full Intel environment script:
- 
-   .. code-block:: shell
- 
--    . /opt/intel/bin/compilervars.sh intel64
-+    . /var/empty/intel/bin/compilervars.sh intel64
- 
-   Or, source the MKL component environment script:
- 
-   .. code-block:: shell
- 
--    . /opt/intel/mkl/bin/mklvars.sh intel64
-+    . /var/empty/intel/mkl/bin/mklvars.sh intel64
- 
- The above environment scripts set the ``MKLROOT`` environment variable
- to the top of the MKL installation.  They also add the location of the
-@@ -268,7 +268,7 @@
- 
-   .. code-block:: shell
- 
--    . /opt/intel/oneapi/compiler/latest/env/vars.sh
-+    . /var/empty/intel/oneapi/compiler/latest/env/vars.sh
- 
- #]=======================================================================]
- 
 @@ -1101,12 +1101,12 @@
    if(WIN32)
      file(GLOB _ACML_ROOT "C:/AMD/acml*/ACML-EULA.txt")
@@ -459,36 +191,10 @@ index b45a279b94..4b63868725 100644
    endif()
    list(GET _ACML_ROOT 0 _ACML_ROOT)
    list(GET _ACML_GPU_ROOT 0 _ACML_GPU_ROOT)
-diff --git a/Modules/FindBoost.cmake b/Modules/FindBoost.cmake
-index 8ae4223834..325c0f653b 100644
---- a/Modules/FindBoost.cmake
-+++ b/Modules/FindBoost.cmake
-@@ -293,8 +293,8 @@
- ``Boost_REALPATH``
-   Set to ``ON`` to resolve symlinks for discovered libraries to assist with
-   packaging.  For example, the "system" component library may be resolved to
--  ``/usr/lib/libboost_system.so.1.67.0`` instead of
--  ``/usr/lib/libboost_system.so``.  This does not affect linking and should
-+  ``/var/empty/lib/libboost_system.so.1.67.0`` instead of
-+  ``/var/empty/lib/libboost_system.so``.  This does not affect linking and should
-   not be enabled unless the user needs this information.
- 
- ``Boost_LIBRARY_DIR``
 diff --git a/Modules/FindCUDA.cmake b/Modules/FindCUDA.cmake
-index bceb615ca0..ab053660ed 100644
+index bceb615ca0..e573ccaae3 100644
 --- a/Modules/FindCUDA.cmake
 +++ b/Modules/FindCUDA.cmake
-@@ -42,8 +42,8 @@
- path and ``REQUIRED`` is specified to :command:`find_package`.  To use
- a different installed version of the toolkit set the environment variable
- ``CUDA_BIN_PATH`` before running cmake (e.g.
--``CUDA_BIN_PATH=/usr/local/cuda1.0`` instead of the default
--``/usr/local/cuda``) or set ``CUDA_TOOLKIT_ROOT_DIR`` after configuring.  If
-+``CUDA_BIN_PATH=/var/empty/local/cuda1.0`` instead of the default
-+``/var/empty/local/cuda``) or set ``CUDA_TOOLKIT_ROOT_DIR`` after configuring.  If
- you change the value of ``CUDA_TOOLKIT_ROOT_DIR``, various components that
- depend on the path will be relocated.
- 
 @@ -854,7 +854,7 @@
    # Now search default paths
    find_program(CUDA_TOOLKIT_ROOT_DIR_NVCC
@@ -517,43 +223,9 @@ index bceb615ca0..ab053660ed 100644
  else()
    list(APPEND CUDA_LIBRARIES ${CUDA_CUDART_LIBRARY})
 diff --git a/Modules/FindCUDAToolkit.cmake b/Modules/FindCUDAToolkit.cmake
-index b00cd26b7e..ba98a43a31 100644
+index b00cd26b7e..900a0e9206 100644
 --- a/Modules/FindCUDAToolkit.cmake
 +++ b/Modules/FindCUDAToolkit.cmake
-@@ -44,7 +44,7 @@
-    responsible for ensuring that the first ``nvcc`` to show up in the path is
-    the desired path in the event that multiple CUDA Toolkits are installed.
- 
--6. On Unix systems, if the symbolic link ``/usr/local/cuda`` exists, this is
-+6. On Unix systems, if the symbolic link ``/var/empty/local/cuda`` exists, this is
-    used.  No subsequent search attempts are performed.  No default symbolic link
-    location exists for the Windows platform.
- 
-@@ -57,20 +57,20 @@
-    +=============+=============================================================+
-    | macOS       | ``/Developer/NVIDIA/CUDA-X.Y``                              |
-    +-------------+-------------------------------------------------------------+
--   | Other Unix  | ``/usr/local/cuda-X.Y``                                     |
-+   | Other Unix  | ``/var/empty/local/cuda-X.Y``                                     |
-    +-------------+-------------------------------------------------------------+
-    | Windows     | ``C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\vX.Y`` |
-    +-------------+-------------------------------------------------------------+
- 
-    Where ``X.Y`` would be a specific version of the CUDA Toolkit, such as
--   ``/usr/local/cuda-9.0`` or
-+   ``/var/empty/local/cuda-9.0`` or
-    ``C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0``
- 
-    .. note::
- 
-        When multiple CUDA Toolkits are installed in the default location of a
--       system (e.g., both ``/usr/local/cuda-9.0`` and ``/usr/local/cuda-10.0``
--       exist but the ``/usr/local/cuda`` symbolic link does **not** exist), this
-+       system (e.g., both ``/var/empty/local/cuda-9.0`` and ``/var/empty/local/cuda-10.0``
-+       exist but the ``/var/empty/local/cuda`` symbolic link does **not** exist), this
-        package is marked as **not** found.
- 
-        There are too many factors involved in making an automatic decision in
 @@ -776,11 +776,11 @@
        elseif(CUDAToolkit_ROOT_DIR AND EXISTS "${CUDAToolkit_ROOT_DIR}/${vf}")
          set(${result_variable} "${CUDAToolkit_ROOT_DIR}/${vf}" PARENT_SCOPE)
@@ -570,19 +242,7 @@ index b00cd26b7e..ba98a43a31 100644
          break()
        endif()
      endforeach()
-@@ -856,17 +856,17 @@
- 
-   # CUDAToolkit_ROOT cmake / env variable not specified, try platform defaults.
-   #
--  # - Linux: /usr/local/cuda-X.Y
-+  # - Linux: /var/empty/local/cuda-X.Y
-   # - macOS: /Developer/NVIDIA/CUDA-X.Y
-   # - Windows: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\vX.Y
-   #
--  # We will also search the default symlink location /usr/local/cuda first since
-+  # We will also search the default symlink location /var/empty/local/cuda first since
-   # if CUDAToolkit_ROOT is not specified, it is assumed that the symlinked
-   # directory is the desired location.
+@@ -866,7 +866,7 @@
    if(NOT CUDAToolkit_ROOT_DIR)
      if(UNIX)
        if(NOT APPLE)
@@ -591,27 +251,15 @@ index b00cd26b7e..ba98a43a31 100644
        else()
          set(platform_base "/Developer/NVIDIA/CUDA-")
        endif()
-@@ -895,9 +895,9 @@
-       list(APPEND search_paths "${platform_base}${v}")
-     endforeach()
+@@ -897,7 +897,7 @@
  
--    # Force the global default /usr/local/cuda to the front on Unix.
-+    # Force the global default /var/empty/local/cuda to the front on Unix.
+     # Force the global default /usr/local/cuda to the front on Unix.
      if(UNIX)
 -      list(INSERT search_paths 0 "/usr/local/cuda")
 +      list(INSERT search_paths 0 "/var/empty/local/cuda")
      endif()
  
      # Now search for the toolkit again using the platform default search paths.
-@@ -1029,7 +1029,7 @@
- # as the compiler being enabled means the header was found
- if(NOT CUDAToolkit_INCLUDE_DIRECTORIES)
-   # Otherwise use CUDAToolkit_TARGET_DIR to guess where the `cuda_runtime.h` is located
--  # On a scattered installation /usr, on a non-scattered something like /usr/local/cuda or /usr/local/cuda-10.2/targets/aarch64-linux.
-+  # On a scattered installation /usr, on a non-scattered something like /var/empty/local/cuda or /var/empty/local/cuda-10.2/targets/aarch64-linux.
-   if(EXISTS "${CUDAToolkit_TARGET_DIR}/include/cuda_runtime.h")
-     set(CUDAToolkit_INCLUDE_DIRECTORIES "${CUDAToolkit_TARGET_DIR}/include")
-   else()
 diff --git a/Modules/FindCurses.cmake b/Modules/FindCurses.cmake
 index 64600c6c64..cea48852ac 100644
 --- a/Modules/FindCurses.cmake
@@ -631,7 +279,7 @@ index 64600c6c64..cea48852ac 100644
      endif()
    endif()
 diff --git a/Modules/FindDCMTK.cmake b/Modules/FindDCMTK.cmake
-index 4e0ff47f52..31ca105387 100644
+index 4e0ff47f52..c7ef2a89e0 100644
 --- a/Modules/FindDCMTK.cmake
 +++ b/Modules/FindDCMTK.cmake
 @@ -93,7 +93,7 @@
@@ -643,15 +291,6 @@ index 4e0ff47f52..31ca105387 100644
    set(DCMTK_DIR "/usr" CACHE PATH ${_dcmtk_dir_description} FORCE)
  endif()
  
-@@ -132,7 +132,7 @@
- # Step2: Attempt to find a version of DCMTK that does NOT provide a DCMTKConfig.cmake file.
- #
- 
--# prefer DCMTK_DIR over default system paths like /usr/lib
-+# prefer DCMTK_DIR over default system paths like /var/empty/lib
- if(DCMTK_DIR)
-   set(CMAKE_PREFIX_PATH ${DCMTK_DIR}/lib ${CMAKE_PREFIX_PATH}) # this is given to FIND_LIBRARY or FIND_PATH
- endif()
 diff --git a/Modules/FindDart.cmake b/Modules/FindDart.cmake
 index 96cce45590..9676e3a4e1 100644
 --- a/Modules/FindDart.cmake
@@ -723,19 +362,6 @@ index e29758dc1c..fe89ec0e0a 100644
      ${_GLUT_glut_LIB_DIR}
      HINTS
      ${PC_GLUT_LIBRARY_DIRS}
-diff --git a/Modules/FindGSL.cmake b/Modules/FindGSL.cmake
-index a3cd654245..2ac8b7b9aa 100644
---- a/Modules/FindGSL.cmake
-+++ b/Modules/FindGSL.cmake
-@@ -119,7 +119,7 @@
- # locations.  These find_library and find_path calls will prefer custom
- # locations over standard locations (HINTS).  If the requested file is not found
- # at the HINTS location, standard system locations will be still be searched
--# (/usr/lib64 (Redhat), lib/i386-linux-gnu (Debian)).
-+# (/var/empty/lib64 (Redhat), lib/i386-linux-gnu (Debian)).
- 
- find_path( GSL_INCLUDE_DIR
-   NAMES gsl/gsl_sf.h
 diff --git a/Modules/FindGTK.cmake b/Modules/FindGTK.cmake
 index 6e39f5a989..d3369f6df9 100644
 --- a/Modules/FindGTK.cmake
@@ -841,27 +467,9 @@ index 6e39f5a989..d3369f6df9 100644
  
    if(GTK_gtk_INCLUDE_PATH
 diff --git a/Modules/FindGTK2.cmake b/Modules/FindGTK2.cmake
-index 9c5bc63272..56df794635 100644
+index 9c5bc63272..539d3ad10b 100644
 --- a/Modules/FindGTK2.cmake
 +++ b/Modules/FindGTK2.cmake
-@@ -362,14 +362,14 @@
-     #
-     # NOTE: The following suffixes cause searching for header files in both of
-     # these directories:
--    #         /usr/include/<pkg>
--    #         /usr/lib/<pkg>/include
-+    #         /var/empty/include/<pkg>
-+    #         /var/empty/lib/<pkg>/include
-     #
- 
-     set(_suffixes)
-     foreach(_d ${_gtk_packages})
-         list(APPEND _suffixes ${_d})
--        list(APPEND _suffixes ${_d}/include) # for /usr/lib/gtk-2.0/include
-+        list(APPEND _suffixes ${_d}/include) # for /var/empty/lib/gtk-2.0/include
-     endforeach()
- 
-     if(GTK2_DEBUG)
 @@ -378,7 +378,7 @@
      endif()
  
@@ -918,30 +526,6 @@ index 9c5bc63272..56df794635 100644
              $ENV{GTKMM_BASEPATH}/lib
              [HKEY_CURRENT_USER\\SOFTWARE\\gtkmm\\2.4;Path]/lib
              [HKEY_LOCAL_MACHINE\\SOFTWARE\\gtkmm\\2.4;Path]/lib
-diff --git a/Modules/FindGettext.cmake b/Modules/FindGettext.cmake
-index 71d41e0d05..00abd3641d 100644
---- a/Modules/FindGettext.cmake
-+++ b/Modules/FindGettext.cmake
-@@ -242,7 +242,7 @@
-     // Bind the text domain
-     const char* dir = std::getenv("TEXTDOMAINDIR");
-     if (!dir) {
--      dir = "/usr/local/share/locale";
-+      dir = "/var/empty/local/share/locale";
-     }
-     bindtextdomain("MyApp", dir);
-     textdomain("MyApp");
-@@ -330,8 +330,8 @@
- 
- .. code-block:: console
- 
--  $ LANG=de_DE.UTF-8 TEXTDOMAINDIR=./stage/usr/local/share/locale \
--    ./stage/usr/local/bin/example
-+  $ LANG=de_DE.UTF-8 TEXTDOMAINDIR=./stage/var/empty/local/share/locale \
-+    ./stage/var/empty/local/bin/example
- 
- Example: Processing POT File
- """"""""""""""""""""""""""""
 diff --git a/Modules/FindGnuplot.cmake b/Modules/FindGnuplot.cmake
 index abbb681551..af1afa032f 100644
 --- a/Modules/FindGnuplot.cmake
@@ -1176,18 +760,9 @@ index ccfad5e7fb..5476e7a673 100644
  
  
 diff --git a/Modules/FindKDE4.cmake b/Modules/FindKDE4.cmake
-index 220906b2de..bcc6278a72 100644
+index 220906b2de..234f998130 100644
 --- a/Modules/FindKDE4.cmake
 +++ b/Modules/FindKDE4.cmake
-@@ -15,7 +15,7 @@
- 
-   CMAKE_INSTALL_PREFIX
-   KDEDIRS
--  /opt/kde4
-+  /var/empty/kde4
- 
- 
- 
 @@ -52,7 +52,7 @@
     HINTS
     ${CMAKE_INSTALL_PREFIX}
@@ -1371,32 +946,19 @@ index cba30e4b58..331b3b8b7a 100644
  
  if(LUA_LIBRARY)
 diff --git a/Modules/FindMPI.cmake b/Modules/FindMPI.cmake
-index 78b1c5c915..8665c5f472 100644
+index 78b1c5c915..fd77559f1b 100644
 --- a/Modules/FindMPI.cmake
 +++ b/Modules/FindMPI.cmake
-@@ -664,7 +664,7 @@
- 
-   # For GNU-style compilers, it's possible to prefix includes and definitions with certain flags to pass them
-   # only to the preprocessor. For CMake purposes, we need to treat, but ignore such scopings.
--  # Note that we do not support spaces between the arguments, i.e. -Wp,-I -Wp,/opt/mympi will not be parsed
-+  # Note that we do not support spaces between the arguments, i.e. -Wp,-I -Wp,/var/empty/mympi will not be parsed
-   # correctly. This form does not seem to occur in any common MPI implementation, however.
-   if(NOT MSVC)
-     set(_MPI_PREPROCESSOR_FLAG_REGEX "(-Wp,|-Xpreprocessor )?")
-@@ -1350,13 +1350,13 @@
- 
- set(MPI_HINT_DIRS ${MPI_HOME} $ENV{MPI_HOME} $ENV{I_MPI_ROOT})
+@@ -1352,11 +1352,11 @@
  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
--  # SUSE Linux Enterprise Server stores its MPI implementations under /usr/lib64/mpi/gcc/<name>
-+  # SUSE Linux Enterprise Server stores its MPI implementations under /var/empty/lib64/mpi/gcc/<name>
+   # SUSE Linux Enterprise Server stores its MPI implementations under /usr/lib64/mpi/gcc/<name>
    # We enumerate the subfolders and append each as a prefix
 -  MPI_search_mpi_prefix_folder("/usr/lib64/mpi/gcc")
 +  MPI_search_mpi_prefix_folder("/var/empty/lib64/mpi/gcc")
  elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "FreeBSD")
    # FreeBSD ships mpich under the normal system paths - but available openmpi implementations
--  # will be found in /usr/local/mpi/<name>
+   # will be found in /usr/local/mpi/<name>
 -  MPI_search_mpi_prefix_folder("/usr/local/mpi")
-+  # will be found in /var/empty/local/mpi/<name>
 +  MPI_search_mpi_prefix_folder("/var/empty/local/mpi")
  endif()
  
@@ -1420,19 +982,6 @@ index d72b19309e..ddc2583ee2 100644
      )
  
  endif()
-diff --git a/Modules/FindMsys.cmake b/Modules/FindMsys.cmake
-index 0d78c9bd92..d6033eb693 100644
---- a/Modules/FindMsys.cmake
-+++ b/Modules/FindMsys.cmake
-@@ -35,7 +35,7 @@
-   :caption: FindFoo.cmake
- 
-   find_package(Msys)
--  find_program(Foo_EXECUTABLE NAMES foo PATHS ${MSYS_INSTALL_PATH}/usr/bin)
-+  find_program(Foo_EXECUTABLE NAMES foo PATHS ${MSYS_INSTALL_PATH}/var/empty/bin)
- 
-   include(FindPackageHandleStandardArgs)
-   find_package_handle_standard_args(Foo REQUIRED_VARS Foo_EXECUTABLE)
 diff --git a/Modules/FindOpenAL.cmake b/Modules/FindOpenAL.cmake
 index dad9ada128..d89ee0573e 100644
 --- a/Modules/FindOpenAL.cmake
@@ -1493,18 +1042,9 @@ index 3be945ba1b..140f522625 100644
          lib/x86_64
          lib/x64
 diff --git a/Modules/FindOpenGL.cmake b/Modules/FindOpenGL.cmake
-index a842756fcf..07426f9a9b 100644
+index a842756fcf..feeddc8368 100644
 --- a/Modules/FindOpenGL.cmake
 +++ b/Modules/FindOpenGL.cmake
-@@ -203,7 +203,7 @@
-   endif()
- 
- An end user building this project may need to point CMake at their
--X11 installation, e.g., with ``-DOpenGL_ROOT=/opt/X11``.
-+X11 installation, e.g., with ``-DOpenGL_ROOT=/var/empty/X11``.
- 
- #]=======================================================================]
- 
 @@ -252,18 +252,18 @@
      )
  else()
@@ -1631,19 +1171,6 @@ index edef791cb8..3926d7a08a 100644
    )
  
  find_path(PHP4_FOUND_INCLUDE_PATH main/php.h
-diff --git a/Modules/FindPackageHandleStandardArgs.cmake b/Modules/FindPackageHandleStandardArgs.cmake
-index 508193647f..ace3694656 100644
---- a/Modules/FindPackageHandleStandardArgs.cmake
-+++ b/Modules/FindPackageHandleStandardArgs.cmake
-@@ -163,7 +163,7 @@
- 
- .. code-block:: cmake
- 
--  find_package(Automoc4 QUIET NO_MODULE HINTS /opt/automoc4)
-+  find_package(Automoc4 QUIET NO_MODULE HINTS /var/empty/automoc4)
-   find_package_handle_standard_args(Automoc4  CONFIG_MODE)
- 
- In this case, a ``FindAutmoc4.cmake`` module wraps a call to
 diff --git a/Modules/FindPatch.cmake b/Modules/FindPatch.cmake
 index c6ca07b1d8..385622e453 100644
 --- a/Modules/FindPatch.cmake
@@ -1738,19 +1265,6 @@ index 1894498d9d..9e51ba9c4f 100644
  )
  
  include(FindPackageHandleStandardArgs)
-diff --git a/Modules/FindPostgreSQL.cmake b/Modules/FindPostgreSQL.cmake
-index ede8f0d640..04e1b5e4bc 100644
---- a/Modules/FindPostgreSQL.cmake
-+++ b/Modules/FindPostgreSQL.cmake
-@@ -150,7 +150,7 @@
- cmake_policy(PUSH)
- cmake_policy(SET CMP0159 NEW) # file(STRINGS) with REGEX updates CMAKE_MATCH_<n>
- 
--set(PostgreSQL_INCLUDE_PATH_DESCRIPTION "top-level directory containing the PostgreSQL include directories. E.g /usr/local/include/PostgreSQL/8.4 or C:/Program Files/PostgreSQL/8.4/include")
-+set(PostgreSQL_INCLUDE_PATH_DESCRIPTION "top-level directory containing the PostgreSQL include directories. E.g /var/empty/local/include/PostgreSQL/8.4 or C:/Program Files/PostgreSQL/8.4/include")
- set(PostgreSQL_INCLUDE_DIR_MESSAGE "Set the PostgreSQL_INCLUDE_DIR cmake cache entry to the ${PostgreSQL_INCLUDE_PATH_DESCRIPTION}")
- set(PostgreSQL_LIBRARY_PATH_DESCRIPTION "top-level directory containing the PostgreSQL libraries.")
- set(PostgreSQL_LIBRARY_DIR_MESSAGE "Set the PostgreSQL_LIBRARY_DIR cmake cache entry to the ${PostgreSQL_LIBRARY_PATH_DESCRIPTION}")
 diff --git a/Modules/FindProducer.cmake b/Modules/FindProducer.cmake
 index 1d034bc207..ecaf1c6213 100644
 --- a/Modules/FindProducer.cmake
@@ -2175,60 +1689,10 @@ index b2f23bd1dd..5e21d9c15a 100644
    )
  
    find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
-diff --git a/Modules/FindwxWidgets.cmake b/Modules/FindwxWidgets.cmake
-index fa2ad7b896..4db40967ba 100644
---- a/Modules/FindwxWidgets.cmake
-+++ b/Modules/FindwxWidgets.cmake
-@@ -55,7 +55,7 @@
- 
- There is also a wxWidgets_CONFIG_OPTIONS variable for all other
- options that need to be passed to the wx-config utility.  For example,
--to use the base toolkit found in the /usr/local path, set the variable
-+to use the base toolkit found in the /var/empty/local path, set the variable
- (before calling the FIND_PACKAGE command) as such:
- 
- .. code-block:: cmake
 diff --git a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
-index ff9c11a9d7..30c9809fa6 100644
+index ff9c11a9d7..73280bbe30 100644
 --- a/Modules/GNUInstallDirs.cmake
 +++ b/Modules/GNUInstallDirs.cmake
-@@ -89,7 +89,7 @@
- ``INCLUDEDIR``
-   C header files (``include``)
- ``OLDINCLUDEDIR``
--  C header files for non-gcc (``/usr/include``)
-+  C header files for non-gcc (``/var/empty/include``)
- ``DATAROOTDIR``
-   read-only architecture-independent data root (``share``)
- ``DATADIR``
-@@ -151,22 +151,22 @@
-     absolute paths ``/etc``, ``/var`` and ``/var/run`` respectively.
-     See policy :policy:`CMP0192`.
- 
--``/opt/...``
-+``/var/empty/...``
- 
-   For ``<dir>`` equal to ``SYSCONFDIR``, ``LOCALSTATEDIR`` or
-   ``RUNSTATEDIR``, the ``CMAKE_INSTALL_FULL_<dir>`` is computed by
-   *appending* the prefix to the value of ``CMAKE_INSTALL_<dir>``
-   if it is not already an absolute path.
--  For example, the ``SYSCONFDIR`` value ``etc`` becomes ``/etc/opt/...``.
-+  For example, the ``SYSCONFDIR`` value ``etc`` becomes ``/etc/var/empty/...``.
-   This is defined by the `Filesystem Hierarchy Standard`_.
- 
--  This behavior does not apply to paths under ``/opt/homebrew/...``.
-+  This behavior does not apply to paths under ``/var/empty/homebrew/...``.
- 
-   .. versionchanged:: 4.1
-     The default values of ``CMAKE_INSTALL_<dir>`` for ``<dir>`` equal
-     to ``SYSCONFDIR``, ``LOCALSTATEDIR`` and ``RUNSTATEDIR`` are the
--    absolute paths ``/etc/opt/...``, ``/var/opt/...`` and
--    ``/var/run/opt/...`` respectively. See policy :policy:`CMP0192`.
-+    absolute paths ``/etc/var/empty/...``, ``/var/var/empty/...`` and
-+    ``/var/run/var/empty/...`` respectively. See policy :policy:`CMP0192`.
- 
- .. _`Filesystem Hierarchy Standard`: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html
- 
 @@ -331,8 +331,8 @@
      set(conda_prefix "$ENV{CONDA_PREFIX}")
      cmake_path(ABSOLUTE_PATH conda_prefix NORMALIZE)
@@ -2240,13 +1704,7 @@ index ff9c11a9d7..30c9809fa6 100644
        set(${out_var} "conda")
      endif()
    endif()
-@@ -350,14 +350,14 @@
-   return(PROPAGATE ${out_var})
- endfunction()
- 
--# Special handler for `/`, `/usr`, `/opt/...` install prefixes
-+# Special handler for `/`, `/usr`, `/var/empty/...` install prefixes
- # Used for SYSCONFDIR, LOCALSTATEDIR and RUNSTATEDIR paths
+@@ -355,9 +355,9 @@
  function(_GNUInstallDirs_special_absolute out_var original_path install_prefix)
    set(${out_var} "${original_path}")
  
@@ -2276,42 +1734,19 @@ index ff9c11a9d7..30c9809fa6 100644
            set(${out_var} "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
          endif()
        endif()
-@@ -472,9 +472,9 @@
- function(_GNUInstallDirs_RUNSTATEDIR_get_default out_var install_prefix)
-   set(${out_var} "${_GNUInstallDirs_RUNSTATEDIR_DEFAULT}")
+@@ -474,7 +474,7 @@
    if(_GNUInstallDirs_CMP0192 STREQUAL "NEW")
--    # In the /opt/ case we want the install_prefix to be appended as
-+    # In the /var/empty/ case we want the install_prefix to be appended as
+     # In the /opt/ case we want the install_prefix to be appended as
      # LOCALSTATEDIR/run/PREFIX
 -    if(install_prefix MATCHES "^/opt/" AND NOT install_prefix MATCHES "^/opt/homebrew/")
 +    if(install_prefix MATCHES "^/var/empty/" AND NOT install_prefix MATCHES "^/var/empty/homebrew/")
          string(REPLACE "${install_prefix}" "/run${install_prefix}"
            ${out_var} "${CMAKE_INSTALL_LOCALSTATEDIR}"
          )
-@@ -630,8 +630,8 @@
-   if(NOT IS_ABSOLUTE "${${var}}")
-     # Handle special cases:
-     # - CMAKE_INSTALL_PREFIX == /
--    # - CMAKE_INSTALL_PREFIX == /usr
--    # - CMAKE_INSTALL_PREFIX == /opt/...
-+    # - CMAKE_INSTALL_PREFIX == /var/empty
-+    # - CMAKE_INSTALL_PREFIX == /var/empty/...
-     if("${GGAID_dir}" STREQUAL "SYSCONFDIR" OR "${GGAID_dir}" STREQUAL "LOCALSTATEDIR" OR "${GGAID_dir}" STREQUAL "RUNSTATEDIR")
-       _GNUInstallDirs_special_absolute(${absvar} "${${var}}" "${CMAKE_INSTALL_PREFIX}")
-       # If the CMAKE_INSTALL_PREFIX was not special, the output
 diff --git a/Modules/GetPrerequisites.cmake b/Modules/GetPrerequisites.cmake
-index f1f5db7b7b..7e014a946f 100644
+index f1f5db7b7b..4b83830300 100644
 --- a/Modules/GetPrerequisites.cmake
 +++ b/Modules/GetPrerequisites.cmake
-@@ -73,7 +73,7 @@
-   ``<dirs>``
-     A list of paths where libraries might be found: these paths are searched
-     first when a target without any path info is given.  Then standard system
--    locations are also searched: PATH, Framework locations, /usr/lib...
-+    locations are also searched: PATH, Framework locations, /var/empty/lib...
-   ``<rpaths>``
-     Optional run-time search paths for an executable file or library to help
-     find files.
 @@ -458,11 +458,11 @@
    if(NOT resolved)
      set(ri "ri-NOTFOUND")
@@ -2344,22 +1779,10 @@ index f1f5db7b7b..7e014a946f 100644
        endif()
      endif()
 diff --git a/Modules/Internal/CMakeCUDAFindToolkit.cmake b/Modules/Internal/CMakeCUDAFindToolkit.cmake
-index 8fd408994f..b210f08d76 100644
+index 8fd408994f..9ee9593f3c 100644
 --- a/Modules/Internal/CMakeCUDAFindToolkit.cmake
 +++ b/Modules/Internal/CMakeCUDAFindToolkit.cmake
-@@ -42,17 +42,17 @@
- 
-     # CUDAToolkit_ROOT cmake/env variable not specified, try platform defaults.
-     #
--    # - Linux: /usr/local/cuda-X.Y
-+    # - Linux: /var/empty/local/cuda-X.Y
-     # - macOS: /Developer/NVIDIA/CUDA-X.Y
-     # - Windows: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\vX.Y
-     #
--    # We will also search the default symlink location /usr/local/cuda first since
-+    # We will also search the default symlink location /var/empty/local/cuda first since
-     # if CUDAToolkit_ROOT is not specified, it is assumed that the symlinked
-     # directory is the desired location.
+@@ -52,7 +52,7 @@
      if(NOT _CUDA_NVCC_EXECUTABLE)
        if(UNIX)
          if(NOT APPLE)
@@ -2368,12 +1791,9 @@ index 8fd408994f..b210f08d76 100644
          else()
            set(platform_base "/Developer/NVIDIA/CUDA-")
          endif()
-@@ -81,9 +81,9 @@
-         list(APPEND search_paths "${platform_base}${v}")
-       endforeach()
+@@ -83,7 +83,7 @@
  
--      # Force the global default /usr/local/cuda to the front on Unix.
-+      # Force the global default /var/empty/local/cuda to the front on Unix.
+       # Force the global default /usr/local/cuda to the front on Unix.
        if(UNIX)
 -        list(INSERT search_paths 0 "/usr/local/cuda")
 +        list(INSERT search_paths 0 "/var/empty/local/cuda")
@@ -2432,7 +1852,7 @@ index 873c7bc332..ad0e3fd4b4 100644
      get_filename_component(_DIR ${_FILE} DIRECTORY)
      get_filename_component(_PARENT_DIR ${_DIR} DIRECTORY)
 diff --git a/Modules/Internal/CPack/CPackRPM.cmake b/Modules/Internal/CPack/CPackRPM.cmake
-index b733cfe964..c0d53fde0a 100644
+index b733cfe964..566b0d03a2 100644
 --- a/Modules/Internal/CPack/CPackRPM.cmake
 +++ b/Modules/Internal/CPack/CPackRPM.cmake
 @@ -238,9 +238,9 @@
@@ -2448,12 +1868,9 @@ index b733cfe964..c0d53fde0a 100644
      if(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION)
        if(CPACK_RPM_PACKAGE_DEBUG)
          message("CPackRPM:Debug: Adding ${CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION} to builtin omit list.")
-@@ -263,12 +263,12 @@
-   list(REMOVE_ITEM CPACK_RPM_INSTALL_FILES ${_RPM_DIRS_TO_OMIT})
- 
+@@ -265,10 +265,10 @@
    # add man paths that will be compressed
--  # (copied from /usr/lib/rpm/brp-compress - script that does the actual
-+  # (copied from /var/empty/lib/rpm/brp-compress - script that does the actual
+   # (copied from /usr/lib/rpm/brp-compress - script that does the actual
    # compressing)
 -  list(APPEND MAN_LOCATIONS "/usr/man/man.*" "/usr/man/.*/man.*" "/usr/info.*"
 -    "/usr/share/man/man.*" "/usr/share/man/.*/man.*" "/usr/share/info.*"
@@ -2493,15 +1910,6 @@ index b733cfe964..c0d53fde0a 100644
      endif()
  
      # handle cases where path contains extra slashes (e.g. /a//b/ instead of
-@@ -1490,7 +1490,7 @@
-       if(TMP_DEBUGINFO_ADDITIONAL_SOURCES)
-         set(TMP_RPM_DEBUGINFO "
- # Modified version of %%debug_package macro
--# defined in /usr/lib/rpm/macros as that one
-+# defined in /var/empty/lib/rpm/macros as that one
- # can't handle injection of extra source files.
- %ifnarch noarch
- %global __debug_package 1
 diff --git a/Modules/Platform/ADSP-Determine.cmake b/Modules/Platform/ADSP-Determine.cmake
 index 1588c92687..556415c681 100644
 --- a/Modules/Platform/ADSP-Determine.cmake
@@ -2514,18 +1922,10 @@ index 1588c92687..556415c681 100644
 +  _find_adsp_root("/var/empty/analog/cces *")
  endif()
 diff --git a/Modules/Platform/AIX.cmake b/Modules/Platform/AIX.cmake
-index dcc9837259..21fab9d56b 100644
+index dcc9837259..cfdbb6980f 100644
 --- a/Modules/Platform/AIX.cmake
 +++ b/Modules/Platform/AIX.cmake
-@@ -6,13 +6,13 @@
- set(CMAKE_DL_LIBS "-lld")
- 
- # RPATH support on AIX is called libpath.  By default the runtime
--# libpath is paths specified by -L followed by /usr/lib and /lib.  In
-+# libpath is paths specified by -L followed by /var/empty/lib and /lib.  In
- # order to prevent the -L paths from being used we must force use of
--# -Wl,-blibpath:/usr/lib:/lib whether RPATH support is on or not.
-+# -Wl,-blibpath:/var/empty/lib:/lib whether RPATH support is on or not.
+@@ -12,7 +12,7 @@
  # When our own RPATH is to be added it may be inserted before the
  # "always" paths.
  if(NOT DEFINED CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH)
@@ -2731,7 +2131,7 @@ index daff647591..64893df66d 100644
  )
  
 diff --git a/Modules/Platform/Darwin-Initialize.cmake b/Modules/Platform/Darwin-Initialize.cmake
-index 196ab18b0b..245a0a7780 100644
+index 196ab18b0b..0bce622cb2 100644
 --- a/Modules/Platform/Darwin-Initialize.cmake
 +++ b/Modules/Platform/Darwin-Initialize.cmake
 @@ -106,7 +106,7 @@
@@ -2743,21 +2143,8 @@ index 196ab18b0b..245a0a7780 100644
    set(system_lib_dylib_path "${common_lib_prefix}.dylib")
    set(system_lib_tbd_path "${common_lib_prefix}.tbd")
  
-@@ -274,7 +274,7 @@
- endif()
- if(NOT CMAKE_OSX_SYSROOT)
-   # Without any explicit SDK we rely on the toolchain default,
--  # which we assume to be what wrappers like /usr/bin/cc use.
-+  # which we assume to be what wrappers like /var/empty/bin/cc use.
-   if(CMAKE_GENERATOR STREQUAL "Xcode")
-     set(_sdk_macosx --sdk macosx)
-   else()
-@@ -290,9 +290,9 @@
-   unset(_sdk_macosx)
- 
-   list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES_EXCLUDE
--    # Without -isysroot, some compiler drivers implicitly pass -L/usr/local/lib
-+    # Without -isysroot, some compiler drivers implicitly pass -L/var/empty/local/lib
+@@ -293,6 +293,6 @@
+     # Without -isysroot, some compiler drivers implicitly pass -L/usr/local/lib
      # to the linker.  Since the macOS dynamic loader does not search it by
      # default, it is not a fully-implemented implicit link directory.
 -    /usr/local/lib
@@ -2949,19 +2336,6 @@ index bdf4155232..588064821d 100644
  # Add the Nix C library paths.
  if(DEFINED ENV{NIX_CC}
    AND IS_DIRECTORY "$ENV{NIX_CC}"
-diff --git a/Modules/Platform/Windows-GNU.cmake b/Modules/Platform/Windows-GNU.cmake
-index 37d5cf1ca6..7cca40592a 100644
---- a/Modules/Platform/Windows-GNU.cmake
-+++ b/Modules/Platform/Windows-GNU.cmake
-@@ -19,7 +19,7 @@
-     set(_MSYSTEM_PREFIX "$ENV{MSYSTEM_PREFIX}")
-   endif()
- 
--  # Search this MSYSTEM environment's equivalent to /usr/local and /usr.
-+  # Search this MSYSTEM environment's equivalent to /var/empty/local and /usr.
-   if(_MSYSTEM_PREFIX)
-     list(PREPEND CMAKE_SYSTEM_PREFIX_PATH "${_MSYSTEM_PREFIX}")
-     if(IS_DIRECTORY "${_MSYSTEM_PREFIX}/local")
 diff --git a/Modules/Platform/WindowsPaths.cmake b/Modules/Platform/WindowsPaths.cmake
 index c56dfaf9ac..4e0b250c1a 100644
 --- a/Modules/Platform/WindowsPaths.cmake
@@ -3043,19 +2417,6 @@ index b977d955ca..ffc4d8e6d2 100644
          ${Java_JAR_PATHS})
      set(_jar_doc "NOTSET")
  
-diff --git a/Source/QtDialog/CMakeLists.txt b/Source/QtDialog/CMakeLists.txt
-index 7f9e7f00d7..c6c026eb89 100644
---- a/Source/QtDialog/CMakeLists.txt
-+++ b/Source/QtDialog/CMakeLists.txt
-@@ -357,7 +357,7 @@
- 
- if(CMake_INSTALL_DEPENDENCIES AND (APPLE OR WIN32))
-   # install rules for including 3rd party libs such as Qt
--  # if a system Qt is used (e.g. installed in /usr/lib/), it will not be included in the installation
-+  # if a system Qt is used (e.g. installed in /var/empty/lib/), it will not be included in the installation
-   set(fixup_exe "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/bin/cmake-gui${CMAKE_EXECUTABLE_SUFFIX}")
-   if(APPLE)
-     set(fixup_exe "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/MacOS/CMake")
 diff --git a/Utilities/cmcurl/CMakeLists.txt b/Utilities/cmcurl/CMakeLists.txt
 index ddc975c202..a3320a5812 100644
 --- a/Utilities/cmcurl/CMakeLists.txt
