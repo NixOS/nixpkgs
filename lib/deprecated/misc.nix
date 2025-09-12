@@ -73,7 +73,7 @@ let
     name: default: attrs:
     attrs.${name} or default;
 
-  # Return the second argument if the first one is true or the empty version
+  # Returns the second argument if the first one is true or the empty version
   # of the second argument.
   ifEnable =
     cond: val:
@@ -89,7 +89,7 @@ let
     else
       null;
 
-  # Return true only if there is an attribute and it is true.
+  # Returns true only if there is an attribute and it is true.
   checkFlag =
     attrSet: name:
     if name == "true" then
