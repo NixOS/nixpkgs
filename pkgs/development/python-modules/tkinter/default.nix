@@ -27,21 +27,26 @@ buildPythonPackage {
     cp -rv Modules/clinic ../tkinter/
     cp -rv Lib/tkinter ../tkinter/
 
-    pushd $NIX_BUILD_TOP/tkinter
-
     # install our custom pyproject.toml
     cp ${
       replaceVars ./pyproject.toml {
         python_version = python.version;
         python_internal_dir = "${python}/include/${python.libPrefix}/internal";
       }
-    } ./pyproject.toml
+    } $NIX_BUILD_TOP/tkinter/pyproject.toml
 
   ''
   + lib.optionalString (pythonOlder "3.13") ''
-    substituteInPlace "tkinter/tix.py" --replace-fail \
+    substituteInPlace "$NIX_BUILD_TOP/tkinter/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
       "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
+  '';
+
+  # Adapted from https://github.com/python/cpython/pull/124542
+  patches = lib.optional (pythonOlder "3.12") ./fix-ttk-notebook-test.patch;
+
+  preConfigure = ''
+    pushd $NIX_BUILD_TOP/tkinter
   '';
 
   build-system = [ setuptools ];
@@ -81,7 +86,7 @@ buildPythonPackage {
         if pythonOlder "3.12" then
           [
             "test.test_tk"
-            # "test.test_ttk_guionly"  # https://github.com/python/cpython/issues/124378
+            "test.test_ttk_guionly"
           ]
         else
           [
