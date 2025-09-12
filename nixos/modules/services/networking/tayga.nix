@@ -42,7 +42,7 @@ let
         };
 
         prefixLength = mkOption {
-          type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+          type = types.ints.between 0 (if v == 4 then 32 else 128);
           description = ''
             Subnet mask of the interface, specified as the number of
             bits in the prefix ("${if v == 4 then "24" else "64"}").
