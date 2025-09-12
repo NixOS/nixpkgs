@@ -496,6 +496,7 @@ in
   ergochat = runTest ./ergochat.nix;
   esphome = runTest ./esphome.nix;
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
+  etc-cleanup = handleTest ./etc-cleanup.nix {};
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-var = runTest ./activation/var.nix;
