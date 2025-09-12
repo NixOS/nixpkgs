@@ -131,21 +131,24 @@ in
         '';
 
         proposals = mkCommaSepListParam [ "default" ] ''
-          A proposal is a set of algorithms. For non-AEAD algorithms, this includes
-          for IKE an encryption algorithm, an integrity algorithm, a pseudo random
-          function and a Diffie-Hellman group. For AEAD algorithms, instead of
-          encryption and integrity algorithms, a combined algorithm is used.
+          A proposal is a set of algorithms. For non-AEAD IKE proposals, this includes
+          an encryption algorithm, an integrity algorithm, a pseudo-random function
+          and a key exchange method. For AEAD proposals, instead of encryption and
+          integrity algorithms, a combined mode algorithm is used.
 
-          In IKEv2, multiple algorithms of the same kind can be specified in a
-          single proposal, from which one gets selected. In IKEv1, only one
-          algorithm per kind is allowed per proposal, more algorithms get implicitly
-          stripped. Use multiple proposals to offer different algorithms
-          combinations in IKEv1.
+          With peers that support multiple IKEv2 key exchanges (RFC 9370), up to seven
+          additional key exchanges may be negotiated. They can be configured by
+          prefixing the algorithm keyword with **keX_** (where X is a number between
+          1 and 7).
 
-          Algorithm keywords get separated using dashes. Multiple proposals may be
-          specified in a list. The special value `default` forms a
-          default proposal of supported algorithms considered safe, and is usually a
-          good choice for interoperability.
+          For IKEv2, multiple algorithms of the same kind can be specified in a single
+          proposal, from which one gets selected. For IKEv1, only one algorithm per
+          kind is allowed per proposal, more algorithms get implicitly stripped. Use
+          multiple proposals to offer different algorithm combinations with IKEv1.
+
+          Algorithm keywords get separated using dashes. The special value _default_
+          forms a default proposal of supported algorithms considered safe, and is
+          usually a good choice for interoperability.
         '';
 
         vips = mkCommaSepListParam [ ] ''
@@ -240,16 +243,16 @@ in
 
           Use childless IKE_SA initiation (RFC 6023) for IKEv2, with the first
           CHILD_SA created with a separate CREATE_CHILD_SA exchange (e.g. to use an
-          independent DH exchange for all CHILD_SAs).  Acceptable values are `allow`
-          (the default), `prefer`, `force` and `never`. If set to `allow`, responders
+          independent key exchange for all CHILD_SAs).  Acceptable values are _allow_
+          (the default), _prefer_, _force_ and _never_. If set to _allow_, responders
           will accept childless IKE_SAs (as indicated via notify in the IKE_SA_INIT
           response) while initiators continue to create regular IKE_SAs with the first
           CHILD_SA created during IKE_AUTH, unless the IKE_SA is initiated explicitly
           without any children (which will fail if the responder does not support or
-          has disabled this extension). The effect of `prefer` is the same as `allow`
+          has disabled this extension). The effect of _prefer_ is the same as _allow_
           on responders, but as initiator a childless IKE_SA is initiated if the
-          responder supports it. If set to `force`, only childless initiation is
-          accepted in either role.  Finally, setting the option to `never` disables
+          responder supports it. If set to _force_, only childless initiation is
+          accepted in either role.  Finally, setting the option to _never_ disables
           support for childless IKE_SAs as responder.
         '';
 
@@ -321,9 +324,10 @@ in
           reauthentication lifetime negotiation can instruct the client to perform
           reauthentication.
 
-          Reauthentication is disabled by default. Enabling it usually may lead to
-          small connection interruptions, as strongSwan uses a break-before-make
-          policy with IKEv2 to avoid any conflicts with associated tunnel resources.
+          Reauthentication is disabled by default. Enabling it can usually result in
+          short connection interruptions, even when using make-before-break
+          reauthentication, which is now the default. However, they are significantly
+          shorter than when using the legacy break-before-make approach.
         '';
 
         rekey_time = mkDurationParam "4h" ''
@@ -657,59 +661,63 @@ in
           mkAttrsOfParams
             {
               ah_proposals = mkCommaSepListParam [ ] ''
-                AH proposals to offer for the CHILD_SA. A proposal is a set of
-                algorithms. For AH, this includes an integrity algorithm and an optional
-                Diffie-Hellman group. If a DH group is specified, CHILD_SA/Quick Mode
-                rekeying and initial negotiation uses a separate Diffie-Hellman exchange
-                using the specified group (refer to esp_proposals for details).
+                AH proposals to offer for the CHILD_SA. A proposal is a set of algorithms.
+                For AH, this includes an integrity algorithm and an optional key exchange
+                method. If a KE method is specified, CHILD_SA/Quick Mode rekeying and
+                initial negotiation uses a separate key exchange using the negotiated method
+                (refer to _esp_proposals_ for details).
 
-                In IKEv2, multiple algorithms of the same kind can be specified in a
-                single proposal, from which one gets selected. In IKEv1, only one
-                algorithm per kind is allowed per proposal, more algorithms get
-                implicitly stripped. Use multiple proposals to offer different algorithms
-                combinations in IKEv1.
+                With peers that support multiple IKEv2 key exchanges (RFC 9370), up to seven
+                additional key exchanges may be negotiated. They can be configured by
+                prefixing the algorithm keyword with **keX_** (where X is a number between
+                1 and 7).
 
-                Algorithm keywords get separated using dashes. Multiple proposals may be
-                specified in a list. The special value `default` forms
-                a default proposal of supported algorithms considered safe, and is
+                For IKEv2, multiple algorithms of the same kind can be specified in a single
+                proposal, from which one gets selected. For IKEv1, only one algorithm per
+                kind is allowed per proposal, more algorithms get implicitly stripped. Use
+                multiple proposals to offer different algorithm combinations with IKEv1.
+
+                Algorithm keywords get separated using dashes. The special value _default_
+                forms a default proposal of supported algorithms considered safe, and is
                 usually a good choice for interoperability. By default no AH proposals
                 are included, instead ESP is proposed.
               '';
 
               esp_proposals = mkCommaSepListParam [ "default" ] ''
-                ESP proposals to offer for the CHILD_SA. A proposal is a set of
-                algorithms. For ESP non-AEAD proposals, this includes an integrity
-                algorithm, an encryption algorithm, an optional Diffie-Hellman group and
-                an optional Extended Sequence Number Mode indicator. For AEAD proposals,
-                a combined mode algorithm is used instead of the separate
-                encryption/integrity algorithms.
+                ESP proposals to offer for the CHILD_SA. A proposal is a set of algorithms.
+                For non-AEAD ESP proposals, this includes an integrity algorithm, an
+                encryption algorithm, an optional key exchange method and an optional
+                Extended Sequence Number Mode indicator. For AEAD proposals, a combined
+                mode algorithm is used instead of the separate encryption/integrity
+                algorithms.
 
-                If a DH group is specified, CHILD_SA/Quick Mode rekeying and initial
-                negotiation use a separate Diffie-Hellman exchange using the specified
-                group. However, for IKEv2, the keys of the CHILD_SA created implicitly
-                with the IKE_SA will always be derived from the IKE_SA's key material. So
-                any DH group specified here will only apply when the CHILD_SA is later
-                rekeyed or is created with a separate CREATE_CHILD_SA exchange. A
-                proposal mismatch might, therefore, not immediately be noticed when the
-                SA is established, but may later cause rekeying to fail.
+                If a key exchange method is specified, CHILD_SA/Quick Mode rekeying and
+                initial negotiation use a separate key exchange using the specified method.
+                However, for IKEv2, the keys of the CHILD_SA created implicitly with the
+                IKE_SA will always be derived from the IKE_SA's key material. So any key
+                exchange method specified here will only apply when the CHILD_SA is later
+                rekeyed or is created with a separate CREATE_CHILD_SA exchange. A proposal
+                mismatch might, therefore, not immediately be noticed when the SA is
+                established, but may later cause rekeying to fail.
 
-                Extended Sequence Number support may be indicated with the
-                `esn` and `noesn` values, both may be
-                included to indicate support for both modes. If omitted,
-                `noesn` is assumed.
+                With peers that support multiple IKEv2 key exchanges (RFC 9370), up to seven
+                additional key exchanges may be negotiated. They can be configured by
+                prefixing the algorithm keyword with **keX_** (where X is a number between
+                1 and 7).
 
-                In IKEv2, multiple algorithms of the same kind can be specified in a
-                single proposal, from which one gets selected. In IKEv1, only one
-                algorithm per kind is allowed per proposal, more algorithms get
-                implicitly stripped. Use multiple proposals to offer different algorithms
-                combinations in IKEv1.
+                Extended Sequence Number support may be indicated with the _esn_ and _noesn_
+                values, both may be included to indicate support for both modes. If omitted,
+                _noesn_ is assumed.
 
-                Algorithm keywords get separated using dashes. Multiple proposals may be
-                specified as a list. The special value `default` forms
-                a default proposal of supported algorithms considered safe, and is
-                usually a good choice for interoperability. If no algorithms are
-                specified for AH nor ESP, the default set of algorithms for ESP is
-                included.
+                For IKEv2, multiple algorithms of the same kind can be specified in a single
+                proposal, from which one gets selected. For IKEv1, only one algorithm per
+                kind is allowed per proposal, more algorithms get implicitly stripped. Use
+                multiple proposals to offer different algorithm combinations with IKEv1.
+
+                Algorithm keywords get separated using dashes. The special value _default_
+                forms a default proposal of supported algorithms considered safe, and is
+                usually a good choice for interoperability. If no algorithms are specified
+                for AH nor ESP, the _default_ set of algorithms for ESP is included.
               '';
 
               sha256_96 = mkYesNoParam no ''
@@ -721,30 +729,34 @@ in
               '';
 
               local_ts = mkCommaSepListParam [ "dynamic" ] ''
-                List of local traffic selectors to include in CHILD_SA. Each selector is
-                a CIDR subnet definition, followed by an optional proto/port
-                selector. The special value `dynamic` may be used
-                instead of a subnet definition, which gets replaced by the tunnel outer
-                address or the virtual IP, if negotiated. This is the default.
+                List of local traffic selectors to include in CHILD_SA.
+                Each selector is a CIDR subnet definition, followed by an optional
+                proto/port selector. The special value _dynamic_ may be used instead of a
+                subnet definition, which gets replaced by the tunnel outer address or the
+                virtual IP, if negotiated. This is the default.
 
                 A protocol/port selector is surrounded by opening and closing square
-                brackets. Between these brackets, a numeric or getservent(3) protocol
-                name may be specified. After the optional protocol restriction, an
-                optional port restriction may be specified, separated by a slash. The
-                port restriction may be numeric, a getservent(3) service name, or the
-                special value `opaque` for RFC 4301 OPAQUE
-                selectors. Port ranges may be specified as well, none of the kernel
-                backends currently support port ranges, though.
+                brackets. Between these brackets, a numeric or **getservent**(3) protocol
+                name may be specified. After the optional protocol restriction, an optional
+                port restriction may be specified, separated by a slash. The port
+                restriction may be numeric, a **getservent**(3) service name, or the special
+                value _opaque_ for RFC 4301 OPAQUE selectors. Port ranges may be specified
+                as well, none of the kernel backends currently support port ranges, though.
+                If the protocol is _icmp_ or _ipv6-icmp_, the port is interpreted as ICMP
+                message type if it is less than 256 or as type and code if it is greater or
+                equal to 256, with the type in the most significant 8 bits and the code in
+                the least significant 8 bits.
 
-                When IKEv1 is used only the first selector is interpreted, except if the
-                Cisco Unity extension plugin is used. This is due to a limitation of the
-                IKEv1 protocol, which only allows a single pair of selectors per
-                CHILD_SA. So to tunnel traffic matched by several pairs of selectors when
-                using IKEv1 several children (CHILD_SAs) have to be defined that cover
-                the selectors.  The IKE daemon uses traffic selector narrowing for IKEv1,
-                the same way it is standardized and implemented for IKEv2. However, this
-                may lead to problems with other implementations. To avoid that, configure
-                identical selectors in such scenarios.
+                When IKEv1 is used only the first selector is interpreted, except if
+                the Cisco Unity extension plugin is used. This is due to a limitation of the
+                IKEv1 protocol, which only allows a single pair of selectors per CHILD_SA.
+                So to tunnel traffic matched by several pairs of selectors when using IKEv1
+                several children (CHILD_SAs) have to be defined that cover the selectors.
+
+                The IKE daemon uses traffic selector narrowing for IKEv1, the same way it is
+                standardized and implemented for IKEv2. However, this may lead to problems
+                with other implementations. To avoid that, configure identical selectors in
+                such scenarios.
               '';
 
               remote_ts = mkCommaSepListParam [ "dynamic" ] ''
@@ -752,14 +764,17 @@ in
                 {option}`local_ts` for a description of the selector syntax.
               '';
 
-              rekey_time = mkDurationParam "1h" ''
+              rekey_time = mkOptionalDurationParam ''
                 Time to schedule CHILD_SA rekeying. CHILD_SA rekeying refreshes key
                 material, optionally using a Diffie-Hellman exchange if a group is
-                specified in the proposal.  To avoid rekey collisions initiated by both
-                ends simultaneously, a value in the range of {option}`rand_time`
-                gets subtracted to form the effective soft lifetime.
+                specified in the proposal.
 
-                By default CHILD_SA rekeying is scheduled every hour, minus
+                To avoid rekey collisions initiated by both ends simultaneously, a value
+                in the range of {option}`rand_time` gets subtracted to form the effective soft
+                lifetime.
+
+                If {option}`life_time` is explicitly configured, {option}`rekey_time` defaults to 10%
+                less than that, otherwise, CHILD_SA rekeying is scheduled every hour, minus
                 {option}`rand_time`.
               '';
 
@@ -776,16 +791,19 @@ in
                 {option}`life_time` and {option}`rekey_time`.
               '';
 
-              rekey_bytes = mkIntParam 0 ''
+              rekey_bytes = mkOptionalIntParam ''
+                Number of bytes processed before initiating CHILD_SA rekeying.
+
                 Number of bytes processed before initiating CHILD_SA rekeying. CHILD_SA
-                rekeying refreshes key material, optionally using a Diffie-Hellman
-                exchange if a group is specified in the proposal.
+                rekeying refreshes key material, optionally using a Diffie-Hellman exchange
+                if a group is specified in the proposal.
 
                 To avoid rekey collisions initiated by both ends simultaneously, a value
-                in the range of {option}`rand_bytes` gets subtracted to form the
-                effective soft volume limit.
+                in the range of {option}`rand_bytes` gets subtracted to form the effective soft
+                volume limit.
 
-                Volume based CHILD_SA rekeying is disabled by default.
+                Volume based CHILD_SA rekeying is disabled by default. If {option}`life_bytes`
+                is explicitly configured, {option}`rekey_bytes` defaults to 10% less than that.
               '';
 
               life_bytes = mkOptionalIntParam ''
@@ -801,16 +819,20 @@ in
                 {option}`life_bytes` and {option}`rekey_bytes`.
               '';
 
-              rekey_packets = mkIntParam 0 ''
+              rekey_packets = mkOptionalIntParam ''
+                Number of packets processed before initiating CHILD_SA rekeying.
+
                 Number of packets processed before initiating CHILD_SA rekeying. CHILD_SA
-                rekeying refreshes key material, optionally using a Diffie-Hellman
-                exchange if a group is specified in the proposal.
+                rekeying refreshes key material, optionally using a Diffie-Hellman exchange
+                if a group is specified in the proposal.
 
                 To avoid rekey collisions initiated by both ends simultaneously, a value
-                in the range of {option}`rand_packets` gets subtracted to form
-                the effective soft packet count limit.
+                in the range of {option}`rand_packets` gets subtracted to form the effective soft
+                packet count limit.
 
-                Packet count based CHILD_SA rekeying is disabled by default.
+                Packet count based CHILD_SA rekeying is disabled by default. If
+                {option}`life_packets` is explicitly configured, {option}`rekey_packets` defaults to
+                10% less than that.
               '';
 
               life_packets = mkOptionalIntParam ''
@@ -1019,6 +1041,19 @@ in
                 the default of `32` are supported using the Netlink
                 backend only, a value of `0` disables IPsec replay
                 protection.
+              '';
+
+              per_cpu_sas = mkEnumParam [ "yes" "no" "encap" ] "no" ''
+                Enable per-CPU CHILD_SAs. Requires `trap` in `start_action`.
+                The value `encap` enables a special type of UDP encapsulation
+                (requires enabling `encap` for the connection if there is no NAT),
+                where a random source port is used for each outbound per-CPU SA
+                (the destination port for all of them remains 4500). This allows
+                using the port for RSS if the SPI can’t be used. Note that this type
+                of behavior is not standardized and not negotiated. So regardless
+                of whether the option is enabled, inbound per-CPU SAs
+                with UDP-encapsulation always have the source port set to 0
+                as the peer’s random port is unknown if it has this option enabled.
               '';
 
               hw_offload = mkEnumParam [ "yes" "no" "auto" "crypto" "packet" ] "no" ''
@@ -1302,9 +1337,14 @@ in
     mkAttrsOfParams
       {
         addrs = mkOptionalStrParam ''
-          Subnet or range defining addresses allocated in pool. Accepts a single
-          CIDR subnet defining the pool to allocate addresses from or an address
-          range (\<from\>-\<to\>). Pools must be unique and non-overlapping.
+          Addresses allocated in pool.
+
+          Subnet or range defining addresses allocated in pool. Accepts a single CIDR
+          subnet defining the pool to allocate addresses from or an address range
+          (<from>-<to>). If the address in CIDR notation is not the network ID of the
+          subnet (e.g. 10.1.0.5/24 instead of 10.1.0.0/24), addresses below it won't
+          be allocated to clients (they could e.g. be assigned manually to internal
+          hosts like the VPN server itself). Pools must be unique and non-overlapping
         '';
 
         dns = mkCommaSepListParam [ ] "Address or CIDR subnets";

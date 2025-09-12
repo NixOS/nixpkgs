@@ -9197,7 +9197,7 @@ with pkgs;
     zig_0_15
     ;
 
-  zig = zig_0_14;
+  zig = zig_0_15;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
@@ -12859,7 +12859,7 @@ with pkgs;
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
-  seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
+  seafile-client = qt6Packages.callPackage ../applications/networking/seafile-client { };
 
   seq66 = qt5.callPackage ../applications/audio/seq66 { };
 
