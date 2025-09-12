@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     }
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd starboard \
       --bash <($out/bin/starboard completion bash) \
       --fish <($out/bin/starboard completion fish) \

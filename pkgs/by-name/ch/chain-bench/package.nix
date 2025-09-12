@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -25,7 +26,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd chain-bench \
       --bash <($out/bin/chain-bench completion bash) \
       --fish <($out/bin/chain-bench completion fish) \

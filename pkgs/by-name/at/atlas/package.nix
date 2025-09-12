@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -32,7 +33,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atlas \
       --bash <($out/bin/atlas completion bash) \
       --fish <($out/bin/atlas completion fish) \

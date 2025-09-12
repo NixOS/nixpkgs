@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -31,7 +32,7 @@ buildGoModule (finalAttrs: {
     "-X main.VERSION=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd timoni \
     --bash <($out/bin/timoni completion bash) \
     --fish <($out/bin/timoni completion fish) \

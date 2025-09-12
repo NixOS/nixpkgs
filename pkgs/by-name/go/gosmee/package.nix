@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -23,7 +24,7 @@ buildGoModule rec {
     printf ${version} > gosmee/templates/version
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gosmee \
       --bash <($out/bin/gosmee completion bash) \
       --fish <($out/bin/gosmee completion fish) \

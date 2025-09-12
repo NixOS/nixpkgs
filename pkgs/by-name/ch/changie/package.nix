@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd changie \
       --bash <($out/bin/changie completion bash) \
       --fish <($out/bin/changie completion fish) \

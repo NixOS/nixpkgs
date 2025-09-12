@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -27,7 +28,7 @@ buildGoModule rec {
     "-X main.Commit=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd polaris \
       --bash <($out/bin/polaris completion bash) \
       --fish <($out/bin/polaris completion fish) \

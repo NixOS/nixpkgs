@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchurl,
   fetchFromGitHub,
   installShellFiles,
@@ -68,7 +69,7 @@ buildGoModule rec {
       --set FASTLY_VICEROY_USE_PATH 1
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME="$(mktemp -d)"
     installShellCompletion --cmd fastly \
       --bash <($out/bin/fastly --completion-script-bash) \

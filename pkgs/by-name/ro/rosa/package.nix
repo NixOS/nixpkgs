@@ -43,7 +43,7 @@ buildGoModule rec {
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rosa \
       --bash <($out/bin/rosa completion bash) \
       --fish <($out/bin/rosa completion fish) \

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitLab,
   installShellFiles,
@@ -35,6 +36,8 @@ buildNpmPackage (finalAttrs: {
 
   postInstall = ''
     installManPage readability-cli.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd readable \
       --bash <(SHELL=bash $out/bin/readable --completion) \
       --zsh <(SHELL=zsh $out/bin/readable --completion)

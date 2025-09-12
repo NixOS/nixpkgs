@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -31,7 +32,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd enc \
       --bash <($out/bin/enc completion bash) \
       --fish <($out/bin/enc completion fish) \

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   getent,
@@ -27,7 +28,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-X knative.dev/client/pkg/commands/version.Version=v${finalAttrs.version}" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kn \
       --bash <($out/bin/kn completion bash) \
       --zsh <($out/bin/kn completion zsh)

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -30,7 +31,7 @@ buildGoModule {
 
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lefthook \
       --bash <($out/bin/lefthook completion bash) \
       --fish <($out/bin/lefthook completion fish) \
