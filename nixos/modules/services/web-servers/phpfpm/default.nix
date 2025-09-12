@@ -23,12 +23,13 @@ let
 
   fpmCfgFile =
     pool: poolOpts:
-    pkgs.writeText "phpfpm-${pool}.conf" ''
+    pkgs.writeText "${poolOpts.systemdServiceName}.conf" ''
       [global]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
 
       [${pool}]
+      env[CREDENTIALS_DIRECTORY] = $CREDENTIALS_DIRECTORY
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}
       ${optionalString (poolOpts.extraConfig != null) poolOpts.extraConfig}
@@ -152,6 +153,13 @@ let
             See the documentation on `php-fpm.conf` for
             details on configuration directives.
           '';
+        };
+
+        systemdServiceName = mkOption {
+          type = types.str;
+          default = "phpfpm-${name}";
+          example = "phpfpm-poolName";
+          readOnly = true;
         };
       };
 
@@ -277,7 +285,7 @@ in
 
     systemd.services = mapAttrs' (
       pool: poolOpts:
-      nameValuePair "phpfpm-${pool}" {
+      nameValuePair poolOpts.systemdServiceName {
         description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
@@ -287,6 +295,24 @@ in
           let
             cfgFile = fpmCfgFile pool poolOpts;
             iniFile = phpIni poolOpts;
+            wrapper = pkgs.writeShellApplication {
+              name = "phpfpm-exec-start-pre";
+              runtimeInputs = with pkgs; [
+                mount
+              ];
+              text = ''
+                if [ -v CREDENTIALS_DIRECTORY ]; then
+                  OLD_CREDENTIALS_DIRECTORY="$CREDENTIALS_DIRECTORY"
+                  export CREDENTIALS_DIRECTORY="/tmp''${CREDENTIALS_DIRECTORY}"
+                  mkdir -p "$CREDENTIALS_DIRECTORY"
+                  mount -t tmpfs -o size=1M,nodev,nosuid,noexec,mode=500,uid="$(id -u "${poolOpts.user}")",gid="$(id -g "${poolOpts.group}")" tmpfs "$CREDENTIALS_DIRECTORY"
+                  cp -r "$OLD_CREDENTIALS_DIRECTORY"/. "$CREDENTIALS_DIRECTORY"
+                  chown -R "${poolOpts.user}:${poolOpts.group}" "$CREDENTIALS_DIRECTORY"
+                fi
+
+                exec ${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}
+              '';
+            };
           in
           {
             Slice = "system-phpfpm.slice";
@@ -297,7 +323,7 @@ in
             # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
             RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
             Type = "notify";
-            ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
+            ExecStart = lib.getExe wrapper;
             ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
             RuntimeDirectory = "phpfpm";
             RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
