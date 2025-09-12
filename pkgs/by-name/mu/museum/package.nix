@@ -5,10 +5,9 @@
   libsodium,
   buildGoModule,
   nix-update-script,
-  nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "museum";
   version = "1.2.4";
 
@@ -16,13 +15,13 @@ buildGoModule (finalAttrs: {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
-    tag = "photos-v${finalAttrs.version}";
+    tag = "photos-v${version}";
     hash = "sha256-2kcIXnQPNB6V8ElTxoAETFCSyIIOGme15pYVXNLPlAg=";
   };
 
   vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
 
-  sourceRoot = "${finalAttrs.src.name}/server";
+  sourceRoot = "${src.name}/server";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,26 +42,21 @@ buildGoModule (finalAttrs: {
       $out/share/museum
   '';
 
-  passthru = {
-    tests.ente = nixosTests.ente;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "photos-v(.*)"
-      ];
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "photos-v(.*)"
+    ];
   };
 
   meta = {
     description = "API server for ente.io";
     homepage = "https://github.com/ente-io/ente/tree/main/server";
-    changelog = "https://github.com/ente-io/ente/releases/tag/photos-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
-      oddlama
     ];
     mainProgram = "museum";
     platforms = lib.platforms.linux;
   };
-})
+}

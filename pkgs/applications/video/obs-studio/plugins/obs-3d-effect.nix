@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-3d-effect";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

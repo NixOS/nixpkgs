@@ -70,9 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://projects.coin-or.org/Ipopt";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      nim65s
-      qbisi
-    ];
+    maintainers = [ ];
   };
 }

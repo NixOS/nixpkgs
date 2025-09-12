@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm run generate
     pnpm exec electron-builder \
-      --linux "dir:${stdenv.hostPlatform.node.arch}" \
+      --dir \
       --config.extraMetadata.environment=$SIGNAL_ENV \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}

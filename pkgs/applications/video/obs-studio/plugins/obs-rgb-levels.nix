@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wimpysworld/obs-rgb-levels";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Only;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

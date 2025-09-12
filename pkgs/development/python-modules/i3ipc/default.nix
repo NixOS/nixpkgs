@@ -72,5 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/altdesktop/i3ipc-python";
     changelog = "https://github.com/altdesktop/i3ipc-python/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vanzef ];
   };
 }

@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gfls";

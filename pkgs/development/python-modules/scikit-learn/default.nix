@@ -123,17 +123,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sklearn" ];
 
-  meta = {
+  meta = with lib; {
     description = "Set of python modules for machine learning and data mining";
     changelog =
       let
-        major = lib.versions.major version;
-        minor = lib.versions.minor version;
-        dashVer = lib.replaceStrings [ "." ] [ "-" ] version;
+        major = versions.major version;
+        minor = versions.minor version;
+        dashVer = replaceStrings [ "." ] [ "-" ] version;
       in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ davhau ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ davhau ];
   };
 }

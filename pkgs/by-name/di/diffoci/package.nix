@@ -37,7 +37,7 @@ buildGoModule rec {
           buildPackages.diffoci;
     in
     ''
-      installShellCompletion --cmd diffoci \
+      installShellCompletion --cmd trivy \
         --bash <(${diffoci}/bin/diffoci completion bash) \
         --fish <(${diffoci}/bin/diffoci completion fish) \
         --zsh <(${diffoci}/bin/diffoci completion zsh)

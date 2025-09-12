@@ -56,7 +56,6 @@ python.pkgs.buildPythonApplication {
     certifi
     coloredlogs
     heif-image-plugin
-    legacy-cgi
     numpy
     pillow-avif-plugin
     pillow

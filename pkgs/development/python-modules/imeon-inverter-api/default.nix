@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "imeon-inverter-api";
-  version = "0.4.0";
+  version = "0.3.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Imeon-Inverters-for-Home-Assistant";
     repo = "inverter-api";
     tag = version;
-    hash = "sha256-8tecWWDYFq+kAqWM9vKhM15LKnEVqaDBkH6jh0xwIsE=";
+    hash = "sha256-zaGmzp9uOzjtDxca1EWGKQ/PYsKqMldv5mnxQlwfcX4=";
   };
 
   build-system = [ pdm-pep517 ];

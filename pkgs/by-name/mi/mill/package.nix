@@ -1,32 +1,21 @@
 {
-  autoPatchelfHook,
+  lib,
+  stdenv,
   fetchurl,
   jre,
-  lib,
   makeWrapper,
-  sourcesJSON ? ./sources.json,
-  stdenvNoCC,
-  zlib,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mill";
-  version = "1.0.4";
+  version = "0.12.14";
 
-  src =
-    let
-      source = (lib.importJSON sourcesJSON)."${stdenvNoCC.hostPlatform.system}";
-    in
-    fetchurl {
-      url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${source.artifact-suffix}/${finalAttrs.version}/mill-dist-${source.artifact-suffix}-${finalAttrs.version}.exe";
-      inherit (source) hash;
-    };
+  src = fetchurl {
+    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${finalAttrs.version}/mill-dist-${finalAttrs.version}.exe";
+    hash = "sha256-2MyufFcgKH/bxVB83qXNESByAdgbzhyIHqAr36Bb9o0=";
+  };
 
-  buildInputs = [ zlib ];
-  nativeBuildInputs = [
-    makeWrapper
-  ]
-  ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -37,14 +26,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
-    install -Dm 555 $src $out/bin/.mill-wrapped
+    install -Dm555 "$src" "$out/bin/.mill-wrapped"
     # can't use wrapProgram because it sets --argv0
-    makeWrapper $out/bin/.mill-wrapped $out/bin/mill \
+    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
       --prefix PATH : "${jre}/bin" \
-      --set-default JAVA_HOME "${jre}"
-
+      --set JAVA_HOME "${jre}"
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  # The default release is a script which will do an impure download
+  # just ensure that the application can run without network
+  installCheckPhase = ''
+    $out/bin/mill --help > /dev/null
   '';
 
   meta = with lib; {
@@ -63,12 +57,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       scalavision
       zenithal
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.all;
   };
 })

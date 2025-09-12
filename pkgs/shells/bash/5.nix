@@ -183,15 +183,5 @@ lib.warnIf (withDocs != null)
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = [ ];
       mainProgram = "bash";
-      identifiers.cpeParts =
-        let
-          versionSplit = lib.split "p" version;
-        in
-        {
-          vendor = "gnu";
-          product = "bash";
-          version = lib.elemAt versionSplit 0;
-          update = lib.elemAt versionSplit 2;
-        };
     };
   }

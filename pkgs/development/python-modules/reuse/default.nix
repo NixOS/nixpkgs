@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "5.1.1";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     tag = "v${version}";
-    hash = "sha256-xrYr68PpTLglTlLgTHWHJjTd62tzcOvY9h//CxYJOzM=";
+    hash = "sha256-MzI3AY5WLNyCLJZM7Q5wUH3ttx+FHPlSgAfngzOgzec=";
   };
 
   outputs = [

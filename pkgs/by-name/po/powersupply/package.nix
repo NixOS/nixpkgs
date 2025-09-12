@@ -4,57 +4,57 @@
   fetchFromGitLab,
   desktop-file-utils,
   gobject-introspection,
-  gtk4,
-  libadwaita,
+  gtk3,
+  libhandy,
   meson,
   ninja,
   pkg-config,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "powersupply";
-  version = "0.10.1";
+  version = "0.9.0";
 
   format = "other";
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    owner = "martijnbraam";
     repo = "powersupply";
     rev = version;
-    hash = "sha256-sPdtrm2WQYjPu+1bb0ltBiqS9t8FFvbgRdGe1PEthy0=";
+    hash = "sha256-3NXoOqveMlMezYe4C78F3764KeAy5Sz3M714PO3h/eI=";
   };
-
-  postPatch = ''
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-  '';
 
   nativeBuildInputs = [
     desktop-file-utils
-    gtk4 # for gtk4-update-icon-cache
-    gobject-introspection # Without this, launching the app on aarch64-linux results in ValueError: Namespace Gtk not available
+    gtk3
+    gobject-introspection
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk4
-    libadwaita
+    gtk3
+    libhandy
   ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pygobject3
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   strictDeps = true;
 
   meta = with lib; {
     description = "Graphical app to display power status of mobile Linux platforms";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";
+    homepage = "https://gitlab.com/MartijnBraam/powersupply";
     license = licenses.mit;
     mainProgram = "powersupply";
     platforms = platforms.linux;

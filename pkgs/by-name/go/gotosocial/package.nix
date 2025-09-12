@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   fetchFromGitea,
-  buildGo124Module,
+  buildGoModule,
   nixosTests,
 }:
 let
@@ -17,7 +17,7 @@ let
     hash = "sha256-et1jguboadjJJdUpugmRvkAtpdfHxn4+ftXUH/hWTdE=";
   };
 in
-buildGo124Module rec {
+buildGoModule rec {
   inherit version;
   pname = repo;
 

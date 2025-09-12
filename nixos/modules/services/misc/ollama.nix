@@ -270,11 +270,7 @@ in
         "multi-user.target"
         "ollama.service"
       ];
-      wants = [ "network-online.target" ];
-      after = [
-        "ollama.service"
-        "network-online.target"
-      ];
+      after = [ "ollama.service" ];
       bindsTo = [ "ollama.service" ];
       environment = config.systemd.services.ollama.environment;
       serviceConfig = {

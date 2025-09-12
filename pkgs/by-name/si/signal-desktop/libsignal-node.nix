@@ -70,9 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace node/build_node_bridge.py \
       --replace-fail "dst_base = 'libsignal_client_%s_%s' % (node_os_name, node_arch)" \
-                     "dst_base = '@signalapp+libsignal-client'" \
-      --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
-                     "objcopy = os.getenv('OBJCOPY', 'objcopy')"
+                     "dst_base = '@signalapp+libsignal-client'"
   '';
 
   buildPhase = ''

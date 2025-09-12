@@ -10,7 +10,7 @@
   cjs,
   gtksourceview4,
   gobject-introspection,
-  libmusicbrainz,
+  libmusicbrainz5,
   webkitgtk_4_1,
   clutter-gtk,
   clutter-gst,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     cjs
     gtksourceview4
-    libmusicbrainz
+    libmusicbrainz5
     webkitgtk_4_1
     clutter-gtk
     clutter-gst

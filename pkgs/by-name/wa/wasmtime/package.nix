@@ -3,13 +3,9 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  buildPackages,
   cmake,
-  installShellFiles,
   versionCheckHook,
   nix-update-script,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
@@ -39,10 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-  ];
+  nativeBuildInputs = [ cmake ];
 
   doCheck =
     with stdenv.buildPlatform;
@@ -61,12 +54,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      inherit (stdenv.hostPlatform.rust) cargoShortTarget;
+      inherit (stdenv.targetPlatform.rust) cargoShortTarget;
     in
     ''
       moveToOutput lib $dev
-      ${lib.optionalString (!enableShared) "rm $dev/lib/*.so{,.*}"}
-      ${lib.optionalString (!enableStatic) "rm $dev/lib/*.a"}
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
@@ -76,18 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install_name_tool -id \
         $dev/lib/libwasmtime.dylib \
         $dev/lib/libwasmtime.dylib
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd wasmtime \
-        --bash <("$out/bin/wasmtime" completion bash) \
-        --zsh <("$out/bin/wasmtime" completion zsh) \
-        --fish <("$out/bin/wasmtime" completion fish)
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd wasmtime \
-        --bash "${buildPackages.wasmtime}"/share/bash-completion/completions/*.bash \
-        --zsh "${buildPackages.wasmtime}"/share/zsh/site-functions/* \
-        --fish "${buildPackages.wasmtime}"/share/fish/*/*
     '';
 
   nativeInstallCheckInputs = [
