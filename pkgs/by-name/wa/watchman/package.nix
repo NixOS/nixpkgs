@@ -11,7 +11,6 @@
   cargo,
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
-  removeReferencesTo,
 
   pcre2,
   openssl,
@@ -35,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.04.21.00";
+  version = "2025.09.15.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZRrG7bgmh7hW7ihQISQP5pnWAVGhDLL93rCP7ZtUnA=";
+    hash = "sha256-ZIFGCOoIuy4Ns51oek3HnBLtCSnI742FTA2YmorBpyk=";
   };
 
   patches = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -95,7 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
+
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
+
+    # Facebook Thrift requires C++20 now but Watchman hasn’t been
+    # updated yet… (Aren’t these things meant to be integrated together
+    # in a monorepo?)
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
   postFixup = ''
