@@ -17,6 +17,7 @@
   geoclue2,
   python3,
   gsettings-desktop-schemas,
+  typescript,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     python3
     gobject-introspection
     gjs
+    typescript
   ];
 
   buildInputs = [
