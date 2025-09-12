@@ -21,13 +21,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "sourcegit";
-  version = "2025.29";
+  version = "2025.34";
 
   src = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ptHiC5BaX0EP2uInGE7/FV61wsCU2V+FE1VHxJKN+70=";
+    hash = "sha256-O7HzbrcQGgP3mRSfqLxoHPswVW99S9chb7ZWBeEelsY=";
   };
 
   patches = [ ./fix-darwin-git-path.patch ];
