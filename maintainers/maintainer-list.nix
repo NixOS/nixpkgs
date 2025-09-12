@@ -23794,6 +23794,7 @@
   };
   Silk-OT = {
 <<<<<<< HEAD
+<<<<<<< HEAD
     name = "Quote";
     email = "quotesilk@proton.me";
     github = "Silk-OT";
@@ -23802,6 +23803,11 @@
     email = "quotesilk@proton.me"
     github = "Silk-OT"
 >>>>>>> 9806c7cbbef9 (Update maintainer-list.nix)
+=======
+    name = "Quote";
+    email = "quotesilk@proton.me";
+    github = "Silk-OT";
+>>>>>>> 8b546d864bfd (Update maintainer-list.nix)
     githubId = 123989069;
   };
   silky = {
