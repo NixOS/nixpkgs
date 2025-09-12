@@ -4051,6 +4051,8 @@ self: super: with self; {
 
   django-pydantic-field = callPackage ../development/python-modules/django-pydantic-field { };
 
+  django-registration = callPackage ../development/python-modules/django-registration { };
+
   django-q2 = callPackage ../development/python-modules/django-q2 { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };

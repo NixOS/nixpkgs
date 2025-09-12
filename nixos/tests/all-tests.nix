@@ -697,6 +697,7 @@ in
   invidious = runTest ./invidious.nix;
   iosched = runTest ./iosched.nix;
   isolate = runTest ./isolate.nix;
+  linkding = runTest ./web-apps/linkding/overrides.nix;
   livebook-service = runTest ./livebook-service.nix;
   pyload = runTest ./pyload.nix;
   oci-containers = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./oci-containers.nix { };
