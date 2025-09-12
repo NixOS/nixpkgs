@@ -2,14 +2,13 @@
   lib,
   fetchPypi,
   python3Packages,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bashate";
   version = "2.1.1";
   pyproject = true;
-
-  disabled = python3Packages.pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +20,6 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     babel
     pbr
-    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -39,12 +37,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "bashate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Style enforcement for bash programs";
     mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
-    teams = [ teams.openstack ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
+    teams = [ lib.teams.openstack ];
   };
 }
