@@ -584,8 +584,20 @@ let
     in
     (length values == 11) && !any isNull values;
   makeCPE =
-    cpeParts:
-    "cpe:2.3:${cpeParts.part}:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}";
+    {
+      part,
+      vendor,
+      product,
+      version,
+      update,
+      edition,
+      sw_edition,
+      target_sw,
+      target_hw,
+      language,
+      other,
+    }:
+    "cpe:2.3:${part}:${vendor}:${product}:${version}:${update}:${edition}:${sw_edition}:${target_sw}:${target_hw}:${language}:${other}";
   possibleCPEPartsFuns = [
     (vendor: version: {
       success = true;
@@ -693,9 +705,9 @@ let
                   # Since we can't split them apart, user overrides don't apply to possibleCPEs.
                   guessedParts = cpeParts // result.value;
                 in
-                optional (result.success && (hasAllCPEParts guessedParts)) {
+                optional (result.success && hasAllCPEParts guessedParts) {
                   cpeParts = guessedParts;
-                  cpe = (makeCPE guessedParts);
+                  cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
           v1 = {
