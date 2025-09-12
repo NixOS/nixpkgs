@@ -92,6 +92,10 @@ wrapPythonProgramsIn() {
 
                     local -a wrapProgramArgs=("${wrap_args[@]}" "${user_args[@]}")
                     wrapProgram "${wrapProgramArgs[@]}"
+
+                    # Python doesn't support `exec -a`. We have to use environment
+                    # to pass argv[0]
+                    sed -i '2iexport NIX_PYTHONSCRIPT="$0"' "$f"
                 fi
             fi
         done
