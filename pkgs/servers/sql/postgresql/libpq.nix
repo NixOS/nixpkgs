@@ -118,6 +118,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     cat ${./pg_config.env.mk} >> src/common/Makefile
+  ''
+  # Explicitly disable building the shared libs, because that would fail with pkgsStatic.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace src/interfaces/libpq/Makefile \
+      --replace-fail "all: all-lib libpq-refs-stamp" "all: all-lib"
+    substituteInPlace src/Makefile.shlib \
+      --replace-fail "all-lib: all-shared-lib" "all-lib: all-static-lib" \
+      --replace-fail "install-lib: install-lib-shared" "install-lib: install-lib-static"
   '';
 
   installPhase = ''
@@ -141,14 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # PostgreSQL always builds both shared and static libs, so we delete those we don't want.
-  postInstall =
-    if stdenv.hostPlatform.isStatic then
-      ''
-        rm -rfv $out/lib/*.so*
-        touch $out/empty
-      ''
-    else
-      "rm -rfv $dev/lib/*.a";
+  postInstall = if stdenv.hostPlatform.isStatic then "touch $out/empty" else "rm -rfv $dev/lib/*.a";
 
   doCheck = false;
 
