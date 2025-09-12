@@ -14,7 +14,9 @@
   unbound,
   xdp-tools,
 }:
-
+let
+  withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
   version = "25.09.0";
@@ -58,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure --with-dbdir=/var/lib/openvswitch
+    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
@@ -70,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sbindir=$(out)/bin"
     "--enable-ssl"
   ]
-  ++ lib.optional stdenv.hostPlatform.isStatic "--with-openssl=${lib.getLib openssl.dev}";
+  ++ lib.optional stdenv.hostPlatform.isStatic withOpensslConfigureFlag;
 
   enableParallelBuilding = true;
 
