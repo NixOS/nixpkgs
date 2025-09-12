@@ -79,6 +79,11 @@ stdenv.mkDerivation {
     export MKDIR_P="mkdir -p"
   '';
 
+  configureFlags =
+    # Work around build failure caused by the gnulib workaround for
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after GCC 15
+    lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
+
   enableParallelBuilding = true;
 
   # Fix reference to sh in bootstrap-tools, and invoke grep via
@@ -92,7 +97,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 
