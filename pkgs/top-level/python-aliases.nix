@@ -442,6 +442,7 @@ mapAliases ({
   mistune_2_0 = mistune; # added 2022-08-12
   mitmproxy-wireguard = throw "mitmproxy-wireguard has been removed because it was replaced by upstream with mitmproxy-rs"; # added 2023-11-06
   mkdocs-awesome-pages-plugin = mkdocs-awesome-nav; # added 2025-03-10
+  mkdocs-macros = mkdocs-macros-plugin; # added 2025-09-02
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mne-python = mne; # added 2025-05-02
   modestmaps = throw "modestmaps is unmaintained and was never enabled for anything except Python27"; # Added 2025-03-23
