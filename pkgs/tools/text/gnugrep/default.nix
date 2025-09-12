@@ -92,7 +92,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 
