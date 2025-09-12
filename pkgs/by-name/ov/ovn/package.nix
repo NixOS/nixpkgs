@@ -15,14 +15,14 @@
   xdp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
   version = "25.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
     fetchSubmodules = true;
   };
@@ -117,15 +117,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open Virtual Network";
     longDescription = ''
       OVN (Open Virtual Network) is a series of daemons that translates virtual network configuration into OpenFlow, and installs them into Open vSwitch.
     '';
-    homepage = "https://github.com/ovn-org/ovn";
-    changelog = "https://github.com/ovn-org/ovn/blob/${src.rev}/NEWS";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ adamcstephens ];
-    platforms = platforms.linux;
+    homepage = "https://www.ovn.org";
+    changelog = "https://github.com/ovn-org/ovn/blob/refs/tags/${finalAttrs.src.tag}/NEWS";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ adamcstephens ];
+    platforms = lib.platforms.linux;
   };
-}
+})
