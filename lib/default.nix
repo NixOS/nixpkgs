@@ -377,6 +377,7 @@ let
         fixedWidthString
         fixedWidthNumber
         toInt
+        toIntBase
         toIntBase10
         readPathsFromFile
         fileContents
