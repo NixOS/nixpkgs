@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytransportnswv2";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyTransportNSWv2";
     inherit version;
-    hash = "sha256-+JJ36cUzeK25pWF9eEvgB5G8HGmHmsL7QY3s+AnrjmY=";
+    hash = "sha256-tFQnCGYgekXFrDXDpH8MZNlL1v9xeumMHmQvU6bwVZc=";
   };
 
   build-system = [ setuptools ];
