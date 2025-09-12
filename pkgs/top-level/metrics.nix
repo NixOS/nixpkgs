@@ -1,24 +1,34 @@
 { nixpkgs, pkgs }:
 
-with pkgs;
+let
+  inherit (pkgs) lib stdenvNoCC;
+in
 
-runCommand "nixpkgs-metrics"
-  {
-    nativeBuildInputs =
-      with pkgs.lib;
-      map getBin [
-        nix
-        time
-        jq
-      ];
-    # see https://github.com/NixOS/nixpkgs/issues/52436
-    #requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
-  }
-  ''
+stdenvNoCC.mkDerivation {
+  name = "nixpkgs-metrics";
+
+  nativeBuildInputs = map lib.getBin [
+    pkgs.nix
+    pkgs.time
+    pkgs.jq
+  ];
+
+  # see https://github.com/NixOS/nixpkgs/issues/52436
+  #requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
+
+  unpackPhase = ''
+    runHook preUnpack
+
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PAGER=
     nix-store --init
+
+    runHook postUnpack
+  '';
+
+  installPhase = ''
+    runHook preInstall
 
     mkdir -p $out/nix-support
     touch $out/nix-support/hydra-build-products
@@ -83,4 +93,7 @@ runCommand "nixpkgs-metrics"
 
     lines=$(find ${nixpkgs} -name "*.nix" -type f | xargs cat | wc -l)
     echo "loc $lines" >> $out/nix-support/hydra-metrics
-  ''
+
+    runHook postInstall
+  '';
+}
