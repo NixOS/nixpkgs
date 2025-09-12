@@ -86,7 +86,7 @@ stdenvNoCC.mkDerivation {
     run nixos.kde nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.kde.x86_64-linux --show-trace
     run nixos.lapp nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.lapp.x86_64-linux --show-trace
     run nix-env.qa nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa
-    run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --xml
+    run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --json
 
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
     num="$(nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa | wc -l)"
@@ -124,7 +124,7 @@ stdenvNoCC.mkDerivation {
 
       | Name | Command |
       |------|---------|
-      | `nix-env.qaDrv` | `nix-env -f ${nixpkgs} -qa --drv-path --meta --xml` |
+      | `nix-env.qaDrv` | `nix-env -f ${nixpkgs} -qa --drv-path --meta --json` |
       | `nix-env.qa` | `nix-env -f ${nixpkgs} -qa` |
       | `nixos.kde` | `nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.kde.x86_64-linux --show-trace` |
       | `nixos.lapp` | `nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.lapp.x86_64-linux --show-trace` |
