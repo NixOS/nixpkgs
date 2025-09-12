@@ -170,11 +170,6 @@ in
                 };
               };
             };
-            description = ''
-              The set of parser specifications.
-
-              See <https://docs.crowdsec.net/docs/parsers/intro> for details.
-            '';
             default = { };
           };
           postOverflows = lib.mkOption {
@@ -203,11 +198,6 @@ in
                 };
               };
             };
-            description = ''
-              The set of Postoverflows specifications.
-
-              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro#postoverflows> for details.
-            '';
             default = { };
           };
           contexts = lib.mkOption {
@@ -316,9 +306,6 @@ in
           };
           patterns = lib.mkOption {
             type = lib.types.listOf lib.types.package;
-            description = ''
-              A list of files containing custom grok patterns.
-            '';
             default = [ ];
             example = lib.literalExpression ''
               [ (pkgs.writeTextDir "custom_service_logs" (builtins.readFile ./custom_service_logs)) ]
@@ -326,9 +313,6 @@ in
           };
         };
       };
-      description = ''
-        The configuration for a crowdsec security engine.
-      '';
       default = { };
     };
 
@@ -489,9 +473,6 @@ in
           };
         };
       };
-      description = ''
-        Set of various configuration attributes
-      '';
     };
   };
   config =

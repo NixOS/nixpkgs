@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnss_nis";
-  version = "3.4";
+  version = "3.2";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "thkukuk";
     repo = "libnss_nis";
     rev = "v${version}";
-    hash = "sha256-FWAyf4soSUpNrYzSefNWthEMfQEopfYX9pMDf1rNK6c=";
+    hash = "sha256-dt5wL+v98Heg6395BOwNssXLXmoOKFnRXGqlOknYYPs=";
   };
 
   outputs = [ "out" ];

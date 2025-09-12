@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     pkgs.lz4
-    pkgs.protobuf_31
+    pkgs.protobuf
     pkgs.snappy
     pkgs.zlib
     pkgs.zstd

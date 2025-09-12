@@ -5,14 +5,11 @@
   cmake,
   ninja,
   pkg-config,
+  qt5,
   python3,
   nix-update-script,
   xxHash,
   fmt,
-  libxml2,
-  openssl,
-  range-v3,
-  catch2,
   nasm,
   buildEnv,
   writeText,
@@ -24,8 +21,6 @@
   libGL,
   wayland,
   xorg,
-  withQt ? true,
-  qt6,
 }:
 
 let
@@ -95,13 +90,14 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2509";
+  version = "2508.1";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-Dq87cx7tv+HJvpy57L8dcApE+3E8VEyyTYKhDyoUfVU=";
+
+    hash = "sha256-yWUZF/Chgi9bd5gF9qU1jiiIvHOHBUw7tLWxyNUZy9g=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -116,7 +112,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         External/jemalloc_glibc \
         External/robin-map \
         External/vixl \
-        Source/Common/cpp-optparse
+        Source/Common/cpp-optparse \
+        External/Catch2
 
       find . -name .git -print0 | xargs -0 rm -rf
 
@@ -162,39 +159,42 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    qt5.wrapQtAppsHook
     llvmPackages.bintools
+
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
         setuptools
         libclang
       ]
     ))
-  ]
-  ++ lib.optional withQt qt6.wrapQtAppsHook;
+  ];
+
+  nativeCheckInputs = [ nasm ];
 
   buildInputs = [
     xxHash
     fmt
-    libxml2
-    openssl
-    range-v3
     pkgsCross64.buildPackages.clang
     pkgsCross32.buildPackages.clang
     libclang
     libllvm
   ]
   ++ libForwardingInputs
-  ++ lib.optionals withQt [
-    qt6.qtbase
-    qt6.qtdeclarative
-  ];
+  ++ (with qt5; [
+    qtbase
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+  ]);
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
+    (lib.cmakeBool "ENABLE_LTO" true)
+    (lib.cmakeBool "ENABLE_ASSERTIONS" false)
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_THUNKS" true)
-    (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
     (lib.cmakeFeature "X86_32_TOOLCHAIN_FILE" "${toolchain32}")
     (lib.cmakeFeature "X86_64_TOOLCHAIN_FILE" "${toolchain}")
     (lib.cmakeFeature "X86_DEV_ROOTFS" "${devRootFS}")
@@ -204,9 +204,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
   doCheck = true;
-
-  nativeCheckInputs = [ nasm ];
-  checkInputs = [ catch2 ];
 
   # List not exhaustive, e.g. because they depend on an x86 compiler or some
   # other difficult-to-build test binaries.
@@ -220,7 +217,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
   dontWrapQtApps = true;
-  preFixup = lib.optionalString withQt ''
+  preFixup = ''
     wrapQtApp $out/bin/FEXConfig
   '';
 

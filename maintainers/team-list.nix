@@ -64,7 +64,6 @@ with lib.maintainers;
     # Edits to this list should only be done by an already existing member.
     members = [
       DutchGerman
-      friedow
     ];
   };
 

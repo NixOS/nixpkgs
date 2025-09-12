@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mescc-tools";
-  version = "1.7.0";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-toL3v1dvieVdCxxjjZ3i2b6yhVciaPWPq/TtFNm2V1w=";
+    hash = "sha256-k2wYbLNasuLRq03BG/DXJySNabKOv9sakgst1V8wU8k=";
   };
 
   # Don't use vendored M2libc

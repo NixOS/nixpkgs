@@ -7723,8 +7723,6 @@ self: super: with self; {
 
   kanidm = callPackage ../development/python-modules/kanidm { };
 
-  kantoku = callPackage ../development/python-modules/kantoku { };
-
   kaptan = callPackage ../development/python-modules/kaptan { };
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
@@ -8130,12 +8128,6 @@ self: super: with self; {
   libagent = callPackage ../development/python-modules/libagent { };
 
   libais = callPackage ../development/python-modules/libais { };
-
-  libapparmor = toPythonModule (
-    pkgs.libapparmor.override {
-      python3Packages = self;
-    }
-  );
 
   libarchive-c = callPackage ../development/python-modules/libarchive-c {
     inherit (pkgs) libarchive;
@@ -9331,7 +9323,9 @@ self: super: with self; {
 
   minexr = callPackage ../development/python-modules/minexr { };
 
-  miniaudio = callPackage ../development/python-modules/miniaudio { };
+  miniaudio = callPackage ../development/python-modules/miniaudio {
+    inherit (pkgs) miniaudio;
+  };
 
   minichain = callPackage ../development/python-modules/minichain { };
 
@@ -13161,8 +13155,6 @@ self: super: with self; {
   pyialarm = callPackage ../development/python-modules/pyialarm { };
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
-
-  pyiceberg-core = callPackage ../development/python-modules/pyiceberg-core { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 

@@ -25,10 +25,7 @@ stdenv.mkDerivation rec {
     mainProgram = "libnovaconfig";
     homepage = "http://libnova.sf.net";
     license = licenses.gpl2;
-    maintainers = with maintainers; [
-      hjones2199
-      returntoreality
-    ];
+    maintainers = with maintainers; [ hjones2199 ];
     platforms = platforms.unix;
   };
 }

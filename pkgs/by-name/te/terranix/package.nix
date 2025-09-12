@@ -38,9 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://terranix.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [
-      mrVanDalo
-      sshine
-    ];
+    maintainers = with maintainers; [ mrVanDalo ];
   };
 }

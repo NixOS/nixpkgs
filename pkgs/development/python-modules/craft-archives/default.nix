@@ -67,11 +67,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-archives";
     changelog = "https://github.com/canonical/craft-archives/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [
-      adhityaravi
-      bepri
-      dstathis
-    ];
+    maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,31 +1,21 @@
 {
-  fetchFromGitHub,
-  installShellFiles,
   lib,
+  fetchFromGitHub,
   rustPlatform,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lintspec";
-  version = "0.9.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "lintspec";
     tag = "v${version}";
-    hash = "sha256-5jNOMAohfzq/S+1LASQh0hvzqdMLQGdPYSb6rcGxmD8=";
+    hash = "sha256-TMiUOrDsKXi+d/CbJauo2FT9WEWnztMYqrZZHpS8i7M=";
   };
 
-  cargoHash = "sha256-m9n9r3SJtGx3/MURmZak2XRCLkmQZU06nPMQpROfvVs=";
-
-  nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd lintspec \
-      --bash <($out/bin/lintspec completions -s bash) \
-      --fish <($out/bin/lintspec completions -s fish) \
-      --zsh <($out/bin/lintspec completions -s zsh)
-  '';
+  cargoHash = "sha256-K8zx+dW6RXcbX2ZqNdfnv7WjbvjA8ZdJBitdDOi8hxE=";
 
   meta = {
     description = "Blazingly fast linter for NatSpec comments in Solidity code";

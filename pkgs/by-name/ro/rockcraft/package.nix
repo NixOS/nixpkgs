@@ -78,11 +78,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/canonical/rockcraft";
     changelog = "https://github.com/canonical/rockcraft/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      adhityaravi
-      bepri
-      dstathis
-    ];
+    maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;
   };
 }

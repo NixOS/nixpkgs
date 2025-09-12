@@ -209,7 +209,7 @@ let
       repo = "tree-sitter-viml";
     };
     "tree-sitter-yaml" = {
-      orga = "tree-sitter-grammars";
+      orga = "ikatyang";
       repo = "tree-sitter-yaml";
     };
     "tree-sitter-zig" = {

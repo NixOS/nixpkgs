@@ -20,8 +20,6 @@ import ./versions.nix (
       inherit hash;
     };
 
-    enableParallelBuilding = true;
-
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       libiconv

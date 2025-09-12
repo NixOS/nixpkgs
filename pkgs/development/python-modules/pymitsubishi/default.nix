@@ -5,20 +5,19 @@
   setuptools,
   requests,
   pycryptodome,
-  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymitsubishi";
-  version = "0.3.0";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "pymitsubishi";
     tag = "v${version}";
-    hash = "sha256-cfLKFvhzLN9dM0cMogCL93LVfRd8jDFo9x+nnEWInSc=";
+    hash = "sha256-hawPxP8WqpHUikmbcSFIjSeSTNyWu1zYtgT/TCPbOro=";
   };
 
   build-system = [ setuptools ];
@@ -28,15 +27,12 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  nativeCheckInputs = [
-    pytest-cov-stub
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pymitsubishi" ];
 
   meta = {
-    description = "Library for controlling and monitoring Mitsubishi MAC-577IF-2E air conditioners";
+    description = "A Python library for controlling and monitoring Mitsubishi MAC-577IF-2E air conditioners";
     homepage = "https://github.com/pymitsubishi/pymitsubishi";
     changelog = "https://github.com/pymitsubishi/pymitsubishi/releases/tag/${src.tag}";
     license = lib.licenses.mit;

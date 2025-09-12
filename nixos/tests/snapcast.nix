@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   ...
 }:
@@ -13,7 +12,7 @@ let
 in
 {
   name = "snapcast";
-  meta = with lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -21,27 +20,30 @@ in
     server = {
       services.snapserver = {
         enable = true;
-        settings = {
-          stream = {
-            port = port;
-            source = [
-              "pipe:///run/snapserver/mpd?name=mpd&mode=create"
-              "pipe:///run/snapserver/bluetooth?name=bluetooth"
-              "tcp://127.0.0.1:${toString tcpStreamPort}?name=tcp"
-              "meta:///mpd/bluetooth/tcp?name=meta"
-            ];
-            buffer = bufferSize;
+        port = port;
+        tcp.port = tcpPort;
+        http.port = httpPort;
+        openFirewall = true;
+        buffer = bufferSize;
+        streams = {
+          mpd = {
+            type = "pipe";
+            location = "/run/snapserver/mpd";
+            query.mode = "create";
+          };
+          bluetooth = {
+            type = "pipe";
+            location = "/run/snapserver/bluetooth";
           };
           tcp = {
-            enabled = true;
-            port = tcpPort;
+            type = "tcp";
+            location = "127.0.0.1:${toString tcpStreamPort}";
           };
-          http = {
-            enabled = true;
-            port = httpPort;
+          meta = {
+            type = "meta";
+            location = "/mpd/bluetooth/tcp";
           };
         };
-        openFirewall = true;
       };
       environment.systemPackages = [ pkgs.snapcast ];
     };

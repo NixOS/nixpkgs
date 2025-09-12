@@ -249,11 +249,6 @@ stdenv.mkDerivation rec {
     inherit mpi;
   };
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   postInstall = ''
     mkdir -p $out/share/cp2k
     cp -r ../data/* $out/share/cp2k

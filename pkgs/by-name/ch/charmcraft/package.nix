@@ -132,11 +132,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/canonical/charmcraft";
     changelog = "https://github.com/canonical/charmcraft/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      adhityaravi
-      bepri
-      dstathis
-    ];
+    maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;
   };
 }

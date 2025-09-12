@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deviceinfo";
-  version = "0.2.4";
+  version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/deviceinfo";
     rev = finalAttrs.version;
-    hash = "sha256-eZQyTRhMRobufPk5AcTY8G718T+/e3teFtqV5kGspxw=";
+    hash = "sha256-Tc/jbiEoekudfy9Si6Jy51wYue6cqlMigpDHJtFl64I=";
   };
 
   outputs = [

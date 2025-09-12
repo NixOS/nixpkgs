@@ -13,13 +13,6 @@
   byName ? false,
 }:
 let
-  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
-  # nix store paths around. These need to be turned into (fake) derivations again to track
-  # dependencies properly.
-  # We use two steps for evaluation, because we compare results from two different checkouts.
-  # CI additionalls spreads evaluation across multiple workers.
-  combined = if lib.isDerivation combinedDir then combinedDir else lib.toDerivation combinedDir;
-
   /*
     Derivation that computes which packages are affected (added, changed or removed) between two revisions of nixpkgs.
     Note: "platforms" are "x86_64-linux", "aarch64-darwin", ...
@@ -82,7 +75,7 @@ let
   # Attrs
   # - keys: "added", "changed", "removed" and "rebuilds"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
+  diffAttrs = builtins.fromJSON (builtins.readFile "${combinedDir}/combined-diff.json");
 
   changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
@@ -146,8 +139,8 @@ runCommand "compare"
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
     env = {
-      BEFORE_DIR = "${combined}/before";
-      AFTER_DIR = "${combined}/after";
+      BEFORE_DIR = "${combinedDir}/before";
+      AFTER_DIR = "${combinedDir}/after";
     };
   }
   ''

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lr";
-  version = "2.0.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "lr";
     rev = "v${version}";
-    sha256 = "sha256-zpHThIB1FS45RriE214SM9ZQJ1HyuBkBi/+PTeJjEFc=";
+    sha256 = "sha256-riKXHcpVb5qe9UOEAAZ8+kjSylYRKRrdiwAB43Y4aRY=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

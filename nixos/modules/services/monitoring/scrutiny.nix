@@ -274,5 +274,5 @@ in
     })
   ];
 
-  meta.maintainers = [ ];
+  meta.maintainers = [ maintainers.jnsgruk ];
 }

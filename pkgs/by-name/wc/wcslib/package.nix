@@ -40,10 +40,7 @@ stdenv.mkDerivation rec {
       and their conversion to image coordinate systems. This is the
       standard library for this purpose in astronomy.
     '';
-    maintainers = with lib.maintainers; [
-      hjones2199
-      returntoreality
-    ];
+    maintainers = with lib.maintainers; [ hjones2199 ];
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
   };

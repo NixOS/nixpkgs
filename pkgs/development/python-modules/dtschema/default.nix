@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2025.08";
+  version = "2024.02";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "devicetree-org";
     repo = "dt-schema";
     tag = "v${version}";
-    sha256 = "sha256-SW2WAVB7ZSgKRjIyFdMqe8tRIuM97ZVBg4d0BJC6SBI=";
+    sha256 = "sha256-UJU8b9BzuuUSHRjnA6hOd1bMPNOlk4LNtrQV5aZmGhI=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

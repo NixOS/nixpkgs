@@ -30,9 +30,7 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
-  apple-sdk_14,
   curl,
-  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
@@ -75,13 +73,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6442";
+  version = "6210";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-YNH7gvFtkHaZDnABg9pxJjnsASQfrRU4iqKqVa79MO8=";
+    hash = "sha256-yPlFw3fuXvf4+IhOv0nVI9hnuZq73Br6INn8wdOmCOs=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -121,7 +119,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
-    ++ optionals metalSupport [ apple-sdk_14 ]
     ++ [ curl ];
 
   preConfigure = ''
@@ -176,31 +173,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # the tests are failing as of 2025-08
   doCheck = false;
 
-  passthru = {
-    tests = {
-      metal = llama-cpp.override { metalSupport = true; };
-    };
-    updateScript = nix-update-script {
-      attrPath = "llama-cpp";
-      extraArgs = [
-        "--version-regex"
-        "b(.*)"
-      ];
-    };
+  passthru.updateScript = nix-update-script {
+    attrPath = "llama-cpp";
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
     homepage = "https://github.com/ggml-org/llama.cpp";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "llama";
-    maintainers = with lib.maintainers; [
-      booxter
+    maintainers = with maintainers; [
       dit7ya
       philiptaron
       xddxdd
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
     broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };

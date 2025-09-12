@@ -1,39 +1,42 @@
 {
+  lib,
+  stdenv,
   autoreconfHook,
   cppunit,
   curl,
   fetchFromGitHub,
   installShellFiles,
-  lib,
   libtool,
-  libtorrent-rakshasa,
-  lua5_4_compat,
+  libtorrent,
   ncurses,
-  nixosTests,
-  nix-update-script,
   openssl,
   pkg-config,
-  stdenv,
-  versionCheckHook,
-  withLua ? false,
   zlib,
+  nixosTests,
+  gitUpdater,
+  withLua ? false,
+  lua5_4_compat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rtorrent";
-  version = "0.16.0";
+  pname = "rakshasa-rtorrent";
+  version = "0.15.6";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-+lpivm3MXbuJ4XYhK5OaASpqpDKcCdW7JCFjQYBYCSA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-B/5m1JXdUpczUMNN4cy5p6YurjmRFxMQHG3cQFSmZSs=";
   };
 
   outputs = [
     "out"
     "man"
   ];
+
+  passthru = {
+    inherit libtorrent;
+  };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cppunit
     curl
     libtool
-    libtorrent-rakshasa
+    libtorrent
     ncurses
     openssl
     zlib
@@ -58,6 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLua [ "--with-lua" ];
 
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      inherit (nixosTests) rtorrent;
+    };
+  };
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -65,26 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "-h";
-
-  passthru = {
-    inherit libtorrent-rakshasa;
-    tests = { inherit (nixosTests) rtorrent; };
-    updateScript = nix-update-script { };
-  };
-
   meta = {
-    description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     homepage = "https://rakshasa.github.io/rtorrent/";
+    description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = lib.licenses.gpl2Plus;
-    mainProgram = "rtorrent";
     maintainers = with lib.maintainers; [
       ebzzry
       codyopel
       thiagokokada
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "rtorrent";
   };
 })

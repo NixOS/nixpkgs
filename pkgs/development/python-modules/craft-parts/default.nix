@@ -92,11 +92,6 @@ buildPythonPackage rec {
     "test_get_build_packages"
     # Relies upon certain paths being present that don't make sense on Nix.
     "test_java_plugin_jre_not_17"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # This test is flaky on arm64, I think due to a mock library misbehaving
-    # on arm64.
-    "test_get_build_commands_is_reentrant"
   ];
 
   disabledTestPaths = [
@@ -126,11 +121,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-parts";
     changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [
-      adhityaravi
-      bepri
-      dstathis
-    ];
+    maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;
   };
 }

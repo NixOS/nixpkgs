@@ -2372,8 +2372,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.27.0";
-          hash = "sha256-NGl5uiR4taamA8lhH/qJT1nCfUhxCQ/XQ/oEZ9N9Q5Y=";
+          version = "7.26.6";
+          hash = "sha256-oLzOkb0C93HlUcBKOKMa3u/jsRY6n8fnapRg5Jiyass=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -3004,8 +3004,8 @@ let
         mktplcRef = {
           name = "rainbow-csv";
           publisher = "mechatroner";
-          version = "3.21.0";
-          hash = "sha256-IPgPE5vM9tzHPioRBZeJs4hqut6t++SjZJlHnz/ismA=";
+          version = "3.20.0";
+          hash = "sha256-qQ05km8jLLoMFItVbgVWNXmmaBDWd0Bcbq88HPaRdWs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mechatroner.rainbow-csv/changelog";

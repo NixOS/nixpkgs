@@ -12,7 +12,6 @@
   itsdangerous,
   motor,
   poetry-core,
-  pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
   redis,
@@ -63,19 +62,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     faker
-    pytest-asyncio
     pytest-aiohttp
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
-
   pythonImportsCheck = [ "aiohttp_client_cache" ];
 
   disabledTestPaths = [
     # Tests require running instances of the services
-    "test/integration/*"
+    "test/integration/test_dynamodb.py"
+    "test/integration/test_redis.py"
+    "test/integration/test_sqlite.py"
   ];
 
   meta = with lib; {
