@@ -277,6 +277,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       leleuvilela
       bricklou
       jonhermansen
+      iedame
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
