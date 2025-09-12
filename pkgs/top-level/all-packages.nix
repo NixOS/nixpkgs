@@ -1832,8 +1832,6 @@ with pkgs;
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
-  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
-
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
