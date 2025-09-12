@@ -16790,6 +16790,14 @@
     githubId = 34864484;
     name = "Mikael Fangel";
   };
+  mikatammi = {
+    email = "mikatammi@gmail.com";
+    github = "mikatammi";
+    githubId = 826368;
+    name = "Mika Tammi";
+    matrix = "@oak:universumi.fi";
+    keys = [ { fingerprint = "3606 AD2B 342F 70B3 B306  E724 BF5B DF55 A973 5223"; } ];
+  };
   mikecm = {
     email = "mikecmcleod@gmail.com";
     github = "MaxwellDupre";
