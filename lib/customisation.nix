@@ -207,6 +207,35 @@ rec {
         result
     );
 
+  makeAlias =
+    let
+      currentRelease = lib.versions.majorMinor lib.version;
+    in
+    self:
+    name:
+    {
+      type,
+      package ? null,
+      reason ? null,
+      release ? null,
+    }:
+    assert type == "alias";
+    if release == null then
+      self.${package}
+    else if release != currentRelease then
+      if package == null then
+        abort "Throw for '${name}' was added in ${release}. The alias must now be removed."
+      else
+        abort "Warning for '${name}' was added in ${release}. The alias must now be converted to a throw."
+    else if package == null || !self.config.allowAliases then
+      {
+        type = "error";
+        meta = throw "'${name}' was removed because it was ${reason}.";
+      }
+    else
+      lib.warnOnInstantiate "'${name}' was renamed to '${package}'. The alias will be removed in the next release." self.${package}
+    ;
+
   /**
     Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
@@ -261,6 +290,18 @@ rec {
       f = if isFunction fn then fn else import fn;
       fargs = functionArgs f;
 
+      aliasArgs = filterAttrs (name: _: autoArgs._aliases.${name} or false) fargs;
+
+      aliasErrorForArg =
+        arg:
+        let
+          loc = builtins.unsafeGetAttrPos arg fargs;
+        in
+        "Function expects alias \"${arg}\" at ${loc.file}:${toString loc.line}.";
+
+      # Only show the error for the first alias
+      aliasError = aliasErrorForArg (head (attrNames aliasArgs));
+
       # All arguments that will be passed to the function
       # This includes automatic ones and ones passed explicitly
       allArgs = intersectAttrs fargs autoArgs // args;
@@ -300,7 +341,7 @@ rec {
         else
           ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
 
-      errorForArg =
+      missingErrorForArg =
         arg:
         let
           loc = builtins.unsafeGetAttrPos arg fargs;
@@ -309,17 +350,18 @@ rec {
         + "${loc.file}:${toString loc.line}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
-      error = errorForArg (head (attrNames missingArgs));
+      missingError = missingErrorForArg (head (attrNames missingArgs));
 
     in
-    if missingArgs == { } then
-      makeOverridable f allArgs
-    # This needs to be an abort so it can't be caught with `builtins.tryEval`,
-    # which is used by nix-env and ofborg to filter out packages that don't evaluate.
-    # This way we're forced to fix such errors in Nixpkgs,
-    # which is especially relevant with allowAliases = false
+    # These need to be abort so they can't be caught with `builtins.tryEval`,
+    # which is used by nix-env and CI to filter out packages that don't evaluate.
+    # This way we're forced to fix such errors in Nixpkgs.
+    if aliasArgs != { } then
+      abort "lib.customisation.callPackageWith: ${aliasError}"
+    else if missingArgs != { } then
+      abort "lib.customisation.callPackageWith: ${missingError}"
     else
-      abort "lib.customisation.callPackageWith: ${error}";
+      makeOverridable f allArgs;
 
   /**
     Like callPackage, but for a function that returns an attribute
