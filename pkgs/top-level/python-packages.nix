@@ -13015,6 +13015,8 @@ self: super: with self; {
 
   pyfronius = callPackage ../development/python-modules/pyfronius { };
 
+  pyft232 = callPackage ../development/python-modules/pyft232 { };
+
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
@@ -13279,6 +13281,8 @@ self: super: with self; {
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
   pykwb = callPackage ../development/python-modules/pykwb { };
+
+  pylablib = callPackage ../development/python-modules/pylablib { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
 
