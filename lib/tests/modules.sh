@@ -741,6 +741,10 @@ checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNix
 checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
 checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
 
+# Option name suggestions
+checkConfigError 'Did you mean .set\.enable.\?' config.set ./error-typo-nested.nix
+checkConfigError 'Did you mean .set.\?' config ./error-typo-outside-with-nested.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

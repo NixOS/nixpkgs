@@ -20,12 +20,14 @@ let
     head
     id
     imap1
+    init
     isAttrs
     isBool
     isFunction
     oldestSupportedReleaseIsAtLeast
     isList
     isString
+    last
     length
     mapAttrs
     mapAttrsToList
@@ -35,6 +37,7 @@ let
     optionalAttrs
     optionalString
     recursiveUpdate
+    remove
     reverseList
     sort
     seq
@@ -60,6 +63,7 @@ let
     ;
   inherit (lib.strings)
     isConvertibleWithToString
+    levenshtein
     ;
 
   showDeclPrefix =
@@ -303,8 +307,17 @@ let
                   addErrorContext
                     "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
                     (addErrorContext "while evaluating a definition from `${firstDef.file}'" (showDefs [ firstDef ]));
+
+                prefix' = init (prefix ++ firstDef.prefix);
+                adj = attrNames (attrByPath prefix' { } options);
+                adj' = if prefix' == [ ] then remove "_module" adj else adj;
+                lev = levenshtein (last firstDef.prefix);
+                closest = if adj' == [ ] then null else head (sort (p: q: lev p < lev q) adj');
+                suggestion =
+                  optionalString (closest != null)
+                    "\n\nDid you mean `${showOption (prefix' ++ [ closest ])}'?";
               in
-              "The option `${optText}' does not exist. Definition values:${defText}";
+              "The option `${optText}' does not exist. Definition values:${defText}${suggestion}";
           in
           if
             attrNames options == [ "_module" ]
