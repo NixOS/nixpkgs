@@ -7529,6 +7529,8 @@ self: super: with self; {
 
   joserfc = callPackage ../development/python-modules/joserfc { };
 
+  jpegiptc = callPackage ../development/python-modules/jpegiptc { };
+
   jplephem = callPackage ../development/python-modules/jplephem { };
 
   jproperties = callPackage ../development/python-modules/jproperties { };
