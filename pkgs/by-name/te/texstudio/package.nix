@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.8";
+  version = "4.8.9";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-e3kQnWjOe5dkFslDZ+pUgsMB0twDZEcQXYUaPtd+jHA=";
+    hash = "sha256-nI7aNZ7/IAjgjmHRO78uwkah8l+3m+w1ZQ096177eAU=";
   };
 
   nativeBuildInputs = [
