@@ -1,3 +1,4 @@
+# Tests in: nixos/tests/ec2-image.nix
 {
   config,
   lib,
