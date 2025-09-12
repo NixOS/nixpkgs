@@ -137,7 +137,7 @@ with pkgs;
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
   fetchNextcloudApp = recurseIntoAttrs (
-    callPackages ../build-support/fetchnextcloudapp/tests.nix { }
+    callPackages ../build-support/nextcloud/fetchnextcloudapp/tests.nix { }
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
   fetchFirefoxAddon = recurseIntoAttrs (
