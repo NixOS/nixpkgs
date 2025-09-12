@@ -3340,8 +3340,6 @@ with pkgs;
     lua = lua5_2_compat;
   };
 
-  kdbg = callPackage ../development/tools/misc/kdbg { };
-
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   lagrange-tui = lagrange.override { enableTUI = true; };
