@@ -1612,10 +1612,6 @@ with pkgs;
     httpServer = true;
   };
 
-  bashate = python3Packages.callPackage ../development/tools/bashate {
-    python3Packages = python311Packages;
-  };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
@@ -5986,7 +5982,8 @@ with pkgs;
   jpm = callPackage ../development/interpreters/janet/jpm.nix { };
 
   davmail = callPackage ../applications/networking/davmail {
-    zulu = zulu11;
+    jre = jdk11.override { enableJavaFX = true; };
+    zulu = zulu11.override { enableJavaFX = true; };
   };
 
   lambda-lisp-blc = lambda-lisp;
@@ -13428,10 +13425,6 @@ with pkgs;
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
-  x11basic = callPackage ../development/compilers/x11basic {
-    autoconf = buildPackages.autoconf269;
-  };
-
   x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
@@ -14390,8 +14383,6 @@ with pkgs;
 
   liblapack = lapack-reference;
 
-  nota = haskellPackages.callPackage ../applications/science/math/nota { };
-
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
   openblas = callPackage ../development/libraries/science/math/openblas {
@@ -15044,7 +15035,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nixComponents = nixVersions.nixComponents_2_30;
+    nixComponents = nixVersions.nixComponents_2_31;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

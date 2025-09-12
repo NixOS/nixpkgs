@@ -111,6 +111,7 @@ python3Packages.buildPythonApplication rec {
     "out"
     "doc"
     "man"
+    "lib"
   ];
 
   inherit src;
@@ -226,7 +227,7 @@ python3Packages.buildPythonApplication rec {
     # And finally build
     patchShebangs ./ninja
 
-    export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/lib/python${python3.pythonVersion}/site-packages
+    export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
     # Necessary for yarn to not complain about 'corepack'
     jq 'del(.packageManager)' package.json > package.json.tmp && mv package.json.tmp package.json
     YARN_BINARY="${lib.getExe noInstallYarn}" PIP_USER=1 \
@@ -251,7 +252,7 @@ python3Packages.buildPythonApplication rec {
     in
     ''
       runHook preCheck
-      export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/lib/python${python3.pythonVersion}/site-packages
+      export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
@@ -262,10 +263,13 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    uv pip install out/wheels/*.whl --prefix $out
+    mkdir -p $lib $out
+    uv pip install out/wheels/*.whl --prefix $lib
     # remove non-anki bins from dependencies
-    find $out/bin -type f ! -name "anki*" -delete
+    find $lib/bin -type f ! -name "anki*" -delete
+    # and put bin into $out so people can access it. Leave $lib separate to avoid collisions, see
+    # https://github.com/NixOS/nixpkgs/issues/438598
+    mv $lib/bin $out/bin
 
     install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
@@ -280,6 +284,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
+      --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"
     )
   '';
 

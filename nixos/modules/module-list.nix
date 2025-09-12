@@ -81,6 +81,7 @@
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
   ./hardware/keyboard/zsa.nix
+  ./hardware/kryoflux.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/libftdi.nix
@@ -536,6 +537,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/postgrest.nix
   ./services/databases/redis.nix
+  ./services/databases/rethinkdb.nix
   ./services/databases/surrealdb.nix
   ./services/databases/tigerbeetle.nix
   ./services/databases/victorialogs.nix
@@ -1133,6 +1135,7 @@
   ./services/networking/dnsproxy.nix
   ./services/networking/doh-proxy-rust.nix
   ./services/networking/doh-server.nix
+  ./services/networking/dsnet.nix
   ./services/networking/easytier.nix
   ./services/networking/ejabberd.nix
   ./services/networking/envoy.nix
@@ -1446,6 +1449,7 @@
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
+  ./services/security/crowdsec.nix
   ./services/security/e-imzo.nix
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix
