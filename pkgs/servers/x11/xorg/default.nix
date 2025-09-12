@@ -1911,11 +1911,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "libXpresent";
-      version = "1.0.1";
+      version = "1.0.2";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXpresent-1.0.1.tar.xz";
-        sha256 = "06r34v7z3jb0x7l5ghlc1g82gjjp5ilq5p6j11galv86bagdyr5r";
+        url = "mirror://xorg/individual/lib/libXpresent-1.0.2.tar.xz";
+        sha256 = "00knsc4hrxzq3rx7ff1h0k0h418p66p0cdh14fra81i2h6s22nsf";
       };
       hardeningDisable = [
         "bindnow"
