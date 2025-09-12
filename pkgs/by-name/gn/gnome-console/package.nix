@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  appstream,
   gettext,
   gnome,
   libgtop,
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    appstream
     desktop-file-utils
     gettext
     meson
