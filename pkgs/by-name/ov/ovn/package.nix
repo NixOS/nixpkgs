@@ -125,7 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ovn.org";
     changelog = "https://github.com/ovn-org/ovn/blob/refs/tags/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      booxter
+    ];
     platforms = lib.platforms.linux;
   };
 })
