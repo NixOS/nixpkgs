@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  gnused,
   libbpf,
   libcap_ng,
   nix-update-script,
@@ -78,7 +77,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    gnused
     procps
   ];
 
