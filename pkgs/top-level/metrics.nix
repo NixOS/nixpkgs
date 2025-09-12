@@ -7,6 +7,10 @@ in
 stdenvNoCC.mkDerivation {
   name = "nixpkgs-metrics";
 
+  # Use structured attrs to pass in relevant information.
+  __structuredAttrs = true;
+  inherit nixpkgs;
+
   nativeBuildInputs = map lib.getBin [
     pkgs.nix
     pkgs.time
@@ -29,6 +33,8 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+
+    release="$nixpkgs/nixos/release.nix"
 
     mkdir -p $out/nix-support
     touch $out/nix-support/hydra-build-products
@@ -71,26 +77,26 @@ stdenvNoCC.mkDerivation {
       echo "$name.values $values" >> $out/nix-support/hydra-metrics
     }
 
-    run nixos.smallContainer nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.smallContainer.x86_64-linux --show-trace
-    run nixos.kde nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.kde.x86_64-linux --show-trace
-    run nixos.lapp nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.lapp.x86_64-linux --show-trace
-    run nix-env.qa nix-env -f ${nixpkgs} -qa
-    run nix-env.qaDrv nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
+    run nixos.smallContainer nix-instantiate --dry-run "$release" -A closures.smallContainer.x86_64-linux --show-trace
+    run nixos.kde nix-instantiate --dry-run "$release" -A closures.kde.x86_64-linux --show-trace
+    run nixos.lapp nix-instantiate --dry-run "$release" -A closures.lapp.x86_64-linux --show-trace
+    run nix-env.qa nix-env -f "$nixpkgs" -qa
+    run nix-env.qaDrv nix-env -f "$nixpkgs" -qa --drv-path --meta --xml
 
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
-    num="$(nix-env -f ${nixpkgs} -qa | wc -l)"
+    num="$(nix-env -f "$nixpkgs" -qa | wc -l)"
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
-    qaCountDrv="$(nix-env -f ${nixpkgs} -qa --drv-path | wc -l)"
+    qaCountDrv="$(nix-env -f "$nixpkgs" -qa --drv-path | wc -l)"
     num="$((num - $qaCountDrv))"
     echo "nix-env.qaCountBroken $num" >> $out/nix-support/hydra-metrics
 
     # TODO: this has been ignored for some time
     # GC Warning: Bad initial heap size 128k - ignoring it.
     #export GC_INITIAL_HEAP_SIZE=128k
-    run nix-env.qaAggressive nix-env -f ${nixpkgs} -qa
-    run nix-env.qaDrvAggressive nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
+    run nix-env.qaAggressive nix-env -f "$nixpkgs" -qa
+    run nix-env.qaDrvAggressive nix-env -f "$nixpkgs" -qa --drv-path --meta --xml
 
-    lines="$(find ${nixpkgs} -name "*.nix" -type f | xargs cat | wc -l)"
+    lines="$(find "$nixpkgs" -name "*.nix" -type f | xargs cat | wc -l)"
     echo "loc $lines" >> $out/nix-support/hydra-metrics
 
     runHook postInstall
