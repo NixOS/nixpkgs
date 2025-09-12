@@ -221,10 +221,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.1";
+  version = "0.12.0";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
+    sha256 = "sha256-H/caXhsIdgsiat3UTi1QMF9J22dtyEB6YEIn9f8wWB4=";
   };
   nativeBuildInputs = [
     meson
