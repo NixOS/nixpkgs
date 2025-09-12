@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix paths in glycin library
-    libglycin.passthru.glycinPathsPatch
+    libglycin.passthru.glycin3PathsPatch
   ];
 
   nativeBuildInputs = [
