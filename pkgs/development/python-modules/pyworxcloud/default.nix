@@ -1,5 +1,6 @@
 {
   lib,
+  awsiotsdk,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -10,19 +11,20 @@
 
 buildPythonPackage rec {
   pname = "pyworxcloud";
-  version = "4.1.46";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MTrab";
     repo = "pyworxcloud";
     tag = "v${version}";
-    hash = "sha256-JRmAARfmGRWdUj4J2CqUaRd+S9itZgCxqbRl78Iub+o=";
+    hash = "sha256-eyMMtLgJuBIuPCyenYrHaRQIrb2tzPaIzM2UCAPPqDg=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
+    awsiotsdk
     paho-mqtt
     requests
     urllib3
