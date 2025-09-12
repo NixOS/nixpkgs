@@ -104,9 +104,6 @@ buildPythonPackage rec {
     "tests/completers/test_bash_completer.py"
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/248978
-  dontWrapPythonPrograms = true;
-
   env.LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
