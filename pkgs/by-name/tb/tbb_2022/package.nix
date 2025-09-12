@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tbb";
-  version = "2022.1.0";
+  version = "2022.2.0";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "oneTBB";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DqJkNlC94cPJSXnhyFcEqWYGCQPunMfIfb05UcFGynw=";
+    hash = "sha256-ASQPAGm5e4q7imvTVWlmj5ON4fGEao1L5m2C5wF7EhI=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
       hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
-    })
-    # Fix tests on FreeBSD and Windows
-    (fetchpatch {
-      name = "fix-tbb-freebsd-and-windows-tests.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1696.patch";
-      hash = "sha256-yjX2FkOK8bz29a/XSA7qXgQw9lxzx8VIgEBREW32NN4=";
     })
     # Fix 32-bit PowerPC build
     (fetchpatch {
