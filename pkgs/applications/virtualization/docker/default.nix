@@ -387,7 +387,7 @@ in
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_25 =
     let
-      version = "25.0.12";
+      version = "25.0.13";
     in
     callPackage dockerGen {
       inherit version;
@@ -396,7 +396,7 @@ in
       cliRev = "43987fca488a535d810c429f75743d8c7b63bf4f";
       cliHash = "sha256-OwufdfuUPbPtgqfPeiKrQVkOOacU2g4ommHb770gV40=";
       mobyRev = "v${version}";
-      mobyHash = "sha256-EBOdbFP6UBK1uhXi1IzcPxYihHikuzzwMvv2NHsksYk=";
+      mobyHash = "sha256-X+1QG/toJt+VNLktR5vun8sG3PRoTVBAcekFXxocJdU=";
       runcRev = "v1.2.5";
       runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
       containerdRev = "v1.7.27";
