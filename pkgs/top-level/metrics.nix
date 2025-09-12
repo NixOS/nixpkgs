@@ -96,4 +96,85 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  meta = {
+    description = "Metrics tracked by Hydra about Nixpkgs";
+    homepage = "https://hydra.nixos.org/job/nixpkgs/trunk/metrics";
+    longDescription = ''
+      View the metrics for Nixpkgs evaluation over time at these URLs.
+
+      These are all produced from running `nix` with `NIX_SHOW_STATS=1`.
+      See `EvalState::printStatistics` in the Nix source code for the implementation.
+      None of these metrics are inherently meaningful on their own.
+      Exercise caution in interpreting them as "bad" or "good".
+
+      # Total repository statistics
+
+      - [Lines of code in Nixpkgs](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/loc)
+      - [Count of broken packages using `nix-env -qa`](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaCountBroken)
+      - [Count of packages using `nix-env -qa`](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaCount)
+
+      # Statistics about representative commands
+
+      These are statistics gathered by running commands against Nixpkgs.
+
+      | Name | Command |
+      |------|---------|
+      | `nix-env.qaAggressive` | `nix-env -f ${nixpkgs} -qa` |
+      | `nix-env.qaDrvAggressive` | `nix-env -f ${nixpkgs} -qa --drv-path --meta --xml` |
+      | `nix-env.qaDrv` | `nix-env -f ${nixpkgs} -qa --drv-path --meta --xml` |
+      | `nix-env.qa` | `nix-env -f ${nixpkgs} -qa` |
+      | `nixos.kde` | `nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.kde.x86_64-linux --show-trace` |
+      | `nixos.lapp` | `nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.lapp.x86_64-linux --show-trace` |
+      | `nixos.smallContainer` | `nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.smallContainer.x86_64-linux --show-trace`|
+
+      ## Allocations performed (in bytes)
+
+      This counts `envs.bytes`, `list.bytes`, `values.bytes`, and `sets.bytes` from the Nix statistics.
+
+      - [nix-env.qa.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qa.allocations)
+      - [nix-env.qaAggressive.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaAggressive.allocations)
+      - [nix-env.qaDrv.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrv.allocations)
+      - [nix-env.qaDrvAggressive.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrvAggressive.allocations)
+      - [nixos.kde.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.kde.allocations)
+      - [nixos.lapp.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.lapp.allocations)
+      - [nixos.smallContainer.allocations](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.smallContainer.allocations)
+
+      ## Maximum resident size (in number of KiB)
+
+      This counts `maxresident` KiB (`%M`) from the `time` command on Linux.
+
+      - [nix-env.qa.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qa.maxresident)
+      - [nix-env.qaAggressive.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaAggressive.maxresident)
+      - [nix-env.qaDrv.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrv.maxresident)
+      - [nix-env.qaDrvAggressive.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrvAggressive.maxresident)
+      - [nixos.kde.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.kde.maxresident)
+      - [nixos.lapp.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.lapp.maxresident)
+      - [nixos.smallContainer.maxresident](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.smallContainer.maxresident)
+
+      ## Time taken (in seconds)
+
+      This counts `cpuTime` as reported in the Nix statistics. On Linux, this resolves to [`getrusage(RUSAGE_SELF)`](https://man7.org/linux/man-pages/man2/getrusage.2.html).
+
+      - [nix-env.qa.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qa.time)
+      - [nix-env.qaAggressive.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaAggressive.time)
+      - [nix-env.qaDrv.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrv.time)
+      - [nix-env.qaDrvAggressive.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrvAggressive.time)
+      - [nixos.kde.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.kde.time)
+      - [nixos.lapp.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.lapp.time)
+      - [nixos.smallContainer.time](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.smallContainer.time)
+
+      ## Number of values
+
+      This counts the total number of values allocated in Nix (see `EvalState::allocValue` in the Nix source code).
+
+      - [nix-env.qa.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qa.values)
+      - [nix-env.qaAggressive.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaAggressive.values)
+      - [nix-env.qaDrv.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrv.values)
+      - [nix-env.qaDrvAggressive.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nix-env.qaDrvAggressive.values)
+      - [nixos.kde.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.kde.values)
+      - [nixos.lapp.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.lapp.values)
+      - [nixos.smallContainer.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.smallContainer.values)
+    '';
+  };
 }
