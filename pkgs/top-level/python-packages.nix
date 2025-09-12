@@ -15928,6 +15928,8 @@ self: super: with self; {
 
   rfc3161-client = callPackage ../development/python-modules/rfc3161-client { };
 
+  re-wx = callPackage ../development/python-modules/re-wx { };
+
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
