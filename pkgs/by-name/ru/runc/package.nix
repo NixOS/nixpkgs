@@ -9,7 +9,7 @@
   libapparmor,
   libseccomp,
   libselinux,
-  runtimeShell,
+  stdenv,
   makeWrapper,
   nixosTests,
 }:
@@ -47,7 +47,7 @@ buildGoModule rec {
 
   makeFlags = [
     "BUILDTAGS+=seccomp"
-    "SHELL=${runtimeShell}"
+    "SHELL=${stdenv.shell}"
   ];
 
   buildPhase = ''
