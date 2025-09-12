@@ -17,7 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "flake8_import_order";
     hash = "sha256-Ezs8VUl2MeQjUHT8mKlQeLuoF4MjefIqMfCtJFW8sLI=";
   };
 
