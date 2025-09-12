@@ -30,22 +30,16 @@
 
 stdenv.mkDerivation {
   pname = "android-translation-layer";
-  version = "0-unstable-2025-09-03";
+  version = "0-unstable-2025-09-14";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "android_translation_layer";
-    rev = "cf93a172b9238e6612b778c7ab76013acebf0ef8";
-    hash = "sha256-nnwefW8802ctJRY0aqL+D6MK713eoiQ5K6oVnm5fUOQ=";
+    rev = "9de91586994af5078decda17db92ce50c5673951";
+    hash = "sha256-iRjP++WzLsV7oDGNdF3m9JJJS7zLrG5W46U3h39H5uk=";
   };
 
   patches = [
-    # meson: use pkg-config from art-standalone instead of manual library search
-    # See: https://gitlab.com/android_translation_layer/android_translation_layer/-/merge_requests/164
-    (replaceVars ./configure-art-path.patch {
-      artStandalonePackageDir = "${art-standalone}";
-    })
-
     # Required gio-unix dependency is missing in meson.build
     ./add-gio-unix-dep.patch
 
