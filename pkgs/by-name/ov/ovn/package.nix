@@ -45,6 +45,16 @@ stdenv.mkDerivation rec {
     xdp-tools
   ];
 
+  postPatch = ''
+    # One test assumes that the test environment has a network route to
+    # 192.168.0.10 and fails in sandbox. Replace it with localhost.
+    #
+    # The test case checks behavior when the configured ovn-remote is down, so
+    # we can pick any "free" port here.
+    substituteInPlace tests/ovn-controller.at \
+      --replace-fail 192.168.0.10:6642 127.0.0.1:9999
+  '';
+
   # need to build the ovs submodule first
   preConfigure = ''
     pushd ovs
