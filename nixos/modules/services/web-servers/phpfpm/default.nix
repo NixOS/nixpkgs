@@ -159,6 +159,13 @@ let
           type = types.str;
           default = "phpfpm-${name}";
           example = "phpfpm-poolName";
+          description = ''
+            Name of the systemd service generated for this pool.
+
+            ::: {.note}
+            This option is read-only.
+            :::
+          '';
           readOnly = true;
         };
       };
