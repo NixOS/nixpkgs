@@ -65,8 +65,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # disable tests due to networking issues and because individual tests can't be skipped easily
-  doCheck = false;
+  doCheck = true;
 
   nativeCheckInputs = [
     gnused
