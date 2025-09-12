@@ -26479,10 +26479,10 @@ with self;
 
   ObjectPad = buildPerlModule {
     pname = "Object-Pad";
-    version = "0.809";
+    version = "0.821";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.809.tar.gz";
-      hash = "sha256-EpUKZkwGB+o/ynSA82XfVNF0YpH0XrsO2AkXt0+xXvU=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.821.tar.gz";
+      hash = "sha256-tdUF+PoWLg5r4q5YsPM0SUxPeRs6BA8va4kBTwSEUgw=";
     };
     buildInputs = [
       Test2Suite
