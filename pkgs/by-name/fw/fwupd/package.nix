@@ -134,7 +134,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.15";
+  version = "2.0.16";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-p0ZpbthjUaEKAn1UwzoW2gxqiBTsC4GMoXTmV3zKN2o=";
+    hash = "sha256-fsjW3Idaqg4pNGaRP0bm2R94FcW2MVfPQwPFWrN+Qy8=";
   };
 
   patches = [
@@ -400,7 +400,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://fwupd.org/";
     changelog = "https://github.com/fwupd/fwupd/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ rvdp ];
+    maintainers = with lib.maintainers; [
+      rvdp
+      johnazoidberg
+    ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
