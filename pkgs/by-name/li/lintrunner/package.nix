@@ -43,7 +43,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/suo/lintrunner";
     changelog = "https://github.com/suo/lintrunner/releases/tag/v${version}";
     mainProgram = "lintrunner";
-    license = lib.licenses.mit;
+    license = [
+      lib.licenses.mit
+      lib.licenses.bsd3
+    ];
     maintainers = with lib.maintainers; [ prestonhager ];
   };
 }
