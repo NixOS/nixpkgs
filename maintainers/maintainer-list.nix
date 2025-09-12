@@ -27763,6 +27763,12 @@
     githubId = 78392041;
     name = "Winter";
   };
+  winterveil = {
+    name = "winterveil";
+    email = "winterveil.dev@gmail.com";
+    github = "wintermute-cell";
+    githubId = 64093588;
+  };
   wintrmvte = {
     name = "Jakub Lutczyn";
     email = "kubalutczyn@gmail.com";
