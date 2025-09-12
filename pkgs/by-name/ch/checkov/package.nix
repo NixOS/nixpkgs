@@ -17,6 +17,18 @@ let
           tag = "v${version}";
           hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
         };
+
+        # The `serializable` package eventually got renamed `py_serializable`, therefore we need
+        # to patch the imports;
+        # _c.f._ https://github.com/madpah/serializable/pull/155 .
+        postPatch = ''
+          find . -name '*.py' | xargs -I{} sed -i \
+            -e 's/serializable\./py_serializable\./g' \
+            -e 's/@serializable/@py_serializable/g' \
+            -e 's/from serializable/from py_serializable/g' \
+            -e 's/import serializable/import py_serializable/g' \
+            {}
+        '';
       });
     };
   };
@@ -41,8 +53,8 @@ python3.pkgs.buildPythonApplication rec {
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cachetools"
     "cloudsplaining"
-    "cyclonedx-python-lib"
     "dpath"
     "igraph"
     "importlib-metadata"
