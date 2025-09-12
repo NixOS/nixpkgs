@@ -1,3 +1,18 @@
+# The no-op Bash function that preserves the return status of its inputs
+#
+# NOTE:
+# If nop is called as the first command inside the else-block,
+# and the inputs of nop don't have return status,
+# it will return non-zero exit status from the if-condition.
+nop() {
+    local ret="$?"
+    if [[ "$ret" != 0 ]]; then
+        echo "nop: Get nonzero exit status $ret from the previous command." >&2
+        return "$ret"
+    fi
+    return 0
+}
+
 addCMakeParams() {
     # NIXPKGS_CMAKE_PREFIX_PATH is like CMAKE_PREFIX_PATH except cmake
     # will not search it for programs
@@ -28,7 +43,7 @@ cmakeConfigurePhase() {
     runHook preConfigure
 
     # default to CMake defaults if unset
-    : ${cmakeBuildDir:=build}
+    nop "${cmakeBuildDir:=build}"
 
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
@@ -38,9 +53,10 @@ cmakeConfigurePhase() {
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
         mkdir -p "$cmakeBuildDir"
         cd "$cmakeBuildDir"
-        : ${cmakeDir:=..}
+        nop "${cmakeDir:=..}"
     else
-        : ${cmakeDir:=.}
+        true # Zeroize the previous exit status.
+        nop "${cmakeDir:=.}"
     fi
 
     if [ -z "${dontAddPrefix-}" ]; then
