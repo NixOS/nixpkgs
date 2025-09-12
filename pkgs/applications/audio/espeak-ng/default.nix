@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags = [
-    "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
+    "--with-mbrola=${lib.boolToYesNo mbrolaSupport}"
   ];
 
   # ref https://github.com/void-linux/void-packages/blob/3cf863f894b67b3c93e23ac7830ca46b697d308a/srcpkgs/espeak-ng/template#L29-L31

@@ -26,7 +26,7 @@ let
   inherit (pkgs) vsftpd;
 
   yesNoOption = nixosName: vsftpdName: default: description: {
-    cfgText = "${vsftpdName}=${if getAttr nixosName cfg then "YES" else "NO"}";
+    cfgText = "${vsftpdName}=${toUpper (boolToYesNo (getAttr nixosName cfg))}";
 
     nixosOption = {
       type = types.bool;

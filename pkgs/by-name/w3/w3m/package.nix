@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-gc=${boehmgc.dev}"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ]
   ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
   ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
