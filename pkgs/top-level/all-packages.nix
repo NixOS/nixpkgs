@@ -12017,13 +12017,6 @@ with pkgs;
     subproject = "reader";
   };
 
-  jabref = callPackage ../applications/office/jabref {
-    jdk = jdk21.override {
-      enableJavaFX = true;
-      openjfx_jdk = openjfx23;
-    };
-  };
-
   jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
