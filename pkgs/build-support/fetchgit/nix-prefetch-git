@@ -59,6 +59,7 @@ Options:
       --fetch-submodules Fetch submodules.
       --fetch-tags    Fetch all tags (useful for git describe).
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+      --no-add-path   Do not actually add the contents of the git repo to the store.
       --root-dir dir  Directory in the repository that will be copied to the output instead of the full repository.
       --quiet         Only print the final json summary.
 "
@@ -91,6 +92,7 @@ for arg; do
             --fetch-submodules) fetchSubmodules=true;;
             --fetch-tags) fetchTags=true;;
             --builder) builder=true;;
+            --no-add-path) noAddPath=true;;
             --root-dir) argfun=set_rootDir;;
             -h|--help) usage; exit;;
             *)
@@ -519,7 +521,14 @@ else
         hash=$(nix-hash --type $hashType --base32 "$tmpOut")
 
         # Add the downloaded file to the Nix store.
-        finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpOut")
+
+        if test -z "$noAddPath"; then
+            finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpOut") \
+                || { printf "maybe try again with \`nix-prefetch-git --no-add-path <...>' ?\n" >&2; exit 1; }
+        else
+            printf "the path for \`%s' has NOT been added to the store\n" "$url" >&2
+            finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$hash" "$storePathName")
+        fi
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
             echo "hash mismatch for URL \`$url'. Got \`$hash'; expected \`$expHash'." >&2
