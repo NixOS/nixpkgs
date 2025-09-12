@@ -44,35 +44,37 @@ stdenvNoCC.mkDerivation {
       shift
 
       echo "running $@"
+      local nix_stats="$name-nix-stats.json"
+      local time_stats="$name-time-stats.json"
 
       case "$name" in
         # Redirect stdout to /dev/null to avoid hitting "Output Limit Exceeded" on Hydra.
         nix-env.qaDrv)
-          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=stats-nix time -o stats-time "$@" >/dev/null ;;
+          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" time -o "$time_stats" "$@" >/dev/null ;;
         *)
-          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=stats-nix time -o stats-time "$@" ;;
+          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" time -o "$time_stats" "$@" ;;
       esac
 
       # Show the Nix statistics and the `time` statistics.
-      cat stats-nix
+      cat "$nix_stats"
       echo
-      cat stats-time
+      cat "$time_stats"
       echo
 
-      cpuTime="$(jq '.cpuTime' < stats-nix)"
+      cpuTime="$(jq '.cpuTime' < "$nix_stats")"
       [[ -n $cpuTime ]] || exit 1
       echo "$name.time $cpuTime s" >> $out/nix-support/hydra-metrics
 
-      maxresident="$(sed -e 's/.* \([0-9]\+\)maxresident.*/\1/ ; t ; d' < stats-time)"
+      maxresident="$(jq '.max_resident_set_kb' < "$time_stats")"
       [[ -n $maxresident ]] || exit 1
       echo "$name.maxresident $maxresident KiB" >> $out/nix-support/hydra-metrics
 
       # Nix also outputs `.symbols.bytes` but since that wasn't summed originally, we don't count it here.
-      allocations="$(jq '[.envs,.list,.values,.sets] | map(.bytes) | add' < stats-nix)"
+      allocations="$(jq '[.envs,.list,.values,.sets] | map(.bytes) | add' < "$nix_stats")"
       [[ -n $allocations ]] || exit 1
       echo "$name.allocations $allocations B" >> $out/nix-support/hydra-metrics
 
-      values="$(jq '.values.number' < stats-nix)"
+      values="$(jq '.values.number' < "$nix_stats")"
       [[ -n $values ]] || exit 1
       echo "$name.values $values" >> $out/nix-support/hydra-metrics
     }
@@ -165,5 +167,30 @@ stdenvNoCC.mkDerivation {
       - [nixos.lapp.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.lapp.values)
       - [nixos.smallContainer.values](https://hydra.nixos.org/job/nixpkgs/trunk/metrics/metric/nixos.smallContainer.values)
     '';
+  };
+
+  # Convince `time` to output in JSON
+  env.TIME = builtins.toJSON {
+    real_time = "%e";
+    user_time = "%U";
+    sys_time = "%S";
+    cpu_percent = "%P";
+    max_resident_set_kb = "%M";
+    avg_resident_set_kb = "%t";
+    avg_total_mem_kb = "%K";
+    avg_data_kb = "%D";
+    avg_stack_kb = "%p";
+    avg_unshared_data_kb = "%X";
+    avg_shared_text_kb = "%Z";
+    page_faults_major = "%F";
+    page_faults_minor = "%R";
+    swaps = "%W";
+    context_switches_voluntary = "%c";
+    context_switches_involuntary = "%w";
+    io_reads = "%I";
+    io_writes = "%O";
+    signals_received = "%k";
+    exit_status = "%x";
+    command = "%C";
   };
 }
