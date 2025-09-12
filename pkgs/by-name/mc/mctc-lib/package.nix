@@ -9,7 +9,6 @@
   cmake,
   pkg-config,
   python3,
-  toml-f,
   jonquil,
 }:
 

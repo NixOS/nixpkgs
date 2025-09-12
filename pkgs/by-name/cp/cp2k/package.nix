@@ -70,7 +70,7 @@ let
   grimmeCmake = lib.makeScope newScope (self: {
     mctc-lib = mctc-lib.override {
       buildType = "cmake";
-      inherit (self) jonquil toml-f;
+      inherit (self) jonquil;
     };
 
     toml-f = toml-f.override {
