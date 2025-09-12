@@ -7,8 +7,6 @@
   nix-update-script,
   pgbadger,
   PodMarkdown,
-  shortenPerlShebang,
-  stdenv,
   testers,
   TextCSV_XS,
   which,
@@ -29,13 +27,6 @@ buildPerlPackage rec {
     patchShebangs ./pgbadger
   '';
 
-  # pgbadger has too many `-Idir` flags on its shebang line on Darwin,
-  # causing the build to fail when trying to generate the documentation.
-  # Rewrite the -I flags in `use lib` form.
-  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang ./pgbadger
-  '';
-
   outputs = [ "out" ];
 
   PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
@@ -45,8 +36,6 @@ buildPerlPackage rec {
     PodMarkdown
     TextCSV_XS
   ];
-
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
 
   nativeCheckInputs = [
     bzip2

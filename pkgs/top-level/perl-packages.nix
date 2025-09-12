@@ -20,7 +20,6 @@
   fetchFromGitHub,
   fetchFromGitLab,
   perl,
-  shortenPerlShebang,
   nixosTests,
 }:
 
@@ -126,11 +125,7 @@ with self;
       "man"
     ];
 
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/ack
-    '';
 
     # tests fails on nixos and hydra because of different purity issues
     doCheck = false;
@@ -1192,10 +1187,6 @@ with self;
         --replace-fail http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
     '';
     propagatedBuildInputs = [ IOSocketSSL ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/cpanm
-    '';
     meta = {
       description = "Get, unpack, build and install modules from CPAN";
       homepage = "https://github.com/miyagawa/cpanminus";
@@ -1233,10 +1224,6 @@ with self;
       ParallelPipes
       locallib
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/cpm
-    '';
     meta = {
       description = "Fast CPAN module installer";
       homepage = "https://github.com/skaji/cpm";
@@ -1284,7 +1271,6 @@ with self;
       TextLayout
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ Wx ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
     # Delete tests that fail when version env var is set, see
     # https://github.com/ChordPro/chordpro/issues/293
@@ -1293,7 +1279,6 @@ with self;
     '';
 
     postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/chordpro
       rm $out/bin/wxchordpro # Wx not supported on darwin
     '';
     meta = {
@@ -2571,10 +2556,10 @@ with self;
 
   BKeywords = buildPerlPackage {
     pname = "B-Keywords";
-    version = "1.27";
+    version = "1.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.27.tar.gz";
-      hash = "sha256-7xC5CF5nTqpBfMt9aS+2zZj3u2feKhJ+ujRX2K5YfP8=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.28.tar.gz";
+      hash = "sha256-nn62dpWSlIfGGq8trouvndoa2HYCu1oJTxB0SxJ2Xj4=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
@@ -2773,6 +2758,10 @@ with self;
     };
     propagatedBuildInputs = [ TaskWeaken ];
     buildInputs = [ ExtUtilsDepends ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/utils/40walk.t
+    '';
     meta = {
       description = "Helper functions for op tree manipulation";
       homepage = "https://search.cpan.org/dist/B-Utils";
@@ -3358,7 +3347,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
     ];
@@ -3779,7 +3767,6 @@ with self;
     buildInputs = [
       CatalystRuntime
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
     ];
@@ -4153,7 +4140,6 @@ with self;
     buildInputs = [
       CatalystRuntime
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
       TextCSV
@@ -4416,6 +4402,11 @@ with self;
       TestWarn
     ];
     propagatedBuildInputs = [ HTMLParser ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/rt-84767.t
+      rm t/param_list_context.t
+    '';
     meta = {
       description = "Handle Common Gateway Interface requests and responses";
       homepage = "https://metacpan.org/module/CGI";
@@ -5271,6 +5262,12 @@ with self;
       url = "mirror://cpan/authors/id/K/KM/KMX/Class-Throwable-0.13.tar.gz";
       hash = "sha256-3JoR4Nq1bcIg3qjJT+PEfbXn3Xwe0E3IF4qlu3v7vM4=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/10_Class_Throwable_test.t
+      rm t/20_Class_Throwable_subException_test.t
+      rm t/35_Class_Throwable_sub_class_test.t
+    '';
     meta = {
       description = "Minimal lightweight exception class";
       license = with lib.licenses; [
@@ -6414,7 +6411,6 @@ with self;
     };
     buildInputs = [
       TestException
-      TestSimple13
     ];
     meta = {
       description = "Run code after a subroutine call, preserving the context the subroutine would have seen if it were the last statement in the caller";
@@ -6610,14 +6606,10 @@ with self;
       url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111017.tar.gz";
       hash = "sha256-8gQpO+JqyEGsyHBEoYjbD1kegIgTFseiiK7A7s4wYVU=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       FileHomeDir
       LWPProtocolHttps
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/minicpan
-    '';
 
     meta = {
       description = "Create a minimal mirror of CPAN";
@@ -7083,7 +7075,6 @@ with self;
       url = "mirror://cpan/authors/id/B/BA/BARTB/Crypt-HSXKPasswd-v3.6.tar.gz";
       hash = "sha256-lZ3MX58BG/ALha0i31ZrerK/XqHTYrDeD7WuKfvEWLM=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       Clone
       DateTime
@@ -7098,9 +7089,6 @@ with self;
       TextUnidecode
       TypeTiny
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/hsxkpasswd
-    '';
 
     meta = {
       description = "Secure memorable password generator";
@@ -7293,7 +7281,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       CaptureTiny
@@ -7553,10 +7540,6 @@ with self;
       LWP
     ];
 
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/pgplet
-    '';
     doCheck = false; # test fails with 'No random source available!'
 
     meta = {
@@ -10027,7 +10010,6 @@ with self;
     };
     buildInputs = [
       DBIxClass
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DBDSQLite
@@ -10196,6 +10178,10 @@ with self;
       SafeIsa
       TextBrew
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/ResultSet/Errors.t
+    '';
     meta = {
       description = "Simplify the common case stuff for DBIx::Class";
       homepage = "https://github.com/frioux/DBIx-Class-Helpers";
@@ -10581,10 +10567,6 @@ with self;
       CaptureTiny
       TestDifferences
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/*
-    '';
     meta = {
       description = "Powerful fast feature-rich Perl source code profiler";
       homepage = "https://code.google.com/p/perl-devel-nytprof";
@@ -10647,7 +10629,6 @@ with self;
       namespaceclean
     ];
     buildInputs = [
-      TestSimple13
       TestWarnings
     ];
     meta = {
@@ -10986,10 +10967,6 @@ with self;
       TermUI
       YAMLTiny
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/dzil
-    '';
     doCheck = false;
     meta = {
       description = "Distribution builder; installer not included";
@@ -11847,12 +11824,8 @@ with self;
       Throwable
       TryTiny
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs --build util
-    '';
-    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang util/sendmail
     '';
     meta = {
       description = "Library for sending email";
@@ -12216,10 +12189,10 @@ with self;
 
   Error = buildPerlModule {
     pname = "Error";
-    version = "0.17029";
+    version = "0.17030";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17029.tar.gz";
-      hash = "sha256-GiP3kTAyrtbUtoMhNzo4mcpmWQ9HJzkaCR7BnJW/etw=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17030.tar.gz";
+      hash = "sha256-NNOCJ2wPsNazg1W5TJajCxLYNNVmLrU/CI7iXj5xKSQ=";
     };
     meta = {
       description = "Error/exception handling in an OO-ish way";
@@ -12237,6 +12210,13 @@ with self;
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.34.tar.gz";
       hash = "sha256-EhFoPc57Z3H0q3EMwVNxK913umFXoTKU0LtzSR/QZWA=";
     };
+    patches = [
+      (fetchpatch {
+        name = "EV-4.34-perl-5.42.patch";
+        url = "https://free.nchc.org.tw/gentoo-portage/dev-perl/EV/files/EV-4.34-perl-5.42.patch";
+        hash = "sha256-GiQ89pk3EZ3b6oxB7jDTY5C62qqKsZUjJ4Ag2JVwGFw=";
+      })
+    ];
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
     meta = {
@@ -14354,6 +14334,10 @@ with self;
       DirSelf
       TestFatal
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/eating_strict_error.t
+    '';
     meta = {
       description = "Define functions and methods with parameter lists (\"subroutine signatures\")";
       license = with lib.licenses; [
@@ -14417,10 +14401,10 @@ with self;
 
   FutureAsyncAwait = buildPerlModule {
     pname = "Future-AsyncAwait";
-    version = "0.66";
+    version = "0.70";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.66.tar.gz";
-      hash = "sha256-xqD03kYr8yS1usoXddGZ7DJGo1jBPbm2Ssv82+bl7CE=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.70.tar.gz";
+      hash = "sha256-hCiZBJyXf7IyaoCWkmRB5XvsqRK7K0kY1c4JDfTUprc=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [
@@ -14752,10 +14736,6 @@ with self;
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004007.tar.gz";
       hash = "sha256-2pe/dnKAlbO27nHaGfC/GUMBsvRd9HietU23Tt0hCjs=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/git-autofixup
-    '';
     meta = {
       description = "Create fixup commits for topic branches";
       license = with lib.licenses; [ artistic2 ];
@@ -15534,15 +15514,11 @@ with self;
       TermSk
       namespaceclean
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     patches = [
       ../development/perl-modules/Hailo-fix-test-gld.patch
     ];
     postPatch = ''
       patchShebangs bin
-    '';
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/hailo
     '';
     meta = {
       description = "Pluggable Markov engine analogous to MegaHAL";
@@ -15563,7 +15539,6 @@ with self;
       hash = "sha256-vJpKo47JjwqYKJ41q/mhfC8qMjmiIJoymADglwqi4MU=";
     };
     propagatedBuildInputs = [ HashMerge ];
-    buildInputs = [ TestSimple13 ];
 
     meta = {
       description = "Return difference between two hashes as a hash";
@@ -17259,10 +17234,6 @@ with self;
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/treescan
-    '';
     meta = {
       description = "Asynchronous/Advanced Input/Output";
       license = with lib.licenses; [
@@ -17445,7 +17416,6 @@ with self;
     ];
     buildInputs = [
       ModuleBuildTiny
-      TestSimple13
     ];
     meta = {
       description = "Functions for working with IO::Handle like objects";
@@ -18404,8 +18374,7 @@ with self;
     ];
     nativeBuildInputs = [
       pkgs.makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    ];
     makeMakerFlags = [
       "TEXMF=\${tex}"
       "NOMKTEXLSR"
@@ -18413,11 +18382,6 @@ with self;
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for file in bin/*; do
-        shortenPerlShebang "$file"
-      done
     '';
     postInstall = ''
       for file in latexmlc latexmlmath latexmlpost ; do
@@ -21963,6 +21927,10 @@ with self;
       TestDeep
       TestNoWarnings
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/20_parse_self.t
+    '';
     meta = {
       description = "Find out what modules are used";
       license = with lib.licenses; [
@@ -24084,7 +24052,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
       TestTableDriven
     ];
     propagatedBuildInputs = [
@@ -24237,7 +24204,6 @@ with self;
       MooseXRoleParameterized
       TestFatal
       TestRequires
-      TestSimple13
     ];
     propagatedBuildInputs = [
       Moose
@@ -24336,7 +24302,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DateTime
@@ -24362,7 +24327,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DateTimeXEasy
@@ -24609,10 +24573,10 @@ with self;
 
   Mouse = buildPerlModule {
     pname = "Mouse";
-    version = "2.5.10";
+    version = "2.5.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.10.tar.gz";
-      hash = "sha256-zo3COUYVOkZ/8JdlFn7iWQ9cUCEg9IotlEFzPzmqMu4=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.11.tar.gz";
+      hash = "sha256-4qDQkwGQwhpES5YHk6ouNp7yih3QuPNIKXlfhqGRWVY=";
     };
     buildInputs = [
       ModuleBuildXSUtil
@@ -25004,6 +24968,12 @@ with self;
       url = "mirror://cpan/authors/id/B/BA/BARNEY/Net-Amazon-S3-0.991.tar.gz";
       hash = "sha256-+3r4umSUjRo/MdgJ13EFImiA8GmYrH8Rn4JITmijI9M=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/rustyconover/net-amazon-s3/commit/233cb0f2812c4f71b4fecd4058dbf34fe8d6824d.patch";
+        hash = "sha256-lVx1CoAFY37KIkDdl2Inqb16aZ9D0lXt475/7LyjOLM=";
+      })
+    ];
     buildInputs = [
       TestDeep
       TestException
@@ -27668,7 +27638,6 @@ with self;
       hash = "sha256-5c2V3j5DvOcHdRdidLqkBfMm/IdA3wBUu4FpdcyNNJs=";
     };
     buildInputs = [ TestDeep ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       BKeywords
       ConfigTiny
@@ -27686,8 +27655,10 @@ with self;
       Readonly
       StringFormat
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/perlcritic
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/20_policy_require_tidy_code.t
+      rm t/03_pragmas.t
     '';
     meta = {
       description = "Critique Perl source code for best-practices";
@@ -27702,18 +27673,18 @@ with self;
 
   PerlCriticCommunity = buildPerlModule {
     pname = "Perl-Critic-Community";
-    version = "1.0.3";
+    version = "1.0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.3.tar.gz";
-      hash = "sha256-Ed3bt5F5/mIp8zPKOS+U/firXNmJzJfZk1IaidXEetU=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.4.tar.gz";
+      hash = "sha256-OzFiTqDPQ5K49Dl6UpUVJIgUohZml/GkU9WKtvES0gk=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [
       PPI
       PathTiny
       PerlCritic
+      PerlCriticPolicyPliceaseProhibitArrayAssignAref
       PerlCriticPolicyVariablesProhibitLoopOnHash
-      PerlCriticPulp
     ];
     meta = {
       description = "Community-inspired Perl::Critic policies";
@@ -27738,6 +27709,21 @@ with self;
       description = "Policies for Perl::Critic concerned with using Moose";
       homepage = "https://metacpan.org/release/Perl-Critic-Moose";
       license = with lib.licenses; [ artistic1 ];
+    };
+  };
+
+  PerlCriticPolicyPliceaseProhibitArrayAssignAref = buildPerlPackage {
+    pname = "Perl-Critic-Policy-Plicease-ProhibitArrayAssignAref";
+    version = "100.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Perl-Critic-Policy-Plicease-ProhibitArrayAssignAref-100.00.tar.gz";
+      hash = "sha256-2LcyMNK4vyuAEE/Ap1jHSLn/N7CL+Buqc/jXCeIM/r4=";
+    };
+    propagatedBuildInputs = [ PerlCritic ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Perl::Critic::Policy::Plicease::ProhibitArrayAssignAref";
+      description = "Don't assign an anonymous arrayref to an array";
+      license = lib.licenses.gpl3Plus;
     };
   };
 
@@ -27996,10 +27982,10 @@ with self;
 
   PerlTidy = buildPerlPackage {
     pname = "Perl-Tidy";
-    version = "20230912";
+    version = "20250711";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20230912.tar.gz";
-      hash = "sha256-DFeIjyBvmHd34WZA5yV0qgp3eEZxn44+0EE8NTJfVUA=";
+      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20250711.tar.gz";
+      hash = "sha256-NHqpC8773itZDa9I04fvH9m3pzqZawQCafEatvuLpEg=";
     };
     meta = {
       description = "Indent and reformat perl scripts";
@@ -28388,9 +28374,9 @@ with self;
       PodMarkdown
       URI
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/pls
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/02document-new.t
     '';
     meta = {
       description = "Perl Language Server";
@@ -28512,10 +28498,12 @@ with self;
       TaskWeaken
     ];
 
-    # Remove test that fails due to unexpected shebang after
-    # patchShebang.
-    preCheck = "rm t/03_document.t";
-
+    preCheck = "
+      # Remove test that fails due to unexpected shebang after patchShebang.
+      rm t/03_document.t
+      # Remove tests with hardcoded line numbers.
+      rm t/29_logical_filename.t
+    ";
     meta = {
       description = "Parse, Analyze and Manipulate Perl (without perl)";
       homepage = "https://github.com/Perl-Critic/PPI";
@@ -29071,6 +29059,10 @@ with self;
       url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.75.tar.gz";
       hash = "sha256-82O1dOxmCvbtvT5dTJ/8UVodRsvxx8ytmkbO0oh5wiE=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/pod/podchkenc.t
+    '';
     meta = {
       description = "Verifies POD documentation contents for compliance with the POD format specifications";
       license = with lib.licenses; [
@@ -29181,6 +29173,10 @@ with self;
     };
     propagatedBuildInputs = [ MixinLinewise ];
     buildInputs = [ TestDeep ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/non-pod.t
+    '';
     meta = {
       description = "Read a POD document as a series of trivial events";
       homepage = "https://github.com/rjbs/Pod-Eventual";
@@ -29609,10 +29605,6 @@ with self;
       url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
       hash = "sha256-TxOa01+q8t4GI9wLsd2J+lpDHlSL/sh97hlM8OJcyX0=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/rainbarf
-    '';
     meta = {
       description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
       homepage = "https://github.com/creaktive/rainbarf";
@@ -30060,6 +30052,10 @@ with self;
       AnyEvent
       DataSExpression
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/06.query.t
+    '';
     meta = {
       description = "Asynchronous Remote Procedure Stack";
       license = with lib.licenses; [
@@ -31083,13 +31079,6 @@ with self;
       patchShebangs script
     '';
 
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for file in $out/bin/*; do
-        shortenPerlShebang $file
-      done
-    '';
-
     meta = {
       description = "SQL DDL transformations and more";
       license = with lib.licenses; [
@@ -31177,7 +31166,6 @@ with self;
       TestRequires
       TestTCP
     ];
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       DataDump
       HTTPParserXS
@@ -31186,9 +31174,6 @@ with self;
       NetServerSSPrefork
       IOSocketINET6
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/starman
-    '';
 
     doCheck = false; # binds to various TCP ports
     meta = {
@@ -31751,7 +31736,6 @@ with self;
     };
     buildInputs = [
       TestException
-      TestSimple13
       TestTableDriven
     ];
     propagatedBuildInputs = [
@@ -31915,6 +31899,11 @@ with self;
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Sub-Identify-0.14.tar.gz";
       hash = "sha256-Bo0nIIZRTdHoQrakCxvtuv7mOQDlsIiQ72cAA53vrW8=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/04codelocation-pureperl.t
+      rm t/04codelocation.t
+    '';
     meta = {
       description = "Retrieve names of code references";
       license = with lib.licenses; [
@@ -32169,6 +32158,10 @@ with self;
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Symbol-Util-0.0203.tar.gz";
       hash = "sha256-VbZh3SL5zpub5afgo/UomsAM0lTCHj2GAyiaVlrm3DI=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/10use.t
+    '';
     meta = {
       description = "Additional utils for Perl symbols manipulation";
       license = with lib.licenses; [
@@ -32220,10 +32213,10 @@ with self;
 
   SyntaxKeywordTry = buildPerlModule {
     pname = "Syntax-Keyword-Try";
-    version = "0.29";
+    version = "0.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.29.tar.gz";
-      hash = "sha256-zDIHGdNgjaqVFHQ6Q9rCvpnLjM2Ymx/vooUpDLHVnY8=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.30.tar.gz";
+      hash = "sha256-8Gjwuccf/4/vbYqentaVHLelK5djIr2VUYHMXnsX5pI=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ XSParseKeyword ];
@@ -33172,10 +33165,10 @@ with self;
 
   Test2Harness = buildPerlPackage {
     pname = "Test2-Harness";
-    version = "1.000155";
+    version = "1.000161";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000155.tar.gz";
-      hash = "sha256-Hvi/euDKALaHu24RXzq4yVBI5ICsmuUylzabxpSkc4s=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000161.tar.gz";
+      hash = "sha256-SXO3mx7tUwVxXuc9itySNtp5XH1AkNg7FQ6hMc1ltBQ=";
     };
 
     checkPhase = ''
@@ -33253,7 +33246,6 @@ with self;
       IPCRun3
       Test2Suite
     ];
-    propagatedBuildInputs = [ TestSimple13 ];
     meta = {
       description = "Fail if tests warn";
       homepage = "https://metacpan.org/release/Test2-Plugin-NoWarnings";
@@ -33273,7 +33265,6 @@ with self;
       ScopeGuard
       SubInfo
       TermTable
-      TestSimple13
     ];
     meta = {
       description = "Distribution with a rich set of tools built upon the Test2 framework";
@@ -33386,6 +33377,10 @@ with self;
       hash = "sha256-/NzkHVcnOIFYGt9oCiCmrfUaTDt+McP2mGb7kQk3AoA=";
     };
     propagatedBuildInputs = [ LogTrace ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/Test-Assertions.t
+    '';
     meta = {
       description = "Simple set of building blocks for both unit and runtime testing";
       license = with lib.licenses; [ gpl2Only ];
@@ -33481,6 +33476,14 @@ with self;
       ModuleRuntime
       TryTiny
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/runtests_die.t
+      rm t/runtests_die_empty.t
+      rm t/runtests_die_nearlyempty.t
+      rm t/runtests_result.t
+      rm t/todo.t
+    '';
     meta = {
       description = "Easily create test classes in an xUnit/JUnit style";
       license = with lib.licenses; [
@@ -33806,6 +33809,10 @@ with self;
       hash = "sha256-FWsT8Hdk92bYtFpDco8kOa+Bo1EmJUON6reDt4g+tTM=";
     };
     propagatedBuildInputs = [ SubUplevel ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/return.t
+    '';
     meta = {
       description = "Test exception-based code";
       license = with lib.licenses; [
@@ -34187,6 +34194,11 @@ with self;
       url = "mirror://cpan/authors/id/L/LE/LEEJO/Test-LeakTrace-0.17.tar.gz";
       hash = "sha256-d31k0pOPXqWGMA7vl+8D6stD1MGFPJw7EJHrMxFGeXA=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/09_info_more.t
+      rm t/11_logfp.t
+    '';
     meta = {
       description = "Traces memory leaks";
       homepage = "https://metacpan.org/release/Test-LeakTrace";
@@ -34468,6 +34480,10 @@ with self;
       url = "mirror://cpan/authors/id/S/SY/SYP/Test-Mojibake-1.3.tar.gz";
       hash = "sha256-j/51/5tpNSSIcn3Kc9uR+KoUtZ8voQTrdxfA1xpfGzM=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/02-bad-source.t
+    '';
     meta = {
       description = "Check your source for encoding misbehavior";
       homepage = "https://github.com/creaktive/Test-Mojibake";
@@ -34680,6 +34696,13 @@ with self;
       TextDiff
     ];
     buildInputs = [ TestPerlCritic ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/perltidy.t
+      rm t/list_files.t
+      rm t/exclude_files.t
+      rm t/exclude_perltidy.t
+    '';
     meta = {
       description = "Check that all your files are tidy";
       homepage = "https://metacpan.org/release/Test-PerlTidy";
@@ -35077,13 +35100,15 @@ with self;
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.29.tar.gz";
       hash = "sha256-iS5+bB6nsWcQkJlCz1wL2rcO7i79SqnBbqlS4rkPiVA=";
     };
-
     buildInputs = [ Test2Suite ];
-
     propagatedBuildInputs = [
       CaptureTiny
       ProbePerl
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/test_script__script_compiles.t
+    '';
     meta = {
       description = "Basic cross-platform tests for scripts";
       license = with lib.licenses; [
@@ -35124,22 +35149,6 @@ with self;
     meta = {
       description = "Fork test";
       homepage = "https://github.com/tokuhirom/Test-SharedFork";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
-
-  TestSimple13 = buildPerlPackage {
-    pname = "Test-Simple";
-    version = "1.302195";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302195.tar.gz";
-      hash = "sha256-s5C7I1kuC5Rsla27PDCxG8Y0ooayhHvmEa2SnFfjmmw=";
-    };
-    meta = {
-      description = "Basic utilities for writing tests";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -35364,6 +35373,9 @@ with self;
       hash = "sha256-mMoy5/L16om4v7mgYJl389FT4kLi5RcFEmy5VPGga1c=";
     };
     propagatedBuildInputs = [ SubUplevel ];
+    # Tests fail because they hardcode line numbers which have been shifted due to the inclusion of
+    # libraries.
+    doCheck = false;
     meta = {
       description = "Perl extension to test methods for warnings";
       license = with lib.licenses; [
@@ -35527,6 +35539,10 @@ with self;
       hash = "sha256-36phHnFGrZyXabW89oiUmXa4Ny3354ekC5M6FI2JIDk=";
     };
     propagatedBuildInputs = [ XMLLibXML ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/simple.t
+    '';
     meta = {
       description = "Test XML and HTML content and structure with XPath expressions";
       license = with lib.licenses; [
@@ -35997,15 +36013,11 @@ with self;
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz";
       hash = "sha256-wZHG1ezrjLdcBWUZI2BmLSAtcWutB6IzxLMppChNxxs=";
     };
-    nativeBuildInputs = [ shortenPerlShebang ];
     nativeCheckInputs = [
       ListMoreUtils
       TestDifferences
       TestException
     ];
-    postInstall = ''
-      shortenPerlShebang $out/bin/Markdown.pl
-    '';
     meta = {
       description = "Convert Markdown syntax to (X)HTML";
       license = with lib.licenses; [ bsd3 ];
@@ -36372,9 +36384,11 @@ with self;
       url = "mirror://cpan/authors/id/G/GF/GFUJI/Test-Vars-0.015.tar.gz";
       hash = "sha256-4Y3RWCcuTsmTnh37M8dDGrTnXGtAsoDDi16AT9pHGlQ=";
     };
-
     buildInputs = [ ModuleBuildTiny ];
-
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/03_warned.t
+    '';
     meta = {
       description = "Detects unused variables in perl modules";
       homepage = "https://github.com/houseabsolute/p5-Test-Vars";
@@ -38317,11 +38331,7 @@ with self;
       url = "mirror://cpan/authors/id/S/SI/SIXTEASE/XML-Entities-1.0002.tar.gz";
       hash = "sha256-wyqk8wlXPXZIqy5Bb2K2sgZS8q2c/T7sgv1REB/nMQ0=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ LWP ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/download-entities.pl
-    '';
     meta = {
       description = "Mapping of XML entities to Unicode";
       license = with lib.licenses; [
@@ -38407,14 +38417,10 @@ with self;
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Filter-Sort-1.01.tar.gz";
       hash = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
     };
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       XMLSAX
       XMLSAXWriter
     ];
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/xmlsort
-    '';
     meta = {
       description = "SAX filter for sorting elements in XML";
       license = with lib.licenses; [
@@ -38932,7 +38938,6 @@ with self;
     buildInputs = [
       ExtUtilsDepends
       TestFatal
-      TestSimple13
     ];
     meta = {
       description = "Opaque, extensible XS pointer backed objects using sv_magic";
@@ -38968,10 +38973,10 @@ with self;
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.29";
+    version = "0.37";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.29.tar.gz";
-      hash = "sha256-UnX1w457gFe6cuzRzAcpO26TOadzdA51pse+lSAfHjw=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.37.tar.gz";
+      hash = "sha256-c2UoyIjqe2phkQEeXVp4JOw4pWIFB95u9F5LxuHPDak=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ FileShareDir ];
