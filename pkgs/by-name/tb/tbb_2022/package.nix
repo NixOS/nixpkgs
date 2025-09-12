@@ -5,6 +5,7 @@
   fetchpatch,
   cmake,
   ninja,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    ctestCheckHook
   ];
 
   patches = [
@@ -40,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-faNiVdHRIkmavufDHQQ8vHppvdahZ7yhJVL3bOwNTFg=";
     })
   ];
+
+  doCheck = true;
+
+  dontUseNinjaCheck = true;
 
   # Fix build with modern gcc
   # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
@@ -60,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_LDFLAGS = lib.optionalString (
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) "--undefined-version";
+
+  # The memory leak test fails on static Linux, despite passing on
+  # dynamic Musl.
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    "test_arena_constraints"
+  ];
 
   # Disable failing test on musl
   # test/conformance/conformance_resumable_tasks.cpp:37:24: error: ‘suspend’ is not a member of ‘tbb::v1::task’; did you mean ‘tbb::detail::r1::suspend’?
