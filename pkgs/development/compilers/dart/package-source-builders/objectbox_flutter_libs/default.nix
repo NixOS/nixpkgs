@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  replaceVars,
+  perl,
 }:
 
 { version, src, ... }:
@@ -18,13 +18,16 @@ let
     aarch64-linux = "aarch64";
   };
 
-  objectbox-sync = fetchzip {
-    url = "https://github.com/objectbox/objectbox-c/releases/download/v4.0.2/objectbox-sync-linux-${arch}.tar.gz";
+  objectbox-c = fetchzip {
+    # version is kept in sync by upstream, https://github.com/objectbox/objectbox-dart/blob/befffe65689f596edb5494a41998bba60a0fd3b6/flutter_libs/linux/CMakeLists.txt#L47
+    url = "https://github.com/objectbox/objectbox-c/releases/download/v${version}/objectbox-linux-${arch}.tar.gz";
+    name = "objectbox-linux-${version}";
     hash = selectSystem {
-      x86_64-linux = "sha256-VXTuCYg0ZItK+lAs7xkNlxO0rUPnbRZOP5RAXbcRyjM=";
-      aarch64-linux = "sha256-kNlrBRR/qDEhdU34f4eDQLgYkYAIfFC8/of4rgL+m6k=";
+      x86_64-linux = "sha256-FuA/q81x04YjxKhln5DFKWOoTw2x4hKegaWfKZe0Z1k=";
+      aarch64-linux = "sha256-yJ5Hf2svRSlmtNS+OVnI5s81+7LQMGy22q6c+vCWcnQ=";
     };
     stripRoot = false;
+    meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library
   };
 in
 stdenv.mkDerivation {
@@ -32,11 +35,20 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  patches = [
-    (replaceVars ./CMakeLists.patch {
-      OBJECTBOX_SHARED_LIBRARY = "${objectbox-sync}/lib/libobjectbox.so";
-    })
-  ];
+  nativeBuildInputs = [ perl ];
+  patchPhase = ''
+    runHook prePatch
+
+    # patch the cmakelists.txt file, independent of the version
+
+    # remove the objectbox-c download section
+    perl -0pe 's/set\(OBJECTBOX_VERSION.*?FetchContent_Populate\(objectbox-download\).*?endif\(\)//gs' -i linux/CMakeLists.txt
+    # replace the shared library path
+    substituteInPlace linux/CMakeLists.txt \
+    --replace-fail '"''${objectbox-download_SOURCE_DIR}/lib/''${CMAKE_SHARED_LIBRARY_PREFIX}objectbox''${CMAKE_SHARED_LIBRARY_SUFFIX}"' '"${objectbox-c}/lib/libobjectbox.so"'
+
+    runHook postPatch
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -46,6 +58,5 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library
   meta.sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
 }
