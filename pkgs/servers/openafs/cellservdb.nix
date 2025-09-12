@@ -3,13 +3,13 @@
   lib,
 }:
 let
-  version = "2023-10-31";
+  version = "2025-08-16";
 in
 fetchurl {
   pname = "cellservdb";
   inherit version;
-  url = "http://dl.central.org/dl/cellservdb/CellServDB.${version}";
-  hash = "sha256-fuVHhTJI5FNwObBkAoTMZvZwVY4YEMTJX8fLpOVkQsU=";
+  url = "https://grand.central.org/dl/cellservdb/CellServDB.${version}";
+  hash = "sha256-Rb6DBb9to7x5ya2ywx+wTls2c9GQmV0v5z9rmZ78dDs=";
 
   meta = {
     description = "GRAND.CENTRAL.ORG Public CellServDB";
