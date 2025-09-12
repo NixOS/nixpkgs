@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  cmake,
   anki,
 }:
 
@@ -27,20 +26,22 @@ python3Packages.buildPythonApplication {
     ./update-to-newer-anki-versions.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
-  propagatedBuildInputs =
-    [ anki ]
-    ++ (with python3Packages; [
-      beartype
-      click
-      colorama
-      git-filter-repo
-      gitpython
-      lark
-      tqdm
-      whatthepatch
-    ]);
+  dependencies = [
+    anki
+  ]
+  ++ (with python3Packages; [
+    beartype
+    colorama
+    git-filter-repo
+    gitpython
+    lark
+    tqdm
+    whatthepatch
+  ]);
 
   nativeCheckInputs = with python3Packages; [
     bitstring
@@ -59,13 +60,10 @@ python3Packages.buildPythonApplication {
 
   dontCheckRuntimeDeps = true;
 
-  # CMake needs to be run by pyproject rather than by its hook
-  dontConfigure = true;
-
-  meta = with lib; {
+  meta = {
     description = "Version control for Anki collections";
     homepage = "https://github.com/langfield/ki";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eljamm ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 }

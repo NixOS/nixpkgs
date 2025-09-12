@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A gnome extension designed for efficiently carrying out executions of commands from a customizable menu";
+    description = "Gnome extension designed for efficiently carrying out executions of commands from a customizable menu";
     homepage = "https://gitlab.com/ente76/guillotine/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ husky ];

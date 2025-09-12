@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = "erigon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MQpHRlKxWCBD2Tj9isxMKwvYBy9HtDkQPyKPse8uB3g=";
     fetchSubmodules = true;
   };
@@ -67,7 +67,6 @@ buildGoModule {
       gpl3Plus
     ];
     maintainers = with maintainers; [
-      d-xo
       happysalada
     ];
   };

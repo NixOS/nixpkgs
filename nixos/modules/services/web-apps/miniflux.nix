@@ -107,10 +107,10 @@ in
 
     systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
-      requires = [ "postgresql.service" ];
+      requires = [ "postgresql.target" ];
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
       serviceConfig = {
         Type = "oneshot";
@@ -123,12 +123,13 @@ in
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
       requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
-      after =
-        [ "network.target" ]
-        ++ lib.optionals cfg.createDatabaseLocally [
-          "postgresql.service"
-          "miniflux-dbsetup.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optionals cfg.createDatabaseLocally [
+        "postgresql.target"
+        "miniflux-dbsetup.service"
+      ];
 
       serviceConfig = {
         Type = "notify";

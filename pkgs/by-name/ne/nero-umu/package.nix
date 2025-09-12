@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nero-umu";
-  version = "1.1.1";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "SeongGino";
     repo = "Nero-umu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sX/Z/b5stauut8qg6IV/DdsCIkdx1N3+y1jwoXHr1LY=";
+    hash = "sha256-Cx2hN5LV7/EOXnn9RfIsj9OmnlM1oMZB7a535/hwTas=";
   };
 
   #Replace quazip git submodule with pre-packaged quazip
@@ -60,12 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "NERO_QT_VERSION" "Qt6")
-  ];
-
-  #Fixes to be able to find binaries for nix
-  patches = [
-    ./nerofs.patch
-    ./neroprefix.patch
   ];
 
   installPhase = ''

@@ -19,6 +19,7 @@
   libpulseaudio,
   harfbuzz,
   mesa,
+  apple-sdk,
 }:
 
 buildPythonPackage rec {
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
-    ''
+    lib.optionalString stdenv.isLinux ''
       cat > pyglet/lib.py <<EOF
       import ctypes
       def load_library(*names, **kwargs):
@@ -85,6 +86,34 @@ buildPythonPackage rec {
                   return ctypes.cdll.LoadLibrary(path)
           raise Exception("Could not load library {}".format(names))
       EOF
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      cat > pyglet/lib.py <<EOF
+      import os
+      import ctypes
+      def load_library(*names, **kwargs):
+          path = None
+          framework = kwargs.get('framework')
+          if framework is not None:
+            path = '${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/{framework}.framework/{framework}'.format(framework=framework)
+          else:
+              names = kwargs.get('darwin', names)
+              if not isinstance(names, tuple):
+                  names = (names,)
+              for name in names:
+                  if name == "libharfbuzz.0.dylib":
+                      path = '${harfbuzz}/lib/%s' % name
+                      break
+                  elif name.startswith('avutil'):
+                      path = '${lib.getLib ffmpeg-full}/lib/lib%s.dylib' % name
+                      if not os.path.exists(path):
+                          path = None
+                      else:
+                          break
+          if path is not None:
+              return ctypes.cdll.LoadLibrary(path)
+          raise ImportError("Could not load library {}".format(names))
+      EOF
     '';
 
   nativeBuildInputs = [ unzip ];
@@ -95,9 +124,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export PYGLET_HEADLESS=True
-  '';
+  preCheck = # libEGL only available on Linux (despite meta.platforms on libGL)
+    lib.optionalString stdenv.isLinux ''
+      export PYGLET_HEADLESS=True
+    '';
 
   # test list taken from .travis.yml
   disabledTestPaths = [
@@ -109,11 +139,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyglet" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.pyglet.org/";
     description = "Cross-platform windowing and multimedia library";
-    license = licenses.bsd3;
-    # The patch needs adjusting for non‐Linux platforms.
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    # The patch needs adjusting for other platforms.
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

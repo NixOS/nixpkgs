@@ -43,6 +43,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "oauthlib" ];
+
   optional-dependencies = {
     Images = [
       ascii-magic

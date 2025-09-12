@@ -34,35 +34,34 @@ buildPythonPackage rec {
     hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
   };
 
-  patches =
-    [
-      # Fix hardcoded `fapi-config.json` configuration path
-      ./fapi-config.patch
-      # libtpms (underneath swtpm) bumped the TPM revision
-      # https://github.com/tpm2-software/tpm2-pytss/pull/593
-      (fetchpatch {
-        url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
-        hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
-      })
-      # support cryptography >= 45.0.0
-      # https://github.com/tpm2-software/tpm2-pytss/pull/643
-      (fetchpatch {
-        url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
-        hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
-      })
-    ]
-    ++ lib.optionals isCross [
-      # pytss will regenerate files from headers of tpm2-tss.
-      # Those headers are fed through a compiler via pycparser. pycparser expects `cpp`
-      # to be in the path.
-      # This is put in the path via stdenv when not cross-compiling, but this is absent
-      # when cross-compiling is turned on.
-      # This patch changes the call to pycparser.preprocess_file to provide the name
-      # of the cross-compiling cpp
-      (replaceVars ./cross.patch {
-        crossPrefix = stdenv.hostPlatform.config;
-      })
-    ];
+  patches = [
+    # Fix hardcoded `fapi-config.json` configuration path
+    ./fapi-config.patch
+    # libtpms (underneath swtpm) bumped the TPM revision
+    # https://github.com/tpm2-software/tpm2-pytss/pull/593
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
+      hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
+    })
+    # support cryptography >= 45.0.0
+    # https://github.com/tpm2-software/tpm2-pytss/pull/643
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
+      hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
+    })
+  ]
+  ++ lib.optionals isCross [
+    # pytss will regenerate files from headers of tpm2-tss.
+    # Those headers are fed through a compiler via pycparser. pycparser expects `cpp`
+    # to be in the path.
+    # This is put in the path via stdenv when not cross-compiling, but this is absent
+    # when cross-compiling is turned on.
+    # This patch changes the call to pycparser.preprocess_file to provide the name
+    # of the cross-compiling cpp
+    (replaceVars ./cross.patch {
+      crossPrefix = stdenv.hostPlatform.config;
+    })
+  ];
 
   postPatch = ''
     sed -i "s#@TPM2_TSS@#${tpm2-tss.out}#" src/tpm2_pytss/FAPI.py

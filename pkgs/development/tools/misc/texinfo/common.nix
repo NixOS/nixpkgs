@@ -58,30 +58,29 @@ stdenv.mkDerivation {
     patchShebangs tp/maintain/regenerate_commands_perl_info.pl
   '';
 
-  env =
-    {
-      XFAIL_TESTS = toString (
-        optionals stdenv.hostPlatform.isMusl [
-          # musl does not support locales.
-          "different_languages_gen_master_menu.sh"
-          "test_scripts/formatting_documentlanguage_cmdline.sh"
-          "test_scripts/layout_formatting_fr_info.sh"
-          "test_scripts/layout_formatting_fr.sh"
-          "test_scripts/layout_formatting_fr_icons.sh"
-        ]
-        ++ optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
-          # Test is known to fail on various locales on texinfo-6.8:
-          #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
-          "test_scripts/layout_formatting_fr_icons.sh"
-        ]
-      );
-    }
-    // lib.optionalAttrs crossBuildTools {
-      # ncurses is required to build `makedoc'
-      # this feature is introduced by the ./cross-tools-flags.patch
-      NATIVE_TOOLS_CFLAGS = "-I${getDev buildPackages.ncurses}/include";
-      NATIVE_TOOLS_LDFLAGS = "-L${getLib buildPackages.ncurses}/lib";
-    };
+  env = {
+    XFAIL_TESTS = toString (
+      optionals stdenv.hostPlatform.isMusl [
+        # musl does not support locales.
+        "different_languages_gen_master_menu.sh"
+        "test_scripts/formatting_documentlanguage_cmdline.sh"
+        "test_scripts/layout_formatting_fr_info.sh"
+        "test_scripts/layout_formatting_fr.sh"
+        "test_scripts/layout_formatting_fr_icons.sh"
+      ]
+      ++ optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
+        # Test is known to fail on various locales on texinfo-6.8:
+        #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
+        "test_scripts/layout_formatting_fr_icons.sh"
+      ]
+    );
+  }
+  // lib.optionalAttrs crossBuildTools {
+    # ncurses is required to build `makedoc'
+    # this feature is introduced by the ./cross-tools-flags.patch
+    NATIVE_TOOLS_CFLAGS = "-I${getDev buildPackages.ncurses}/include";
+    NATIVE_TOOLS_LDFLAGS = "-L${getLib buildPackages.ncurses}/lib";
+  };
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -93,30 +92,30 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs =
-    [
-      bashNonInteractive
-      libintl
-    ]
-    ++ optionals stdenv.hostPlatform.isSunOS [
-      libiconv
-      gawk
-    ]
-    ++ optional interactive ncurses;
+  buildInputs = [
+    bashNonInteractive
+    libintl
+  ]
+  ++ optionals stdenv.hostPlatform.isSunOS [
+    libiconv
+    gawk
+  ]
+  ++ optional interactive ncurses;
 
-  configureFlags =
-    [ "PERL=${buildPackages.perl}/bin/perl" ]
-    # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
-    # fallbacks.
-    # Also prevent the buildPlatform's awk being used in the texindex script
-    ++ optionals crossBuildTools [
-      "--enable-perl-xs=no"
-      "TI_AWK=${getBin gawk}/bin/awk"
-    ]
-    ++ optionals (crossBuildTools && lib.versionAtLeast version "7.1") [
-      "texinfo_cv_sys_iconv_converts_euc_cn=yes"
-    ]
-    ++ optional stdenv.hostPlatform.isSunOS "AWK=${gawk}/bin/awk";
+  configureFlags = [
+    "PERL=${buildPackages.perl}/bin/perl"
+  ]
+  # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
+  # fallbacks.
+  # Also prevent the buildPlatform's awk being used in the texindex script
+  ++ optionals crossBuildTools [
+    "--enable-perl-xs=no"
+    "TI_AWK=${getBin gawk}/bin/awk"
+  ]
+  ++ optionals (crossBuildTools && lib.versionAtLeast version "7.1") [
+    "texinfo_cv_sys_iconv_converts_euc_cn=yes"
+  ]
+  ++ optional stdenv.hostPlatform.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [

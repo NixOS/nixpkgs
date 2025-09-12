@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "zenergy";
-  version = "0-unstable-2025-04-15";
+  version = "0-unstable-2025-08-31";
 
   src = fetchFromGitHub {
     owner = "BoukeHaarsma23";
     repo = "zenergy";
-    rev = "f77293fc4aa8c2f5645b2d05d8f0d476220cba9a";
-    hash = "sha256-T9ualNYna2Ip19dqz1mOcFWX5oKWIhf9SGMaXovS8QE=";
+    rev = "58f2fda7184fbde95033f492f7c54990552ef86f";
+    hash = "sha256-nSkq4JuZqhuH+JGH/vr9bw/suo/2rmdbKcvYPIil9qw=";
   };
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Based on AMD_ENERGY driver, but with some jiffies added so non-root users can read it safely.";
+    description = "Based on AMD_ENERGY driver, but with some jiffies added so non-root users can read it safely";
     homepage = "https://github.com/BoukeHaarsma23/zenergy";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ wizardlink ];

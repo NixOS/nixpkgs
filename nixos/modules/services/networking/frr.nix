@@ -128,100 +128,99 @@ in
 {
 
   ###### interface
-  imports =
-    [
-      {
-        options.services.frr = {
-          configFile = lib.mkOption {
-            type = lib.types.nullOr lib.types.path;
-            default = null;
-            example = "/etc/frr/frr.conf";
-            description = ''
-              Configuration file to use for FRR.
-              By default the NixOS generated files are used.
-            '';
-          };
-          config = lib.mkOption {
-            type = lib.types.lines;
-            default = "";
-            example = ''
-              router rip
-                network 10.0.0.0/8
-              router ospf
-                network 10.0.0.0/8 area 0
-              router bgp 65001
-                neighbor 10.0.0.1 remote-as 65001
-            '';
-            description = ''
-              FRR configuration statements.
-            '';
-          };
-          openFilesLimit = lib.mkOption {
-            type = lib.types.ints.unsigned;
-            default = 1024;
-            description = ''
-              This is the maximum number of FD's that will be available.  Use a
-              reasonable value for your setup if you are expecting a large number
-              of peers in say BGP.
-            '';
-          };
+  imports = [
+    {
+      options.services.frr = {
+        configFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          example = "/etc/frr/frr.conf";
+          description = ''
+            Configuration file to use for FRR.
+            By default the NixOS generated files are used.
+          '';
         };
-      }
-      { options.services.frr = (lib.genAttrs allDaemons serviceOptions); }
-      (lib.mkRemovedOptionModule [ "services" "frr" "zebra" "enable" ] "FRR zebra is always enabled")
-    ]
-    ++ (map (
-      d: lib.mkRenamedOptionModule [ "services" "frr" d "enable" ] [ "services" "frr" "${d}d" "enable" ]
-    ) renamedServices)
-    ++ (map
-      (
-        d:
-        lib.mkRenamedOptionModule
-          [ "services" "frr" d "extraOptions" ]
-          [ "services" "frr" "${d}d" "extraOptions" ]
-      )
-      (
-        renamedServices
-        ++ [
-          "static"
-          "mgmt"
-        ]
-      )
+        config = lib.mkOption {
+          type = lib.types.lines;
+          default = "";
+          example = ''
+            router rip
+              network 10.0.0.0/8
+            router ospf
+              network 10.0.0.0/8 area 0
+            router bgp 65001
+              neighbor 10.0.0.1 remote-as 65001
+          '';
+          description = ''
+            FRR configuration statements.
+          '';
+        };
+        openFilesLimit = lib.mkOption {
+          type = lib.types.ints.unsigned;
+          default = 1024;
+          description = ''
+            This is the maximum number of FD's that will be available.  Use a
+            reasonable value for your setup if you are expecting a large number
+            of peers in say BGP.
+          '';
+        };
+      };
+    }
+    { options.services.frr = (lib.genAttrs allDaemons serviceOptions); }
+    (lib.mkRemovedOptionModule [ "services" "frr" "zebra" "enable" ] "FRR zebra is always enabled")
+  ]
+  ++ (map (
+    d: lib.mkRenamedOptionModule [ "services" "frr" d "enable" ] [ "services" "frr" "${d}d" "enable" ]
+  ) renamedServices)
+  ++ (map
+    (
+      d:
+      lib.mkRenamedOptionModule
+        [ "services" "frr" d "extraOptions" ]
+        [ "services" "frr" "${d}d" "extraOptions" ]
     )
-    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "enable" ] "FRR ${d}d is always enabled")
-      [
+    (
+      renamedServices
+      ++ [
         "static"
         "mgmt"
       ]
     )
-    ++ (map (
-      d:
-      lib.mkRemovedOptionModule [
-        "services"
-        "frr"
-        d
-        "config"
-      ] "FRR switched to integrated-vtysh-config, please use services.frr.config"
-    ) obsoleteServices)
-    ++ (map (
-      d:
-      lib.mkRemovedOptionModule [ "services" "frr" d "configFile" ]
-        "FRR switched to integrated-vtysh-config, please use services.frr.config or services.frr.configFile"
-    ) obsoleteServices)
-    ++ (map (
-      d:
-      lib.mkRemovedOptionModule [
-        "services"
-        "frr"
-        d
-        "vtyListenAddress"
-      ] "Please change -A option in services.frr.${d}.options instead"
-    ) obsoleteServices)
-    ++ (map (
-      d:
-      lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenPort" ]
-        "Please use `-P «vtyListenPort»` option with services.frr.${d}.extraOptions instead, or change services.frr.${d}.options accordingly"
-    ) obsoleteServices);
+  )
+  ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "enable" ] "FRR ${d}d is always enabled")
+    [
+      "static"
+      "mgmt"
+    ]
+  )
+  ++ (map (
+    d:
+    lib.mkRemovedOptionModule [
+      "services"
+      "frr"
+      d
+      "config"
+    ] "FRR switched to integrated-vtysh-config, please use services.frr.config"
+  ) obsoleteServices)
+  ++ (map (
+    d:
+    lib.mkRemovedOptionModule [ "services" "frr" d "configFile" ]
+      "FRR switched to integrated-vtysh-config, please use services.frr.config or services.frr.configFile"
+  ) obsoleteServices)
+  ++ (map (
+    d:
+    lib.mkRemovedOptionModule [
+      "services"
+      "frr"
+      d
+      "vtyListenAddress"
+    ] "Please change -A option in services.frr.${d}.options instead"
+  ) obsoleteServices)
+  ++ (map (
+    d:
+    lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenPort" ]
+      "Please use `-P «vtyListenPort»` option with services.frr.${d}.extraOptions instead, or change services.frr.${d}.options accordingly"
+  ) obsoleteServices);
 
   ###### implementation
 
@@ -298,7 +297,6 @@ in
           Nice = -5;
           Type = "forking";
           NotifyAccess = "all";
-          StartLimitBurst = "3";
           TimeoutSec = 120;
           WatchdogSec = 60;
           RestartSec = 5;
@@ -308,6 +306,9 @@ in
           ExecStart = "${pkgs.frr}/libexec/frr/frrinit.sh start";
           ExecStop = "${pkgs.frr}/libexec/frr/frrinit.sh stop";
           ExecReload = "${pkgs.frr}/libexec/frr/frrinit.sh reload";
+        };
+        unitConfig = {
+          StartLimitBurst = "3";
         };
       };
     };

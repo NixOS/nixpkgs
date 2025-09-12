@@ -29,6 +29,10 @@ buildPythonPackage {
     "doc"
   ];
 
+  postPatch = ''
+    substituteInPlace docs/conf.py --replace-fail "sphinx-prompt" "sphinx_prompt"
+  '';
+
   src = fetchFromGitHub {
     owner = "humitos";
     repo = "sphinx-version-warning";

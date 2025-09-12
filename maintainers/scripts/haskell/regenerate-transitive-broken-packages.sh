@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils jq nix -I nixpkgs=.
+#! nix-shell -i bash -p coreutils jq -I nixpkgs=.
 
 set -euo pipefail
 

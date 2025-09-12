@@ -2,7 +2,7 @@
 
 This hook uses [the `haredo` command runner](https://sr.ht/~autumnull/haredo/) to build, check, and install the package. It overrides `buildPhase`, `checkPhase`, and `installPhase` by default.
 
-The hook builds its targets in parallel if [`config.enableParallelBuilding`](#var-stdenv-enableParallelBuilding) is set to `true`.
+The hook builds its targets in parallel if [`enableParallelBuilding`](#var-stdenv-enableParallelBuilding) is set to `true`.
 
 ## `buildPhase` {#haredo-hook-buildPhase}
 

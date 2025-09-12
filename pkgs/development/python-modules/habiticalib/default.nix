@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "habiticalib";
-  version = "0.4.0";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "habiticalib";
     tag = "v${version}";
-    hash = "sha256-RYtTJavfw5gQTo0m/Dgkv/6ghv+T5SSaaweiI370OOA=";
+    hash = "sha256-hnZS6YIO6mZHS3EXEmeTxwT3LhKkQLYYzls6xMDqOBk=";
   };
 
   build-system = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "habiticalib" ];
 

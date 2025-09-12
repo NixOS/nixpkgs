@@ -51,10 +51,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   meta = {
-    description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
+    description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     homepage = "https://github.com/benoitc/gunicorn";
     changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
     license = lib.licenses.mit;

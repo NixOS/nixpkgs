@@ -62,7 +62,7 @@ let
 
       testScript = ''
         # make an initial base backup
-        machine.wait_for_unit("postgresql")
+        machine.wait_for_unit("postgresql.target")
         machine.wait_for_unit("postgresql-wal-receiver-main")
         # WAL receiver healthchecks PG every 5 seconds, so let's be sure they have connected each other
         # required only for 9.4
@@ -99,7 +99,7 @@ let
         machine.systemctl("start postgresql")
         machine.wait_for_file("${postgresqlDataDir}/recovery.done")
         machine.systemctl("restart postgresql")
-        machine.wait_for_unit("postgresql")
+        machine.wait_for_unit("postgresql.target")
 
         # check that our records have been restored
         machine.succeed(

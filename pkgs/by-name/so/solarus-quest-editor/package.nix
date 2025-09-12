@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  fetchFromGitHub,
-  replaceVars,
+  qlementine,
   cmake,
   ninja,
   luajit,
@@ -16,45 +14,21 @@
   libvorbis,
   solarus,
   glm,
-  qt6Packages,
-  kdePackages,
+  qt6,
 }:
 
-let
-  qlementine-src = fetchFromGitHub {
-    owner = "oclero";
-    repo = "qlementine";
-    tag = "v1.2.0";
-    hash = "sha256-25PKOpQl3IkBXX14gt8KKYXXJKeutQ75O7BftEqCAxk=";
-  };
-
-  inherit (qt6Packages)
-    qtbase
-    qttools
-    wrapQtAppsHook
-    ;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus-quest-editor";
-  version = "2.0.0";
+  inherit (solarus) version;
 
-  src = fetchFromGitLab {
-    owner = "solarus-games";
-    repo = "solarus-quest-editor";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GTslxValldReWGb3x67zRPrvQUuCO/HQSXOEQlJfAmw=";
-  };
-
-  patches = [
-    (replaceVars ./qlementine-src.patch { inherit qlementine-src; })
-  ];
+  src = solarus.src + "/editor";
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -67,9 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     libmodplug
     libvorbis
     solarus
-    qtbase
-    kdePackages.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
     glm
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "SOLARUS_USE_LOCAL_QLEMENTINE" true)
+    (lib.cmakeFeature "SOLARUS_QLEMENTINE_LOCAL_PATH" "${qlementine.src}")
   ];
 
   meta = {

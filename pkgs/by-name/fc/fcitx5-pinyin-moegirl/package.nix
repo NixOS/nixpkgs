@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-moegirl";
-  version = "20250610";
+  version = "20250909";
 
   src = fetchurl {
     url = "https://github.com/outloudvi/mw2fcitx/releases/download/${finalAttrs.version}/moegirl.dict";
-    hash = "sha256-krtBLVcF6qKQ7xIUuJsxYmbBlFXezzGXczg9Th0NPYo=";
+    hash = "sha256-wtMLjgHb1IRkc0G/R5HDlF+r7/ooR9XxgFth3Lo+7ws=";
   };
 
   dontUnpack = true;

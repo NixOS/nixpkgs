@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "any1";
     repo = "aml";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,0 +1,33 @@
+diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
+index 66cbbd52ed..a8b9d41e4e 100644
+--- a/externals/CMakeLists.txt
++++ b/externals/CMakeLists.txt
+@@ -230,13 +230,8 @@
+     )
+     target_link_libraries(zstd_seekable PUBLIC libzstd_static)
+ 
+-    target_link_libraries(libzstd_static INTERFACE zstd_seekable)
+-
+-    add_library(zstd ALIAS libzstd_static)
+-
+-    install(TARGETS zstd_seekable
+-        EXPORT zstdExports
+-    )
++    add_library(zstd INTERFACE)
++    target_link_libraries(zstd INTERFACE libzstd_static zstd_seekable)
+ endif()
+ 
+ # ENet
+diff --git a/src/common/zstd_compression.cpp b/src/common/zstd_compression.cpp
+index 1e38877a1c..ac85ea1978 100644
+--- a/src/common/zstd_compression.cpp
++++ b/src/common/zstd_compression.cpp
+@@ -13,7 +13,7 @@
+ #include <mutex>
+ #include <sstream>
+ #include <zstd.h>
+-#include <zstd/contrib/seekable_format/zstd_seekable.h>
++#include <zstd_seekable.h>
+ 
+ #include <boost/serialization/base_object.hpp>
+ #include <boost/serialization/unique_ptr.hpp>

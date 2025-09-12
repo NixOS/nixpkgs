@@ -20,19 +20,18 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString withRoundedCorners ''
-      find src -name theme.conf -exec sed -iE 's/^# (Image=(panel|highlight).svg)/\1/' {} +
-    ''
-    + ''
-      mkdir -p $out/share/fcitx5
-      cp -r src $out/share/fcitx5/themes
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString withRoundedCorners ''
+    find src -name theme.conf -exec sed -i -E 's/^# (Image=(panel|highlight).svg)/\1/' {} +
+  ''
+  + ''
+    mkdir -p $out/share/fcitx5
+    cp -r src $out/share/fcitx5/themes
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru.updateScript = unstableGitUpdater { };
 

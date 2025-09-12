@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "krtab";
     repo = "agnos";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hSiJvpTQIbhz/0AFBTvgfRDTqOi9YcDOvln15SksMJs=";
   };
 

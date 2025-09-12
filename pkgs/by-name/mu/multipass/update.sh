@@ -40,21 +40,6 @@ update_multipass_source() {
     sed -i "s|hash = \".*$|hash = \"${sri_hash}\";|" package.nix
 }
 
-# Update the version/hash of the grpc source code in the Nix expression.
-update_grpc_source() {
-    local version; version="$1"
-    echo "Updating grpc source"
-
-    submodule_info="https://raw.githubusercontent.com/canonical/multipass/refs/tags/v${version}/3rd-party/submodule_info.md"
-    commit_short="$(curl -s "${submodule_info}" | grep -Po "CanonicalLtd/grpc/compare/v[0-9]+\.[0-9]+\.[0-9]+\.\.\K[0-9a-f]+")"
-    commit_hash="$(curl -s "https://github.com/canonical/grpc/commits/${commit_short}" | grep -Po "${commit_short}[0-9a-f]+" | head -n1)"
-    sri_hash="$(nix-prefetch-github canonical grpc --rev "${commit_hash}" --fetch-submodules | jq -r '.hash')"
-
-    sed -i "s|rev = \".*$|rev = \"${commit_hash}\";|" multipassd.nix
-    sed -i "s|hash = \".*$|hash = \"${sri_hash}\";|" multipassd.nix
-}
-
-
 LATEST_TAG="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/canonical/multipass/releases/latest | jq -r '.tag_name')"
 LATEST_VERSION="$(expr "$LATEST_TAG" : 'v\(.*\)')"
 CURRENT_VERSION="$(grep -Po "version = \"\K[^\"]+" package.nix)"
@@ -66,12 +51,11 @@ fi
 
 update_pubspec_json "$LATEST_VERSION"
 
-update_dart_pkg_hash dartssh2 andrei-toterman dartssh2
-update_dart_pkg_hash hotkey_manager_linux andrei-toterman hotkey_manager
-update_dart_pkg_hash tray_menu andrei-toterman tray_menu
+update_dart_pkg_hash dartssh2 canonical dartssh2
+update_dart_pkg_hash hotkey_manager_linux canonical hotkey_manager
+update_dart_pkg_hash tray_menu canonical tray_menu
 update_dart_pkg_hash window_size google flutter-desktop-embedding
 update_dart_pkg_hash xterm levkropp xterm.dart
 
 update_multipass_source "$LATEST_VERSION"
 
-update_grpc_source "$LATEST_VERSION"

@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "25.03";
+  version = "25.06";
 
   commonMeta = {
     description = "Various coreboot-related tools";
@@ -46,7 +46,7 @@ let
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-tsNdsH+GxjLUTd7KXHMZUTNTIAWeKJ3BNy1Lehjo8Eo=";
+          hash = "sha256-D7W8LtL6eeaKiRYoxVkcjeZ2aMIEXCvNakVtexe0mG8=";
         };
 
         enableParallelBuilding = true;
@@ -83,7 +83,7 @@ let
     };
     cbmem = generic {
       pname = "cbmem";
-      meta.description = "coreboot console log reader";
+      meta.description = "Coreboot console log reader";
     };
     ifdtool = generic {
       pname = "ifdtool";

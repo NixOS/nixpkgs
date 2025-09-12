@@ -54,16 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
   # 2. https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
   postFixup =
     let
-      finalJvmFlags =
-        [
-          "-client"
-          "--add-modules"
-          "javafx.swing,javafx.controls,javafx.graphics"
-          "-classpath"
-          "${placeholder "out"}/libexec/*"
-        ]
-        ++ jvmFlags
-        ++ [ "Moneydance" ];
+      finalJvmFlags = [
+        "-client"
+        "--add-modules"
+        "javafx.swing,javafx.controls,javafx.graphics"
+        "-classpath"
+        "${placeholder "out"}/libexec/*"
+      ]
+      ++ jvmFlags
+      ++ [ "Moneydance" ];
     in
     ''
       # This is in postFixup because gappsWrapperArgs is generated in preFixup

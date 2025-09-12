@@ -62,24 +62,23 @@ stdenv.mkDerivation rec {
     udevCheckHook
   ];
 
-  buildInputs =
-    [
-      libtirpc
-      libcap
-      libevent
-      sqlite
-      lvm2
-      libuuid
-      keyutils
-      libkrb5
-      tcp_wrappers
-      libxml2
-    ]
-    ++ lib.optional enablePython python3
-    ++ lib.optionals enableLdap [
-      openldap
-      cyrus_sasl
-    ];
+  buildInputs = [
+    libtirpc
+    libcap
+    libevent
+    sqlite
+    lvm2
+    libuuid
+    keyutils
+    libkrb5
+    tcp_wrappers
+    libxml2
+  ]
+  ++ lib.optional enablePython python3
+  ++ lib.optionals enableLdap [
+    openldap
+    cyrus_sasl
+  ];
 
   enableParallelBuilding = true;
 
@@ -100,7 +99,8 @@ stdenv.mkDerivation rec {
     "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
     "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
     "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
-  ] ++ lib.optional enableLdap "--enable-ldap";
+  ]
+  ++ lib.optional enableLdap "--enable-ldap";
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # http://openwall.com/lists/musl/2015/08/18/10
@@ -158,18 +158,17 @@ stdenv.mkDerivation rec {
     "etc/systemd/system-generators"
   ];
 
-  postInstall =
-    ''
-      # Not used on NixOS
-      sed -i \
-        -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
-        -e "s,/usr/sbin,$out/bin,g" \
-        $out/etc/systemd/system/*
-    ''
-    + lib.optionalString (!enablePython) ''
-      # Remove all scripts that require python (currently mountstats and nfsiostat)
-      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
-    '';
+  postInstall = ''
+    # Not used on NixOS
+    sed -i \
+      -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
+      -e "s,/usr/sbin,$out/bin,g" \
+      $out/etc/systemd/system/*
+  ''
+  + lib.optionalString (!enablePython) ''
+    # Remove all scripts that require python (currently mountstats and nfsiostat)
+    grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
+  '';
 
   # One test fails on mips.
   # doCheck = !stdenv.hostPlatform.isMips;
@@ -196,6 +195,6 @@ stdenv.mkDerivation rec {
     homepage = "https://linux-nfs.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

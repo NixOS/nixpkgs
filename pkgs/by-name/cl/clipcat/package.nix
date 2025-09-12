@@ -5,6 +5,7 @@
   rustPlatform,
   protobuf,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,12 +19,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CIqV5V7NN2zsqBwheJrcBnOTOBEncIwqqXdsZ9DLAog=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UA+NTtZ2qffUPUmvCidnTHwFzD3WOPTlxHR2e2vKwPQ=";
+
+  patches = [
+    # Fix compilation errors caused by stricter restrictions on unused code in Rust 1.89.
+    # TODO: remove this patch after upstream fix it.
+    ./dummy.patch
+  ];
 
   nativeBuildInputs = [
     protobuf
     installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fix following error on darwin:
+    # objc/notify.h:1:9: fatal error: could not build module 'Cocoa'
+    writableTmpDirAsHomeHook
   ];
 
   checkFlags = [

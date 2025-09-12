@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_36,
+  electron_37,
   python3,
   makeWrapper,
   callPackage,
@@ -23,7 +23,7 @@
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_36;
+  electron = electron_37;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.58.0";
+  version = "7.68.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-0WO4cjbZLVaf/ju7PdfZJKOa7qGXsjWZHGY8lxOvr3w=";
+    hash = "sha256-jsNSRNgIS0ZroM2vwPSFpCVfC81slQ4mUoRq5jDYi8Y=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -68,6 +68,7 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
+      fetcherVersion = 1;
       hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
     };
 
@@ -111,6 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
+  postPatch = ''
+    # The spell checker dictionary URL interpolates the electron version,
+    # however, the official website only provides dictionaries for electron
+    # versions which they vendor into the binary releases. Since we unpin
+    # electron to use the one from nixpkgs the URL may point to nonexistent
+    # resource if the nixpkgs version is different. To fix this we hardcode
+    # the electron version to the declared one here instead of interpolating
+    # it at runtime.
+    substituteInPlace app/updateDefaultSession.ts \
+      --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+  '';
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
@@ -118,17 +131,18 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-h2yaGRqAtVh/8Jv+YZAcXw3/b8+fi+cKFSqcRhMH2sM="
+        "sha256-iu/ZjIn5c4X0rxWUFqiNLLAjCGKFYihsYxfgWtfmqk4="
       else
-        "sha256-1dkJBIQVJxpsd8IQIlRncDYHp+2j0fowlbEEWpQSPtI=";
+        "sha256-gMtBdlcuiAZRV5eeh2NoyOusFheCmn0/NIQwVPrUH/U=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1750276003;
+    SOURCE_DATE_EPOCH = 1756327041;
   };
 
   preBuild = ''

@@ -20,6 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "bubblemail";
   version = "1.9";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
@@ -50,6 +51,10 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pillow
     # For setup-hook
     gobject-introspection
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   propagatedBuildInputs = with python3Packages; [

@@ -15,13 +15,6 @@ mkDerivation {
     hash = "sha256-ab+KojzRbkUTAFNH5OA78s0F5SUuXTbliai6badveg4=";
   };
 
-  preConfigure = ''
-    cd test
-    make everything
-    mv Everything.agda ..
-    cd ..
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/UlfNorell/agda-prelude";
     description = "Programming library for Agda";

@@ -18,19 +18,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.8.1";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q9iCEJu/HgWnMqiT0EjtJUk7dp7o0hbLoamlkFEaR4M=";
+    hash = "sha256-YEu1qTI2ExfS+WKFxNGkubr+HOCCuWGpZFk3hS3srCU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lWU1NrUwcAXQR6mEiCr6Ze3TzpDYvCx5/fBIef9ao5I=";
+  cargoHash = "sha256-NksWHI2TJR0YMGRIDHBxrQPGHiir2Kn4bxnSvO7EzoA=";
 
   postPatch =
     let
@@ -68,15 +67,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      desktop-file-utils
-      pkg-config
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cargo-tauri_1.hook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    desktop-file-utils
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking

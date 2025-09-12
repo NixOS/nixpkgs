@@ -21,28 +21,27 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "6.14";
+  version = "6.16";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    hash = "sha256-31q4BPyzbikcQq2DYfgBrR4QJBtDvTBP5Qzj355+PaE=";
+    hash = "sha256-Makw+HN8JhioJK1L0f3YP1QQPg6qFaqtxIT/rjNGb8U=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals udevSupport [
-      udevCheckHook
-    ]
-    ++ [
-      (buildPackages.python3.withPackages (
-        ps: with ps; [
-          sphinx
-          sphinx-rtd-theme
-        ]
-      ))
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals udevSupport [
+    udevCheckHook
+  ]
+  ++ [
+    (buildPackages.python3.withPackages (
+      ps: with ps; [
+        sphinx
+        sphinx-rtd-theme
+      ]
+    ))
+  ];
 
   buildInputs = [
     acl
@@ -63,17 +62,20 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags =
-    [
-      # Built separately, see python3Packages.btrfsutil
-      "--disable-python"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "--disable-backtrace"
-    ]
-    ++ lib.optionals (!udevSupport) [
-      "--disable-libudev"
-    ];
+  configureFlags = [
+    # Built separately, see python3Packages.btrfsutil
+    "--disable-python"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ]
+  ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 

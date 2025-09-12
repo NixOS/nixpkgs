@@ -1,24 +1,29 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
+
+  # nativeBuildInputs
   rustPlatform,
   cmake,
   nasm,
-  libiconv,
+
+  # tests
+  numpy,
+  pytestCheckHook,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "kornia-rs";
-  version = "0.1.2";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia-rs";
     tag = "v${version}";
-    hash = "sha256-7toCMaHzFAzm6gThVLBxKLgQVgFJatdJseDlfdeS8RE=";
+    hash = "sha256-0Id1Iyd/xyqSqFvg/TXnlX1DgMUWuMS9KbtDXduwU+Y=";
   };
 
   nativeBuildInputs = [
@@ -28,30 +33,38 @@ buildPythonPackage rec {
     nasm # Only for dependencies.
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
-
-  cargoRoot = "py-kornia";
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      cargoRoot
-      ;
-    hash = "sha256-VQtPfTmT9UGM0fIMeZF/1lUqQeyP63naoYZ7UuL6hFg=";
+  cargoRoot = "kornia-py";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} kornia-py/Cargo.lock
+  '';
 
   maturinBuildFlags = [
     "-m"
-    "py-kornia/Cargo.toml"
+    "kornia-py/Cargo.toml"
   ];
 
   dontUseCmakeConfigure = true; # We only want to use CMake to build some Rust dependencies.
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
+    torch
+  ];
+
+  meta = {
     homepage = "https://github.com/kornia/kornia-rs";
     description = "Python bindings to Low-level Computer Vision library in Rust";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chpatrick ];
+    changelog = "https://github.com/kornia/kornia-rs/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chpatrick ];
+    badPlatforms = [
+      # error: could not compile `kornia-3d` (lib)
+      # error: rustc interrupted by SIGSEGV
+      "aarch64-linux"
+    ];
   };
 }

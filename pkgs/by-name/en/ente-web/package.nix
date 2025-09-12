@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web";
-  version = "1.1.0";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -20,13 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     sparseCheckout = [ "web" ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rHz/QlH3t+J2oz0s5LuWkgxGZmdiPFZXTuDI5yFajrA=";
+    hash = "sha256-KCRwQmYmf2DXe3WQS8Rc8h397F0xEth4x36Yz4Ke4Y0=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-9BumlPzvG6dmuoFGdCAALzKpJATA3ibb1SkLtofAasI=";
+    hash = "sha256-vm1pQrS4yWvSeTo++964kM+OK0JED8et/dHqLG6lJH0=";
   };
 
   nativeBuildInputs = [

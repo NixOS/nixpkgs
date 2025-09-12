@@ -73,7 +73,7 @@
     "meta": {
       "isOpenSource": true,
       "description": "Free Java, Kotlin, Groovy and Scala IDE from jetbrains",
-      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "steinybot", "AnatolyPopov", "tymscar" ],
+      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "steinybot", "tymscar" ],
       "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
       "homepage": "https://www.jetbrains.com/idea/"
     }
@@ -85,7 +85,7 @@
     "meta": {
       "isOpenSource": false,
       "description": "Paid-for Java, Kotlin, Groovy and Scala IDE from jetbrains",
-      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "steinybot", "AnatolyPopov", "tymscar" ],
+      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "steinybot", "tymscar" ],
       "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
       "homepage": "https://www.jetbrains.com/idea/"
     }

@@ -189,13 +189,12 @@ in
       )
     ];
 
-    systemd.tmpfiles.rules =
-      [
-        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      ]
-      ++ lib.optionals (cfg.unixSocket != null) [
-        "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ]
+    ++ lib.optionals (cfg.unixSocket != null) [
+      "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ];
 
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";

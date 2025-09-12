@@ -51,38 +51,36 @@ stdenv.mkDerivation rec {
     ./correct-gir-lib-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      desktop-file-utils
-      itstool
-      libxml2
-      meson
-      ninja
-      pkg-config
-      vala
-      wrapGAppsHook3
-      gtk-doc
-      gobject-introspection
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    itstool
+    libxml2
+    meson
+    ninja
+    pkg-config
+    vala
+    wrapGAppsHook3
+    gtk-doc
+    gobject-introspection
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      glib
-      gsettings-desktop-schemas
-      gspell
-      gtk3
-      libgedit-amtk
-      libgedit-gtksourceview
-      libgedit-tepl
-      libpeas
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gtk-mac-integration
-    ];
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas
+    gspell
+    gtk3
+    libgedit-amtk
+    libgedit-gtksourceview
+    libgedit-tepl
+    libpeas
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration
+  ];
 
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;

@@ -10,7 +10,7 @@
 
 let
   pname = "digital";
-  pkgDescription = "A digital logic designer and circuit simulator.";
+  pkgDescription = "Digital logic designer and circuit simulator";
   version = "0.31";
   buildDate = "2024-09-03T14:02:31+02:00"; # v0.31 commit date
 

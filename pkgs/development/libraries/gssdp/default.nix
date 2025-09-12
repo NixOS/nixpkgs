@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withIntrospection [ "devdoc" ];
+  ]
+  ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -48,19 +49,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      glib
-      python3
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-      gi-docgen
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+    python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+    gi-docgen
+  ];
 
   buildInputs = [
     libsoup_2_4

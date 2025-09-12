@@ -2,8 +2,8 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  athens,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -31,9 +31,10 @@ buildGoModule (finalAttrs: {
     mv $out/bin/proxy $out/bin/athens
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = athens; };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go module datastore and proxy";

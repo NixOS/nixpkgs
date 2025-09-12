@@ -9,6 +9,7 @@
 
 buildPythonApplication rec {
   version = "0.16.6.1";
+  format = "setuptools";
   pname = "gita";
 
   src = fetchFromGitHub {

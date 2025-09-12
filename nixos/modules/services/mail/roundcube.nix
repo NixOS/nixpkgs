@@ -68,7 +68,7 @@ in
         '';
         description = ''
           Password file for the postgresql connection.
-          Must be formatted according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+          Must be formatted according to PostgreSQL .pgpass standard (see <https://www.postgresql.org/docs/current/libpq-pgpass.html>)
           but only one line, no comments and readable by user `nginx`.
           Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
         '';
@@ -273,8 +273,8 @@ in
 
     systemd.services.roundcube-setup = lib.mkMerge [
       (lib.mkIf localDB {
-        requires = [ "postgresql.service" ];
-        after = [ "postgresql.service" ];
+        requires = [ "postgresql.target" ];
+        after = [ "postgresql.target" ];
       })
       {
         wants = [ "network-online.target" ];

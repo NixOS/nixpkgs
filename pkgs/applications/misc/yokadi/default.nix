@@ -12,6 +12,7 @@
 buildPythonApplication rec {
   pname = "yokadi";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://yokadi.github.io/download/${pname}-${version}.tar.gz";

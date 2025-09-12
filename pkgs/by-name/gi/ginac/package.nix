@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-rpath" ];
 
   meta = with lib; {
-    description = "GiNaC is Not a CAS";
+    description = "GiNaC C++ library for symbolic manipulations";
     homepage = "https://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Illumina";
     repo = "DRAGMAP";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-f1jsOErriS1I/iUS4CzJ3+Dz8SMUve/ccb3KaE+L7U8=";
   };

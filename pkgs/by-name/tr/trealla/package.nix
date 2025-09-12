@@ -23,13 +23,13 @@ assert lib.elem lineEditingLibrary [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.73.3";
+  version = "2.82.9";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CaSn2WErUMutdlBf+Clck5srwlUhrF6S+j0IpUMh3i0=";
+    hash = "sha256-2eexWmrVNjfOnK+upPJfUMxE+Xuo5dOyJrEFNGuCapc=";
   };
 
   postPatch = ''
@@ -50,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  makeFlags =
-    [ "GIT_VERSION=\"v${finalAttrs.version}\"" ]
-    ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
-    ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
-    ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
-    ++ lib.optionals enableThreads [ "THREADS=1" ];
+  makeFlags = [
+    "GIT_VERSION=\"v${finalAttrs.version}\""
+  ]
+  ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
+  ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
+  ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
+  ++ lib.optionals enableThreads [ "THREADS=1" ];
 
   enableParallelBuilding = true;
 

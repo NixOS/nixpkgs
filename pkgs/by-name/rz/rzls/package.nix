@@ -25,11 +25,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "razor";
-    rev = "2798396c3481573aa49f9c792179ebbb5e183dca";
-    hash = "sha256-tPROplLbKmWTbm0r3844zJX3mUQfIWv9jzjcflM5WJk=";
+    rev = "f2270a5492e831864b60a8853c7435ded110ad6f";
+    hash = "sha256-QMeIQmX/1W3N3r27fG5/Q6CsW/Wh+EI5+poGlJ2sbsQ=";
   };
 
-  version = "9.0.0-preview.25156.2";
+  version = "10.0.0-preview.25424.9";
   projectFile = "src/Razor/src/rzls/rzls.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -45,6 +45,7 @@ buildDotnetModule {
   dotnetFlags = [
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
+    "-p:PublishReadyToRun=false"
   ];
 
   dotnetInstallFlags = [

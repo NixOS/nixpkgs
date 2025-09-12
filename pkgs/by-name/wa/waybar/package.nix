@@ -9,9 +9,9 @@
   fftw,
   glib,
   gobject-introspection,
+  gpsd,
   gtk-layer-shell,
   gtkmm3,
-  howard-hinnant-date,
   iniparser,
   jsoncpp,
   libcava,
@@ -49,6 +49,7 @@
   enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   evdevSupport ? true,
   experimentalPatches ? true,
+  gpsSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
@@ -71,16 +72,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.12.0-unstable-2025-06-13";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
-    # TODO: switch back to using tag when a new version is released which
-    # includes the fixes for issues like
-    # https://github.com/Alexays/Waybar/issues/3956
-    rev = "2c482a29173ffcc03c3e4859808eaef6c9014a1f";
-    hash = "sha256-29g4SN3Yr4q7zxYS3dU48i634jVsXHBwUUeALPAHZGM=";
+    tag = finalAttrs.version;
+    hash = "sha256-mGiBZjfvtZZkSHrha4UF2l1Ogbij8J//r2h4gcZAJ6w=";
   };
 
   postUnpack = lib.optional cavaSupport ''
@@ -90,16 +88,15 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      wayland-scanner
-      wrapGAppsHook3
-    ]
-    ++ lib.optional withMediaPlayer gobject-introspection
-    ++ lib.optional enableManpages scdoc;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    wrapGAppsHook3
+  ]
+  ++ lib.optional withMediaPlayer gobject-introspection
+  ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
@@ -107,40 +104,39 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3
   ];
 
-  buildInputs =
-    [
-      gtk-layer-shell
-      gtkmm3
-      howard-hinnant-date
-      jsoncpp
-      libsigcxx
-      libxkbcommon
-      spdlog
-      wayland
-    ]
-    ++ lib.optionals cavaSupport [
-      SDL2
-      alsa-lib
-      fftw
-      iniparser
-      ncurses
-      portaudio
-    ]
-    ++ lib.optional evdevSupport libevdev
-    ++ lib.optional inputSupport libinput
-    ++ lib.optional jackSupport libjack2
-    ++ lib.optional mpdSupport libmpdclient
-    ++ lib.optional mprisSupport playerctl
-    ++ lib.optional nlSupport libnl
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional sndioSupport sndio
-    ++ lib.optional systemdSupport systemdMinimal
-    ++ lib.optional traySupport libdbusmenu-gtk3
-    ++ lib.optional udevSupport udev
-    ++ lib.optional upowerSupport upower
-    ++ lib.optional wireplumberSupport wireplumber
-    ++ lib.optional (cavaSupport || pipewireSupport) pipewire
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
+  buildInputs = [
+    gtk-layer-shell
+    gtkmm3
+    jsoncpp
+    libsigcxx
+    libxkbcommon
+    spdlog
+    wayland
+  ]
+  ++ lib.optionals cavaSupport [
+    SDL2
+    alsa-lib
+    fftw
+    iniparser
+    ncurses
+    portaudio
+  ]
+  ++ lib.optional evdevSupport libevdev
+  ++ lib.optional gpsSupport gpsd
+  ++ lib.optional inputSupport libinput
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional mpdSupport libmpdclient
+  ++ lib.optional mprisSupport playerctl
+  ++ lib.optional nlSupport libnl
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional sndioSupport sndio
+  ++ lib.optional systemdSupport systemdMinimal
+  ++ lib.optional traySupport libdbusmenu-gtk3
+  ++ lib.optional udevSupport udev
+  ++ lib.optional upowerSupport upower
+  ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional (cavaSupport || pipewireSupport) pipewire
+  ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;
@@ -149,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonEnable {
       "cava" = cavaSupport && lib.asserts.assertMsg sndioSupport "Sndio support is required for Cava";
       "dbusmenu-gtk" = traySupport;
+      "gps" = gpsSupport;
       "jack" = jackSupport;
       "libevdev" = evdevSupport;
       "libinput" = inputSupport;
@@ -192,8 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   versionCheckProgramArg = "--version";
 
-  # TODO: re-enable after bump to next release.
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };

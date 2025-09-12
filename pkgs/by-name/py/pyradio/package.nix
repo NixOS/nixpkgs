@@ -7,20 +7,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.9.3.11.13";
+  version = "0.9.3.11.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = "pyradio";
     tag = version;
-    hash = "sha256-thHx1IJLYG83qxV6QSHRn7Jt1a1LUR47noDvAtcFZuE=";
+    hash = "sha256-PogdBixxr50M5J4hp158KAhs6+2E3ILCC44MAh222QY=";
   };
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     dnspython
     netifaces
     psutil

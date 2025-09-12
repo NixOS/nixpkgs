@@ -10,17 +10,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.11";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wiNXwg6mC24nWwakA9cX8OYDOhghoEgm0yVR3Tmtod4=";
+    hash = "sha256-PffZx2rkOdwwhZ4LYE6ZiAWa68oZT3Gly6Is9gRPWdw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-M3nwa93vzVm+GtCdmBn/jqIvgJRcULw+8FFFLPmfbyg=";
+  cargoHash = "sha256-FfTySXynezMs/Nkuai+jZCSJnIo5D3obh3LboYYGhVk=";
+
+  buildNoDefaultFeatures = true;
+  # Would be cleaner with an "--all-features" option
+  buildFeatures = [ "full" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/RustyNova016/Alistral/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Power tools for Listenbrainz";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [
+      jopejoe1
+      RustyNova
+    ];
     mainProgram = "alistral";
   };
 })

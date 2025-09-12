@@ -24,19 +24,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "packet";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "nozwock";
     repo = "packet";
     tag = finalAttrs.version;
-    hash = "sha256-MZdZf4fLtUd30LncPLVkcNdjuzw+Wi33A1MJqQbEurk=";
+    hash = "sha256-zR2WZER49xsxaiZbFGFOukHE3w0odxVi9WJTI4FSWJ0=";
   };
-
-  patches = [
-    # let nautilus find the locale directory
-    ./nautilus-extension-locale.patch
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;

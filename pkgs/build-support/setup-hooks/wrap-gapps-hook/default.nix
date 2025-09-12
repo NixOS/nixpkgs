@@ -16,17 +16,16 @@
 
 makeSetupHook {
   name = "wrap-gapps-hook";
-  propagatedBuildInputs =
-    [
-      # We use the wrapProgram function.
-      makeWrapper
-    ]
-    ++ lib.optionals isGraphical [
-      # TODO: remove this, packages should depend on GTK explicitly.
-      gtk3
+  propagatedBuildInputs = [
+    # We use the wrapProgram function.
+    makeWrapper
+  ]
+  ++ lib.optionals isGraphical [
+    # TODO: remove this, packages should depend on GTK explicitly.
+    gtk3
 
-      librsvg
-    ];
+    librsvg
+  ];
 
   # depsTargetTargetPropagated will essentially be buildInputs when wrapGAppsHook3 is placed into nativeBuildInputs
   # the librsvg and gtk3 above should be removed but kept to not break anything that implicitly depended on its binaries

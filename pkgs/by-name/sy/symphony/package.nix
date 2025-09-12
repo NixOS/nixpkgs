@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "SYMPHONY is an open-source solver, callable library, and development framework for mixed-integer linear programs (MILPs) written in C with a number of unique features";
+    description = "Open-source solver, callable library, and development framework for mixed-integer linear programs (MILPs)";
     homepage = "https://www.coin-or.org/SYMPHONY/index.htm";
     changelog = "https://github.com/coin-or/SYMPHONY/blob/${version}/CHANGELOG.md";
     platforms = [ "x86_64-linux" ];

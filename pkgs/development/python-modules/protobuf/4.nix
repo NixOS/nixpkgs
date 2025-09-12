@@ -82,7 +82,8 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
+  ]
+  ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
 
   disabledTests =
     lib.optionals isPyPy [

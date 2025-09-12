@@ -1,20 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  flutter324,
+  flutter327,
   autoPatchelfHook,
   buildGoModule,
   libayatana-appindicator,
 }:
 
 let
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-9xAArQhf1lAWL6mbx6wuGY3xhKAMigpWFrX8P6/olMY=";
+    hash = "sha256-GUCc6GK1yhVbk3Ss1XnT23wtz22uTgdSSDfEdr4mMpA=";
   };
 
   metaCommon = {
@@ -29,7 +29,7 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-rJriTQF4tf7sZXcEDS6yZXk3xUI8Cav8OC7o4egpfIw=";
+    vendorHash = "sha256-7SPTMeaHvqTZJQYPoGUGRudNRTcsEl/8AKgI6W/XCJQ=";
 
     buildPhase = ''
       runHook preBuild
@@ -44,7 +44,7 @@ let
     meta = metaCommon;
   };
 in
-flutter324.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version src;
   pname = "gopeed";
 

@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage rec {
     --add-rpath ${lib.makeLibraryPath runtimeInputs}
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5t6PPlfV/INqb4knz1Bv6dqw47RxUmVO0DSlQNUIQL4=";
 
   desktopItems = [

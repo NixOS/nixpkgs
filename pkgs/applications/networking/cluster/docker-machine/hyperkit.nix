@@ -12,6 +12,7 @@ buildGoModule rec {
     buildInputs
     vendorHash
     doCheck
+    postPatch
     ;
 
   pname = "docker-machine-hyperkit";

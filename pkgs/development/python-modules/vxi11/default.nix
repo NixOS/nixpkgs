@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "python-vxi11";
   version = "0.9";
+  format = "setuptools";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {

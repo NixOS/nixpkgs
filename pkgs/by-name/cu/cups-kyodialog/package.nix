@@ -70,7 +70,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     python3Packages.wrapPython
-  ] ++ lib.optionals withQtGui [ qt5.wrapQtAppsHook ];
+  ]
+  ++ lib.optionals withQtGui [ qt5.wrapQtAppsHook ];
 
   buildInputs = [ cups ] ++ lib.optionals withQtGui [ qt5.qtbase ];
 
@@ -82,35 +83,34 @@ stdenv.mkDerivation rec {
     setuptools
   ];
 
-  installPhase =
-    ''
-      # allow cups to find the ppd files
-      mkdir -p $out/share/cups/model
-      mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
+  installPhase = ''
+    # allow cups to find the ppd files
+    mkdir -p $out/share/cups/model
+    mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
 
-      # remove absolute path prefixes to filters in ppd
-      find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
-
-
-      mkdir -p $out/lib/cups/
-      mv ./usr/lib/cups/filter/ $out/lib/cups/
-      # for lib/cups/filter/kyofilter_pre_H
-      wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
+    # remove absolute path prefixes to filters in ppd
+    find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
 
 
-      install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
-    ''
-    + lib.optionalString withQtGui ''
-      install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
-      install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
+    mkdir -p $out/lib/cups/
+    mv ./usr/lib/cups/filter/ $out/lib/cups/
+    # for lib/cups/filter/kyofilter_pre_H
+    wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
-      install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
 
-      install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
-      substituteInPlace $out/share/applications/kyodialog.desktop \
-        --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
-        --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
-    '';
+    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+  ''
+  + lib.optionalString withQtGui ''
+    install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
+    install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
+
+    install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
+
+    install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
+    substituteInPlace $out/share/applications/kyodialog.desktop \
+      --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
+      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
+  '';
 
   meta = with lib; {
     description = "CUPS drivers for several Kyocera printers";

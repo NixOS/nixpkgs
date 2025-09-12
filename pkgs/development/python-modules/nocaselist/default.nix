@@ -5,22 +5,26 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "nocaselist";
-  version = "2.0.3";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VXFNqEM/tIQ855dASXfkOF1ePfnkqgD33emD/YdBD+8=";
+    hash = "sha256-+3MG9aPgRVNOc3q37L7uA5ul6br7xbXyMfYW1+khG2U=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ six ];
 

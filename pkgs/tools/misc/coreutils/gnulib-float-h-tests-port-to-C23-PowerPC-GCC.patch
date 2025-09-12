@@ -1,0 +1,230 @@
+Applies the following incremental gnulib commits:
+
+- 55a366a06fbd98bf13adc531579e3513cee97a32
+- 65ed9d3b24ad09fd61d326c83e7f1b05f6e9d65f
+- ce8e9de0bf34bc63dffc67ab384334c509175f64
+- 6164b4cb0887b5331a4e64449107decd37d32735
+
+With adjustments specific to the structure & differences in coreutils:
+
+- gnulib code is split across lib and gnulib-tests
+- A Makefile.in is used for the test flags instead of the fancy automake modules
+  in the upstream gnulib project, so we add -lm to the float test there.
+  Surrounding texts in this file are slightly different in every project.
+---
+diff '--color=auto' -ruN a/gnulib-tests/Makefile.in b/gnulib-tests/Makefile.in
+--- a/gnulib-tests/Makefile.in	2025-04-09 10:05:54.000000000 +0000
++++ b/gnulib-tests/Makefile.in	2025-07-09 10:00:23.767927263 +0000
+@@ -1496,7 +1496,7 @@
+ 	$(am__DEPENDENCIES_1)
+ test_float_h_SOURCES = test-float-h.c
+ test_float_h_OBJECTS = test-float-h.$(OBJEXT)
+-test_float_h_LDADD = $(LDADD)
++test_float_h_LDADD = $(LDADD) -lm
+ test_float_h_DEPENDENCIES = libtests.a ../lib/libcoreutils.a \
+ 	libtests.a ../lib/libcoreutils.a libtests.a \
+ 	$(am__DEPENDENCIES_1)
+diff '--color=auto' -ruN a/gnulib-tests/test-float-h.c b/gnulib-tests/test-float-h.c
+--- a/gnulib-tests/test-float-h.c	2025-01-01 09:32:30.000000000 +0000
++++ b/gnulib-tests/test-float-h.c	2025-07-09 10:00:13.837937094 +0000
+@@ -101,6 +101,8 @@
+ 
+ /* ------------------------------------------------------------------------- */
+ 
++#include <math.h>
++
+ #include "fpucw.h"
+ #include "isnanf-nolibm.h"
+ #include "isnand-nolibm.h"
+@@ -396,6 +398,44 @@
+ 
+ /* -------------------- Check macros for 'long double' -------------------- */
+ 
++static int
++test_isfinitel (long double volatile x)
++{
++  if (x != x)
++    return 0;
++  long double volatile zero = x * 0;
++  return zero == 0;
++}
++
++/* Return X after normalization.  This makes a difference on platforms
++   where long double can represent unnormalized values.  For example,
++   suppose x = 1 + 2**-106 on PowerPC with IBM long double where
++   FLT_RADIX = 2, LDBL_MANT_DIG = 106, and LDBL_EPSILON = 2**-105.
++   Then 1 < x < 1 + LDBL_EPSILON, and normalize_long_double (x) returns 1.  */
++static long double
++normalize_long_double (long double volatile x)
++{
++  if (FLT_RADIX == 2 && test_isfinitel (x))
++    {
++      int xexp;
++      long double volatile
++        frac = frexpl (x, &xexp),
++        significand = frac * pow2l (LDBL_MANT_DIG),
++        normalized_significand = truncl (significand),
++        normalized_x = normalized_significand * pow2l (xexp - LDBL_MANT_DIG);
++
++      /* The test_isfinitel defends against PowerPC with IBM long double,
++         which fritzes out near LDBL_MAX.  */
++      if (test_isfinitel (normalized_x))
++        x = normalized_x;
++    }
++  else
++    {
++      /* Hope that X is already normalized.  */
++    }
++  return x;
++}
++
+ static void
+ test_long_double (void)
+ {
+@@ -455,7 +495,7 @@
+     for (n = 0; n <= 2 * LDBL_MANT_DIG; n++)
+       {
+         volatile long double half_n = pow2l (- n); /* 2^-n */
+-        volatile long double x = me - half_n;
++        volatile long double x = normalize_long_double (me - half_n);
+         if (x < me)
+           ASSERT (x <= 1.0L);
+       }
+@@ -483,8 +523,12 @@
+   ASSERT (!LDBL_IS_IEC_60559);
+ #endif
+ 
++  printf("LDBL_NORM_MAX: %LF\n", LDBL_NORM_MAX);
++  printf("LDBL_MAX: %LF\n", LDBL_MAX);
++  printf("normalize_long_double(LDBL_MAX): %LF\n", normalize_long_double(LDBL_MAX));
++
+   /* Check the value of LDBL_NORM_MAX.  */
+-  ASSERT (LDBL_NORM_MAX == LDBL_MAX);
++  ASSERT (LDBL_NORM_MAX == normalize_long_double (LDBL_MAX));
+ 
+   /* Check the value of LDBL_SNAN.  */
+   ASSERT (isnanl (LDBL_SNAN));
+diff '--color=auto' -ruN a/lib/float.c b/lib/float.c
+--- a/lib/float.c	2025-01-01 09:32:29.000000000 +0000
++++ b/lib/float.c	2025-07-09 10:00:13.837937094 +0000
+@@ -23,7 +23,7 @@
+ #if GNULIB_defined_long_double_union
+ # if (defined _ARCH_PPC || defined _POWER) && (defined _AIX || defined __linux__) && (LDBL_MANT_DIG == 106) && defined __GNUC__
+ const union gl_long_double_union gl_LDBL_MAX =
+-  { { DBL_MAX, DBL_MAX / (double)134217728UL / (double)134217728UL } };
++  { { DBL_MAX, DBL_MAX / 0x1p53 } };
+ # elif defined __i386__
+ const union gl_long_double_union gl_LDBL_MAX =
+   { { 0xFFFFFFFF, 0xFFFFFFFF, 32766 } };
+diff '--color=auto' -ruN a/lib/float.in.h b/lib/float.in.h
+--- a/lib/float.in.h	2025-01-01 09:32:29.000000000 +0000
++++ b/lib/float.in.h	2025-07-09 10:00:13.837937094 +0000
+@@ -113,44 +113,38 @@
+ # define LDBL_MAX_10_EXP 4932
+ #endif
+ 
+-/* On AIX 7.1 with gcc 4.2, the values of LDBL_MIN_EXP, LDBL_MIN, LDBL_MAX are
+-   wrong.
+-   On Linux/PowerPC with gcc 4.4, the value of LDBL_MAX is wrong.  */
+-#if (defined _ARCH_PPC || defined _POWER) && defined _AIX && (LDBL_MANT_DIG == 106) && defined __GNUC__
++/* On PowerPC with gcc 15 when using __ibm128 long double, the value of
++   LDBL_MIN_EXP, LDBL_MIN, LDBL_MAX, and LDBL_NORM_MAX are wrong.  */
++#if ((defined _ARCH_PPC || defined _POWER) && LDBL_MANT_DIG == 106 \
++     && defined __GNUC__)
+ # undef LDBL_MIN_EXP
+ # define LDBL_MIN_EXP DBL_MIN_EXP
+ # undef LDBL_MIN_10_EXP
+ # define LDBL_MIN_10_EXP DBL_MIN_10_EXP
+ # undef LDBL_MIN
+ # define LDBL_MIN 2.22507385850720138309023271733240406422e-308L /* DBL_MIN = 2^-1022 */
+-#endif
+-#if (defined _ARCH_PPC || defined _POWER) && (defined _AIX || defined __linux__) && (LDBL_MANT_DIG == 106) && defined __GNUC__
+ # undef LDBL_MAX
+-/* LDBL_MAX is represented as { 0x7FEFFFFF, 0xFFFFFFFF, 0x7C8FFFFF, 0xFFFFFFFF }.
+-   It is not easy to define:
+-     #define LDBL_MAX 1.79769313486231580793728971405302307166e308L
+-   is too small, whereas
+-     #define LDBL_MAX 1.79769313486231580793728971405302307167e308L
+-   is too large.  Apparently a bug in GCC decimal-to-binary conversion.
+-   Also, I can't get values larger than
+-     #define LDBL63 ((long double) (1ULL << 63))
+-     #define LDBL882 (LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63)
+-     #define LDBL945 (LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63)
+-     #define LDBL1008 (LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63 * LDBL63)
+-     #define LDBL_MAX (LDBL1008 * 65535.0L + LDBL945 * (long double) 9223372036821221375ULL + LDBL882 * (long double) 4611686018427387904ULL)
+-   which is represented as { 0x7FEFFFFF, 0xFFFFFFFF, 0x7C8FFFFF, 0xF8000000 }.
+-   So, define it like this through a reference to an external variable
++/* LDBL_MAX is 2**1024 - 2**918, represented as: { 0x7FEFFFFF, 0xFFFFFFFF,
++                                                   0x7C9FFFFF, 0xFFFFFFFF }.
++
++   Do not write it as a constant expression, as GCC would likely treat
++   that as infinity due to the vagaries of this platform's funky arithmetic.
++   Instead, define it through a reference to an external variable.
++   Like the following, but using a union to avoid type mismatches:
+ 
+-     const double LDBL_MAX[2] = { DBL_MAX, DBL_MAX / (double)134217728UL / (double)134217728UL };
++     const double LDBL_MAX[2] = { DBL_MAX, DBL_MAX / 0x1p53 };
+      extern const long double LDBL_MAX;
+ 
+-   or through a pointer cast
++   The following alternative would not work as well when GCC is optimizing:
++
++     #define LDBL_MAX (*(long double const *) (double[])
++                       { DBL_MAX, DBL_MAX / 0x1p53 })
+ 
+-     #define LDBL_MAX \
+-       (*(const long double *) (double[]) { DBL_MAX, DBL_MAX / (double)134217728UL / (double)134217728UL })
++   The following alternative would require GCC 6 or later:
+ 
+-   Unfortunately, this is not a constant expression, and the latter expression
+-   does not work well when GCC is optimizing..  */
++     #define LDBL_MAX __builtin_pack_longdouble (DBL_MAX, DBL_MAX / 0x1p53)
++
++   Unfortunately none of the alternatives are constant expressions.  */
+ # if !GNULIB_defined_long_double_union
+ union gl_long_double_union
+   {
+@@ -161,6 +155,8 @@
+ # endif
+ extern const union gl_long_double_union gl_LDBL_MAX;
+ # define LDBL_MAX (gl_LDBL_MAX.ld)
++# undef LDBL_NORM_MAX
++# define LDBL_NORM_MAX LDBL_MAX
+ #endif
+ 
+ /* On IRIX 6.5, with cc, the value of LDBL_MANT_DIG is wrong.
+@@ -181,6 +177,21 @@
+ # endif
+ #endif
+ 
++/* On PowerPC platforms, 'long double' has a double-double representation.
++   Up to ISO C 17, this was outside the scope of ISO C because it can represent
++   numbers with mantissas of the form 1.<52 bits><many zeroes><52 bits>, such as
++   1.0L + 4.94065645841246544176568792868221e-324L = 1 + 2^-1074; see
++   ISO C 17 § 5.2.4.2.2.(3).
++   In ISO C 23, wording has been included that makes this 'long double'
++   representation compliant; see ISO C 23 § 5.2.5.3.3.(8)-(9).  In this setting,
++   numbers with mantissas of the form 1.<52 bits><many zeroes><52 bits> are
++   called "unnormalized".  And since LDBL_EPSILON must be normalized (per
++   ISO C 23 § 5.2.5.3.3.(33)), it must be 2^-105.  */
++#if defined __powerpc__ && LDBL_MANT_DIG == 106
++# undef LDBL_EPSILON
++# define LDBL_EPSILON 2.46519032881566189191165176650870696773e-32L /* 2^-105 */
++#endif
++
+ /* ============================ ISO C11 support ============================ */
+ 
+ /* 'float' properties */
+@@ -309,7 +320,11 @@
+ # endif
+ #endif
+ #ifndef LDBL_NORM_MAX
+-# define LDBL_NORM_MAX LDBL_MAX
++# ifdef __LDBL_NORM_MAX__
++#  define LDBL_NORM_MAX __LDBL_NORM_MAX__
++# else
++#  define LDBL_NORM_MAX LDBL_MAX
++# endif
+ #endif
+ #ifndef LDBL_SNAN
+ /* For sh, beware of <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111814>.  */

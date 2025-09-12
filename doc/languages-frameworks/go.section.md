@@ -67,7 +67,7 @@ To avoid updating this field when dependencies change, run `go mod vendor` in yo
 You can read more about [vendoring in the Go documentation](https://go.dev/ref/mod#vendoring).
 
 To obtain the hash, set `vendorHash = lib.fakeHash;` and run the build. ([more details here](#sec-source-hashes)).
-Another way is to use use `nix-prefetch` to obtain the hash. The following command gets the value of `vendorHash` for package `pet`:
+Another way is to use `nix-prefetch` to obtain the hash. The following command gets the value of `vendorHash` for package `pet`:
 
 
 ```sh
@@ -108,7 +108,7 @@ Defaults to `false`.
 ### `modPostBuild` {#var-go-modPostBuild}
 
 Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash`.
-Note that if you change this attribute, you need to update `vendorHash` attribute.
+Note that if you change this attribute, you need to update the `vendorHash` attribute.
 
 
 ### `modRoot` {#var-go-modRoot}
@@ -147,9 +147,7 @@ A string list of [Go build tags (also called build constraints)](https://pkg.go.
 Tags can also be set conditionally:
 
 ```nix
-{
-  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
-}
+{ tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ]; }
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -194,12 +192,18 @@ Specifies the contents of the `go.sum` file and triggers rebuilds when it change
 
 Defaults to `null`
 
+### `buildTestBinaries` {#var-go-buildTestBinaries}
+
+This option allows to compile test binaries instead of the usual binaries produced by a package.
+Go can [compile test into binaries](https://pkg.go.dev/cmd/go#hdr-Test_packages) using the `go test -c` command.
+These binaries can then be executed at a later point (outside the Nix sandbox) to run the tests.
+This is mostly useful for downstream consumers to run integration or end-to-end tests that won't work in the Nix sandbox, for example because they require network access.
 
 ## Versioned toolchains and builders {#ssec-go-toolchain-versions}
 
 Beside `buildGoModule`, there are also versioned builders available that pin a specific Go version, like `buildGo124Module` for Go 1.24.
 Similar, versioned toolchains are available, like `go_1_24` for Go 1.24.
-Both builder and toolchain of a certain version will be removed as soon as the Go version reaches end of life.
+Both builder and toolchain of a certain version will be removed as soon as the Go version reaches its end of life.
 
 As toolchain updates in nixpkgs cause mass rebuilds and must go through the staging cycle, it can take a while until a new Go minor version is available to consumers of nixpkgs.
 If you want quicker access to the latest minor, use `go_latest` toolchain and `buildGoLatestModule` builder.
@@ -250,7 +254,7 @@ The Go build can be further tweaked by setting environment variables via the `en
 
 ### `env.CGO_ENABLED` {#var-go-CGO_ENABLED}
 
-When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As consequence, the build
+When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As a consequence, the build
 program can't link against C libraries anymore, and the resulting binary is statically linked.
 
 When building with CGO enabled, Go will likely link some packages from the Go standard library against C libraries,
@@ -283,9 +287,7 @@ For example, only a selection of tests could be run with:
 ```nix
 {
   # -run and -skip accept regular expressions
-  checkFlags = [
-    "-run=^Test(Simple|Fast)$"
-  ];
+  checkFlags = [ "-run=^Test(Simple|Fast)$" ];
 }
 ```
 

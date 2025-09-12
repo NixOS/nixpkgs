@@ -2,17 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  scikit-learn,
-  numpy,
-  scipy,
+
+  # dependencies
   jinja2,
-  pytestCheckHook,
-  networkx,
-  matplotlib,
+  numpy,
+  scikit-learn,
+  scipy,
+
+  # tests
+  anywidget,
   igraph,
-  plotly,
   ipywidgets,
+  matplotlib,
+  networkx,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,27 +37,29 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    scikit-learn
-    numpy
-    scipy
     jinja2
+    numpy
+    scikit-learn
+    scipy
   ];
 
   pythonImportsCheck = [ "kmapper" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    networkx
-    matplotlib
+    anywidget
     igraph
-    plotly
     ipywidgets
+    matplotlib
+    networkx
+    plotly
+    pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
     homepage = "https://kepler-mapper.scikit-tda.org/";
-    license = licenses.mit;
+    changelog = "https://github.com/scikit-tda/kepler-mapper/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -65,18 +65,18 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libsoup_3
-      makeBinaryWrapper
-      webkitgtk_4_1
-    ]
-    ++ dotnetSdk.packages
-    ++ dotnetBuild.nugetDeps;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libsoup_3
+    makeBinaryWrapper
+    webkitgtk_4_1
+  ]
+  ++ dotnetSdk.packages
+  ++ dotnetBuild.nugetDeps;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Ph6QZW21JYQJgrUecN+MklWuY51iKC2glPEdgxw+3r8=";
   buildAndTestSubdir = subdir;
 

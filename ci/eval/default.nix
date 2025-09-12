@@ -14,10 +14,9 @@
   runCommand,
   writeShellScript,
   symlinkJoin,
-  time,
-  procps,
-  nix,
+  busybox,
   jq,
+  nix,
 }:
 
 let
@@ -27,14 +26,18 @@ let
       root = ../..;
       fileset = unions (
         map (lib.path.append ../..) [
+          ".version"
+          "ci/supportedSystems.json"
+          "ci/eval/attrpaths.nix"
+          "ci/eval/chunk.nix"
+          "ci/eval/outpaths.nix"
           "default.nix"
           "doc"
           "lib"
           "maintainers"
+          "modules"
           "nixos"
           "pkgs"
-          ".version"
-          "ci/supportedSystems.json"
         ]
       );
     };
@@ -48,9 +51,10 @@ let
     runCommand "attrpaths-superset.json"
       {
         src = nixpkgs;
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           nix
-          time
         ];
       }
       ''
@@ -59,13 +63,12 @@ let
         export GC_INITIAL_HEAP_SIZE=4g
         command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
-            "$src/pkgs/top-level/release-attrpaths-superset.nix" \
+            "$src/ci/eval/attrpaths.nix" \
             -A paths \
             -I "$src" \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
-            --option eval-system "${evalSystem}" \
-            --arg enableWarnings false > $out/paths.json
+            --option eval-system "${evalSystem}" > $out/paths.json
       '';
 
   singleSystem =
@@ -73,12 +76,11 @@ let
       # The system to evaluate.
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
-      evalSystem,
+      evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
-      checkMeta ? true,
+      chunkSize ? 5000,
 
       # Don't try to eval packages marked as broken.
       includeBroken ? false,
@@ -99,7 +101,7 @@ let
         set +e
         command time -o "$outputDir/timestats/$myChunk" \
           -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
-          nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          nix-env -f "${nixpkgs}/ci/eval/chunk.nix" \
           --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
@@ -110,7 +112,6 @@ let
           --arg myChunk "$myChunk" \
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
-          --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
@@ -132,15 +133,17 @@ let
     in
     runCommand "nixpkgs-eval-${evalSystem}"
       {
-        nativeBuildInputs = [
-          nix
-          time
-          procps
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           jq
+          nix
         ];
         env = {
           inherit evalSystem chunkSize;
         };
+        __structuredAttrs = true;
+        unsafeDiscardReferences.out = true;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -161,14 +164,14 @@ let
         # Record and print stats on free memory and swap in the background
         (
           while true; do
-            availMemory=$(free -b | grep Mem | awk '{print $7}')
-            freeSwap=$(free -b | grep Swap | awk '{print $4}')
-            echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
+            availMemory=$(free -m | grep Mem | awk '{print $7}')
+            freeSwap=$(free -m | grep Swap | awk '{print $4}')
+            echo "Available memory: $(( availMemory )) MiB, free swap: $(( freeSwap )) MiB"
 
             if [[ ! -f "$out/${evalSystem}/min-avail-memory" ]] || (( availMemory < $(<$out/${evalSystem}/min-avail-memory) )); then
               echo "$availMemory" > $out/${evalSystem}/min-avail-memory
             fi
-            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( availMemory < $(<$out/${evalSystem}/min-free-swap) )); then
+            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( freeSwap < $(<$out/${evalSystem}/min-free-swap) )); then
               echo "$freeSwap" > $out/${evalSystem}/min-free-swap
             fi
             sleep 4
@@ -207,7 +210,8 @@ let
     }:
     runCommand "combined-eval"
       {
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
           jq
         ];
       }
@@ -219,7 +223,8 @@ let
           reduce .[] as $item ({}; {
             added: (.added + $item.added),
             changed: (.changed + $item.changed),
-            removed: (.removed + $item.removed)
+            removed: (.removed + $item.removed),
+            rebuilds: (.rebuilds + $item.rebuilds)
           })
         ' > $out/combined-diff.json
 
@@ -236,36 +241,62 @@ let
 
   compare = callPackage ./compare { };
 
+  baseline =
+    {
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
+      # The number of attributes per chunk, see ./README.md for more info.
+      chunkSize ? 5000,
+      quickTest ? false,
+    }:
+    symlinkJoin {
+      name = "nixpkgs-eval-baseline";
+      paths = map (
+        evalSystem:
+        singleSystem {
+          inherit quickTest evalSystem chunkSize;
+        }
+      ) evalSystems;
+    };
+
   full =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
+      chunkSize ? 5000,
       quickTest ? false,
+      baseline,
+      # Which maintainer should be considered the author?
+      # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
+      githubAuthorId ? "nixpkgs-ci",
+      # What files have been touched? Defaults to none; use the expression below to calculate it.
+      # ```
+      # git diff --name-only --merge-base master HEAD \
+      #   | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
+      # ```
+      touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]",
     }:
     let
       diffs = symlinkJoin {
-        name = "diffs";
+        name = "nixpkgs-eval-diffs";
         paths = map (
           evalSystem:
-          let
-            eval = singleSystem {
-              inherit quickTest evalSystem chunkSize;
-            };
-          in
           diff {
             inherit evalSystem;
-            # Local "full" evaluation doesn't do a real diff.
-            beforeDir = eval;
-            afterDir = eval;
+            beforeDir = baseline;
+            afterDir = singleSystem {
+              inherit quickTest evalSystem chunkSize;
+            };
           }
         ) evalSystems;
       };
+      comparisonReport = compare {
+        combinedDir = combine { diffDir = diffs; };
+        inherit touchedFilesJson githubAuthorId;
+      };
     in
-    combine {
-      diffDir = diffs;
-    };
+    comparisonReport;
 
 in
 {
@@ -276,7 +307,8 @@ in
     combine
     compare
     # The above three are used by separate VMs in a GitHub workflow,
-    # while the below is intended for testing on a single local machine
+    # while the below are intended for testing on a single local machine
+    baseline
     full
     ;
 }

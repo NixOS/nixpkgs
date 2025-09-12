@@ -206,7 +206,10 @@ let
         concatMapAttrs
         mapAttrsRecursive
         mapAttrsRecursiveCond
+        mapAttrsToListRecursive
+        mapAttrsToListRecursiveCond
         genAttrs
+        genAttrs'
         isDerivation
         toDerivation
         optionalAttrs
@@ -287,6 +290,7 @@ let
         init
         crossLists
         unique
+        uniqueStrings
         allUnique
         intersectLists
         subtractLists
@@ -566,6 +570,9 @@ let
         ;
       inherit (self.versions)
         splitVersion
+        ;
+      inherit (self.network.ipv6)
+        mkEUI64Suffix
         ;
     }
   );

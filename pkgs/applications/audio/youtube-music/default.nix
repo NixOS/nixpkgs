@@ -1,30 +1,37 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   electron,
   python3,
-  stdenv,
   copyDesktopItems,
   nodejs,
   pnpm,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.9.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-xaHYNfW5ZLYiaeJ0F32NQ87woMh6K4Ea9rjgNOyabck=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M8YFpeauM55fpNyHSGQm8iZieV0oWqOieVThhglKKPE=";
   };
+
+  patches = [
+    # MPRIS's DesktopEntry property needs to match the desktop entry basename
+    ./fix-mpris-desktop-entry.patch
+  ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-xIQyTetHU37gTxCcQp4VCqzGdIfVQGy/aORCVba6YQ0=";
+    fetcherVersion = 2;
+    hash = "sha256-xZQ8rnLGD0ZxxUUPLHmNJ6mA+lnUHCTBvtJTiIPxaZU=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     pnpm.configHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -49,45 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
         -c.electronVersion=${electron.version}
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
-
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv pack/mac*/YouTube\ Music.app $out/Applications
-      makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      mkdir -p "$out/share/lib/youtube-music"
-      cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
-
-      pushd assets/generated/icons/png
-      for file in *.png; do
-        install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
-      done
-      popd
-    ''
-    + ''
-
-      runHook postInstall
-    '';
-
-  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
-      --add-flags $out/share/lib/youtube-music/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --set-default ELECTRON_IS_DEV 0 \
-      --inherit-argv0
-  '';
-
-  patches = [
-    # MPRIS's DesktopEntry property needs to match the desktop entry basename
-    ./fix-mpris-desktop-entry.patch
-  ];
-
   desktopItems = [
     (makeDesktopItem {
       name = "com.github.th_ch.youtube_music";
@@ -99,14 +68,49 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  installPhase = ''
+    runHook preInstall
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv pack/mac*/YouTube\ Music.app $out/Applications
+    ln -s "$out/Applications/YouTube Music.app/Contents/MacOS/YouTube Music" $out/bin/youtube-music
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mkdir -p "$out/share/youtube-music"
+    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/youtube-music"
+
+    pushd assets/generated/icons/png
+    for file in *.png; do
+      install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
+    done
+    popd
+  ''
+  + ''
+
+    runHook postInstall
+  '';
+
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
+      --add-flags $out/share/youtube-music/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     changelog = "https://github.com/th-ch/youtube-music/blob/master/changelog.md#${
-      lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.rev
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.tag
     }";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aacebedo
       SuperSandro2000
     ];

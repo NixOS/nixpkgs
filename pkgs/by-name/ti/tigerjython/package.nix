@@ -87,7 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --add-flags "-Duser.dir=$CUSTOM_LIBS/" \
       --add-flags "-Xmx512M" \
       --add-flags "-jar $JAR" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd'
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';

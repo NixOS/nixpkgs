@@ -6,8 +6,8 @@
   pytestCheckHook,
   numpy,
   pillow,
-  pillow-jpls,
   pydicom,
+  pyjpegls,
   pylibjpeg,
   pylibjpeg-libjpeg,
   pylibjpeg-openjpeg,
@@ -15,17 +15,9 @@
   typing-extensions,
 }:
 
-let
-  test_data = fetchFromGitHub {
-    owner = "pydicom";
-    repo = "pydicom-data";
-    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
-    hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
-  };
-in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.25.1";
+  version = "0.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -34,7 +26,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     tag = "v${version}";
-    hash = "sha256-AwKaqCqPjLyNwXomV/pxijpsTQajekBO/rgLQJpuYww=";
+    hash = "sha256-zaa0daGMQHktYkG56JA2a7s5UZSv8AbinO5roe9rWQc=";
   };
 
   build-system = [
@@ -44,8 +36,8 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     pillow
-    pillow-jpls
     pydicom
+    pyjpegls
     typing-extensions
   ];
 
@@ -57,31 +49,12 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonRemoveDeps = [
-    "pyjpegls" # not directly used
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
-    ln -s ${test_data}/data_store/data $HOME/.pydicom/data
+    ln -s ${pydicom.passthru.pydicom-data}/data_store/data $HOME/.pydicom/data
   '';
-
-  disabledTests = [
-    # require pyjpegls
-    "test_jpegls_monochrome"
-    "test_jpegls_rgb"
-    "test_jpeglsnearlossless_monochrome"
-    "test_jpeglsnearlossless_rgb"
-    "test_multi_frame_sm_image_ushort_encapsulated_jpegls"
-    "test_monochrome_jpegls"
-    "test_monochrome_jpegls_near_lossless"
-    "test_rgb_jpegls"
-    "test_construction_autotile"
-    "test_pixel_types_fractional"
-    "test_pixel_types_labelmap"
-  ];
 
   pythonImportsCheck = [
     "highdicom"
@@ -95,14 +68,11 @@ buildPythonPackage rec {
     "highdicom.sc"
   ];
 
-  # updates the wrong fetcher
-  passthru.skipBulkUpdate = true;
-
-  meta = with lib; {
+  meta = {
     description = "High-level DICOM abstractions for Python";
     homepage = "https://highdicom.readthedocs.io";
     changelog = "https://github.com/ImagingDataCommons/highdicom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

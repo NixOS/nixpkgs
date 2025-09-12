@@ -1,0 +1,184 @@
+diff --git a/Utilities/VTK/Applications/gdcm2vtk.cxx b/Utilities/VTK/Applications/gdcm2vtk.cxx
+index 344aec0df..c1cd4b43d 100644
+--- a/Utilities/VTK/Applications/gdcm2vtk.cxx
++++ b/Utilities/VTK/Applications/gdcm2vtk.cxx
+@@ -498,7 +498,7 @@ int main(int argc, char *argv[])
+     {
+     imgreader->SetFileLowerLeft( lowerleft );
+     if( names->GetNumberOfValues() == 1 )
+-      imgreader->SetFileName( names->GetValue(0) );
++      imgreader->SetFileName( names->GetValue(0).c_str() );
+     else
+       imgreader->SetFileNames(names);
+     imgreader->Update();
+diff --git a/Utilities/VTK/Applications/gdcmviewer.cxx b/Utilities/VTK/Applications/gdcmviewer.cxx
+index 3ed4778f8..58236a6a5 100644
+--- a/Utilities/VTK/Applications/gdcmviewer.cxx
++++ b/Utilities/VTK/Applications/gdcmviewer.cxx
+@@ -321,7 +321,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
+   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+   if( filenames->GetSize() == 1 ) // Backward compatible...
+     {
+-    reader->SetFileName( filenames->GetValue(0) );
++    reader->SetFileName( filenames->GetValue(0).c_str() );
+     }
+   else
+     {
+diff --git a/Utilities/VTK/Testing/Cxx/TestvtkGDCMImageWriter2.cxx b/Utilities/VTK/Testing/Cxx/TestvtkGDCMImageWriter2.cxx
+index fa1d7d895..00d9f3845 100644
+--- a/Utilities/VTK/Testing/Cxx/TestvtkGDCMImageWriter2.cxx
++++ b/Utilities/VTK/Testing/Cxx/TestvtkGDCMImageWriter2.cxx
+@@ -113,7 +113,7 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
+     // Need to check we can still read those files back:
+     for(int file=0; file<filenames->GetNumberOfValues(); ++file)
+       {
+-      const char *fname = filenames->GetValue(file);
++      const char *fname = filenames->GetValue(file).c_str();
+       gdcm::ImageReader r;
+       //r.SetFileName( gdcmfile.c_str() );
+       r.SetFileName( fname );
+diff --git a/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader.cxx b/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader.cxx
+index 8b253ec83..1c83ed417 100644
+--- a/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader.cxx
++++ b/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader.cxx
+@@ -170,7 +170,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
+     assert( sarray->GetNumberOfValues() == (int)nfiles );
+     reader->SetFileNames( sarray );
+     sarray->Delete();
+-    refimage = sarray->GetValue( 0 ); // Ok since sarray is ref count
++    refimage = sarray->GetValue( 0 ).c_str(); // Ok since sarray is ref count
+     }
+   else
+     {
+diff --git a/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader2.cxx b/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader2.cxx
+index 5151893e8..22dd4fd57 100644
+--- a/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader2.cxx
++++ b/Utilities/VTK/Testing/Cxx/TestvtkGDCMThreadedImageReader2.cxx
+@@ -160,7 +160,7 @@ int TestvtkGDCMThreadedImageRead2(const char *filename, bool verbose = false)
+     assert( sarray->GetNumberOfValues() == (int)nfiles );
+     reader->SetFileNames( sarray );
+     sarray->Delete();
+-    refimage = sarray->GetValue( 0 ); // Ok since sarray is ref count
++    refimage = sarray->GetValue( 0 ).c_str(); // Ok since sarray is ref count
+     }
+   else
+     {
+diff --git a/Utilities/VTK/vtkGDCMImageReader.cxx b/Utilities/VTK/vtkGDCMImageReader.cxx
+index c62034300..463c3879b 100644
+--- a/Utilities/VTK/vtkGDCMImageReader.cxx
++++ b/Utilities/VTK/vtkGDCMImageReader.cxx
+@@ -608,7 +608,7 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
+     // FIXME a gdcm::Scanner would be much faster here:
+     for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
+       {
+-      const char *filename = filenames->GetValue( i );
++      const char *filename = filenames->GetValue( i ).c_str();
+       gdcm::ImageReader reader;
+       reader.SetFileName( filename );
+       if( !reader.Read() )
+@@ -703,7 +703,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
+     }
+   else if ( this->FileNames && this->FileNames->GetNumberOfValues() > 0 )
+     {
+-    filename = this->FileNames->GetValue( 0 );
++    filename = this->FileNames->GetValue( 0 ).c_str();
+     }
+   else
+     {
+@@ -1459,7 +1459,7 @@ int vtkGDCMImageReader::RequestDataCompat()
+     for(int j = dext[4]; !this->AbortExecute && j <= dext[5]; ++j)
+       {
+       assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
+-      const char *filename = this->FileNames->GetValue( j );
++      const char *filename = this->FileNames->GetValue( j ).c_str();
+       int load = this->LoadSingleFile( filename, pointer, len );
+       if( !load )
+         {
+diff --git a/Utilities/VTK/vtkGDCMImageReader2.cxx b/Utilities/VTK/vtkGDCMImageReader2.cxx
+index 266c1270a..4976f0190 100644
+--- a/Utilities/VTK/vtkGDCMImageReader2.cxx
++++ b/Utilities/VTK/vtkGDCMImageReader2.cxx
+@@ -388,7 +388,7 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
+     // FIXME a gdcm::Scanner would be much faster here:
+     for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
+       {
+-      const char *filename = filenames->GetValue( i );
++      const char *filename = filenames->GetValue( i ).c_str();
+       gdcm::ImageReader reader;
+       reader.SetFileName( filename );
+       if( !reader.Read() )
+@@ -480,7 +480,7 @@ int vtkGDCMImageReader2::RequestInformationCompat()
+     }
+   else if ( this->FileNames && this->FileNames->GetNumberOfValues() > 0 )
+     {
+-    filename = this->FileNames->GetValue( 0 );
++    filename = this->FileNames->GetValue( 0 ).c_str();
+     }
+   else
+     {
+@@ -1177,7 +1177,7 @@ int vtkGDCMImageReader2::RequestDataCompat()
+     for(int j = outExt[4]; !this->AbortExecute && j <= outExt[5]; ++j)
+       {
+       assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
+-      const char *filename = this->FileNames->GetValue( j );
++      const char *filename = this->FileNames->GetValue( j ).c_str();
+       int load = this->LoadSingleFile( filename, pointer, len );
+       vtkDebugMacro( "LoadSingleFile: " << filename );
+       if( !load )
+diff --git a/Utilities/VTK/vtkGDCMImageWriter.cxx b/Utilities/VTK/vtkGDCMImageWriter.cxx
+index 37e1245a5..e723d15b7 100644
+--- a/Utilities/VTK/vtkGDCMImageWriter.cxx
++++ b/Utilities/VTK/vtkGDCMImageWriter.cxx
+@@ -255,7 +255,7 @@ int vtkGDCMImageWriter::RequestData(
+ {
+   if( this->FileNames->GetNumberOfValues() )
+     {
+-    const char *filename = this->FileNames->GetValue(0);
++    const char *filename = this->FileNames->GetValue(0).c_str();
+     return const_cast<char*>(filename);
+     }
+   return this->Superclass::GetFileName();
+@@ -1148,7 +1148,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
+   if( this->FileNames->GetNumberOfValues() )
+     {
+     //int n = this->FileNames->GetNumberOfValues();
+-    filename = this->FileNames->GetValue(k);
++    filename = this->FileNames->GetValue(k).c_str();
+     }
+   else
+     {
+diff --git a/Utilities/VTK/vtkGDCMThreadedImageReader.cxx b/Utilities/VTK/vtkGDCMThreadedImageReader.cxx
+index d50a3fee2..c531b8854 100644
+--- a/Utilities/VTK/vtkGDCMThreadedImageReader.cxx
++++ b/Utilities/VTK/vtkGDCMThreadedImageReader.cxx
+@@ -592,7 +592,7 @@ void vtkGDCMThreadedImageReader::RequestDataCompat()
+     const char **filenames = new const char* [ nfiles ];
+     for(unsigned int i = 0; i < nfiles; ++i)
+       {
+-      filenames[i] = this->FileNames->GetValue( i );
++      filenames[i] = this->FileNames->GetValue( i ).c_str();
+       //std::cerr << filenames[i] << std::endl;
+       }
+     ReadFiles((unsigned int)nfiles, filenames);
+diff --git a/Utilities/VTK/vtkGDCMThreadedImageReader2.cxx b/Utilities/VTK/vtkGDCMThreadedImageReader2.cxx
+index 2e6a2e932..72ce6453c 100644
+--- a/Utilities/VTK/vtkGDCMThreadedImageReader2.cxx
++++ b/Utilities/VTK/vtkGDCMThreadedImageReader2.cxx
+@@ -71,7 +71,7 @@ vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
+ //----------------------------------------------------------------------------
+ const char *vtkGDCMThreadedImageReader2::GetFileName(int i)
+ {
+-  return this->FileNames->GetValue( i );
++  return this->FileNames->GetValue( i ).c_str();
+ }
+ 
+ //----------------------------------------------------------------------------
+@@ -106,7 +106,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
+   for( int i = outExt[4]; i <= outExt[5] && i < maxfiles; ++i )
+     {
+     assert( i < maxfiles );
+-    const char *filename = self->GetFileNames()->GetValue( i );
++    const char *filename = self->GetFileNames()->GetValue( i ).c_str();
+     //ReadOneFile( filename );
+     //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
+ 

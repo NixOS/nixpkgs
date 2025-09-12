@@ -29,7 +29,7 @@ in
       type = types.path;
       default = /etc/ecoflow-access-key;
       description = ''
-        Path to the file with your personal api access string from the Ecoflow development website https://developer-eu.ecoflow.com.
+        Path to the file with your personal api access string from the Ecoflow development website <https://developer-eu.ecoflow.com>.
         Do to share or commit your plaintext scecrets to a public repo use: agenix or soaps.
       '';
     };
@@ -37,7 +37,7 @@ in
       type = types.path;
       default = /etc/ecoflow-secret-key;
       description = ''
-        Path to the file with your personal api secret string from the Ecoflow development website https://developer-eu.ecoflow.com.
+        Path to the file with your personal api secret string from the Ecoflow development website <https://developer-eu.ecoflow.com>.
         Do to share or commit your plaintext scecrets to a public repo use: agenix or soaps.
       '';
     };

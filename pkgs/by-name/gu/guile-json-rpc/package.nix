@@ -9,14 +9,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-json-rpc";
-  version = "0.4.5a";
+  version = "0.5.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "rgherdt";
     repo = "scheme-json-rpc";
     tag = finalAttrs.version;
-    hash = "sha256-sTJxPxHKovMOxfu5jM/6EpB9RFpG+9E3388xeE2Fpgw=";
+    hash = "sha256-xCykgq0L6PDqjXfNwsqV9u1nFiK9t+qCUgIgzZoIsxc=";
   };
 
   strictDeps = true;

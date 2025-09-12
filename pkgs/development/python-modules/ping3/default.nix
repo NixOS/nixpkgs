@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ping3";
-  version = "4.0.8";
+  version = "5.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mrRg61fwBrcfl3ppPRVyFaq9a7y8bNZCi2lR6q4MKHU=";
+    hash = "sha256-bJm8hE4Lfbxcl2XotTAUDa8czSESyZ2wGreYMb2Agc0=";
   };
 
   build-system = [ setuptools ];

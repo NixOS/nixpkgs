@@ -27,22 +27,23 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: case: { inherit case out; }) {
-        "1.7.11" = isEq "8.20";
-        "1.7.10" = range "8.18" "8.19";
-        "1.7.9" = isEq "8.17";
-        "1.7.8" = isEq "8.16";
-        "1.7.7" = isEq "8.15";
-        "1.7.6" = isEq "8.14";
-        "1.7.5" = isEq "8.13";
-        "1.7.4" = isEq "8.12";
-        "1.7.3" = isEq "8.11";
-        "1.7.2" = isEq "8.10";
-        "1.7.1" = isEq "8.9";
-      }
-    )) null;
+    lib.switch coq.coq-version [
+      (case (isEq "8.20") "1.7.11")
+      (case (range "8.18" "8.19") "1.7.10")
+      (case (isEq "8.17") "1.7.9")
+      (case (isEq "8.16") "1.7.8")
+      (case (isEq "8.15") "1.7.7")
+      (case (isEq "8.14") "1.7.6")
+      (case (isEq "8.13") "1.7.5")
+      (case (isEq "8.12") "1.7.4")
+      (case (isEq "8.11") "1.7.3")
+      (case (isEq "8.10") "1.7.2")
+      (case (isEq "8.9") "1.7.1")
+    ] null;
 
   mlPlugin = true;
 

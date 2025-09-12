@@ -12,22 +12,32 @@
 
     specialisation = {
       bpfland.configuration.services.scx.scheduler = "scx_bpfland";
-      central.configuration.services.scx.scheduler = "scx_central";
+      cosmos.configuration.services.scx.scheduler = "scx_cosmos";
+      flash.configuration.services.scx.scheduler = "scx_flash";
+      flatcg.configuration.services.scx.scheduler = "scx_flatcg";
       lavd.configuration.services.scx.scheduler = "scx_lavd";
+      nest.configuration.services.scx.scheduler = "scx_nest";
+      p2dq.configuration.services.scx.scheduler = "scx_p2dq";
       rlfifo.configuration.services.scx.scheduler = "scx_rlfifo";
       rustland.configuration.services.scx.scheduler = "scx_rustland";
       rusty.configuration.services.scx.scheduler = "scx_rusty";
+      simple.configuration.services.scx.scheduler = "scx_simple";
     };
   };
 
   testScript = ''
     specialisation = [
       "bpfland",
-      "central",
+      "cosmos",
+      "flash",
+      "flatcg",
       "lavd",
+      "nest",
+      "p2dq",
       "rlfifo",
       "rustland",
-      "rusty"
+      "rusty",
+      "simple"
     ]
 
     def activate_specialisation(name: str):

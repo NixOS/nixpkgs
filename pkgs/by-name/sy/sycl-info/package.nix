@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "sycl-info";
-  version = "unstable-2019-11-19";
+  version = "0-unstable-2019-11-19";
 
   src = fetchFromGitHub {
     owner = "codeplaysoftware";
@@ -22,6 +22,11 @@ stdenv.mkDerivation {
     rev = "b47d498ee2d6b77ec21972de5882e8e12efecd6c";
     sha256 = "0fy0y1rcfb11p3vijd8wym6xkaicav49pv2bv2l18rma929n1m1m";
   };
+
+  patches = [
+    # fix error caused by upgrading lyra from 1.6.1 to 1.7.0
+    ./fix-lyra-message.patch
+  ];
 
   buildInputs = [
     nlohmann_json

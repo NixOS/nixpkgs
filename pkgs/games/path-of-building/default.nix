@@ -17,13 +17,13 @@
 let
   data = stdenv.mkDerivation (finalAttrs: {
     pname = "path-of-building-data";
-    version = "2.54.0";
+    version = "2.56.0";
 
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-NMSr5HJ/YvrqE8uVINzH0b9+U3snQGQYalSJ4bNRh1I=";
+      hash = "sha256-vzTMkrZgXtsCtEyxaDkea/MRj8tZDzDV3JAc440xrM8=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -64,7 +64,8 @@ stdenv.mkDerivation {
     qttools
     wrapQtAppsHook
     icoutils
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     qtbase

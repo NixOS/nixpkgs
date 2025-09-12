@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2024.03.0";
+  version = "2025.02.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,13 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aionotion";
     tag = version;
-    hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
+    hash = "sha256-MqH3CPp+dAX5DXtnHio95KGQ+Ok2TXrX6rn/AMx5OsY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core==" "poetry-core>="
+  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -42,6 +47,12 @@ buildPythonPackage rec {
     mashumaro
     pyjwt
     yarl
+  ];
+
+  pythonRelaxDeps = [
+    "ciso8601"
+    "frozenlist"
+    "mashumaro"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -61,7 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
-    changelog = "https://github.com/bachya/aionotion/releases/tag/${version}";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

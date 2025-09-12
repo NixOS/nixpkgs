@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-deepseek";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-deepseek==${version}";
-    hash = "sha256-nkL8QO1H29sA6g61Hgt7QrRAfwD3t+0m5JEHyPx8B7Y=";
+    hash = "sha256-lIlThVpyZF5osiCyYMO8kQUNtG5eUjXGZLdgRraj4Yc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/deepseek";
@@ -56,12 +56,16 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_deepseek" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-deepseek==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-deepseek==";
+    };
   };
 
   meta = {

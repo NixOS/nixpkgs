@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "orgparse";
-  version = "0.4.20231004";
+  version = "0.4.20250520";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pOOK6tq/mYiw9npmrNCCedGCILy8QioSkGDCiQu6kaA=";
+    hash = "sha256-ZHL9Ft3Ku1I5GFBchlJjq/oFrIC1k+ZooInNopGxot4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/karlicoss/orgparse";
-    description = "orgparse - Emacs org-mode parser in Python";
+    description = "Orgparse - Emacs org-mode parser in Python";
     license = licenses.bsd2;
     maintainers = with maintainers; [ twitchy0 ];
   };

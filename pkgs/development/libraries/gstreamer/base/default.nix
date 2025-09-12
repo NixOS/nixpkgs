@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.26.0";
+  version = "1.26.5";
 
   outputs = [
     "out"
@@ -61,106 +61,102 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4jGJ++0uxIZpA4LRBVwZ7q9arj6V4ldvxMiE2WqQ5p4=";
+    hash = "sha256-8MDibL7apXcyy2pXjozBOhFkvxjXN9VcMzBhxS8MSNc=";
   };
 
   strictDeps = true;
   depsBuildBuild = [
     pkg-config
   ];
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      python3
-      gettext
-      orc
-      glib
-      gstreamer
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ]
-    ++ lib.optionals enableWayland [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    gettext
+    orc
+    glib
+    gstreamer
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ]
+  ++ lib.optionals enableWayland [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      graphene
-      orc
-      libtheora
-      libintl
-      libopus
-      isocodes
-      libpng
-      libjpeg
-      tremor
-      pango
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libdrm
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ]
-    ++ lib.optionals enableAlsa [
-      alsa-lib
-    ]
-    ++ lib.optionals enableX11 [
-      libXext
-      libXi
-      libXv
-    ]
-    ++ lib.optionals enableWayland [
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional enableCdparanoia cdparanoia;
+  buildInputs = [
+    graphene
+    orc
+    libtheora
+    libintl
+    libopus
+    isocodes
+    libpng
+    libjpeg
+    tremor
+    pango
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libdrm
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ]
+  ++ lib.optionals enableAlsa [
+    alsa-lib
+  ]
+  ++ lib.optionals enableX11 [
+    libXext
+    libXi
+    libXv
+  ]
+  ++ lib.optionals enableWayland [
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional enableCdparanoia cdparanoia;
 
-  propagatedBuildInputs =
-    [
-      gstreamer
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libdrm
-    ];
+  propagatedBuildInputs = [
+    gstreamer
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libdrm
+  ];
 
-  mesonFlags =
-    [
-      "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-      "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-      # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
-      "-Dgl_winsys=${
-        lib.concatStringsSep "," (
-          lib.optional enableX11 "x11"
-          ++ lib.optional enableWayland "wayland"
-          ++ lib.optional enableCocoa "cocoa"
-        )
-      }"
-      (lib.mesonEnable "introspection" withIntrospection)
-      (lib.mesonEnable "doc" enableDocumentation)
-      (lib.mesonEnable "libvisual" false)
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-Dtests=disabled"
-    ]
-    ++ lib.optionals (!enableX11) [
-      "-Dx11=disabled"
-      "-Dxi=disabled"
-      "-Dxshm=disabled"
-      "-Dxvideo=disabled"
-    ]
-    # TODO How to disable Wayland?
-    ++ lib.optional (!enableGl) "-Dgl=disabled"
-    ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
-    ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
-    ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
+  mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
+    "-Dgl_winsys=${
+      lib.concatStringsSep "," (
+        lib.optional enableX11 "x11"
+        ++ lib.optional enableWayland "wayland"
+        ++ lib.optional enableCocoa "cocoa"
+      )
+    }"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "libvisual" false)
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dtests=disabled"
+  ]
+  ++ lib.optionals (!enableX11) [
+    "-Dx11=disabled"
+    "-Dxi=disabled"
+    "-Dxshm=disabled"
+    "-Dxvideo=disabled"
+  ]
+  # TODO How to disable Wayland?
+  ++ lib.optional (!enableGl) "-Dgl=disabled"
+  ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
+  ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
 
   postPatch = ''
     patchShebangs \

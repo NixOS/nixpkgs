@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.3";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-YxcxVyiPEZPvO4NyeDp8nTVfbxlOCLClWCmAlL5PPi0=";
+    hash = "sha256-BOXYyisEU/Hwf1/IymIrlK6ALL8DD3vBAXuDdb9eM9c=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
@@ -56,12 +56,16 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-ollama==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-ollama==";
+    };
   };
 
   meta = {

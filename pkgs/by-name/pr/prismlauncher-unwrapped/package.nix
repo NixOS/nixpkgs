@@ -71,28 +71,28 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.quazip
     tomlplusplus
     zlib
-  ] ++ lib.optional gamemodeSupport gamemode;
+  ]
+  ++ lib.optional gamemodeSupport gamemode;
 
   hardeningEnable = lib.optionals stdenv.hostPlatform.isLinux [ "pie" ];
 
-  cmakeFlags =
-    [
-      # downstream branding
-      (lib.cmakeFeature "Launcher_BUILD_PLATFORM" "nixpkgs")
-    ]
-    ++ lib.optionals (msaClientID != null) [
-      (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
-    ]
-    ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
-      (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # we wrap our binary manually
-      (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
-      # disable built-in updater
-      (lib.cmakeFeature "MACOSX_SPARKLE_UPDATE_FEED_URL" "''")
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
-    ];
+  cmakeFlags = [
+    # downstream branding
+    (lib.cmakeFeature "Launcher_BUILD_PLATFORM" "nixpkgs")
+  ]
+  ++ lib.optionals (msaClientID != null) [
+    (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
+  ]
+  ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
+    (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # we wrap our binary manually
+    (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
+    # disable built-in updater
+    (lib.cmakeFeature "MACOSX_SPARKLE_UPDATE_FEED_URL" "''")
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
+  ];
 
   doCheck = true;
 

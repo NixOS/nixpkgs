@@ -12,7 +12,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.8.10";
+  version = "1.9.12";
   appname = "Obsidian";
   meta = with lib; {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -36,9 +36,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-3BiPbT1ME75WpR/mTDl8/TI+yq6+WMU+RaZXykUG8yE="
+        "sha256-HIcnOY/Fn/3zJTKiLxzPKbvug/wf1nc3lG2zyep68Nw="
       else
-        "sha256-xZoi4Z9JMM/FEPfvjBXEag3pT/uJH9dvFp8qHnTFNKE=";
+        "sha256-qS4M9gvCs3B2kOlImH/ddm0zjsVa4Zrhu2VEBKYNuMo=";
   };
 
   icon = fetchurl {
@@ -79,7 +79,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar

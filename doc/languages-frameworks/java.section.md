@@ -42,7 +42,7 @@ generated `.jar` files to be non-deterministic, which is not optimal.
 Using it, however, does not always guarantee reproducibility.
 
 JAR files that are intended to be used by other packages should be
-installed in `$out/share/java`. JDKs have a stdenv setup hook that add
+installed in `$out/share/java`. JDKs have a `stdenv` setup hook that adds
 any JARs in the `share/java` directories of the build inputs to the
 `CLASSPATH` environment variable. For instance, if the package `libfoo`
 installs a JAR named `foo.jar` in its `share/java` directory, and
@@ -84,7 +84,7 @@ Since the introduction of the Java Platform Module System in Java 9,
 Java distributions typically no longer ship with a general-purpose JRE:
 instead, they allow generating a JRE with only the modules required for
 your application(s). Because we can't predict what modules will be
-needed on a general-purpose system, the default jre package is the full
+needed on a general-purpose system, the default `jre` package is the full
 JDK. When building a minimal system/image, you can override the
 `modules` parameter on `jre_minimal` to build a JRE with only the
 modules relevant for you:
@@ -108,11 +108,7 @@ You can also specify what JDK your JRE should be based on, for example
 selecting a 'headless' build to avoid including a link to GTK+:
 
 ```nix
-{
-  my_jre = pkgs.jre_minimal.override {
-    jdk = jdk11_headless;
-  };
-}
+{ my_jre = pkgs.jre_minimal.override { jdk = jdk11_headless; }; }
 ```
 
 Note all JDKs passthru `home`, so if your application requires

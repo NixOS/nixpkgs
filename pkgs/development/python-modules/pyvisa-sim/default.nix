@@ -15,24 +15,21 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-sim";
-  version = "0.6.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "PyVISA-sim";
+    pname = "pyvisa_sim";
     inherit version;
-    hash = "sha256-kHahaRKoEUtDxEsdMolPwfEy1DidiytxmvYiQeQhYcE=";
+    hash = "sha256-EbEGWOIVJwjuraDIZifYlMTRFIQxLwLTzzhRlrS8hw8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyvisa
     pyyaml
     stringparser

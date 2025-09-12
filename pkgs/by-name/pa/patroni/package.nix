@@ -11,6 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "patroni";
   version = "4.0.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zalando";

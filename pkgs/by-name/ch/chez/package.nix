@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  llvmPackages_17,
   fetchurl,
   coreutils,
   cctools,
@@ -13,13 +12,6 @@
   testers,
 }@args:
 
-let
-  # x64 darwin fails with invalid memory reference with clang-18 & 19.
-  # https://github.com/cisco/ChezScheme/issues/896
-  # aarch64 darwin fails to execute `system` calls with clang-18 & 19.
-  # https://github.com/cisco/ChezScheme/issues/928
-  stdenv = if args.stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else args.stdenv;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
   version = "10.2.0";

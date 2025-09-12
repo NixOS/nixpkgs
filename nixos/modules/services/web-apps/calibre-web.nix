@@ -160,29 +160,34 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          {
-            Type = "simple";
-            User = cfg.user;
-            Group = cfg.group;
+        # fix book cover cache directory defaults to a path under /nix/store/
+        environment.CACHE_DIR = "/var/cache/calibre-web";
 
-            ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
-              ''
-                __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
+        serviceConfig = {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
 
-                ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-              ''
-              + optionalString (cfg.options.calibreLibrary != null) ''
-                test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
-              ''
-            );
+          ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
+            ''
+              __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
-            ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
-            Restart = "on-failure";
-          }
-          // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
-            StateDirectory = cfg.dataDir;
-          };
+              ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
+            ''
+            + optionalString (cfg.options.calibreLibrary != null) ''
+              test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
+            ''
+          );
+
+          ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
+          Restart = "on-failure";
+
+          CacheDirectory = "calibre-web";
+          CacheDirectoryMode = "0750";
+        }
+        // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
+        };
       };
 
     networking.firewall = mkIf cfg.openFirewall {

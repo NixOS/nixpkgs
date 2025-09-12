@@ -28,30 +28,29 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests =
-    [
-      # 'AssertionError: 'function (test.muppy.test_summary.func)' != 'function (muppy.test_summary.func)'
-      # https://github.com/pympler/pympler/issues/134
-      "test_repr_function"
-      # Stuck
-      "test_locals"
-      "test_globals"
-      "test_traceback"
-      "test_otracker_diff"
-      "test_stracker_store_summary"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # https://github.com/pympler/pympler/issues/148
-      "test_findgarbage"
-      "test_get_tree"
-      "test_prune"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/pympler/pympler/issues/163
-      "test_edges_new"
-      "test_edges_old"
-      "test_split"
-    ];
+  disabledTests = [
+    # 'AssertionError: 'function (test.muppy.test_summary.func)' != 'function (muppy.test_summary.func)'
+    # https://github.com/pympler/pympler/issues/134
+    "test_repr_function"
+    # Stuck
+    "test_locals"
+    "test_globals"
+    "test_traceback"
+    "test_otracker_diff"
+    "test_stracker_store_summary"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/pympler/pympler/issues/148
+    "test_findgarbage"
+    "test_get_tree"
+    "test_prune"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/pympler/pympler/issues/163
+    "test_edges_new"
+    "test_edges_old"
+    "test_split"
+  ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 

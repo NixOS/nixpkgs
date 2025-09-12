@@ -73,7 +73,8 @@ buildPythonPackage rec {
 
     # fastapi
     httpx
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # AssertionError: assert 'c7a05e2b-8a21-4255-a3ed-92cea1e74a62' is None
@@ -97,7 +98,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/mozilla-services/python-dockerflow/releases/tag/${src.tag}";
-    description = "A Python package to implement tools and helpers for Mozilla Dockerflow";
+    description = "Python package to implement tools and helpers for Mozilla Dockerflow";
     homepage = "https://github.com/mozilla-services/python-dockerflow";
     license = lib.licenses.mpl20;
   };

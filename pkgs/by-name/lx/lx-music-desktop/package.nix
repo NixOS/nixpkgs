@@ -8,13 +8,12 @@
 
   makeWrapper,
 
-  electron_34,
+  electron_36,
   commandLineArgs ? "",
 }:
 
 let
-  # if we want to use later electron, we'll need to bump the `node-abi` npm package version
-  electron = electron_34;
+  electron = electron_36;
 in
 buildNpmPackage rec {
   pname = "lx-music-desktop";
@@ -95,6 +94,6 @@ buildNpmPackage rec {
     platforms = electron.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with lib.maintainers; [ oosquare ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

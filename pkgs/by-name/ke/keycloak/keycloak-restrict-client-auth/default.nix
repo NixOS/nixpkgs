@@ -6,16 +6,16 @@
 
 maven.buildMavenPackage rec {
   pname = "keycloak-restrict-client-auth";
-  version = "24.0.0";
+  version = "26.1.0";
 
   src = fetchFromGitHub {
     owner = "sventorben";
     repo = "keycloak-restrict-client-auth";
     rev = "v${version}";
-    hash = "sha256-Pk0tj8cTHSBwVIzINE7GLA5b/eI97wuOTvO7UoXBStM=";
+    hash = "sha256-nQ2AwXhSUu5RY/BbxXE2OXgEb7Zf6FfrGP5tfbgAXk8=";
   };
 
-  mvnHash = "sha256-Pk2yYuBqGs4k1KwaU06RQe1LpohZu0VI1pHEUBU3EUE=";
+  mvnHash = "sha256-32un0gcpFI5wU9eShASzVnXmdhu3e+55iC3GBX/2yko=";
 
   installPhase = ''
     runHook preInstall

@@ -27,7 +27,13 @@
         };
       };
 
-      systemd.extraConfig = "DefaultEnvironment=\"XXX_SYSTEM=foo\"";
+      systemd.settings.Manager = {
+        DefaultEnvironment = "XXX_SYSTEM=foo";
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
       systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
       services.journald.extraConfig = "Storage=volatile";
       test-support.displayManager.auto.user = "alice";
@@ -84,13 +90,6 @@
             touch "$HOME/user_conf_read"
           fi
         '';
-      };
-
-      systemd.watchdog = {
-        device = "/dev/watchdog";
-        runtimeTime = "30s";
-        rebootTime = "10min";
-        kexecTime = "5min";
       };
 
       environment.etc."systemd/system-preset/10-testservice.preset".text = ''

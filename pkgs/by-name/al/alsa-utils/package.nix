@@ -7,6 +7,7 @@
   alsa-plugins,
   gettext,
   makeWrapper,
+  pkg-config,
   ncurses,
   libsamplerate,
   pciutils,
@@ -28,18 +29,19 @@ let
     paths = map (path: "${path}/lib/alsa-lib") plugin-packages;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/alsa-utils-${version}.tar.bz2";
-    hash = "sha256-FwKmsc35uj6ZbsvB3c+RceaAj1lh1QPQ8n6A7hYvHao=";
+    url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-B5THTTP+2UPnxQYJwTCJ5AkxK2xAPWromE/EKcCWB0E=";
   };
 
   nativeBuildInputs = [
     gettext
     makeWrapper
+    pkg-config
   ];
   buildInputs = [
     alsa-lib
@@ -64,7 +66,9 @@ stdenv.mkDerivation rec {
         procps
       ]
     }"
-    wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
+    for program in $out/bin/*; do
+        wrapProgram "$program" --set-default ALSA_PLUGIN_DIR "${plugin-dir}"
+    done
   '';
 
   postInstall = ''
@@ -77,7 +81,7 @@ stdenv.mkDerivation rec {
     url = "https://www.alsa-project.org/files/pub/utils/";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
@@ -85,8 +89,13 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl2Only # alsactl (init_{parse,sysdeps,sysfs,utils_{run,string}}.c, rest GPL 2.0+)
+      lgpl21Plus # alsaucm
+    ];
+
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

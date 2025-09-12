@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -23,5 +24,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ nrhelmi ];
     mainProgram = "xteve";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

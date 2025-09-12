@@ -54,10 +54,11 @@ buildPerlModule rec {
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
-  buildInputs =
-    [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook3 to work correctly
-    ++ lib.optional withGtk3 Gtk3;
+  buildInputs = [
+    perlEnv
+  ]
+  # Can't be in perlEnv for wrapGAppsHook3 to work correctly
+  ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule
   # and the Perl code fails anyway
@@ -78,31 +79,30 @@ buildPerlModule rec {
     cp -r share/* $out/share
   '';
 
-  postFixup =
-    ''
-      wrapProgram "$out/bin/pipe-viewer" \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            ffmpeg
-            mpv
-            wget
-            yt-dlp
-          ]
-        }"
-    ''
-    + lib.optionalString withGtk3 ''
-      # make xdg-open overrideable at runtime
-      wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            ffmpeg
-            mpv
-            wget
-            yt-dlp
-          ]
-        }" \
-        --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
-    '';
+  postFixup = ''
+    wrapProgram "$out/bin/pipe-viewer" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ffmpeg
+          mpv
+          wget
+          yt-dlp
+        ]
+      }"
+  ''
+  + lib.optionalString withGtk3 ''
+    # make xdg-open overrideable at runtime
+    wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ffmpeg
+          mpv
+          wget
+          yt-dlp
+        ]
+      }" \
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/trizen/pipe-viewer";

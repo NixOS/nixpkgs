@@ -53,7 +53,7 @@ They fall in one of these categories:
 
   These tend to entail support from the derivation or the `passthru` attribute in question.
   Common examples of this type are `passthru.optional-dependencies`, `passthru.withPlugins`, and `passthru.withPackages`.
-  All of those allow associating the package with a set of components built for that specific package, such as when building Python runtime environments using (`python.withPackages`)[#python.withpackages-function].
+  All of those allow associating the package with a set of components built for that specific package, such as when building Python runtime environments using [`python.withPackages`](#python.withpackages-function).
 
 Attributes that apply only to particular [build helpers](#part-builders) or [language ecosystems](#chap-language-support) are documented there.
 
@@ -83,11 +83,11 @@ Besides tests provided by upstream, that you run in the [`checkPhase`](#ssec-che
 - They can be run and debugged without rebuilding the package, which is useful if that takes a long time
 - They don't add overhead to each build, as opposed checks added to the [`installCheckPhase`](#ssec-installCheck-phase), such as [`versionCheckHook`](#versioncheckhook).
 
-It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion), but since that is pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](#versioncheckhook) for that, which has the following advantages over `passthru.tests`:
+It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion), but since that is a pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](#versioncheckhook) for that, which has the following advantages over `passthru.tests`:
 
 - If the `versionCheckPhase` (the phase defined by [`versionCheckHook`](#versioncheckhook)) fails, it triggers a failure which can't be ignored if you use the package, or if you find out about it in a [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) report.
 - Sometimes packages become silently broken - meaning they fail to launch but their build passes because they don't perform any tests in the `checkPhase`. If you use this tool infrequently, such a silent breakage may rot in your system / profile configuration, and you will not notice the failure until you will want to use this package. Testing such basic functionality ensures you have to deal with the failure when you update your system / profile.
-- When you open a PR, [ofborg](https://github.com/NixOS/ofborg)'s CI _will_ run `passthru.tests` of [packages that are directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building), but if you'd want to use the [`@ofborg build`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) command for dependent packages, you won't have to specify in addition the `.tests` attribute of the packages you want to build, and no body will be able to avoid these tests.
+- When you open a PR, [ofborg](https://github.com/NixOS/ofborg)'s CI _will_ run `passthru.tests` of [packages that are directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building), but if you'd want to use the [`@ofborg build`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) command for dependent packages, you won't have to specify in addition the `.tests` attribute of the packages you want to build, and nobody will be able to avoid these tests.
 
 <!-- NOTE(@fricklerhandwerk): one may argue whether that testing guide should rather be in the user's manual -->
 For more on how to write and run package tests for Nixpkgs, see the [testing section in the package contributor guide](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).

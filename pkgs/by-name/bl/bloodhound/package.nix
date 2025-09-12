@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.3.1";
 
   src = fetchzip {
-    url = "https://github.com/BloodHoundAD/BloodHound/releases/download/v${finalAttrs.version}/BloodHound-linux-x64.zip";
+    url = "https://github.com/SpecterOps/BloodHound-Legacy/releases/download/v${finalAttrs.version}/BloodHound-linux-x64.zip";
     hash = "sha256-gGfZ5Mj8rmz3dwKyOitRExkgOmSVDOqKpPxvGlE4izw=";
   };
 
@@ -119,10 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Active Directory reconnaissance and attack path management tool";
-    homepage = "https://github.com/BloodHoundAD/BloodHound";
+    homepage = "https://github.com/SpecterOps/BloodHound-Legacy";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    changelog = "https://github.com/BloodHoundAD/BloodHound/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://github.com/BloodHoundAD/BloodHound/releases";
+    changelog = "https://github.com/SpecterOps/BloodHound-Legacy/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/SpecterOps/BloodHound-Legacy/releases";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ akechishiro ];
     platforms = [ "x86_64-linux" ];

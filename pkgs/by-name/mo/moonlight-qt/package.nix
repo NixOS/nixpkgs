@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-qt";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rWVNpfRDLrWsqELPFquA6rW6/AfWV+6DNLUCPqIhle0=";
     fetchSubmodules = true;
   };
@@ -49,27 +49,26 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  buildInputs =
-    [
-      SDL2
-      SDL2_ttf
-      ffmpeg
-      libopus
-      libplacebo
-      qt6.qtdeclarative
-      qt6.qtsvg
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-      libva
-      libvdpau
-      libxkbcommon
-      qt6.qtwayland
-      wayland
-      libdrm
-    ];
+  buildInputs = [
+    SDL2
+    SDL2_ttf
+    ffmpeg
+    libopus
+    libplacebo
+    qt6.qtdeclarative
+    qt6.qtsvg
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+    libva
+    libvdpau
+    libxkbcommon
+    qt6.qtwayland
+    wayland
+    libdrm
+  ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 

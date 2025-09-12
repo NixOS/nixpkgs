@@ -89,18 +89,17 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  nativeBuildInputs =
-    [
-      which
-      pkg-config
-      perl
-      autoreconfHook # patches applied
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # autogen needs a build autogen when cross-compiling
-      buildPackages.buildPackages.autogen
-      buildPackages.texinfo
-    ];
+  nativeBuildInputs = [
+    which
+    pkg-config
+    perl
+    autoreconfHook # patches applied
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # autogen needs a build autogen when cross-compiling
+    buildPackages.buildPackages.autogen
+    buildPackages.texinfo
+  ];
   buildInputs = [
     guile_2_2
     libxml2
@@ -110,48 +109,46 @@ stdenv.mkDerivation rec {
     export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
   '';
 
-  configureFlags =
-    [
-      "--with-libxml2=${libxml2.dev}"
-      "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
-      # Make sure to use a static value for the timeout. If we do not set a value
-      # here autogen will select one based on the execution time of the configure
-      # phase which is not really reproducible.
-      #
-      # If you are curious about the number 78, it has been cargo-culted from
-      # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
-      "--enable-timeout=78"
-      "CFLAGS=-D_FILE_OFFSET_BITS=64"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # the configure check for regcomp wants to run a host program
-      "libopts_cv_with_libregex=yes"
-      #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
-    ]
-    # See: https://sourceforge.net/p/autogen/bugs/187/
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "ac_cv_func_utimensat=no" ];
+  configureFlags = [
+    "--with-libxml2=${libxml2.dev}"
+    "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
+    # Make sure to use a static value for the timeout. If we do not set a value
+    # here autogen will select one based on the execution time of the configure
+    # phase which is not really reproducible.
+    #
+    # If you are curious about the number 78, it has been cargo-culted from
+    # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
+    "--enable-timeout=78"
+    "CFLAGS=-D_FILE_OFFSET_BITS=64"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # the configure check for regcomp wants to run a host program
+    "libopts_cv_with_libregex=yes"
+    #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
+  ]
+  # See: https://sourceforge.net/p/autogen/bugs/187/
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "ac_cv_func_utimensat=no" ];
 
   #doCheck = true; # not reliable
 
-  postInstall =
-    ''
-      mkdir -p $dev/bin
-      mv $bin/bin/autoopts-config $dev/bin
+  postInstall = ''
+    mkdir -p $dev/bin
+    mv $bin/bin/autoopts-config $dev/bin
 
-      for f in $lib/lib/autogen/tpl-config.tlib $out/share/autogen/tpl-config.tlib; do
-        sed -e "s|$dev/include|/no-such-autogen-include-path|" -i $f
-        sed -e "s|$bin/bin|/no-such-autogen-bin-path|" -i $f
-        sed -e "s|$lib/lib|/no-such-autogen-lib-path|" -i $f
-      done
+    for f in $lib/lib/autogen/tpl-config.tlib $out/share/autogen/tpl-config.tlib; do
+      sed -e "s|$dev/include|/no-such-autogen-include-path|" -i $f
+      sed -e "s|$bin/bin|/no-such-autogen-bin-path|" -i $f
+      sed -e "s|$lib/lib|/no-such-autogen-lib-path|" -i $f
+    done
 
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      # remove build directory (/build/**, or /tmp/nix-build-**) from RPATHs
-      for f in "$bin"/bin/*; do
-        local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)'$NIX_BUILD_TOP'[^:]*:@\1@g')"
-        patchelf --set-rpath "$nrp" "$f"
-      done
-    '';
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # remove build directory (/build/**, or /tmp/nix-build-**) from RPATHs
+    for f in "$bin"/bin/*; do
+      local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)'$NIX_BUILD_TOP'[^:]*:@\1@g')"
+      patchelf --set-rpath "$nrp" "$f"
+    done
+  '';
 
   meta = with lib; {
     description = "Automated text and program generation tool";

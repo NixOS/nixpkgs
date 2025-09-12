@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "bqn386";
-  version = "unstable-2022-05-16";
+  version = "0-unstable-2022-05-16";
 
   src = fetchFromGitHub {
     owner = "dzaima";

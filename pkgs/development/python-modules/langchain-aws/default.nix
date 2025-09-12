@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.25";
+  version = "0.2.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${version}";
-    hash = "sha256-Qk3D8XtpzV7YgMM0WeainzCp6Sq1uZEaM0PFbGKIO7U=";
+    hash = "sha256-oUCFVVHd35pTc0ViVWRf+h6+cHtx22du/xa0KgnBRtw=";
   };
 
   postPatch = ''
@@ -65,12 +65,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_aws" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-aws==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-aws==";
+    };
   };
 
   meta = {
@@ -79,7 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       natsukium
       sarahec
     ];

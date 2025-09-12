@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     unittest-xml-reporting
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
   ];
 

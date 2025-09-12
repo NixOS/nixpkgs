@@ -92,29 +92,28 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      shaderc
-      SDL2
-      glew
-      libvorbis
-      libogg
-      freetype
-      curl
-      libjpeg
-      libpng
-      libX11
-      harfbuzz
-      mcpp
-      wiiuse
-      angelscript
-      sqlite
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
-    ++ lib.optional stdenv.hostPlatform.isLinux openal
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libsamplerate
-    ];
+  buildInputs = [
+    shaderc
+    SDL2
+    glew
+    libvorbis
+    libogg
+    freetype
+    curl
+    libjpeg
+    libpng
+    libX11
+    harfbuzz
+    mcpp
+    wiiuse
+    angelscript
+    sqlite
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
+  ++ lib.optional stdenv.hostPlatform.isLinux openal
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libsamplerate
+  ];
 
   cmakeFlags = [
     "-DBUILD_RECORDER=${

@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DJSON_BuildTests=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DJSON_FastTests=ON"
     "-DJSON_MultipleHeaders=ON"
-  ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

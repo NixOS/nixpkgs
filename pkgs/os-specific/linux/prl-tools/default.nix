@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "20.3.2-55975";
+  version = "26.0.0-57238";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-eazDR+eSUcp81XdRfYRHIt7E4FNCEjsh0M0wYQQYmMQ=";
+    hash = "sha256-UuQGW1qYLGVLqAzApPKBqfOZdS23mCPsID4D0HATHNw=";
   };
 
   hardeningDisable = [
@@ -64,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     p7zip
     perl
     undmg
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildInputs = [
     dbus-glib
@@ -117,9 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     ( # kernel modules
       cd kmods
       mkdir -p $out/lib/modules/${kernelVersion}/extra
-      cp prl_fs_freeze/Snapshot/Guest/Linux/prl_freeze/prl_fs_freeze.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
-      ${lib.optionalString stdenv.hostPlatform.isAarch64 "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
     )
 
     ( # tools

@@ -3,22 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-benchmark,
   pythonOlder,
   hatchling,
   httpx,
   tomli,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.11.0";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TDvTNh+5cxgBoy9nuXItHOdtfbsP+3F16egZjUBSpak=";
+    hash = "sha256-wOaFLlFCNUo7RWWiMXRuztyVJTXpJtPvZJi9d6UmkcY=";
   };
 
   build-system = [ hatchling ];
@@ -28,7 +30,17 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies.web = [
+    starlette
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-benchmark
+  ]
+  ++ optional-dependencies.web;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

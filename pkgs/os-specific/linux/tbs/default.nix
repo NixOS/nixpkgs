@@ -68,7 +68,8 @@ stdenv.mkDerivation {
     patchutils
     kmod
     perlPackages.ProcProcessTable
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;

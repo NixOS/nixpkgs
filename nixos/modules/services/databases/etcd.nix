@@ -180,10 +180,12 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
-      ] ++ lib.optional config.networking.firewall.enable "firewall.service";
+      ]
+      ++ lib.optional config.networking.firewall.enable "firewall.service";
       wants = [
         "network-online.target"
-      ] ++ lib.optional config.networking.firewall.enable "firewall.service";
+      ]
+      ++ lib.optional config.networking.firewall.enable "firewall.service";
 
       environment =
         (lib.filterAttrs (n: v: v != null) {

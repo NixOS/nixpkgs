@@ -11,14 +11,13 @@ let
 
   cfg = config.services.mtprotoproxy;
 
-  configOpts =
-    {
-      PORT = cfg.port;
-      USERS = cfg.users;
-      SECURE_ONLY = cfg.secureOnly;
-    }
-    // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
-    // cfg.extraConfig;
+  configOpts = {
+    PORT = cfg.port;
+    USERS = cfg.users;
+    SECURE_ONLY = cfg.secureOnly;
+  }
+  // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
+  // cfg.extraConfig;
 
   convertOption =
     opt:

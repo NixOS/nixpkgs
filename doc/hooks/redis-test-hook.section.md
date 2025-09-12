@@ -13,9 +13,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [
-    redisTestHook
-  ];
+  nativeCheckInputs = [ redisTestHook ];
 }
 ```
 
@@ -42,7 +40,7 @@ Exported variables:
 
 Bash-only variables:
 
- - `redisTestPort`: Port to use by Redis. Defaults to `6379`
+- `redisTestPort`: Port to use by Redis. Defaults to `6379`
 
 Example usage:
 
@@ -56,9 +54,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [
-    redisTestHook
-  ];
+  nativeCheckInputs = [ redisTestHook ];
 
   preCheck = ''
     redisTestPort=6390;

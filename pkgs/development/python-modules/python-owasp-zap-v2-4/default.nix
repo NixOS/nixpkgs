@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-owasp-zap-v2-4";
-  version = "0.0.18";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zap-api-python";
-    rev = version;
-    sha256 = "0b46m9s0vwaaq8vhiqspdr2ns9qdw65fnjh8mf58gjinlsd27ygk";
+    tag = version;
+    sha256 = "sha256-UG8+0jJwnywvuc68/9r10kKMqxNIOg5mIdPt2Fx2BZA=";
   };
 
   propagatedBuildInputs = [

@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "ubridge";
     maintainers = with lib.maintainers; [
-      primeos
       anthonyroussel
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

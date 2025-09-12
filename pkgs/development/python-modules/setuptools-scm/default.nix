@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "8.3.1";
+  version = "9.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-PVVekrddrNA30yuv35T5evUeoprox7I0z5S3pb0kKmM=";
+    hash = "sha256-RuHPfooJZSthP5uk/ptV8vSW56Iz5OANJafLQflMPAs=";
   };
 
   postPatch =
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     packaging
     setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     rich = [ rich ];

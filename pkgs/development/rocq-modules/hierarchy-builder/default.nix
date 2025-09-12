@@ -12,12 +12,15 @@ let
     owner = "math-comp";
     inherit version;
     defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
       with lib.versions;
-      lib.switch rocq-core.rocq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-        lib.mapAttrsToList (out: case: { inherit case out; }) {
-          "1.9.1" = range "9.0" "9.0";
-        }
-      )) null;
+      lib.switch rocq-core.rocq-version [
+        (case (range "9.0" "9.1") "1.10.0")
+        (case (range "9.0" "9.1") "1.9.1")
+      ] null;
+    release."1.10.0".sha256 = "sha256-c52nS8I0tia7Q8lZTFJyHVPVabW9xv55m7w6B7y3+e8=";
     release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     releaseRev = v: "v${v}";
 

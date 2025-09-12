@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "2.1.0";
+  version = "2.2.0";
 
   pyproject = true;
 
@@ -26,15 +26,12 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     tag = version;
-    hash = "sha256-VjGoAsmdYyoU7ngU69HVNauEk2/vbcEz2tMCTmjheF4=";
+    hash = "sha256-NXMBaY4sZT47Qi3XS5yuiXJEMKENghiXkLXnXHHYpRI=";
   };
 
   postPatch = ''
     substituteInPlace craft_archives/__init__.py \
       --replace-fail "dev" "${version}"
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.7.2" "setuptools"
   '';
 
   pythonRelaxDeps = [
@@ -61,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -70,7 +67,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-archives";
     changelog = "https://github.com/canonical/craft-archives/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

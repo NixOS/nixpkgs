@@ -29,18 +29,18 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDHT_BOOTSTRAP=ON"
     "-DBOOTSTRAP_DAEMON=ON"
-  ] ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
+  ]
+  ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
 
-  buildInputs =
-    [
-      libsodium
-      ncurses
-      libconfig
-    ]
-    ++ lib.optionals buildToxAV [
-      libopus
-      libvpx
-    ];
+  buildInputs = [
+    libsodium
+    ncurses
+    libconfig
+  ]
+  ++ lib.optionals buildToxAV [
+    libopus
+    libvpx
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
-      ehmry
     ];
     platforms = lib.platforms.all;
   };

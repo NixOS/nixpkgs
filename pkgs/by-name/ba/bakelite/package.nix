@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "bakelite";
-  version = "0.4.2-unstable-2023-05-30";
+  version = "0.4.2-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "richfelker";
     repo = "bakelite";
-    rev = "65d69e88e0972d1493ebbd9bf9d1bfde36272636";
-    hash = "sha256-OjBw9aYD2h7BWYgQzZp03hGCyQcRgmm2AjrcT/QrQAo=";
+    rev = "bc79a16b4414702c579143154d94a86666e99b78";
+    hash = "sha256-rRJrtCcgfbqC/4qQiTVeUUcPqoJlNfitYRqIO58AmpA=";
   };
 
   hardeningEnable = [ "pie" ];

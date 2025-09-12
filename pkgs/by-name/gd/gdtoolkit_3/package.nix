@@ -28,6 +28,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit3";
   version = "3.5.0";
+  format = "setuptools";
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
   src = fetchFromGitHub {

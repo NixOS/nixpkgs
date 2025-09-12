@@ -26,10 +26,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs [
-      "greetd"
-      "regreet"
-    ] { };
+    package = lib.mkPackageOption pkgs "regreet" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;

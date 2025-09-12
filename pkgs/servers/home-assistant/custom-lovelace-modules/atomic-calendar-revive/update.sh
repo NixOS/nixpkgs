@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update git
+#!nix-shell -i bash -p nix-update git jq
 # shellcheck shell=bash
 
 ROOT=$(git rev-parse --show-toplevel)

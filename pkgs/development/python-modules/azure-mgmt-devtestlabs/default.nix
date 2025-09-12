@@ -26,7 +26,8 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
+  ]
+  ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

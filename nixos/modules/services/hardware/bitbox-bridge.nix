@@ -34,17 +34,18 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    services.udev.packages =
-      [ cfg.package ]
-      ++ lib.optionals (cfg.runOnMount) [
-        (pkgs.writeTextFile {
-          name = "bitbox-bridge-run-on-mount-udev-rules";
-          destination = "/etc/udev/rules.d/99-bitbox-bridge-run-on-mount.rules";
-          text = ''
-            SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2403", MODE="0660", GROUP="bitbox", TAG+="systemd", SYMLINK+="bitbox02", ENV{SYSTEMD_WANTS}="bitbox-bridge.service"
-          '';
-        })
-      ];
+    services.udev.packages = [
+      cfg.package
+    ]
+    ++ lib.optionals (cfg.runOnMount) [
+      (pkgs.writeTextFile {
+        name = "bitbox-bridge-run-on-mount-udev-rules";
+        destination = "/etc/udev/rules.d/99-bitbox-bridge-run-on-mount.rules";
+        text = ''
+          SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2403", MODE="0660", GROUP="bitbox", TAG+="systemd", SYMLINK+="bitbox02", ENV{SYSTEMD_WANTS}="bitbox-bridge.service"
+        '';
+      })
+    ];
 
     systemd.services.bitbox-bridge = {
       description = "BitBox Bridge";

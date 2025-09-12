@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional (variant != "qt5") "devdoc";
+  ]
+  ++ lib.optional (variant != "qt5") "devdoc";
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -39,35 +40,33 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gi-docgen
-    ]
-    ++ lib.optionals (variant != "qt5") [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gi-docgen
+  ]
+  ++ lib.optionals (variant != "qt5") [
+    gobject-introspection
+    vala
+  ];
 
-  propagatedBuildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals (variant == "gtk3") [
-      gtk3
-    ]
-    ++ lib.optionals (variant == "gtk4") [
-      gtk4
-    ]
-    ++ lib.optionals (variant == "qt5") [
-      libsForQt5.qtbase
-      libsForQt5.qtx11extras
-    ]
-    ++ lib.optionals (variant == "qt6") [
-      qt6Packages.qtbase
-    ];
+  propagatedBuildInputs = [
+    glib
+  ]
+  ++ lib.optionals (variant == "gtk3") [
+    gtk3
+  ]
+  ++ lib.optionals (variant == "gtk4") [
+    gtk4
+  ]
+  ++ lib.optionals (variant == "qt5") [
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+  ]
+  ++ lib.optionals (variant == "qt6") [
+    qt6Packages.qtbase
+  ];
 
   mesonFlags = [
     (lib.mesonEnable "backend-gtk3" (variant == "gtk3"))

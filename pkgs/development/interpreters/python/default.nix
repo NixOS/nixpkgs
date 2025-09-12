@@ -4,7 +4,6 @@
   config,
   db,
   lib,
-  libffiBoot,
   makeScopeWithSplicing',
   pythonPackagesExtensions,
   stdenv,
@@ -21,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "4";
+          patch = "7";
           suffix = "";
         };
-        hash = "sha256-J7FaeXViopcdzj/+MbshYELOC5lbOddozxX3hMx1c2U=";
+        hash = "sha256-VGL5CZ39MOI43vg8cdkYl9jKpf9uvHpQ8U1IAs2qp5o=";
       };
     };
 
@@ -93,9 +92,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "b3";
+        suffix = "rc2";
       };
-      hash = "sha256-xvSL9R8B9Q2HAHpEXdev5KTHqHq0glcL6STB3f0NNoI=";
+      hash = "sha256-vGKFTPIyNFvSLJCRpoRk4B4FbGRzo//6hFcsijQtplY=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
@@ -106,38 +105,7 @@
           inherit passthruFun;
           pythonAttr = "python3Minimal";
           # strip down that python version as much as possible
-          openssl = null;
-          readline = null;
-          ncurses = null;
-          gdbm = null;
-          sqlite = null;
-          tzdata = null;
-          libuuid = null;
-          bzip2 = null;
-          libxcrypt = null;
-          xz = null;
-          zlib = null;
-          libffi = libffiBoot; # without test suite
-          stripConfig = true;
-          stripIdlelib = true;
-          stripTests = true;
-          stripTkinter = true;
-          rebuildBytecode = false;
-          stripBytecode = true;
-          includeSiteCustomize = false;
-          enableOptimizations = false;
-          enableLTO = false;
-          mimetypesSupport = false;
-          withExpat = false;
-          withMpdecimal = false;
-          /*
-            The actual 'allowedReferences' attribute is set inside the cpython derivation.
-            This is necessary in order to survive overrides of dependencies.
-          */
-          allowedReferenceNames = [
-            "bashNonInteractive"
-            "libffi"
-          ];
+          withMinimalDeps = true;
         }
         // sources.python313
       )).overrideAttrs

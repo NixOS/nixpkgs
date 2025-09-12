@@ -18,14 +18,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-vBggblml+lQFhyNrfIp5GKVQ09fd+ccblKHEzWteMbI=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
 
   # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";

@@ -27,25 +27,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
+  postInstall = ''
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/public/presets/toml/*.toml $presetdir
+  ''
+  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
     ''
-      presetdir=$out/share/starship/presets/
-      mkdir -p $presetdir
-      cp docs/public/presets/toml/*.toml $presetdir
+      installShellCompletion --cmd starship \
+        --bash <(${emulator} $out/bin/starship completions bash) \
+        --fish <(${emulator} $out/bin/starship completions fish) \
+        --zsh <(${emulator} $out/bin/starship completions zsh)
     ''
-    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
-        installShellCompletion --cmd starship \
-          --bash <(${emulator} $out/bin/starship completions bash) \
-          --fish <(${emulator} $out/bin/starship completions fish) \
-          --zsh <(${emulator} $out/bin/starship completions zsh)
-      ''
-    );
+  );
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cxDWaPlNK7POJ3GhA21NlJ6q62bqHdA/4sru5pLkvOA=";
 
   nativeCheckInputs = [

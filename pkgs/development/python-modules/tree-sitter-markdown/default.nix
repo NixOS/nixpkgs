@@ -41,6 +41,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
     changelog = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      gepbird
+    ];
   };
 }

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.23.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,16 +36,15 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      asttokens
-      executing
-      rich
-      toml
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      toml
-    ];
+  dependencies = [
+    asttokens
+    executing
+    rich
+    toml
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    toml
+  ];
 
   nativeCheckInputs = [
     freezegun
@@ -58,7 +57,8 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     time-machine
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   optional-dependencies = {
     black = [ black ];

@@ -2,10 +2,8 @@
 mkKdeDerivation {
   pname = "kservice";
 
-  # FIXME(later): upstream
+  # FIXME(later): the whole sycoca situation is very bad
   patches = [
-    # follow symlinks when generating sycoca
-    ./qdiriterator-follow-symlinks.patch
     # explode less when sycoca is deleted
     ./handle-sycoca-deletion.patch
   ];

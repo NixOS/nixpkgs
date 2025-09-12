@@ -31,7 +31,8 @@ buildPythonPackage rec {
     python-hglib
     pygit2
     pyuv
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ i3ipc ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ i3ipc ];
 
   # tests are travis-specific
   doCheck = false;

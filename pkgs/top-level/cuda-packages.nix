@@ -25,7 +25,7 @@
   _cuda,
   cudaMajorMinorVersion,
   lib,
-  newScope,
+  pkgs,
   stdenv,
   runCommand,
 }:
@@ -51,6 +51,35 @@ let
     lib.intersectLists jetsonCudaCapabilities (config.cudaCapabilities or [ ]) != [ ];
   redistSystem = _cuda.lib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
 
+  # We must use an instance of Nixpkgs where the CUDA package set we're building is the default; if we do not, members
+  # of the versioned, non-default package sets may rely on (transitively) members of the default, unversioned CUDA
+  # package set.
+  # See `Using cudaPackages.pkgs` in doc/languages-frameworks/cuda.section.md for more information.
+  pkgs' =
+    let
+      cudaPackagesUnversionedName = "cudaPackages";
+      cudaPackagesMajorVersionName = cudaLib.mkVersionedName cudaPackagesUnversionedName (
+        versions.major cudaMajorMinorVersion
+      );
+      cudaPackagesMajorMinorVersionName = cudaLib.mkVersionedName cudaPackagesUnversionedName cudaMajorMinorVersion;
+    in
+    # If the CUDA version of pkgs matches our CUDA version, we are constructing the default package set and can use
+    # pkgs without modification.
+    if pkgs.cudaPackages.cudaMajorMinorVersion == cudaMajorMinorVersion then
+      pkgs
+    else
+      pkgs.extend (
+        final: _: {
+          recurseForDerivations = false;
+          # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
+          # minor-versioned and unversioned package sets.
+          # cudaPackages_x = cudaPackages_x_y
+          ${cudaPackagesMajorVersionName} = final.${cudaPackagesMajorMinorVersionName};
+          # cudaPackages = cudaPackages_x
+          ${cudaPackagesUnversionedName} = final.${cudaPackagesMajorVersionName};
+        }
+      );
+
   passthruFunction = final: {
     # NOTE:
     # It is important that _cuda is not part of the package set fixed-point. As described by
@@ -64,21 +93,13 @@ let
 
     inherit cudaMajorMinorVersion;
 
+    pkgs = pkgs';
+
     cudaNamePrefix = "cuda${cudaMajorMinorVersion}";
 
     cudaMajorVersion = versions.major cudaMajorMinorVersion;
     cudaOlder = strings.versionOlder cudaMajorMinorVersion;
     cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
-
-    # Maintain a reference to the final cudaPackages.
-    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
-    # argument, it's provided with `cudaPackages` from the top-level scope, which is not what we
-    # want. We want to provide the `cudaPackages` from the final scope -- that is, the *current*
-    # scope. However, we also want to prevent `pkgs/top-level/release-attrpaths-superset.nix` from
-    # recursing more than one level here.
-    cudaPackages = final // {
-      __attrsFailEvaluation = true;
-    };
 
     flags =
       cudaLib.formatCapabilities {
@@ -96,13 +117,12 @@ let
       };
 
     # Loose packages
-    # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
+    # Barring packages which share a home (e.g., cudatoolkit), new packages
     # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically
     # discovered and added to the package set.
 
     # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
-    cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
 
     tests =
       let
@@ -152,7 +172,11 @@ let
       (
         final: _:
         {
-          cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false"; # Prevent missing attribute errors
+          # Prevent missing attribute errors
+          # NOTE(@connorbaker): CUDA 12.3 does not have a cuda_compat package; indeed, none of the release supports
+          # Jetson devices. To avoid errors in the case that cuda_compat is not defined, we have a dummy package which
+          # is always defined, but does nothing, will not build successfully, and has no platforms.
+          cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false";
         }
         // lib.packagesFromDirectoryRecursive {
           inherit (final) callPackage;
@@ -201,24 +225,16 @@ let
         releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
         shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
       })
-      (import ../development/cuda-modules/cuda-samples/extension.nix {
-        inherit cudaMajorMinorVersion lib stdenv;
-      })
       (import ../development/cuda-modules/cuda-library-samples/extension.nix { inherit lib stdenv; })
     ]
     ++ lib.optionals config.allowAliases [
       (import ../development/cuda-modules/aliases.nix { inherit lib; })
     ]
+    ++ _cuda.extensions
   );
 
-  cudaPackages = customisation.makeScope newScope (
+  cudaPackages = customisation.makeScope pkgs'.newScope (
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-# We want to warn users about the upcoming deprecation of old CUDA
-# versions, without breaking Nixpkgs CI with evaluation warnings. This
-# gross hack ensures that the warning only triggers if aliases are
-# enabled, which is true by default, but not for ofborg.
-lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
-  "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
-  cudaPackages
+cudaPackages

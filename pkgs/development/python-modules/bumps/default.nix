@@ -3,19 +3,54 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
+  versioningit,
+  numpy,
+  scipy,
+  h5py,
+  dill,
+  matplotlib,
+  blinker,
+  aiohttp,
+  python,
+  plotly,
+  python-socketio,
 }:
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "0.9.3";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MpUpj3/hsjkrsv+Ix6Cuadd6dpivWAqBVwBSygW6Uw8=";
+    hash = "sha256-YfnBA1rCD05B4XOS611qgi4ab3xKoYs108mwhj/I+sg=";
   };
+
+  pythonRemoveDeps = [
+    "mpld3" # not packaged
+  ];
+
+  build-system = [
+    setuptools
+    versioningit
+  ];
+
+  dependencies = [
+    numpy
+    scipy
+    h5py
+    dill
+    matplotlib
+    blinker
+    aiohttp
+    python
+    plotly
+    python-socketio
+    # mpld3 # not packaged
+  ];
 
   # Module has no tests
   doCheck = false;

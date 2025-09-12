@@ -32,7 +32,8 @@ let
       makeWrapper
       dotnetbuildhelpers
       mono
-    ] ++ nativeBuildInputs;
+    ]
+    ++ nativeBuildInputs;
 
     configurePhase = ''
       runHook preConfigure

@@ -45,18 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
     libunarr
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
-      (lib.cmakeBool "USE_SYSTEM_FMT" true)
-      (lib.cmakeBool "USE_SYSTEM_TOML11" true)
-      (lib.cmakeBool "USE_SYSTEM_UNARR" true)
-      (lib.cmakeBool "PORTABLE_MODE" false)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeBool "MACOS_BUILD_APP_BUNDLE" true)
-      (lib.cmakeBool "MACOS_BUNDLE_QT" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
+    (lib.cmakeBool "USE_SYSTEM_FMT" true)
+    (lib.cmakeBool "USE_SYSTEM_TOML11" true)
+    (lib.cmakeBool "USE_SYSTEM_UNARR" true)
+    (lib.cmakeBool "PORTABLE_MODE" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "MACOS_BUILD_APP_BUNDLE" true)
+    (lib.cmakeBool "MACOS_BUNDLE_QT" false)
+  ];
 
   # Make it runnable from the terminal on Darwin
   postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''

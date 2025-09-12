@@ -64,11 +64,10 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MHwyXCAqdBzdJlYzSeUXr6bJdTVHcjJ/kGcuAsZCCW8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TkeB939zV5VvqICFqJd/7uX+ydXyEQOJ3sYQbHbZhP0=";
 
   buildInputs = [

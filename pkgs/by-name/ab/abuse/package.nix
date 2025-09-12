@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Xenoveritas";
     repo = "abuse";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eneu0HxEoM//Ju2XMHnDMZ/igeVMPSLg7IaxR2cnJrk=";
   };
 

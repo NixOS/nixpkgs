@@ -28,18 +28,17 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  nativeCheckInputs =
-    [
-      dbus
-      pytest
-      pytest-trio
-      pytest-asyncio
-      testpath
-      trio
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      async-timeout
-    ];
+  nativeCheckInputs = [
+    dbus
+    pytest
+    pytest-trio
+    pytest-asyncio
+    testpath
+    trio
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ];
 
   checkPhase = ''
     runHook preCheck

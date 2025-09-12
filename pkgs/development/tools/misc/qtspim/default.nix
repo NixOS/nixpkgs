@@ -8,7 +8,6 @@
   qmake,
   bison,
   flex,
-  ...
 }:
 stdenv.mkDerivation {
   pname = "qtspim";

@@ -17,18 +17,18 @@
   requests,
   setuptools-scm,
   xorgserver,
+  nixosTests,
 }:
-
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${version}";
-    hash = "sha256-NMbgSStXJV8fVtula1cyIwFlD8WrO8kBnOphDxbig04=";
+    hash = "sha256-3aN2MrD1U5iBneVbYtNeWpK+JAQunGpemDpJnDuQdVI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -85,6 +85,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "qtile_extras" ];
+
+  passthru.tests.qtile-extras = nixosTests.qtile-extras;
 
   meta = with lib; {
     description = "Extra modules and widgets for the Qtile tiling window manager";

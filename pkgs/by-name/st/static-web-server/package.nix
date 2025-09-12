@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.37.0";
+  version = "2.38.1";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = "static-web-server";
     rev = "v${version}";
-    hash = "sha256-haQYouLUaDkYo9c0CA07twaEohgmSa2hn8xJevEVNFU=";
+    hash = "sha256-fcD1jd9kwm/jCYdvNGEnanLO/wUKeYy5OqOeQE2lGP4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1e3of8qC1cJ9ZZt1mrfe10wjkLzUICS25TDu+HfkTyU=";
+  cargoHash = "sha256-rfhRMQb7MX2722wcMk35qATav6WFFULy3Ix3WcC7r4M=";
 
   # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
   preCheck = ''

@@ -27,7 +27,6 @@
   icu,
   pkg-config,
   bison,
-  imake,
   which,
   jdk,
   blas,
@@ -47,7 +46,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src =
     let
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      sha256 = "sha256-OzPqET4NHdyXk4dNWUnOwsc4b2bkq/sc75rsIoRsPOE=";
+      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
     };
 
   outputs = [
@@ -63,11 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     "tex"
   ];
 
-  dontUseImakeConfigure = true;
-
   nativeBuildInputs = [
     bison
-    imake
     perl
     pkg-config
     tzdata
@@ -130,46 +126,45 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontDisableStatic = static;
 
-  preConfigure =
-    ''
-      configureFlagsArray=(
-        --disable-lto
-        --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-        --with-blas="-L${blas}/lib -lblas"
-        --with-lapack="-L${lapack}/lib -llapack"
-        --with-readline
-        --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
-        --with-cairo
-        --with-libpng
-        --with-jpeglib
-        --with-libtiff
-        --with-ICU
-        ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
-        ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
-        ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
-        AR=$(type -p ar)
-        AWK=$(type -p gawk)
-        CC=$(type -p cc)
-        CXX=$(type -p c++)
-        FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-        JAVA_HOME="${jdk}"
-        RANLIB=$(type -p ranlib)
-        CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
-        r_cv_have_curl728=yes
-        R_SHELL="${stdenv.shell}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      --disable-R-framework
-      --without-x
-      OBJC="clang"
-      CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-      LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
-    ''
-    + ''
-      )
-      echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
-      echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
-    '';
+  preConfigure = ''
+    configureFlagsArray=(
+      --disable-lto
+      --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
+      --with-blas="-L${blas}/lib -lblas"
+      --with-lapack="-L${lapack}/lib -llapack"
+      --with-readline
+      --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
+      --with-cairo
+      --with-libpng
+      --with-jpeglib
+      --with-libtiff
+      --with-ICU
+      ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
+      ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
+      AR=$(type -p ar)
+      AWK=$(type -p gawk)
+      CC=$(type -p cc)
+      CXX=$(type -p c++)
+      FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
+      JAVA_HOME="${jdk}"
+      RANLIB=$(type -p ranlib)
+      CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
+      r_cv_have_curl728=yes
+      R_SHELL="${stdenv.shell}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    --disable-R-framework
+    --without-x
+    OBJC="clang"
+    CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
+  ''
+  + ''
+    )
+    echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
+    echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
+  '';
 
   installTargets = [
     "install"

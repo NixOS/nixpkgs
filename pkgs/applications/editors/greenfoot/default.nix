@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${openjdk}/bin/java $out/bin/greenfoot \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
                    -cp $out/share/greenfoot/boot.jar bluej.Boot \
                    -greenfoot=true -bluej.compiler.showunchecked=false \
@@ -55,7 +55,10 @@ stdenv.mkDerivation rec {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2ClasspathPlus;
+    license = with licenses; [
+      gpl2Plus
+      classpathException20
+    ];
     mainProgram = "greenfoot";
     maintainers = [ maintainers.chvp ];
     platforms = platforms.linux;

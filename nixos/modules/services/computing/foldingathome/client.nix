@@ -7,16 +7,15 @@
 let
   cfg = config.services.foldingathome;
 
-  args =
-    [
-      "--team"
-      "${toString cfg.team}"
-    ]
-    ++ lib.optionals (cfg.user != null) [
-      "--user"
-      cfg.user
-    ]
-    ++ cfg.extraArgs;
+  args = [
+    "--team"
+    "${toString cfg.team}"
+  ]
+  ++ lib.optionals (cfg.user != null) [
+    "--user"
+    cfg.user
+  ]
+  ++ cfg.extraArgs;
 in
 {
   imports = [

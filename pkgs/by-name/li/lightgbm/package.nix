@@ -92,22 +92,23 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/cpp_tests/test_arrow.cpp
   '';
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals openclSupport [
-      opencl-headers
-      ocl-icd
-      boost
-    ]
-    ++ lib.optionals mpiSupport [ openmpi ]
-    ++ lib.optionals hdfsSupport [ hadoop ]
-    ++ lib.optionals (hdfsSupport || javaWrapper) [ openjdk ]
-    ++ lib.optionals javaWrapper [ swig ]
-    ++ lib.optionals rLibrary [
-      R
-      pandoc
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
+  ++ lib.optionals openclSupport [
+    opencl-headers
+    ocl-icd
+    boost
+  ]
+  ++ lib.optionals mpiSupport [ openmpi ]
+  ++ lib.optionals hdfsSupport [ hadoop ]
+  ++ lib.optionals (hdfsSupport || javaWrapper) [ openjdk ]
+  ++ lib.optionals javaWrapper [ swig ]
+  ++ lib.optionals rLibrary [
+    R
+    pandoc
+  ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit;
 
@@ -161,48 +162,47 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit doCheck;
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString (!rLibrary) ''
-      mkdir -p $out
-      mkdir -p $out/lib
-      mkdir -p $out/bin
-      cp -r ../include $out
-      install -Dm755 ../lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''
-    + lib.optionalString (!rLibrary && !pythonLibrary) ''
-      install -Dm755 ../lightgbm $out/bin/lightgbm
-    ''
-    + lib.optionalString javaWrapper ''
-      cp -r java $out
-      cp -r com $out
-      cp -r lightgbmlib.jar $out
-    ''
-    + ''''
-    + lib.optionalString rLibrary ''
-      mkdir $out
-      mkdir $out/tmp
-      mkdir $out/library
-      mkdir $out/library/lightgbm
-    ''
-    + lib.optionalString (rLibrary && (!openclSupport)) ''
-      Rscript build_r.R \
-        -j$NIX_BUILD_CORES
-      rm -rf $out/tmp
-    ''
-    + lib.optionalString (rLibrary && openclSupport) ''
-      Rscript build_r.R --use-gpu \
-        --opencl-library=${ocl-icd}/lib/libOpenCL.so \
-        --opencl-include-dir=${opencl-headers}/include \
-        --boost-librarydir=${boost} \
-        -j$NIX_BUILD_CORES
-      rm -rf $out/tmp
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString (!rLibrary) ''
+    mkdir -p $out
+    mkdir -p $out/lib
+    mkdir -p $out/bin
+    cp -r ../include $out
+    install -Dm755 ../lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary}
+  ''
+  + lib.optionalString (!rLibrary && !pythonLibrary) ''
+    install -Dm755 ../lightgbm $out/bin/lightgbm
+  ''
+  + lib.optionalString javaWrapper ''
+    cp -r java $out
+    cp -r com $out
+    cp -r lightgbmlib.jar $out
+  ''
+  + ''''
+  + lib.optionalString rLibrary ''
+    mkdir $out
+    mkdir $out/tmp
+    mkdir $out/library
+    mkdir $out/library/lightgbm
+  ''
+  + lib.optionalString (rLibrary && (!openclSupport)) ''
+    Rscript build_r.R \
+      -j$NIX_BUILD_CORES
+    rm -rf $out/tmp
+  ''
+  + lib.optionalString (rLibrary && openclSupport) ''
+    Rscript build_r.R --use-gpu \
+      --opencl-library=${ocl-icd}/lib/libOpenCL.so \
+      --opencl-include-dir=${opencl-headers}/include \
+      --boost-librarydir=${boost} \
+      -j$NIX_BUILD_CORES
+    rm -rf $out/tmp
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   postFixup = lib.optionalString rLibrary ''
     if test -e $out/nix-support/propagated-build-inputs; then
@@ -217,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "LightGBM is a gradient boosting framework that uses tree based learning algorithms.";
+    description = "Gradient boosting framework that uses tree based learning algorithms";
     mainProgram = "lightgbm";
     homepage = "https://github.com/microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${finalAttrs.version}";

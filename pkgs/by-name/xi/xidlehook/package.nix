@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-U1kjOWrFEp1pZnbawW2MCtC4UN7ELD/kcYWfEmn94Pg=";
 
   buildInputs = [
     xorg.libX11
+    xorg.libxcb
     xorg.libXScrnSaver
     libpulseaudio
   ];

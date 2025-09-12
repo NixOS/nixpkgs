@@ -96,7 +96,7 @@ let
     in
     (mkCustomFlutter args).overrideAttrs (
       prev: next: {
-        passthru = next.passthru // rec {
+        passthru = next.passthru // {
           inherit wrapFlutter mkCustomFlutter mkFlutter;
           buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
             flutter = wrapFlutter (mkCustomFlutter args);
@@ -129,7 +129,11 @@ let
 in
 flutterVersions
 // {
-  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
-  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
   inherit wrapFlutter mkFlutter;
+}
+// lib.optionalAttrs (betaFlutterVersions != { }) {
+  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
+}
+// lib.optionalAttrs (stableFlutterVersions != { }) {
+  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
 }

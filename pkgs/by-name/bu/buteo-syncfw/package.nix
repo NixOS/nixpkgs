@@ -67,27 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
   # QMake doesn't handle strictDeps well
   strictDeps = false;
 
-  nativeBuildInputs =
-    [
-      doxygen
-      glib
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ (with libsForQt5; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    doxygen
+    glib
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
-      dbus
-    ]
-    ++ (with libsForQt5; [
-      accounts-qt
-      qtdeclarative
-      signond
-    ]);
+  buildInputs = [
+    dbus
+  ]
+  ++ (with libsForQt5; [
+    accounts-qt
+    qtdeclarative
+    signond
+  ]);
 
   dontWrapGApps = true;
 

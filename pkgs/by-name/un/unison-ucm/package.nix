@@ -14,21 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.41";
+  version = "0.5.47";
 
   src =
     {
       aarch64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
-        hash = "sha256-0Zz8lc1s46y2JC6DAbJjahap+hsz1QuLRl4nGryhSxA=";
+        hash = "sha256-Ocqwh+kH4tLMTMthbezDB0o00TTF/d6n8CzQxR919hA=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-x64.tar.gz";
-        hash = "sha256-O9H62uhWnOPQp7s4yUhnUXFyk0vNS4BAddaCru4n1GU=";
+        hash = "sha256-Fkouq/jv0Ddv1EjREtiGjMAEqdNoxwv4nqqp/nwf+zg=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
-        hash = "sha256-ul5PCDqjfpsMiZZaZaH04Mrv29U9uS/ik8KwFNmXbgg=";
+        hash = "sha256-RizYZaNdaXCkfiFXblB34btqmu6xo3owKkSuOrgopIo=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gmp
     ncurses6
@@ -49,9 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/{bin,lib}
-    mv runtime $out/lib/runtime
+
     mv ui $out/ui
     mv unison $out/unison
+
     makeWrapper $out/unison/unison $out/bin/ucm \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
@@ -60,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       } \
       --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
-      --add-flags "--runtime-path $out/lib/runtime/bin/unison-runtime" \
       --set UCM_WEB_UI "$out/ui"
   '';
 

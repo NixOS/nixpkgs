@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "QuickFIX C++ Fix Engine Library";
+    description = "C++ Fix Engine Library";
     homepage = "http://www.quickfixengine.org";
     license = licenses.free; # similar to BSD 4-clause
     maintainers = with maintainers; [ bhipple ];

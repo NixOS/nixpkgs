@@ -10,17 +10,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.38.0";
+  version = "2.47.4";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cZUzkThVKgPc8bsxmDc2+gsq9YxVswokO1rORvKVIws=";
+    hash = "sha256-V/RwHwPp1THlzFdMts5qt4Ueqcoxx932eMqgF6yiZpM=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-aQVDt6VDtQjHCkY2xcbmoKn+UUplJ+a6xfdwPSF/j9Y=";
+  vendorHash = "sha256-kFaXOvJBp/QU0N2Jwq450G48O2GYgC2Pc+2bGK9rJ9g=";
 
   subPackages = [ "cmd/werf" ];
 
@@ -35,52 +35,49 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
-    ]
-    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-      "-extldflags=-static"
-      "-linkmode external"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
+  ]
+  ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
+    "-extldflags=-static"
+    "-linkmode external"
+  ];
 
-  tags =
-    [
-      "containers_image_openpgp"
-      "dfrunmount"
-      "dfrunnetwork"
-      "dfrunsecurity"
-      "dfssh"
-    ]
-    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-      "cni"
-      "exclude_graphdriver_devicemapper"
-      "netgo"
-      "no_devmapper"
-      "osusergo"
-      "static_build"
-    ];
+  tags = [
+    "containers_image_openpgp"
+    "dfrunmount"
+    "dfrunnetwork"
+    "dfrunsecurity"
+    "dfssh"
+  ]
+  ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
+    "cni"
+    "exclude_graphdriver_devicemapper"
+    "netgo"
+    "no_devmapper"
+    "osusergo"
+    "static_build"
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  preCheck =
-    ''
-      # Test all packages.
-      unset subPackages
+  preCheck = ''
+    # Test all packages.
+    unset subPackages
 
-      # Remove tests that fail or require external services.
-      rm -rf \
-        integration/suites \
-        pkg/true_git/*_test.go \
-        pkg/werf/exec/*_test.go \
-        test/e2e
-    ''
-    + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
-      # A workaround for osusergo.
-      export USER=nixbld
-    '';
+    # Remove tests that fail or require external services.
+    rm -rf \
+      integration/suites \
+      pkg/true_git/*_test.go \
+      pkg/werf/exec/*_test.go \
+      test/e2e
+  ''
+  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
+    # A workaround for osusergo.
+    export USER=nixbld
+  '';
 
   doInstallCheck = true;
 

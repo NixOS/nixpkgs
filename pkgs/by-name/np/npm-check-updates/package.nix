@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "npm-check-updates";
-  version = "18.0.1";
+  version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JVwjjGs1BCQnL9q4zwnQ56JRWL5CZ9cf4FyK2jpfKKE=";
+    hash = "sha256-vFcghhJTJJMl+0GrnEsTj6NUDW4GSU3wOi0KsNreC5k=";
   };
 
-  npmDepsHash = "sha256-75YPV96eKIhNVIT10ZYTJOVzJEFk98a2e4XUIoiYRd4=";
+  npmDepsHash = "sha256-Y1yl2kF8CPArDgeEYj0aP8Zx61mQMRxDg3WEwRdvoHc=";
 
   postPatch = ''
     sed -i '/"prepare"/d' package.json

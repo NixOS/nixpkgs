@@ -27,7 +27,6 @@
   '';
 
   meta.maintainers = with lib.maintainers; [
-    drupol
     niklaskorz
   ];
 }

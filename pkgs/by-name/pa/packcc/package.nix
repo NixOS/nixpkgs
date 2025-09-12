@@ -44,15 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  preCheck =
-    ''
-      # Style tests will always fail because upstream uses an older version of
-      # uncrustify.
-      rm -rf ../../tests/style.d
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
-    '';
+  preCheck = ''
+    # Style tests will always fail because upstream uses an older version of
+    # uncrustify.
+    rm -rf ../../tests/style.d
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
+    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
+  '';
 
   installPhase = ''
     runHook preInstall

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-azure-dynamic-sessions==${version}";
-    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
+    hash = "sha256-tgvoOSr4tpi+tFBan+kw8FZUfUJHcQXv9e1nyeGP0so=";
   };
 
   sourceRoot = "${src.name}/libs/partners/azure-dynamic-sessions";
@@ -70,12 +70,16 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-azure-dynamic-sessions==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-azure-dynamic-sessions==";
+    };
   };
 
   meta = {

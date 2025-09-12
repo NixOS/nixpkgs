@@ -18,6 +18,8 @@
   typing-extensions,
   ujson,
   distutils,
+  huggingface-hub,
+  nix-update-script,
 }:
 
 let
@@ -49,14 +51,14 @@ let
 in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.0.1";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-qov5nqGIsSfaho2dcWVsyWKQlJsIJgdX3rDz66JtLDI=";
+    hash = "sha256-Oc8fgAv8T/9PjxW8yU31t3m3CUxFuAXdVS71BGhtlJo=";
   };
 
   build-system = [ setuptools ];
@@ -82,14 +84,17 @@ buildPythonPackage rec {
     typing-extensions
     ujson
     gputil
+    huggingface-hub
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
     changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

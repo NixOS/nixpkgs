@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.7.3";
+  version = "1.7.6";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     tag = finalAttrs.version;
-    hash = "sha256-zVmVh1iljidcXU+c7DAGBPkYyJkA11SvXtuCosB/Foc=";
+    hash = "sha256-HpjP6VSkEAFeXIFXLbndQzEWJwVvHe6B3aSwCz6KiIM=";
   };
 
   depsBuildBuild = [
@@ -55,13 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils # for validate-desktop-file
   ];
 
-  mesonFlags =
-    [
-      "-Ddocumentation=true"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dtests=false"
-    ];
+  mesonFlags = [
+    "-Ddocumentation=true"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dtests=false"
+  ];
 
   buildInputs = [
     appstream
@@ -72,13 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
   ];
 
-  nativeCheckInputs =
-    [
-      adwaita-icon-theme
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      xvfb-run
-    ];
+  nativeCheckInputs = [
+    adwaita-icon-theme
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    xvfb-run
+  ];
 
   # Tests had to be disabled on Darwin because test-button-content fails
   #

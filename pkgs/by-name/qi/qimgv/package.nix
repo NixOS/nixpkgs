@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "easymodo";
-    repo = pname;
+    repo = "qimgv";
     rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
     sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
   };
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     exiv2
     mpv
-    opencv4
+    opencv4.cxxdev
     libsForQt5.qtbase
     libsForQt5.qtimageformats
     libsForQt5.qtsvg

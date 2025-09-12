@@ -149,13 +149,12 @@ in
       }) enabledPolicies
       ++ lib.mapAttrsToList (name: path: { inherit name path; }) cfg.includes
     );
-    environment.etc."apparmor/parser.conf".text =
-      ''
-        ${if cfg.enableCache then "write-cache" else "skip-cache"}
-        cache-loc /var/cache/apparmor
-        Include /etc/apparmor.d
-      ''
-      + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
+    environment.etc."apparmor/parser.conf".text = ''
+      ${if cfg.enableCache then "write-cache" else "skip-cache"}
+      cache-loc /var/cache/apparmor
+      Include /etc/apparmor.d
+    ''
+    + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
     environment.etc."apparmor/apparmor.conf".text = '''';
     # For aa-logprof

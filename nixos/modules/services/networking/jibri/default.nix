@@ -71,7 +71,8 @@ let
       "--enabled"
       "--disable-infobars"
       "--autoplay-policy=no-user-gesture-required"
-    ] ++ lists.optional cfg.ignoreCert "--ignore-certificate-errors";
+    ]
+    ++ lists.optional cfg.ignoreCert "--ignore-certificate-errors";
 
     stats.enable-stats-d = true;
     webhook.subscribers = [ ];

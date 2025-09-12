@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice-glue";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libimobiledevice-glue";
     rev = version;
-    hash = "sha256-Fu0zQIryESRaTGzDlAaewX9Yo2nPEeUxmcb3yPJLuSI=";
+    hash = "sha256-cUcJARbZV9Yaqd9TP3NVmF9p8Pjz88a3GmAh4c4sEHo=";
   };
 
   preAutoreconf = ''

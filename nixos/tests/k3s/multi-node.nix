@@ -192,7 +192,7 @@ import ../make-test-python.nix (
             # Verify the pods can talk to each other
             for pod in pods:
                 resp = server.succeed(f"k3s kubectl exec {pod} -- socat TCP:{pod_ip}:8000 -")
-                assert resp.strip() == "server"
+                t.assertEqual(resp.strip(), "server")
       '';
 
     meta.maintainers = lib.teams.k3s.members;

@@ -30,17 +30,17 @@ stdenv.mkDerivation {
     let
       ephemeris = fetchzip {
         url = "http://astrolog.org/ftp/ephem/astephem.zip";
-        sha256 = "1mwvpvfk3lxjcc79zvwl4ypqzgqzipnc01cjldxrmx56xkc35zn7";
+        hash = "sha256-+on9LE27hCPRacHaIo6wz6M3V+G1QpyJ1Rp4wHbycM0=";
         stripRoot = false;
       };
       moonsEphemeris = fetchzip {
         url = "https://www.astrolog.org/ftp/ephem/moons/sepm.zip";
-        sha256 = "0labcidm8mrwvww93nwpp5738m9ff9q48cqzbgd18xny1jf6f8xd";
+        hash = "sha256-bHJc1yyR2loSOC4QJWsYNtKRYpxN9ZnKK5cWCapAptI=";
         stripRoot = false;
       };
       atlas = fetchurl {
         url = "http://astrolog.org/ftp/atlas/atlasbig.as";
-        sha256 = "001bmqyldsbk4bdliqfl4a9ydrh1ff13wccvfniwaxlmvkridx2q";
+        hash = "sha256-5DVfW3IaOwOguH9cv2opr1gIWo+K/Q2bLtRM35oD/EM=";
       };
     in
     ''
@@ -60,12 +60,12 @@ stdenv.mkDerivation {
       ''}
     '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.kmein ];
+  meta = {
+    maintainers = with lib.maintainers; [ kmein ];
     homepage = "https://astrolog.org/astrolog.htm";
     description = "Freeware astrology program";
     mainProgram = "astrolog";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

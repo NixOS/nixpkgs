@@ -37,21 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      curl
-      libGL
-      libGLU
-      openssl
-      SDL2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXi
-      libXcursor
-      lua
-    ];
+  buildInputs = [
+    alsa-lib
+    curl
+    libGL
+    libGLU
+    openssl
+    SDL2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXi
+    libXcursor
+    lua
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_CURL" true)

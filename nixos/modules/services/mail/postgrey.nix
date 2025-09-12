@@ -26,7 +26,7 @@ let
         description = "The address to bind to. Localhost if null";
       };
       port = mkOption {
-        type = natural';
+        type = port;
         default = 10030;
         description = "Tcp port to bind to";
       };

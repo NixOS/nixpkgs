@@ -21,6 +21,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sc-controller";
   version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";

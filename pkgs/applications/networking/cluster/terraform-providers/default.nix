@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  buildGo123Module,
+  buildGo125Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -97,7 +97,6 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
-    aws = automated-providers.aws.override { mkProviderGoModule = buildGo123Module; };
     # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
     checkly = automated-providers.checkly.override { spdx = "MIT"; };
     gitlab = automated-providers.gitlab.override {
@@ -111,6 +110,8 @@ let
       propagatedBuildInputs = [ cdrtools ];
     });
     minio = automated-providers.minio.override { spdx = "AGPL-3.0-only"; };
+    # requires go >= 1.25.0
+    talos = automated-providers.talos.override { mkProviderGoModule = buildGo125Module; };
   };
 
   # Put all the providers we not longer support in this list.

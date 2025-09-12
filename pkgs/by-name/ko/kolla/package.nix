@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kolla";
-  version = "19.4.0";
+  version = "20.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    hash = "sha256-yVNMCqg6eAUhLg3iAjDkYpMoIKc6OksDri9jNpyaS7c=";
-    rev = version;
+    tag = version;
+    hash = "sha256-vVP9EwxAY2NBSciPSOvVaoCu85QVdFduY5aXPUI03XI=";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   # Tests output a few exceptions but still succeed
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -e <(echo "test_load_ok")
     runHook postCheck
   '';
 

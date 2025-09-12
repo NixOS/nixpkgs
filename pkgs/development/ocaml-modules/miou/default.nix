@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "miou";
-  version = "0.3.1";
+  version = "0.4.0";
 
   minimalOCamlVersion = "5.0.0";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/miou/releases/download/v${version}/miou-${version}.tbz";
-    hash = "sha256-K3otUuwFmRVrbnxYYZDMmd2WTYQHmXY/byQHu4PjlHE=";
+    hash = "sha256-2a5SET2SPyQloTdcWU9KzPYRcXgK8e8hHbu6OP9R2s8=";
   };
 
   meta = {

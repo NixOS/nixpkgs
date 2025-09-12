@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pixel2svg";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://static.florian-berger.de/pixel2svg-${version}.zip";

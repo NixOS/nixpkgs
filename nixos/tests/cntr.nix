@@ -1,41 +1,31 @@
 # Test for cntr tool
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  lib ? pkgs.lib,
-}:
+
+{ runTest, lib }:
 
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-
   mkOCITest =
     backend:
-    makeTest {
+    runTest {
       name = "cntr-${backend}";
 
-      meta = {
-        maintainers = with lib.maintainers; [
-          sorki
-          mic92
-        ];
-      };
+      meta.maintainers = with lib.maintainers; [
+        sorki
+        mic92
+      ];
 
-      nodes = {
-        ${backend} =
-          { pkgs, ... }:
-          {
-            environment.systemPackages = [ pkgs.cntr ];
-            virtualisation.oci-containers = {
-              inherit backend;
-              containers.nginx = {
-                image = "nginx-container";
-                imageStream = pkgs.dockerTools.examples.nginxStream;
-                ports = [ "8181:80" ];
-              };
+      nodes.${backend} =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = [ pkgs.cntr ];
+          virtualisation.oci-containers = {
+            inherit backend;
+            containers.nginx = {
+              image = "nginx-container";
+              imageStream = pkgs.dockerTools.examples.nginxStream;
+              ports = [ "8181:80" ];
             };
           };
-      };
+        };
 
       testScript = ''
         start_all()
@@ -53,18 +43,16 @@ let
       '';
     };
 
-  mkContainersTest = makeTest {
+  mkContainersTest = runTest {
     name = "cntr-containers";
 
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [
-        sorki
-        mic92
-      ];
-    };
+    meta.maintainers = with lib.maintainers; [
+      sorki
+      mic92
+    ];
 
     nodes.machine =
-      { lib, ... }:
+      { pkgs, ... }:
       {
         environment.systemPackages = [ pkgs.cntr ];
         containers.test = {

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mnemosyne";
   version = "2.10.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";

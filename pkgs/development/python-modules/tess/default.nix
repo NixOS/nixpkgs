@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tess/tests.py" ];
+  enabledTestPaths = [ "tess/tests.py" ];
 
   preCheck = ''
     cd $out/${python.sitePackages}

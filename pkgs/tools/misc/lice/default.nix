@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "lice";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

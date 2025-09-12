@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii-data-importer";
-  version = "1.6.3";
+  version = "1.7.10";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "data-importer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+e5UtnK/eiFnmvtKjVp3EZ8JLi+dWnJ+vgjDJKRLqH8=";
+    hash = "sha256-6C9ztbmYONhnNPZtZC0dQzU5qM8fqyigPVDKBhO7x8Y=";
   };
 
   buildInputs = [ php84 ];
@@ -38,12 +38,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   composerStrictValidation = true;
   strictDeps = true;
 
-  vendorHash = "sha256-ExHT4kRyyp4c7vGqUN7hbP8pScvto/qp81oDjZGBJis=";
+  vendorHash = "sha256-WCh0NeTfunWrh2gur7+2Otcoa3U21ldi4JvualiatG8=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-i+Ytv8uLSrdLPC04BfZbRXRA7jmy1IX4nYW5WRZubCY=";
+    hash = "sha256-NELRAxCnvUNC1LTfktufkcNc/R8gkn6S/jt7VlOWRtg=";
   };
 
   composerRepository = php84.mkComposerRepository {
@@ -84,7 +84,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/firefly-iii/data-importer/releases/tag/v${finalAttrs.version}";
-    description = "Firefly III Data Importer can import data into Firefly III.";
+    description = "Firefly III Data Importer can import data into Firefly III";
     homepage = "https://github.com/firefly-iii/data-importer";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.savyajha ];

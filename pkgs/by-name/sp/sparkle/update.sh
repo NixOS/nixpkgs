@@ -13,5 +13,5 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
 fi
 
 nix-update sparkle --version $latestVersion --system x86_64-linux
-hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; sparkle.src.url" --system aarch64-linux | tr -d '"')))
+hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; sparkle.src.url" --system aarch64-linux | tr -d '"')))
 update-source-version sparkle $latestVersion $hash --system=aarch64-linux --ignore-same-version

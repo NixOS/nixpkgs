@@ -51,6 +51,12 @@
         inherit runCommand rustc;
       };
 
+      # Useful when rebuilding std
+      # e.g. when building wasm with wasm-pack
+      rustVendorSrc = callPackage ./rust-vendor-src.nix {
+        inherit runCommand rustc;
+      };
+
       # Hooks
       inherit
         (callPackages ../../../build-support/rust/hooks {

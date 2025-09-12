@@ -592,17 +592,16 @@ package-set { inherit pkgs lib callPackage; } self
       #
       # The important thing to note here is that all the fields from
       # packageInputs are set correctly.
-      genericBuilderArgs =
-        {
-          pname = if pkgs.lib.length selected == 1 then (pkgs.lib.head selected).name else "packages";
-          version = "0";
-          license = null;
-        }
-        // packageInputs
-        // pkgs.lib.optionalAttrs doBenchmark {
-          # `doBenchmark` needs to explicitly be set here because haskellPackages.mkDerivation defaults it to `false`.  If the user wants benchmark dependencies included in their development shell, it has to be explicitly enabled here.
-          doBenchmark = true;
-        };
+      genericBuilderArgs = {
+        pname = if pkgs.lib.length selected == 1 then (pkgs.lib.head selected).name else "packages";
+        version = "0";
+        license = null;
+      }
+      // packageInputs
+      // pkgs.lib.optionalAttrs doBenchmark {
+        # `doBenchmark` needs to explicitly be set here because haskellPackages.mkDerivation defaults it to `false`.  If the user wants benchmark dependencies included in their development shell, it has to be explicitly enabled here.
+        doBenchmark = true;
+      };
 
       # This is a pseudo Haskell package derivation that contains all the
       # dependencies for the packages in `selected`.
@@ -735,6 +734,6 @@ package-set { inherit pkgs lib callPackage; } self
   */
   forceLlvmCodegenBackend = overrideCabal (drv: {
     configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
-    buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    buildTools = drv.buildTools or [ ] ++ [ self.ghc.llvmPackages.llvm ];
   });
 }

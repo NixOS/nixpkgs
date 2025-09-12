@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   pkg-config,
   cmake,
   qttools,
+  qt5compat,
   libuuid,
   seafile-shared,
   jansson,
@@ -16,14 +18,23 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "9.0.12";
+  version = "9.0.14";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "sha256-9ng8TsT211jAt2Vhv8fEIQGCtbQ6LQ6pCVFToVaK8LY=";
+    hash = "sha256-ZMhU0uXAC3tH1e3ktiHhC5YCDwFOnILretPgjYYa9DQ=";
   };
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/442063
+    (fetchpatch {
+      name = "fix_build_with_QT6.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_QT6.diff?h=seafile-client&id=8bbd6e5017f03dbb368603b4313738b0d783ca2a";
+      hash = "sha256-N1fepqjTm/M17+TgwNTUecP/wGVlBuZEtTezFgJEeVM=";
+    })
+  ];
 
   nativeBuildInputs = [
     libuuid
@@ -34,10 +45,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qt5compat
     seafile-shared
     jansson
     libsearpc
-  ] ++ lib.optional withShibboleth qtwebengine;
+  ]
+  ++ lib.optional withShibboleth qtwebengine;
 
   cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
@@ -52,7 +65,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       schmittlauch
-      greizgh
     ];
     mainProgram = "seafile-applet";
   };

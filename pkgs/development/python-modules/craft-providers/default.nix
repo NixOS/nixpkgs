@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.3.1";
+  version = "3.0.0";
 
   pyproject = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-MeQOqw0F4OwaooHHrUh3qITTOFNXG1Qg1oJcYxRQTz0=";
+    hash = "sha256-8StnxyuvyK9HRl1smbhJFz1qZxyNOWnzELG0ku0dh8k=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.2.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # Relies upon "logassert" python package which isn't in nixpkgs
@@ -101,7 +101,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-providers";
     changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

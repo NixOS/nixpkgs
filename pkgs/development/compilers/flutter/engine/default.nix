@@ -58,20 +58,19 @@ stdenv.mkDerivation (
     dontUnpack = true;
     dontBuild = true;
 
-    installPhase =
+    installPhase = ''
+      mkdir -p $out/out
+    ''
+    + lib.concatMapStrings (
+      runtimeMode:
+      let
+        runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
+        runtimeModeOut = runtimeModeBuild.outName;
+      in
       ''
-        mkdir -p $out/out
+        ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
       ''
-      + lib.concatMapStrings (
-        runtimeMode:
-        let
-          runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
-          runtimeModeOut = runtimeModeBuild.outName;
-        in
-        ''
-          ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
-        ''
-      ) runtimeModes;
+    ) runtimeModes;
   }
   // runtimeModesBuilds
 )

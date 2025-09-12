@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "8.2.3";
+  version = "8.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-6M9IWwrCaJoi7b5e4ltdyZfdT7KkOgsollHNKhLPr9U=";
+    hash = "sha256-uupFeQ73hr6ziLEtzgVJWASUxhspXJX54/U+3PLSCFY=";
   };
 
   patches = [
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
 
-    # WindowStateSaver: fix crash
-    # https://github.com/elementary/gala/pull/2443
+    # Fix gtk3 daemon menu location with x2 scaling
+    # https://github.com/elementary/gala/pull/2493
     (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/9defe95ef412f87eb14e0efd8b87f2fde5378a76.patch";
-      hash = "sha256-P50ahXFlTLyHMT+WdHdLU2qNdMUnfXF+CjoJRchmyzw=";
+      url = "https://github.com/elementary/gala/commit/33bc3ebe7f175c61845feaf2d06083f1e3b64ddc.patch";
+      hash = "sha256-hjjiKcO5o/OABKD8vUsVyqtNKN4ffEOGZntLceLr2+k=";
     })
   ];
 

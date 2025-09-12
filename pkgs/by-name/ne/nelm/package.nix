@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nelm";
-  version = "1.6.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "nelm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bqVas9zF/xtL5K/7cOF/4q4weZtEBhfB5ngdAq0ZfjI=";
+    hash = "sha256-fhHkWkbMGLr/dlHFtbg/tZA0Yr8dKDKGiN//CNSVAOs=";
   };
 
-  vendorHash = "sha256-bx8e5jV+ORnJg/35VwO7qodFjmSf7XbzTKZKp3b8hqc=";
+  vendorHash = "sha256-53pIUVbGXU1GGFZtUtjSOufCbvHEPUltZd52eZEGSio=";
 
   subPackages = [ "cmd/nelm" ];
 

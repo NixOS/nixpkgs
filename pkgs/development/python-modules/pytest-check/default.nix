@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_check" ];
 
   meta = with lib; {
-    description = "pytest plugin allowing multiple failures per test";
+    description = "Pytest plugin allowing multiple failures per test";
     homepage = "https://github.com/okken/pytest-check";
     changelog = "https://github.com/okken/pytest-check/releases/tag/${version}";
     license = licenses.mit;

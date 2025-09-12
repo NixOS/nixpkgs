@@ -44,7 +44,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.5.1";
+  version = "3.5.3";
 
   pyproject = true;
 
@@ -52,7 +52,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-4zlUHttny6nIRhx/5aDz2sh1Va0+nN+7cezBGtt5Img=";
+    hash = "sha256-SPWbHyHp1SIwDmcpBftUJ7SXggkGsxPvZyfRVm67KFM=";
   };
 
   postPatch = ''
@@ -112,7 +112,7 @@ python.pkgs.buildPythonApplication rec {
       writableTmpDirAsHomeHook
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon the `charm` tool being installed
@@ -132,7 +132,11 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/canonical/charmcraft";
     changelog = "https://github.com/canonical/charmcraft/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

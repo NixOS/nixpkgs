@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "4.0.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-GS4JLLXrX4+BQ4S6ySbOHUaUthCFYTCHWnOaMpfnIj8=";
+    hash = "sha256-nlNjBbXd4ujzVx10+UwqbXliuLVVf+UHR8Dl5CQzsZo=";
   };
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
@@ -61,10 +61,14 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # network access
+    "test_lock_order"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];

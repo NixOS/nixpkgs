@@ -31,17 +31,16 @@ stdenv.mkDerivation {
     installShellFiles
   ];
 
-  postPatch =
-    ''
-      sed -i i3lock-fancy \
-        -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
-        -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
-      rm Makefile
-    ''
-    + lib.optionalString (screenshotCommand != "") ''
-      sed -i i3lock-fancy \
-        -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
-    '';
+  postPatch = ''
+    sed -i i3lock-fancy \
+      -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
+      -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
+    rm Makefile
+  ''
+  + lib.optionalString (screenshotCommand != "") ''
+    sed -i i3lock-fancy \
+      -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -71,7 +70,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
+    description = "Bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/meskarune/i3lock-fancy";
     maintainers = [ maintainers.reedrw ];
     mainProgram = "i3lock-fancy";

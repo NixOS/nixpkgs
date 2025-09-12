@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.99.3";
+  version = "1.103.1";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-nA+StCJgutWjD7vgCCcj9B91QSF7dEHnlNtj7zgJRwI=";
+    hash = "sha256-Co0MF8Yr60Ppv6Zv85nJeua2S5Rnye6wGB1hTWNpMm4=";
   };
 
   ## fetchNpmDeps doesn't correctly process git dependencies
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-lgzNpWFAIGNxjDZ60kRw80fP1qEItk3FN1s5t7KdxGA=";
+        outputHash = "sha256-xK4qfzkWuOsEyP1+6cY5Dhrr5wNW3eOJBTyQaE6gTcc=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
@@ -123,25 +123,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   # remove all built-in extensions, as these are 3rd party extensions that
   # get downloaded from vscode marketplace
-  postPatch =
-    ''
-      jq --slurp '.[0] * .[1]' "product.json" <(
-        cat << EOF
-      {
-        "builtInExtensions": []
-      }
-      EOF
-      ) | sponge product.json
-      echo "Updated product.json"
-    ''
-    ## build/lib/node.ts picks up nodejs version from remote/.npmrc
-    ## and prefetches it into .build/node/v{version}/{target}/node
-    ## so we pre-seed it here
-    + ''
-      sed -i 's/target=.*/target="${nodejs.version}"/' remote/.npmrc
-      mkdir -p .build/node/v${nodejs.version}/${vsBuildTarget}
-      ln -s ${nodejs}/bin/node .build/node/v${nodejs.version}/${vsBuildTarget}/node
-    '';
+  postPatch = ''
+    jq --slurp '.[0] * .[1]' "product.json" <(
+      cat << EOF
+    {
+      "builtInExtensions": []
+    }
+    EOF
+    ) | sponge product.json
+    echo "Updated product.json"
+  ''
+  ## build/lib/node.ts picks up nodejs version from remote/.npmrc
+  ## and prefetches it into .build/node/v{version}/{target}/node
+  ## so we pre-seed it here
+  + ''
+    sed -i 's/target=.*/target="${nodejs.version}"/' remote/.npmrc
+    mkdir -p .build/node/v${nodejs.version}/${vsBuildTarget}
+    ln -s ${nodejs}/bin/node .build/node/v${nodejs.version}/${vsBuildTarget}/node
+  '';
 
   preConfigure = ''
     export HOME=$TMPDIR/home
@@ -154,62 +153,61 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_cache=$TMPDIR/cache
   '';
 
-  configurePhase =
-    ''
-      runHook preConfigure
-    ''
-    ## unpack all of the prefetched node_modules folders
-    + ''
-      for p in $(find -name package-lock.json -exec dirname {} \;)
-      do (
-        echo "Setting up $p/node_modules"
-        cd $p
-        if [ -e node_modules ]
-        then
-          echo >&2 "File exists $p/node_modules"
-          exit 0
-        fi
-        npm ci --ignore-scripts
-        patchShebangs node_modules
-      )
-      done
-    ''
-    ## put ripgrep binary into bin so postinstall does not try to download it
-    + ''
-      find -path "*@vscode/ripgrep" -type d \
-        -execdir mkdir -p {}/bin \; \
-        -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
-    ''
-    ## pre-seed node-gyp
-    + ''
-      mkdir -p $HOME/.node-gyp/${nodejs.version}
-      echo 11 > $HOME/.node-gyp/${nodejs.version}/installVersion
-      ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    ''
-    ## node-pty build fix
-    + ''
-      substituteInPlace remote/node_modules/node-pty/scripts/post-install.js \
-        --replace-fail "npx node-gyp" "$npm_config_node_gyp"
-    ''
-    ## rebuild native binaries
-    + ''
-      echo >&2 "Rebuilding from source in ./remote"
-      npm --offline --prefix ./remote rebuild --build-from-source
-    ''
-    ## run postinstall scripts
-    + ''
-      find -name package.json -type f -exec sh -c '
-        if jq -e ".scripts.postinstall" {} >-
-        then
-          echo >&2 "Running postinstall script in $(dirname {})"
-          npm --offline --prefix=$(dirname {}) run postinstall
-        fi
+  configurePhase = ''
+    runHook preConfigure
+  ''
+  ## unpack all of the prefetched node_modules folders
+  + ''
+    for p in $(find -name package-lock.json -exec dirname {} \;)
+    do (
+      echo "Setting up $p/node_modules"
+      cd $p
+      if [ -e node_modules ]
+      then
+        echo >&2 "File exists $p/node_modules"
         exit 0
-      ' \;
-    ''
-    + ''
-      runHook postConfigure
-    '';
+      fi
+      npm ci --ignore-scripts
+      patchShebangs node_modules
+    )
+    done
+  ''
+  ## put ripgrep binary into bin so postinstall does not try to download it
+  + ''
+    find -path "*@vscode/ripgrep" -type d \
+      -execdir mkdir -p {}/bin \; \
+      -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
+  ''
+  ## pre-seed node-gyp
+  + ''
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 11 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+  ''
+  ## node-pty build fix
+  + ''
+    substituteInPlace remote/node_modules/node-pty/scripts/post-install.js \
+      --replace-fail "npx node-gyp" "$npm_config_node_gyp"
+  ''
+  ## rebuild native binaries
+  + ''
+    echo >&2 "Rebuilding from source in ./remote"
+    npm --offline --prefix ./remote rebuild --build-from-source
+  ''
+  ## run postinstall scripts
+  + ''
+    find -name package.json -type f -exec sh -c '
+      if jq -e ".scripts.postinstall" {} >-
+      then
+        echo >&2 "Running postinstall script in $(dirname {})"
+        npm --offline --prefix=$(dirname {}) run postinstall
+      fi
+      exit 0
+    ' \;
+  ''
+  + ''
+    runHook postConfigure
+  '';
 
   buildPhase = ''
     runHook preBuild

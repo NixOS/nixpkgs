@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.33.1";
+  version = "1.33.4";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    hash = "sha256-leWFoZ8aMGQgy0JDcbyZ+GX9B6Qdm+f5ng1X0beIcw0=";
+    hash = "sha256-T/LPnm4rnNhvFWWiBAz1R4T5mtHW1CrWEfHQ3Ce/wYA=";
   };
   vendorHash = null;
 
@@ -39,19 +39,18 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      btrfs-progs
-      gpgme
-      libapparmor
-      libseccomp
-      libselinux
-      lvm2
-    ]
-    ++ lib.optionals (glibc != null) [
-      glibc
-      glibc.static
-    ];
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ]
+  ++ lib.optionals (glibc != null) [
+    glibc
+    glibc.static
+  ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''

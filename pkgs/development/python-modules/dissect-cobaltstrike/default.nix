@@ -68,7 +68,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
 

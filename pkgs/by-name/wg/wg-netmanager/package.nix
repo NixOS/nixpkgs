@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LtZTfmVVUqxc9GAM6mLLmlJXBhLqnfrvBZWh0RWrR/0=";
 
   # Test 01 tries to create a wireguard interface, which requires sudo.

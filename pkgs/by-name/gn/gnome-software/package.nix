@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "48.2";
+  version = "48.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-q/0wZDqGxl9IhrZ2XrO7YhXJ6gmBfWvRZcUAVokIIsk=";
+    hash = "sha256-nNEwvGLNCLY6Ii6yZmG8xxfnXVjuGzwYgMTRt2zNJjs=";
   };
 
   patches = [
@@ -101,12 +101,14 @@ stdenv.mkDerivation (finalAttrs: {
     # For video screenshots
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals withFwupd [ fwupd ];
+  ]
+  ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
-  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
+  ]
+  ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };

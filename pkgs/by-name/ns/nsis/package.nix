@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
     "SKIPMISC=all"
     "NSIS_CONFIG_CONST_DATA=no"
     "VERSION=${version}"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "APPEND_LINKFLAGS=-liconv";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "APPEND_LINKFLAGS=-liconv";
 
   preBuild = ''
     sconsFlagsArray+=(

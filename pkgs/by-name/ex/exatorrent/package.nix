@@ -54,15 +54,14 @@ buildGoModule (finalAttrs: {
 
   tags = lib.optionals (!withUI) [ "noui" ];
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isGnu [
-      # upstream also tries to compile statically if possible
-      "-extldflags '-static'"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isGnu [
+    # upstream also tries to compile statically if possible
+    "-extldflags '-static'"
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
     stdenv.cc.libc.static

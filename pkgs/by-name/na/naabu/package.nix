@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "naabu";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     tag = "v${version}";
-    hash = "sha256-Xri3kdpK1oPb2doL/x7PkZQBtFugesbNX3GGc/w3GY8=";
+    hash = "sha256-UHjWO/uCfUF6xylfYLbwiMwpNwZvlNoVRzRhRFxfqck=";
   };
 
-  vendorHash = "sha256-HpkFUHD3B09nxGK75zELTsjr4wXivY2o/DCjYSDepRI=";
+  vendorHash = "sha256-wl0BqZXd7NRNBY3SCLOwfwa3e91ar5JX6lxtkQChXHM=";
 
   buildInputs = [ libpcap ];
 

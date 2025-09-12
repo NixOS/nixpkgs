@@ -1,11 +1,17 @@
 { pkgs, ... }:
-
 let
+  inherit (import ./ssh-keys.nix pkgs)
+    snakeOilEd25519PrivateKey
+    snakeOilEd25519PublicKey
+    ;
+
   remoteRepository = "/root/restic-backup";
   remoteFromFileRepository = "/root/restic-backup-from-file";
+  remoteFromCommandRepository = "/root/restic-backup-from-command";
   remoteInhibitTestRepository = "/root/restic-backup-inhibit-test";
   remoteNoInitRepository = "/root/restic-backup-no-init";
   rcloneRepository = "rclone:local:/root/restic-rclone-backup";
+  sftpRepository = "sftp:alice@sftp:backups/test";
 
   backupPrepareCommand = ''
     touch /root/backupPrepareCommand
@@ -39,6 +45,12 @@ let
     "--keep-monthly 1"
     "--keep-yearly 99"
   ];
+  commandString = "testing";
+  command = [
+    "echo"
+    "-n"
+    commandString
+  ];
 in
 {
   name = "restic";
@@ -51,7 +63,34 @@ in
   };
 
   nodes = {
-    server =
+    sftp =
+      # Copied from openssh.nix
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          extraConfig = ''
+            Match Group sftponly
+              ChrootDirectory /srv/sftp
+              ForceCommand internal-sftp
+          '';
+        };
+
+        users.groups = {
+          sftponly = { };
+        };
+        users.users = {
+          alice = {
+            isNormalUser = true;
+            createHome = false;
+            group = "sftponly";
+            shell = "/run/current-system/sw/bin/nologin";
+            openssh.authorizedKeys.keys = [ snakeOilEd25519PublicKey ];
+          };
+        };
+      };
+
+    restic =
       { pkgs, ... }:
       {
         services.restic.backups = {
@@ -68,6 +107,20 @@ in
             initialize = true;
             timerConfig = null; # has no effect here, just checking that it doesn't break the service
           };
+          remote-sftp = {
+            inherit
+              passwordFile
+              paths
+              exclude
+              pruneOpts
+              ;
+            repository = sftpRepository;
+            initialize = true;
+            timerConfig = null; # has no effect here, just checking that it doesn't break the service
+            extraOptions = [
+              "sftp.command='ssh alice@sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -s sftp'"
+            ];
+          };
           remote-from-file-backup = {
             inherit passwordFile exclude pruneOpts;
             initialize = true;
@@ -79,6 +132,15 @@ in
             dynamicFilesFrom = ''
               find /opt -mindepth 1 -maxdepth 1 ! -name a_dir # all files in /opt except for a_dir
             '';
+          };
+          remote-from-command-backup = {
+            inherit
+              passwordFile
+              pruneOpts
+              command
+              ;
+            initialize = true;
+            repository = remoteFromCommandRepository;
           };
           inhibit-test = {
             inherit
@@ -143,28 +205,55 @@ in
   };
 
   testScript = ''
-    server.start()
-    server.wait_for_unit("dbus.socket")
-    server.fail(
+    restic.start()
+    sftp.start()
+    restic.wait_for_unit("dbus.socket")
+    sftp.wait_for_unit("sshd.service")
+
+    restic.systemctl("start network-online.target")
+    restic.wait_for_unit("network-online.target")
+
+    sftp.succeed(
+      "mkdir -p /srv/sftp/backups",
+      "chown alice:sftponly /srv/sftp/backups",
+      "chmod 0755 /srv/sftp/backups",
+    )
+
+    restic.succeed(
+      "mkdir -p /root/.ssh/",
+      "cat ${snakeOilEd25519PrivateKey} > /root/.ssh/id_ed25519",
+      "chmod 0600 /root/.ssh/id_ed25519",
+    )
+
+    restic.fail(
         "restic-remotebackup snapshots",
+        "restic-remote-sftp snapshots",
         'restic-remote-from-file-backup snapshots"',
         "restic-rclonebackup snapshots",
         "grep 'backup.* /opt' /root/fake-restic.log",
     )
-    server.succeed(
+    restic.succeed(
         # set up
         "cp -rT ${testDir} /opt",
         "touch /opt/excluded_file_1 /opt/excluded_file_2",
         "mkdir -p /root/restic-rclone-backup",
     )
 
-    server.fail(
+    restic.fail(
         # test that noinit backup in fact does not initialize the repository
         # and thus fails without a pre-initialized repository
         "systemctl start restic-backups-remote-noinit-backup.service",
     )
 
-    server.succeed(
+    restic.succeed(
+        # test that remotebackup runs custom commands and produces a snapshot
+        "timedatectl set-time '2016-12-13 13:45'",
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+    )
+
+    restic.succeed(
         # test that remotebackup runs custom commands and produces a snapshot
         "timedatectl set-time '2016-12-13 13:45'",
         "systemctl start restic-backups-remotebackup.service",
@@ -192,6 +281,11 @@ in
         "mkdir /tmp/restore-3",
         "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-3",
         "diff -ru ${testDir} /tmp/restore-3/opt",
+
+        # test that remote-from-command-backup produces a snapshot, with the expected contents
+        "systemctl start restic-backups-remote-from-command-backup.service",
+        'restic-remote-from-command-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        '[[ $(restic-remote-from-command-backup dump --path /stdin latest stdin) == ${commandString} ]]',
 
         # test that rclonebackup produces a snapshot
         "systemctl start restic-backups-rclonebackup.service",
@@ -231,15 +325,29 @@ in
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
         'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
 
+        # test that SFTP backup works by copying from the remotebackup
+        'restic-remote-sftp init --from-repo ${remoteRepository} --from-password-file ${passwordFile} --copy-chunker-params',
+        'restic-remote-sftp copy --from-repo ${remoteRepository} --from-password-file ${passwordFile}',
+        'restic-remote-sftp snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+
         # test that remoteprune brings us back to 1 snapshot in remotebackup
         "systemctl start restic-backups-remoteprune.service",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
+        # test that remoteprune brings us back to 1 snapshot in remotebackup
+        "systemctl start restic-backups-remoteprune.service",
+        'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
     )
 
     # test that the inhibit option is working
-    server.systemctl("start --no-block restic-backups-inhibit-test.service")
-    server.wait_until_succeeds(
+    restic.systemctl("start --no-block restic-backups-inhibit-test.service")
+    restic.wait_until_succeeds(
+        "systemd-inhibit --no-legend --no-pager | grep -q restic",
+        5
+    )
+    # test that the inhibit option is working
+    restic.systemctl("start --no-block restic-backups-inhibit-test.service")
+    restic.wait_until_succeeds(
         "systemd-inhibit --no-legend --no-pager | grep -q restic",
         5
     )

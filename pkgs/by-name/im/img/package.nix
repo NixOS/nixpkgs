@@ -48,7 +48,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Standalone, daemon-less, unprivileged Dockerfile and OCI compatible container image builder.";
+    description = "Standalone, daemon-less, unprivileged Dockerfile and OCI compatible container image builder";
     mainProgram = "img";
     license = licenses.mit;
     homepage = "https://github.com/genuinetools/img";

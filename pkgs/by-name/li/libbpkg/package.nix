@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "build2 package dependency manager utility library";
+    description = "Build2 package dependency manager utility library";
     longDescription = ''
       This library defines the types and utilities for working with build2 packages.
       In particular, it provides C++ classes as well as the parser and serializer

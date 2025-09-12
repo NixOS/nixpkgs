@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase =
-    ''
-      mkdir -p "$out"
-      cp -vr . "$out"
-      # Remove (for now) uneeded Windows .bat files
-      rm -f "$out"/bin/*.bat
-      # Improve purity
-      sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
-    ''
-    + lib.optionalString (jdk != null) ''
-      # Inject JDK path into grails
-      sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
-    '';
+  installPhase = ''
+    mkdir -p "$out"
+    cp -vr . "$out"
+    # Remove (for now) uneeded Windows .bat files
+    rm -f "$out"/bin/*.bat
+    # Improve purity
+    sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
+  ''
+  + lib.optionalString (jdk != null) ''
+    # Inject JDK path into grails
+    sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
+  '';
 
   preferLocalBuild = true;
 

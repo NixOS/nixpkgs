@@ -23,14 +23,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray =
-    if isPyPy then
-      [
-        # uses ctypes to find native library
-        "--deselect=test_six.py::test_move_items"
-      ]
-    else
-      null;
+  disabledTestPaths = lib.optionals isPyPy [
+    # uses ctypes to find native library
+    "test_six.py::test_move_items"
+  ];
 
   pythonImportsCheck = [ "six" ];
 

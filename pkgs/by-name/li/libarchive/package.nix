@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   acl,
   attr,
   autoreconfHook,
   bzip2,
-  e2fsprogs,
+  fetchpatch,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -33,28 +32,27 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nL2p2h+U25fhQQjbj16yhxhU8xEEuhNynIx7SNzl6Mo=";
+    hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
   };
 
   patches = [
-    # Remove in next release
-    #
-    # Fixes macOS metadata file handling when reading certain tarballs
-    # (e.g, bsdtar-produced tar containing a file with xattrs whose name is exactly 99 bytes long)
-    # <https://github.com/libarchive/libarchive/pull/2636>
-    #
-    # This also fixes test_copy in the test suite.
+    # https://github.com/libarchive/libarchive/pull/2689
+    # Remove after next release.
     (fetchpatch {
-      name = "reset-header-state-after-mac-metadata.patch";
-      url = "https://github.com/libarchive/libarchive/commit/5bb36db5e19aecabccec8f351ec22f8c3a8695f0.patch";
-      hash = "sha256-eNGSunYZ5b0TrkBUtOO7MYGXc+SEn1Sxm8MYyI+4JsQ=";
+      url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
+      hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
     })
+    # Fix the tests on Darwin when `$TMPDIR` does not end with a slash
+    # and its parent directory is not writable by the build user, as on
+    # Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
+    # <https://github.com/libarchive/libarchive/pull/2708>
+    ./fix-darwin-tmpdir-handling.patch
   ];
 
   outputs = [
@@ -65,24 +63,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      skipTestPaths =
-        [
-          # test won't work in nix sandbox
-          "libarchive/test/test_write_disk_perms.c"
-          # the filesystem does not necessarily have sparse capabilities
-          "libarchive/test/test_sparse_basic.c"
-          # the filesystem does not necessarily have hardlink capabilities
-          "libarchive/test/test_write_disk_hardlink.c"
-          # access-time-related tests flakey on some systems
-          "libarchive/test/test_read_disk_directory_traversals.c"
-          "cpio/test/test_option_a.c"
-          "cpio/test/test_option_t.c"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-          # only on some aarch64-linux systems?
-          "cpio/test/test_basic.c"
-          "cpio/test/test_format_newc.c"
-        ];
+      skipTestPaths = [
+        # test won't work in nix sandbox
+        "libarchive/test/test_write_disk_perms.c"
+        # the filesystem does not necessarily have sparse capabilities
+        "libarchive/test/test_sparse_basic.c"
+        # the filesystem does not necessarily have hardlink capabilities
+        "libarchive/test/test_write_disk_hardlink.c"
+        # access-time-related tests flakey on some systems
+        "libarchive/test/test_read_disk_directory_traversals.c"
+        "cpio/test/test_option_a.c"
+        "cpio/test/test_option_t.c"
+        # fails tests on filesystems with 64-bit inode values:
+        # FAIL: bsdcpio_test
+        #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
+        "cpio/test/test_basic.c"
+        "cpio/test/test_format_newc.c"
+      ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
         rm "${testPath}"
@@ -100,21 +97,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      lzo
-      openssl
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-      e2fsprogs
-    ]
-    ++ lib.optional xarSupport libxml2;
+  buildInputs = [
+    bzip2
+    lzo
+    openssl
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+  ]
+  ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [

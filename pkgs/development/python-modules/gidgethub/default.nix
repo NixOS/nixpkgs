@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  flit,
+  flit-core,
   uritemplate,
   pyjwt,
   pytestCheckHook,
@@ -16,22 +16,23 @@
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "5.3.0";
-  format = "pyproject";
+  version = "5.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ns59N/vOuBm4BWDn7Vj5NuSKZdN+xfVtt5FFFWtCaiU=";
+    hash = "sha256-dHDXcj18F0NHGi1i55yHUvuhKxwJcuS61XJSM4pQHb0=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     uritemplate
     pyjwt
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     pytestCheckHook

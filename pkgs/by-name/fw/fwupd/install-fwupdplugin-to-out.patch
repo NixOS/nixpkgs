@@ -1,14 +1,14 @@
-commit 50827b154728a97e5dfcb7d41e5c7155752919c3
+commit 1b7f8b3ad7df9a5911fbc45608d9b40e0787baca
 Author: r-vdp <ramses@well-founded.dev>
 Date:   Mon Oct 28 12:07:51 2024 +0100
 
     Install fwupdplugin to out
 
 diff --git a/meson.build b/meson.build
-index 250b76107..62c127c35 100644
+index 747d1b385..312513d75 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -553,7 +553,7 @@ if build_standalone
+@@ -548,7 +548,7 @@ if build_standalone
  if host_machine.system() == 'windows'
    libdir_pkg = bindir
  else

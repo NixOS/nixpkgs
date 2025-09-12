@@ -42,16 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
       "spral_tests += [['ssids', 'ssidst', files('ssids.f90')]]" ""
   '';
 
-  nativeBuildInputs =
-    [
-      gfortran
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
 
   propagatedBuildInputs = lib.optionals enableCuda [
     cudaPackages.cuda_cudart
@@ -63,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     (hwloc.override { inherit enableCuda; })
     lapack
     metis
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 

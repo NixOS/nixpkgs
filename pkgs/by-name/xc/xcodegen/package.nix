@@ -7,7 +7,6 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  ...
 }:
 
 let
@@ -40,14 +39,12 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
 
   # The helper provides a configure snippet that will prepare all dependencies
   # in the correct place, where SwiftPM expects them.
-  configurePhase =
-    generated.configure
-    + ''
-      # Replace the dependency symlink with a writable copy
-      swiftpmMakeMutable Spectre
-      # Now apply a patch
-      patch -p1 -d .build/checkouts/Spectre -i ${./0001-spectre-xct-record.patch}
-    '';
+  configurePhase = generated.configure + ''
+    # Replace the dependency symlink with a writable copy
+    swiftpmMakeMutable Spectre
+    # Now apply a patch
+    patch -p1 -d .build/checkouts/Spectre -i ${./0001-spectre-xct-record.patch}
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/xcodegen

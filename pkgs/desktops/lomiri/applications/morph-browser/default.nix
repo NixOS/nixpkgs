@@ -43,22 +43,21 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
-        --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  postPatch = ''
+    substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
+      --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-      substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
-        --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
-        --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
+    substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
+      --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
+      --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
 
-      substituteInPlace doc/CMakeLists.txt \
-        --replace-fail 'COMMAND ''${QDOC_EXECUTABLE} -qt5' 'COMMAND ''${QDOC_EXECUTABLE}'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests)' ""
-    '';
+    substituteInPlace doc/CMakeLists.txt \
+      --replace-fail 'COMMAND ''${QDOC_EXECUTABLE} -qt5' 'COMMAND ''${QDOC_EXECUTABLE}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' ""
+  '';
 
   strictDeps = true;
 

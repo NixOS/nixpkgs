@@ -34,9 +34,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Flaky test, remove this when https://github.com/Cisco-Talos/clamav/issues/343 is fixed
-    ./remove-freshclam-test.patch
-    ./sample-cofiguration-file-install-location.patch
+    ./sample-configuration-file-install-location.patch
+    ./use-non-existent-file-with-proper-permissions.patch
   ];
 
   enableParallelBuilding = true;
@@ -62,14 +61,17 @@ stdenv.mkDerivation rec {
     libmspack
     json_c
     check
-  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
   ];
 
-  doCheck = true;
+  # Seems to only fail on x86_64-darwin with sandboxing
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     python3.pkgs.pytest

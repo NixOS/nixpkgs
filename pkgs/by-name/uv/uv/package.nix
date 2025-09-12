@@ -18,17 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.7.13";
+  version = "0.8.14";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-/K8zTExK6G/Rrh/4g2CLS4rBbQovb6DvAL8puS7eM5w=";
+    hash = "sha256-KG6WNaHbrPBasHdSdtWrnvzwMRrvpwukVSIZe3COrUA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-GsjBTqV7GO1NNI/3EMXN0S0TwPvdtP/PTTv6NbGa9a4=";
+  cargoHash = "sha256-Ow39kxnACXVbEtCPGJJ7SKdTFhYwd9IDPbYAsvNPOKw=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -62,6 +61,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.uv-python = python3Packages.uv;
+
+    # Updating `uv` needs to be done on staging. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
@@ -79,5 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       prince213
     ];
     mainProgram = "uv";
+
+    # Builds on 32-bit platforms fails with "out of memory" since at least 0.8.6.
+    # We don't place this in `badPlatforms` because cross-compilation on 64-bit
+    # machine may work, e.g. `pkgsCross.gnu32.uv`.
+    broken = stdenv.buildPlatform.is32bit;
   };
 })

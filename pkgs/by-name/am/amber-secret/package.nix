@@ -12,11 +12,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fpco";
     repo = "amber";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nduSnDhLvHpZD7Y1zeZC4nNL7P1qfLWc0yMpsdqrKHM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Gwj0rnbKWifja5NJwskcrFpPoK15HjSQHXolGbgV784=";
 
   meta = {

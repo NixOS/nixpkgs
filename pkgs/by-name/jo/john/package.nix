@@ -51,37 +51,36 @@ stdenv.mkDerivation {
     }' run/*.conf
   '';
 
-  preConfigure =
-    ''
-      cd src
-      # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-      # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-      export AS=$CC
-      export LD=$CC
-    ''
-    + lib.optionalString withOpenCL ''
-      python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
-    '';
+  preConfigure = ''
+    cd src
+    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+    export AS=$CC
+    export LD=$CC
+  ''
+  + lib.optionalString withOpenCL ''
+    python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+  '';
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
-  ] ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
+  ]
+  ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
-  buildInputs =
-    [
-      openssl
-      nss
-      nspr
-      libkrb5
-      gmp
-      zlib
-      libpcap
-      re2
-    ]
-    ++ lib.optionals withOpenCL [
-      opencl-headers
-      ocl-icd
-    ];
+  buildInputs = [
+    openssl
+    nss
+    nspr
+    libkrb5
+    gmp
+    zlib
+    libpcap
+    re2
+  ]
+  ++ lib.optionals withOpenCL [
+    opencl-headers
+    ocl-icd
+  ];
   nativeBuildInputs = [
     gcc
     python3Packages.wrapPython

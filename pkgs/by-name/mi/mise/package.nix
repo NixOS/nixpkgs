@@ -21,17 +21,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.6.2";
+  version = "2025.8.20";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-vptTQdP7r9m328DK7USB6bV7muLVPIkZG8596nfdNQ8=";
+    hash = "sha256-zjb0ND6U/fe/1h+0LdTDYLIpsSPTvGhWOhFOb4vmiT0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0PS3WWQo3+fJ2TivvRalYCzDFmNxPRZStJj13kAP9bg=";
+  cargoHash = "sha256-kebXsDAtQjEtAVCD76n5/A9hB1Sj+ww9MoHcfm/ucBs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -63,16 +62,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ cacert ];
 
-  checkFlags =
-    [
-      # last_modified will always be different in nix
-      "--skip=tera::tests::test_last_modified"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-      # started failing mid-April 2025
-      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
-      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
-    ];
+  checkFlags = [
+    # last_modified will always be different in nix
+    "--skip=tera::tests::test_last_modified"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # started failing mid-April 2025
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+  ];
 
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions

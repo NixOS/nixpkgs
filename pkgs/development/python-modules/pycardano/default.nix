@@ -87,7 +87,7 @@ buildPythonPackage rec {
     description = "Lightweight Cardano library in Python";
     homepage = "https://github.com/Python-Cardano/pycardano";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ t4ccer ];
+    maintainers = with lib.maintainers; [ aciceri ];
     # https://github.com/Python-Cardano/pycardano/blob/v0.13.2/Makefile#L26-L39
     # cbor2 with C extensions fail tests due to differences in used sized vs unsized arrays
     # more info: https://github.com/NixOS/nixpkgs/pull/402433#issuecomment-2916520286

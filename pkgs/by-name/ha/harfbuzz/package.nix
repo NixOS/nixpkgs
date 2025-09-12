@@ -34,22 +34,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "10.2.0";
+  version = "11.2.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Yg40aPrsLqhoXTLEalhGm4UO9jBAs1Zc3gWVmCW0gic=";
+    hash = "sha256-CTcUyFSKKFCUaF8L3JmeIC1ma1nus98v+SGraLgzakk=";
   };
 
-  postPatch =
-    ''
-      patchShebangs src/*.py test
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # ApplicationServices.framework headers have cast-align warnings.
-      substituteInPlace src/hb.hh \
-        --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
-    '';
+  postPatch = ''
+    patchShebangs src/*.py test
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+  '';
 
   outputs = [
     "out"
@@ -87,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional withIntrospection gobject-introspection;
+  ]
+  ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [
     glib

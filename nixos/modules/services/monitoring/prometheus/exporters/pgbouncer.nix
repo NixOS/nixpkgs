@@ -82,7 +82,7 @@ in
         needs to have read access to files owned by the PgBouncer process. Depends on
         the availability of /proc.
 
-        https://prometheus.io/docs/instrumenting/writing_clientlibs/#process-metrics.
+        <https://prometheus.io/docs/instrumenting/writing_clientlibs/#process-metrics>.
 
       '';
     };

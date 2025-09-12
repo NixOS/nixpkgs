@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "tiler";
-  version = "0.5.7";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2HWO/iJ9RCWNVmw2slu9F/+Mchk3evB5/F8EfbuMI/Y=";
+    hash = "sha256-ps0uHgzPa+ZoXXrB+0gfuVIEBUNmym/ym6xCxiyHhxA=";
   };
 
   patches = [

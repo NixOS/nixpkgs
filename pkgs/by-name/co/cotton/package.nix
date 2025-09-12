@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "cotton";
-  version = "unstable-2023-09-13";
+  version = "0-unstable-2023-09-13";
 
   src = fetchFromGitHub {
     owner = "danielhuang";
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-ZMQaVMH8cuOb4PQ19g0pAFAMwP8bR60+eWFhiXk1bYE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-y162tjxPGZQiYBJxFk4QN9ZqSH8jrqa5Y961Sx2zrRs=";
 
   meta = with lib; {

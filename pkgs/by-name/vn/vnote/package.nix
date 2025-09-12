@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = "vnote";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-40k0wSqRdwlUqrbb9mDK0dqsSEqCfbNLt+cUKeky+do=";
   };

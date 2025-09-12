@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "json-logging";
-  version = "1.5.0-rc0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bobbui";
     repo = "json-logging-python";
     tag = version;
-    hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
+    hash = "sha256-r2ttPFvlN+hqMxBLPkr5hOz0UKNX4NRoXmLMXhTZ/VY=";
   };
 
   # The logging module introduced the `taskName` field in Python 3.12, which the tests don't expect
@@ -67,7 +67,7 @@ buildPythonPackage rec {
       infrastructure such as ELK, EFK, AWS Cloudwatch, GCP Stackdriver.
     '';
     homepage = "https://github.com/bobbui/json-logging-python";
-    changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${version}";
+    changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = [ ];
   };

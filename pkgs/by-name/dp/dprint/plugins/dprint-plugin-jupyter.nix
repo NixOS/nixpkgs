@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "Jupyter notebook code block formatter.";
+  description = "Jupyter notebook code block formatter";
   hash = "sha256-IlGwt2TnKeH9NwmUmU1keaTInXgYQVLIPNnr30A9lsM=";
   initConfig = {
     configExcludes = [ ];

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/xlslib/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

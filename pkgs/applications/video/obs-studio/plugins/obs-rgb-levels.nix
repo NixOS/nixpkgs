@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ obs-studio ];
 
   meta = with lib; {
-    description = "A simple OBS Studio filter to adjust RGB levels.";
+    description = "Simple OBS Studio filter to adjust RGB levels";
     homepage = "https://github.com/wimpysworld/obs-rgb-levels";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Only;

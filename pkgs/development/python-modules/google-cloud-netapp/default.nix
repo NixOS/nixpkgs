@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.23";
+  version = "3.31.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    rev = "google-cloud-netapp-v${version}";
-    hash = "sha256-ietiyPCghGUD1jlGdZMhVgVozAlyfdvYgkV6NNlzLQg=";
+    tag = "google-cloud-build-v${version}";
+    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
 
   sourceRoot = "${src.name}/packages/google-cloud-netapp";
@@ -34,7 +34,8 @@ buildPythonPackage rec {
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for NetApp API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-netapp";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-netapp-v${version}/packages/google-cloud-netapp/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-netapp-${src.tag}/packages/google-cloud-netapp/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

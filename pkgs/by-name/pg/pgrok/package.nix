@@ -33,6 +33,7 @@ buildGoModule {
 
   env.pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = "sha256-o6wxO8EGRmhcYggJnfxDkH+nbt+isc8bfHji8Hu9YKg=";
   };
 

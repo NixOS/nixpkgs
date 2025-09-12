@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.4.313.0";
+  version = "1.4.321.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-FavJ9QIv9J/QlY8bBSQ4C+8ZeNzge3Rov97GPOjltuA=";
+    hash = "sha256-aTO8AIwN6/oOcxu6AgYBoOQiUHQkT6MJGAYNgP5js9I=";
   };
 
   strictDeps = true;
@@ -42,24 +42,23 @@ stdenv.mkDerivation rec {
     jq
   ];
 
-  buildInputs =
-    [
-      glslang
-      robin-hood-hashing
-      spirv-headers
-      spirv-tools
-      vulkan-headers
-      vulkan-utility-libraries
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-      libXrandr
-      libffi
-      libxcb
-      wayland
-    ];
+  buildInputs = [
+    glslang
+    robin-hood-hashing
+    spirv-headers
+    spirv-tools
+    vulkan-headers
+    vulkan-utility-libraries
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXau
+    libXdmcp
+    libXrandr
+    libffi
+    libxcb
+    wayland
+  ];
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"

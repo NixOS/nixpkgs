@@ -25,7 +25,8 @@ buildPythonPackage rec {
     cryptography
     python-dateutil
     requests
-  ] ++ lib.optional (!isPy3k) azure-storage-nspkg;
+  ]
+  ++ lib.optional (!isPy3k) azure-storage-nspkg;
 
   # has no tests
   doCheck = false;

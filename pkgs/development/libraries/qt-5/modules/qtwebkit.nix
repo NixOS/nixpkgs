@@ -50,7 +50,8 @@ qtModule {
     qtlocation
     qtsensors
     qtwebchannel
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin qtmultimedia;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin qtmultimedia;
   buildInputs = [
     fontconfig
     libwebp
@@ -74,13 +75,14 @@ qtModule {
     cmake
   ];
 
-  cmakeFlags =
-    [ "-DPORT=Qt" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DQt5Multimedia_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
-      "-DQt5MultimediaWidgets_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
-      "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
-    ];
+  cmakeFlags = [
+    "-DPORT=Qt"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DQt5Multimedia_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
+    "-DQt5MultimediaWidgets_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
+    "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     [
@@ -107,7 +109,6 @@ qtModule {
 
   meta = {
     maintainers = with lib.maintainers; [
-      abbradar
       periklis
     ];
     knownVulnerabilities = [

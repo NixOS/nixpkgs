@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "ua-parser-rs";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ua-parser";

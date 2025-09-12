@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.32.3";
+  version = "0.34.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-qCFwzhjQI1L7mgSSqDPw59woTSTDY0boWSHcm7dgx2A=";
+    hash = "sha256-2R4G/2VBj/URVdVn/1dPBDdFCdXZymPc2zdbzddyYwU=";
   };
 
   build-system = [ setuptools ];
@@ -76,7 +76,8 @@ buildPythonPackage rec {
     torch = [
       torch
       safetensors
-    ] ++ safetensors.optional-dependencies.torch;
+    ]
+    ++ safetensors.optional-dependencies.torch;
     hf_transfer = [
       hf-transfer
     ];

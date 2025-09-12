@@ -5,27 +5,35 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "doge";
-  version = "3.8.0";
+  version = "3.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Olivia5k";
     repo = "doge";
-    rev = version;
-    hash = "sha256-CZw9Pz9YPVmDMOfDp5yIp/yStOvXEzAgb/HvKpxhQ8I=";
+    tag = version;
+    hash = "sha256-aJ1SFehjKiSc7osf5BOB1xjDnrkVXp37PQ5bNpbv1Mk=";
   };
 
-  pyproject = true;
-  nativeBuildInputs = [ python3Packages.setuptools ];
-  propagatedBuildInputs = [ python3Packages.python-dateutil ];
+  build-system = [ python3Packages.hatchling ];
+
+  dependencies = with python3Packages; [
+    python-dateutil
+    fullmoon
+  ];
 
   meta = {
-    homepage = "https://github.com/Olivia5k/doge";
     description = "Wow very terminal doge";
+    longDescription = ''
+      Doge is a simple motd script based on the slightly stupid but very funny doge meme.
+      It prints random grammatically incorrect statements that are sometimes based on things from your computer.
+    '';
+    homepage = "https://github.com/Olivia5k/doge";
     license = lib.licenses.mit;
+    mainProgram = "doge";
     maintainers = with lib.maintainers; [
       Gonzih
       quantenzitrone
     ];
-    mainProgram = "doge";
   };
 }

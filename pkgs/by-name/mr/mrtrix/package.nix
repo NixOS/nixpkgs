@@ -20,15 +20,15 @@
   withGui ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrtrix";
-  version = "3.0.4-unstable-2025-04-09";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
-    rev = "7843bfc53a75f465901804ccf3fd6797d77531dd";
-    hash = "sha256-C4Io3VkX10eWia4djrYvN12fWmwm0j1G60I8lmFH49w=";
+    rev = finalAttrs.version;
+    hash = "sha256-cPI6Ac1Yp5yb07zv9r5O7ZbsHpjrv5BkzbAW1qgj3gQ=";
     fetchSubmodules = true;
   };
 
@@ -36,26 +36,26 @@ stdenv.mkDerivation {
     makeWrapper
     less
     python3
-  ] ++ lib.optional withGui qt5.wrapQtAppsHook;
+  ]
+  ++ lib.optional withGui qt5.wrapQtAppsHook;
 
-  buildInputs =
-    [
-      ants
-      eigen_3_4_0
-      python3
-      fftw
-      libtiff
-      libpng
-      zlib
-    ]
-    ++ lib.optionals withGui [
-      libGL
-      libGLU
-      libX11
-      libXext
-      qt5.qtbase
-      qt5.qtsvg
-    ];
+  buildInputs = [
+    ants
+    eigen_3_4_0
+    python3
+    fftw
+    libtiff
+    libpng
+    zlib
+  ]
+  ++ lib.optionals withGui [
+    libGL
+    libGLU
+    libX11
+    libXext
+    qt5.qtbase
+    qt5.qtsvg
+  ];
 
   nativeInstallCheckInputs = [ bc ];
 
@@ -134,4 +134,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.mpl20;
   };
-}
+})

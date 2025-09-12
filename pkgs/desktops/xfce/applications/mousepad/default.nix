@@ -39,18 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      glib
-      gspell
-      gtk3
-      gtksourceview4
-      libxfce4ui # for shortcut plugin
-      xfconf # required by libxfce4kbd-private-3
-    ]
-    ++ lib.optionals enablePolkit [
-      polkit
-    ];
+  buildInputs = [
+    glib
+    gspell
+    gtk3
+    gtksourceview4
+    libxfce4ui # for shortcut plugin
+    xfconf # required by libxfce4kbd-private-3
+  ]
+  ++ lib.optionals enablePolkit [
+    polkit
+  ];
 
   # Use the GSettings keyfile backend rather than the default
   mesonFlags = [ "-Dkeyfile-settings=true" ];

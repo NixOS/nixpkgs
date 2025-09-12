@@ -8,21 +8,21 @@
   sphinx,
   coreutils,
   iptables,
-  nettools,
+  net-tools,
   openssh,
   procps,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
     tag = "v${version}";
-    hash = "sha256-/ThWsPtFuUo41+Xw23UigZup1fq6/SAzDpxIaT0Vhvg=";
+    hash = "sha256-Rvhh99DO/4J1p0JZJauOnvQZKtZBvxu+7hNnNgsXn2w=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iptables
-            nettools
+            net-tools
           ]
         )
       }" \

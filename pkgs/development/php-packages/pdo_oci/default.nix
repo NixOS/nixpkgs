@@ -21,7 +21,7 @@ buildPecl {
 
   meta = {
     changelog = "https://pecl.php.net/package-changelog.php?package=PDO_OCI";
-    description = "The PHP PDO_OCI extension lets you access Oracle Database";
+    description = "PHP PDO_OCI extension lets you access Oracle Database";
     license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/pdo_oci";
     teams = [ lib.teams.php ];

@@ -24,6 +24,7 @@ with py.pkgs;
 buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "expliot_framework";

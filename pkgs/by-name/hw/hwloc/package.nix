@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   pkg-config,
   expat,
   ncurses,
@@ -15,13 +16,15 @@
   cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hwloc";
-  version = "2.12.1";
+  version = "2.12.2";
 
-  src = fetchurl {
-    url = "https://www.open-mpi.org/software/hwloc/v${lib.versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
-    hash = "sha256-OKkDKLuGJZ+bsv4dxX/YQeER0eY1gBK+8j39ldIdxms=";
+  src = fetchFromGitHub {
+    owner = "open-mpi";
+    repo = "hwloc";
+    tag = "hwloc-${finalAttrs.version}";
+    hash = "sha256-xLrhffz6pDSjkvAsPWSM3m8OxMV14/6kUgWOlI2u6go=";
   };
 
   configureFlags = [
@@ -30,19 +33,22 @@ stdenv.mkDerivation rec {
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
-    [
-      expat
-      ncurses
-    ]
-    ++ lib.optionals x11Support [
-      cairo
-      libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
-    ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
+  buildInputs = [
+    expat
+    ncurses
+  ]
+  ++ lib.optionals x11Support [
+    cairo
+    libX11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux pciutils;
@@ -99,4 +105,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

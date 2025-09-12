@@ -7,25 +7,29 @@
   graphviz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qvge";
-  version = "0.6.3-unstable-2024-04-08";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ArsMasiuk";
     repo = "qvge";
-    #tag = "v${version}";
-    rev = "5751948358d407673cfda10f52892683be143d42";
-    hash = "sha256-Rh8ahS/9x2aWu4THjLKoog58+yJoCQ6GETaAQTW4Hq8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-011gJobDqNnXFTr/XSXcONxvPlzU7UEwS7CHkz1YMtY=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   patches = (
     replaceVars ./set-graphviz-path.patch {
       inherit graphviz;
     }
   );
+
+  postPatch = ''
+    substituteInPlace qvge/linux/qvge.desktop \
+      --replace-warn "Exec=qvgeapp" "Exec=qvge"
+  '';
 
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
@@ -35,12 +39,19 @@ stdenv.mkDerivation rec {
   buildInputs =
     if stdenv.hostPlatform.isDarwin then [ libsForQt5.qtsvg ] else [ libsForQt5.qtx11extras ];
 
-  meta = with lib; {
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/qvge.app $out/Applications
+    ln -s $out/Applications/qvge.app/Contents/MacOS/qvge $out/bin/qvge
+  '';
+
+  meta = {
     description = "Qt Visual Graph Editor";
-    mainProgram = "qvgeapp";
     homepage = "https://github.com/ArsMasiuk/qvge";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/ArsMasiuk/qvge/blob/v${finalAttrs.version}/CHANGES";
+    license = lib.licenses.mit;
+    mainProgram = "qvge";
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
-}
+})

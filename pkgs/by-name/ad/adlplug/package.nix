@@ -74,21 +74,20 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fmt
-      liblo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      freetype
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-    ]
-    ++ lib.optionals withJack [ libjack2 ];
+  buildInputs = [
+    fmt
+    liblo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    freetype
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+  ]
+  ++ lib.optionals withJack [ libjack2 ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,Library/Audio/Plug-Ins/{VST,Components}}

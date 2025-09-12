@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schemacrawler";
-  version = "16.26.1";
+  version = "16.26.3";
 
   src = fetchzip {
     url = "https://github.com/schemacrawler/SchemaCrawler/releases/download/v${finalAttrs.version}/schemacrawler-${finalAttrs.version}-bin.zip";
-    hash = "sha256-dXaHL9LBd/XKwPqVL7RxmepkzVXInQ19iKD35jYb4Y4=";
+    hash = "sha256-mkibPu2uR5GCm8FAs3e1fypf35JErsqKO+1/vRZ16Kg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [ ];
   };
 })

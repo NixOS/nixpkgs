@@ -5,7 +5,7 @@ let
 in
 options.mkOption {
   description = "Redistributable manifest is an attribute set which includes a mapping from package name to release";
-  example = trivial.importJSON ../../../../cuda/manifests/redistrib_11.5.2.json;
+  example = trivial.importJSON ../../../../cuda/manifests/redistrib_11.8.0.json;
   type = types.submodule {
     # Allow any attribute name as these will be the package names
     freeformType = types.attrsOf Release.type;

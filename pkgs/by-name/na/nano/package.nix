@@ -24,18 +24,18 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "bf8d898efaa10dce3f7972ff765b58c353b4b4ab";
-    hash = "sha256-1tJV7F+iwMPRV6FgnbTw+5m7vMhgaeXftYkr9GPR4xw=";
+    rev = "5c30e1de6d664d609ff3828a8877fba3e06ca336";
+    hash = "sha256-S9p/g8DZhZ1cZdyFI6eaOxxGAbz+dloFEWdamAHo120=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.5";
+  version = "8.6";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-AAsBHTOcFBr5ZG1DKI9UMl/1xujTnW5IK3h7vGZUwmo=";
+    hash = "sha256-96v78O7V9XOrUb13pFjzLYL5hZxV6WifgZ2W/hQ3phk=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
@@ -46,15 +46,14 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      (lib.enableFeature enableNls "nls")
-      (lib.enableFeature enableTiny "tiny")
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "gl_cv_func_strcasecmp_works=yes"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (lib.enableFeature enableNls "nls")
+    (lib.enableFeature enableTiny "tiny")
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "gl_cv_func_strcasecmp_works=yes"
+  ];
 
   postInstall =
     if enableTiny then

@@ -17,12 +17,12 @@
 }:
 
 let
-  version = "3.3.1";
+  version = "3.3.2";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-oPcLIKpJmPv2WMlBGM1sjatqu7Bkejvas0TXC8Hry7g=";
+    hash = "sha256-LuXKCGPvRA9bfHWFa7R1xSg9CoNZyzcLHBYTFP0p39k=";
   };
 in
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     tag = "v${version}";
-    hash = "sha256-WotmLbktFLVpoRSmlxj7RLRYDhVQ7AWp4Awgry7kgIM=";
+    hash = "sha256-rwEsJlYlOIdgQfniAXdE2sg0WdI1ZxWxZV6MTFQoueg=";
   };
 
   #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
@@ -63,18 +63,17 @@ stdenv.mkDerivation rec {
     echo -n > server/meson.build
   '';
 
-  postInstall =
-    ''
-      mkdir -p "$out/share/scrcpy"
-      ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
+  postInstall = ''
+    mkdir -p "$out/share/scrcpy"
+    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
-      # runtime dep on `adb` to push the server
-      wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $out/share/applications/scrcpy-console.desktop \
-        --replace "/bin/bash" "${runtimeShell}"
-    '';
+    # runtime dep on `adb` to push the server
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $out/share/applications/scrcpy-console.desktop \
+      --replace "/bin/bash" "${runtimeShell}"
+  '';
 
   meta = {
     description = "Display and control Android devices over USB or TCP/IP";

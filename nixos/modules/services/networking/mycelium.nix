@@ -49,7 +49,7 @@ in
       type = lib.types.bool;
       default = true;
       description = ''
-        Adds the hosted peers from https://github.com/threefoldtech/mycelium#hosted-public-nodes.
+        Adds the hosted peers from <https://github.com/threefoldtech/mycelium#hosted-public-nodes>.
       '';
     };
     extraArgs = lib.mkOption {

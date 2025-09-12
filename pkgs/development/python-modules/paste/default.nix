@@ -40,6 +40,11 @@ buildPythonPackage rec {
     touch tests/urlparser_data/secured.txt
   '';
 
+  disabledTests = [
+    # pkg_resources deprecation warning
+    "test_form"
+  ];
+
   pythonNamespaces = [ "paste" ];
 
   meta = with lib; {

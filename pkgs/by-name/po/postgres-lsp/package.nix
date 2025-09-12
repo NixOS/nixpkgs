@@ -6,18 +6,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0.8.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "supabase-community";
     repo = "postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-H97FC4GmUktLFhLjrgHHwmX+qu014nIw2ccVIc54GiQ=";
+    hash = "sha256-0Q8MxKeh12STWIJ9441uTz+qQXEJjCESj21C4X8CBC4=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-P5Q6VMy5DsMDA9r28lRH4MA8ZlXN0gRVe/ICeDfvBuQ=";
+  cargoHash = "sha256-oIbS5BUpNOXwiRconqJI/jdXeX05FIZVNl2kYt+79wY=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

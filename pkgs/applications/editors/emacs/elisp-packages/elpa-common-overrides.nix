@@ -14,11 +14,7 @@ let
     ;
 in
 {
-  cl-lib = null; # builtin
-  cl-print = null; # builtin
-  tle = null; # builtin
-  advice = null; # builtin
-
+  # keep-sorted start block=yes newline_separated=yes
   # Compilation instructions for the Ada executables:
   # https://www.nongnu.org/ada-mode/
   ada-mode = super.ada-mode.overrideAttrs (
@@ -65,6 +61,8 @@ in
   # native-compiler-error-empty-byte in old versions
   ada-ref-man = ignoreCompilationErrorIfOlder super.ada-ref-man "2020.1.0.20201129.190419";
 
+  advice = null; # builtin
+
   # elisp error in old versions
   ampc = ignoreCompilationErrorIfOlder super.ampc "0.2.0.20240220.181558";
 
@@ -73,6 +71,10 @@ in
   auctex-cont-latexmk = mkHome super.auctex-cont-latexmk;
 
   auctex-label-numbers = mkHome super.auctex-label-numbers;
+
+  cl-lib = null; # builtin
+
+  cl-print = null; # builtin
 
   # missing optional dependencies https://codeberg.org/rahguzar/consult-hoogle/issues/4
   consult-hoogle = addPackageRequiresIfOlder super.consult-hoogle [ self.consult ] "0.2.2";
@@ -234,8 +236,6 @@ in
   # native-ice https://github.com/mattiase/relint/issues/15
   relint = ignoreCompilationError super.relint;
 
-  shen-mode = ignoreCompilationErrorIfOlder super.shen-mode "0.1.0.20221221.82050"; # elisp error
-
   # native compilation for tests/seq-tests.el never ends
   # delete tests/seq-tests.el to workaround this
   seq = super.seq.overrideAttrs (old: {
@@ -250,6 +250,8 @@ in
         tar --create --verbose --file=$src $content_directory
       '';
   });
+
+  shen-mode = ignoreCompilationErrorIfOlder super.shen-mode "0.1.0.20221221.82050"; # elisp error
 
   # https://github.com/alphapapa/taxy.el/issues/3
   taxy = super.taxy.overrideAttrs (old: {
@@ -269,6 +271,8 @@ in
 
   timerfunctions = ignoreCompilationErrorIfOlder super.timerfunctions "1.4.2.0.20201129.225252";
 
+  tle = null; # builtin
+
   # kv is required in triples-test.el
   # Alternatively, we can delete that file.  But adding a dependency is easier.
   triples = addPackageRequires super.triples [ self.kv ];
@@ -278,11 +282,9 @@ in
   xeft = super.xeft.overrideAttrs (old: {
     dontUnpack = false;
     buildInputs = old.buildInputs or [ ] ++ [ pkgs.xapian ];
-    buildPhase =
-      old.buildPhase or ""
-      + ''
-        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
-      '';
+    buildPhase = old.buildPhase or "" + ''
+      $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
+    '';
     postInstall =
       old.postInstall or ""
       + "\n"
@@ -295,4 +297,6 @@ in
 
   # native-ice https://github.com/mattiase/xr/issues/9
   xr = ignoreCompilationError super.xr;
+
+  # keep-sorted end
 }

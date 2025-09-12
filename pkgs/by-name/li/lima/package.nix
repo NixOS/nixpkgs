@@ -12,6 +12,7 @@
   withAdditionalGuestAgents ? false,
   lima-additional-guestagents,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   testers,
   writeText,
   runCommand,
@@ -21,16 +22,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lima";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmn5AQpFbugFOmeiPUNMkPkgV1cZSR3nli90tdFmF0A";
+    hash = "sha256-90fFsS5jidaovE2iqXfe4T2SgZJz6ScOwPPYxCsCk/k=";
   };
 
-  vendorHash = "sha256-1+jWEZ4VvVjJ7tSL4vlkCrWxCoSu8hiXefKSm3GExNs=";
+  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -38,7 +39,8 @@ buildGoModule (finalAttrs: {
 
     # For checkPhase, and installPhase(required to build completion)
     writableTmpDirAsHomeHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
@@ -67,23 +69,22 @@ buildGoModule (finalAttrs: {
       runHook postBuild
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r _output/* $out
-      wrapProgram $out/bin/limactl \
-        --prefix PATH : ${lib.makeBinPath [ qemu ]}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd limactl \
-        --bash <($out/bin/limactl completion bash) \
-        --fish <($out/bin/limactl completion fish) \
-        --zsh <($out/bin/limactl completion zsh)
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -r _output/* $out
+    wrapProgram $out/bin/limactl \
+      --prefix PATH : ${lib.makeBinPath [ qemu ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd limactl \
+      --bash <($out/bin/limactl completion bash) \
+      --fish <($out/bin/limactl completion fish) \
+      --zsh <($out/bin/limactl completion zsh)
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   postInstall = lib.optionalString withAdditionalGuestAgents ''
     cp -rs '${lima-additional-guestagents}/share/lima/.' "$out/share/lima/"
@@ -92,14 +93,16 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
     writableTmpDirAsHomeHook
+    versionCheckHook
   ];
   doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/limactl";
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
-  # Don't use versionCheckHook for this package until Env solutions like #403971 or #411609 are available on the master branch.
   installCheckPhase = ''
     runHook preInstallCheck
 
-    [[ "$("$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${finalAttrs.version}" ]]
     USER=nix $out/bin/limactl validate templates/default.yaml
 
     runHook postInstallCheck

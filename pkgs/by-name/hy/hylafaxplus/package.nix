@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
     changelog = "https://hylafax.sourceforge.io/news/${finalAttrs.version}.php";
-    description = "enterprise-class system for sending and receiving facsimiles";
+    description = "Enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";
     license = lib.licenses.bsd3;

@@ -102,6 +102,7 @@ let
         NetAmazonS3
         NetPrometheus
         NetStatsd
+        NumberBytesHuman
         PadWalker
         ParallelForkManager
         PerlCriticCommunity
@@ -130,13 +131,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-06-15";
+  version = "0-unstable-2025-08-12";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "ed500ca4345f7edaa6c3d84027a7599d38b15a29";
-    hash = "sha256-Mxz4n40VKxA2ILtIHX6fObgcy2WlgsM+ERfpjuVJ0BU=";
+    rev = "f7bda020c6144913f134ec616783e57817f7686f";
+    hash = "sha256-5fHXCFSCe2XQoXjqk25AIQo/5aUfaORf9lIszQ9KTyU=";
   };
 
   outputs = [
@@ -239,7 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
         read -n 4 chars < $i
         if [[ $chars =~ ELF ]]; then continue; fi
         wrapProgram $i \
-            --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
+            --prefix PERL5LIB ':' "$out/libexec/hydra/lib:${perlPackages.makePerlPath [ perlDeps ]}" \
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \

@@ -32,6 +32,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/ui";
+      fetcherVersion = 1;
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
     };
     installPhase = ''
@@ -47,8 +48,6 @@ rustPlatform.buildRustPackage {
   inherit pname version src;
 
   sourceRoot = "${src.name}/server";
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
 

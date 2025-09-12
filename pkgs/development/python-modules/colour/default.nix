@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "--doctest-glob=\"*.rst\""
+  pytestFlags = [
+    "--doctest-glob=*.rst"
     "--doctest-modules"
   ];
 

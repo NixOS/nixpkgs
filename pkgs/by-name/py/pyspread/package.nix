@@ -21,6 +21,7 @@ let
     ;
 in
 python3.pkgs.buildPythonApplication {
+  format = "setuptools";
   inherit pname version src;
 
   nativeBuildInputs = [

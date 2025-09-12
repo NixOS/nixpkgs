@@ -15,24 +15,15 @@
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gfxstream";
   version = "0.1.2";
 
   src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/hardware/google/gfxstream";
-    rev = "a29282666c0e2fdbb2c98cfe68a7c0677163ef91";
-    hash = "sha256-IYXkaHZPEYIE9KW731GN6x6yRS+FYtP1zyHcaSofhIM=";
+    rev = "v${finalAttrs.version}-gfxstream-release";
+    hash = "sha256-AN6OpZQ2te4iVuh/kFHXzmLAWIMyuoj9FHTVicnbiPw=";
   };
-
-  patches = [
-    # Make libdrm an optional dependency, which is required to build on Darwin.
-    (fetchpatch {
-      url = "https://android.googlesource.com/platform/hardware/google/gfxstream/+/a8df2a3eb099b419a7b3638e68ea30b4cffb751b%5E%21/?format=TEXT";
-      decode = "base64 -d";
-      hash = "sha256-shjeNuxtQokscCGBKEUbOPKOWRELBAnHFNj3Y5w87Nw=";
-    })
-  ];
 
   # Ensure that meson can find an Objective-C compiler on Darwin.
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -52,7 +43,8 @@ stdenv.mkDerivation {
     vulkan-headers
     vulkan-loader
     xorg.libX11
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ];
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [
@@ -77,4 +69,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qyliss ];
     platforms = aemu.meta.platforms;
   };
-}
+})
