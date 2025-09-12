@@ -2692,63 +2692,6 @@ with self;
     };
   };
 
-  BSON = buildPerlPackage {
-    pname = "BSON";
-    version = "1.12.2";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MO/MONGODB/BSON-v1.12.2.tar.gz";
-      hash = "sha256-9GEsDDVDEHQbmattJkUSJoIxUMonEJsbORIy1c/dpts=";
-    };
-    buildInputs = [
-      JSONMaybeXS
-      PathTiny
-      TestDeep
-      TestFatal
-    ];
-    propagatedBuildInputs = [
-      CryptURandom
-      Moo
-      TieIxHash
-      boolean
-      namespaceclean
-    ];
-    meta = {
-      description = "BSON serialization and deserialization (EOL)";
-      homepage = "https://github.com/mongodb-labs/mongo-perl-bson";
-      license = with lib.licenses; [ asl20 ];
-    };
-  };
-
-  BSONXS = buildPerlPackage {
-    pname = "BSON-XS";
-    version = "0.8.4";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MO/MONGODB/BSON-XS-v0.8.4.tar.gz";
-      hash = "sha256-KPfTOP14tvnJpggL6d4/XLI9iIuW6/b8v6zp8pZq6/k=";
-    };
-    buildInputs = [
-      ConfigAutoConf
-      JSONMaybeXS
-      PathTiny
-      TestDeep
-      TestFatal
-      TieIxHash
-    ];
-    propagatedBuildInputs = [
-      BSON
-      boolean
-      JSONXS
-      JSONPP
-      CpanelJSONXS
-    ];
-    meta = {
-      description = "XS implementation of MongoDB's BSON serialization (EOL)";
-      homepage = "https://github.com/mongodb-labs/mongo-perl-bson-xs";
-      license = with lib.licenses; [ asl20 ];
-      platforms = lib.platforms.linux; # configure phase fails with "ld: unknown option: -mmacosx-version-min=10.12"
-    };
-  };
-
   BUtils = buildPerlPackage {
     pname = "B-Utils";
     version = "0.27";
@@ -22858,47 +22801,6 @@ with self;
     };
   };
 
-  MongoDB = buildPerlPackage {
-    pname = "MongoDB";
-    version = "2.2.2";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MO/MONGODB/MongoDB-v2.2.2.tar.gz";
-      hash = "sha256-IBk1+S2slPOcNd5zZh6LJSQ55JbyKGV9uF/5MlfDJo8=";
-    };
-    buildInputs = [
-      JSONMaybeXS
-      PathTiny
-      TestDeep
-      TestFatal
-      TimeMoment
-    ];
-    propagatedBuildInputs = [
-      AuthenSASLSASLprep
-      AuthenSCRAM
-      BSON
-      IOSocketSSL
-      NetSSLeay
-      ClassXSAccessor
-      BSONXS
-      TypeTinyXS
-      MozillaCA
-      Moo
-      NetDNS
-      SafeIsa
-      SubQuote
-      TieIxHash
-      TypeTiny
-      UUIDURandom
-      boolean
-      namespaceclean
-    ];
-    meta = {
-      description = "Official MongoDB Driver for Perl (EOL)";
-      homepage = "https://github.com/mongodb-labs/mongo-perl-driver";
-      license = with lib.licenses; [ asl20 ];
-    };
-  };
-
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
     version = "0.40";
@@ -39485,7 +39387,10 @@ with self;
   SubExporterUtil = self.SubExporter;
   version = self.Version;
 
-  Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
-  pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
+  BSON = throw "BSON has been removed"; # 2025-09-12
+  BSONXS = throw "BSONXS has been removed"; # 2025-09-12
   GnuPG = throw "'GnuPG' has been removed"; # 2025-01-11
+  Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
+  MongoDB = throw "MongoDB has been removed"; # 2025-09-12
+  pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
 }
