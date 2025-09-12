@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation rec {
   pname = "procps";
-  version = "4.0.4";
+  version = "4.0.5";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
-    hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
+    hash = "sha256-wubRk8x4+EzW3bcqr21capFi8EcOWZIJIFf1/1GFYvo=";
   };
 
   buildInputs = [ ncurses ] ++ lib.optional withSystemd systemd;
