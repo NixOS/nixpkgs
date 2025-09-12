@@ -103,11 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
-  postFixup = ''
-    # TODO: Do this in `fmt` rather than downstream.
-    remove-references-to -t ${folly.fmt.dev} $out/bin/*
-  '';
-
   passthru.updateScript = ./update.sh;
 
   meta = {
