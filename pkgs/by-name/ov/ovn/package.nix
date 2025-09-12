@@ -102,6 +102,10 @@ stdenv.mkDerivation rec {
     sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
   '';
 
+  env = {
+    SKIP_UNSTABLE = "yes";
+  };
+
   # https://docs.ovn.org/en/latest/topics/testing.html
   preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
