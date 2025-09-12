@@ -175,6 +175,46 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  # copied from pkgs/build-support/go/module.nix, with modification
+  checkPhase = ''
+    runHook preCheck
+    # We do not set trimpath for tests, in case they reference test assets
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+    local -x skipTests=0
+    local kernelVersion=$(uname -r)
+    local -a brokenVersions=(${
+      toString [
+        "6.6.102"
+        "6.6.103"
+        "6.6.103"
+        "6.12.42"
+        "6.12.43"
+        "6.12.44"
+        "6.12.45"
+        "6.16.5"
+      ]
+    })
+    for v in ''${brokenVersions[@]}; do
+      if [[ $kernelVersion == $v ]]; then
+        skipTests=1
+      fi
+    done
+
+    if (( $skipTests == 0 )); then
+      for pkg in $(getGoDirs test); do
+        buildGoDir test "$pkg"
+      done
+    else
+      cat <<eof
+        Skipping tests as we are on an incompatible kernel version ($kernelVersion).
+        Refer to https://github.com/tailscale/tailscale/issues/16966 and https://github.com/NixOS/nixpkgs/issues/438765.
+    eof
+    fi
+
+    runHook postCheck
+  '';
+
   postInstall = ''
     ln -s $out/bin/tailscaled $out/bin/tailscale
     moveToOutput "bin/derper" "$derper"
