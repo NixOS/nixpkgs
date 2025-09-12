@@ -96,6 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
 
+    # The build system looks for `/usr/bin/python3`. It falls back
+    # gracefully if it’s not found, but let’s dodge the potential
+    # reproducibility risk for unsandboxed Darwin.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /usr/bin /var/empty
+
     # Facebook Thrift requires C++20 now but Watchman hasn’t been
     # updated yet… (Aren’t these things meant to be integrated together
     # in a monorepo?)
