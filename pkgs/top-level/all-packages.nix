@@ -4319,8 +4319,6 @@ with pkgs;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
 
-  vampire = callPackage ../applications/science/logic/vampire { };
-
   vcmi = libsForQt5.callPackage ../games/vcmi { };
 
   video2midi = callPackage ../tools/audio/video2midi {
