@@ -45,16 +45,11 @@ stdenvNoCC.mkDerivation {
       shift
 
       echo "running $@"
+      local output="$name.out"
       local nix_stats="$name-nix-stats.json"
       local time_stats="$name-time-stats.json"
 
-      case "$name" in
-        # Redirect stdout to /dev/null to avoid hitting "Output Limit Exceeded" on Hydra.
-        nix-env.qaDrv)
-          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" time -o "$time_stats" "$@" >/dev/null ;;
-        *)
-          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" time -o "$time_stats" "$@" ;;
-      esac
+      NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" time -o "$time_stats" "$@" > "$output"
 
       # Show the Nix statistics and the `time` statistics.
       echo "Nix statistics for $@"
@@ -89,11 +84,11 @@ stdenvNoCC.mkDerivation {
     run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --json
 
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
-    num="$(nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa | wc -l)"
+    num="$(wc -l < nix-env.qa.out)"
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
-    qaCountDrv="$(nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path | wc -l)"
-    num="$((num - $qaCountDrv))"
-    echo "nix-env.qaCountBroken $num" >> $out/nix-support/hydra-metrics
+    qaCountDrv="$(jq -r 'reduce .[].drvPath as $d (0; .+1)' < nix-env.qaDrv.out)"
+    numBroken="$((num - $qaCountDrv))"
+    echo "nix-env.qaCountBroken $numBroken" >> $out/nix-support/hydra-metrics
 
     lines="$(find "$nixpkgs" -name "*.nix" -type f | xargs cat | wc -l)"
     echo "loc $lines" >> $out/nix-support/hydra-metrics
