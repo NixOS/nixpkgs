@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "suo";
     repo = "lintrunner";
-    rev = "main";
+    rev = "f05b0a3f56fbc183b11347a2a879e2009fc982b7";
     hash = "sha256-/kNySvqCwfWPRITJEZ+8akQa+ZW7gfo2aOGDyvsRs9E=";
   };
 
