@@ -12,6 +12,11 @@ stdenvNoCC.mkDerivation {
   __structuredAttrs = true;
   inherit evalSystem nixpkgs;
 
+  outputs = [
+    "out"
+    "raw"
+  ];
+
   nativeBuildInputs = map lib.getBin [
     pkgs.nix
     pkgs.time
@@ -45,11 +50,13 @@ stdenvNoCC.mkDerivation {
       shift
 
       echo "running $@"
-      local output="$name.out"
-      local nix_stats="$name-nix-stats.json"
-      local time_stats="$name-time-stats.json"
 
-      NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" time -o "$time_stats" "$@" > "$output"
+      mkdir -p "$raw/$name"
+      local output="$raw/$name/output"
+      local nix_stats="$raw/$name/nix-stats.json"
+      local time_stats="$raw/$name/time-stats.json"
+
+      NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" command time -o "$time_stats" -- "$@" > "$output"
 
       # Show the Nix statistics and the `time` statistics.
       echo "Nix statistics for $@"
@@ -84,14 +91,17 @@ stdenvNoCC.mkDerivation {
     run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --json
 
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
-    num="$(wc -l < nix-env.qa.out)"
+    num="$(wc -l < $raw/nix-env.qa/output)"
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
-    qaCountDrv="$(jq -r 'reduce .[].drvPath as $d (0; .+1)' < nix-env.qaDrv.out)"
+    qaCountDrv="$(jq -r 'reduce .[].drvPath as $d (0; .+1)' $raw/nix-env.qaDrv/output)"
     numBroken="$((num - $qaCountDrv))"
     echo "nix-env.qaCountBroken $numBroken" >> $out/nix-support/hydra-metrics
 
     lines="$(find "$nixpkgs" -name "*.nix" -type f | xargs cat | wc -l)"
     echo "loc $lines" >> $out/nix-support/hydra-metrics
+
+    # Compress the raw output
+    xz -v $raw/*/output
 
     runHook postInstall
   '';
