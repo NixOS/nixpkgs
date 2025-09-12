@@ -1612,10 +1612,6 @@ with pkgs;
     httpServer = true;
   };
 
-  bashate = python3Packages.callPackage ../development/tools/bashate {
-    python3Packages = python311Packages;
-  };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
