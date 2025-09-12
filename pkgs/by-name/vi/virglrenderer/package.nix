@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "virgl";
     repo = "virglrenderer";
     tag = finalAttrs.version;
-    hash = "sha256-ah6+AAf7B15rPMb4uO873wieT3+gf/5iGH+ZFoZKAAI=";
+    hash = "sha256-5Ok5ctJ3kcBH05URctvZ0hCZA/o59r2KsAOJYoiWMHs=";
   };
 
   separateDebugInfo = true;
@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionalString nativeContextSupport (
         lib.concatStringsSep "," [
           "amdgpu-experimental"
+          "asahi"
           "msm"
         ]
       )
