@@ -14,14 +14,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "runc";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B7x1J2ijM+/RWzPTldBNhvrGa/8de6Unl47lOS/KxXs=";
   };
 
@@ -53,7 +53,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make ${toString makeFlags} runc man
+    make ${toString finalAttrs.makeFlags} runc man
     runHook postBuild
   '';
 
@@ -77,4 +77,4 @@ buildGoModule rec {
     platforms = platforms.linux;
     mainProgram = "runc";
   };
-}
+})
