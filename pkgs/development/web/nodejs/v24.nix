@@ -17,10 +17,7 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools_catch_oserror = false; }
-      ++ [
-        ./gyp-patches-set-fallback-value-for-CLT.patch
-      ]
+      callPackage ./gyp-patches.nix { patch_tools = false; }
     else
       [ ];
 in
