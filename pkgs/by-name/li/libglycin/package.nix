@@ -11,10 +11,10 @@
   rustPlatform,
   vala,
   gi-docgen,
+  gobject-introspection,
   libseccomp,
   lcms2,
   gtk4,
-  gobject-introspection,
   gnome,
   replaceVars,
   bubblewrap,
@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withIntrospection [
     vala
     gi-docgen
+    gobject-introspection
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -60,8 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
     lcms2
     gtk4
-  ]
-  ++ lib.optionals withIntrospection [ gobject-introspection ];
+  ];
 
   propagatedBuildInputs = [
     libseccomp
