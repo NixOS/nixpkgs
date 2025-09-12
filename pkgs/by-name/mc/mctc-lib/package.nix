@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preCheck = ''
+    export OMP_NUM_THREADS=2
+  '';
+
   postPatch = ''
     patchShebangs --build config/install-mod.py
   '';
