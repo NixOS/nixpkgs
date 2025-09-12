@@ -10,7 +10,7 @@
   libseccomp,
   libselinux,
   stdenv,
-  makeWrapper,
+  makeBinaryWrapper,
   nixosTests,
 }:
 
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     go-md2man
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
     which
   ];
