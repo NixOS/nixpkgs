@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
+    openssl # used to generate certificates used for test services
     procps
   ];
 
