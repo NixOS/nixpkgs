@@ -144,7 +144,7 @@ in
 
           Enabling system-wide PipeWire is however not recommended and disabled
           by default according to
-          https://github.com/PipeWire/pipewire/blob/master/NEWS
+          https://github.com/PipeWire/pipewire/blob/9df770eb168749926cd37558d05bbdf00d5e4b4d/NEWS#L6905-L6907
         '';
       };
 
