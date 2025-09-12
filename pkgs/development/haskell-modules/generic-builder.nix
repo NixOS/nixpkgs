@@ -11,6 +11,7 @@
   ghcWithHoogle,
   ghcWithPackages,
   nodejs,
+  devShellTools,
 }:
 
 let
@@ -1024,6 +1025,8 @@ lib.fix (
             // env';
           } "echo $nativeBuildInputs $buildInputs > $out";
 
+        # Specialise the devShell attribute, so we get our improved shell.
+        devShell = env.devShell;
         env = envFunc { };
 
       };
