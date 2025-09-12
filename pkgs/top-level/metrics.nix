@@ -2,6 +2,7 @@
 
 let
   inherit (pkgs) lib stdenvNoCC;
+  evalSystem = "x86_64-linux";
 in
 
 stdenvNoCC.mkDerivation {
@@ -9,7 +10,7 @@ stdenvNoCC.mkDerivation {
 
   # Use structured attrs to pass in relevant information.
   __structuredAttrs = true;
-  inherit nixpkgs;
+  inherit evalSystem nixpkgs;
 
   nativeBuildInputs = map lib.getBin [
     pkgs.nix
@@ -81,16 +82,16 @@ stdenvNoCC.mkDerivation {
       echo "$name.values $values" >> $out/nix-support/hydra-metrics
     }
 
-    run nixos.smallContainer nix-instantiate --dry-run "$release" -A closures.smallContainer.x86_64-linux --show-trace
-    run nixos.kde nix-instantiate --dry-run "$release" -A closures.kde.x86_64-linux --show-trace
-    run nixos.lapp nix-instantiate --dry-run "$release" -A closures.lapp.x86_64-linux --show-trace
-    run nix-env.qa nix-env -f "$nixpkgs" -qa
-    run nix-env.qaDrv nix-env -f "$nixpkgs" -qa --drv-path --meta --xml
+    run nixos.smallContainer nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.smallContainer.x86_64-linux --show-trace
+    run nixos.kde nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.kde.x86_64-linux --show-trace
+    run nixos.lapp nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.lapp.x86_64-linux --show-trace
+    run nix-env.qa nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa
+    run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --xml
 
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
-    num="$(nix-env -f "$nixpkgs" -qa | wc -l)"
+    num="$(nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa | wc -l)"
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
-    qaCountDrv="$(nix-env -f "$nixpkgs" -qa --drv-path | wc -l)"
+    qaCountDrv="$(nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path | wc -l)"
     num="$((num - $qaCountDrv))"
     echo "nix-env.qaCountBroken $num" >> $out/nix-support/hydra-metrics
 
