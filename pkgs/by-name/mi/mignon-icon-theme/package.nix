@@ -67,4 +67,4 @@ stdenvNoCC.mkDerivation (finalAttr: {
     mainProgram = "mignon-icon-theme";
     platforms = lib.platforms.all;
   };
-}) 
+})
