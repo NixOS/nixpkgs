@@ -71,6 +71,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
     broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "alcom";
+    mainProgram = "ALCOM";
   };
 }
