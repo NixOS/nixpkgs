@@ -19372,6 +19372,8 @@ self: super: with self; {
 
   uharfbuzz = callPackage ../development/python-modules/uharfbuzz { };
 
+  uhashring = callPackage ../development/python-modules/uhashring { };
+
   uhi = callPackage ../development/python-modules/uhi { };
 
   uiprotect = callPackage ../development/python-modules/uiprotect { };
