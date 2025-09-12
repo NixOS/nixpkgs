@@ -213,6 +213,37 @@ Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
 
+### Writing Reference Documentation
+
+[Reference documentation](https://diataxis.fr/reference/) should **only describe** the subject being documented.
+
+We use **descriptive, present-active** style to describe.
+
+👉 Rule of thumb: Always describe what the function does. Only give instructions when the user actually needs to act (e.g. migrations).
+
+👉 When drafting, think of a full sentence like: *"subtractValues does ..."*
+
+But since the function name already appears in the signature or heading, repeating it is redundant. Drop the subject and start directly with the verb:
+
+```nix
+/**
+  Subtracts value `b` from value `a`.
+
+  Returns the difference as a number.
+*/
+subtractValues # ...elided code
+```
+
+Renders as:
+
+```md
+## `subtractValues`
+
+Subtracts value `b` from value `a`.
+
+Returns the difference as a number.
+```
+
 ### Callouts and examples
 
 Use the [admonition syntax](#admonitions) for callouts and examples.
