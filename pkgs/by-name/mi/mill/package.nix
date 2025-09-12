@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${finalAttrs.version}/mill-dist-${finalAttrs.version}.exe";
-    hash = "sha256-0w0qjzlmqs6g1vkwkl6fdbfxdfprdq84ljbh9jja4v56adlpgrll";
+    sha256 = "0w0qjzlmqs6g1vkwkl6fdbfxdfprdq84ljbh9jja4v56adlpgrll";
   };
 
   nativeBuildInputs = [ makeWrapper ];
