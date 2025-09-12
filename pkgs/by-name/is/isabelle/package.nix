@@ -77,6 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-p/Hp+7J5gJy5s6BVD5Ma1Mu2OS53I8BS7gKSOYYB0PE=";
       };
 
+  patches = [
+    # Make "isabelle build" work when generating documents
+    # See: https://github.com/NixOS/nixpkgs/issues/289529
+    ./fix-copied-permissions.patch
+  ];
+
   nativeBuildInputs = [ java ];
 
   buildInputs = [
@@ -246,7 +252,12 @@ stdenv.mkDerivation (finalAttrs: {
       maintainers.jwiegley
       maintainers.jvanbruegge
     ];
-    platforms = platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
   passthru.withComponents =
