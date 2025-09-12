@@ -63,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
