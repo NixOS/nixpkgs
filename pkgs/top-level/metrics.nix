@@ -56,9 +56,11 @@ stdenvNoCC.mkDerivation {
       esac
 
       # Show the Nix statistics and the `time` statistics.
-      cat "$nix_stats"
+      echo "Nix statistics for $@"
+      jq . "$nix_stats"
       echo
-      cat "$time_stats"
+      echo "Time statistics for $@"
+      jq . "$time_stats"
       echo
 
       cpuTime="$(jq '.cpuTime' < "$nix_stats")"
