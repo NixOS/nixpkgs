@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonBool "glycin-loaders" false)
+    (lib.mesonBool "glycin-thumbnailer" false)
     (lib.mesonBool "libglycin" true)
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "vapi" withIntrospection)
