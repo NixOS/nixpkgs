@@ -1,6 +1,6 @@
 {
   lib,
-  runCommandNoCC,
+  stdenvNoCC,
   fetchFromGitHub,
   gtk3,
   kdePackages,
@@ -9,7 +9,7 @@
   mint-y-icons,
 }:
 
-runCommandNoCC "mignon-icon-theme-unstable-2025-09-05" {
+stdenvNoCC.mkDerivation (finalAttr: {
   pname = "mignon-icon-theme";
   version = "unstable-2025-09-05";
 
@@ -30,38 +30,41 @@ runCommandNoCC "mignon-icon-theme-unstable-2025-09-05" {
 
   dontBuild = true;
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
-  meta = with lib; {
+  installPhase = ''
+    runHook preInstall
+    theme_name="Mignon-pastel"
+    theme_color='#99C0ED'
+    dest="$out/share/icons/$theme_name"
+    mkdir -p "$dest"
+
+    sed -i "s/%NAME%/''${theme_name//-/ }/g" "./src/index.theme"
+    cp -r ./src/index.theme "$dest/index.theme"
+
+    mkdir -p "$dest/scalable"
+
+    sed -i "s/#5294e2/$theme_color/g" "./src/scalable/apps/"*.svg "./src/scalable/places/"default-*.svg
+    sed -i "/\ColorScheme-Highlight/s/currentColor/$theme_color/" "./src/scalable/places/"default-*.svg
+    sed -i "/\ColorScheme-Background/s/currentColor/#ffffff/" "./src/scalable/places/"default-*.svg
+
+    cp -r ./src/scalable/{apps,devices,mimetypes} "$dest/scalable"
+    cp -r ./src/scalable/places "$dest/scalable/places"
+
+    cp -r links/scalable "$dest/"
+
+    find "$dest" -xtype l -exec rm {} +
+
+    ln -sr "$dest/scalable" "$dest/scalable@2x"
+    runHook postInstall
+  '';
+
+  meta = {
     description = "Flat, Pastel, Cute Icons for Linux";
     homepage = "https://github.com/IgorFerreiraMoraes/Mignon-icon-theme";
     license = lib.licenses.gpl3Only;
-    maintainers = with maintainers; [ Silk-OT ];
+    maintainers = with lib.maintainers; [ Silk-OT ];
     mainProgram = "mignon-icon-theme";
-    platforms = platforms.linux;
+    platforms = lib.platforms.all;
   };
-} ''
-  theme_name="Mignon-pastel"
-  theme_color='#99C0ED'
-  dest="$out/share/icons/$theme_name"
-  mkdir -p "$dest"
-
-  cp -r $src/* .
-  chmod u+w -R .
-  sed -i "s/%NAME%/''${theme_name//-/ }/g" "./src/index.theme"
-  cp -r ./src/index.theme "$dest/index.theme"
-
-  mkdir -p "$dest/scalable"
-
-  sed -i "s/#5294e2/$theme_color/g" "./src/scalable/apps/"*.svg "./src/scalable/places/"default-*.svg
-  sed -i "/\ColorScheme-Highlight/s/currentColor/$theme_color/" "./src/scalable/places/"default-*.svg
-  sed -i "/\ColorScheme-Background/s/currentColor/#ffffff/" "./src/scalable/places/"default-*.svg
-
-  cp -r ./src/scalable/{apps,devices,mimetypes} "$dest/scalable"
-  cp -r ./src/scalable/places "$dest/scalable/places"
-
-  cp -r links/scalable "$dest/"
-
-  find "$dest" -xtype l -exec rm {} +
-
-  ln -sr "$dest/scalable" "$dest/scalable@2x"
-''
+}) 
