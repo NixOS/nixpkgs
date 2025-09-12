@@ -113,6 +113,18 @@ in
       ];
     };
 
+    systemd.targets.windmill = {
+      description = "Windmill";
+      wantedBy = [ "multi-user.target" ];
+      requires =
+        [ ]
+        ++ (lib.optionals config.systemd.services.windmill-server.enable [ "windmill-server.service" ])
+        ++ (lib.optionals config.systemd.services.windmill-worker.enable [ "windmill-worker.service" ])
+        ++ (lib.optionals config.systemd.services.windmill-worker-native.enable [
+          "windmill-worker-native.service"
+        ]);
+    };
+
     systemd.services =
       let
         useUrlPath = (cfg.database.urlPath != null);
@@ -202,7 +214,7 @@ in
         windmill-server = {
           description = "Windmill server";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          partOf = [ "windmill.target" ];
 
           serviceConfig = serviceConfig // {
             StateDirectory = "windmill";
@@ -220,7 +232,7 @@ in
         windmill-worker = {
           description = "Windmill worker";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          partOf = [ "windmill.target" ];
 
           serviceConfig = serviceConfig // {
             StateDirectory = "windmill-worker";
@@ -239,7 +251,7 @@ in
         windmill-worker-native = {
           description = "Windmill worker native";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          partOf = [ "windmill.target" ];
 
           serviceConfig = serviceConfig // {
             StateDirectory = "windmill-worker-native";
