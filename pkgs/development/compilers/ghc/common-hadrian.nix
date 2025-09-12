@@ -304,7 +304,7 @@
       ]
 
       # Unreleased or still in-progress upstream cross fixes
-      ++ lib.optionals (lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.15") [
+      ++ lib.optionals (lib.versionAtLeast version "9.10" && lib.versionOlder version "9.15") [
         # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
         (fetchpatch {
           name = "include-modern-utimbuf.patch";

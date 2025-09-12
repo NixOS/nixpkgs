@@ -144,23 +144,6 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
-      ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
-        bootPkgs =
-          if
-            stdenv.buildPlatform.isPower64
-            && stdenv.buildPlatform.isBigEndian
-            && pkgs.stdenv.hostPlatform.isAbiElfv1
-          then
-            # No bindist, "borrowing" the GHC from Debian
-            bb.packages.ghc966DebianBinary
-          else if stdenv.buildPlatform.isi686 then
-            bb.packages.ghc967
-          else
-            bb.packages.ghc984Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
-      };
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
         bootPkgs =
           if
@@ -294,11 +277,6 @@ in
         buildHaskellPackages = bh.packages.ghc984;
         ghc = bh.compiler.ghc984;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
-      };
-      ghc9102 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc9102;
-        ghc = bh.compiler.ghc9102;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
       };
       ghc9103 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9103;
