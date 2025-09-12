@@ -89,7 +89,6 @@ buildPythonPackage {
     ];
     maintainers = with maintainers; [
       frogamic
-      raitobezarius
     ];
     inherit mainProgram;
   };
