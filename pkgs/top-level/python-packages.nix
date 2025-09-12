@@ -18476,6 +18476,8 @@ self: super: with self; {
 
   thttp = callPackage ../development/python-modules/thttp { };
 
+  thumbor-plugins-gifv = callPackage ../development/python-modules/thumbor-plugins-gifv { };
+
   tianshou = callPackage ../development/python-modules/tianshou { };
 
   tidalapi = callPackage ../development/python-modules/tidalapi { };
