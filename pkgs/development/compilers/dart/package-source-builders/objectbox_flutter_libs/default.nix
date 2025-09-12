@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library
   meta.sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
 }
