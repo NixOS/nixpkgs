@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.4";
+  version = "5.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-ki4bnwRpvmB9yzt/Mn3MQs1Dr6Vrcs2D0tvCjvvfmq4=";
+    hash = "sha256-+QqmZsBFmYRwaAFqRyMBxVFFrjZGBDdMaW4YD/7D2gU=";
   };
 
   outputs = [
