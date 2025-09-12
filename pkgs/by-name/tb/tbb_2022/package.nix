@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   ctestCheckHook,
@@ -24,23 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ASQPAGm5e4q7imvTVWlmj5ON4fGEao1L5m2C5wF7EhI=";
   };
 
+  patches = [
+    # <https://github.com/uxlfoundation/oneTBB/pull/899>
+    ./fix-musl-build.patch
+
+    # <https://github.com/uxlfoundation/oneTBB/pull/987>
+    ./fix-32-bit-powerpc-build.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
     ctestCheckHook
-  ];
-
-  patches = [
-    # Fix musl build from https://github.com/oneapi-src/oneTBB/pull/899
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
-      hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
-    })
-    # Fix 32-bit PowerPC build
-    (fetchpatch {
-      url = "https://github.com/uxlfoundation/oneTBB/pull/987/commits/c828ae47b8f4bea7736d2f9d05460e2b529c9d7d.patch";
-      hash = "sha256-faNiVdHRIkmavufDHQQ8vHppvdahZ7yhJVL3bOwNTFg=";
-    })
   ];
 
   doCheck = true;
