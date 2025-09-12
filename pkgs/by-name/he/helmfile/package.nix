@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
+  nix-update-script,
   pluginsDir ? null,
 }:
 
@@ -45,6 +46,7 @@ buildGo125Module rec {
         --fish <($out/bin/helmfile completion fish) \
         --zsh <($out/bin/helmfile completion zsh)
     '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Declarative spec for deploying Helm charts";
