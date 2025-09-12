@@ -23793,9 +23793,9 @@
     keys = [ { fingerprint = "ADF4 C13D 0E36 1240 BD01  9B51 D1DE 6D7F 6936 63A5"; } ];
   };
   Silk-OT = {
-    name = "Quote"
-    email = "quotesilk@proton.me"
-    github = "Silk-OT"
+    name = "Quote";
+    email = "quotesilk@proton.me";
+    github = "Silk-OT";
     githubId = 123989069;
   };
   silky = {
