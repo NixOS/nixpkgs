@@ -29,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # <https://github.com/uxlfoundation/oneTBB/pull/987>
     ./fix-32-bit-powerpc-build.patch
+
+    # Fix an assumption that `libtbbmalloc` can pass a relative path to
+    # `dlopen(3)` to find itself. This caused mysterious crashes on
+    # macOS, where we do not use run paths by default.
+    #
+    # <https://github.com/uxlfoundation/oneTBB/pull/1849>
+    ./fix-libtbbmalloc-dlopen.patch
   ];
 
   nativeBuildInputs = [
