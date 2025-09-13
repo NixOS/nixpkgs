@@ -156,16 +156,6 @@ self: super:
     };
   });
 
-  libXfont = super.libXfont.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ freetype ]; # propagate link reqs. like bzip2
-    # prevents "misaligned_stack_error_entering_dyld_stub_binder"
-    configureFlags = lib.optional isDarwin "CFLAGS=-O0";
-  });
-
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
@@ -200,60 +190,6 @@ self: super:
     meta = attrs.meta // {
       mainProgram = "xdm";
     };
-  });
-
-  libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
-  libXdamage = super.libXdamage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXft = super.libXft.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXrender
-      freetype
-      fontconfig
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-
-    # the include files need ft2build.h, and Requires.private isn't enough for us
-    postInstall = ''
-      sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
-    '';
-    passthru = attrs.passthru // {
-      inherit freetype fontconfig;
-    };
-  });
-
-  libXi = super.libXi.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXfixes
-      xorg.libXext
-    ];
-    configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "xorg_cv_malloc0_returns_null=no"
-      ]
-      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {

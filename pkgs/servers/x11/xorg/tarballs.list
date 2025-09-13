@@ -101,12 +101,6 @@ mirror://xorg/individual/font/font-sun-misc-1.0.4.tar.xz
 mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.4.tar.xz
 mirror://xorg/individual/font/font-xfree86-type1-1.0.5.tar.xz
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libXcomposite-0.4.6.tar.xz
-mirror://xorg/individual/lib/libXdamage-1.1.6.tar.xz
-mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2
-mirror://xorg/individual/lib/libXfont2-2.0.7.tar.xz
-mirror://xorg/individual/lib/libXft-2.3.9.tar.xz
-mirror://xorg/individual/lib/libXi-1.8.2.tar.xz
 mirror://xorg/individual/lib/libXinerama-1.1.5.tar.xz
 mirror://xorg/individual/lib/libxkbfile-1.1.3.tar.xz
 mirror://xorg/individual/lib/libXp-1.0.4.tar.xz
