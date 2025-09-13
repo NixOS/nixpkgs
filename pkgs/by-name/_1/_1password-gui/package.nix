@@ -4,8 +4,6 @@
   channel ? "stable",
   fetchurl,
   lib,
-  # This is only relevant for Linux, so we need to pass it through
-  polkitPolicyOwners ? [ ],
 }:
 
 let
@@ -63,6 +61,5 @@ else
       version
       src
       meta
-      polkitPolicyOwners
       ;
   }
