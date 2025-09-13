@@ -2,25 +2,52 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
   nix-update-script,
+  jq,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.0.6";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4+1hqdlJh5jOy6uZz608n5DzuBR+v/s+7D85oFwQIY=";
+    hash = "sha256-5qKSWbc0NPpgvt36T/gRSgm1+o2Pbdw3tgfcGba6YSs=";
   };
 
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-cGO66hQxgpoxphtt/BPPDIBuAG8yQseCdzUdAO2mkr4=";
-  };
+  patches = [
+    # similar to upstream gemini-cli some node deps are missing resolved and integrity fields
+    # upstream the problem is solved in master and in v0.4+, eventually the fix should arrive to qwen
+    ./add-missing-resolved-integrity-fields.patch
+  ];
+
+  npmDepsHash = "sha256-tI8s3e3UXE+wV81ctuRsJb3ewL67+a+d9R5TnV99wz4=";
+
+  nativeBuildInputs = [
+    jq
+  ];
+
+  postPatch = ''
+    # Remove node-pty dependencies from package.json
+    jq 'del(.optionalDependencies."@lydell/node-pty")' package.json > package.json.tmp && mv package.json.tmp package.json
+    jq 'del(.optionalDependencies."node-pty")' package.json > package.json.tmp && mv package.json.tmp package.json
+    jq 'del(.optionalDependencies."@lydell/node-pty-darwin-arm64")' package.json > package.json.tmp && mv package.json.tmp package.json
+    jq 'del(.optionalDependencies."@lydell/node-pty-darwin-x64")' package.json > package.json.tmp && mv package.json.tmp package.json
+    jq 'del(.optionalDependencies."@lydell/node-pty-linux-x64")' package.json > package.json.tmp && mv package.json.tmp package.json
+    jq 'del(.optionalDependencies."@lydell/node-pty-win32-arm64")' package.json > package.json.tmp && mv package.json.tmp package.json
+    jq 'del(.optionalDependencies."@lydell/node-pty-win32-x64")' package.json > package.json.tmp && mv package.json.tmp package.json
+
+    # Remove node-pty dependencies from packages/core/package.json
+    jq 'del(.dependencies."@lydell/node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+    jq 'del(.dependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+    jq 'del(.dependencies."@lydell/node-pty-darwin-arm64")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+    jq 'del(.dependencies."@lydell/node-pty-darwin-x64")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+    jq 'del(.dependencies."@lydell/node-pty-linux-x64")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+    jq 'del(.dependencies."@lydell/node-pty-win32-arm64")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+    jq 'del(.dependencies."@lydell/node-pty-win32-x64")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -34,10 +61,10 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r bundle/* $out/
-    patchShebangs $out
-    ln -s $out/gemini.js $out/bin/qwen
+    mkdir -p $out/bin $out/share/qwen-code
+    cp -r bundle/* $out/share/qwen-code/
+    patchShebangs $out/share/qwen-code
+    ln -s $out/share/qwen-code/gemini.js $out/bin/qwen
 
     runHook postInstall
   '';
