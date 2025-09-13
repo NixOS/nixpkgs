@@ -8,7 +8,7 @@
 
 buildPythonApplication rec {
   pname = "kitti3";
-  version = "unstable-2021-09-11";
+  version = "0.4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
