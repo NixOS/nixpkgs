@@ -6,6 +6,47 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  boost =
+    (pkgs.boost.override {
+      toolset = "emscripten";
+      enableStatic = true;
+      enableShared = false;
+      enableSingleThreaded = true;
+      enableMultiThreaded = false;
+      useMpi = false;
+      extraB2Args = [
+        "cxxflags=-fdeclspec"
+        "--without-graph_parallel"
+        "--without-type_erasure"
+        "--prefix=${placeholder "out"}"
+        # The following boost libraries cause errors when building with emscripten
+        "--without-process"
+        "--without-contract"
+        "--without-container"
+        "--without-log"
+        "--without-json"
+        "--without-python"
+      ];
+    }).overrideAttrs
+      (old: {
+        pname = "emscripten-${lib.getName old}";
+        outputs = [
+          "out"
+          "dev"
+        ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+          emscripten
+        ];
+        doCheck = true;
+        checkPhase = ''
+          HOME=$TMPDIR
+          mkdir -p .emscriptencache
+          export EM_CACHE=$PWD/.emscriptencache
+          ${lib.getExe' emscripten "emcc"} -O2 -o example.js -I. libs/uuid/test/test_hash.cpp
+          ${lib.getExe nodejs} ./example.js
+        '';
+      });
+
   json_c =
     (pkgs.json_c.override {
       stdenv = pkgs.emscriptenStdenv;
