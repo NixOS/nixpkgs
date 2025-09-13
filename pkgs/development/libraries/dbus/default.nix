@@ -14,7 +14,7 @@
   xmlto,
   autoreconfHook,
   autoconf-archive,
-  x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  x11Support ? !stdenv.hostPlatform.isDarwin,
   xorg,
 }:
 
