@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional withShishi shishi;
 
   # ./stdint.h:89:5: error: expected value in expression
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl) ''
     export GNULIBHEADERS_OVERRIDE_WINT_T=0
   '';
 
