@@ -1,6 +1,6 @@
 {
   lib,
-  rust,
+  buildPackages,
   stdenv,
   rustPlatform,
   fetchCrate,
@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
   checkType = "debug";
 
   postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   passthru = {
