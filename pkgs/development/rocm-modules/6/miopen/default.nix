@@ -74,10 +74,10 @@ let
     fetchSubmodules = true;
     # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream
     leaveDotGit = true;
+    # FIXME: if someone can reduce the level of awful here that would be really nice
     postFetch = ''
       export HOME=$(mktemp -d)
       cd $out
-      set -x
       git remote add origin $url
       git fetch origin +refs/tags/rocm-${version}:refs/tags/rocm-${version}
       git clean -fdx
@@ -86,8 +86,8 @@ let
       rm .lfsconfig
       git lfs install
       git lfs track "*.kdb.bz2"
-      GIT_TRACE=1 git lfs fetch --include="src/kernels/**"
-      GIT_TRACE=1 git lfs pull --include="src/kernels/**"
+      git lfs fetch --include="src/kernels/**"
+      git lfs pull --include="src/kernels/**"
       git lfs checkout
 
       rm -rf .git
