@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "hashid";
-  version = "3.1.4-unstable-2015-03-17";
+  version = "3.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
