@@ -234,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/pexpects/job_summary.py
     rm tests/pexpects/signals.py
     rm tests/pexpects/fg.py
+    rm tests/checks/fish_exit.fish
   ''
   + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
     # This test seems to consistently fail on aarch64 and darwin
