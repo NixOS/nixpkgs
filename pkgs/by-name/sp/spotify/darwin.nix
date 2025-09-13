@@ -14,10 +14,12 @@ stdenv.mkDerivation {
   version = "1.2.70.409";
 
   src =
+    # WARNING: This Wayback Machine URL redirects to the closest timestamp.
+    # Future maintainers must manually check the timestamp exists.
     if stdenv.hostPlatform.isAarch64 then
       (fetchurl {
-        url = "https://web.archive.org/web/20250826093914/https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-bs+rSMfIFG0FyHGDUtuk6tSbd5l6r6qUNH20hQQjZC0=";
+        url = "https://web.archive.org/web/20250829211423/https://download.scdn.co/SpotifyARM64.dmg";
+        hash = "sha256-fTyACxbyIgg7EwIgnNvNerJGUwAVLP2bg0TMnOegWeQ=";
       })
     else
       (fetchurl {
