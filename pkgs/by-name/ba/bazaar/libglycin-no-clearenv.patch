@@ -1,0 +1,37 @@
+diff --git a/glycin/src/sandbox.rs b/glycin/src/sandbox.rs
+index faa10114a5..1cf73e9d8f 100644
+--- a/glycin/src/sandbox.rs
++++ b/glycin/src/sandbox.rs
+@@ -239,32 +239,6 @@
+         command.stdin(OwnedFd::from(self.stdin));
+         command.args(args);
+ 
+-        // Clear ENV
+-        if matches!(self.sandbox_mechanism, SandboxMechanism::FlatpakSpawn) {
+-            // Do not clear environment before `flatpak-spawn` is called. Otherwise,
+-            // `flatpak-spawn` will fail to find the D-Bus connection to call the portal.
+-            command.arg("--clear-env");
+-        } else {
+-            command.env_clear();
+-        }
+-
+-        // Inherit some environment variables
+-        for env_key in ["RUST_BACKTRACE", "RUST_LOG"] {
+-            if let Some(val) = std::env::var_os(env_key) {
+-                if matches!(self.sandbox_mechanism, SandboxMechanism::FlatpakSpawn) {
+-                    let mut arg = OsString::new();
+-                    arg.push("--env=");
+-                    arg.push(env_key);
+-                    arg.push("=");
+-                    arg.push(val);
+-
+-                    command.arg(arg);
+-                } else {
+-                    command.env(env_key, val);
+-                }
+-            }
+-        }
+-
+         // Set memory limit for sandbox
+         if matches!(self.sandbox_mechanism, SandboxMechanism::Bwrap) {
+             unsafe {

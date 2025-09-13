@@ -1,0 +1,26 @@
+diff --git a/glycin/src/sandbox.rs b/glycin/src/sandbox.rs
+index faa10114a5..c527f788b7 100644
+--- a/glycin/src/sandbox.rs
++++ b/glycin/src/sandbox.rs
+@@ -201,13 +201,9 @@
+             SandboxMechanism::Bwrap => {
+                 let mut args = self.bwrap_args().await?;
+ 
+-                let seccomp_memfd = Self::seccomp_export_bpf(&self.seccomp_filter()?)?;
+-                args.push("--seccomp".into());
+-                args.push(seccomp_memfd.as_raw_fd().to_string().into());
+-
+                 args.push(self.exec());
+ 
+-                ("bwrap".into(), args, Some(seccomp_memfd))
++                ("bwrap".into(), args, None)
+             }
+             SandboxMechanism::FlatpakSpawn => {
+                 let memory_limit = Self::memory_limit();
+@@ -586,4 +582,4 @@
+ 
+         Ok(())
+     }
+-}
++}
+\ No newline at end of file
