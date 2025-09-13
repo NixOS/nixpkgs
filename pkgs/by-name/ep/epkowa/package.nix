@@ -436,6 +436,42 @@ let
         description = "iscan GT-1500 for " + passthru.hw;
       };
     };
+    ds30 = stdenv.mkDerivation rec {
+      name = "iscan-ds-30-bundle";
+      version = "2.30.4";
+
+      src = fetchurl {
+        urls = [
+          "https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${version}.x64.rpm.tar.gz"
+        ];
+        sha256 = "0d5ef9b83999c56c14bd17ca63537f63ad4f0d70056870dc00888af1b36f4153";
+      };
+
+      nativeBuildInputs = [
+        autoPatchelfHook
+        rpm
+      ];
+
+      installPhase = ''
+        ${rpm}/bin/rpm2cpio plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        mkdir $out
+        cp -r usr/share $out
+        cp -r usr/lib64 $out/lib
+        mv $out/lib/iscan $out/lib/esci
+        mkdir $out/share/esci
+      '';
+
+      passthru = {
+        registrationCommand = ''
+          $registry --add interpreter usb 0x04b8 0x0147 "$plugin/lib/esci/libiscan-plugin-ds-30.so"
+        '';
+        hw = "DS-30";
+      };
+      meta = common_meta // {
+        description = "Plugin to support " + passthru.hw + " scanner in sane";
+      };
+    };
     network = stdenv.mkDerivation rec {
       pname = "iscan-nt-bundle";
       # for the version, look for the driver of XP-750 in the search page
