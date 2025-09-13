@@ -19,6 +19,7 @@
   smartmontools,
   systemd,
   udevCheckHook,
+  usbutils,
   util-linux,
   x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
           perl
           smartmontools
           systemd
+          usbutils
           util-linux
         ]
         ++ lib.optional enableRDW networkmanager
