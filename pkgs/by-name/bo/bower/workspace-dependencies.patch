@@ -1,0 +1,28 @@
+--- a/package.json
++++ b/package.json
+@@ -16,6 +16,11 @@
+     "bower"
+   ],
+   "dependencies": {
++    "bower-config": "file:./packages/bower-config",
++    "bower-endpoint-parser": "file:./packages/bower-endpoint-parser",
++    "bower-json": "file:./packages/bower-json",
++    "bower-logger": "file:./packages/bower-logger",
++    "bower-registry-client": "file:./packages/bower-registry-client",
+     "abbrev": "^1.0.5",
+     "archy": "1.0.0",
+     "cardinal": "0.4.4",
+@@ -98,12 +103,5 @@
+   "resolutions": {
+     "deep-extend": "0.5.1",
+     "minimist": "0.2.1"
+-  },
+-  "workspaces": [
+-    "packages/bower-config",
+-    "packages/bower-endpoint-parser",
+-    "packages/bower-json",
+-    "packages/bower-logger",
+-    "packages/bower-registry-client"
+-  ]
++  }
+ }
