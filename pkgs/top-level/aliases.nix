@@ -2323,6 +2323,7 @@ mapAliases {
   taplo-lsp = taplo; # Added 2022-07-30
   targetcli = targetcli-fb; # Added 2025-03-14
   taro = taproot-assets; # Added 2023-07-04
+  tbb_2021 = throw "tbb_2021 has been removed because it is unmaintained upstream and had no remaining users; use tbb_2022"; # Added 2025-09-13
   tcl-fcgi = tclPackages.tcl-fcgi; # Added 2024-10-02
   tclcurl = tclPackages.tclcurl; # Added 2024-10-02
   tcllib = tclPackages.tcllib; # Added 2024-10-02
