@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gperftools";
-  version = "2.17";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     owner = "gperftools";
     repo = "gperftools";
     tag = "gperftools-${finalAttrs.version}";
-    sha256 = "sha256-Tm+sYKwFSHAxOALgr9UGv7vBMlWqUymXsvNu7Sku6Kk=";
+    hash = "sha256-WCEuiSjNIX/KhEBWndyVhrKlWs7H60mcHoPlWd7YWC4=";
   };
 
   patches = [
