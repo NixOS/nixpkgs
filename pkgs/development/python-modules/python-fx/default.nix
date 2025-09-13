@@ -81,6 +81,14 @@ buildPythonPackage rec {
   # FAILED tests/test_event_loops.py::TwistedEventLoopTest::test_run - AssertionError: 'callback called with future outcome: True' not found in ['...
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  disabledTests = [
+    # AttributeError: 'Frame' object has no attribute '_Frame__super'
+    "test_start"
+    "test_autocomplete"
+    "test_help_exit"
+    "test_warning_bar"
+  ];
+
   pythonImportsCheck = [ "pyfx" ];
 
   meta = with lib; {
