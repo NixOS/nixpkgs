@@ -9892,8 +9892,6 @@ with pkgs;
 
   q4wine = kdePackages.callPackage ../applications/misc/q4wine { };
 
-  googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
-
   gpsbabel-gui = gpsbabel.override {
     withGUI = true;
     withDoc = true;
