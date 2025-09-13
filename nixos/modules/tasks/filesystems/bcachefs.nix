@@ -7,6 +7,7 @@
 }:
 
 let
+  cfg = config.boot.bcachefs;
   cfgScrub = config.services.bcachefs.autoScrub;
 
   bootFs = lib.filterAttrs (
@@ -146,7 +147,7 @@ let
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
           Type = "oneshot";
-          ExecCondition = "${pkgs.bcachefs-tools}/bin/bcachefs unlock -c \"${device}\"";
+          ExecCondition = "${cfg.package}/bin/bcachefs unlock -c \"${device}\"";
           Restart = "on-failure";
           RestartMode = "direct";
           # Ideally, this service would lock the key on stop.
@@ -155,7 +156,7 @@ let
         };
         script =
           let
-            unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
+            unlock = ''${cfg.package}/bin/bcachefs unlock "${device}"'';
             unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
           in
           if useClevis fs then
@@ -196,6 +197,10 @@ let
 in
 
 {
+  options.boot.bcachefs.package = lib.mkPackageOption pkgs "bcachefs-tools" { } // {
+    description = "Configured Bcachefs userspace package.";
+  };
+
   options.services.bcachefs.autoScrub = {
     enable = lib.mkEnableOption "regular bcachefs scrub";
 
@@ -227,11 +232,11 @@ in
       {
         inherit assertions;
         # needed for systemd-remount-fs
-        system.fsPackages = [ pkgs.bcachefs-tools ];
-        services.udev.packages = [ pkgs.bcachefs-tools ];
+        system.fsPackages = [ cfg.package ];
+        services.udev.packages = [ cfg.package ];
 
         systemd = {
-          packages = [ pkgs.bcachefs-tools ];
+          packages = [ cfg.package ];
           services = lib.mapAttrs' (mkUnits "") (
             lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems
           );
@@ -253,12 +258,12 @@ in
         ];
         boot.initrd.systemd.extraBin = {
           # do we need this? boot/systemd.nix:566 & boot/systemd/initrd.nix:357
-          "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
-          "mount.bcachefs" = "${pkgs.bcachefs-tools}/bin/mount.bcachefs";
+          "bcachefs" = "${cfg.package}/bin/bcachefs";
+          "mount.bcachefs" = "${cfg.package}/bin/mount.bcachefs";
         };
         boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
-          copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/mount.bcachefs
+          copy_bin_and_libs ${cfg.package}/bin/bcachefs
+          copy_bin_and_libs ${cfg.package}/bin/mount.bcachefs
         '';
         boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           $out/bin/bcachefs version
@@ -348,7 +353,7 @@ in
                   "sleep.target"
                 ];
 
-                script = "${lib.getExe pkgs.bcachefs-tools} data scrub ${fs}";
+                script = "${lib.getExe cfg.package} data scrub ${fs}";
 
                 serviceConfig = {
                   Type = "oneshot";
