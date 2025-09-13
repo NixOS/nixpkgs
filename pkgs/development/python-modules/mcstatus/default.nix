@@ -14,15 +14,21 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "12.0.2";
+  version = "12.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = "mcstatus";
     tag = "v${version}";
-    hash = "sha256-DWIpN7oBbb/F5aER0v0qhcQsDoa/EfizjHgy/BE2P6E=";
+    hash = "sha256-gtLWUIxG40MsmavA4KrHJ3btCR/zKdstwiUiZGsoNcw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "uv-dynamic-versioning"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
 
   build-system = [ hatchling ];
 
