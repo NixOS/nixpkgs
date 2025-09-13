@@ -555,6 +555,17 @@ in
           + "Either update your PostgreSQL package to the correct version or set services.discourse.database.ignorePostgresqlVersion. "
           + "See https://nixos.org/manual/nixos/stable/index.html#module-postgresql for details on how to upgrade PostgreSQL.";
       }
+      {
+        assertion =
+          databaseActuallyCreateLocally
+          -> (builtins.elem config.services.postgresql.package.pkgs.pgvector (
+            # installedExtensions doesn't exist when when the postgresql package has no extensions
+            config.services.postgresql.package.installedExtensions or [ ]
+          ));
+        message =
+          "Discourse requires the PostgreSQL pgvector extension. Please extend services.postgresql.package accordingly. "
+          + "See https://nixos.org/manual/nixos/stable/index.html#module-postgresql for details.";
+      }
     ];
 
     # Default config values are from `config/discourse_defaults.conf`
@@ -719,6 +730,7 @@ in
           psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'discourse'" | grep -q 1 || psql -tAc 'CREATE DATABASE "discourse" OWNER "discourse"'
           psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
           psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
+          psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS vector"
         '';
 
         serviceConfig = {
@@ -805,8 +817,11 @@ in
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
+          cp -r ${cfg.package.assets.generated}/* /run/discourse/assets-generated/
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
           ln -sf /var/lib/discourse/backups /run/discourse/public/backups
+          # discourse creates images in this folder, and by default it only has u=rx
+          chmod 750 /run/discourse/public/images
 
           (
               umask u=rwx,g=,o=
@@ -839,6 +854,7 @@ in
           "assets/javascripts/plugins"
           "public"
           "sockets"
+          "assets-generated"
         ];
         RuntimeDirectoryMode = "0750";
         StateDirectory = map (p: "discourse/" + p) [

@@ -29,7 +29,7 @@ in
   nodes.discourse =
     { nodes, ... }:
     {
-      virtualisation.memorySize = 2048;
+      virtualisation.memorySize = 4096;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;
@@ -56,7 +56,9 @@ in
 
       environment.systemPackages = [ pkgs.jq ];
 
-      services.postgresql.package = pkgs.postgresql_15;
+      services.postgresql.package = pkgs.postgresql_15.withPackages (ps: [
+        ps.pgvector
+      ]);
 
       services.discourse = {
         enable = true;
