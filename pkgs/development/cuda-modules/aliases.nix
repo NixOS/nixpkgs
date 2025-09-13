@@ -25,4 +25,8 @@ builtins.mapAttrs mkRenamed {
     package = final.cudatoolkit;
   };
 
+  cusparselt = {
+    path = "cudaPackages.libcusparse_lt";
+    package = final.libcusparse_lt;
+  };
 }
