@@ -6,7 +6,7 @@
 
 buildDunePackage rec {
   pname = "unionFind";
-  version = "20220122";
+  version = "20250818";
 
   useDune2 = true;
   minimalOCamlVersion = "4.05";
@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "fpottier";
     repo = pname;
     rev = version;
-    sha256 = "sha256:0hdh56rbg8vfjd61q09cbmh8l5wmry5ykivg7gsm0v5ckkb3531r";
+    sha256 = "sha256-q/3Wx2/JvFO3m51OvMwO6bz+s7+4Vjs4pFgy5+OinNo=";
   };
 
   meta = {
