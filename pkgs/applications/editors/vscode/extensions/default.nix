@@ -1433,31 +1433,7 @@ let
         };
       };
 
-      eamodio.gitlens = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "gitlens";
-          publisher = "eamodio";
-          # Stable versions are listed on the GitHub releases page and use a
-          # semver scheme, contrary to preview versions which are listed on
-          # the VSCode Marketplace and use a calver scheme. We should avoid
-          # using preview versions, because they expire after two weeks.
-          version = "17.3.4";
-          hash = "sha256-HrIvJ0+E9lL6wa6lQSjvqdiQiVVCcKAJIPp+x8x/QMc=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
-          description = "Visual Studio Code extension that improves its built-in Git capabilities";
-          longDescription = ''
-            Supercharge the Git capabilities built into Visual Studio Code — Visualize code authorship at a glance via Git
-            blame annotations and code lens, seamlessly navigate and explore Git repositories, gain valuable insights via
-            powerful comparison commands, and so much more
-          '';
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens";
-          homepage = "https://gitlens.amod.io/";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ratsclub ];
-        };
-      };
+      eamodio.gitlens = callPackage ./eamodio.gitlens { };
 
       earthly.earthfile-syntax-highlighting = buildVscodeMarketplaceExtension {
         mktplcRef = {
