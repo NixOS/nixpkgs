@@ -151,6 +151,7 @@ in
 
   options.boot.initrd.systemd = {
     enable = mkEnableOption "systemd in initrd" // {
+      default = true;
       description = ''
         Whether to enable systemd in initrd. The unit options such as
         {option}`boot.initrd.systemd.services` are the same as their
