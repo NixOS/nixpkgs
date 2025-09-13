@@ -391,10 +391,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  vcpkg-tool = callPackage ../by-name/vc/vcpkg-tool/package.nix {
-    fmt = fmt_11;
-  };
-
   r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
@@ -2422,7 +2418,7 @@ with pkgs;
 
       # To see which `fmt` version Ceph upstream recommends, check its `src/fmt` submodule.
       #
-      # Ceph does not currently build with `fmt_10`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
+      # Ceph does not currently build with `fmt_11`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
       # If we want to switch for that before upstream fixes it, use this patch:
       # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
       fmt = fmt_9;
@@ -7515,7 +7511,7 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/fmt { }) fmt_9 fmt_10 fmt_11;
 
-  fmt = fmt_10;
+  fmt = fmt_11;
 
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
@@ -9047,10 +9043,6 @@ with pkgs;
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
-
-  termbench-pro = callPackage ../by-name/te/termbench-pro/package.nix {
-    fmt = fmt_11;
-  };
 
   tinyxml = tinyxml2;
 

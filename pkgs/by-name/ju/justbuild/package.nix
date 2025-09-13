@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchurl,
 
-  fmt_10,
+  fmt,
   nlohmann_json,
   cli11,
   microsoft-gsl,
@@ -63,12 +63,7 @@ stdenv.mkDerivation rec {
 
     # Dependencies of just
     cli11
-    # Using fmt 10 because this is the same version upstream currently
-    # uses for bundled builds
-    # For future updates: The currently used version can be found in the file
-    # etc/repos.in.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.in.json
-    # under the key .repositories.fmt
-    fmt_10
+    fmt
     microsoft-gsl
     nlohmann_json
 

@@ -46,7 +46,7 @@ let
       libxml2,
       linux-pam,
       numactl,
-      fmt_11,
+      fmt,
       withStorageMroonga ? true,
       kytea,
       libsodium,
@@ -231,7 +231,7 @@ let
           ];
 
           buildInputs =
-            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -286,7 +286,7 @@ let
             msgpack
             zeromq
           ]
-          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
         propagatedBuildInputs = lib.optional withNuma numactl;
 
