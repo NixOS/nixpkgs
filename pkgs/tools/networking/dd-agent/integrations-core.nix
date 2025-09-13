@@ -42,14 +42,14 @@
 
 let
   inherit (lib) attrValues mapAttrs;
+  version = "7.70.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
-    rev = version;
-    sha256 = "sha256-p5eoNNHQQl314mfUk2t3qQaerPu02GKA+tKkAY7bojk=";
+    tag = version;
+    hash = "sha256-8EocsZ2CeiF8vb7KlC9n1nLMluhq69DjjLX8hY1kwec=";
   };
-  version = "7.56.2";
 
   # Build helper to build a single datadog integration package.
   buildIntegration =
@@ -75,19 +75,13 @@ let
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
 
-    # Make setuptools build the 'base' and 'checks' modules.
-    postPatch = ''
-      substituteInPlace setup.py \
-        --replace "from setuptools import setup" "from setuptools import find_packages, setup" \
-        --replace "packages=['datadog_checks']" "packages=find_packages()"
-    '';
-
-    propagatedBuildInputs = with python3Packages; [
+    dependencies = with python3Packages; [
       binary
       cachetools
       cryptography
       immutables
       jellyfish
+      lazy-loader
       prometheus-client
       protobuf
       pydantic
