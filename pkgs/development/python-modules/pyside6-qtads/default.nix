@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyside6-qtads";
-  version = "4.3.1.4";
+  version = "4.4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = "pyside6_qtads";
     tag = "v${version}";
-    hash = "sha256-02YUeD9PfcaYkvz9JX5FucsbG9Idk7OH24U+RXXEmvo=";
+    hash = "sha256-QuZaVdHfP3nVmQeCv7ra1ecvcezRh4r78XA2fbMZ9ys=";
     fetchSubmodules = true;
   };
 
