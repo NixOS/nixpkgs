@@ -22,20 +22,22 @@
   wayland-scanner,
   wlroots,
   pango,
-  nlohmann_json,
   xorg,
+  yyjson,
+  libxml2,
+  vulkan-headers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-xQZ4/UE66IISZQLl702OQXAAr8XmEsA4hJwB7aXua+E=";
+    hash = "sha256-rnrcuikfRPnIfIkmKUIRh8Sm+POwFLzaZZMAlmeBdjY=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland-protocols
     xorg.xcbutilwm
-    nlohmann_json
+    yyjson
+    libxml2
+    vulkan-headers
   ];
 
   propagatedBuildInputs = [
@@ -70,6 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doctest
   ];
+
+  postPatch = ''
+    substituteInPlace plugins/common/wayfire/plugins/common/cairo-util.hpp \
+      --replace "<drm_fourcc.h>" "<libdrm/drm_fourcc.h>"
+  '';
 
   # CMake is just used for finding doctest.
   dontUseCmakeConfigure = true;
