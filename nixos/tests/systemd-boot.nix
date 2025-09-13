@@ -197,7 +197,7 @@ in
           # (we would then be able to use `dumpdtb`). Thus, the following config
           # will not boot, but it does allow us to assert that the boot entry has
           # the correct contents.
-          boot.loader.systemd-boot.installDeviceTree = pkgs.stdenv.hostPlatform.isAarch64;
+          boot.loader.efi.installDeviceTree = pkgs.stdenv.hostPlatform.isAarch64;
           hardware.deviceTree.name = "dummy.dtb";
           hardware.deviceTree.package = lib.mkForce (
             pkgs.runCommand "dummy-devicetree-package" { } ''
