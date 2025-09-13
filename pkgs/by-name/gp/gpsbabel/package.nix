@@ -5,16 +5,11 @@
   fetchurl,
   pkg-config,
   which,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
   libusb1,
   shapelib,
   zlib,
   withGUI ? false,
-  qtserialport,
   withMapPreview ? (!stdenv.hostPlatform.isDarwin),
-  qtwebengine,
   withDoc ? false,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -23,6 +18,7 @@
   libxml2,
   libxslt,
   perl,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,11 +52,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    qmake
+    libsForQt5.qmake
   ]
   ++ lib.optionals withGUI [
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ]
   ++ lib.optionals withDoc [
     docbook_xml_dtd_45
@@ -77,8 +73,8 @@ stdenv.mkDerivation rec {
     shapelib
     zlib
   ]
-  ++ lib.optional withGUI qtserialport
-  ++ lib.optional (withGUI && withMapPreview) qtwebengine;
+  ++ lib.optional withGUI libsForQt5.qtserialport
+  ++ lib.optional (withGUI && withMapPreview) libsForQt5.qtwebengine;
 
   nativeCheckInputs = [
     libxml2
