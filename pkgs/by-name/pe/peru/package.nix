@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "peru";
-  version = "1.3.3";
+  version = "1.3.4";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.5";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "buildinspace";
     repo = "peru";
     rev = version;
-    sha256 = "FCyR14jcFjI6epoFPNVyFZ4k1URZ1NraX1+ajVcCQ2A=";
+    sha256 = "sha256-ubkDB/McG2Tp3s0K5PbL6QpHbpqRLAUSHa7v+u/n6hI=";
   };
 
   build-system = with python3Packages; [ setuptools ];
