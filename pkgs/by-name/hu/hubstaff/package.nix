@@ -29,9 +29,9 @@
 }:
 
 let
-  url = "https://app.hubstaff.com/download/10276-standard-linux-1-7-4-release/sh";
-  version = "1.7.4-d4458b13";
-  sha256 = "sha256:16ml8ykhrlis2fa3a01cqy5xs6l423ljfsal7gxdnqza7vphayhw";
+  url = "https://app.hubstaff.com/download/10606-standard-linux-1-7-5-release/sh";
+  version = "1.7.5-a68a2738";
+  sha256 = "sha256:19rp5xldhfx48v8hdbvxbvv1j2n3wn5rymm82gryz620kfiandfb";
 
   rpath = lib.makeLibraryPath [
     libX11
