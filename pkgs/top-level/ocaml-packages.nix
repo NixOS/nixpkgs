@@ -455,16 +455,30 @@ let
             callPackage ../development/tools/ocaml/dune/2.nix { }
           else if lib.versionAtLeast ocaml.version "4.02" then
             pkgs.dune_2
+          else if config.allowAliases then
+            throw "dune_2 is not available for OCaml ${ocaml.version}"
           else
-            throw "dune_2 is not available for OCaml ${ocaml.version}";
+            {
+              inherit (pkgs.dune_2) version pname name;
+              meta = pkgs.dune_2.meta // {
+                broken = true;
+              };
+            };
 
         dune_3 =
           if lib.versionAtLeast ocaml.version "4.08" then
             callPackage ../development/tools/ocaml/dune/3.nix { }
           else if lib.versionAtLeast ocaml.version "4.02" then
             pkgs.dune_3
+          else if config.allowAliases then
+            throw "dune_3 is not available for OCaml ${ocaml.version}"
           else
-            throw "dune_3 is not available for OCaml ${ocaml.version}";
+            {
+              inherit (pkgs.dune_3) version pname name;
+              meta = pkgs.dune_3.meta // {
+                broken = true;
+              };
+            };
 
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
