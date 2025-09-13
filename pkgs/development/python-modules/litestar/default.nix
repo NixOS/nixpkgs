@@ -44,7 +44,7 @@
   time-machine,
   typing-extensions,
   uvicorn,
-  valkey,
+  # valkey,
 
   # tests
   httpx-sse,
@@ -122,7 +122,7 @@ buildPythonPackage rec {
     redis = [ redis ] ++ redis.optional-dependencies.hiredis;
     # sqlalchemy = [ advanced-alchemy ];
     structlog = [ structlog ];
-    valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
+    # valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
     yaml = [ pyyaml ];
   };
 
