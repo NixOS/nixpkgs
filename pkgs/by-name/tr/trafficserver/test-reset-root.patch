@@ -1,0 +1,12 @@
+diff --git a/src/tscore/unit_tests/test_layout.cc b/src/tscore/unit_tests/test_layout.cc
+index 278728dc0..74471c44a 100644
+--- a/src/tscore/unit_tests/test_layout.cc
++++ b/src/tscore/unit_tests/test_layout.cc
+@@ -40,6 +40,7 @@ append_slash(const char *path)
+ 
+ TEST_CASE("constructor test", "[constructor]")
+ {
++  unsetenv("TS_ROOT");
+   Layout layout;
+   // test for constructor
+   REQUIRE(layout.prefix == TS_BUILD_PREFIX);
