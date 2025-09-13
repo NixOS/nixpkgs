@@ -70,7 +70,7 @@ in
   };
 
   tomcat11 = common {
-    version = "11.0.10";
-    hash = "sha256-6w4ybJed9iyiqq0igUalagYyP9Okroz8NP8NLeWKMNY=";
+    version = "11.0.11";
+    hash = "sha256-KpG4DB6n279K8Fux+Aq7l15d5BXAyAPep0XlqhEm4IE=";
   };
 }
