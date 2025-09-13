@@ -1,0 +1,24 @@
+diff --git a/binaries/geph5-broker/src/routes.rs b/binaries/geph5-broker/src/routes.rs
+index 5d8c244..daebc1b 100644
+--- a/binaries/geph5-broker/src/routes.rs
++++ b/binaries/geph5-broker/src/routes.rs
+@@ -82,8 +82,8 @@ pub async fn bridge_to_leaf_route(
+                     )
+                 });
+ 
+-                if let Ok(version) = semver::Version::parse(version) && 
+-                VersionReq::parse(">=0.2.72").unwrap().matches(&version) &&
++                if let Ok(version) = semver::Version::parse(version) {
++                    if VersionReq::parse(">=0.2.72").unwrap().matches(&version) &&
+                 bridge.pool.contains("ovh_de") && // only have one group do this
+                 (
+                     asn == 197207 || // hamrah-e avval
+@@ -94,7 +94,7 @@ pub async fn bridge_to_leaf_route(
+                     return anyhow::Ok(RouteDescriptor::Delay {
+                         milliseconds: delay_ms,
+                         lower: RouteDescriptor::Race(vec![RouteDescriptor::Delay{milliseconds: 10000, lower: meeklike_route!().await?.into()}, tls_route!().await?.into(), sosistab3_route!().await?.into()]).into(),
+-                    })
++                    })}
+                 }
+ 
+                 if asn == 9808 || asn == 56044 || asn == 56047 || asn == 58807 || asn == 56048 || asn == 56040 || asn == 56047 {
