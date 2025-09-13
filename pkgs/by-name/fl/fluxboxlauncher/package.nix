@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "fluxboxlauncher";
-  version = "0.2.1";
+  version = "0.2.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
