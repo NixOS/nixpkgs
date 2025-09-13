@@ -37,7 +37,7 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
-  version = "0.4.0";
+  version = "0.4.6";
   pyproject = true;
 
   # Pypi version has no tests
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "deid";
     # the github repo does not contain Pypi version tags:
-    rev = "14d1e4eb70f2c9fda43fca411794be9d8a5a8516";
-    hash = "sha256-YsLWHIO6whcBQriMYb0tDD9s/RrxlfeKGORF1UCOilI=";
+    rev = "f2e125e5a13ae1c3ccfeb55d9431d3a627a4d0db";
+    hash = "sha256-Vk6MD3MNf1JejqACxjjHkFniK7YDgmdH7k1iQi+enEY=";
   };
 
   build-system = [ setuptools ];
