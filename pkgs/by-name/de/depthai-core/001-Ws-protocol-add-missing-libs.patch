@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1a8b393..7cb4870 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,7 +11,7 @@ target_include_directories(foxglove_websocket
+     ${nlohmann_json_INCLUDE_DIRS}
+     ${websocketpp_INCLUDE_DIRS}
+ )
+-target_link_libraries(foxglove_websocket nlohmann_json::nlohmann_json websocketpp::websocketpp)
++target_link_libraries(foxglove_websocket nlohmann_json::nlohmann_json websocketpp::websocketpp ssl crypto z)
+ set_target_properties(foxglove_websocket PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+ 
+ if (MSVC)
