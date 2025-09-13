@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.traefik;
 
@@ -21,7 +19,7 @@ let
   staticConfigFile =
     if cfg.staticConfigFile == null then
       format.generate "config.toml" (
-        recursiveUpdate cfg.staticConfigOptions {
+        lib.recursiveUpdate cfg.staticConfigOptions {
           providers.file.filename = "${dynamicConfigFile}";
         }
       )
@@ -33,19 +31,19 @@ let
 in
 {
   options.services.traefik = {
-    enable = mkEnableOption "Traefik web server";
+    enable = lib.mkEnableOption "Traefik web server";
 
-    staticConfigFile = mkOption {
+    staticConfigFile = lib.mkOption {
       default = null;
-      example = literalExpression "/path/to/static_config.toml";
-      type = types.nullOr types.path;
+      example = lib.literalExpression "/path/to/static_config.toml";
+      type = with lib.types; nullOr path;
       description = ''
         Path to traefik's static configuration to use.
         (Using that option has precedence over `staticConfigOptions` and `dynamicConfigOptions`)
       '';
     };
 
-    staticConfigOptions = mkOption {
+    staticConfigOptions = lib.mkOption {
       description = ''
         Static configuration for Traefik.
       '';
@@ -61,17 +59,17 @@ in
       };
     };
 
-    dynamicConfigFile = mkOption {
+    dynamicConfigFile = lib.mkOption {
       default = null;
-      example = literalExpression "/path/to/dynamic_config.toml";
-      type = types.nullOr types.path;
+      example = lib.literalExpression "/path/to/dynamic_config.toml";
+      type = with lib.types; nullOr path;
       description = ''
         Path to traefik's dynamic configuration to use.
         (Using that option has precedence over `dynamicConfigOptions`)
       '';
     };
 
-    dynamicConfigOptions = mkOption {
+    dynamicConfigOptions = lib.mkOption {
       description = ''
         Dynamic configuration for Traefik.
       '';
@@ -87,17 +85,26 @@ in
       };
     };
 
-    dataDir = mkOption {
+    plugins = lib.mkOption {
+      default = [ ];
+      type = with lib.types; listOf package;
+      example = lib.literalExpression "[ pkgs.fosrl-badger ]";
+      description = ''
+        List of plugins to be added to the `localPlugins` attribute in the static configuration. These plugins are usually packaged in Nixpkgs, and are managed by Nix.
+      '';
+    };
+
+    dataDir = lib.mkOption {
       default = "/var/lib/traefik";
-      type = types.path;
+      type = lib.types.path;
       description = ''
         Location for any persistent data traefik creates, ie. acme
       '';
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "traefik";
-      type = types.str;
+      type = lib.types.str;
       example = "docker";
       description = ''
         Set the group that traefik runs under.
@@ -105,11 +112,11 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "traefik" { };
+    package = lib.mkPackageOption pkgs "traefik" { };
 
-    environmentFiles = mkOption {
+    environmentFiles = lib.mkOption {
       default = [ ];
-      type = types.listOf types.path;
+      type = with lib.types; listOf path;
       example = [ "/run/secrets/traefik.env" ];
       description = ''
         Files to load as environment file. Environment variables from this file
@@ -118,8 +125,30 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
+  config = lib.mkIf cfg.enable {
+    services.traefik.staticConfigOptions = lib.mkIf (cfg.plugins != [ ]) {
+      experimental.localPlugins = lib.listToAttrs (
+        map (plugin: lib.nameValuePair plugin.plugin { inherit (plugin) moduleName; }) cfg.plugins
+      );
+    };
+
+    systemd.tmpfiles.settings."10-traefik" = lib.mkMerge [
+      {
+        ${cfg.dataDir}.d = {
+          group = "traefik";
+          mode = "0700";
+          user = "traefik";
+        };
+      }
+      (lib.mkIf (cfg.plugins != [ ]) {
+        "${cfg.dataDir}/plugins-local"."L+".argument = toString (
+          pkgs.symlinkJoin {
+            name = "traefik-plugins";
+            paths = cfg.plugins;
+          }
+        );
+      })
+    ];
 
     systemd.services.traefik = {
       description = "Traefik web server";
@@ -131,9 +160,9 @@ in
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
         ExecStartPre = lib.optional (cfg.environmentFiles != [ ]) (
-          pkgs.writeShellScript "pre-start" ''
+          pkgs.writeShellScript "traefik-pre-start-envsubst" ''
             umask 077
-            ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
+            ${lib.getExe pkgs.envsubst} -i "${staticConfigFile}" > "${finalStaticConfigFile}"
           ''
         );
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
