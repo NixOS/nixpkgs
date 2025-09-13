@@ -2820,8 +2820,8 @@ let
         mktplcRef = {
           name = "vscord";
           publisher = "leonardssh";
-          version = "5.3.5";
-          hash = "sha256-b5osn7UeSkr8gnLZ/PkrxS0WmgHUwfS0jnwTc1Uw0Sg=";
+          version = "5.3.6";
+          hash = "sha256-mLSlZQ7R3coh1fN16F2PnmsLqRaL0EYz5EElK3IeZLU=";
         };
         meta = {
           description = "Highly customizable Discord Rich Presence extension for Visual Studio Code";
