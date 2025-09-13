@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchfossil,
 }:
 
 {
@@ -7,13 +8,12 @@
     let
       self = {
         pname = "arcan";
-        version = "0.6.3.3";
+        version = "0-unstable-2025-08-22";
 
-        src = fetchFromGitHub {
-          owner = "letoram";
-          repo = "arcan";
-          rev = self.version;
-          hash = "sha256-YH3VGU3gSR5gqHnAlA2vrzU8vasKd0hOpc+2ludnV+Y=";
+        src = fetchfossil {
+          url = "https://chiselapp.com/user/letoram/repository/arcan";
+          rev = "152a24d5193c169a25e07ec0994dd0bf3e60afdb2016090cb1e73d2f78ce3a8d";
+          hash = "sha256-TBq3eg4vF07wz23gnESTtB3RXKG9gJObuI6KTs74AcI=";
         };
       };
     in
