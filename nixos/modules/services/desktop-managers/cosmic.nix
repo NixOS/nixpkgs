@@ -26,6 +26,7 @@ let
       cosmic-files
       config.services.displayManager.cosmic-greeter.package
       cosmic-idle
+      cosmic-initial-setup
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
