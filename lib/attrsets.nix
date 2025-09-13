@@ -2235,6 +2235,80 @@ rec {
     in
     (x // y) // mask;
 
+  /**
+    Recursively get the attribute names of an AttrSet.
+
+    # Inputs
+
+    `attrs`
+
+    : The AttrSet
+
+    # Type
+
+    ```
+    attrNamesRecursive :: AttrSet -> [ [ String ] ]
+    ```
+
+    # Examples
+    :::{.example}
+
+    ## `lib.attrsets.attrNamesRecursive` usage example
+
+    ```nix
+    attrNamesRecursive { a = { b = 1; c = 2; }; d = 3; e.f = "g"; h = {}; }
+    => [ [ "a" "b" ] [ "a" "c" ] [ "d" ] [ "e" "f" ] ]
+    ```
+
+    :::
+  */
+  attrNamesRecursive =
+    attrs:
+    if lib.isAttrs attrs then
+      lib.foldlAttrs (
+        acc: name: value:
+        acc ++ lib.map (path: [ name ] ++ path) (attrNamesRecursive value)
+      ) [ ] attrs
+    else
+      [ [ ] ];
+
+  /**
+    Recursively get the attribute values of an AttrSet.
+
+    # Inputs
+
+    `attrs`
+
+    : The AttrSet
+
+    # Type
+
+    ```
+    attrValuesRecursive :: AttrSet -> [ Any ]
+    ```
+
+    # Examples
+    :::{.example}
+
+    ## `lib.attrsets.attrValuesRecursive` usage example
+
+    ```nix
+    attrValuesRecursive { a = { b = 1; c = 2; }; d = 3; e.f = "g"; h = {}; }
+    => [ 1 2 3 "g" ]
+    ```
+
+    :::
+  */
+  attrValuesRecursive =
+    attrs:
+    if lib.isAttrs attrs then
+      lib.foldlAttrs (
+        acc: name: value:
+        acc ++ attrValuesRecursive value
+      ) [ ] attrs
+    else
+      [ attrs ];
+
   # DEPRECATED
   zipWithNames = warn "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
 
