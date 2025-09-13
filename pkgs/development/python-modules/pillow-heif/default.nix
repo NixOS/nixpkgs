@@ -74,17 +74,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    # https://github.com/bigcat88/pillow_heif/issues/325
-    rm tests/images/heif_other/L_xmp_latin1.heic
-    rm tests/images/heif/L_xmp.heif
-  '';
-
   disabledTests = [
-    # Time based
+    # Time sensitive speed test, not reproducible
     "test_decode_threads"
-    # Missing EXIF info on WEBP-AVIF variant
-    "test_exif_from_pillow"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/bigcat88/pillow_heif/issues/89
@@ -110,6 +102,9 @@ buildPythonPackage rec {
       bsd3
       lgpl3
     ];
-    maintainers = with lib.maintainers; [ dandellion ];
+    maintainers = with lib.maintainers; [
+      dandellion
+      kuflierl
+    ];
   };
 }
