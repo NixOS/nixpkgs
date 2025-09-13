@@ -153,11 +153,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-rCWT9QmQnobfyqHtb1r/2XIgZEd4eA71eg6ffFQQZOU=",
+    "hash": "sha256-/7TF9ISbrM4ZYyJKBZ3OrZsNp4a7BKtda12hnuPVS6E=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.42.0",
+    "rev": "v4.44.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -516,13 +516,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-0+zBgoLpdIn20QVygVfwZXn6CKmjBku5mOzjSJV7LYo=",
+    "hash": "sha256-BMXxg6yz0b33yZK/Q8tkqDqPbYlrJWMvMenucDs+qUo=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v18.2.0",
+    "rev": "v18.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-eE9AY/79xQSbRl5kA0rwS8Oz8I9jaxT/KlVd0v0GAa8="
+    "vendorHash": "sha256-v0nYsQinopJ9DXtkGFe3bIYXMBMsPDafn71Xfmvi2mo="
   },
   "google": {
     "hash": "sha256-TInKyk82gwn3bGEPM6l9pGDmfMPskrMSSWNL0hDpnws=",
@@ -940,11 +940,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-MbyUz+sMOoWnBKu9t0QWyZKnhoJyelsaZteqxtUKwDE=",
+    "hash": "sha256-3kxR/QhWhfL4IW+YLN0z+EuYgnOdnCHfbxuXxOYHLC0=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.16.0",
+    "rev": "v7.18.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
