@@ -219,7 +219,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_prerequisite_1_key_protector_add_key_protectors_framework.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=5d260302da672258444b01239803c8f4d753e3f3";
-      hash = "sha256-9WnFN6xMiv+1XMhNHgVEegkhwzp9KpRZI6MIZY/Ih3Q=";
+      hash = "sha256-5aFHzc5qXBNLEc6yzI17AH6J7EYogcXdLxk//1QgumY=";
     })
     (fetchpatch {
       name = "23_prerequisite_2_disk_cryptodisk_allow_user_to_retry_failed_passphrase.patch";
