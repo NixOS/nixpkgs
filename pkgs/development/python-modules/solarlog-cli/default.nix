@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dontinelli/solarlog_cli/releases/tag/v${version}";
+    changelog = "https://github.com/dontinelli/solarlog_cli/releases/tag/${src.tag}";
     description = "Python library to access the Solar-Log JSON interface";
     homepage = "https://github.com/dontinelli/solarlog_cli";
     license = lib.licenses.gpl3Plus;
