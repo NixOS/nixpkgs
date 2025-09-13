@@ -5,6 +5,7 @@
   alsa-lib,
   dbus,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg,
   flac,
   freetype,
@@ -66,6 +67,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-OewUmnYpRByOgTi42G2reoaSuwxyPGHwP0+Uts/pg54=";
     rev = "v${version}";
   };
+
+  extraPatches = [
+    (fetchpatch {
+      url = "https://github.com/libretro/RetroArch/commit/2bc0a25e6f5cf2b67b183792886e24c2ec5d448e.patch";
+      sha256 = "sha256-gkpBql5w/xUpddv/6sePb5kZ5gy9huStDthmvoz6Qbk=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
