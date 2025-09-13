@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fixes cross-compilation to riscv64-linux
     ./time-1.9-implicit-func-decl-clang.patch
+    # fix compilation with gcc15
+    ./time-fix-compiling-with-GCC15.patch
   ];
 
   meta = {
