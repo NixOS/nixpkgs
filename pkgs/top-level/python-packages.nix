@@ -3377,6 +3377,8 @@ self: super: with self; {
 
   dataclasses-serialization = callPackage ../development/python-modules/dataclasses-serialization { };
 
+  dataconf = callPackage ../development/python-modules/dataconf { };
+
   datadiff = callPackage ../development/python-modules/datadiff { };
 
   datadog = callPackage ../development/python-modules/datadog { };
