@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
-  version = "2024.10.03";
+  version = "2025.08.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-autobuild";
     tag = version;
-    hash = "sha256-RUPyOI0DYmpbemSIA2pNjlE5T4PEAE84yvWbcula0qs=";
+    hash = "sha256-JfhLC1924bU1USvoYwluFGdxxahS+AfRSHnGlLfE0NY=";
   };
 
   build-system = [ flit-core ];
