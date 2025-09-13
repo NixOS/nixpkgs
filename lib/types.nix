@@ -1453,7 +1453,12 @@ let
                       headError = {
                         message = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
                       };
-                      value = abort "(t.merge.v2 defs).value must only be accessed when `.headError == null`. This is a bug in code that consumes a module system type.";
+                      value = lib.warn ''
+                        One or more definitions did not pass the type-check of the 'either' type.
+                        ${headError.message}
+                        If `either`, `oneOf` or similar is used in freeformType, ensure that it is preceded by an 'attrsOf' such as: `freeformType = types.attrsOf (types.either t1 t2)`.
+                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.06.
+                      '' (mergeOneOption loc defs);
                     };
               in
               checkedAndMerged;
