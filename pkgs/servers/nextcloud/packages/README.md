@@ -3,7 +3,7 @@
 To regenerate the nixpkgs nextcloudPackages set, run:
 
 ```
-./generate.sh
+../generate.sh
 ```
 
 After that you can commit and submit the changes in a pull request.
