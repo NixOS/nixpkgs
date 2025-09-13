@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rsa";
-  version = "4.9";
+  version = "4.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
