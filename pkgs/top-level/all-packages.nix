@@ -11753,12 +11753,6 @@ with pkgs;
     withDoc = true;
   };
 
-  gpxsee-qt5 = libsForQt5.callPackage ../applications/misc/gpxsee { };
-
-  gpxsee-qt6 = qt6Packages.callPackage ../applications/misc/gpxsee { };
-
-  gpxsee = gpxsee-qt5;
-
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   hachoir = with python3Packages; toPythonApplication hachoir;

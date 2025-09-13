@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
-  version = "1.5.0";
+  version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "textual-universal-directorytree";
     tag = "v${version}";
-    hash = "sha256-hUig0aJWSS0FsgRIrs74/uVaQgH6tczJWO5rj6TVOvQ=";
+    hash = "sha256-e9i6P+KQnGbFwCsNiu2eLJFg3fpcR2/vl/FVWOBqWUQ=";
   };
 
   nativeBuildInputs = [ hatchling ];

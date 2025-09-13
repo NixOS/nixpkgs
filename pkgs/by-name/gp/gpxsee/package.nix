@@ -2,52 +2,33 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
   nix-update-script,
-  qtbase,
-  qttools,
-  qtlocation ? null, # qt5 only
-  qtpositioning ? null, # qt6 only
-  qtserialport,
-  qtsvg,
-  wrapQtAppsHook,
+  qt6,
   wrapGAppsHook3,
 }:
 
-let
-  isQt6 = lib.versions.major qtbase.version == "6";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.46";
+  version = "13.47";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     tag = finalAttrs.version;
-    hash = "sha256-SkAEnKviUHQrej1fhpLs1bh/nAOgmRzzBzTFe4fURVc=";
+    hash = "sha256-1waE0A70MsUaGttaxHcOO2aaeRdZ9ihc7ZeqJ+azH/0=";
   };
 
   buildInputs = [
-    qtserialport
-  ]
-  ++ (
-    if isQt6 then
-      [
-        qtbase
-        qtpositioning
-        qtsvg
-      ]
-    else
-      [
-        qtlocation
-      ]
-  );
+    qt6.qtbase
+    qt6.qtpositioning
+    qt6.qtserialport
+    qt6.qtsvg
+  ];
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    qt6.qmake
+    qt6.qttools
+    qt6.wrapQtAppsHook
     wrapGAppsHook3
   ];
 
