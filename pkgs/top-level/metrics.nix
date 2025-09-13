@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   nativeBuildInputs = map lib.getBin [
-    pkgs.nix
+    pkgs.nixVersions.latest
     pkgs.time
     pkgs.jq
   ];
