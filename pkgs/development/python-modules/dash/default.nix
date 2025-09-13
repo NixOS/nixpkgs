@@ -28,22 +28,24 @@
   psutil,
   flask-compress,
 
+  flaky,
   pytestCheckHook,
   pytest-mock,
   mock,
+  numpy,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "3.0.4";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${version}";
-    hash = "sha256-KCGVdD1L+U2KbktU2GU19BQ6wRcmEeYtC/v8UrFTyto=";
+    hash = "sha256-7wSUPAcPvY5Q5Ws2mLjiY599oZlo5SA6Pa8QnS7pgvg=";
   };
 
   nativeBuildInputs = [
@@ -107,19 +109,32 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    flaky
     pytestCheckHook
     pytest-mock
     mock
+    numpy
     pyyaml
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     "tests/unit/test_browser.py"
     "tests/unit/test_app_runners.py" # Uses selenium
     "tests/integration"
+    # dash_test_components is not available
+    "tests/async_tests/test_async_callbacks.py"
+    "tests/async_tests/test_async_background_callbacks.py"
+    "tests/background_callback/"
+    "tests/compliance/test_typing.py"
   ];
 
   pythonImportsCheck = [ "dash" ];
+
+  disabledTests = [
+    # Import error
+    "test_missing_flask_compress_raises"
+  ];
 
   meta = {
     changelog = "https://github.com/plotly/dash/blob/${src.tag}/CHANGELOG.md";
