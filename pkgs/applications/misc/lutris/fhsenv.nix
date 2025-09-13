@@ -79,7 +79,6 @@ buildFHSEnv {
 
       # Adventure Game Studio
       allegro
-      dumb
 
       # Battle.net
       jansson
