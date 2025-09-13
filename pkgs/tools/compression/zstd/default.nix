@@ -13,7 +13,10 @@
   enableStatic ? static,
   # these need to be ran on the host, thus disable when cross-compiling
   buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform,
-  doCheck ? stdenv.hostPlatform == stdenv.buildPlatform,
+  # cygwin:
+  # ===>  zstd created file permissions tests
+  # permissions on tmp1 don't match expected (664 != 666)
+  doCheck ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.buildPlatform.isCygwin),
   nix-update-script,
 
   # for passthru.tests
@@ -87,6 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
   inherit doCheck;
   checkPhase = ''
     runHook preCheck
+  ''
+  + lib.optionalString stdenv.buildPlatform.isCygwin ''
+    PATH=$PWD/lib:$PATH
+  ''
+  + ''
     # Patch shebangs for playTests
     patchShebangs ../programs/zstdgrep
     ctest -R playTests # The only relatively fast test.
@@ -110,6 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
       install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
     ''
   );
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isCygwin ''
+    for link in unzstd zstdcat zstdmt; do
+      ln -sf zstd.exe $bin/bin/$link
+    done
+  '';
 
   outputs = [
     "bin"
