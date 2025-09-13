@@ -11520,8 +11520,6 @@ with pkgs;
     libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   };
 
-  fclones = callPackage ../tools/misc/fclones { };
-
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
