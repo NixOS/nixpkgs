@@ -8,29 +8,38 @@
   cmake,
   gtest,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyloggingpp";
   version = "9.97.1";
+
   src = fetchFromGitHub {
-    owner = "amrayn";
+    owner = "abumq";
     repo = "easyloggingpp";
-    rev = "v${version}";
-    sha256 = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gtest ];
-  cmakeFlags = [ "-Dtest=ON" ];
-  env.NIX_CFLAGS_COMPILE = "-std=c++14" + lib.optionalString stdenv.hostPlatform.isLinux " -pthread";
-  postInstall = ''
-    mkdir -p $out/include
-    cp ../src/easylogging++.cc $out/include
-  '';
+
+  nativeCheckInputs = [ gtest ];
+
+  cmakeFlags = [ (lib.cmakeBool "test" finalAttrs.doCheck) ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux " -pthread";
+
+  doCheck = true;
+
+  env.GTEST_FILTER =
+    # https://github.com/abumq/easyloggingpp/issues/816
+    "-CommandLineArgsTest.LoggingFlagsArg";
+
   meta = {
     description = "C++ logging library";
-    homepage = "https://github.com/amrayn/easyloggingpp";
+    homepage = "https://github.com/abumq/easyloggingpp";
+    changelog = "https://github.com/abumq/easyloggingpp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ acowley ];
     platforms = lib.platforms.all;
   };
-}
+})
