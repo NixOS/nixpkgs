@@ -14,6 +14,8 @@ let
     isFloat
     isInt
     isList
+    isPath
+    isStorePath
     isString
     mapAttrs
     mapAttrsToList
@@ -1023,6 +1025,91 @@ optionalAttrs allowAliases aliases
               black $out
             ''
         ) { };
+    };
+
+  vim =
+    { }:
+    let
+      specialType =
+        { value, _vimType }:
+        if _vimType == "raw" then
+          value
+        else
+          abort "formats.vim: should never happen (_vimType = ${_vimType})";
+
+      toVim =
+        value:
+        if value ? _vimType then
+          specialType value
+        else if value == null then
+          "v:null"
+        else if value == true then
+          "v:true"
+        else if value == false then
+          "v:false"
+        else if isInt value || isFloat value then
+          toString value
+        else if isString value then
+          builtins.toJSON value
+        else if isStorePath value then
+          builtins.toJSON (toString value)
+        else if isPath value then
+          builtins.toJSON (toString value)
+        else if isAttrs value then
+          "{${
+            concatStringsSep "," (
+              lib.mapAttrsToList (name: innerValue: ''"${name}":${toVim innerValue}'') value
+            )
+          }}"
+        else if isList value then
+          "[${concatStringsSep "," (map toVim value)}]"
+        else
+          abort "formats.vim: should never happen (value = ${value})";
+    in
+    {
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              float
+              int
+              path
+              str
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Vim value";
+            };
+        in
+        valueType;
+
+      lib = {
+        mkRaw = value: {
+          inherit value;
+          _vimType = "raw";
+        };
+
+        types =
+          let
+            isVimType = type: x: (x._vimType or "") == type;
+
+            rawVim = mkOptionType {
+              name = "rawVim";
+              description = "raw vim";
+              check = isVimType "raw";
+            };
+
+            vimOr = other: either other rawVim;
+          in
+          {
+            inherit rawVim vimOr;
+          }
+          // mapAttrs (_name: type: vimOr type) types;
+      };
+
+      generate = name: value: pkgs.writeText name (toVim value);
     };
 
   xml =
