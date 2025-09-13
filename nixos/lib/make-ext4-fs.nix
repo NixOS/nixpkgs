@@ -20,6 +20,8 @@
   libfaketime,
   perl,
   fakeroot,
+  # may need to be adjusted, depending on how many tiny files are in the disk image
+  inode_ratio ? 16000,
 }:
 
 let
@@ -78,7 +80,7 @@ pkgs.stdenv.mkDerivation {
 
     truncate -s $bytes $img
 
-    faketime -f "1970-01-01 00:00:01" fakeroot mkfs.ext4 -L ${volumeLabel} -U ${uuid} -d ./rootImage $img
+    faketime -f "1970-01-01 00:00:01" fakeroot mkfs.ext4 -i ${toString inode_ratio} -L ${volumeLabel} -U ${uuid} -d ./rootImage $img
 
     export EXT2FS_NO_MTAB_OK=yes
     # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
@@ -100,6 +102,15 @@ pkgs.stdenv.mkDerivation {
       '/Block count/{count=$2} /Block size/{size=$2} END{print (count*size+16*2**20)/size}')
 
     resize2fs $img $new_size
+
+    free_inodes=$(dumpe2fs -h $img | awk -F: '/Free inodes/{print $2}')
+    echo free inodes: $free_inodes
+
+    if [ $free_inodes -lt 500 ]; then
+      echo "free inode count low, image will likely fail to boot, decrease inode_ratio to fix"
+      echo "see https://github.com/NixOS/nixpkgs/issues/435489 for more details"
+      exit 1
+    fi
 
     if [ ${builtins.toString compressImage} ]; then
       echo "Compressing image"
