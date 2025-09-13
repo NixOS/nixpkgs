@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-3smmsco9xgOv+xCo9QIAudbHjZ1s3sKLEQmLXXaylYQ=";
+    hash = "sha256-wRLdxnAD9wZeIwWiX+x/j2gaVv1/iEsy3jYIeb3hWoo=";
   };
   vendorHash = null;
 
