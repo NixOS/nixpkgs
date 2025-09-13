@@ -91,25 +91,34 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = lib.optionalString useLibTensorflow ''
+    runHook preBuild
+
     cd recognize
 
     # Install tfjs dependency
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
     node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
+    rm -r ./build-tmp-napi-v*/
     cd -
 
     # Test tfjs returns exit code 0
     node src/test_libtensorflow.js
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     approot="$(dirname $(dirname $(find -path '*/appinfo/info.xml' | head -n 1)))"
     if [ -d "$approot" ]; then
       mv "$approot/" $out
       chmod -R a-w $out
     fi
+
+    runHook postInstall
   '';
 
   meta = with lib; {
