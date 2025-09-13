@@ -75,6 +75,10 @@
       "-DWITH_OPENSSL=ON"
       # on darwin this defaults to ON but we want to build against unixODBC
       "-DWITH_IODBC=OFF"
+      # Remove on update to 3.2.5 or newer.
+      #
+      # See: <https://github.com/mariadb-corporation/mariadb-connector-odbc/commit/af97ea3e395d1eceed8fbe538f2dbf0027d9228b>
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.12.0"
     ];
 
     buildFlags = if stdenv.hostPlatform.isDarwin then [ "maodbc" ] else null;
