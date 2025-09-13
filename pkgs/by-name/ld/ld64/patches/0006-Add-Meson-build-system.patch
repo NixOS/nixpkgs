@@ -299,7 +299,7 @@ index 0000000..067a69c
 +    install : true,
 +    sources : [
 +        configure_h,
-+        'UnwindDump.cpp',
++        'unwinddump.cpp',
 +    ],
 +)
 +install_man(meson.global_source_root() / 'doc/man/man1/unwinddump.1')
