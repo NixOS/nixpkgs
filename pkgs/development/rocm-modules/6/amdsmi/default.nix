@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "6.4.2";
+  version = "6.4.3";
   src = fetchFromGitHub {
     owner = "rocm";
     repo = "amdsmi";

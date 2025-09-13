@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "6.4.2";
+  version = "6.4.3";
 
   outputs = [
     "out"

@@ -55,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "6.4.2";
+  version = "6.4.3";
 
   outputs = [
     "out"

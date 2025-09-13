@@ -36,7 +36,7 @@
 }@args:
 
 let
-  version = "6.4.2";
+  version = "6.4.3";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "19.0.0-rocm";
   # llvmPackages_base version should be close to rocmLlvmVersion,

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "aqlprofile";
-  version = "6.4.2";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     # TODO: Will move to rocm-systems repo and have proper tags in 7.x
