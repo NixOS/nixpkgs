@@ -12814,6 +12814,7 @@ with pkgs;
     rke2_1_30
     rke2_1_31
     rke2_1_32
+    rke2_1_33
     rke2_stable
     rke2_latest
     ;
