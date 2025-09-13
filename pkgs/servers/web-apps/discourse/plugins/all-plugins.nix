@@ -14,7 +14,6 @@ in
   discourse-github = callPackage ./discourse-github { };
   discourse-ldap-auth = callPackage ./discourse-ldap-auth { };
   discourse-math = callPackage ./discourse-math { };
-  discourse-migratepassword = callPackage ./discourse-migratepassword { };
   discourse-oauth2-basic = callPackage ./discourse-oauth2-basic { };
   discourse-openid-connect = callPackage ./discourse-openid-connect { };
   discourse-prometheus = callPackage ./discourse-prometheus { };
@@ -22,6 +21,5 @@ in
   discourse-saved-searches = callPackage ./discourse-saved-searches { };
   discourse-solved = callPackage ./discourse-solved { };
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert { };
-  discourse-voting = callPackage ./discourse-voting { };
   discourse-yearly-review = callPackage ./discourse-yearly-review { };
 }
