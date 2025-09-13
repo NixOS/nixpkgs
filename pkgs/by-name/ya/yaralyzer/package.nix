@@ -6,20 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yaralyzer";
-  version = "1.0.6";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
     tag = "v${version}";
-    hash = "sha256-zaC33dlwjMNvvXnxqrEJvk3Umh+4hYsbDWoW6n6KmCk=";
+    hash = "sha256-OGMvDPwR4WFINKJpoP242Xhi3mhDzrUypClVGgIIHJI=";
   };
-
-  pythonRelaxDeps = [
-    "python-dotenv"
-    "rich"
-  ];
 
   build-system = with python3.pkgs; [
     poetry-core
