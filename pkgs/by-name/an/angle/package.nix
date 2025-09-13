@@ -20,6 +20,7 @@ let
   llvmPackages = llvmPackages_21;
   llvmMajorVersion = lib.versions.major llvmPackages.llvm.version;
   arch = stdenv.hostPlatform.parsed.cpu.name;
+  shlExt = toString (builtins.splitVersion stdenv.hostPlatform.extensions.sharedLibrary);
   triplet = lib.getAttr arch {
     "x86_64" = "x86_64-unknown-linux-gnu";
     "aarch64" = "aarch64-unknown-linux-gnu";
@@ -95,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     # On darwin during linking:
     # clang++: error: argument unused during compilation: '-stdlib=libc++'
     "treat_warnings_as_errors=false"
+    "angle_egl_extension=\"${shlExt}.1.1.0\""
+    "angle_glesv2_extension=\"${shlExt}.2.1.0\""
   ];
 
   patches = [
@@ -131,9 +134,25 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstallPhase
 
+    symlink() {
+      local -r name=$1
+      local -r baseName=$2
+      local -r major=$3
+
+      ln -vs "$out/lib/$name" "$out/lib/$baseName.${shlExt}.$major"
+      ln -vs "$out/lib/$name" "$out/lib/$baseName.${shlExt}"
+    }
+
     install -v -m755 -D \
       *${stdenv.hostPlatform.extensions.sharedLibrary}* \
       -t "$out/lib"
+
+    symlink "libEGL.${shlExt}.1.1.0" "libEGL" "1"
+    symlink "libEGL_vulkan_secondaries.${shlExt}.1.1.0" "libEGL_vulkan_secondaries" "1"
+    symlink "libGLESv2.${shlExt}.2.1.0" "libGLESv2" "2"
+    symlink "libGLESv2_vulkan_secondaries.${shlExt}.2.1.0" "libGLESv2_vulkan_secondaries" "2"
+    symlink "libGLESv2_with_capture.${shlExt}.2.1.0" "libGLESv2_with_capture" "2"
+
     install -v -m755 -D \
       angle_shader_translator \
       gaussian_distribution_gentables \
