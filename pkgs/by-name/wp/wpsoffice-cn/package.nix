@@ -4,6 +4,7 @@
   dpkg,
   autoPatchelfHook,
   alsa-lib,
+  at-spi2-core,
   libtool,
   libxkbcommon,
   nspr,
@@ -24,22 +25,20 @@
 }:
 
 let
-  pkgVersion = "12.1.2.22571";
-  pkgSuffix = ".AK.preread.sw_480057_amd64.deb";
-  url = "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2023/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}${pkgSuffix}";
-  hash = "sha256-oppJqiUEe/0xEWxgKVMPMFngjQ0e5xaac6HuFVIBh8I=";
-  uri = builtins.replaceStrings [ "https://wps-linux-personal.wpscdn.cn" ] [ "" ] url;
-  securityKey = "7f8faaaa468174dc1c9cd62e5f218a5b";
+  sources = import ./sources.nix;
+  version = sources.version;
+  url = sources.url;
+  hash = sources.hash;
+  uri = sources.uri;
 in
 
 stdenv.mkDerivation {
   pname = "wpsoffice-cn";
-  version = pkgVersion;
+  inherit version;
 
   src =
-    runCommandLocal "wps-office_${pkgVersion}${pkgSuffix}"
+    runCommandLocal "wpsoffice-cn-${version}-src"
       {
-        outputHashMode = "recursive";
         outputHashAlgo = "sha256";
         outputHash = hash;
 
@@ -52,8 +51,10 @@ stdenv.mkDerivation {
         SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
       }
       ''
+        readonly SECURITY_KEY="7f8faaaa468174dc1c9cd62e5f218a5b"
+
         timestamp10=$(date '+%s')
-        md5hash=($(printf '%s' "${securityKey}${uri}$timestamp10" | md5sum))
+        md5hash=($(printf '%s' "$SECURITY_KEY${uri}$timestamp10" | md5sum))
 
         curl --retry 3 --retry-delay 3 "${url}?t=$timestamp10&k=$md5hash" > $out
       '';
@@ -68,6 +69,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
+    at-spi2-core
     libtool
     libxkbcommon
     nspr
@@ -123,6 +125,8 @@ stdenv.mkDerivation {
     patchelf --add-rpath ${libmysqlclient}/lib/mariadb $out/opt/kingsoft/wps-office/office6/libFontWatermark.so
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com";
@@ -135,6 +139,7 @@ stdenv.mkDerivation {
       th0rgal
       wineee
       pokon548
+      chillcicada
     ];
   };
 }
