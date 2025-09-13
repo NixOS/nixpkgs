@@ -291,14 +291,12 @@ def update_plugins():
         {'name': 'discourse-github'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-math'},
-        {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
         {'name': 'discourse-openid-connect'},
         {'name': 'discourse-prometheus'},
         {'name': 'discourse-reactions'},
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
-        {'name': 'discourse-voting', 'repo_name': "discourse-topic-voting"},
         {'name': 'discourse-yearly-review'},
     ]
 

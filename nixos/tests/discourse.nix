@@ -32,7 +32,7 @@ import ./make-test-python.nix (
     nodes.discourse =
       { nodes, ... }:
       {
-        virtualisation.memorySize = 2048;
+        virtualisation.memorySize = 4096;
         virtualisation.cores = 4;
         virtualisation.useNixStoreImage = true;
         virtualisation.writableStore = false;
