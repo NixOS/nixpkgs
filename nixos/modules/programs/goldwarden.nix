@@ -17,13 +17,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.useSshAgent -> !config.programs.ssh.startAgent;
-        message = "Only one ssh-agent can be used at a time.";
-      }
-    ];
-
     environment = {
       etc = lib.mkIf config.programs.chromium.enable {
         "chromium/native-messaging-hosts/com.8bit.bitwarden.json".source =
@@ -32,11 +25,9 @@ in
           "${cfg.package}/etc/chrome/native-messaging-hosts/com.8bit.bitwarden.json";
       };
 
-      extraInit = lib.mkIf cfg.useSshAgent ''
-        if [ -z "$SSH_AUTH_SOCK" -a -n "$HOME" ]; then
-          export SSH_AUTH_SOCK="$HOME/.goldwarden-ssh-agent.sock"
-        fi
-      '';
+      variables.SSH_AUTH_SOCK = builtins.addErrorContext "while setting SSH_AUTH_SOCK, did you enable another agent already?" (
+        lib.optionalString cfg.useSshAgent (lib.mkDefault "$HOME/.goldwarden-ssh-agent.sock")
+      );
 
       systemPackages = [
         # for cli and polkit action
