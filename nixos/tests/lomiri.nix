@@ -777,9 +777,10 @@ in
     # messages normally has no contents
     ({
       name = "display";
-      left = 6;
+      left = 7;
       ocr = [ "Lock" ];
     })
+    # transfer normally has no contents
     ({
       name = "bluetooth";
       left = 5;
