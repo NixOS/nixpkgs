@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   curl,
   openssl,
@@ -27,6 +28,14 @@ stdenv.mkDerivation {
     rev = "v${version}";
     inherit hash;
   };
+
+  patches = [
+    # fix compilation against gcc15
+    (fetchpatch {
+      url = "https://github.com/mariadb-corporation/mariadb-connector-c/commit/e8448137f3365568090d5c0d4051039ddc1cdb6f.patch";
+      hash = "sha256-aDbaaJA8DxGG5RrOa+CHhk4wuzlBy5tWyS+f/zVYU0c=";
+    })
+  ];
 
   outputs = [
     "out"
