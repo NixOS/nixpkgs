@@ -11347,6 +11347,8 @@ self: super: with self; {
 
   pandantic = callPackage ../development/python-modules/pandantic { };
 
+  pandarallel = callPackage ../development/python-modules/pandarallel { };
+
   pandas = callPackage ../development/python-modules/pandas { inherit (pkgs.darwin) adv_cmds; };
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
@@ -13135,6 +13137,8 @@ self: super: with self; {
   pyhaversion = callPackage ../development/python-modules/pyhaversion { };
 
   pyhcl = callPackage ../development/python-modules/pyhcl { };
+
+  pyhealth = callPackage ../development/python-modules/pyhealth { };
 
   pyheck = callPackage ../development/python-modules/pyheck { };
 
