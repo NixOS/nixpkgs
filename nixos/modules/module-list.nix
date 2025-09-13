@@ -351,6 +351,7 @@
   ./programs/wayland/uwsm.nix
   ./programs/wayland/waybar.nix
   ./programs/wayland/wayfire.nix
+  ./programs/wayland/wayvnc.nix
   ./programs/weylus.nix
   ./programs/winbox.nix
   ./programs/wireshark.nix
