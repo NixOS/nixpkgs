@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Map `$NIX_BUILD_TOP` to `/build` in the Thrift compiler output to
+    # avoid reproducibility issues on Darwin.
+    ./scrub-build-directory-from-output.patch
+
     # Remove a line that breaks the build due to the CMake classic of
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
