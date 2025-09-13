@@ -26,6 +26,8 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=8a8fb570d7c5310a03a34b3dd6f9f8bb35ee9f40";
       hash = "sha256-hWS/X0jf/ZFXIR39NvNDVhkR8F81k9UWpsqDhZFxO5o=";
     })
+    ./0002-newlib-Fix-i386-libgloss-support.patch
+
   ]
   ++ lib.optionals nanoizeNewlib [
     # https://bugs.gentoo.org/723756
