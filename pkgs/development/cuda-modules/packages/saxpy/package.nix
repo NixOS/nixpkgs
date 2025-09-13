@@ -43,6 +43,15 @@ backendStdenv.mkDerivation {
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
+    (lib.cmakeBool "CMAKE_SKIP_INSTALL_RPATH" false)
+    (lib.cmakeBool "CMAKE_SKIP_RPATH" false)
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (
+      lib.makeLibraryPath [
+        (getLib libcublas)
+        cuda_cudart
+      ]
+    ))
   ];
 
   passthru.gpuCheck = saxpy.overrideAttrs (_: {
