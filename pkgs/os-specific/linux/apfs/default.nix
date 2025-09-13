@@ -5,6 +5,7 @@
   kernel,
   kernelModuleMakeFlags,
   nixosTests,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.tests.apfs = nixosTests.apfs;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "APFS module for linux";
