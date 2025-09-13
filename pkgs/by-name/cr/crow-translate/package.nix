@@ -5,59 +5,63 @@
   cmake,
   extra-cmake-modules,
   leptonica,
-  libsForQt5,
-  qt5,
-  tesseract4,
-  gst_all_1,
+  qt6,
+  tesseract,
   testers,
+  kdePackages,
+  onnxruntime,
+  withPiper ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crow-translate";
-  version = "3.1.0";
+  version = "4.0.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "crow-translate";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zL+Ucw6rzIoEaBHi/uqKQB0cnR6aAcF8MPOG3hwK3iA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hrxYC6zdh4aG9AkHZcnOE5jihJSo3xrq0hzBRE8NtRw=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
     substituteInPlace data/org.kde.CrowTranslate.desktop.in \
-      --subst-var-by QT_BIN_DIR ${lib.getBin qt5.qttools}/bin
+      --subst-var-by QT_BIN_DIR ${lib.getBin qt6.qttools}/bin
   '';
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.kwayland
+    kdePackages.kwayland
     leptonica
-    tesseract4
-    qt5.qtmultimedia
-    qt5.qtx11extras
+    tesseract
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtscxml
+    qt6.qtspeech
   ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
-
-  preFixup = ''
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  ++ lib.optionals withPiper [
+    onnxruntime
+  ];
+  cmakeFlags = [
+    (lib.cmakeBool "ONNXRuntime_USE_STATIC" false)
+    (lib.cmakeBool "WITH_PIPER_TTS" withPiper)
+  ];
+  # Necessary for KWin D-BUS authorization for taking screenshots, without
+  # which the app falls back to interactive capture, which has some limitations.
+  postInstall = ''
+    substituteInPlace $out/share/applications/org.kde.CrowTranslate.desktop \
+      --replace-fail 'Exec=crow' "Exec=$out/bin/crow"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
