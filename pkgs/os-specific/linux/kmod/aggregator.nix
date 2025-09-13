@@ -3,9 +3,16 @@
   kmod,
   modules,
   buildEnv,
+  callPackage,
+  kernelVersion,
   name ? "kernel-modules",
+  depmodConfig ? null,
 }:
-
+let
+  depmodConfFile = callPackage ./depmod-config-generator.nix {
+    inherit modules kernelVersion depmodConfig;
+  };
+in
 buildEnv {
   inherit name;
 
@@ -30,11 +37,13 @@ buildEnv {
 
     shopt -s extglob
 
+    cp ${depmodConfFile} $out/lib/modules/$kernelVersion/depmod.conf
+
     # Regenerate the depmod map files.  Be sure to pass an explicit
     # kernel version number, otherwise depmod will use `uname -r'.
     if test -w $out/lib/modules/$kernelVersion; then
         rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*)
-        ${kmod}/bin/depmod -b $out -C $out/etc/depmod.d -a $kernelVersion
+        ${kmod}/bin/depmod --config ${depmodConfFile} -b $out -a $kernelVersion
     fi
   '';
 }
