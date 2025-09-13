@@ -38,7 +38,7 @@ def main [] {
 
     xwin --accept-license --cache-dir $dir --manifest $"($PATH | path join manifest.json)" --arch $arch splat --preserve-ms-arch-notation
 
-    let hash = nix hash path ($dir | path join splat)
+    let hash = nix-hash --sri --type sha256 ($dir | path join splat)
 
     {arch: $arch, hash: $hash}
   } | transpose -r -d
