@@ -72,14 +72,6 @@ let
         inherit mainProgram;
       };
     });
-
-  brokenOnDarwin =
-    pkg:
-    pkg.overrideAttrs (attrs: {
-      meta = attrs.meta // {
-        broken = isDarwin;
-      };
-    });
 in
 self: super:
 {
@@ -365,7 +357,7 @@ self: super:
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
     meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
+      broken = isDarwin; # no darwin driver
     };
   });
 
@@ -374,7 +366,7 @@ self: super:
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
     meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
+      broken = isDarwin; # no darwin driver
     };
   });
 
@@ -419,9 +411,6 @@ self: super:
       ];
     };
   });
-
-  xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
-  xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
   # Obsolete drivers that don't compile anymore.
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
@@ -500,24 +489,6 @@ self: super:
     meta = attrs.meta // {
       broken = true;
     };
-  });
-
-  xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
-  });
-
-  xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-  });
-
-  xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
@@ -739,6 +710,10 @@ self: super:
         }
       else
         {
+          outputs = [
+            "out"
+            "dev"
+          ];
           nativeBuildInputs = attrs.nativeBuildInputs ++ [
             autoreconfHook
             bootstrap_cmds
@@ -814,8 +789,14 @@ self: super:
             ln -s Xquartz $out/bin/X
 
             cp ${darwinOtherX}/share/man -rT $out/share/man
+
+            mkdir -p $dev/{lib,include,share}
+            cp ${darwinOtherX.dev}/share/aclocal -rT $dev/share/aclocal
+            cp ${darwinOtherX.dev}/lib/pkgconfig -rT $dev/lib/pkgconfig
+            cp ${darwinOtherX.dev}/include -rT $dev/include
           '';
           passthru = attrs.passthru // {
+            darwinXorg = darwinOtherX;
             inherit version;
           };
         }
