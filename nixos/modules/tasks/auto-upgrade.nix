@@ -184,6 +184,15 @@ in
         '';
       };
 
+      runGarbageCollection = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to automatically run `nix-gc.service` after a successful
+          system upgrade.
+        '';
+      };
+
     };
 
   };
@@ -218,6 +227,7 @@ in
 
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
+      unitConfig.OnSuccess = lib.optional cfg.runGarbageCollection "nix-gc.service";
 
       serviceConfig.Type = "oneshot";
 
