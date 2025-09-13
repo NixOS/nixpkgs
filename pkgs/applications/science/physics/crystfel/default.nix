@@ -1,39 +1,39 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchzip,
-  cmake,
-  lz4,
-  gfortran,
-  bzip2,
-  hdf5,
-  gsl,
-  unzip,
-  makeWrapper,
-  zlib,
-  meson,
-  ninja,
-  pandoc,
-  eigen,
-  pkg-config,
-  wrapGAppsHook3,
-  flex,
-  bison,
-  doxygen,
-  opencl-headers,
-  ncurses,
-  msgpack,
-  fftw,
-  zeromq,
-  ocl-icd,
-  gtk3,
-  gdk-pixbuf,
-  argp-standalone,
-  withGui ? true,
-  withBitshuffle ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, fetchzip
+, cmake
+, lz4
+, gfortran
+, bzip2
+, hdf5
+, gsl
+, unzip
+, makeWrapper
+, zlib
+, meson
+, ninja
+, pandoc
+, eigen
+, pkg-config
+, wrapGAppsHook3
+, flex
+, bison
+, doxygen
+, opencl-headers
+, ncurses
+, msgpack
+, fftw
+, zeromq
+, ocl-icd
+, gtk3
+, gdk-pixbuf
+, argp-standalone
+, withGui ? true
+, withBitshuffle ? true
+,
 }:
 
 let
@@ -82,12 +82,13 @@ let
       version = "7.4.0";
       src =
         if stdenv.hostPlatform.isDarwin then
-          fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+          fetchurl
+            {
+              url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
               builtins.replaceStrings [ "." ] [ "" ] version
             }/pre-built/mosflm-osx-64-noX11.zip";
-            sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
-          }
+              sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
+            }
         else
           fetchurl {
             url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
@@ -215,10 +216,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.1";
+  version = "0.12.0";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
+    sha256 = "sha256-H/caXhsIdgsiat3UTi1QMF9J22dtyEB6YEIn9f8wWB4=";
   };
   nativeBuildInputs = [
     meson
