@@ -47,9 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Aitum/obs-vertical-canvas";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }
