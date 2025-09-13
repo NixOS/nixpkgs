@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  attrs,
   buildPythonPackage,
+  colorama,
   fetchPypi,
   glibcLocales,
   gnureadline,
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    attrs
+    colorama
     pyperclip
     rich-argparse
     wcwidth
