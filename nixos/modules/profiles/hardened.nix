@@ -110,6 +110,10 @@ in
     # Disable ftrace debugging
     boot.kernel.sysctl."kernel.ftrace_enabled" = mkDefault false;
 
+    # Disable io_uring, a large source of security vulnerabilities
+    # https://security.googleblog.com/2023/06/learnings-from-kctf-vrps-42-linux.html
+    boot.kernel.sysctl."kernel.io_uring_disabled" = mkDefault 2;
+
     # Enable strict reverse path filtering (that is, do not attempt to route
     # packets that "obviously" do not belong to the iface's network; dropped
     # packets are logged as martians).
