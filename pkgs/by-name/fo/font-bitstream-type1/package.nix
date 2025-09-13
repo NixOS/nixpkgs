@@ -22,8 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     fontforge
   ];
 
-  configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-
   postBuild = ''
     # convert Postscript (Type 1) font to otf
     for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
@@ -34,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # install the otf fonts
-    fontDir="$out/lib/X11/fonts/misc"
+    fontDir="$out/share/fonts/X11/otf"
     install -Dm444 -t "$fontDir" *.otf
     mkfontscale "$fontDir"
   '';

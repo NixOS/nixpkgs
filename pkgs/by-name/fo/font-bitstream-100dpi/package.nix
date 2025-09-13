@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ font-util ];
 
-  configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+  configureFlags = [ "--with-fontrootdir=$(out)/share/fonts/X11" ];
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
