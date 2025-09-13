@@ -289,6 +289,7 @@
   ./programs/partition-manager.nix
   ./programs/pay-respects.nix
   ./programs/plotinus.nix
+  ./programs/pmount.nix
   ./programs/pqos-wrapper.nix
   ./programs/projecteur.nix
   ./programs/proxychains.nix
