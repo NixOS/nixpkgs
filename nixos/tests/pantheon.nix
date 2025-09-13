@@ -54,7 +54,7 @@
           machine.wait_for_x()
           machine.wait_for_file("${user.home}/.Xauthority")
           machine.succeed("xauth merge ${user.home}/.Xauthority")
-          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
+          machine.wait_until_succeeds('journalctl -t gnome-session-service --grep "Entering running state"')
 
       with subtest("Check that logging in has given the user ownership of devices"):
           machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
