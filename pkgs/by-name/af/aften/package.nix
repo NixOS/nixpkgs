@@ -21,7 +21,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DSHARED=ON" ];
+  cmakeFlags = [
+    "-DSHARED=ON"
+
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ];
 
   meta = {
     description = "Audio encoder which generates compressed audio streams based on ATSC A/52 specification";
