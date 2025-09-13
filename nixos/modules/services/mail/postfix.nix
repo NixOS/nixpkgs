@@ -809,7 +809,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Entries for the transport map, cf. man-page {manpage}`transport(8)`.
+          Entries for the transport map, cf. man-page {manpage}`transport(5)`.
         '';
       };
 
