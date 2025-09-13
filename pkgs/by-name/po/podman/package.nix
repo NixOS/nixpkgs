@@ -34,6 +34,7 @@
   vfkit,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  man-db,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -100,6 +101,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     go-md2man
+    man-db
     installShellFiles
     makeWrapper
     python3
