@@ -262,6 +262,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    (cd $out/bin && ln -s microsoft-edge microsoft-edge-stable)
+  '';
+
   passthru.updateScript = ./update.py;
 
   meta = {
