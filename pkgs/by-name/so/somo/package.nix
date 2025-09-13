@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "somo";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "theopfr";
     repo = "somo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HUTaBSy3FemAQH1aKZYTJnUWiq0bU/H6c5Gz3yamPiA=";
+    hash = "sha256-QTW+hsoj8Wrv3BbFCB2aibR27Wu1MA/1gWzAXtPKWsM=";
   };
 
-  cargoHash = "sha256-e3NrEfbWz6h9q4TJnn8jnRmMJbeaEc4Yo3hFlaRLzzQ=";
+  cargoHash = "sha256-xlAdEo11UV1Y49D1LjxH5Oykf/RUoe1w6ZcQpGhfqkk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Avoids "couldn't find any valid shared libraries matching: ['libclang.dylib']" error on darwin in sandbox mode.
     rustPlatform.bindgenHook
   ];
+
+  # It depends on system files likely /etc/services and don't use iana-etc to respect user customized files
+  # See https://github.com/NixOS/nixpkgs/pull/439590#discussion_r2325080667 for detail
+  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd somo \
