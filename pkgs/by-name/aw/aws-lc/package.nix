@@ -46,19 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      # Needed with GCC 12 but breaks on darwin (with clang)
-      "-Wno-error=stringop-overflow"
-    ]
-  );
-
-  postFixup = ''
-    for f in $out/lib/crypto/cmake/*/crypto-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   __darwinAllowLocalNetworking = true;
 
