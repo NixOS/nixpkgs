@@ -52,6 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-debug.patch
   ];
 
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()" \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
+
   # Dirty approach to add patches after cargoSetupPostUnpackHook
   # We should eventually use a cargo vendor patch hook instead
   preConfigure = ''
@@ -103,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript = nix-update-script { };
