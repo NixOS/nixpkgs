@@ -8,18 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tuist";
-  version = "4.53.4";
+  version = "4.65.6";
 
   src = fetchurl {
     url = "https://github.com/tuist/tuist/releases/download/${finalAttrs.version}/tuist.zip";
-    hash = "sha256-4YQY94/uWh/H4cCzhdQ3KxIh19D8mmUCCDKMF8ZwA4E=";
+    hash = "sha256-IB6rvbGYvAYGV1Mtf0d6OkUhyCTuy2eaT4k7i2qtEPk=";
   };
 
   dontUnpack = true;
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  dontFixup = true;
 
   nativeBuildInputs = [ unzip ];
 
@@ -42,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Command line tool that helps you generate, maintain and interact with Xcode projects";
     homepage = "https://tuist.dev";
-    changelog = "https://github.com/tuist/tuist/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/tuist/tuist/blob/${finalAttrs.version}/cli/CHANGELOG.md";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = [ lib.maintainers.DimitarNestorov ];
