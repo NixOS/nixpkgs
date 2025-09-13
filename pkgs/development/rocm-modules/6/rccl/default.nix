@@ -39,7 +39,7 @@ in
 # infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
-  version = "6.4.2";
+  version = "6.4.3";
 
   outputs = [
     "out"

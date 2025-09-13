@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-register";
-  version = "6.4.2";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
