@@ -7,17 +7,14 @@
   nixosTests,
 }:
 
-let
-  tag = "0.3.14";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apfs";
-  version = "${tag}-${kernel.version}";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "v${tag}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bv3WGcIKx5RVj+cQg0U5U1zGPRzjxMlCZmol9QvAmc4=";
   };
 
@@ -48,4 +45,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ Luflosi ];
   };
-}
+})
