@@ -13,7 +13,7 @@ in
         simple = {
           services.homebox = {
             enable = true;
-            settings.HBOX_WEB_PORT = port;
+            environment.HBOX_WEB_PORT = port;
           };
         };
 
