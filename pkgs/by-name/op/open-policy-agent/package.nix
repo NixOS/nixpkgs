@@ -91,7 +91,7 @@ buildGoModule (finalAttrs: {
       rm v1/server/server_bench_test.go
     '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd opa \
       --bash <($out/bin/opa completion bash) \
       --fish <($out/bin/opa completion fish) \

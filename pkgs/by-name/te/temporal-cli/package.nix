@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
     export HOME="$(mktemp -d)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd temporal \
       --bash <($out/bin/temporal completion bash) \
       --fish <($out/bin/temporal completion fish) \

@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "srgn";
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash zsh fish; do
       installShellCompletion --cmd srgn "--$shell" <("$out/bin/srgn" --completions "$shell")
     done
