@@ -1,0 +1,65 @@
+From c4d7c6711f5ce3d09e6f629ba49e15dfc3390948 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Tue, 29 Jul 2025 18:04:17 +0100
+Subject: [PATCH] test: use relative paths for pipes and Unix sockets
+
+This fixes the test suite in environments where `/tmp` is not writable
+or does not allow the use of Unix sockets, and matches the use of
+relative paths elsewhere in the tests.
+---
+ docs/code/pipe-echo-server/main.c |  2 +-
+ test/task.h                       | 10 +++-------
+ test/test-poll.c                  |  2 +-
+ 3 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/docs/code/pipe-echo-server/main.c b/docs/code/pipe-echo-server/main.c
+index 4f28fd03..6a233888 100644
+--- a/docs/code/pipe-echo-server/main.c
++++ b/docs/code/pipe-echo-server/main.c
+@@ -6,7 +6,7 @@
+ #ifdef _WIN32
+ #define PIPENAME "\\\\?\\pipe\\echo.sock"
+ #else
+-#define PIPENAME "/tmp/echo.sock"
++#define PIPENAME "echo.sock"
+ #endif
+ 
+ uv_loop_t *loop;
+diff --git a/test/task.h b/test/task.h
+index 2600da5e..e16af147 100644
+--- a/test/task.h
++++ b/test/task.h
+@@ -53,14 +53,10 @@
+ # define TEST_PIPENAME "\\\\.\\pipe\\uv-test"
+ # define TEST_PIPENAME_2 "\\\\.\\pipe\\uv-test2"
+ # define TEST_PIPENAME_3 "\\\\.\\pipe\\uv-test3"
+-#elif __ANDROID__
+-# define TEST_PIPENAME "/data/local/tmp/uv-test-sock"
+-# define TEST_PIPENAME_2 "/data/local/tmp/uv-test-sock2"
+-# define TEST_PIPENAME_3 "/data/local/tmp/uv-test-sock3"
+ #else
+-# define TEST_PIPENAME "/tmp/uv-test-sock"
+-# define TEST_PIPENAME_2 "/tmp/uv-test-sock2"
+-# define TEST_PIPENAME_3 "/tmp/uv-test-sock3"
++# define TEST_PIPENAME "uv-test-sock"
++# define TEST_PIPENAME_2 "uv-test-sock2"
++# define TEST_PIPENAME_3 "uv-test-sock3"
+ #endif
+ 
+ #ifdef _WIN32
+diff --git a/test/test-poll.c b/test/test-poll.c
+index 11974424..e291e737 100644
+--- a/test/test-poll.c
++++ b/test/test-poll.c
+@@ -633,7 +633,7 @@ TEST_IMPL(poll_unidirectional) {
+  * In addition to regular files, we also disallow FIFOs on Darwin.
+  */
+ #ifdef __APPLE__
+-#define TEST_POLL_FIFO_PATH "/tmp/uv-test-poll-fifo"
++#define TEST_POLL_FIFO_PATH "uv-test-poll-fifo"
+ #endif
+ TEST_IMPL(poll_bad_fdtype) {
+ #if !defined(__sun) && \
+-- 
+2.50.1
+
