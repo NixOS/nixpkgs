@@ -272,7 +272,19 @@ builtins.intersectAttrs super {
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (
     enableSeparateBinOutput super.ormolu
   );
-  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] super.hnix;
+
+  hnix = lib.pipe super.hnix [
+    (self.generateOptparseApplicativeCompletions [ "hnix" ])
+    # For nix-instantiate(1)
+    (addTestToolDepends [ pkgs.nix ])
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "-p"
+        # Need to connect to the Nix daemon (?)
+        "!(/eval-okay-context-introspection/ || /eval-okay-context/ || /eval-okay-eq-derivations/ || /eval-okay-path/)"
+      ];
+    }))
+  ];
 
   # Provides a library and an executable (pretty-derivation)
   nix-derivation = enableSeparateBinOutput super.nix-derivation;

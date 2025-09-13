@@ -901,7 +901,7 @@ with haskellLib;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2024-01-15: too strict bound on free < 5.2
-  hnix = doJailbreak (dontCheck super.hnix);
+  hnix = doJailbreak super.hnix;
   # 2025-09-13: too strict bound on algebraic-graphs
   hnix-store-core = warnAfterVersion "0.6.1.0" (doJailbreak super.hnix-store-core);
 
