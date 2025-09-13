@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "remotebox";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchurl {
     url = "http://remotebox.knobgoblin.org.uk/downloads/RemoteBox-${version}.tar.bz2";
-    sha256 = "sha256-e9qDNKdfLOOlml/8BHuSBIGNbh2eO5H4OmBuANtPXvs=";
+    sha256 = "sha256-ZrVd6xgH+Je4TyqR0rJ3L5jFnaF/8DjIAGJMvzOTd38=";
   };
 
   buildInputs = with perlPackages; [
