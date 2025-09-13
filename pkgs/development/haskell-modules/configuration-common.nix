@@ -750,6 +750,7 @@ with haskellLib;
       (
         super.cachix.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
+          hnix-store-core = self.hnix-store-core_0_8_0_0;
         }
       )
   );
@@ -901,6 +902,24 @@ with haskellLib;
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2024-01-15: too strict bound on free < 5.2
   hnix = doJailbreak (dontCheck super.hnix);
+  # 2025-09-13: too strict bound on algebraic-graphs
+  hnix-store-core = warnAfterVersion "0.6.1.0" (doJailbreak super.hnix-store-core);
+
+  # hnix doesn't support hnix-store-core >= 0.8: https://github.com/haskell-nix/hnix/pull/1112
+  hnix-store-core_0_8_0_0 = doDistribute super.hnix-store-core_0_8_0_0;
+  hnix-store-db = super.hnix-store-db.override { hnix-store-core = self.hnix-store-core_0_8_0_0; };
+  hnix-store-json = super.hnix-store-json.override {
+    hnix-store-core = self.hnix-store-core_0_8_0_0;
+  };
+  hnix-store-readonly = super.hnix-store-readonly.override {
+    hnix-store-core = self.hnix-store-core_0_8_0_0;
+  };
+  hnix-store-remote_0_7_0_0 = doDistribute (
+    super.hnix-store-remote_0_7_0_0.override { hnix-store-core = self.hnix-store-core_0_8_0_0; }
+  );
+  hnix-store-tests = super.hnix-store-tests.override {
+    hnix-store-core = self.hnix-store-core_0_8_0_0;
+  };
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
