@@ -284,7 +284,6 @@ with pkgs;
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
     tbb = tbb_2021;
-    cereal = cereal_1_3_2;
     opencv = opencv.override { enableGtk3 = true; };
   };
 
@@ -327,8 +326,6 @@ with pkgs;
   celeste-classic-pm = pkgs.celeste-classic.override {
     practiceMod = true;
   };
-
-  cereal = cereal_1_3_0;
 
   chef-cli = callPackage ../tools/misc/chef-cli { };
 

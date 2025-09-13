@@ -7,7 +7,7 @@
   glfw,
   glm,
   spdlog,
-  cereal_1_3_2,
+  cereal,
   python3Packages,
 }:
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # non-numerical
     spdlog
-    cereal_1_3_2
+    cereal
     glfw
   ];
 

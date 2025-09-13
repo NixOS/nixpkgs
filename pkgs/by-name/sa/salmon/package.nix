@@ -3,7 +3,7 @@
   stdenv,
   boost,
   bzip2,
-  cereal_1_3_2,
+  cereal,
   cmake,
   curl,
   fetchFromGitHub,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       enabledStatic = true;
     })
     bzip2
-    cereal_1_3_2
+    cereal
     curl
     icu
     jemalloc
