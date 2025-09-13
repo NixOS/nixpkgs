@@ -1,0 +1,63 @@
+diff --git a/src/Microsoft.VisualStudio.Services.Agent/Constants.cs b/src/Microsoft.VisualStudio.Services.Agent/Constants.cs
+index baf813ec..1075e20e 100644
+--- a/src/Microsoft.VisualStudio.Services.Agent/Constants.cs
++++ b/src/Microsoft.VisualStudio.Services.Agent/Constants.cs
+@@ -10,6 +10,7 @@ namespace Microsoft.VisualStudio.Services.Agent
+     public enum WellKnownDirectory
+     {
+         Bin,
++        Diag,
+         Externals,
+         LegacyPSHost,
+         Root,
+@@ -267,6 +268,7 @@ namespace Microsoft.VisualStudio.Services.Agent
+             {
+                 public static readonly string ArtifactsDirectory = "a";
+                 public static readonly string BinariesDirectory = "b";
++                public static readonly string DiagDirectory = "_diag";
+                 public static readonly string GarbageCollectionDirectory = "GC";
+                 public static readonly string LegacyArtifactsDirectory = "artifacts";
+                 public static readonly string LegacyStagingDirectory = "staging";
+diff --git a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
+index 2753f3a8..d67187a6 100644
+--- a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
++++ b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
+@@ -123,8 +123,10 @@ namespace Microsoft.VisualStudio.Services.Agent
+                     logRetentionDays = _defaultLogRetentionDays;
+                 }
+ 
+-                // this should give us _diag folder under agent root directory as default value for diagLogDirctory
+-                string diagLogPath = GetDiagDirectory(_hostType);
++                // this should give us _diag folder under agent root directory as default value for diagLogDirectory
++                #pragma warning disable CA2214
++                string diagLogPath = GetDirectory(WellKnownDirectory.Diag);
++                #pragma warning restore CA2214
+                 _traceManager = new TraceManager(new HostTraceListener(diagLogPath, hostType.ToString(), logPageSize, logRetentionDays), this.SecretMasker);
+ 
+             }
+@@ -221,6 +223,12 @@ namespace Microsoft.VisualStudio.Services.Agent
+                         Constants.Path.ExternalsDirectory);
+                     break;
+ 
++                case WellKnownDirectory.Diag:
++                    path = Path.Combine(
++                       GetDirectory(WellKnownDirectory.Root),
++                        Constants.Path.DiagDirectory);
++                    break;
++
+                 case WellKnownDirectory.LegacyPSHost:
+                     path = Path.Combine(
+                         GetDirectory(WellKnownDirectory.Externals),
+@@ -315,7 +323,11 @@ namespace Microsoft.VisualStudio.Services.Agent
+                     throw new NotSupportedException($"Unexpected well known directory: '{directory}'");
+             }
+ 
+-            _trace.Info($"Well known directory '{directory}': '{path}'");
++            // only log if we’ve already set up _trace
++            if (_trace != null)
++            {
++                _trace.Info($"Well known directory '{directory}': '{path}'");
++            }
+             return path;
+         }
+ 
