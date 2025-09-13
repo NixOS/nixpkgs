@@ -36,7 +36,7 @@ let
     sio.seek(0)
     minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
   '';
-  rootCredentialsFile = "/etc/nixos/minio-root-credentials";
+  environmentFile = "/etc/nixos/minio-root-credentials";
   credsPartial = pkgs.writeText "minio-credentials-partial" ''
     MINIO_ROOT_USER=${accessKey}
   '';
@@ -60,7 +60,7 @@ in
       {
         services.minio = {
           enable = true;
-          inherit rootCredentialsFile;
+          inherit environmentFile;
         };
         environment.systemPackages = [ pkgs.minio-client ];
 
@@ -77,7 +77,7 @@ in
     start_all()
     # simulate manually editing root credentials file
     machine.wait_for_unit("multi-user.target")
-    machine.copy_from_host("${credsFull}", "${rootCredentialsFile}")
+    machine.copy_from_host("${credsFull}", "${environmentFile}")
 
     # Test non-TLS server
     machine.wait_for_unit("minio.service")
