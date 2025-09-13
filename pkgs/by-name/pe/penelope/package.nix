@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "penelope";
-  version = "0.12.4-unstable-2024-10-21";
+  version = "0.14.8";
   pyproject = true;
 
   src = fetchFromGitHub {
