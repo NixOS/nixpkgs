@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   legacy-cgi,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pydal";
   version = "20250629.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -53,10 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ wamserma ];
+    changelog = "https://github.com/web2py/pydal/commits/v${version}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }
