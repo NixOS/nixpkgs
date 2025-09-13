@@ -1,7 +1,8 @@
 {
   lib,
-  branca,
   buildPythonPackage,
+  branca,
+  chromedriver,
   fetchFromGitHub,
   geodatasets,
   geopandas,
@@ -10,6 +11,7 @@
   numpy,
   pandas,
   pillow,
+  pixelmatch,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -52,16 +54,17 @@ buildPythonPackage rec {
     nbconvert
     pandas
     pillow
+    pixelmatch
     pytestCheckHook
+    selenium
+    # chromedriver
   ];
 
   disabledTests = [
     # Tests require internet connection
-    "test__repr_png_is_bytes"
-    "test_geojson"
-    "test_heat_map_with_weights"
     "test_json_request"
-    "test_notebook"
+    # no selenium driver
+    "test__repr_png_is_bytes"
     "test_valid_png_size"
     "test_valid_png"
     # pooch tries to write somewhere it can, and geodatasets does not give us an env var to customize this.
@@ -69,7 +72,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Import issue with selenium.webdriver.common.fedcm
+    # Selenium cannot find chrome driver, even with chromedriver package
+    "tests/snapshots/test_snapshots.py"
     "tests/selenium"
   ];
 
