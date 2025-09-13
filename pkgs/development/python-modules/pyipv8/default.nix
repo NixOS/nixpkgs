@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyipv8";
-  version = "3.0.2197-unstable-2025-07-29";
+  version = "3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
