@@ -34,9 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patchPhase = ''
-    runHook prePatch
-
+  postPatch = ''
     # The .git folder had to be deleted. Read hash from file instead of using the git command.
     substituteInPlace build.gradle \
       --replace-fail "commandLine 'git', 'rev-parse', '--short', 'HEAD'" 'commandLine "cat", "$projectDir/common/src/main/resources/HEAD.txt"'
@@ -44,8 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Use gradle repo to download dependencies
     substituteInPlace build.gradle \
       --replace-fail 'mavenCentral()' "gradlePluginPortal()"
-
-    runHook postPatch
   '';
 
   preConfigure = ''
@@ -122,5 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryBytecode # mitm cache
     ];
+    # ./configure doesn't understand --build / --host
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
