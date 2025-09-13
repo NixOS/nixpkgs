@@ -8,6 +8,7 @@
 with lib;
 let
   cfg = config.services.prosody;
+  hasMucNotificationsModule = lib.elem "muc_notifications" cfg.package.communityModules;
 
   sslOpts = _: {
     options = {
@@ -541,7 +542,9 @@ let
         ${lib.concatStringsSep "\n  " (
           lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
         )}
-        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
+        ${lib.concatStringsSep "\n" (
+          map (x: "${toLua x};") (lib.filter (n: n != "muc_notifications") cfg.package.communityModules)
+        )}
         ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
@@ -572,7 +575,7 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''} }
+            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''}${optionalString hasMucNotificationsModule ''"muc_notifications",''} }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
