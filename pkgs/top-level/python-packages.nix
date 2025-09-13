@@ -4841,6 +4841,8 @@ self: super: with self; {
 
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
+  euporie = callPackage ../development/python-modules/euporie { };
+
   eval-type-backport = callPackage ../development/python-modules/eval-type-backport { };
 
   evaluate = callPackage ../development/python-modules/evaluate { };
@@ -5392,6 +5394,8 @@ self: super: with self; {
   flatbuffers = callPackage ../development/python-modules/flatbuffers { inherit (pkgs) flatbuffers; };
 
   flatdict = callPackage ../development/python-modules/flatdict { };
+
+  flatlatex = callPackage ../development/python-modules/flatlatex { };
 
   flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
@@ -16830,6 +16834,8 @@ self: super: with self; {
 
   sixel = callPackage ../development/python-modules/sixel { };
 
+  sixelcrop = callPackage ../development/python-modules/sixelcrop { };
+
   sjcl = callPackage ../development/python-modules/sjcl { };
 
   skein = callPackage ../development/python-modules/skein { };
@@ -18352,6 +18358,8 @@ self: super: with self; {
   timetagger = callPackage ../development/python-modules/timetagger { };
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
+
+  timg = callPackage ../development/python-modules/timg { };
 
   timing-asgi = callPackage ../development/python-modules/timing-asgi { };
 
