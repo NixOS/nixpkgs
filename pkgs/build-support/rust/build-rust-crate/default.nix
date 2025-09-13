@@ -196,10 +196,13 @@ lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
       extraRustcOptsForBuildRs,
-      # Whether to enable building tests.
-      # Use true to enable.
+      # if True, executables running tests are built instead of the actual
+      # binaries/libararies.
       # Default: false
       buildTests,
+      # if buildTests is true, test executables may need to reference the
+      # actual executables to be tested
+      testedCrate,
       # Passed to stdenv.mkDerivation.
       preUnpack,
       # Passed to stdenv.mkDerivation.
@@ -249,6 +252,7 @@ lib.makeOverridable
         "buildTests"
         "codegenUnits"
         "links"
+        "testedCrate"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -291,6 +295,7 @@ lib.makeOverridable
           preInstall
           postInstall
           buildTests
+          testedCrate
           ;
 
         src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
@@ -432,6 +437,7 @@ lib.makeOverridable
             colors
             extraRustcOpts
             buildTests
+            testedCrate
             codegenUnits
             ;
         };
@@ -491,4 +497,5 @@ lib.makeOverridable
     buildDependencies = crate_.buildDependencies or [ ];
     crateRenames = crate_.crateRenames or { };
     buildTests = crate_.buildTests or false;
+    testedCrate = crate_.testedCrate or null;
   }
