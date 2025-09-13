@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bzip2,
   nix,
+  perl,
   makeWrapper,
   nixosTests,
 }:
@@ -11,6 +12,7 @@
 let
   rev = "a7e046db4b29d422fc9aac60ea6b82b31399951a";
   sha256 = "sha256-6ZQ0OLijq6UtOtUqRdFC19+helhU0Av6MvGCZf6XmcQ=";
+  inherit (nix.libs) nix-perl-bindings;
 in
 
 stdenv.mkDerivation {
@@ -31,11 +33,11 @@ stdenv.mkDerivation {
     install -Dm0755 nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
 
     makeWrapper ${
-      nix.perl-bindings.perl.withPackages (p: [
+      perl.withPackages (p: [
         p.DBDSQLite
         p.Plack
         p.Starman
-        nix.perl-bindings
+        nix-perl-bindings
       ])
     }/bin/starman $out/bin/nix-serve \
       --prefix PATH : "${
