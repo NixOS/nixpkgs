@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/crystal-lang-tools/tree-sitter-crystal",
-  "rev": "cf69a6504a82fecc55ee1680983744a94a9edfaa",
-  "date": "2025-03-28T11:48:18-04:00",
-  "path": "/nix/store/c20hqk12him4k0675y3l5f53lfnaa37d-tree-sitter-crystal",
-  "sha256": "0jzmkjfhrz1f5pw274dj0f7avazsyhx0h6vbg4p5xxzkqch19wah",
-  "hash": "sha256-UPEUIMPz914ueWsbCDr0+qutjgOykSP4LS78DJ2c9Us=",
+  "rev": "76afc1f53518a2b68b51a5abcde01d268a9cb47c",
+  "date": "2025-06-18T09:50:29-03:00",
+  "path": "/nix/store/2m7zwdza4llzzr3g5wqw1994jzx3kf2z-tree-sitter-crystal",
+  "sha256": "04gv7n0dpsk5sk9jrbf46a7h4ldglcksz5dpiwlb5dfd9v9v564d",
+  "hash": "sha256-jZiy007NtbIoj7eVryejr1ECjzLErSzT1GXq24A9+xE=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }
