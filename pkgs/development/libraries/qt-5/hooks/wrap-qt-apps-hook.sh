@@ -19,6 +19,21 @@ qtUnseenHostPath() {
     return 0
 }
 
+qtFixupPrefixSeen=()
+
+qtUnseenFixupPrefix() {
+    for prefix in "${qtFixupPrefixSeen[@]}"
+    do
+        if [ "${prefix:?}" == "$1" ]
+        then
+            return 1
+        fi
+    done
+
+    qtFixupPrefixSeen+=("$1")
+    return 0
+}
+
 qtHostPathHook() {
     qtUnseenHostPath "$1" || return 0
 
@@ -73,8 +88,7 @@ wrapQtAppsHook() {
     [ -z "${dontWrapQtApps-}" ] || return 0
 
     # guard against running multiple times (e.g. due to propagation)
-    [ -z "$wrapQtAppsHookHasRun" ] || return 0
-    wrapQtAppsHookHasRun=1
+    qtUnseenFixupPrefix "$prefix" || return 0
 
     local targetDirs=( "$prefix/bin" "$prefix/sbin" "$prefix/libexec" "$prefix/Applications" "$prefix/"*.app )
     echo "wrapping Qt applications in ${targetDirs[@]}"
