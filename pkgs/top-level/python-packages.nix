@@ -11666,6 +11666,8 @@ self: super: with self; {
 
   phe = callPackage ../development/python-modules/phe { };
 
+  phidget22 = callPackage ../development/python-modules/phidget22 { };
+
   phik = callPackage ../development/python-modules/phik { };
 
   philipstv = callPackage ../development/python-modules/philipstv { };
@@ -15066,6 +15068,8 @@ self: super: with self; {
   python-speech-features = callPackage ../development/python-modules/python-speech-features { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
+
+  python-statemachine = callPackage ../development/python-modules/python-statemachine { };
 
   python-status = callPackage ../development/python-modules/python-status { };
 
@@ -20362,6 +20366,8 @@ self: super: with self; {
   yeelightsunflower = callPackage ../development/python-modules/yeelightsunflower { };
 
   yfinance = callPackage ../development/python-modules/yfinance { };
+
+  yoctopuce = callPackage ../development/python-modules/yoctopuce { };
 
   yoda = toPythonModule (pkgs.yoda.override { python3 = python; });
 
