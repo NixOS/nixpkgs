@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "python-mapnik";
-  version = "3.0.16-unstable-2024-02-22";
+  version = "3.0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
