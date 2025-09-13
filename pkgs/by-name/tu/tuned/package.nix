@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuned";
-  version = "2.25.1";
+  version = "2.26.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redhat-performance";
     repo = "tuned";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MMyYMgdvoAIeLCqUZMoQYsYYbgkXku47nZWq2aowPFg=";
+    hash = "sha256-tqr8o4rRhN75hXCdsIhFedfWvicmlIFuZjBNKLQgimQ=";
   };
 
   patches = [
@@ -48,16 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
 
     substituteInPlace tuned-gui.py tuned.service tuned/ppd/tuned-ppd.service \
-      --replace-warn "/usr/sbin/" "$out/bin/"
-
-    substituteInPlace tuned-gui.py \
-      --replace-warn "/usr/share/" "$out/share/"
+      --replace-fail "/usr/sbin/" "$out/bin/"
 
     substituteInPlace tuned-gui.desktop \
-      --replace-warn "/usr/sbin/tuned-gui" "tuned-gui"
+      --replace-fail "/usr/sbin/tuned-gui" "tuned-gui"
 
     substituteInPlace experiments/powertop2tuned.py \
-      --replace-warn "/usr/sbin/powertop" "${lib.getExe powertop}"
+      --replace-fail "/usr/sbin/powertop" "${lib.getExe powertop}"
+
+    substituteInPlace \
+      tuned/{gtk/tuned_dialog.py,consts.py} tuned-gui.py tuned-adm.bash \
+      $(find profiles/ -type f -executable -name '*.sh') \
+      --replace-warn "/usr/share" "$out/share" \
+      --replace-warn "/usr/lib" "$out/lib"
   '';
 
   strictDeps = true;
@@ -82,15 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
+    "DESTDIR=${placeholder "out"}"
     "PREFIX="
 
-    "DATADIR=/share"
-    "DESTDIR=${placeholder "out"}"
-    "KERNELINSTALLHOOKDIR=/lib/kernel/install.d"
     "PYTHON=${lib.getExe python3Packages.python}"
     "PYTHON_SITELIB=/${python3Packages.python.sitePackages}"
     "TMPFILESDIR=/lib/tmpfiles.d"
-    "TUNED_PROFILESDIR=/lib/tuned/profile"
     "UNITDIR=/lib/systemd/system"
   ];
 
