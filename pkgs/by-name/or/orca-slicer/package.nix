@@ -34,7 +34,7 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021,
+  tbb_2022,
   webkitgtk_4_1,
   wxGTK31,
   xorg,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2021
+    tbb_2022
     webkitgtk_4_1
     wxGTK'
     xorg.libX11
