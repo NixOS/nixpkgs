@@ -918,7 +918,7 @@ in
         # Security
         NoNewPrivileges = !useSendmail;
         # Sandboxing
-        ProtectSystem = "strict";
+        ProtectSystem = "full"; # NOTE: When this is strict the servce fails to start
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
