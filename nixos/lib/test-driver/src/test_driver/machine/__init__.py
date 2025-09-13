@@ -338,7 +338,7 @@ class Machine:
                 raise RequestedAssertionFailed(f'unit "{unit}" reached state "{state}"')
 
             if state == "inactive":
-                status, jobs = self.systemctl("list-jobs --full 2>&1", user)
+                jobs = self.systemctl("list-jobs --full 2>&1", user)
                 if "No jobs" in jobs:
                     info = self.get_unit_info(unit, user)
                     if info["ActiveState"] == state:
@@ -355,14 +355,7 @@ class Machine:
             retry(check_active, timeout)
 
     def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
-        status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
-        if status != 0:
-            raise RequestedAssertionFailed(
-                f'retrieving systemctl info for unit "{unit}"'
-                + ("" if user is None else f' under user "{user}"')
-                + f" failed with exit code {status}"
-            )
-
+        lines = self.systemctl(f'--no-pager show "{unit}"', user)
         line_pattern = re.compile(r"^([^=]+)=(.*)$")
 
         def tuple_from_line(line: str) -> tuple[str, str]:
@@ -382,16 +375,10 @@ class Machine:
         property: str,
         user: str | None = None,
     ) -> str:
-        status, lines = self.systemctl(
+        lines = self.systemctl(
             f'--no-pager show "{unit}" --property="{property}"',
             user,
         )
-        if status != 0:
-            raise RequestedAssertionFailed(
-                f'retrieving systemctl property "{property}" for unit "{unit}"'
-                + ("" if user is None else f' under user "{user}"')
-                + f" failed with exit code {status}"
-            )
 
         invalid_output_message = (
             f'systemctl show --property "{property}" "{unit}"'
@@ -405,7 +392,7 @@ class Machine:
         assert match[1] == property, invalid_output_message
         return match[2]
 
-    def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
+    def systemctl(self, q: str, user: str | None = None) -> str:
         """
         Runs `systemctl` commands with optional support for
         `systemctl --user`
@@ -421,12 +408,12 @@ class Machine:
         """
         if user is not None:
             q = q.replace("'", "\\'")
-            return self.execute(
+            return self.succeed(
                 f"su -l {user} --shell /bin/sh -c "
                 "$'XDG_RUNTIME_DIR=/run/user/`id -u` "
                 f"systemctl --user {q}'"
             )
-        return self.execute(f"systemctl {q}")
+        return self.succeed(f"systemctl {q}")
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
         with self.nested(
@@ -782,10 +769,10 @@ class Machine:
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
             retry(port_is_closed, timeout)
 
-    def start_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
+    def start_job(self, jobname: str, user: str | None = None) -> str:
         return self.systemctl(f"start {jobname}", user)
 
-    def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
+    def stop_job(self, jobname: str, user: str | None = None) -> str:
         return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:

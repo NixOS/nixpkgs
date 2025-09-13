@@ -135,12 +135,8 @@
 
       def get_pid(node: Machine, unit: str, user: Optional[str] = None) -> int:
           node.wait_for_unit(unit, user=user)
-          (status, out) = node.systemctl(f"show -P MainPID {unit}", user=user)
-          if status == 0:
-              return int(out.strip())
-          else:
-              node.log(out)
-              raise Exception(f"unable to determine MainPID of {unit} (systemctl exit code {status})")
+          out = node.systemctl(f"show -P MainPID {unit}", user=user)
+          return int(out.strip())
 
       def assert_sched(node: Machine, pid: int, policy: Optional[str] = None, priority: Optional[int] = None):
           out = node.succeed(f"chrt -p {pid}")

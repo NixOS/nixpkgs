@@ -70,8 +70,7 @@
         'paretosecurity-user',
         'paretosecurity-user.timer'
     ]:
-        status, out = xfce.systemctl("is-enabled " + unit, "alice")
-        assert status == 0, f"Unit {unit} is not enabled (status: {status}): {out}"
+        xfce.systemctl("is-enabled " + unit, "alice")
     xfce.succeed("xdotool mousemove 460 10")
     xfce.wait_for_text("Pareto Security")
     xfce.succeed("xdotool click 1")

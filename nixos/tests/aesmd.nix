@@ -53,8 +53,7 @@
     in
     ''
       def get_aesmd_pid():
-        status, main_pid = machine.systemctl("show --property MainPID --value aesmd.service")
-        assert status == 0, "Could not get MainPID of aesmd.service"
+        main_pid = machine.systemctl("show --property MainPID --value aesmd.service")
         return main_pid.strip()
 
       with subtest("aesmd.service starts"):
@@ -88,8 +87,7 @@
         assert aesmd_config == "whitelist url = http://nixos.org\nproxy type = direct\ndefault quoting type = ecdsa_256\n", "aesmd.conf differs"
 
       with subtest("aesmd.service without quote provider library has correct LD_LIBRARY_PATH"):
-        status, environment = machine.systemctl("show --property Environment --value aesmd.service")
-        assert status == 0, "Could not get Environment of aesmd.service"
+        environment = machine.systemctl("show --property Environment --value aesmd.service")
         env_by_name = dict(entry.split("=", 1) for entry in environment.split())
         assert not env_by_name["LD_LIBRARY_PATH"], "LD_LIBRARY_PATH is not empty"
 
