@@ -38,6 +38,7 @@ let
       ) (lib.attrValues config.networking.vswitches)
     )
     ++ lib.concatLists (lib.attrValues (lib.mapAttrs (n: v: v.interfaces) config.networking.bonds))
+    ++ lib.attrNames config.networking.wireguard.interfaces
     ++ config.networking.dhcpcd.denyInterfaces;
 
   arrayAppendOrNull =
