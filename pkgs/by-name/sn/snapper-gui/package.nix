@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "snapper-gui";
-  version = "2020-10-20";
+  version = "0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
