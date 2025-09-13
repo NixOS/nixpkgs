@@ -70,6 +70,9 @@ lib.warnIf (withDocs != null)
     + ''
       -DNON_INTERACTIVE_LOGIN_SHELLS
       -DSSH_SOURCE_BASHRC
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isCygwin) ''
+      -Wno-error=incompatible-pointer-types
     '';
 
     patchFlags = [ "-p0" ];
