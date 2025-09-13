@@ -11437,6 +11437,8 @@ self: super: with self; {
 
   parsley = callPackage ../development/python-modules/parsley { };
 
+  parsnip = callPackage ../development/python-modules/parsnip { };
+
   parso = callPackage ../development/python-modules/parso { };
 
   parsy = callPackage ../development/python-modules/parsy { };
