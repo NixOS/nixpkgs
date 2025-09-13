@@ -12,9 +12,33 @@ let
   };
 
   naughtyPassphrase = ''!,./;'[]\-=<>?:"{}|_+@$%^&*()`~ # ceci n'est pas un commentaire'';
+  naughtyPassphrase' = "correct-horse-battery-staple";
+
+  runBssidTest =
+    name: expectedBssid: extraConfig:
+    runConnectionTestWithScript name extraConfig ''
+      with subtest("Daemon can connect to the right access point"):
+          machine.wait_for_unit("wpa_supplicant-wlan1.service")
+          machine.wait_until_succeeds(
+            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+          )
+          machine.wait_until_succeeds(
+            "wpa_cli -i wlan1 status | grep -q bssid=${expectedBssid}"
+          )
+    '';
 
   runConnectionTest =
     name: extraConfig:
+    runConnectionTestWithScript name extraConfig ''
+      with subtest("Daemon can connect to the access point"):
+          machine.wait_for_unit("wpa_supplicant-wlan1.service")
+          machine.wait_until_succeeds(
+            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+          )
+    '';
+
+  runConnectionTestWithScript =
+    name: extraConfig: extraTestScript:
     runTest {
       name = "wpa_supplicant-${name}";
       inherit meta;
@@ -50,12 +74,22 @@ let
                 bssid = "02:00:00:00:00:01";
               };
               wlan0-2 = {
+                ssid = "nixos-test-mixed";
+                authentication = {
+                  mode = "wpa3-sae-transition";
+                  saeAddToMacAllow = true;
+                  saePasswordsFile = pkgs.writeText "password" naughtyPassphrase';
+                  wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase';
+                };
+                bssid = "02:00:00:00:00:02";
+              };
+              wlan0-3 = {
                 ssid = "nixos-test-wpa2";
                 authentication = {
                   mode = "wpa2-sha256";
                   wpaPassword = naughtyPassphrase;
                 };
-                bssid = "02:00:00:00:00:02";
+                bssid = "02:00:00:00:00:03";
               };
             };
           };
@@ -72,8 +106,10 @@ let
             fallbackToWPA2 = lib.mkDefault true;
 
             # secrets
+            # FIXME: it seems like using "psk_nixos_test2" would not work
             secretsFile = pkgs.writeText "wpa-secrets" ''
               psk_nixos_test=${naughtyPassphrase}
+              psk_two=${naughtyPassphrase'}
             '';
           }
           extraConfig
@@ -85,11 +121,7 @@ let
         machine.wait_for_unit("hostapd.service")
         machine.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
 
-        with subtest("Daemon can connect to the access point"):
-            machine.wait_for_unit("wpa_supplicant-wlan1.service")
-            machine.wait_until_succeeds(
-              "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
-            )
+        ${extraTestScript}
       '';
     };
 
@@ -129,6 +161,18 @@ in
             psk = "password";
             authProtocols = [ "SAE" ];
           };
+
+          # Test duplicate SSID generation
+          duplicate1 = {
+            ssid = "duplicate";
+            bssid = "00:00:00:00:00:01";
+            psk = "password";
+          };
+          duplicate2 = {
+            ssid = "duplicate";
+            bssid = "00:00:00:00:00:02";
+            psk = "password";
+          };
         };
       };
     };
@@ -147,6 +191,12 @@ in
       with subtest("WPA2 fallbacks have been generated"):
           assert int(machine.succeed(f"grep -c sae-only {config_file}")) == 1
           assert int(machine.succeed(f"grep -c mixed-wpa {config_file}")) == 2
+
+      with subtest("Duplicate SSID network blocks have been generated"):
+          # more duplication due to fallbacks
+          assert int(machine.succeed(f"grep -c duplicate {config_file}")) == 4
+          assert int(machine.succeed(f"grep -c bssid=00:00:00:00:00:01 {config_file}")) == 2
+          assert int(machine.succeed(f"grep -c bssid=00:00:00:00:00:02 {config_file}")) == 2
 
       # save file for manual inspection
       machine.copy_from_vm(config_file)
@@ -222,4 +272,56 @@ in
       authProtocols = [ "WPA-PSK-SHA256" ];
     };
   };
+
+  # Test connection where priority selects the one with a certain BSSID.
+  # This guarantees that both network blocks are functional with different passwords.
+  bssidGuard1 = runBssidTest "bssid-prio-first" "02:00:00:00:00:01" {
+    networks = {
+      first = {
+        ssid = "nixos-test-mixed";
+        bssid = "02:00:00:00:00:01";
+        pskRaw = "ext:psk_nixos_test";
+        priority = 1;
+      };
+      second = {
+        ssid = "nixos-test-mixed";
+        bssid = "02:00:00:00:00:02";
+        pskRaw = "ext:psk_two";
+      };
+    };
+  };
+  bssidGuard2 = runBssidTest "bssid-prio-second" "02:00:00:00:00:02" {
+    networks = {
+      first = {
+        ssid = "nixos-test-mixed";
+        bssid = "02:00:00:00:00:01";
+        pskRaw = "ext:psk_nixos_test";
+      };
+      second = {
+        ssid = "nixos-test-mixed";
+        bssid = "02:00:00:00:00:02";
+        pskRaw = "ext:psk_two";
+        priority = 1;
+      };
+    };
+  };
+
+  # first high prio but BSSID mismatch, should connect to second
+  # This guarantees that a BSSID mismatch would prevent attempting connection.
+  bssidGuard3 = runBssidTest "bssid-prio-first-bssid-mismatch" "02:00:00:00:00:02" {
+    networks = {
+      first = {
+        ssid = "nixos-test-mixed";
+        bssid = "02:00:00:00:00:FF";
+        pskRaw = "ext:psk_nixos_test";
+        priority = 1;
+      };
+      second = {
+        ssid = "nixos-test-mixed";
+        bssid = "02:00:00:00:00:02";
+        pskRaw = "ext:psk_two";
+      };
+    };
+  };
+
 }
