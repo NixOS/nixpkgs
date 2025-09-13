@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://ncompress.sourceforge.net/";
+    homepage = "https://vapier.github.io/ncompress/";
     license = licenses.publicDomain;
     description = "Fast, simple LZW file compressor";
     platforms = platforms.unix;
