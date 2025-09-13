@@ -87,8 +87,6 @@ callPackage ./generic.nix {
     stdenv = stdenvNoCC;
   };
 
-  tests = { inherit (nixosTests) vscode-remote-ssh; };
-
   updateScript = ./update-vscode.sh;
 
   # Editing the `code` binary within the app bundle causes the bundle's signature
