@@ -1,0 +1,233 @@
+diff --git a/bwm/__init__.py b/bwm/__init__.py
+index b4b7c20..7190ca5 100644
+--- a/bwm/__init__.py
++++ b/bwm/__init__.py
+@@ -11,7 +11,6 @@ import sys
+ from os.path import exists, join
+ from subprocess import run, DEVNULL
+ 
+-from bwm.menu import dmenu_err
+ from xdg_base_dirs import xdg_cache_home, xdg_config_home, xdg_data_home
+ 
+ AUTH_FILE = join(xdg_cache_home(), ".bwm-auth")
+@@ -20,19 +19,6 @@ DATA_HOME = join(xdg_data_home(), "bwm")
+ SECRET_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
+ CLIPBOARD = False
+ CLIPBOARD_CMD = "true"
+-if os.environ.get('WAYLAND_DISPLAY'):
+-    clips = ['wl-copy -o']
+-else:
+-    clips = ["xsel -b", "xclip -l 1 -selection clip"]
+-for clip in clips:
+-    try:
+-        _ = run(shlex.split(clip), check=False, stdout=DEVNULL, stderr=DEVNULL, input="")
+-        CLIPBOARD_CMD = clip
+-        break
+-    except OSError:
+-        continue
+-if CLIPBOARD_CMD == "true":
+-    dmenu_err(f"{' or '.join([shlex.split(i)[0] for i in clips])} needed for clipboard support")
+ 
+ logging.basicConfig(filename=join(xdg_cache_home(), "bwm.log"), level=logging.ERROR)
+ LOGGER = logging.getLogger("bwm")
+@@ -41,6 +27,8 @@ ENV = os.environ.copy()
+ ENC = locale.getpreferredencoding()
+ SESSION_TIMEOUT_DEFAULT_MIN = 360
+ SEQUENCE = "{USERNAME}{TAB}{PASSWORD}{ENTER}"
++
++# Initialize CONF first
+ if not exists(CONF_FILE):
+     CONF = configparser.ConfigParser()
+     try:
+@@ -60,49 +48,81 @@ if not exists(CONF_FILE):
+         CONF.set('vault', 'session_timeout_min ', str(SESSION_TIMEOUT_DEFAULT_MIN))
+         CONF.set('vault', 'autotype_default', SEQUENCE)
+         CONF.write(conf_file)
++
+ CONF = configparser.ConfigParser()
+ try:
+     CONF.read(CONF_FILE)
+ except configparser.ParsingError as err:
+-    dmenu_err(f"Config file error: {err}")
++    from bwm.menu import dmenu_err
++    dmenu_err(f"Config file error: {err}", CONF)
+     sys.exit()
++
++# Parse dmenu command after CONF is available
+ if CONF.has_option('dmenu', 'dmenu_command'):
+     command = shlex.split(CONF.get('dmenu', 'dmenu_command'))
++else:
++    command = ['dmenu']
++
+ if "-l" in command:
+     MAX_LEN = int(command[command.index("-l") + 1])
+ elif "-L" in command:
+     MAX_LEN = int(command[command.index("-L") + 1])
+ else:
+     MAX_LEN = 24
++
+ if CONF.has_option("vault", "session_timeout_min"):
+     SESSION_TIMEOUT_MIN = int(CONF.get("vault", "session_timeout_min"))
+ else:
+     SESSION_TIMEOUT_MIN = SESSION_TIMEOUT_DEFAULT_MIN
++
+ if CONF.has_option('vault', 'autotype_default'):
+     SEQUENCE = CONF.get("vault", "autotype_default")
++
++# Check for required tools
+ if CONF.has_option("vault", "type_library"):
+     if CONF.get("vault", "type_library") == "xdotool":
+         try:
+             run(['xdotool', 'version'], check=False, stdout=DEVNULL)
+         except OSError:
++            from bwm.menu import dmenu_err
+             dmenu_err("Xdotool not installed.\n"
+-                      "Please install or remove that option from config.ini")
++                      "Please install or remove that option from config.ini", CONF)
+             sys.exit()
+     elif CONF.get("vault", "type_library") == "ydotool":
+         try:
+             run(['ydotool'], check=False, stdout=DEVNULL)
+         except OSError:
++            from bwm.menu import dmenu_err
+             dmenu_err("Ydotool not installed.\n"
+-                      "Please install or remove that option from config.ini")
++                      "Please install or remove that option from config.ini", CONF)
+             sys.exit()
+     elif CONF.get("vault", "type_library") == "wtype":
+         try:
+             run(['wtype'], check=False, stdout=DEVNULL, stderr=DEVNULL)
+         except OSError:
++            from bwm.menu import dmenu_err
+             dmenu_err("Wtype not installed.\n"
+-                      "Please install or remove that option from config.ini")
++                      "Please install or remove that option from config.ini", CONF)
+             sys.exit()
+ 
++# Check clipboard support after CONF is available
++if os.environ.get('WAYLAND_DISPLAY'):
++    clips = ['wl-copy -o']
++else:
++    clips = ["xsel -b", "xclip -l 1 -selection clip"]
++
++for clip in clips:
++    try:
++        _ = run(shlex.split(clip), check=False, stdout=DEVNULL, stderr=DEVNULL, input="")
++        CLIPBOARD_CMD = clip
++        break
++    except OSError:
++        continue
++
++if CLIPBOARD_CMD == "true":
++    from bwm.menu import dmenu_err
++    dmenu_err(f"{' or '.join([shlex.split(i)[0] for i in clips])} needed for clipboard support", CONF)
++
+ LOGIN = {"Username": "username",
+          "Password": "password",
+          "TOTP": "totp"}
+diff --git a/bwm/menu.py b/bwm/menu.py
+index 4beee11..175bd8f 100644
+--- a/bwm/menu.py
++++ b/bwm/menu.py
+@@ -5,28 +5,31 @@ import shlex
+ import sys
+ from subprocess import run
+ 
+-import bwm
+ 
+-
+-def dmenu_cmd(num_lines, prompt):
++def dmenu_cmd(num_lines, prompt, conf=None):
+     """Parse config.ini for dmenu options
+ 
+     Args: args - num_lines: number of lines to display
+                  prompt: prompt to show
++                 conf: ConfigParser instance (optional, will import if not provided)
+     Returns: command invocation (as a list of strings) for
+                 ["dmenu", "-l", "<num_lines>", "-p", "<prompt>", "-i", ...]
+ 
+     """
++    if conf is None:
++        import bwm
++        conf = bwm.CONF
++
+     commands = {"bemenu": ["-p", str(prompt), "-l", str(num_lines)],
+                 "dmenu": ["-p", str(prompt), "-l", str(num_lines)],
+                 "rofi": ["-dmenu", "-p", str(prompt), "-l", str(num_lines)],
+                 "wofi": ["--dmenu", "-p", str(prompt), "-L", str(num_lines + 1)]}
+-    command = shlex.split(bwm.CONF.get('dmenu', 'dmenu_command', fallback='dmenu'))
++    command = shlex.split(conf.get('dmenu', 'dmenu_command', fallback='dmenu'))
+     command.extend(commands.get(command[0], []))
+     pwprompts = ("Password", "password", "client_secret", "Verify password", "Enter Password")
+-    obscure = bwm.CONF.getboolean('dmenu_passphrase', 'obscure', fallback=True)
++    obscure = conf.getboolean('dmenu_passphrase', 'obscure', fallback=True)
+     if any(i == prompt for i in pwprompts) and obscure is True:
+-        pass_prompts = {"dmenu": dmenu_pass(command[0]),
++        pass_prompts = {"dmenu": dmenu_pass(command[0], conf),
+                         "rofi": ['-password'],
+                         "bemenu": ['-x', 'indicator', '*'],
+                         "wofi": ['-P']}
+@@ -34,11 +37,12 @@ def dmenu_cmd(num_lines, prompt):
+     return command
+ 
+ 
+-def dmenu_pass(command):
++def dmenu_pass(command, conf=None):
+     """Check if dmenu passphrase patch is applied and return the correct command
+     line arg list
+ 
+     Args: command - string
++          conf - ConfigParser instance (optional)
+     Returns: list or None
+ 
+     """
+@@ -51,21 +55,28 @@ def dmenu_pass(command):
+                                check=False).stderr
+     except FileNotFoundError:
+         dm_patch = False
+-    color = bwm.CONF.get('dmenu_passphrase', 'obscure_color', fallback="#222222")
++
++    if conf is None:
++        color = "#222222"  # fallback
++    else:
++        color = conf.get('dmenu_passphrase', 'obscure_color', fallback="#222222")
++
+     return ["-P"] if dm_patch else ["-nb", color, "-nf", color]
+ 
+ 
+-def dmenu_select(num_lines, prompt="Entries", inp=""):
++def dmenu_select(num_lines, prompt="Entries", inp="", conf=None):
+     """Call dmenu and return the selected entry
+ 
+     Args: num_lines - number of lines to display
+           prompt - prompt to show
+           inp - string to pass to dmenu via STDIN
++          conf - ConfigParser instance (optional)
+ 
+     Returns: sel - string
+ 
+     """
+-    cmd = dmenu_cmd(num_lines, prompt)
++    import bwm  # Import here to avoid circular import during module initialization
++    cmd = dmenu_cmd(num_lines, prompt, conf)
+     res = run(cmd,
+               capture_output=True,
+               check=False,
+@@ -75,14 +86,15 @@ def dmenu_select(num_lines, prompt="Entries", inp=""):
+     return res.stdout.rstrip('\n') if res.stdout is not None else None
+ 
+ 
+-def dmenu_err(prompt):
++def dmenu_err(prompt, conf=None):
+     """Pops up a dmenu prompt with an error message
+ 
+     """
++    import bwm  # Import here to avoid circular import during module initialization
+     try:
+         prompt = prompt.decode(bwm.ENC)
+     except AttributeError:
+         pass
+-    return dmenu_select(len(prompt.splitlines()), "Error", inp=prompt)
++    return dmenu_select(len(prompt.splitlines()), "Error", inp=prompt, conf=conf)
+ 
+ # vim: set et ts=4 sw=4 :
