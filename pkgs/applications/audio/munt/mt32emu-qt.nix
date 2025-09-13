@@ -50,8 +50,6 @@ mkDerivation rec {
   ]
   ++ lib.optional withJack libjack2;
 
-  dontFixCmake = true;
-
   cmakeFlags = [
     "-Dmt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING=OFF"
     "-Dmunt_WITH_MT32EMU_QT=ON"

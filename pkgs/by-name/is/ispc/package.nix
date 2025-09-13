@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
   pname = "ispc";
   version = "1.28.1";
 
-  dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
-
   src = fetchFromGitHub {
     owner = "ispc";
     repo = "ispc";

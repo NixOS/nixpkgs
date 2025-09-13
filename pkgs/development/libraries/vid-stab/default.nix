@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
 
+  cmakeFlags = [
+    # Fix the build with CMake 4.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   meta = with lib; {
     description = "Video stabilization library";
     homepage = "http://public.hronopik.de/vid.stab/";

@@ -18,7 +18,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (
+  cmakeFlags = [
+    # Fix the build with CMake 4.
+    #
+    # See:
+    # * <https://github.com/DaveGamble/cJSON/issues/946>
+    # * <https://github.com/DaveGamble/cJSON/pull/935>
+    # * <https://github.com/DaveGamble/cJSON/pull/949>
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ]
+  ++ lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (
     lib.cmakeBool "ENABLE_CUSTOM_COMPILER_FLAGS" false
   );
 

@@ -32,6 +32,14 @@ stdenv.mkDerivation {
     # this and so will fail.
     "-DENABLE_LIBCXX=${if libcxxCmakeModule then "ON" else "OFF"}"
     "-DCPPTOML_BUILD_EXAMPLES=OFF"
+
+    # Fix the build with CMake 4.
+    #
+    # See:
+    #
+    # * <https://github.com/skystrife/cpptoml/pull/132>
+    # * <https://github.com/facebook/watchman/issues/1286>
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   meta = with lib; {

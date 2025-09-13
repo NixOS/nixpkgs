@@ -55,7 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ' ''${CMAKE_INSTALL_PREFIX}/include' " ${placeholder "dev"}/include"
   '';
 
-  cmakeFlags = lib.optionals static [
+  cmakeFlags = [
+    # Fix the build with CMake 4.
+    #
+    # See: <https://github.com/silnrsi/graphite/issues/98>
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ]
+  ++ lib.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"
   ];
 
