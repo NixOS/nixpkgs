@@ -15,26 +15,21 @@
   stdenv,
   xercesc,
   zxing-cpp,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblinphone";
-  version = "5.2.98";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "liblinphone";
-    rev = version;
-    hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
+    rev = finalAttrs.version;
+    hash = "sha256-iWfR+UvVCVrHjm6GFjQItAX3Owo7TTfjyVEC2aR38Lg=";
   };
-
-  patches = [
-    # zxing-cpp 2.0+ requires C++ 17
-    # Manual backport as upstream ran formatters in the meantime
-    ./backport-cpp17.patch
-  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
@@ -63,6 +58,7 @@ stdenv.mkDerivation rec {
     sqlite
     xercesc
     zxing-cpp
+    zlib
   ];
 
   nativeBuildInputs = [
@@ -92,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})
