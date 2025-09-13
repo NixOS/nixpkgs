@@ -6,6 +6,8 @@
   lz4,
   libxkbcommon,
   installShellFiles,
+  makeWrapper,
+  procps,
   scdoc,
   wayland-protocols,
   wayland-scanner,
@@ -13,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.10.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GXqXZn29r7ktL01KBzlPZ+9b1fdnAPF8qhsQxhiqAsQ=";
+    hash = "sha256-kkMx9t3LEBvRa/MjCb+Nyjeokc55kJg3sJxZ25M82vM=";
   };
 
-  cargoHash = "sha256-jCjeHeHML8gHtvFcnHbiGL5fZ3LhABhXrcUTQriUDc0=";
+  cargoHash = "sha256-fI/+1OpyjnBx5LqW8DZ1g8nanQTcvvYRNBMTrZHB2v4=";
 
   buildInputs = [
     lz4
@@ -36,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeWrapper
     scdoc
   ];
 
@@ -50,6 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash completions/swww.bash \
       --fish completions/swww.fish \
       --zsh completions/_swww
+  '';
+
+  postFixup = ''
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : "${lib.makeBinPath [ procps ]}"
+    done
   '';
 
   meta = {
