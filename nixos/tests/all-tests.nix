@@ -669,6 +669,7 @@ in
   gollum = runTest ./gollum.nix;
   gonic = runTest ./gonic.nix;
   google-oslogin = runTest ./google-oslogin;
+  gophernicus = runTest ./gophernicus.nix;
   gopro-tool = runTest ./gopro-tool.nix;
   goss = runTest ./goss.nix;
   gotenberg = runTest ./gotenberg.nix;

@@ -6,6 +6,7 @@
   systemdMinimal,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/User=nobody/d' "$out"/lib/systemd/system/gophernicus@.service
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.gophernicus;
+  };
 
   meta = {
     description = "Modern full-featured (and hopefully) secure gopher daemon";
