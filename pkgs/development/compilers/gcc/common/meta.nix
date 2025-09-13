@@ -30,4 +30,5 @@ in
   teams = [ teams.gcc ];
   mainProgram = "${targetPrefix}gcc";
 
+  identifiers.cpeParts.vendor = "gnu";
 }
