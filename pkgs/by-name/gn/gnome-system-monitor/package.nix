@@ -5,7 +5,6 @@
   fetchurl,
   pkg-config,
   gtkmm4,
-  libxml2,
   bash,
   catch2_3,
   gtk4,
@@ -54,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     glib
-    libxml2
     gtkmm4
     libgtop
     gdk-pixbuf
@@ -62,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     gsettings-desktop-schemas
     systemd
+  ];
+
+  mesonFlags = [
+    # <artificial>:(.text.startup+0x56): undefined reference to `GsmApplication::get()'
+    "-Db_lto=false"
   ];
 
   doCheck = true;
