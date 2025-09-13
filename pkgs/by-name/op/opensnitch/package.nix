@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   protobuf,
   go-protobuf,
   pkg-config,
@@ -42,6 +43,20 @@ buildGoModule (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-XAR7yZjAzbMxIVGSV82agpAGwlejkILGgDI6iRicZuQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/evilsocket/opensnitch/pull/1418
+      # allow configuring the audit socket path
+      url = "https://github.com/evilsocket/opensnitch/commit/f9358a464f204068359bf5174e6ff43288f12c7e.patch?full_index=1";
+      hash = "sha256-s9CM1CyGpfJZXEtihXCM7nfPhBY8XuwubynTotqtf3E=";
+    })
+    (fetchpatch {
+      # add missing colon in test definition
+      url = "https://github.com/evilsocket/opensnitch/commit/4b38ca1260295d2e0f8c4a7313529f83dcca4554.patch?full_index=1";
+      hash = "sha256-/z3iFRpcv75FyarVnpK8/PTU2fcFHS+SNbHn7M5Etk8=";
+    })
+  ];
 
   postPatch = ''
     # Allow configuring Version at build time
