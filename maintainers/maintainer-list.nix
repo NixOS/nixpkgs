@@ -12639,6 +12639,12 @@
     github = "jooooscha";
     githubId = 57965027;
   };
+  josephfinlayson = {
+    email = "joseph@innocentspark.com";
+    github = "josephfinlayson";
+    githubId = 1572410;
+    name = "Joseph Finlayson";
+  };
   josephst = {
     name = "Joseph Stahl";
     email = "hello@josephstahl.com";
