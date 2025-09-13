@@ -34,6 +34,7 @@
   # enable internal X11 support via libssh2
   enableX11 ? true,
   enableGtk2 ? false,
+  enablePAM ? true,
   gtk2,
   enableNVML ? config.cudaSupport,
   nvml,
@@ -135,16 +136,35 @@ stdenv.mkDerivation rec {
   ]
   ++ (lib.optional enableGtk2 "--disable-gtktest")
   ++ (lib.optional (!enableX11) "--disable-x11")
-  ++ (lib.optional (enableNVML) "--with-nvml");
+  ++ (lib.optional enableNVML "--with-nvml")
+  ++ (lib.optional enablePAM "--enable-pam --with-pam_dir=${placeholder "out"}/lib/security");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
     patchShebangs ./doc/man/man2html.py
+  ''
+  + (lib.optionalString enablePAM ''
+    mkdir -p $out/lib/security
+  '');
+  postConfigure = lib.optionalString enablePAM ''
+    rm -rf $out
   '';
 
-  postInstall = ''
-    rm -f $out/lib/*.la $out/lib/slurm/*.la
+  postBuild = lib.optionalString enablePAM ''
+    (cd contribs/pam; make; cd -)
+    (cd contribs/pam_slurm_adopt; make; cd -)
   '';
+
+  postInstall =
+    (lib.optionalString enablePAM ''
+      export LIBRARY_PATH=/build/source/src/api/.libs
+      mkdir -p $out/lib/security
+      (cd contribs/pam; make install; cd -)
+      (cd contribs/pam_slurm_adopt; make install; cd -)
+    '')
+    + ''
+      rm -f $out/lib/*.la $out/lib/slurm/*.la $out/lib/security/*.la
+    '';
 
   enableParallelBuilding = true;
 
@@ -156,6 +176,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
+      edwtjo
       jagajaga
       markuskowa
     ];
