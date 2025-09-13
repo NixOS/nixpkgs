@@ -1517,6 +1517,47 @@ in
 
     };
 
+    options.networking.vxlans = lib.mkOption {
+      default = { };
+
+      example = literalExpression ''
+        {
+
+        }
+      '';
+
+      description = ''
+
+      '';
+
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+            vni = mkOption {
+              type = types.int;
+              description = "VxLAN network identifier";
+            };
+            local = mkOption {
+              type = types.str;
+              description = "Local IP address";
+            };
+            remote = mkOption {
+              type = types.str;
+              description = "Remote IP address";
+            };
+            port = mkOption {
+              type = types.int;
+              description = "UDP port";
+            };
+            address = mkOption {
+              type = with types; listOf str;
+              description = "IP address(es)";
+            };
+          };
+        });
+    };
+
     networking.wlanInterfaces = mkOption {
       default = { };
       example = literalExpression ''
