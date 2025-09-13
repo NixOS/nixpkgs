@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-TVcSgns+K26CgplSJ4SVlIattG3eDRdg9b2pFKGZGDM=";
+    hash = "sha256-/1ijyVl5CFwOXwo2Jki4o6fJ+Bf4kkDFfJT0+BO5Jhg=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-riAUasZV6yFW9yPoVojH8/zYKV1xlckTVrLzdUZgoDM=";
+    hash = "sha256-VuPnzeM9m3HYV6pEt5n7KSBtS5L4zHiK38tqND2sPHk=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,7 @@ buildPythonPackage rec {
 
     # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
     # ModuleNotFoundError: No module named 'lance'
+    "test_timestamp_precision"
     "test_tracing"
 
     # Flaky (AssertionError)
