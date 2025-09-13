@@ -218,7 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ ncsa ];
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      Madouura
     ];
     platforms = with lib.platforms; aarch64 ++ x86;
   };
