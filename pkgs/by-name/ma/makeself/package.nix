@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.5";
+  version = "2.5.0";
   pname = "makeself";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo = "makeself";
     tag = "release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
+    hash = "sha256-QPisihCGnzG9gaZyb/bUroWdPAoC2GdQiz1tSkoScjs=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     installManPage makeself.1
     install -Dm555 makeself.sh $out/bin/makeself
-    install -Dm444 -t ${sharePath}/ makeself.lsm README.md makeself-header.sh
+    install -Dm444 -t ${sharePath}/ README.md makeself-header.sh
     runHook postInstall
   '';
 
