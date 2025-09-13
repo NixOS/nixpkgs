@@ -39,6 +39,7 @@
   wayland,
 
   # magpie wrapper
+  addDriverRunpath,
   libGL,
   vulkan-loader,
 
@@ -128,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    addDriverRunpath
     blueprint-compiler
     cargo
     libxml2
@@ -178,6 +180,10 @@ stdenv.mkDerivation (finalAttrs: {
           libGL
           libdrm
           vulkan-loader
+
+          # NVIDIA support requires linking libnvidia-ml.so at runtime:
+          # https://github.com/Syllo/nvtop/blob/3.2.0/src/extract_gpuinfo_nvidia.c#L274-L276
+          addDriverRunpath.driverLink
         ]
       }"
   '';
