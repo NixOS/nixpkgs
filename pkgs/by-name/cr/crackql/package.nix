@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "crackql";
-  version = "unstable-20230818";
+  version = "1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication {
     # rev = "refs/tags/${version}";
     # Switch to tag with the next update
     rev = "ac26a44c2dd201f65da0d1c3f95eaf776ed1b2dd";
-    hash = "sha256-XlHbGkwdOV1nobjtQP/M3IIEuzXHBuwf52EsXf3MWoM=";
+    hash = "sha256-sQbaOCdMqc+OTaGalD+er2j9YiwVNg4V4w/utGsfBrA=";
   };
 
   pythonRelaxDeps = [
