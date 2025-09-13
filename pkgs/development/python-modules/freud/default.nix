@@ -3,15 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+
+  # build-system
   cmake,
   cython,
   oldest-supported-numpy,
   scikit-build,
   setuptools,
+
+  # buildInputs
   tbb,
+
+  # dependencies
   numpy,
   rowan,
   scipy,
+
+  # tests
   pytestCheckHook,
   python,
   gsd,
@@ -50,7 +58,7 @@ buildPythonPackage rec {
     touch extern/{voro++,fsph,Eigen}/.git
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     cython
     oldest-supported-numpy
@@ -58,9 +66,11 @@ buildPythonPackage rec {
     setuptools
   ];
   dontUseCmakeConfigure = true;
-  buildInputs = [ tbb ];
+  buildInputs = [
+    tbb
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     rowan
     scipy
