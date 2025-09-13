@@ -24,30 +24,6 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack.annotations/2.5.198/messagepack.annotations.2.5.198.nupkg"
   },
   {
-    "pname": "Microsoft.AspNetCore.App.Runtime.linux-arm64",
-    "version": "9.0.8",
-    "hash": "sha256-lrGSct2fPz3L2nGmGUYo6IjRgFdjltEU7UqPOtl29+0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.linux-arm64/9.0.8/microsoft.aspnetcore.app.runtime.linux-arm64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-    "version": "9.0.8",
-    "hash": "sha256-IgEoUCgazAyXW+IsASPmGYQJqIHejKk3mp1bFbJAJm8=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.linux-x64/9.0.8/microsoft.aspnetcore.app.runtime.linux-x64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.AspNetCore.App.Runtime.osx-arm64",
-    "version": "9.0.8",
-    "hash": "sha256-yqpl3t5p4utZ/GCnPPJm4b6msntyY/Ky97PMw2+29Lc=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.osx-arm64/9.0.8/microsoft.aspnetcore.app.runtime.osx-arm64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.AspNetCore.App.Runtime.osx-x64",
-    "version": "9.0.8",
-    "hash": "sha256-XlXBx1Q/3vPrW+qB1D5Q4T/TVD/TM42KdxROyj2KHXo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.osx-x64/9.0.8/microsoft.aspnetcore.app.runtime.osx-x64.9.0.8.nupkg"
-  },
-  {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "6.0.0",
     "hash": "sha256-49+H/iFwp+AfCICvWcqo9us4CzxApPKC37Q5Eqrw+JU=",
@@ -214,48 +190,6 @@
     "version": "17.6.3",
     "hash": "sha256-H2Qw8x47WyFOd/VmgRmGMc+uXySgUv68UISgK8Frsjw=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.net.stringtools/17.6.3/microsoft.net.stringtools.17.6.3.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.linux-arm64",
-    "version": "9.0.8",
-    "hash": "sha256-xZHCcmlZaBG13yIQY/gBtat/ZRsHuEU32OnR36QjuCg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-arm64/9.0.8/microsoft.netcore.app.host.linux-arm64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.osx-arm64",
-    "version": "9.0.8",
-    "hash": "sha256-eDdBNkFFqAHKF2UyGh1F1zCOnx48lZNRMTSCkIrBIIk=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.osx-arm64/9.0.8/microsoft.netcore.app.host.osx-arm64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.osx-x64",
-    "version": "9.0.8",
-    "hash": "sha256-i3i6YAotxTj0v/aEFBQSJu7jZHijJpeSNf7GhyFN5GI=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.osx-x64/9.0.8/microsoft.netcore.app.host.osx-x64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.linux-arm64",
-    "version": "9.0.8",
-    "hash": "sha256-H8EdL3O0ywVcBFbVnZokcMJoeLg/lII8sWOS+00n7CI=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.linux-arm64/9.0.8/microsoft.netcore.app.runtime.linux-arm64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.linux-x64",
-    "version": "9.0.8",
-    "hash": "sha256-mzHzpruPtJUxu42SqZE+Ct1UCeGSjhdZvsV8hcP9qw0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.linux-x64/9.0.8/microsoft.netcore.app.runtime.linux-x64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.osx-arm64",
-    "version": "9.0.8",
-    "hash": "sha256-69S3wISxYoR5MkloN5xL4chHLdzqC4xx/xao5RRxAtY=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.osx-arm64/9.0.8/microsoft.netcore.app.runtime.osx-arm64.9.0.8.nupkg"
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.osx-x64",
-    "version": "9.0.8",
-    "hash": "sha256-wrg1B9w3xicY0RtFO1ck8v4EVGA+xAPN9xgazIPMKoE=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.osx-x64/9.0.8/microsoft.netcore.app.runtime.osx-x64.9.0.8.nupkg"
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
