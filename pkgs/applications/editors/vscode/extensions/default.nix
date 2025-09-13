@@ -2771,6 +2771,8 @@ let
           };
         };
 
+      kilocode.Kilo-Code = callPackage ./kilocode.Kilo-Code { };
+
       kravets.vscode-publint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-publint";
