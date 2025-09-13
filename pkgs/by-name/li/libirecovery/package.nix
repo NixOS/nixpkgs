@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
-  version = "1.2.1";
+  version = "1.3.0";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "libimobiledevice";
     repo = "libirecovery";
     rev = version;
-    hash = "sha256-R+oBC7F4op0qoIk3d/WqS4MwzZY3WMAMIqlJfJb188Q=";
+    hash = "sha256-QESOl5wQSrk3x9eEvA06Zx/uTUyLSpaJKjFaPsuY8UE=";
   };
 
   nativeBuildInputs = [
