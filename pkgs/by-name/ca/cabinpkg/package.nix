@@ -6,19 +6,10 @@
   libgit2,
   curl,
   fmt,
+  toml11_4,
   nlohmann_json,
   pkg-config,
 }:
-
-let
-  toml11 = fetchFromGitHub rec {
-    owner = "ToruNiina";
-    repo = "toml11";
-    version = "4.2.0";
-    tag = "v${version}";
-    sha256 = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "cabinpkg";
   version = "0.11.1";
@@ -40,6 +31,7 @@ stdenv.mkDerivation rec {
     libgit2
     fmt
     tbb_2021
+    toml11_4
     nlohmann_json
     curl
   ];
@@ -49,11 +41,6 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
        --replace-fail "git clone https://github.com/ToruNiina/toml11.git \$@" ":" \
        --replace-fail "git -C \$@ reset --hard v4.2.0" ":"
-  '';
-
-  preBuild = ''
-    mkdir -p build/DEPS/
-    cp -rf ${toml11} build/DEPS/toml11
   '';
 
   makeFlags = [
