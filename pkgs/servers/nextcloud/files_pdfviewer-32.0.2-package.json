@@ -1,0 +1,58 @@
+{
+  "name": "files_pdfviewer",
+  "description": "PDF viewer plugin for Nextcloud",
+  "version": "5.0.0-dev.0",
+  "author": "John Molakvoæ <skjnldsv@protonmail.com>",
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/nextcloud/files_pdfviewer/issues"
+  },
+  "repository": {
+    "url": "https://github.com/nextcloud/files_pdfviewer",
+    "type": "git"
+  },
+  "homepage": "https://github.com/nextcloud/files_pdfviewer",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "scripts": {
+    "prebuild": "rm -rf js && npm run pdfjs:get",
+    "postbuild": "build-js/npm-post-build.sh",
+    "build": "webpack --node-env production --progress",
+    "dev": "webpack --node-env development --progress",
+    "watch": "webpack --node-env development --progress --watch",
+    "pdfjs:get": "node pdfjs-get.js",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src css",
+    "stylelint:fix": "stylelint src css --fix"
+  },
+  "dependencies": {
+    "@nextcloud/auth": "^2.5.2",
+    "@nextcloud/axios": "^2.5.1",
+    "@nextcloud/dialogs": "^6.3.0",
+    "@nextcloud/l10n": "^3.3.0",
+    "@nextcloud/logger": "^3.0.2",
+    "@nextcloud/paths": "^2.2.1",
+    "@nextcloud/router": "^3.0.1",
+    "@nextcloud/sharing": "^0.2.5",
+    "pdfjs-dist": "4.0.189"
+  },
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "engines": {
+    "node": "^22.0.0",
+    "npm": "^10.5.0"
+  },
+  "devDependencies": {
+    "@nextcloud/babel-config": "^1.2.0",
+    "@nextcloud/browserslist-config": "^3.0.1",
+    "@nextcloud/eslint-config": "^9.0.0-rc.5",
+    "@nextcloud/stylelint-config": "^3.1.1",
+    "@nextcloud/webpack-vue-config": "^6.3.0",
+    "adm-zip": "^0.5.16",
+    "axios": "^1.10.0",
+    "cli-progress": "^3.12.0",
+    "vue-loader": "^15.11.1"
+  }
+}
