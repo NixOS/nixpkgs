@@ -1,3 +1,16 @@
+# This `let` must be top level
+let
+  warn = builtins.warn or builtins.trace;
+
+  # Only emitted once (per evaluator instance, per Nixpkgs source version)
+  freeformBadTypeContext = warn ''
+    freeformType does not pass type check: This module evaluation contains one or more instances of a problem with freeformType. If you are not the maintainer of any module, ignore these messages about freeformType.
+    The module system's `freeformType` is matched to a whole attribute set, but due to a bug, some types were *not* checked if they were assigned directly as the `freeformType`, notably types derived from `either`.
+    This problem can generally be fixed by wrapping it as it should: `freeformType = attrsOf (<the intended value type>);`.
+  '' null;
+
+in
+
 { lib }:
 
 let
@@ -276,13 +289,24 @@ let
 
           # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
-            let
-              defs = map (def: {
-                file = def.file;
-                value = setAttrByPath def.prefix def.value;
-              }) merged.unmatchedDefns;
-            in
-            if defs == [ ] then { } else declaredConfig._module.freeformType.merge prefix defs;
+            if merged.unmatchedDefns == [ ] then
+              { }
+            else
+              let
+                defs = map (def: {
+                  file = def.file;
+                  value = setAttrByPath def.prefix def.value;
+                }) merged.unmatchedDefns;
+                mergedFreeform = mergeDefinitions prefix declaredConfig._module.freeformType defs;
+              in
+              # TODO (after 25.11): make this throw or just use mergedFreeform.checkedAndMerged.value, which throws
+              warnIf (mergedFreeform.checkedAndMerged.headError != null)
+                (builtins.seq freeformBadTypeContext "freeformType at `${showOption prefix}` does not pass type check; see preceding message.")
+                (
+                  # Use valueMeta to silence a warning from `either`, which is a more general but worse duplicate
+                  mergedFreeform.checkedAndMerged.valueMeta._deprecatedFreeformTypeValueOverride
+                    or mergedFreeform.checkedAndMerged.value
+                );
 
         in
         if declaredConfig._module.freeformType == null then
