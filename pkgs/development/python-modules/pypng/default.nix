@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.20220715.0";
+  version = "0.20231004.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
-    rev = "refs/tags/${pname}-${version}";
-    hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
+    tag = "${pname}-${version}";
+    hash = "sha256-xNUI3yGfwmaccCxgljIZzgJ6YgNxcuOzCXDE7RFJP2I=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage = "https://github.com/drj11/pypng";
+    homepage = "https://gitlab.com/drj11/pypng";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };
