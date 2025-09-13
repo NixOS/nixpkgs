@@ -7,6 +7,7 @@
   kmod,
   pahole,
   gitUpdater,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [ pahole ];
-  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    kmod
+    udevCheckHook
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
+
+  doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
