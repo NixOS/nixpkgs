@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ploomber-core";
-  version = "0.2.26";
+  version = "0.2.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "core";
     tag = version;
-    hash = "sha256-4lAsO+igyb/JXmZsgDgUUrgw3EyhdrliD9LlQqxhBMM=";
+    hash = "sha256-/HlJxaxsGbZ1UIJNwDdzJLR4bey7bv/qsmFmVi8eWjQ=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Core module shared across Ploomber projects";
     homepage = "https://github.com/ploomber/core";
-    changelog = "https://github.com/ploomber/core/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ploomber/core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
   };
