@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aml";
-  version = "0.3.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "aml";
     tag = "v${version}";
-    sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
+    sha256 = "sha256-10gm6YphZrpLShj3NUj/AG24dSVLZAZbbnXr7GiF4DI=";
   };
 
   nativeBuildInputs = [
