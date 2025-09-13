@@ -21,6 +21,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
+  __structuredAttrs = true;
   pname = "bcc";
   version = "0.35.0";
   pyproject = false;
@@ -70,14 +71,19 @@ python3Packages.buildPythonApplication rec {
     libbpf
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "BCC_KERNEL_MODULES_DIR" "/run/booted-system/kernel-modules/lib/modules")
-    (lib.cmakeFeature "REVISION" version)
-    (lib.cmakeBool "ENABLE_USDT" true)
-    (lib.cmakeBool "ENABLE_CPP_API" true)
-    (lib.cmakeBool "CMAKE_USE_LIBBPF_PACKAGE" true)
-    (lib.cmakeBool "ENABLE_LIBDEBUGINFOD" false)
-  ];
+  cmakeEntries = {
+    BCC_KERNEL_MODULES_DIR = "/run/booted-system/kernel-modules/lib/modules";
+    REVISION = version;
+    ENABLE_USDT = true;
+    ENABLE_CPP_API = true;
+    CMAKE_USE_LIBBPF_PACKAGE = true;
+    ENABLE_LIBDEBUGINFOD = false;
+  };
+
+  cmakeEntryTypes = {
+    BCC_KERNEL_MODULES_DIR = "PATH";
+    REVISION = "STRING";
+  };
 
   postPatch = ''
     substituteInPlace src/python/bcc/libbcc.py \

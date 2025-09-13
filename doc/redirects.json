@@ -2330,6 +2330,9 @@
   "cmake-exclusive-variables": [
     "index.html#cmake-exclusive-variables"
   ],
+  "cmake-entries": [
+    "index.html#cmake-entries"
+  ],
   "cmake-flags": [
     "index.html#cmake-flags"
   ],
