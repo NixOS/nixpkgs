@@ -87,36 +87,22 @@ In order to support Rook/Ceph, the following NixOS kernelModule configuration is
   boot.kernelModules = [ "rbd" ];
 ```
 
-## ZFS Snapshot Support
+## ZFS ContainerD Support
 
-K3s's builtin containerd does not support the zfs snapshotter. However, it is possible to configure it to use an external containerd:
+The [ZFS snapshotter](https://github.com/containerd/zfs) can be enabled for k3s' embedded ContainerD though it requires mounting a dataset to a specific path used by k3s: `/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.zfs`
+
+For example:
+
+```bash
+$ zfs create -o mountpoint=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.zfs <zpool name>/containerd
+```
+
+You can now configure k3s to use zfs by passing the `--snapshotter` flag.
 
 ```
-virtualisation.containerd = {
-  enable = true;
-  settings =
-    let
-      fullCNIPlugins = pkgs.buildEnv {
-        name = "full-cni";
-        paths = with pkgs;[
-          cni-plugins
-          cni-plugin-flannel
-        ];
-      };
-    in {
-      plugins."io.containerd.grpc.v1.cri".cni = {
-        bin_dir = "${fullCNIPlugins}/bin";
-        conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d/";
-      };
-      # Optionally set private registry credentials here instead of using /etc/rancher/k3s/registries.yaml
-      # plugins."io.containerd.grpc.v1.cri".registry.configs."registry.example.com".auth = {
-      #  username = "";
-      #  password = "";
-      # };
-    };
-};
-# TODO describe how to enable zfs snapshotter in containerd
-services.k3s.extraFlags = toString [
-  "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
-];
+services.k3s = {
+  ...
+  extraFlags = [
+    "--snapshotter=zfs"
+  ];
 ```
