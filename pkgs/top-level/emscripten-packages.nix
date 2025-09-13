@@ -6,6 +6,37 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  gmp =
+    (pkgs.gmp.override {
+      stdenv = emscriptenStdenv;
+      cxx = true;
+    }).overrideAttrs
+      (old: {
+        outputs = [ "out" ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+          writableTmpDirAsHomeHook
+          which
+        ];
+        configureFlags = lib.remove "ABI=64" (old.configureFlags or [ ]) ++ [
+          "--host=wasm32"
+          "--prefix=${placeholder "out"}"
+        ];
+        configurePhase = ''
+          emconfigure ./configure $configureFlags
+        '';
+        buildPhase = ''
+          emmake make
+        '';
+        installPhase = ''
+          mkdir -p $out
+          emmake make install
+        '';
+        checkPhase = ''
+          emcc -O2 -o example.js demos/isprime.c -I. -L.libs -lgmp
+          ${lib.getExe nodejs} ./example.js 23 42 | grep -E '^(23 is a prime|42 is composite)$'
+        '';
+      });
+
   json_c =
     (pkgs.json_c.override {
       stdenv = pkgs.emscriptenStdenv;
@@ -87,6 +118,36 @@ rec {
             echo "since there is no stupid text containing 'foo xml:id' it seems to work! very good."
           fi
           echo "================= /testing libxml2 using node ================="
+        '';
+      });
+
+  mpfr =
+    (pkgs.mpfr.override {
+      stdenv = emscriptenStdenv;
+    }).overrideAttrs
+      (old: {
+        outputs = [ "out" ];
+        propagatedBuildInputs = [ gmp ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+          writableTmpDirAsHomeHook
+        ];
+        configureFlags = (old.configureFlags or [ ]) ++ [
+          "--with-gmp=${gmp}"
+          "--prefix=${placeholder "out"}"
+        ];
+        configurePhase = ''
+          emconfigure ./configure $configureFlags
+        '';
+        buildPhase = ''
+          emmake make
+        '';
+        installPhase = ''
+          mkdir $out
+          emmake make install
+        '';
+        checkPhase = ''
+          emcc -O2 -o example.js examples/sample.c -I${lib.getDev gmp}/include -Isrc -L${lib.getDev gmp}/lib -Lsrc/.libs -lgmp -lmpfr
+          ${lib.getExe nodejs} ./example.js | grep -E '^Sum is 2.7182818284590452353602874713526624977572470936999595749669131e0$'
         '';
       });
 
