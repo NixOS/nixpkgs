@@ -1911,6 +1911,8 @@ self: super: with self; {
 
   binsync = callPackage ../development/python-modules/binsync { };
 
+  biocutils = callPackage ../development/python-modules/biocutils { };
+
   biom-format = callPackage ../development/python-modules/biom-format { };
 
   biopandas = callPackage ../development/python-modules/biopandas { };
@@ -7320,6 +7322,8 @@ self: super: with self; {
   ixia = callPackage ../development/python-modules/ixia { };
 
   j2cli = callPackage ../development/python-modules/j2cli { };
+
+  j2lint = callPackage ../development/python-modules/j2lint { };
 
   jaconv = callPackage ../development/python-modules/jaconv { };
 
