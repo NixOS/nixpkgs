@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   libxcb,
   makeBinaryWrapper,
@@ -8,7 +9,8 @@
   rustPlatform,
   xcb-util-cursor,
   xwayland,
-  withSystemd ? true,
+  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -69,6 +71,7 @@ rustPlatform.buildRustPackage rec {
       if-loop69420
       sodiboo
       getchoo
+      johnrtitor
     ];
     mainProgram = "xwayland-satellite";
     platforms = lib.platforms.linux;
