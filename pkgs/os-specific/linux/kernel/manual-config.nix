@@ -183,14 +183,15 @@ lib.makeOverridable (
         ];
 
       in
-      (optionalAttrs isModular {
+      {
         outputs = [
           "out"
           "dev"
+        ]
+        ++ optionals isModular [
           "modules"
         ];
-      })
-      // {
+
         __structuredAttrs = true;
 
         passthru = rec {
@@ -445,10 +446,11 @@ lib.makeOverridable (
         # which trips the broken symlink check. So, just skip it. We'll know if it explodes.
         dontCheckForBrokenSymlinks = true;
 
-        postInstall = optionalString isModular ''
+        postInstall = ''
           mkdir -p $dev
           cp vmlinux $dev/
-
+        ''
+        + optionalString isModular ''
           mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
           cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
 
@@ -478,10 +480,10 @@ lib.makeOverridable (
           for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
             if [ -f "$buildRoot/$f" ]; then
               cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
-            fi
+             fi
           done
 
-          # !!! No documentation on how much of the source tree must be kept
+            # !!! No documentation on how much of the source tree must be kept
           # If/when kernel builds fail due to missing files, you can add
           # them here. Note that we may see packages requiring headers
           # from drivers/ in the future; it adds 50M to keep all of its
