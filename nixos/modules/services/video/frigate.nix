@@ -13,6 +13,7 @@ let
     elem
     filterAttrsRecursive
     hasPrefix
+    literalExpression
     makeLibraryPath
     mkDefault
     mkEnableOption
@@ -29,6 +30,32 @@ let
   format = pkgs.formats.yaml { };
 
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) cfg.settings;
+
+  configFileUnchecked = format.generate "frigate.yaml" filteredConfig;
+  configFileChecked =
+    pkgs.runCommand "frigate-config"
+      {
+        preferLocalBuilds = true;
+      }
+      ''
+        function error() {
+          cat << 'HEREDOC'
+
+        Note that not all configurations can be reliably checked in the
+        build sandbox.
+
+        This check can be disabled using `services.frigate.checkConfig`.
+        HEREDOC
+
+          exit 1
+        }
+
+        cp ${configFileUnchecked} $out
+        export CONFIG_FILE=$out
+        export PYTHONPATH=${cfg.package.pythonPath}
+        ${cfg.package.python.interpreter} -m frigate --validate-config || error
+      '';
+  configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
 
   cameraFormat =
     with types;
@@ -76,14 +103,16 @@ let
     # Send a subrequest to verify if the user is authenticated and has permission to access the resource.
     auth_request /auth;
 
-    # Save the upstream metadata response headers from Authelia to variables.
+    # Save the upstream metadata response headers from the auth request to variables
     auth_request_set $user $upstream_http_remote_user;
+    auth_request_set $role $upstream_http_remote_role;
     auth_request_set $groups $upstream_http_remote_groups;
     auth_request_set $name $upstream_http_remote_name;
     auth_request_set $email $upstream_http_remote_email;
 
     # Inject the metadata response headers from the variables into the request made to the backend.
     proxy_set_header Remote-User $user;
+    proxy_set_header Remote-Role $role;
     proxy_set_header Remote-Groups $groups;
     proxy_set_header Remote-Email $email;
     proxy_set_header Remote-Name $name;
@@ -161,8 +190,21 @@ in
 
         See also:
 
-        - https://docs.frigate.video/configuration/hardware_acceleration
-        - https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets
+        - <https://docs.frigate.video/configuration/hardware_acceleration>
+        - <https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets>
+      '';
+    };
+
+    checkConfig = mkOption {
+      type = bool;
+      default =
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform
+        && (!pkgs.stdenv.hostPlatform.isAarch64);
+      defaultText = literalExpression ''
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform && !(pkgs.stdenv.hostPlaform.isAarch64)
+      '';
+      description = ''
+        Whether to check the configuration at build time.
       '';
     };
 
@@ -175,7 +217,7 @@ in
             description = ''
               Attribute set of cameras configurations.
 
-              https://docs.frigate.video/configuration/cameras
+              <https://docs.frigate.video/configuration/cameras>
             '';
           };
 
@@ -185,6 +227,17 @@ in
               default = "/var/lib/frigate/frigate.db";
               description = ''
                 Path to the SQLite database used
+              '';
+            };
+          };
+
+          ffmpeg = {
+            path = mkOption {
+              type = coercedTo package toString str;
+              default = pkgs.ffmpeg-headless;
+              example = literalExpression "pkgs.ffmpeg-full";
+              description = ''
+                Package providing the ffmpeg and ffprobe executables below the bin/ directory.
               '';
             };
           };
@@ -294,51 +347,52 @@ in
             '';
           };
           "/vod/" = {
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                aio threads;
-                vod hls;
+            extraConfig = nginxAuthRequest + ''
+              aio threads;
+              vod hls;
 
-                secure_token $args;
-                secure_token_types application/vnd.apple.mpegurl;
+              secure_token $args;
+              secure_token_types application/vnd.apple.mpegurl;
 
-                add_header Cache-Control "no-store";
-                expires off;
+              add_header Cache-Control "no-store";
+              expires off;
 
-                keepalive_disable safari;
-              '';
+              keepalive_disable safari;
+
+              # vod module returns 502 for non-existent media
+              # https://github.com/kaltura/nginx-vod-module/issues/468
+              error_page 502 =404 /vod-not-found;
+            '';
+          };
+          "/vod-not-found" = {
+            return = 404;
           };
           "/stream/" = {
             alias = "/var/cache/frigate/stream/";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                add_header Cache-Control "no-store";
-                expires off;
+            extraConfig = nginxAuthRequest + ''
+              add_header Cache-Control "no-store";
+              expires off;
 
-                types {
-                    application/dash+xml mpd;
-                    application/vnd.apple.mpegurl m3u8;
-                    video/mp2t ts;
-                    image/jpeg jpg;
-                }
-              '';
+              types {
+                  application/dash+xml mpd;
+                  application/vnd.apple.mpegurl m3u8;
+                  video/mp2t ts;
+                  image/jpeg jpg;
+              }
+            '';
           };
           "/clips/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                    video/mp4 mp4;
-                    image/jpeg jpg;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                  video/mp4 mp4;
+                  image/jpeg jpg;
+              }
 
-                expires 7d;
-                add_header Cache-Control "public";
-                autoindex on;
-              '';
+              expires 7d;
+              add_header Cache-Control "public";
+              autoindex on;
+            '';
           };
           "/cache/" = {
             alias = "/var/cache/frigate/";
@@ -348,29 +402,25 @@ in
           };
           "/recordings/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                    video/mp4 mp4;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                  video/mp4 mp4;
+              }
 
-                autoindex on;
-                autoindex_format json;
-              '';
+              autoindex on;
+              autoindex_format json;
+            '';
           };
           "/exports/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                  video/mp4 mp4;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                video/mp4 mp4;
+              }
 
-                autoindex on;
-                autoindex_format json;
-              '';
+              autoindex on;
+              autoindex_format json;
+            '';
           };
           "/ws" = {
             proxyPass = "http://frigate-mqtt-ws/";
@@ -521,6 +571,23 @@ in
               add_header Cache-Control "public";
             '';
           };
+          "/locales/" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              add_header Cache-Control "public";
+            '';
+          };
+          "~ ^/.*-([A-Za-z0-9]+)\.webmanifest$" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              expires 1y;
+              add_header Cache-Control "public";
+              default_type application/json;
+              proxy_set_header Accept-Encoding "";
+            '';
+          };
           "/" = {
             root = cfg.package.web;
             tryFiles = "$uri $uri.html $uri/ /index.html";
@@ -554,6 +621,9 @@ in
           open_file_cache_min_uses 1;
           open_file_cache_errors on;
           aio on;
+
+          # file upload size
+          client_max_body_size 20M;
 
           # https://github.com/kaltura/nginx-vod-module#vod_open_file_thread_pool
           vod_open_file_thread_pool default;
@@ -613,24 +683,22 @@ in
       wantedBy = [
         "multi-user.target"
       ];
-      environment =
-        {
-          CONFIG_FILE = "/run/frigate/frigate.yml";
-          HOME = "/var/lib/frigate";
-          PYTHONPATH = cfg.package.pythonPath;
-        }
-        // optionalAttrs (cfg.vaapiDriver != null) {
-          LIBVA_DRIVER_NAME = cfg.vaapiDriver;
-        }
-        // optionalAttrs withCoral {
-          LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
-        };
+      environment = {
+        CONFIG_FILE = "/run/frigate/frigate.yml";
+        HOME = "/var/lib/frigate";
+        PYTHONPATH = cfg.package.pythonPath;
+      }
+      // optionalAttrs (cfg.vaapiDriver != null) {
+        LIBVA_DRIVER_NAME = cfg.vaapiDriver;
+      }
+      // optionalAttrs withCoral {
+        LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
+      };
       path =
         with pkgs;
         [
           # unfree:
           # config.boot.kernelPackages.nvidiaPackages.latest.bin
-          ffmpeg-headless
           libva-utils
           procps
           radeontop
@@ -643,10 +711,11 @@ in
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            rm --recursive --force /var/cache/frigate/*
+            shopt -s extglob
+            rm --recursive --force /var/cache/frigate/!(model_cache)
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
-            cp --no-preserve=mode "${format.generate "frigate.yml" filteredConfig}" /run/frigate/frigate.yml
+            cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
         ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";

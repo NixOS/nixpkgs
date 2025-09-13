@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonAtLeast,
   fetchPypi,
   rustPlatform,
 }:
@@ -13,7 +12,7 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "zxcvbn_rs_py";
@@ -27,8 +26,7 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
     hash = "sha256-WkaTEoVQVOwxcTyOIG5oHEvcv65fBEpokl3/6SxqiUw=";
   };
 

@@ -64,10 +64,10 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hylafaxplus";
-  version = "7.0.10";
+  version = "7.0.11";
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${finalAttrs.version}.tar.gz";
-    hash = "sha512-6HdYMHq4cLbS06UXs+FEg3XtsMRyXflrgn/NEsgyMFkTS/MoGW8RVXgbXxAhcArpFvMsY0NUPLE3jdbqqWWQCw==";
+    hash = "sha512-JRuJdE17VBrlhVz5GBc2dKBtwzPjljeropcug0bsRvO/8SJvP5PzIP5gbBLpMQKGb77SNp2iNCCOroBOUOn57A==";
   };
   patches = [
     # adjust configure check to work with libtiff > 4.1
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
     changelog = "https://hylafax.sourceforge.io/news/${finalAttrs.version}.php";
-    description = "enterprise-class system for sending and receiving facsimiles";
+    description = "Enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";
     license = lib.licenses.bsd3;

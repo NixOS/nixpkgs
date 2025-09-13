@@ -25,12 +25,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Merge multiple pcap files together, gracefully";
     homepage = "https://github.com/assafmo/joincap";
     changelog = "https://github.com/assafmo/joincap/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "joincap";
   };
 }

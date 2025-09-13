@@ -6,15 +6,15 @@
 
 buildPythonPackage rec {
   pname = "itemdb";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "almarklein";
-    repo = pname;
+    repo = "itemdb";
     tag = "v${version}";
-    sha256 = "sha256-egxQ1tGC6R5p1stYm4r05+b2HkuT+nBySTZPGqeAbSE=";
+    sha256 = "sha256-HXdOERq2td6CME8zWN0DRVkSlmdqTg2po7aJrOuITHE=";
   };
 
   meta = with lib; {

@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Radvendii/MAR1D/commit/baf3269e90eca69f154a43c4c1ef14677a6300fd.patch";
       hash = "sha256-ybdLA2sO8e0J7w4roSdMWn72OkttD3y+cJ3ScuGiHCI=";
     })
+    # https://github.com/Radvendii/MAR1D/pull/5
+    ./fix-aarch64.patch
   ];
 
   meta = {

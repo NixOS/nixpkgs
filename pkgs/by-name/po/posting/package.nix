@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "posting";
-  version = "2.6.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
     tag = version;
-    hash = "sha256-CEfApa1TfBovmGMSxqtHZC9aSSEGYTyVXGpRGxLI7Vo=";
+    hash = "sha256-2mRLkZ4rr5awc8X3thllUlB/XpFGs6uaPsYreSPB/nw=";
   };
 
   pythonRelaxDeps = true;
@@ -53,9 +53,12 @@ python3Packages.buildPythonApplication rec {
     description = "Modern API client that lives in your terminal";
     mainProgram = "posting";
     homepage = "https://posting.sh/";
-    changelog = "https://github.com/darrenburns/posting/releases/tag/${version}";
+    changelog = "https://github.com/darrenburns/posting/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jorikvanveen ];
+    maintainers = with lib.maintainers; [
+      jorikvanveen
+      fullmetalsheep
+    ];
     platforms = lib.platforms.unix;
   };
 }

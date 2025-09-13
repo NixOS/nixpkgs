@@ -28,7 +28,7 @@ diff --git a/auxil/zeekctl/CMakeLists.txt b/auxil/zeekctl/CMakeLists.txt
 index 1ebe7c2..1435509 100644
 --- a/auxil/zeekctl/CMakeLists.txt
 +++ b/auxil/zeekctl/CMakeLists.txt
-@@ -9,7 +9,7 @@ file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION LIMIT_COUNT 1)
+@@ -9,7 +9,7 @@
  set(PREFIX "${CMAKE_INSTALL_PREFIX}")
  set(LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
  set(ZEEKSCRIPTDIR "${ZEEK_SCRIPT_INSTALL_PATH}")
@@ -37,7 +37,7 @@ index 1ebe7c2..1435509 100644
  
  ########################################################################
  ## Dependency Configuration
-@@ -186,38 +186,9 @@ else ()
+@@ -186,41 +186,9 @@
      set(LOGS ${VAR}/logs)
  endif ()
  
@@ -56,6 +56,8 @@ index 1ebe7c2..1435509 100644
 -            DIRECTORY_PERMISSIONS ${perms})
 -    install(DIRECTORY DESTINATION ${SPOOL}/brokerstore
 -            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${SPOOL}/extract_files
+-            DIRECTORY_PERMISSIONS ${perms})
 -    install(DIRECTORY DESTINATION ${LOGS}
 -            DIRECTORY_PERMISSIONS ${perms})
 -    set(EMPTY_WORLD_DIRS
@@ -65,6 +67,7 @@ index 1ebe7c2..1435509 100644
 -    install(DIRECTORY DESTINATION ${SPOOL})
 -    install(DIRECTORY DESTINATION ${SPOOL}/tmp)
 -    install(DIRECTORY DESTINATION ${SPOOL}/brokerstore)
+-    install(DIRECTORY DESTINATION ${SPOOL}/extract_files)
 -    install(DIRECTORY DESTINATION ${LOGS})
 -endif ()
 -

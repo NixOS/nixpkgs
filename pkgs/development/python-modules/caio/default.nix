@@ -5,7 +5,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-aiohttp,
-  pytestCheckHook,
+  pytest-asyncio_0,
+  pytest8_3CheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -28,8 +29,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiomisc
-    pytest-aiohttp
-    pytestCheckHook
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest8_3CheckHook
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (

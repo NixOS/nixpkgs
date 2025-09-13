@@ -23,7 +23,7 @@ in
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
+    repo = "lorri";
     rev = version;
     inherit sha256;
   };
@@ -34,7 +34,6 @@ in
     "doc"
   ];
 
-  useFetchCargoVendor = true;
   inherit cargoHash;
   doCheck = false;
 

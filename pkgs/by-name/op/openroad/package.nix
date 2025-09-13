@@ -63,35 +63,34 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs =
-    [
-      boost186
-      cbc
-      cimg
-      clp
-      cudd
-      eigen
-      glpk
-      lcov
-      lemon-graph
-      libjpeg
-      libsForQt5.qtbase
-      libsForQt5.qtcharts
-      libsForQt5.qtdeclarative
-      libsForQt5.qtsvg
-      or-tools
-      pcre
-      python3
-      re2
-      readline
-      spdlog
-      tcl
-      tclPackages.tclreadline
-      yosys
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  buildInputs = [
+    boost186
+    cbc
+    cimg
+    clp
+    cudd
+    eigen
+    glpk
+    lcov
+    lemon-graph
+    libjpeg
+    libsForQt5.qtbase
+    libsForQt5.qtcharts
+    libsForQt5.qtdeclarative
+    libsForQt5.qtsvg
+    or-tools
+    pcre
+    python3
+    re2
+    readline
+    spdlog
+    tcl
+    tclPackages.tclreadline
+    yosys
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   postPatch = ''
     patchShebangs --build etc/find_messages.py
@@ -99,21 +98,20 @@ stdenv.mkDerivation rec {
     sed 's/^.*partition_gcd/# \0/g' -i src/par/test/CMakeLists.txt
   '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "ENABLE_TESTS" true)
-      (lib.cmakeBool "USE_SYSTEM_BOOST" true)
-      (lib.cmakeBool "USE_SYSTEM_ABC" false)
-      (lib.cmakeBool "ABC_SKIP_TESTS" true) # it attempts to download gtest
-      (lib.cmakeBool "USE_SYSTEM_OPENSTA" false)
-      (lib.cmakeFeature "OPENROAD_VERSION" "${version}_${src.rev}")
-      (lib.cmakeBool "CMAKE_RULE_MESSAGES" false)
-      (lib.cmakeFeature "TCL_HEADER" "${tcl}/include/tcl.h")
-      (lib.cmakeFeature "TCL_LIBRARY" "${tcl}/lib/libtcl${stdenv.hostPlatform.extensions.sharedLibrary}")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_TESTS" true)
+    (lib.cmakeBool "USE_SYSTEM_BOOST" true)
+    (lib.cmakeBool "USE_SYSTEM_ABC" false)
+    (lib.cmakeBool "ABC_SKIP_TESTS" true) # it attempts to download gtest
+    (lib.cmakeBool "USE_SYSTEM_OPENSTA" false)
+    (lib.cmakeFeature "OPENROAD_VERSION" "${version}_${src.rev}")
+    (lib.cmakeBool "CMAKE_RULE_MESSAGES" false)
+    (lib.cmakeFeature "TCL_HEADER" "${tcl}/include/tcl.h")
+    (lib.cmakeFeature "TCL_LIBRARY" "${tcl}/lib/libtcl${stdenv.hostPlatform.extensions.sharedLibrary}")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED")
+  ];
 
   # Resynthesis needs access to the Yosys binaries.
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];

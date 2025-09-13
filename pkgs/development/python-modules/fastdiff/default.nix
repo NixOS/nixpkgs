@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
-  pytestFlagsArray = [ "--benchmark-skip" ];
+  pytestFlags = [ "--benchmark-skip" ];
 
   pythonImportsCheck = [ "fastdiff" ];
 

@@ -42,7 +42,6 @@ stdenv.mkDerivation {
     description = "Small and simple stacking window manager";
     homepage = "http://nickgravgaard.com/windowlab/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
     mainProgram = "windowlab";
   };

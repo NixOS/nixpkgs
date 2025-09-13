@@ -7,11 +7,9 @@
 }:
 scx.cscheds.overrideAttrs (oldAttrs: {
   pname = "scx_full";
-  postInstall =
-    (oldAttrs.postInstall or "")
-    + ''
-      cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
-    '';
+  postInstall = (oldAttrs.postInstall or "") + ''
+    cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
+  '';
 
   passthru.tests.basic = nixosTests.scx;
 

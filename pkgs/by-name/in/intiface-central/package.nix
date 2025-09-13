@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   corrosion,
   rustPlatform,
   cargo,
@@ -11,15 +11,15 @@
   makeDesktopItem,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "intiface-central";
-  version = "2.6.5";
+  version = "2.6.7";
 
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
     tag = "v${version}";
-    hash = "sha256-goN0750EvGw5G8cb4jy6wWnjlLwlwMeTz4GQEilbwpY=";
+    hash = "sha256-ePk0I6Uf2/eaBKSZumv/kF9MJOB+MWQ4/FnQ19lE3ZQ=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ flutter327.buildFlutterApplication rec {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-z9i0xT0e8G9spOmXpI2yFee/y3ZEh69YqL+7zRWszzA=";
+    hash = "sha256-EC0pdTG+BsVFbxixCeOIXCsMHi4pF3tug+YNVzaMn/A=";
   };
 
   cargoRoot = "intiface-engine-flutter-bridge";
@@ -68,6 +68,8 @@ flutter327.buildFlutterApplication rec {
       desktopName = "Intiface Central";
     })
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "intiface_central";

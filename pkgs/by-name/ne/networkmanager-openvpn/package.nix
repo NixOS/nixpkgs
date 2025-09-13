@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-openvpn";
-  version = "1.12.0";
+  version = "1.12.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager-openvpn/${lib.versions.majorMinor finalAttrs.version}/NetworkManager-openvpn-${finalAttrs.version}.tar.xz";
-    sha256 = "kD/UwK69KqescMnYwr7Y35ImVdItdkUUQDVmrom36IY=";
+    sha256 = "S9ochVm7jDX28THAntrpDN/M0DFOi4y5isVeCbYAWtw=";
   };
 
   patches = [
@@ -43,18 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  buildInputs =
-    [
-      openvpn
-      networkmanager
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    openvpn
+    networkmanager
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"

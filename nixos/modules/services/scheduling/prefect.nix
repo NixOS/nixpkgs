@@ -123,110 +123,109 @@ in
     baseUrl = lib.mkOption {
       type = nullOr str;
       default = null;
-      description = "external url when served by a reverse proxy, e.g. https://example.com/prefect";
+      description = "external url when served by a reverse proxy, e.g. `https://example.com/prefect`";
     };
   };
 
   config = lib.mkIf cfg.enable {
     # define systemd.services as the server plus any worker definitions
-    systemd.services =
-      {
-        "prefect-server" = {
-          description = "prefect server";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+    systemd.services = {
+      "prefect-server" = {
+        description = "prefect server";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-          serviceConfig = {
-            DynamicUser = true;
-            StateDirectory = "prefect-server";
-            # TODO all my efforts to setup the database url
-            # have failed with some unable to open file
-            Environment = [
-              "PREFECT_HOME=%S/prefect-server"
-              "PREFECT_UI_STATIC_DIRECTORY=%S/prefect-server"
-              "PREFECT_SERVER_ANALYTICS_ENABLED=off"
-              "PREFECT_UI_API_URL=${cfg.baseUrl}/api"
-              "PREFECT_UI_URL=${cfg.baseUrl}"
-            ];
-            EnvironmentFile =
-              if cfg.database == "postgres" && cfg.databasePasswordFile != null then
-                [ cfg.databasePasswordFile ]
-              else
-                [ ];
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "prefect-server";
+          # TODO all my efforts to setup the database url
+          # have failed with some unable to open file
+          Environment = [
+            "PREFECT_HOME=%S/prefect-server"
+            "PREFECT_UI_STATIC_DIRECTORY=%S/prefect-server"
+            "PREFECT_SERVER_ANALYTICS_ENABLED=off"
+            "PREFECT_UI_API_URL=${cfg.baseUrl}/api"
+            "PREFECT_UI_URL=${cfg.baseUrl}"
+          ];
+          EnvironmentFile =
+            if cfg.database == "postgres" && cfg.databasePasswordFile != null then
+              [ cfg.databasePasswordFile ]
+            else
+              [ ];
 
-            # ReadWritePaths = [ cfg.dataDir ];
-            ProtectSystem = "strict";
-            ProtectHome = true;
-            PrivateTmp = true;
-            NoNewPrivileges = true;
-            MemoryDenyWriteExecute = true;
-            LockPersonality = true;
-            CapabilityBoundingSet = [ ];
-            AmbientCapabilities = [ ];
-            RestrictSUIDSGID = true;
-            RestrictAddressFamilies = [
-              "AF_INET"
-              "AF_INET6"
-              "AF_UNIX"
-            ];
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectKernelLogs = true;
-            ProtectControlGroups = true;
-            MemoryAccounting = true;
-            CPUAccounting = true;
+          # ReadWritePaths = [ cfg.dataDir ];
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          NoNewPrivileges = true;
+          MemoryDenyWriteExecute = true;
+          LockPersonality = true;
+          CapabilityBoundingSet = [ ];
+          AmbientCapabilities = [ ];
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          MemoryAccounting = true;
+          CPUAccounting = true;
 
-            ExecStart = "${pkgs.prefect}/bin/prefect server start --host ${cfg.host} --port ${toString cfg.port}";
-            Restart = "always";
-            WorkingDirectory = cfg.dataDir;
-          };
+          ExecStart = "${pkgs.prefect}/bin/prefect server start --host ${cfg.host} --port ${toString cfg.port}";
+          Restart = "always";
+          WorkingDirectory = cfg.dataDir;
         };
-      }
-      // lib.concatMapAttrs (poolName: poolCfg: {
-        # return a partial attr set with one key: "prefect-worker-..."
-        "prefect-worker-${poolName}" = {
-          description = "prefect worker for pool '${poolName}'";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+      };
+    }
+    // lib.concatMapAttrs (poolName: poolCfg: {
+      # return a partial attr set with one key: "prefect-worker-..."
+      "prefect-worker-${poolName}" = {
+        description = "prefect worker for pool '${poolName}'";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-          environment.systemPackages = cfg.package;
+        environment.systemPackages = cfg.package;
 
-          serviceConfig = {
-            DynamicUser = true;
-            StateDirectory = "prefect-worker-${poolName}";
-            Environment = [
-              "PREFECT_HOME=%S/prefect-worker-${poolName}"
-              "PREFECT_API_URL=${cfg.baseUrl}/api"
-            ];
-            ProtectSystem = "strict";
-            ProtectHome = true;
-            PrivateTmp = true;
-            NoNewPrivileges = true;
-            MemoryDenyWriteExecute = true;
-            LockPersonality = true;
-            CapabilityBoundingSet = [ ];
-            AmbientCapabilities = [ ];
-            RestrictSUIDSGID = true;
-            RestrictAddressFamilies = [
-              "AF_INET"
-              "AF_INET6"
-              "AF_UNIX"
-            ];
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectKernelLogs = true;
-            ProtectControlGroups = true;
-            MemoryAccounting = true;
-            CPUAccounting = true;
-            ExecStart = ''
-              ${pkgs.prefect}/bin/prefect worker start \
-                --pool ${poolName} \
-                --type process \
-                --install-policy ${poolCfg.installPolicy}
-            '';
-            Restart = "always";
-          };
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "prefect-worker-${poolName}";
+          Environment = [
+            "PREFECT_HOME=%S/prefect-worker-${poolName}"
+            "PREFECT_API_URL=${cfg.baseUrl}/api"
+          ];
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          NoNewPrivileges = true;
+          MemoryDenyWriteExecute = true;
+          LockPersonality = true;
+          CapabilityBoundingSet = [ ];
+          AmbientCapabilities = [ ];
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          MemoryAccounting = true;
+          CPUAccounting = true;
+          ExecStart = ''
+            ${pkgs.prefect}/bin/prefect worker start \
+              --pool ${poolName} \
+              --type process \
+              --install-policy ${poolCfg.installPolicy}
+          '';
+          Restart = "always";
         };
-      }) cfg.workerPools;
+      };
+    }) cfg.workerPools;
   };
 }

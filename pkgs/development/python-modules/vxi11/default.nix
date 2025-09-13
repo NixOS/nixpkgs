@@ -9,11 +9,12 @@
 buildPythonPackage rec {
   pname = "python-vxi11";
   version = "0.9";
+  format = "setuptools";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-ivi";
-    repo = pname;
+    repo = "python-vxi11";
     rev = "v${version}";
     sha256 = "1xv7chp7rm0vrvbz6q57fpwhlgjz461h08q9zgmkcl2l0w96hmsn";
   };

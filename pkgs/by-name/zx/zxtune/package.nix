@@ -44,11 +44,12 @@ let
   staticBuildInputs = [
     boost
     zlib
-  ] ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+  ]
+  ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5090";
+  version = "5101";
 
   outputs = [ "out" ];
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-2k1I3wGnUSMgwzxXY3SKhS8nBtrFU8zH9VaFwdWYgOU=";
+    hash = "sha256-C+1tmQ8cKGpigWDh5p0mqv9B7/Tv8iJ4JVc835Q4y40=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -129,19 +130,18 @@ stdenv.mkDerivation rec {
   # load ("Status: Available" or "Status: Failed to load dynamic library...").
   dontPatchELF = true;
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 bin/linux/release/xtractor -t $out/bin
-      install -Dm755 bin/linux/release/zxtune123 -t $out/bin
-    ''
-    + lib.optionalString withQt ''
-      install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
-      install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 bin/linux/release/xtractor -t $out/bin
+    install -Dm755 bin/linux/release/zxtune123 -t $out/bin
+  ''
+  + lib.optionalString withQt ''
+    install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   # Only wrap the gui
   dontWrapQtApps = true;

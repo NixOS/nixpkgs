@@ -26,22 +26,20 @@ stdenv.mkDerivation rec {
     "BINDIR="
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
-  buildInputs =
-    [
-      libusb1
-    ]
+  buildInputs = [
+    libusb1
+  ]
 
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemdMinimal # libudev
-    ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    systemdMinimal # libudev
+  ];
 
   installPhase = ''
     runHook preInstall

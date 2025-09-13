@@ -37,7 +37,7 @@ for url_and_key in "${url_and_key_list[@]}"; do
     name=$(echo "$url_and_key" | cut -d' ' -f3)
 
     echo "prefetching ${url}..."
-    hash=$(nix hash convert --hash-algo sha256 $(nix-prefetch-url "$url" --name "$name"))
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 $(nix-prefetch-url "$url" --name "$name"))
 
     echo "    $key = {" >>$hashfile
     echo "      name = \"$name\";" >>$hashfile

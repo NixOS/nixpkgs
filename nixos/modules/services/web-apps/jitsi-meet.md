@@ -13,7 +13,10 @@ A minimal configuration using Let's Encrypt for TLS certificates looks like this
     hostName = "jitsi.example.com";
   };
   services.jitsi-videobridge.openFirewall = true;
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
   security.acme.email = "me@example.com";
   security.acme.acceptTerms = true;
 }
@@ -46,7 +49,10 @@ Here is the minimal configuration with additional configurations:
     };
   };
   services.jitsi-videobridge.openFirewall = true;
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
   security.acme.email = "me@example.com";
   security.acme.acceptTerms = true;
 }

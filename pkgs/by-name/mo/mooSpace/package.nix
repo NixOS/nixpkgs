@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation {
   pname = "mooSpace";
-  version = "unstable-2020-06-10";
+  version = "0-unstable-2020-06-10";
 
   src = fetchFromGitHub {
     owner = "modularev";

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-aZs1iqfpsiMuhxXNqRatpKD99eDBCsWHk4OPpnnaB70=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GdvqkB/jHAGUbzhOLPkIX664JJH3WrZZtv+/E/PhTR8=";
 
   nativeBuildInputs = [
@@ -35,15 +34,15 @@ rustPlatform.buildRustPackage rec {
       --zsh target/*/release/completions/_*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
     changelog = "https://github.com/str4d/rage/blob/v${version}/rage/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ]; # either at your option
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with lib.maintainers; [ ryantm ];
     mainProgram = "rage";
   };
 }

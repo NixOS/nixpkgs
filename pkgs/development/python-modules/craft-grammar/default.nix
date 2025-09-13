@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "craft-grammar";
-  version = "2.0.3";
+  version = "2.2.0";
 
   pyproject = true;
 
@@ -20,22 +20,24 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-grammar";
     tag = version;
-    hash = "sha256-d7U4AAUikYcz26ZSXQwkTobSKN1PpaL20enfggHSKRM=";
+    hash = "sha256-URyc+N2WSXnjurqd1ieV2mN4Uf9m0zivupRuKmH6s8Q=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ overrides ];
+  dependencies = [
+    overrides
+    pydantic
+  ];
 
   pythonImportsCheck = [ "craft_grammar" ];
 
   nativeCheckInputs = [
-    pydantic
     pytestCheckHook
     pyyaml
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   # Temp fix for test incompatibility with Python 3.13
   disabledTests = [
@@ -49,7 +51,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-grammar";
     changelog = "https://github.com/canonical/craft-grammar/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

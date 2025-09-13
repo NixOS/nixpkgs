@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An essential set of Z-machine tools for interpreter authors, experienced Inform programmers, and Z-code hackers.";
+    description = "Essential set of Z-machine tools for interpreter authors, experienced Inform programmers, and Z-code hackers";
     homepage = "http://inform-fiction.org/zmachine/ztools.html";
     license = lib.licenses.cc-by-sa-40;
     platforms = lib.platforms.unix;

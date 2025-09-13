@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     npmHooks.npmConfigHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
@@ -52,16 +53,7 @@ stdenv.mkDerivation rec {
     # Make sure the native modules are built against electron's ABI
     "--nodedir=${electron.headers}"
     # https://nodejs.org/api/os.html#osarch
-    "--arch=${
-      if stdenv.hostPlatform.parsed.cpu.name == "i686" then
-        "ia32"
-      else if stdenv.hostPlatform.parsed.cpu.name == "x86_64" then
-        "x64"
-      else if stdenv.hostPlatform.parsed.cpu.name == "aarch64" then
-        "arm64"
-      else
-        stdenv.hostPlatform.parsed.cpu.name
-    }"
+    "--arch=${stdenv.hostPlatform.node.arch}"
   ];
 
   installPhase = ''

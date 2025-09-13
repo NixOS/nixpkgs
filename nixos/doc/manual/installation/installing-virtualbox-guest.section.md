@@ -27,18 +27,14 @@ There are a few modifications you should make in configuration.nix.
 Enable booting:
 
 ```nix
-{
-  boot.loader.grub.device = "/dev/sda";
-}
+{ boot.loader.grub.device = "/dev/sda"; }
 ```
 
 Also remove the fsck that runs at startup. It will always fail to run,
 stopping your boot until you press `*`.
 
 ```nix
-{
-  boot.initrd.checkJournalingFS = false;
-}
+{ boot.initrd.checkJournalingFS = false; }
 ```
 
 Shared folders can be given a name and a path in the host system in the
@@ -48,12 +44,15 @@ the "Add" icon). Add the following to the
 `"nofail"`, the system will not boot properly.
 
 ```nix
-{ config, pkgs, ...} :
+{ config, pkgs, ... }:
 {
   fileSystems."/virtualboxshare" = {
     fsType = "vboxsf";
     device = "nameofthesharedfolder";
-    options = [ "rw" "nofail" ];
+    options = [
+      "rw"
+      "nofail"
+    ];
   };
 }
 ```

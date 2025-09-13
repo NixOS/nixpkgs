@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   fetchurl,
   buildDunePackage,
   ocaml,
   findlib,
   alcotest,
   astring,
+  cmdliner,
   cppo,
   fmt,
   logs,
@@ -13,6 +15,7 @@
   camlp-streams,
   lwt,
   re,
+  result,
   csexp,
   gitUpdater,
 }:
@@ -34,9 +37,11 @@ buildDunePackage rec {
     fmt
     logs
     csexp
+    cmdliner
     ocaml-version
     camlp-streams
     re
+    result
     findlib
   ];
   checkInputs = [
@@ -44,7 +49,7 @@ buildDunePackage rec {
     lwt
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   outputs = [
     "bin"

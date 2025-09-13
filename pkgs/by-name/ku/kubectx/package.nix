@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ahmetb";
-    repo = pname;
+    repo = "kubectx";
     rev = "v${version}";
     hash = "sha256-HVmtUhdMjbkyMpTgbsr5Mm286F9Q7zbc5rOxi7OBZEg=";
   };
@@ -31,7 +31,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Fast way to switch between clusters and namespaces in kubectl!";
+    description = "Fast way to switch between clusters and namespaces in kubectl";
     license = licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
     maintainers = with maintainers; [ jlesquembre ];

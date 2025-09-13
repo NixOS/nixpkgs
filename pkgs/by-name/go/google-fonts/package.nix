@@ -49,25 +49,24 @@ stdenvNoCC.mkDerivation {
   # FamilyName.ttf. This installs all fonts if fonts is empty and otherwise
   # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [ " " ] [ "" ] font) fonts;
-  installPhase =
-    ''
-      adobeBlankDest=$adobeBlank/share/fonts/truetype
-      install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
-      rm -r ofl/adobeblank
-      dest=$out/share/fonts/truetype
-    ''
-    + (
-      if fonts == [ ] then
-        ''
-          find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
-        ''
-      else
-        ''
-          for font in $fonts; do
-            find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
-          done
-        ''
-    );
+  installPhase = ''
+    adobeBlankDest=$adobeBlank/share/fonts/truetype
+    install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
+    rm -r ofl/adobeblank
+    dest=$out/share/fonts/truetype
+  ''
+  + (
+    if fonts == [ ] then
+      ''
+        find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
+      ''
+    else
+      ''
+        for font in $fonts; do
+          find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
+        done
+      ''
+  );
 
   meta = with lib; {
     homepage = "https://fonts.google.com";

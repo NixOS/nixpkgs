@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "macfsevents";
   version = "0.8.4";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "MacFSEvents";

@@ -504,13 +504,14 @@ class Editor:
         )
         _prefetch = functools.partial(prefetch, cache=cache)
 
+        to_update_for_filter = [x.replace(".", "-") for x in to_update]
         plugins_to_update = (
             current_plugin_specs
             if len(to_update) == 0
             else [
                 description
                 for description in current_plugin_specs
-                if self.filter_plugins_to_update(description, to_update)
+                if self.filter_plugins_to_update(description, to_update_for_filter)
             ]
         )
 
@@ -558,7 +559,16 @@ class Editor:
         }
 
         for plugin_desc, plugin, redirect in fetched:
-            result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
+            # Check if plugin is a Plugin object and has normalized_name attribute
+            if isinstance(plugin, Plugin) and hasattr(plugin, 'normalized_name'):
+                result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
+            elif isinstance(plugin, Exception):
+                # For exceptions, we can't determine the normalized_name
+                # Just log the error and continue
+                log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
+            else:
+                # For unexpected types, log the issue
+                log.error(f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}")
 
         return list(result.values())
 
@@ -615,9 +625,9 @@ class Editor:
             "--github-token",
             "-t",
             type=str,
-            default=os.getenv("GITHUB_API_TOKEN"),
+            default=os.getenv("GITHUB_TOKEN"),
             help="""Allows to set --proc to higher values.
-            Uses GITHUB_API_TOKEN environment variables as the default value.""",
+            Uses GITHUB_TOKEN environment variables as the default value.""",
         )
         common.add_argument(
             "--no-commit",

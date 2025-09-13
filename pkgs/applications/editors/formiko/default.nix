@@ -10,12 +10,13 @@
   gtkspell3,
   librsvg,
   pygobject3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 
 buildPythonApplication rec {
   pname = "formiko";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ondratu";
@@ -37,7 +38,7 @@ buildPythonApplication rec {
     gtkspell3
     librsvg
     pygobject3
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   # Needs a display

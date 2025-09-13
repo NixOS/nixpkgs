@@ -90,53 +90,52 @@ buildPythonPackage rec {
     pytestCheckHook
     python-pae
     requests-mock
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTestPaths =
-    [
-      # ModuleNotFoundError: No module named 'csc_dummy'
-      "pyhanko_tests/test_csc.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # OSError: One or more parameters passed to a function were not valid.
-      "pyhanko_tests/cli_tests"
-    ];
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'csc_dummy'
+    "pyhanko_tests/test_csc.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: One or more parameters passed to a function were not valid.
+    "pyhanko_tests/cli_tests"
+  ];
 
-  disabledTests =
-    [
-      # Most of the test require working with local certificates,
-      # contacting OSCP or performing requests
-      "test_generic_data_sign_legacy"
-      "test_generic_data_sign"
-      "test_cms_v3_sign"
-      "test_detached_cms_with_self_reported_timestamp"
-      "test_detached_cms_with_tst"
-      "test_detached_cms_with_content_tst"
-      "test_detached_cms_with_wrong_content_tst"
-      "test_detached_with_malformed_content_tst"
-      "test_noop_attribute_prov"
-      "test_detached_cades_cms_with_tst"
-      "test_read_qr_config"
-      "test_no_changes_policy"
-      "test_bogus_metadata_manipulation"
-      "test_tamper_sig_obj"
-      "test_signed_file_diff_proxied_objs"
-      "test_pades_revinfo_live"
-      "test_diff_fallback_ok"
-      "test_no_diff_summary"
-      "test_ocsp_embed"
-      "test_ts_fetch_aiohttp"
-      "test_ts_fetch_requests"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # OSError: One or more parameters passed to a function were not valid.
-      "test_detached_cms_with_duplicated_attr"
-      "test_detached_cms_with_wrong_tst"
-      "test_diff_analysis_add_extensions_dict"
-      "test_diff_analysis_update_indirect_extensions_not_all_path"
-      "test_no_certificates"
-      "test_ocsp_without_nextupdate_embed"
-    ];
+  disabledTests = [
+    # Most of the test require working with local certificates,
+    # contacting OSCP or performing requests
+    "test_generic_data_sign_legacy"
+    "test_generic_data_sign"
+    "test_cms_v3_sign"
+    "test_detached_cms_with_self_reported_timestamp"
+    "test_detached_cms_with_tst"
+    "test_detached_cms_with_content_tst"
+    "test_detached_cms_with_wrong_content_tst"
+    "test_detached_with_malformed_content_tst"
+    "test_noop_attribute_prov"
+    "test_detached_cades_cms_with_tst"
+    "test_read_qr_config"
+    "test_no_changes_policy"
+    "test_bogus_metadata_manipulation"
+    "test_tamper_sig_obj"
+    "test_signed_file_diff_proxied_objs"
+    "test_pades_revinfo_live"
+    "test_diff_fallback_ok"
+    "test_no_diff_summary"
+    "test_ocsp_embed"
+    "test_ts_fetch_aiohttp"
+    "test_ts_fetch_requests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: One or more parameters passed to a function were not valid.
+    "test_detached_cms_with_duplicated_attr"
+    "test_detached_cms_with_wrong_tst"
+    "test_diff_analysis_add_extensions_dict"
+    "test_diff_analysis_update_indirect_extensions_not_all_path"
+    "test_no_certificates"
+    "test_ocsp_without_nextupdate_embed"
+  ];
 
   pythonImportsCheck = [ "pyhanko" ];
 

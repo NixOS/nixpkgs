@@ -30,14 +30,14 @@ rustPlatform.buildRustPackage rec {
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = pinData.serverCargoHash;
 
-  buildInputs =
-    [ libpq ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    libpq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin

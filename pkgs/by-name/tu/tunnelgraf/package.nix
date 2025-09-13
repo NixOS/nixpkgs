@@ -43,12 +43,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "tunnelgraf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage SSH tunnel hops to many endpoints";
     homepage = "https://github.com/denniswalker/tunnelgraf";
     changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tunnelgraf";
   };
 }

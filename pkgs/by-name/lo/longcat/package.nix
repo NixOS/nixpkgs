@@ -25,7 +25,7 @@ buildGoModule {
 
   meta = {
     homepage = "https://github.com/mattn/longcat";
-    description = "Renders a picture of a long cat on the terminal.";
+    description = "Renders a picture of a long cat on the terminal";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "longcat";

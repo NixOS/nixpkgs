@@ -20,13 +20,13 @@ buildGoModule rec {
   # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Content-addressed binary distribution system";
     mainProgram = "desync";
     longDescription = "An alternate implementation of the casync protocol and storage mechanism with a focus on production-readiness";
     homepage = "https://github.com/folbricht/desync";
     changelog = "https://github.com/folbricht/desync/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ chaduffy ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ chaduffy ];
   };
 }

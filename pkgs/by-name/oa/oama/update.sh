@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p haskell.packages.ghc910.cabal2nix nix-prefetch-git curl jq nixfmt-rfc-style
+#!nix-shell -i bash -p haskell.packages.ghc910.cabal2nix nix-prefetch-git curl jq
 
 set -euo pipefail
 

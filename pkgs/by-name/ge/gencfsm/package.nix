@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     sha256 = "RXVwg/xhfAQv3pWp3UylOhMKDh9ZACTuKM4lPrn1dk8=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # tools.c:38:5: error: implicit declaration of function 'gnome_encfs_manager_on_logout' []
+    "-Wno-implicit-function-declaration"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfec";
-  version = "1.4.2.11";
+  version = "1.4.2.12";
 
   src = fetchzip {
     url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${version}.tar.gz";
-    hash = "sha256-lBR8vz8whEdPVHAGVq9eRriKtmS5tUAvtoyXwO4AuEs=";
+    hash = "sha256-KOP3LqCZHdEgm+XhzBdNxnJipGC4gpvA57T7mIeSyaE=";
   };
 
   outputs = [

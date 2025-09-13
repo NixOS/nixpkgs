@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-    ]
-    ++ lib.optionals withGeolocation [ libmaxminddb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
+  buildInputs = [
+    ncurses
+    openssl
+  ]
+  ++ lib.optionals withGeolocation [ libmaxminddb ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   configureFlags = [
     "--enable-utf8"
     "--with-openssl"
-  ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
+  ]
+  ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
     homepage = "https://goaccess.io";
     changelog = "https://github.com/allinurl/goaccess/raw/v${version}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ederoyd46 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ederoyd46 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "goaccess";
   };
 }

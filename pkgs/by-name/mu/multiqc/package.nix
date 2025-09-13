@@ -8,38 +8,47 @@
   addBinToPathHook,
 }:
 
+let
+  test-data = fetchFromGitHub {
+    name = "test-data";
+    owner = "MultiQC";
+    repo = "test-data";
+    rev = "d775b73c106d48726653f2fd02e473b7acbd93d8";
+    hash = "sha256-uxBpMx22gWJmnbF9tVuVIdYdiqUh7n51swzu5hnfZQ0=";
+  };
+in
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
-  version = "1.28";
+  version = "1.29";
+  pyproject = true;
 
-  # Two data sources. One for the code, another for the test data
-  srcs = [
-    (fetchFromGitHub {
-      name = "multiqc";
-      owner = "MultiQC";
-      repo = "MultiQC";
-      tag = "v${version}";
-      hash = "sha256-rYZaecoVAO1RE44XCw60aVwvWhKcZ/RrG3WpVRcLbuA=";
-    })
-    (fetchFromGitHub {
-      owner = "MultiQC";
-      repo = "test-data";
-      rev = "d775b73c106d48726653f2fd02e473b7acbd93d8";
-      hash = "sha256-uxBpMx22gWJmnbF9tVuVIdYdiqUh7n51swzu5hnfZQ0=";
-      name = "test-data";
-    })
-  ];
+  src = fetchFromGitHub {
+    name = "multiqc";
+    owner = "MultiQC";
+    repo = "MultiQC";
+    tag = "v${version}";
+    hash = "sha256-KKLdDNf889lEbCyNpJFZoE8rNO50CRzNP4hKpKHRAcE=";
+  };
 
-  sourceRoot = "multiqc";
+  # Multiqc cannot remove temporary directories in some case.
+  # Default is 10 retries, lower it to 2
+  postPatch = ''
+    substituteInPlace multiqc/utils/util_functions.py \
+      --replace-fail \
+        "max_retries: int = 10," \
+        "max_retries: int = 2,"
+  '';
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
+    boto3
     click
     humanize
     importlib-metadata
     jinja2
     kaleido
     markdown
-    natsort
     numpy
     packaging
     requests
@@ -54,7 +63,11 @@ python3Packages.buildPythonApplication rec {
     typeguard
     tqdm
     python-dotenv
+    natsort
+    tiktoken
     jsonschema
+    polars
+    pyarrow
   ];
 
   optional-dependencies = {
@@ -62,7 +75,7 @@ python3Packages.buildPythonApplication rec {
       pre-commit-hooks
       pdoc3
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       syrupy
       pygithub
@@ -76,26 +89,19 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 
-  # Some tests run subprocess.run() with "multiqc"
   preCheck = ''
-    chmod -R u+w ../test-data
-    ln -s ../test-data .
+    ln -s ${test-data} ./test-data
   '';
 
-  # Some tests run subprocess.run() with "ps"
   nativeCheckInputs =
-    with python3Packages;
-    [
-      procps
-      pytest-cov
+    (with python3Packages; [
       pytest-xdist
       pytestCheckHook
-      syrupy
-      pygithub
-      versionCheckHook
-    ]
+    ])
     ++ [
-      addBinToPathHook
+      addBinToPathHook # Some tests run subprocess.run() with "multiqc"
+      procps # Some tests run subprocess.run() with "ps"
+      versionCheckHook
     ];
 
   versionCheckProgramArg = "--version";

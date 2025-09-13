@@ -103,7 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Astrophotographic image processing tool";
     license = lib.licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
-    maintainers = with lib.maintainers; [ hjones2199 ];
+    maintainers = with lib.maintainers; [
+      hjones2199
+      returntoreality
+    ];
     platforms = lib.platforms.linux;
   };
 })

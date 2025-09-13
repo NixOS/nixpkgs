@@ -21,21 +21,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1CHUkXjb8+wOFQWo/04KcLaJcv/dLiDYwPrSnzWucXI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ESaESon1oJAlvsv6+TIb/lLsOQmjgheQWm82Lr0mJOE=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   nativeCheckInputs = [
     git
@@ -44,16 +42,16 @@ rustPlatform.buildRustPackage rec {
   # disable vendored-libgit2 and vendored-openssl
   buildNoDefaultFeatures = true;
 
-  meta = with lib; {
+  meta = {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
     mainProgram = "cargo-release";
     homepage = "https://github.com/crate-ci/cargo-release";
     changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       gerschtli
     ];

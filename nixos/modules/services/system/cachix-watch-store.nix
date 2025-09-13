@@ -14,7 +14,7 @@ in
   ];
 
   options.services.cachix-watch-store = {
-    enable = lib.mkEnableOption "Cachix Watch Store: https://docs.cachix.org";
+    enable = lib.mkEnableOption "Cachix Watch Store: <https://docs.cachix.org>";
 
     cacheName = lib.mkOption {
       type = lib.types.str;
@@ -83,27 +83,29 @@ in
         DynamicUser = true;
         LoadCredential = [
           "cachix-token:${toString cfg.cachixTokenFile}"
-        ] ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
+        ]
+        ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
       };
       script =
         let
-          command =
-            [ "${cfg.package}/bin/cachix" ]
-            ++ (lib.optional cfg.verbose "--verbose")
-            ++ (lib.optionals (cfg.host != null) [
-              "--host"
-              cfg.host
-            ])
-            ++ [ "watch-store" ]
-            ++ (lib.optionals (cfg.compressionLevel != null) [
-              "--compression-level"
-              (toString cfg.compressionLevel)
-            ])
-            ++ (lib.optionals (cfg.jobs != null) [
-              "--jobs"
-              (toString cfg.jobs)
-            ])
-            ++ [ cfg.cacheName ];
+          command = [
+            "${cfg.package}/bin/cachix"
+          ]
+          ++ (lib.optional cfg.verbose "--verbose")
+          ++ (lib.optionals (cfg.host != null) [
+            "--host"
+            cfg.host
+          ])
+          ++ [ "watch-store" ]
+          ++ (lib.optionals (cfg.compressionLevel != null) [
+            "--compression-level"
+            (toString cfg.compressionLevel)
+          ])
+          ++ (lib.optionals (cfg.jobs != null) [
+            "--jobs"
+            (toString cfg.jobs)
+          ])
+          ++ [ cfg.cacheName ];
         in
         ''
           export CACHIX_AUTH_TOKEN="$(<"$CREDENTIALS_DIRECTORY/cachix-token")"

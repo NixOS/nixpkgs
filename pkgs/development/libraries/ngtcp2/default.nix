@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     # must match version usage in meta.changelog
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mfgWtyYhAJB8kvQVNCuSHx4Nz1Th5STMlorCB2xO7OQ=";
+    hash = "sha256-5Pmk752i/lgO/os2SegevGN+MKaVuQii2HrVWaR15Gg=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     libev
     nghttp3
     quictls
-  ] ++ lib.optional withJemalloc jemalloc;
+  ]
+  ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC_LIB" false)

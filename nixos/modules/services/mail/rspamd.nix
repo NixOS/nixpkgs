@@ -304,8 +304,8 @@ in
   options = {
 
     services.rspamd = {
-
       enable = mkEnableOption "rspamd, the Rapid spam filtering system";
+      package = lib.mkPackageOption pkgs "rspamd" { };
 
       debug = mkOption {
         type = types.bool;
@@ -451,14 +451,14 @@ in
         '';
       };
     };
-    services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
+    services.postfix.settings.main = mkIf cfg.postfix.enable cfg.postfix.config;
 
     systemd.services.postfix = mkIf cfg.postfix.enable {
       serviceConfig.SupplementaryGroups = [ postfixCfg.group ];
     };
 
     # Allow users to run 'rspamc' and 'rspamadm'.
-    environment.systemPackages = [ pkgs.rspamd ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.${cfg.user} = {
       description = "rspamd daemon";
@@ -480,7 +480,7 @@ in
       restartTriggers = [ rspamdDir ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} -c /etc/rspamd/rspamd.conf -f";
+        ExecStart = "${cfg.package}/bin/rspamd ${optionalString cfg.debug "-d"} -c /etc/rspamd/rspamd.conf -f";
         Restart = "always";
 
         User = "${cfg.user}";

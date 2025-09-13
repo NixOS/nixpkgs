@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     description = "Programs for locking and unlocking files and mailboxes";
     homepage = "http://packages.debian.org/sid/lockfile-progs";
     license = lib.licenses.gpl2Only;
-
-    maintainers = [ lib.maintainers.bluescreen303 ];
     platforms = lib.platforms.all;
   };
 }

@@ -26,12 +26,10 @@ in
     ./xterm.nix
     ./phosh.nix
     ./xfce.nix
-    ./plasma5.nix
     ../../desktop-managers/plasma6.nix
     ./lumina.nix
     ./lxqt.nix
     ./enlightenment.nix
-    ./gnome.nix
     ./retroarch.nix
     ./kodi.nix
     ./mate.nix
@@ -40,9 +38,9 @@ in
     ./cde.nix
     ./cinnamon.nix
     ./budgie.nix
-    ./deepin.nix
     ../../desktop-managers/lomiri.nix
     ../../desktop-managers/cosmic.nix
+    ../../desktop-managers/gnome.nix
   ];
 
   options = {

@@ -5,8 +5,8 @@
   linux,
   scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "19769";
-    sha256 = "0mfn2pa587laj45zlah424g953yjxmlh49x36byjylmzj079a42n";
+    rev = "19872";
+    hash = "sha256-zbs5iWCaDtwovJLHnBlHfDBZ2DbggToRj3YZ5Nbx/RM=";
   },
   ...
 }@args:
@@ -30,20 +30,34 @@ linux.override {
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
       src = linux.src;
+
       buildPhase = ''
+        runHook preBuild
+
         # --force flag to skip empty files after deblobbing
-        ${scripts}/${majorMinor}/deblob-${majorMinor} --force \
-            ${major} ${minor} ${patch}
+        ${scripts}/${majorMinor}/deblob-${majorMinor} --force ${major} ${minor} ${patch}
+
+        runHook postBuild
       '';
+
       checkPhase = ''
+        runHook preCheck
+
         ${scripts}/deblob-check
+
+        runHook postCheck
       '';
+
       installPhase = ''
+        runHook preInstall
+
         cp -r . "$out"
+
+        runHook postInstall
       '';
     };
 
-    passthru.updateScript = ./update-libre.sh;
+    extraPassthru.updateScript = ./update-libre.sh;
 
     maintainers = with lib.maintainers; [ qyliss ];
   };

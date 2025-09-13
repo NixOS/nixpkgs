@@ -45,6 +45,7 @@ lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
+lrexlib-oniguruma,,,,,,junestepp
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,,gepbird
@@ -106,7 +107,6 @@ luazip,,,,,,
 lusc_luv,,,,,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 luuid,,,,20120509-2,,
-luv,,,,1.48.0-2,,
 lyaml,,,,,,lblasc
 lz.n,,,,,,mrcjkb
 lze,,,,,,birdee
@@ -144,6 +144,7 @@ rtp.nvim,,,,,,mrcjkb
 rustaceanvim,,,,,,mrcjkb
 say,,,,,,
 serpent,,,,,,lockejan
+sofa,,,,,,f4z3r
 sqlite,,,,,,
 std._debug,,,,,,
 std.normalize,,,,,,

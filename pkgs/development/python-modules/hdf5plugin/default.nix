@@ -5,30 +5,64 @@
   setuptools,
   py-cpuinfo,
   h5py,
+  pkgconfig,
+  c-blosc2,
+  charls,
+  lz4,
+  zlib,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "hdf5plugin";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
     tag = "v${version}";
-    hash = "sha256-6lEU8ZGJKazDqloel5QcaXAbNGzV1fAbAjYC/hFUOdI=";
+    hash = "sha256-12OWsNZfKToNLyokNrwgPc7WRISJI4nRA0J/zwgCZwI=";
   };
 
   build-system = [
     setuptools
     py-cpuinfo
+    pkgconfig # only needed if HDF5PLUGIN_SYSTEM_LIBRARIES is used
   ];
 
   dependencies = [ h5py ];
 
+  buildInputs = [
+    #c-blosc
+    c-blosc2
+    # bzip2_1_1
+    charls
+    lz4
+    # snappy
+    # zfp
+    zlib
+    zstd
+  ];
+
+  # opt-in to use use system libs instead
+  env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
+    #"blosc" # AssertionError: 4000 not less than 4000
+    "blosc2"
+    # "bz2" # only works with bzip2_1_1
+    "charls"
+    "lz4"
+    # "snappy" # snappy tests fail
+    # "sperr" # not packaged?
+    # "zfp" #  pkgconfig: (lib)zfp not found
+    "zlib"
+    "zstd"
+  ];
+
   checkPhase = ''
     python test/test.py
   '';
+
   pythonImportsCheck = [ "hdf5plugin" ];
 
   preBuild = ''

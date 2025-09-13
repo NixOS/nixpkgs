@@ -26,28 +26,24 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      libticonv
-      libtifiles2
-      libticables2
-      xz
-      bzip2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-    ];
+  buildInputs = [
+    glib
+    libticonv
+    libtifiles2
+    libticables2
+    xz
+    bzip2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+  ];
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      siraben
-      clevor
-    ];
+    maintainers = with maintainers; [ siraben ];
     platforms = with platforms; linux ++ darwin;
   };
 }

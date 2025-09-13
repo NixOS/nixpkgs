@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch =
-    ''
-      sed -i "8i #include <time.h>" xprompt.c
-    ''
-    + (
-      let
-        configFile =
-          if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
-      in
-      lib.optionalString (conf != null) "cp ${configFile} config.h"
-    );
+  postPatch = ''
+    sed -i "8i #include <time.h>" xprompt.c
+  ''
+  + (
+    let
+      configFile =
+        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
+    in
+    lib.optionalString (conf != null) "cp ${configFile} config.h"
+  );
 
   makeFlags = [
     "CC:=$(CC)"

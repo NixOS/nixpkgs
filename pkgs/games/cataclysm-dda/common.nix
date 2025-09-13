@@ -66,24 +66,23 @@ stdenv.mkDerivation {
     patchShebangs lang/compile_mo.sh
   '';
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "LANGUAGES=all"
-      (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
-    ]
-    ++ optionals (!debug) [
-      "RELEASE=1"
-    ]
-    ++ optionals tiles [
-      "TILES=1"
-      "SOUND=1"
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      "NATIVE=osx"
-      "CLANG=1"
-      "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LANGUAGES=all"
+    (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
+  ]
+  ++ optionals (!debug) [
+    "RELEASE=1"
+  ]
+  ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
+    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   postInstall = optionalString tiles (
     if !stdenv.hostPlatform.isDarwin then patchDesktopFile else installMacOSAppLauncher

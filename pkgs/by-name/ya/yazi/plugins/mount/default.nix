@@ -5,17 +5,17 @@
 }:
 mkYaziPlugin {
   pname = "mount.yazi";
-  version = "25.2.26-unstable-2025-03-02";
+  version = "25.5.31-unstable-2025-08-11";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "b44c245500b34e713732a9130bf436b13b4777e9";
-    hash = "sha256-nZ8yfnKvNLM5aA+mmQ3PkfM5lwSKwWnkQewcg9GwseI=";
+    rev = "e95c7b384e7b0a9793fe1471f0f8f7810ef2a7ed";
+    hash = "sha256-TUS+yXxBOt6tL/zz10k4ezot8IgVg0/2BbS8wPs9KcE=";
   };
 
   meta = {
-    description = "Previewing archive contents with mount";
+    description = "Mount manager for Yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

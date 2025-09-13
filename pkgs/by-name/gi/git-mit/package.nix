@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-8XWwzR9TiSCU6fKbrulKpCDFDEyzQpaT2nrahF8iac8=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoPatches = [
     # https://github.com/PurpleBooth/git-mit/pull/1543
     ./libgit2-update.patch
@@ -44,11 +42,11 @@ rustPlatform.buildRustPackage {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist set of hooks to aid pairing and link commits to issues";
     homepage = "https://github.com/PurpleBooth/git-mit";
     changelog = "https://github.com/PurpleBooth/git-mit/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

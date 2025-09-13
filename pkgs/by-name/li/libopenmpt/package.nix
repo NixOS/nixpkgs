@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
-  version = "0.7.13";
+  version = "0.8.2";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    hash = "sha256-3NfN5PnEmOtJbEVW4cG4E1Pip0dH6CcKQlZRF+pC4fE=";
+    hash = "sha256-hE5P+Y29mUK75KEEgib5H4vFtGC3vsZInmfO2z4KrDc=";
   };
 
   enableParallelBuilding = true;
@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      mpg123
-      libogg
-      libvorbis
-      portaudio
-      libsndfile
-      flac
-    ]
-    ++ lib.optionals usePulseAudio [
-      libpulseaudio
-    ];
+  buildInputs = [
+    zlib
+    mpg123
+    libogg
+    libvorbis
+    portaudio
+    libsndfile
+    flac
+  ]
+  ++ lib.optionals usePulseAudio [
+    libpulseaudio
+  ];
 
   configureFlags = [
     (lib.strings.withFeature usePulseAudio "pulseaudio")

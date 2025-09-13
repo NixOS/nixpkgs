@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       payloads to compatible requests.
     '';
     homepage = "https://cartero.danirod.es";
+    changelog = "https://github.com/danirod/cartero/releases";
     license = lib.licenses.gpl3Plus;
     mainProgram = "cartero";
     maintainers = with lib.maintainers; [

@@ -11,13 +11,11 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
-  tomli,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.11.0";
+  version = "1.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "setuptools_rust";
     inherit version;
-    hash = "sha256-92XWbz3vb9yF4ebYicaoEq6hQwyNrc8ce2d5tF+HT7I=";
+    hash = "sha256-2UqT8Ml3UcFwFFZfB73DJL7kXTls0buoPY56+SuUXww=";
   };
 
   build-system = [
@@ -47,13 +45,14 @@ buildPythonPackage rec {
       format = "setuptools";
       buildAndTestSubdir = null;
 
-      nativeBuildInputs =
-        [ setuptools-rust ]
-        ++ [
-          rustPlatform.cargoSetupHook
-          cargo
-          rustc
-        ];
+      nativeBuildInputs = [
+        setuptools-rust
+      ]
+      ++ [
+        rustPlatform.cargoSetupHook
+        cargo
+        rustc
+      ];
 
       preConfigure = ''
         # sourceRoot puts Cargo.lock in the wrong place due to the

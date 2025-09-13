@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-XVaWO1zHMXM83Qih3HnmIsOvM1zpefF6u9lBP420/mQ=";
+    sha256 = "sha256-IlMHtsEYafpbCNZfbeJo1JS5S5qcZQt1aDWjv+xxoqM=";
   };
 
   outputs = [
@@ -59,7 +59,11 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   configurePhase = ''
+    runHook preConfigure
+
     ./configure
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

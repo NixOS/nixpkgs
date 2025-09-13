@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rajatjindal";
-    repo = pname;
+    repo = "kubectl-evict-pod";
     rev = "v${version}";
     sha256 = "sha256-Z1NIueonjyO2GHulBbXbsQtX7V/Z95GUoZv9AqjLIR0=";
   };

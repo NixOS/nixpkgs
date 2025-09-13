@@ -2,22 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  debtcollector,
   oslotest,
   stestr,
   pbr,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-context";
-  version = "5.7.1";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "oslo_context";
-    hash = "sha256-DFEf4VNzKv8MGztEq9L1EAioPHB7uSm+4B4SVayWSIk=";
+    hash = "sha256-wajRfHn1DHECTVTMF8wLAeidv/JYMV3BHX4E5rGgLOM=";
   };
 
   postPatch = ''
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    debtcollector
     pbr
+    typing-extensions
   ];
 
   nativeCheckInputs = [

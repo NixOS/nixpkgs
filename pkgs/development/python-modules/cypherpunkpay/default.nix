@@ -77,9 +77,8 @@ buildPythonPackage rec {
     webtest
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.2";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,26 +29,25 @@ buildPythonPackage rec {
     owner = "Fizzadar";
     repo = "pyinfra";
     tag = "v${version}";
-    hash = "sha256-l0RD4lOLjzM9Ydf7vJr+PXpUGsVdAZN/dTUFJ3fo078=";
+    hash = "sha256-7bNkDm5SyIgVkrGQ95/q7AiY/JnxtWx+jkDO/rJQ2WQ=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      click
-      distro
-      gevent
-      jinja2
-      packaging
-      paramiko
-      python-dateutil
-      pywinrm
-      setuptools
-      typeguard
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    click
+    distro
+    gevent
+    jinja2
+    packaging
+    paramiko
+    python-dateutil
+    pywinrm
+    setuptools
+    typeguard
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
-    changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ totoroot ];
     mainProgram = "pyinfra";

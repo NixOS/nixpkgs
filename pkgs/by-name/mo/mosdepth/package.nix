@@ -27,13 +27,12 @@ buildNimPackage (finalAttrs: {
   doInstallCheck = true;
 
   meta = with lib; {
-    description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
+    description = "Fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
     mainProgram = "mosdepth";
     license = licenses.mit;
     homepage = "https://github.com/brentp/mosdepth";
     maintainers = with maintainers; [
       jbedo
-      ehmry
     ];
     platforms = platforms.linux;
   };

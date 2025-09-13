@@ -70,23 +70,21 @@ in
         exec ${lib.getExe cfg.package}
       '';
 
-      environment =
-        {
-          NTFY_URL = cfg.settings.ntfyUrl;
-          BAUTH_USER = cfg.settings.bauthUser;
-        }
-        // lib.optionalAttrs (cfg.settings.ntfyBAuthUser != null) {
-          NTFY_BAUTH_USER = cfg.settings.ntfyBAuthUser;
-        };
+      environment = {
+        NTFY_URL = cfg.settings.ntfyUrl;
+        BAUTH_USER = cfg.settings.bauthUser;
+      }
+      // lib.optionalAttrs (cfg.settings.ntfyBAuthUser != null) {
+        NTFY_BAUTH_USER = cfg.settings.ntfyBAuthUser;
+      };
 
       serviceConfig = {
-        LoadCredential =
-          [
-            "BAUTH_PASS_FILE:${cfg.settings.bauthPass}"
-          ]
-          ++ lib.optional (
-            cfg.settings.ntfyBAuthPass != null
-          ) "NTFY_BAUTH_PASS_FILE:${cfg.settings.ntfyBAuthPass}";
+        LoadCredential = [
+          "BAUTH_PASS_FILE:${cfg.settings.bauthPass}"
+        ]
+        ++ lib.optional (
+          cfg.settings.ntfyBAuthPass != null
+        ) "NTFY_BAUTH_PASS_FILE:${cfg.settings.ntfyBAuthPass}";
 
         DynamicUser = true;
         CapabilityBoundingSet = [ "" ];

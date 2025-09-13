@@ -11,6 +11,7 @@
   harfbuzz,
   glib,
   ninja,
+  plutosvg,
   fixDarwinDylibNames,
 }:
 
@@ -32,24 +33,30 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [
     sdl3
     freetype
     harfbuzz
     glib
+    plutosvg
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDLTTF_STRICT" true)
     (lib.cmakeBool "SDLTTF_HARFBUZZ" true)
-    # disable plutosvg (not in nixpkgs)
-    (lib.cmakeBool "SDLTTF_PLUTOSVG" false)
+    (lib.cmakeBool "SDLTTF_PLUTOSVG" true)
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "release-(3\\..*)"
+      ];
+    };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
@@ -62,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       charain
       Emin017
     ];
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl3-ttf" ];
     platforms = lib.platforms.all;
   };

@@ -17,6 +17,7 @@
   makeWrapper,
   python3,
   callPackage,
+  fetchpatch,
 }:
 
 let
@@ -27,18 +28,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.4.1";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "souffle-lang";
     repo = "souffle";
     rev = version;
-    sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
+    sha256 = "sha256-Umfeb1pGAeK5K3QDRD/labC6IJLsPPJ73ycsAV4yPNM=";
   };
 
   patches = [
     ./threads.patch
     ./includes.patch
+    (fetchpatch {
+      name = "replace-copy-assignment.patch";
+      url = "https://github.com/souffle-lang/souffle/commit/73ebe789ec21772a0c5558639606354bfc3bcbd1.patch";
+      hash = "sha256-L9SK3Dh2cRwxKfEckUSiGGTDsWIZ5B8hoYYcslJpZl4=";
+    })
   ];
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];

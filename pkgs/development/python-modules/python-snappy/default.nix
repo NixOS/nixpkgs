@@ -4,7 +4,7 @@
   fetchPypi,
   cramjam,
   setuptools,
-  snappy,
+  snappy-cpp,
   unittestCheckHook,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ snappy ];
+  buildInputs = [ snappy-cpp ];
 
   dependencies = [ cramjam ];
 

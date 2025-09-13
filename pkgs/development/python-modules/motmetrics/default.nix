@@ -44,7 +44,7 @@ buildPythonPackage {
     pytest-benchmark
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "motmetrics" ];
 

@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfspeedtest";
-  version = "1.3.4";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "code-inflation";
     repo = "cfspeedtest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ea9qOAFP7+1UIrGASFiAPyem+VDVgzrgD44ELsXRzc=";
+    hash = "sha256-MWHZllH0QVylmvwEwCX2uhNSEx9p5xEeW0u/zGyjNZE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uyLd4KQa9zWMCuurpdQv0OnCSguE180dm6FzHR+nC40=";
+  cargoHash = "sha256-wTytRbue26KVaGb3LarTCNdq56psIayVDul4iQkwH2s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Unofficial CLI for speed.cloudflare.com";
     homepage = "https://github.com/code-inflation/cfspeedtest";
+    changelog = "https://github.com/code-inflation/cfspeedtest/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       colemickens

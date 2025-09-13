@@ -1,6 +1,6 @@
 # D (Dlang) {#dlang}
 
-Nixpkgs provides multiple D compilers such as `ldc`, `dmd` and `gdc`.
+Nixpkgs provides multiple D compilers such as `ldc` and `dmd`.
 These can be used like any other package during build time.
 
 However, Nixpkgs provides a build helper for compiling packages using the `dub` package manager.
@@ -47,12 +47,12 @@ Note that you need to define `installPhase` because `dub` doesn't know where fil
 Also note that running `dub test` is disabled by default. You can enable it by setting `doCheck = true`.
 
 ## Lockfiles {#dub-lockfiles}
-Nixpkgs has its own lockfile format for `dub` dependencies, because `dub`'s official "lockfile" format (`dub.selections.json`) is not hash based.
+Nixpkgs has its own lockfile format for `dub` dependencies, because `dub`'s official "lockfile" format (`dub.selections.json`) is not hash-based.
 
 A lockfile can be generated using the `dub-to-nix` helper package.
-* Firstly, install `dub-to-nix` into your shell session by running `nix-shell -p dub-to-nix`
-* Then navigate to the root of the source of the program you want to package
-* Finally, run `dub-to-nix` and it will print the lockfile to stdout. You could pipe stdout into a text file or just copy the output manually into a file.
+* Firstly, install `dub-to-nix` into your shell session by running `nix-shell -p dub-to-nix`.
+* Then navigate to the root of the source of the program you want to package.
+* Finally, run `dub-to-nix`, and it will print the lockfile to stdout. You can pipe stdout into a text file or just copy the output manually into a file.
 
 ## `buildDubPackage` parameters {#builddubpackage-parameters}
 

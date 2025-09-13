@@ -9,9 +9,7 @@ applications on Linux.
 
 To enable Flatpak, add the following to your {file}`configuration.nix`:
 ```nix
-{
-  services.flatpak.enable = true;
-}
+{ services.flatpak.enable = true; }
 ```
 
 For the sandboxed apps to work correctly, desktop integration portals need to

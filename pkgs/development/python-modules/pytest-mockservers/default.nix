@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Gr1N";
-    repo = pname;
+    repo = "pytest-mockservers";
     rev = version;
     hash = "sha256-Mb3wSbambC1h+lFI+fafwZzm78IvADNAsF/Uw60DFHc=";
   };
@@ -45,6 +45,9 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # relies on the removed event_loop fixture
+  disabledTests = [ "test_udp_server_factory" ];
 
   pythonImportsCheck = [ "pytest_mockservers" ];
 

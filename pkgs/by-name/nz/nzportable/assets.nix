@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-assets";
-  version = "0-unstable-2024-09-28-13-34-48";
+  version = "0-unstable-2024-09-28";
 
   src = fetchFromGitHub {
     owner = "nzp-team";

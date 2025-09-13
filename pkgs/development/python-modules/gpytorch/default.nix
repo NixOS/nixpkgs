@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
-    repo = pname;
+    repo = "gpytorch";
     tag = "v${version}";
     hash = "sha256-whZjqAs3nyjKMzAGi+OnyBtboq0UuV8m11A4IzkWtec=";
   };

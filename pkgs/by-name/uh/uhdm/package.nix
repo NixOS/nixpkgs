@@ -9,16 +9,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "UHDM";
-  # When updating this package, also consider updating science/logic/surelog
-  version = "1.84-unstable-2024-11-12";
+  pname = "uhdm";
+  # When updating this package, also consider updating surelog
+  version = "1.86";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "UHDM";
-    # After we're back on a stable tag, use v${finalAttrs.version}
-    rev = "7d90dd0e68759775d0c86885d991925096b5b496";
-    hash = "sha256-msdtBAlOXwYJd0HhWmVo8oMJ6h8OUmy0ILxV1MV52PE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f7QJJEP/jL69DdMJOL5WQdDZU+kBnnLi2eX37AoaXls=";
     fetchSubmodules = false; # we use all dependencies from nix
   };
 
@@ -38,7 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  checkPhase = "make test";
+
+  checkPhase = ''
+    runHook preCheck
+
+    make test
+
+    runHook postCheck
+  '';
 
   meta = {
     description = "Universal Hardware Data Model";

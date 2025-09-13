@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf269,
+  autoconf,
   automake,
   libtool,
   pkg-config,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf269
+    autoconf
     automake
     help2man
     libtool
@@ -75,19 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/^843;/d" tests/testsuite
     # test 875 (INDEXED sample)
     sed -i "/^875;/d" tests/testsuite
+
+    # gnucobol.texi:2765: no matching `@end verbatim'
+    sed -i "214i @end verbatim" doc/cbrunt.tex
   '';
 
-  preConfigure =
-    ''
-      autoconf
-      aclocal
-      automake
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # when building with nix on darwin, configure will use GNU strip,
-      # which fails due to using --strip-unneeded, which is not supported
-      substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
-    '';
+  preConfigure = ''
+    autoconf
+    aclocal
+    automake
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # when building with nix on darwin, configure will use GNU strip,
+    # which fails due to using --strip-unneeded, which is not supported
+    substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
+  '';
 
   # error: call to undeclared function 'xmlCleanupParser'
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]

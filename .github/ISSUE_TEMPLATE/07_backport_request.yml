@@ -9,23 +9,27 @@ body:
         <p align="center">
           <a href="https://nixos.org">
             <picture>
-              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png">
-              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
-              <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="400px" alt="NixOS logo">
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
             </picture>
           </a>
         </p>
 
         > [!CAUTION]
         > **Before you begin:** Be advised that backports are subject to the [release suitability guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
-        > Stable releases of Nixpkgs do not receive breaking changes, which include major package updates that have incompatible API changes and break backwards compatibility. In the [Semantic Versioning standard](https://semver.org/), this is the first version number. (1.X.X)
+        >
+        > Stable releases of Nixpkgs do not receive breaking changes, which include major package updates that have incompatible API changes and break backwards compatibility. In the [Semantic Versioning standard](https://semver.org/), this is the first version number (1.X.X).
+        >
         > Generally, only minor package updates, such as security patches, bug fixes and feature additions (but not removals!) will be considered for backporting. Please read the rules above carefully before filing this backport request.
 
         Welcome to Nixpkgs. Please replace the **`Backport to Stable: PACKAGENAME OLDVERSION → NEWVERSION`** template above with the correct package name (As seen in the [NixOS Package Search](https://search.nixos.org/packages)), the current version of the package in Nixpkgs Stable and the current version of the package in Nixpkgs Unstable.
 
         > [!TIP]
         > For instance, if you were filing a request against the out of date `hello` package, where the current version in Nixpkgs Unstable is 1.0.1, but the current version in Nixpkgs Stable is 1.0.0, your title would be as follows:
-        > `Backport to Stable: hello 1.0.0 → 1.0.1`
+        > ```
+        > Backport to Stable: hello 1.0.0 → 1.0.1
+        > ```
 
         ---
   - type: "input"
@@ -62,7 +66,7 @@ body:
       label: "Notify maintainers"
       description: |
         Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
-      value: |
+      value: |2
 
 
         ---

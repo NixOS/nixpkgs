@@ -37,17 +37,16 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      bash
-      libpcap
-      libxcrypt
-      linux-pam
-      openssl
-    ]
-    ++ lib.optionals withSystemd [
-      systemdMinimal
-    ];
+  buildInputs = [
+    bash
+    libpcap
+    libxcrypt
+    linux-pam
+    openssl
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+  ];
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do

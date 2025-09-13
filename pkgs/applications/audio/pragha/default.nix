@@ -8,7 +8,6 @@
   dbus-glib,
   desktop-file-utils,
   hicolor-icon-theme,
-  pcre,
   qtbase,
   sqlite,
   taglib,
@@ -74,7 +73,6 @@ mkDerivation rec {
       gtk3
       hicolor-icon-theme
       libpeas
-      pcre
       qtbase
       sqlite
       taglib

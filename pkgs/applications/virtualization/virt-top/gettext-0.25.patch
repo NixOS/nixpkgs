@@ -1,0 +1,10 @@
+--- a/configure.ac.orig	2025-08-23 01:41:53
++++ b/configure.ac	2025-08-23 01:42:14
+@@ -123,6 +123,7 @@
+ 
+ dnl Check for gettext.
+ AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.25])
+ 
+ dnl Write gettext modules for the programs.
+ dnl http://www.le-gall.net/sylvain+violaine/documentation/ocaml-gettext/html/reference-manual/ch03s04.html

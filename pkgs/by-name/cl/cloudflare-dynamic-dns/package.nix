@@ -32,12 +32,12 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = cloudflare-dynamic-dns; };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Zebradil/cloudflare-dynamic-dns/blob/${version}/CHANGELOG.md";
     description = "Dynamic DNS client for Cloudflare";
     homepage = "https://github.com/Zebradil/cloudflare-dynamic-dns";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "cloudflare-dynamic-dns";
-    maintainers = [ maintainers.zebradil ];
+    maintainers = [ lib.maintainers.zebradil ];
   };
 }

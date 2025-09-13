@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "warp-plus";
-  version = "1.2.5";
+  version = "1.2.6-unstable-2025-08-13";
 
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "warp-plus";
-    rev = "v${version}";
-    hash = "sha256-gDn4zicSD+Hz3GsL6pzGpUaiHcw+8KHDaOJGCML6LOA=";
+    rev = "08d43e9e4c079534e47ba19fb2965c968c9621b2";
+    hash = "sha256-MHz8b1whSzUJO0YogxMPuXMaQRfR+xxSYhFxq412EmE=";
   };
 
-  vendorHash = "sha256-MWzF9+yK+aUr8D4d64+qCD6XIqtmWH5hCLmQoksgFf8=";
+  vendorHash = "sha256-GmxiQk50iQoH2J/qUVvl9RBz6aIQp8RURqTzrl6NdCY=";
 
   ldflags = [
     "-s"
@@ -27,29 +27,36 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+  patches = [
+    # https://github.com/bepass-org/warp-plus/pull/291
+    ./fix-endpoints.patch
+  ];
+
   checkFlags =
     let
       # Skip tests that require network access
       skippedTests = [
+        "TestStdNetBindReceiveFuncAfterClose"
         "TestConcurrencySafety"
+        "TestNoiseHandshake"
         "TestTwoDevicePing"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = warp-plus; };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+    tests.version = testers.testVersion {
+      package = warp-plus;
+      command = "warp-plus version";
+    };
   };
 
   meta = {
     description = "Warp + Psiphon, an anti censorship utility for Iran";
     homepage = "https://github.com/bepass-org/warp-plus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "warp-plus";
-    # Doesn't work with Go toolchain >1.22, runtime error:
-    # 'panic: tls.ConnectionState doesn't match'
-    broken = true;
   };
 }

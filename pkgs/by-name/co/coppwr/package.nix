@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "coppwr";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "coppwr";
     rev = version;
-    hash = "sha256-5TgK/0UN05P3WENch4sBo/Sy9FaMmyH/gZ+6qUyM1z0=";
+    hash = "sha256-9oFWX44jToJh0vJaDV/KZXVNQgLG0lr1iA+0hInAhLA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-xF/eBBXlbOfGy9avDkOXT/q72DHJ7Zlu3lfDsTwo+3U=";
+  cargoHash = "sha256-Fq8I1pt83yqrjiA4VXA+z7o2LFTac2SonAwTycQRP8M=";
 
   nativeBuildInputs = [
     pkg-config

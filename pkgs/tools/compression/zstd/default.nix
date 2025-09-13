@@ -24,16 +24,17 @@
   curl,
   python3Packages,
   haskellPackages,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zstd";
   version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
   };
 
@@ -92,42 +93,47 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  preInstall =
-    ''
-      mkdir -p $bin/bin
-      substituteInPlace ../programs/zstdgrep \
-        --replace ":-grep" ":-${gnugrep}/bin/grep" \
-        --replace ":-zstdcat" ":-$bin/bin/zstdcat"
+  preInstall = ''
+    mkdir -p $bin/bin
+    substituteInPlace ../programs/zstdgrep \
+      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
-      substituteInPlace ../programs/zstdless \
-        --replace "zstdcat" "$bin/bin/zstdcat"
+    substituteInPlace ../programs/zstdless \
+      --replace "zstdcat" "$bin/bin/zstdcat"
+  ''
+  + lib.optionalString buildContrib (
     ''
-    + lib.optionalString buildContrib (
-      ''
-        cp contrib/pzstd/pzstd $bin/bin/pzstd
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
-      ''
-    );
+      cp contrib/pzstd/pzstd $bin/bin/pzstd
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
+    ''
+  );
 
-  outputs =
-    [
-      "bin"
-      "dev"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isUnix "man"
-    ++ [ "out" ];
+  outputs = [
+    "bin"
+    "dev"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isUnix "man"
+  ++ [ "out" ];
 
   passthru = {
     updateScript = nix-update-script { };
     tests = {
+
+      # Reverse dependencies
+
       inherit libarchive rocksdb arrow-cpp;
       libzip = libzip.override { withZstd = true; };
       curl = curl.override { zstdSupport = true; };
       python-zstd = python3Packages.zstd;
       haskell-zstd = haskellPackages.zstd;
       haskell-hs-zstd = haskellPackages.hs-zstd;
+
+      # Package tests (coherent with overrides)
+
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     };
   };
 
@@ -148,5 +154,6 @@ stdenv.mkDerivation rec {
     mainProgram = "zstd";
     platforms = platforms.all;
     maintainers = with maintainers; [ orivej ];
+    pkgConfigModules = [ "libzstd" ];
   };
-}
+})

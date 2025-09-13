@@ -7,12 +7,10 @@
   pip,
   pytestCheckHook,
   pythonOlder,
-  setuptools-git,
   setuptools,
   twine,
   watchdog,
   webtest,
-  wheel,
   build,
   importlib-resources,
 }:
@@ -31,16 +29,20 @@ buildPythonPackage rec {
     hash = "sha256-ODwDYAEAqel31+kR/BE1yBfgOZOtPz3iaCLg/d6jbb4=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"setuptools-git>=0.3",' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-git
-    wheel
   ];
 
   dependencies = [
     distutils
     pip
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     passlib = [ passlib ];
@@ -54,7 +56,8 @@ buildPythonPackage rec {
     twine
     webtest
     build
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 

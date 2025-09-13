@@ -8,24 +8,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vimcats";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "mrcjkb";
     repo = "vimcats";
     rev = "v${version}";
-    hash = "sha256-QV/eIy6yd6Lnmo8XV+E37/oCZCC3jlPu31emH0MgiO4=";
+    hash = "sha256-BW1pU7NnW8yWePV0IQOUmcNa13NvV9lOZhfnEdQFBQQ=";
   };
 
   buildFeatures = [ "cli" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qxAxMAeeqiHNQ5jJ+Mxtkw9y0xeUFUzhClUc1k8I4HM=";
+  cargoHash = "sha256-OGU7jwXOUf+tVECsyKwJQ9vRqTDoV8m/WOlAqTFdfUM=";
 
   passthru.tests.version = testers.testVersion { package = vimcats; };
 
   meta = with lib; {
-    description = "A CLI to generate vim/nvim help doc from LuaCATS. Forked from lemmy-help";
+    description = "CLI to generate vim/nvim help doc from LuaCATS. Forked from lemmy-help";
     longDescription = ''
       `vimcats` is a LuaCATS parser as well as a CLI which takes that parsed tree and converts it into vim help docs.
       It is a fork of lemmy-help that aims to support more recent LuaCATS features.

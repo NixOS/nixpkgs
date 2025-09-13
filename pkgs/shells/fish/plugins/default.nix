@@ -12,6 +12,8 @@ lib.makeScope newScope (
 
     autopair = callPackage ./autopair.nix { };
 
+    aws = callPackage ./aws.nix { };
+
     bang-bang = callPackage ./bang-bang.nix { };
 
     bobthefish = callPackage ./bobthefish.nix { };
@@ -31,6 +33,8 @@ lib.makeScope newScope (
     exercism-cli-fish-wrapper = callPackage ./exercism-cli-fish-wrapper.nix { };
 
     fifc = callPackage ./fifc.nix { };
+
+    fishbang = callPackage ./fishbang.nix { };
 
     fish-bd = callPackage ./fish-bd.nix { };
 

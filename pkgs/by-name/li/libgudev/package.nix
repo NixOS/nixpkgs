@@ -46,17 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      glib # for glib-mkenums needed during the build
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    glib # for glib-mkenums needed during the build
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ];
 
   buildInputs = [
     udev

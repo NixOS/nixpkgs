@@ -12,21 +12,23 @@
   mold,
   rustc,
   nix-update-script,
+
+  # On non-darwin, `mold` is the default linker, but it's broken on Darwin.
+  withMold ? with stdenv.hostPlatform; isUnix && !isDarwin,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evcxr";
-  version = "0.19.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8PjZFWUH76QrA8EI9Cx0sBCzocvSmnp84VD7Nv9QMc8=";
+    sha256 = "sha256-8dV+NNtU4HFerrgRyc1kO+MSsMTJJItTtJylEIN014g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-hE/O6lHC0o+nrN4vaQ155Nn2gZscpfsZ6o7IDi/IEjI=";
+  cargoHash = "sha256-HJrEXt6O7qCNJ/xOh4kjmqKJ22EVwBTzV1S+q98k0VQ=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
@@ -67,12 +69,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrap = exe: ''
         wrapProgram $out/bin/${exe} \
           --prefix PATH : ${
-            lib.makeBinPath [
-              cargo
-              gcc
-              mold # fix fatal error: "unknown command line option: -run"
-              rustc # requires rust edition 2024
-            ]
+            lib.makeBinPath (
+              [
+                cargo
+                gcc
+                rustc
+              ]
+              ++ lib.optional withMold mold
+            )
           } \
           --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
       '';

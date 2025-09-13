@@ -2,7 +2,9 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
+  nixosTests,
   testers,
   cmake,
   cmake-extras,
@@ -31,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
     rev = finalAttrs.version;
-    hash = "sha256-eA5oCoAZB7fWyWm0Sy6wXh0EW+h76bdfJ2dotr7gUC0=";
+    hash = "sha256-S/idjDdcRvqZqKmflkYJyQckz4/9k/8JY6eRDACk9Ag=";
   };
 
   outputs = [
@@ -47,9 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
     "examples"
   ];
 
+  patches = [
+    # Remove when version > 2.1.0
+    (fetchpatch {
+      name = "0001-lomiri-content-hub-treewide-Add-missing-LDM-include-dirs.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/cdd3371714c183d4caf166157082288c022bb98d.patch";
+      hash = "sha256-Uubd425T+0KxPR9lJW6+ejO2fFzcDwEIpJATSZ9jYD4=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace import/*/Content/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # Look for peer files in running system
     substituteInPlace src/com/lomiri/content/service/registry-updater.cpp \
@@ -101,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_DOC" true)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
@@ -145,7 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # Tests content-hub functionality, up to the point where one app receives a content exchange request
+      # from another and changes into a mode to pick the content to send
+      vm = nixosTests.lomiri.desktop-appinteractions;
+    };
     updateScript = gitUpdater { };
   };
 

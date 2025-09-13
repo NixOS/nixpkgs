@@ -1,7 +1,8 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
-  pytest,
+  pytestCheckHook,
   pytest-cov-stub,
 }:
 
@@ -15,12 +16,15 @@ buildPythonPackage rec {
     hash = "sha256-+L78VL+MEUfBCrQCl+yEwmdvotTqXW9STZQ2qAB075g=";
   };
 
-  checkPhase = ''
-    py.test
-  '';
-
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
+
+  meta = {
+    description = "Loader interface around multiple config file formats";
+    homepage = "https://pypi.org/project/plaster/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+  };
 }

@@ -18,38 +18,23 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     with lib.versions;
     lib.switch
-      [ coq.version mathcomp-ssreflect.version ]
+      [ coq.coq-version mathcomp-ssreflect.version ]
       [
-        {
-          cases = [
-            (range "8.16" "9.0")
-            (range "2.0.0" "2.4.0")
-          ];
-          out = "1.0.3";
-        }
-        {
-          cases = [
-            (range "8.16" "9.0")
-            (range "2.0.0" "2.3.0")
-          ];
-          out = "1.0.2";
-        }
-        {
-          cases = [
-            (range "8.12" "8.18")
-            (range "1.12.0" "1.17.0")
-          ];
-          out = "1.0.1";
-        }
-        {
-          cases = [
-            (range "8.10" "8.16")
-            (range "1.12.0" "1.17.0")
-          ];
-          out = "1.0.0";
-        }
+        (case (range "8.16" "9.1") (range "2.0.0" "2.4.0") "1.0.3")
+        (case (range "8.16" "9.0") (range "2.0.0" "2.3.0") "1.0.2")
+        (case (range "8.12" "8.18") (range "1.12.0" "1.17.0") "1.0.1")
+        (case (range "8.10" "8.16") (range "1.12.0" "1.17.0") "1.0.0")
       ]
       null;
   release."1.0.3".sha256 = "sha256-5lpOCDyH6NFzGLvnXHHAnR7Qv5oXsUyC8TLBFrIiBag=";

@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to work with the feeds (vulnerabilities, CPE dictionary etc.) distributed by National Vulnerability Database";
     homepage = "https://github.com/facebookincubator/nvdtools";
     changelog = "https://github.com/facebookincubator/nvdtools/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

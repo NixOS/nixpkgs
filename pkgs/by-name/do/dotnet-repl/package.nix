@@ -6,15 +6,15 @@
 
 buildDotnetGlobalTool {
   pname = "dotnet-repl";
-  version = "0.3.239";
+  version = "0.3.250";
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
-  nugetHash = "sha256-wn4i0zC56gxnjsgjdiMxLinmUsSROhmimu0lmBZo1hA=";
+  nugetHash = "sha256-Tja6kIr9nHMrFY76vdFvS3ig2Tfrjus8mJb+2OC8fnk=";
 
   meta = {
-    description = "A polyglot REPL built on .NET Interactive";
+    description = "Polyglot REPL built on .NET Interactive";
     homepage = "https://github.com/jonsequitur/dotnet-repl";
     license = lib.licenses.mit;
     mainProgram = "dotnet-repl";

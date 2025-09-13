@@ -52,6 +52,10 @@ let
         hash = "sha256-mZWP9yF1O4knCiXx8CqolnS+93bM+hTQy40cd0HZmwI=";
       };
       commit_date = "2023-01-05";
+      patches = [
+        # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
+        ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
+      ];
     };
     "14" = {
       src = fetchSpark2014 {
@@ -64,6 +68,9 @@ let
 
         # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
         ./0002-mute-aarch64-warnings.patch
+
+        # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
+        ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
       ];
       commit_date = "2024-01-11";
     };
@@ -82,38 +89,36 @@ stdenv.mkDerivation {
 
   patches = thisSpark.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      gnat
-      gprbuild
-      python3
-      makeWrapper
-    ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      menhir
-    ]);
+  nativeBuildInputs = [
+    gnat
+    gprbuild
+    python3
+    makeWrapper
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
-  buildInputs =
-    [
-      gnatcoll-core
-    ]
-    ++ (with ocamlPackages; [
-      ocamlgraph
-      zarith
-      ppx_deriving
-      ppx_sexp_conv
-      camlzip
-      menhirLib
-      num
-      re
-      sexplib
-      yojson
-    ])
-    ++ (lib.optionals (gnat_version == "14") [
-      gpr2_24_2_next
-    ]);
+  buildInputs = [
+    gnatcoll-core
+  ]
+  ++ (with ocamlPackages; [
+    ocamlgraph
+    zarith
+    ppx_deriving
+    ppx_sexp_conv
+    camlzip
+    menhirLib
+    num
+    re
+    sexplib
+    yojson
+  ])
+  ++ (lib.optionals (gnat_version == "14") [
+    gpr2_24_2_next
+  ]);
 
   propagatedBuildInputs = [
     gprbuild
@@ -121,8 +126,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # gnat2why/gnat_src points to the GNAT sources
-    tar xf ${gnat.cc.src} gcc-${gnat.cc.version}/gcc/ada
-    mv gcc-${gnat.cc.version}/gcc/ada gnat2why/gnat_src
+    tar xf ${gnat.cc.src} --wildcards 'gcc-*/gcc/ada'
+    mv gcc-*/gcc/ada gnat2why/gnat_src
   '';
 
   configurePhase = ''

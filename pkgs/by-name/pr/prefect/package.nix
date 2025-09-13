@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.4.0";
+  version = "3.4.5";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uguh6sOIy0mOASFsw8ADb8vpmQm7S+t4ZS/6MFFYiic=";
+    hash = "sha256-jS/r5LskvgWLIiMSVMM6jgxVbuolI+w+g5Xq/xPYXOU=";
   };
 
   pythonRelaxDeps = [
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
       ujson
       uvicorn
       websockets
+      whenever
       uv
     ]
     ++ sqlalchemy.optional-dependencies.asyncio
@@ -191,7 +192,7 @@ python3Packages.buildPythonApplication rec {
   # );
 
   meta = {
-    description = "Prefect is a workflow orchestration framework for building resilient data pipelines in Python";
+    description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];

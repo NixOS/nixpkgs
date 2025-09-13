@@ -3,34 +3,33 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  okms-cli,
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "okms-cli";
-  version = "0.2.1";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "okms-cli";
-    tag = "v${version}";
-    hash = "sha256-inDE/Vexn7efzxfa/ali+mhyioBWjDPRlDznYyChTtI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zYhK2ulFVw7XlhoKrN9JoZg8lUFisfKS/Iez+Ll0eME=";
   };
 
-  vendorHash = "sha256-l8Z5cAfWHWz8mBVioltuNg+jaNwySU/Y4z3z2X86h/s=";
+  vendorHash = "sha256-LFZ4dsWnODHLFc6k7p+Rd3zR0befCSOZLanwUFIWRl0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.date=unknown"
   ];
 
   passthru = {
     tests.version = testers.testVersion {
-      package = okms-cli;
+      package = finalAttrs.finalPackage;
       command = "okms version";
     };
     updateScript = nix-update-script { };
@@ -38,10 +37,10 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/ovh/okms-cli";
-    changelog = "https://github.com/ovh/okms-cli/releases/tag/v${version}";
+    changelog = "https://github.com/ovh/okms-cli/releases/tag/v${finalAttrs.version}";
     description = "Command Line Interface to interact with your OVHcloud KMS services";
     mainProgram = "okms";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.anthonyroussel ];
   };
-}
+})

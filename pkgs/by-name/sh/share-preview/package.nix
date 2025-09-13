@@ -17,23 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "share-preview";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "share-preview";
     rev = finalAttrs.version;
-    hash = "sha256-FqualaTkirB+gBcgkThQpSBHhM4iaXkiGujwBUnUX0E=";
+    hash = "sha256-6Pk+3o4ZWF5pDYAtcBgty4b7edzIZnIuJh0KW1VW33I=";
   };
 
-  patches = [
-    ./wasm-bindgen.patch
-  ];
-
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src patches;
+    inherit (finalAttrs) src;
     name = "share-preview-${finalAttrs.version}";
-    hash = "sha256-lDSRXe+AjJzWT0hda/aev6kNJAvHblGmmAYXdYhrnQs=";
+    hash = "sha256-MC5MsoFdeCvF9nIFoYCKoBBpgGysBH36OdmTqbIJt8s=";
   };
 
   nativeBuildInputs = [

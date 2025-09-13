@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pass-import";
   version = "3.5";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/roddhjav/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";

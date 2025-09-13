@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "parnold-x";
-    repo = pname;
-    rev = version;
+    repo = "nasc";
+    tag = version;
     sha256 = "02b9a59a9fzsb6nn3ycwwbcbv04qfzm6x7csq2addpzx5wak6dd8";
     fetchSubmodules = true;
   };
@@ -44,18 +44,17 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk3
-      gtksourceview
-      libgee
-      pantheon.granite
-      webkitgtk_4_0
-      # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
-    ]
-    ++ libqalculate.buildInputs
-    ++ libqalculate.propagatedBuildInputs;
+  buildInputs = [
+    glib
+    gtk3
+    gtksourceview
+    libgee
+    pantheon.granite
+    webkitgtk_4_0
+    # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
+  ]
+  ++ libqalculate.buildInputs
+  ++ libqalculate.propagatedBuildInputs;
 
   postPatch = ''
     chmod +x meson/post_install.py

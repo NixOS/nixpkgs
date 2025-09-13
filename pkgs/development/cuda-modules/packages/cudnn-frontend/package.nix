@@ -57,15 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # TODO: As a header-only library, we should make sure we have an `include` directory or similar which is not a
   # superset of the `out` (`bin`) or `dev` outputs (which is what the multiple-outputs setup hook does by default).
-  outputs =
-    [
-      "out"
-    ]
-    ++ optionals finalAttrs.doCheck [
-      "legacy_samples"
-      "samples"
-      "tests"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ optionals finalAttrs.doCheck [
+    "legacy_samples"
+    "samples"
+    "tests"
+  ];
 
   nativeBuildInputs = [
     autoAddDriverRunpath # Needed for samples because it links against CUDA::cuda_driver

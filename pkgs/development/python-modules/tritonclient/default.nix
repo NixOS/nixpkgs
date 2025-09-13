@@ -35,8 +35,11 @@ buildPythonPackage rec {
       inherit pname version format;
       python = "py3";
       dist = "py3";
-      platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system} or { };
+      platform =
+        platforms.${stdenv.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      sha256 =
+        hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     };
 
   propagatedBuildInputs = [

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pythonOlder,
   reflex,
   pytestCheckHook,
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "reflex-chakra";
-  version = "0.7.0";
+  version = "0.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,14 +19,13 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex-chakra";
     tag = "v${version}";
-    hash = "sha256-foIXPLWcxNf33y39BgiRpvwRnZOTcfAjhCvC4TD8ZMs=";
+    hash = "sha256-6KWIpTtr2tNBxXoj2hY0zuX0bpSUvsoA1Y7uwln3HDY=";
   };
 
-  build-system = [ poetry-core ];
-
-  dependencies = [
-    reflex
+  build-system = [
+    hatchling
   ];
+  dependencies = [ reflex ];
 
   pythonImportsCheck = [ "reflex_chakra" ];
 

@@ -81,7 +81,7 @@ in
       extraUtilsCommands = lib.mkIf (!systemd.enable) ''
         copy_bin_and_libs ${pkgs.jose}/bin/jose
         copy_bin_and_libs ${pkgs.curl}/bin/curl
-        copy_bin_and_libs ${pkgs.bash}/bin/bash
+        copy_bin_and_libs ${pkgs.bashNonInteractive}/bin/bash
 
         copy_bin_and_libs ${pkgs.tpm2-tools}/bin/.tpm2-wrapped
         mv $out/bin/{.tpm2-wrapped,tpm2}
@@ -95,7 +95,7 @@ in
         done
 
         for BIN in $out/bin/clevis{,-decrypt{,-null,-tang,-tpm2}}; do
-          sed -i $BIN -e 's,${pkgs.bash},,' -e 's,${pkgs.coreutils},,'
+          sed -i $BIN -e 's,${pkgs.bashNonInteractive},,' -e 's,${pkgs.coreutils},,'
         done
 
         sed -i $out/bin/clevis-decrypt-tpm2 -e 's,tpm2_,tpm2 ,'

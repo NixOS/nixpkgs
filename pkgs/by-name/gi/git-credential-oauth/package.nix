@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hickford";
-    repo = pname;
+    repo = "git-credential-oauth";
     rev = "v${version}";
     hash = "sha256-9AoIyQ05Y/usG0Tlehn7U8zjBxC1BYNjNVRtgWgzLbo=";
   };
@@ -35,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/hickford/git-credential-oauth";
     changelog = "https://github.com/hickford/git-credential-oauth/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "git-credential-oauth";
   };
 }

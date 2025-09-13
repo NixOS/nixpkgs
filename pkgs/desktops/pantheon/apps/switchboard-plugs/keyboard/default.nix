@@ -8,6 +8,7 @@
   ninja,
   pkg-config,
   vala,
+  elementary-settings-daemon,
   libadwaita,
   libgee,
   gettext,
@@ -25,18 +26,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-keyboard";
     rev = version;
-    sha256 = "sha256-/jfUftlNL+B4570ajropS7/2fqro380kZzpPwm+A9fA=";
+    sha256 = "sha256-8lgoR7nYqUJfLr9UhqnFJWw9x9l97RxgIkAwodHgrzI=";
   };
 
   patches = [
     # This will try to install packages with apt.
-    # https://github.com/elementary/switchboard-plug-keyboard/issues/324
+    # https://github.com/elementary/settings-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
     (replaceVars ./fix-paths.patch {
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-settings-daemon # io.elementary.settings-daemon.applications
     gnome-settings-daemon # media-keys
     granite7
     gsettings-desktop-schemas
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Keyboard Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-keyboard";
+    homepage = "https://github.com/elementary/settings-keyboard";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     teams = [ teams.pantheon ];

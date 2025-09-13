@@ -66,8 +66,8 @@ in
     systemd.services.mealie = {
       description = "Mealie, a self hosted recipe manager and meal planner";
 
-      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -76,8 +76,9 @@ in
         API_PORT = toString cfg.port;
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
-        NLTK_DATA = pkgs.nltk-data.averaged_perceptron_tagger_eng;
-      } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
+        NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
+      }
+      // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
         DynamicUser = true;

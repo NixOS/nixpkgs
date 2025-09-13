@@ -14,17 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    hash = "sha256-R6T8sXuHlunXvqxQ95EKd+fdkPUZU8nTFkg9WBJWeRA=";
+    hash = "sha256-Trnyrc17KWhX8QizKyBvXhTM7HHEqtywWgNqvQNMOAY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ILv9sVBKhF+KDPfTsxYorRlx33tPolNE8KSNdNajzBc=";
+  cargoHash = "sha256-FxvzCe+dRfMUcPWA4lp4L6FJaSpMiXTqEyhzk+Dv1B8=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -66,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "SQLx's associated command-line utility for managing databases, migrations, and enabling offline mode with sqlx::query!() and friends.";
+    description = "CLI for managing databases, migrations, and enabling offline mode with `sqlx::query!()` and friends";
     homepage = "https://github.com/launchbadge/sqlx";
     license = licenses.asl20;
     maintainers = with maintainers; [

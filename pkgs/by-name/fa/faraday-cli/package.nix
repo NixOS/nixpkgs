@@ -42,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "faraday_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface for Faraday";
     homepage = "https://github.com/infobyte/faraday-cli";
     changelog = "https://github.com/infobyte/faraday-cli/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-cli";
   };
 }

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lyonel";
-    repo = pname;
+    repo = "lshw";
     rev = "B.${version}";
     hash = "sha256-4etC7ymMgn1Q4f98DNASv8vn0AT55dYPdacZo6GRDw0=";
   };
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs =
-    [ hwdata ]
-    ++ lib.optionals withGUI [
-      gtk3
-      sqlite
-    ];
+  buildInputs = [
+    hwdata
+  ]
+  ++ lib.optionals withGUI [
+    gtk3
+    sqlite
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

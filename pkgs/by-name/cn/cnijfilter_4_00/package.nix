@@ -87,6 +87,8 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cd libs
     ./autogen.sh --prefix=$out
 
@@ -127,6 +129,8 @@ stdenv.mkDerivation {
 
     sed -e "s,cnijlgmon2_LDADD =,cnijlgmon2_LDADD = -L../../com/libs_bin${arch}," \
     -i lgmon2/src/Makefile.am || die
+
+    runHook postConfigure
   '';
 
   preInstall = ''

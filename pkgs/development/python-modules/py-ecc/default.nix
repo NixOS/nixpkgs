@@ -9,11 +9,12 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "py-ecc";
-  version = "7.0.0";
+  version = "8.0.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "py_ecc";
     rev = "v${version}";
-    hash = "sha256-DKe+bI1GEzXg4Y4n5OA1/hWYz9L3X1AvaOFPEnCaAfs=";
+    hash = "sha256-4nmmX4TuErHxIDrBi+Ppr+4vuE7dSeqf8OqOxtqb3sY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -32,7 +33,10 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pydantic
+  ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/ethereum/py_ecc/issues/133
@@ -44,6 +48,7 @@ buildPythonPackage rec {
     "test_pairing_negative_G1"
     "test_pairing_negative_G2"
     "test_pairing_output_order"
+    "test_install_local_wheel"
   ];
 
   pythonImportsCheck = [ "py_ecc" ];

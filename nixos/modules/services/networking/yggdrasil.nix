@@ -216,42 +216,41 @@ in
           exec ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf ${lib.strings.escapeShellArgs cfg.extraArgs}
         '';
 
-        serviceConfig =
-          {
-            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-            Restart = "always";
+        serviceConfig = {
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          Restart = "always";
 
-            DynamicUser = true;
-            StateDirectory = "yggdrasil";
-            RuntimeDirectory = "yggdrasil";
-            RuntimeDirectoryMode = "0750";
-            BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
-            LoadCredential = mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
+          DynamicUser = true;
+          StateDirectory = "yggdrasil";
+          RuntimeDirectory = "yggdrasil";
+          RuntimeDirectoryMode = "0750";
+          BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
+          LoadCredential = mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
 
-            AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-            CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-            MemoryDenyWriteExecute = true;
-            ProtectControlGroups = true;
-            ProtectHome = "tmpfs";
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged @keyring"
-            ];
-          }
-          // (
-            if (cfg.group != null) then
-              {
-                Group = cfg.group;
-              }
-            else
-              { }
-          );
+          AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+          CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+          MemoryDenyWriteExecute = true;
+          ProtectControlGroups = true;
+          ProtectHome = "tmpfs";
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @keyring"
+          ];
+        }
+        // (
+          if (cfg.group != null) then
+            {
+              Group = cfg.group;
+            }
+          else
+            { }
+        );
       };
 
       networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
@@ -265,7 +264,6 @@ in
     doc = ./yggdrasil.md;
     maintainers = with lib.maintainers; [
       gazally
-      ehmry
       nagy
     ];
   };

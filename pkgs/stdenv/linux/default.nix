@@ -78,7 +78,12 @@
             else
               ./bootstrap-files/mips64el-unknown-linux-gnuabi64.nix
           );
-          powerpc64-linux = import ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix;
+          powerpc64-linux = import (
+            if localSystem.isAbiElfv2 then
+              ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix
+            else
+              ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv1.nix
+          );
           powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
           riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
           s390x-linux = import ./bootstrap-files/s390x-unknown-linux-gnu.nix;
@@ -158,8 +163,6 @@ let
     isFromBootstrapFiles = true;
   };
 
-  getLibc = stage: stage.${localSystem.libc};
-
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
@@ -190,6 +193,7 @@ let
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
+          inherit (config) rewriteURL;
         };
 
         cc =
@@ -206,7 +210,7 @@ let
               cc = prevStage.gcc-unwrapped;
               bintools = prevStage.binutils;
               isGNU = true;
-              libc = getLibc prevStage;
+              inherit (prevStage) libc;
               inherit lib;
               inherit (prevStage) coreutils gnugrep;
               stdenvNoCC = prevStage.ccWrapperStdenv;
@@ -217,11 +221,9 @@ let
                 a:
                 lib.optionalAttrs (prevStage.gcc-unwrapped.passthru.isXgcc or false) {
                   # This affects only `xgcc` (the compiler which compiles the final compiler).
-                  postFixup =
-                    (a.postFixup or "")
-                    + ''
-                      echo "--sysroot=${lib.getDev (getLibc prevStage)}" >> $out/nix-support/cc-cflags
-                    '';
+                  postFixup = (a.postFixup or "") + ''
+                    echo "--sysroot=${lib.getDev prevStage.libc}" >> $out/nix-support/cc-cflags
+                  '';
                 }
               );
 
@@ -273,17 +275,16 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           strictDeps = true;
           version = "bootstrapFiles";
           enableParallelBuilding = true;
-          buildCommand =
-            ''
-              mkdir -p $out
-              ln -s ${bootstrapTools}/lib $out/lib
-            ''
-            + lib.optionalString (localSystem.libc == "glibc") ''
-              ln -s ${bootstrapTools}/include-glibc $out/include
-            ''
-            + lib.optionalString (localSystem.libc == "musl") ''
-              ln -s ${bootstrapTools}/include-libc $out/include
-            '';
+          buildCommand = ''
+            mkdir -p $out
+            ln -s ${bootstrapTools}/lib $out/lib
+          ''
+          + lib.optionalString (localSystem.libc == "glibc") ''
+            ln -s ${bootstrapTools}/include-glibc $out/include
+          ''
+          + lib.optionalString (localSystem.libc == "musl") ''
+            ln -s ${bootstrapTools}/include-libc $out/include
+          '';
           passthru.isFromBootstrapFiles = true;
         };
         gcc-unwrapped = bootstrapTools;
@@ -292,9 +293,13 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           nativeTools = false;
           nativeLibc = false;
           expand-response-params = "";
-          libc = getLibc self;
           inherit lib;
-          inherit (self) stdenvNoCC coreutils gnugrep;
+          inherit (self)
+            stdenvNoCC
+            coreutils
+            gnugrep
+            libc
+            ;
           bintools = bootstrapTools;
           runtimeShell = "${bootstrapTools}/bin/bash";
         };
@@ -319,6 +324,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     # previous stage0 stdenv:
     assert isFromBootstrapFiles prevStage.binutils.bintools;
     assert isFromBootstrapFiles prevStage."${localSystem.libc}";
+    assert isFromBootstrapFiles prevStage.libc;
     assert isFromBootstrapFiles prevStage.gcc-unwrapped;
     assert isFromBootstrapFiles prevStage.coreutils;
     assert isFromBootstrapFiles prevStage.gnugrep;
@@ -338,7 +344,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           binutils
           ;
 
-        ${localSystem.libc} = getLibc prevStage;
+        ${localSystem.libc} = prevStage.${localSystem.libc};
 
         # A threaded perl build needs glibc/libpthread_nonshared.a,
         # which is not included in bootstrapTools, so disable threading.
@@ -373,6 +379,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     prevStage:
     assert isBuiltByBootstrapFilesCompiler prevStage.binutils-unwrapped;
     assert isFromBootstrapFiles prevStage."${localSystem.libc}";
+    assert isFromBootstrapFiles prevStage.libc;
     assert isFromBootstrapFiles prevStage.gcc-unwrapped;
     assert isFromBootstrapFiles prevStage.coreutils;
     assert isFromBootstrapFiles prevStage.gnugrep;
@@ -392,7 +399,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           perl
           patchelf
           ;
-        ${localSystem.libc} = getLibc prevStage;
+        ${localSystem.libc} = prevStage.${localSystem.libc};
         gmp = super.gmp.override { cxx = false; };
         # This stage also rebuilds binutils which will of course be used only in the next stage.
         # We inherit this until stage3, in stage4 it will be rebuilt using the adjacent bash/runtimeShell pkg.
@@ -483,6 +490,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     # previous stage1 stdenv:
     assert isBuiltByBootstrapFilesCompiler prevStage.binutils-unwrapped;
     assert isFromBootstrapFiles prevStage."${localSystem.libc}";
+    assert isFromBootstrapFiles prevStage.libc;
     assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
     assert isFromBootstrapFiles prevStage.coreutils;
     assert isFromBootstrapFiles prevStage.gnugrep;
@@ -507,16 +515,17 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           doCheck = false;
         });
 
+        # Avoids infinite recursion, as this is in the build-time dependencies of libc.
+        libiconv = self.libcIconv prevStage.libc;
+
         # We need libidn2 and its dependency libunistring as glibc dependency.
         # To avoid the cycle, we build against bootstrap libc, nuke references,
         # and use the result as input for our final glibc.  We also pass this pair
         # through, so the final package-set uses exactly the same builds.
         libunistring = super.libunistring.overrideAttrs (attrs: {
-          postFixup =
-            attrs.postFixup or ""
-            + ''
-              ${self.nukeReferences}/bin/nuke-refs "$out"/lib/lib*.so.*.*
-            '';
+          postFixup = attrs.postFixup or "" + ''
+            ${self.nukeReferences}/bin/nuke-refs "$out"/lib/lib*.so.*.*
+          '';
           # Apparently iconv won't work with bootstrap glibc, but it will be used
           # with glibc built later where we keep *this* build of libunistring,
           # so we need to trick it into supporting libiconv.
@@ -525,19 +534,17 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           };
         });
         libidn2 = super.libidn2.overrideAttrs (attrs: {
-          postFixup =
-            attrs.postFixup or ""
-            + ''
-              ${self.nukeReferences}/bin/nuke-refs -e '${lib.getLib self.libunistring}' \
-                "$out"/lib/lib*.so.*.*
-            '';
+          postFixup = attrs.postFixup or "" + ''
+            ${self.nukeReferences}/bin/nuke-refs -e '${lib.getLib self.libunistring}' \
+              "$out"/lib/lib*.so.*.*
+          '';
         });
 
         # This also contains the full, dynamically linked, final Glibc.
         binutils = prevStage.binutils.override {
           # Rewrap the binutils with the new glibc, so both the next
           # stage's wrappers use it.
-          libc = getLibc self;
+          inherit (self) libc;
 
           # Unfortunately, when building gcc in the next stage, its LTO plugin
           # would use the final libc but `ld` would use the bootstrap one,
@@ -556,8 +563,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               mkdir -p "$out"/bin
               cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
               chmod +w "$out"/bin/ld.bfd
-              patchelf --set-interpreter '${getLibc self}'/lib/ld*.so.? \
-                --set-rpath "${getLibc self}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
+              patchelf --set-interpreter '${self.libc}'/lib/ld*.so.? \
+                --set-rpath "${self.libc}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
                 "$out"/bin/ld.bfd
             '';
           };
@@ -588,6 +595,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     # previous stage2 stdenv:
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.${localSystem.libc};
+    assert isBuiltByNixpkgsCompiler prevStage.libc;
     assert isBuiltByBootstrapFilesCompiler prevStage.gcc-unwrapped;
     assert isFromBootstrapFiles prevStage.coreutils;
     assert isFromBootstrapFiles prevStage.gnugrep;
@@ -624,7 +632,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           gmp = super.gmp.override { cxx = false; };
         }
         // {
-          ${localSystem.libc} = getLibc prevStage;
+          ${localSystem.libc} = prevStage.${localSystem.libc};
           gcc-unwrapped =
             (super.gcc-unwrapped.override (
               commonGccOverrides
@@ -660,6 +668,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     # previous stage3 stdenv:
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.${localSystem.libc};
+    assert isBuiltByNixpkgsCompiler prevStage.libc;
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
     assert isFromBootstrapFiles prevStage.coreutils;
     assert isFromBootstrapFiles prevStage.gnugrep;
@@ -683,7 +692,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           libidn2
           libunistring
           ;
-        ${localSystem.libc} = getLibc prevStage;
+        ${localSystem.libc} = prevStage.${localSystem.libc};
         # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
         binutils = super.binutils.override {
           # Build expand-response-params with last stage like below
@@ -701,13 +710,13 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           inherit (prevStage) expand-response-params;
           cc = prevStage.gcc-unwrapped;
           bintools = self.binutils;
-          libc = getLibc self;
           inherit lib;
           inherit (self)
             stdenvNoCC
             coreutils
             gnugrep
             runtimeShell
+            libc
             ;
           fortify-headers = self.fortify-headers;
         };
@@ -735,6 +744,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     # which applies here as well.
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.${localSystem.libc};
+    assert isBuiltByNixpkgsCompiler prevStage.libc;
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
@@ -842,7 +852,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             libunistring
           ]
           # More complicated cases
-          ++ (map (x: lib.getOutput x (getLibc prevStage)) [
+          ++ (map (x: lib.getOutput x (prevStage.libc)) [
             "out"
             "dev"
             "bin"
@@ -892,7 +902,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               libunistring
               ;
             inherit (prevStage.gnugrep) pcre2;
-            ${localSystem.libc} = getLibc prevStage;
+            ${localSystem.libc} = prevStage.${localSystem.libc};
 
             # Hack: avoid libidn2.{bin,dev} referencing bootstrap tools.  There's a logical cycle.
             libidn2 = import ../../development/libraries/libidn2/no-bootstrap-reference.nix {
@@ -924,6 +934,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     # which applies here as well.
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.${localSystem.libc};
+    assert isBuiltByNixpkgsCompiler prevStage.libc;
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;

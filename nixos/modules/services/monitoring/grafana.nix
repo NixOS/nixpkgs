@@ -430,6 +430,12 @@ in
       type = types.path;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open the ports in the firewall for the server.";
+    };
+
     settings = mkOption {
       description = ''
         Grafana settings. See <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/>
@@ -979,10 +985,13 @@ in
 
             x_xss_protection = mkOption {
               description = ''
-                Set to `false` to disable the `X-XSS-Protection` header,
+                Set to `true` to enable the `X-XSS-Protection` header,
                 which tells browsers to stop pages from loading when they detect reflected cross-site scripting (XSS) attacks.
+
+                __Note:__ this is the default in Grafana, it's turned off here
+                since it's [recommended to not use this header anymore](https://owasp.org/www-project-secure-headers/#x-xss-protection).
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 
@@ -1312,6 +1321,16 @@ in
                     description = "Config file version.";
                     default = 1;
                     type = types.int;
+                  };
+
+                  prune = mkOption {
+                    default = false;
+                    type = types.bool;
+                    description = ''
+                      When `true`, provisioned datasources from this file will be deleted
+                      automatically when removed from
+                      {option}`services.grafana.provision.datasources.settings.datasources`.
+                    '';
                   };
 
                   datasources = mkOption {
@@ -2018,10 +2037,11 @@ in
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "networking.target" ]
-        ++ lib.optional usePostgresql "postgresql.service"
-        ++ lib.optional useMysql "mysql.service";
+      after = [
+        "networking.target"
+      ]
+      ++ lib.optional usePostgresql "postgresql.target"
+      ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
@@ -2067,7 +2087,8 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
+        ]
+        ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''
@@ -2075,6 +2096,8 @@ in
         ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
       '';
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.http_port ];
 
     users.users.grafana = {
       uid = config.ids.uids.grafana;

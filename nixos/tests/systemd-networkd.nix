@@ -125,83 +125,81 @@ let
       };
     };
 in
-import ./make-test-python.nix (
-  { pkgs, ... }:
-  {
-    name = "networkd";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ picnoir ];
-    };
-    nodes = {
-      node1 =
-        { pkgs, ... }@attrs:
-        let
-          localConf = {
-            privk = "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
-            pubk = "iRxpqj42nnY0Qz8MAQbSm7bXxXP5hkPqWYIULmvW+EE=";
-            systemdCreds = false;
-            nodeId = "1";
-            peerId = "2";
-          };
-        in
-        generateNodeConf (attrs // localConf);
+{ pkgs, ... }:
+{
+  name = "networkd";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ picnoir ];
+  };
+  nodes = {
+    node1 =
+      { pkgs, ... }@attrs:
+      let
+        localConf = {
+          privk = "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
+          pubk = "iRxpqj42nnY0Qz8MAQbSm7bXxXP5hkPqWYIULmvW+EE=";
+          systemdCreds = false;
+          nodeId = "1";
+          peerId = "2";
+        };
+      in
+      generateNodeConf (attrs // localConf);
 
-      node2 =
-        { pkgs, ... }@attrs:
-        let
-          localConf = {
-            privk = "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
-            pubk = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
-            systemdCreds = true;
-            nodeId = "2";
-            peerId = "1";
-          };
-        in
-        generateNodeConf (attrs // localConf);
-    };
-    testScript = ''
-      start_all()
-      node1.systemctl("start systemd-networkd-wait-online@eth1.service")
-      node1.systemctl("start systemd-networkd-wait-online.service")
-      node1.wait_for_unit("systemd-networkd-wait-online@eth1.service")
-      node1.wait_for_unit("systemd-networkd-wait-online.service")
-      node2.systemctl("start systemd-networkd-wait-online@eth1.service")
-      node2.systemctl("start systemd-networkd-wait-online.service")
-      node2.wait_for_unit("systemd-networkd-wait-online@eth1.service")
-      node2.wait_for_unit("systemd-networkd-wait-online.service")
+    node2 =
+      { pkgs, ... }@attrs:
+      let
+        localConf = {
+          privk = "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
+          pubk = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+          systemdCreds = true;
+          nodeId = "2";
+          peerId = "1";
+        };
+      in
+      generateNodeConf (attrs // localConf);
+  };
+  testScript = ''
+    start_all()
+    node1.systemctl("start systemd-networkd-wait-online@eth1.service")
+    node1.systemctl("start systemd-networkd-wait-online.service")
+    node1.wait_for_unit("systemd-networkd-wait-online@eth1.service")
+    node1.wait_for_unit("systemd-networkd-wait-online.service")
+    node2.systemctl("start systemd-networkd-wait-online@eth1.service")
+    node2.systemctl("start systemd-networkd-wait-online.service")
+    node2.wait_for_unit("systemd-networkd-wait-online@eth1.service")
+    node2.wait_for_unit("systemd-networkd-wait-online.service")
 
-      # ================================
-      # Networkd Config
-      # ================================
-      node1.succeed("grep RouteTable=custom:23 /etc/systemd/networkd.conf")
-      node1.succeed("sudo ip route show table custom | grep '10.0.0.0/24 via 10.0.0.1 dev wg0 proto static'")
+    # ================================
+    # Networkd Config
+    # ================================
+    node1.succeed("grep RouteTable=custom:23 /etc/systemd/networkd.conf")
+    node1.succeed("sudo ip route show table custom | grep '10.0.0.0/24 via 10.0.0.1 dev wg0 proto static'")
 
-      # ================================
-      # Wireguard
-      # ================================
-      node1.succeed("ping -c 5 10.0.0.2")
-      node2.succeed("ping -c 5 10.0.0.1")
-      # Is the fwmark set?
-      node2.succeed("wg | grep -q 42")
+    # ================================
+    # Wireguard
+    # ================================
+    node1.succeed("ping -c 5 10.0.0.2")
+    node2.succeed("ping -c 5 10.0.0.1")
+    # Is the fwmark set?
+    node2.succeed("wg | grep -q 42")
 
-      # ================================
-      # Routing Policies
-      # ================================
-      # Testing all the routingPolicyRuleConfig members:
-      # Table + IncomingInterface
-      node1.succeed("sudo ip rule | grep 'from all iif eth1 lookup 10'")
-      # OutgoingInterface
-      node1.succeed("sudo ip rule | grep 'from all oif eth1 lookup 20'")
-      # From + To + SourcePort + DestinationPort
-      node1.succeed(
-          "sudo ip rule | grep 'from 192.168.1.1 to 192.168.1.2 sport 666 dport 667 lookup 30'"
-      )
-      # IPProtocol + InvertRule
-      node1.succeed("sudo ip rule | grep 'not from all ipproto tcp lookup 40'")
-      # FirewallMark without a mask
-      node1.succeed("sudo ip rule | grep 'from all fwmark 0x4 lookup 60'")
-      # FirewallMark with a mask
-      node1.succeed("sudo ip rule | grep 'from all fwmark 0x10/0x1f lookup 70'")
-    '';
-  }
-)
+    # ================================
+    # Routing Policies
+    # ================================
+    # Testing all the routingPolicyRuleConfig members:
+    # Table + IncomingInterface
+    node1.succeed("sudo ip rule | grep 'from all iif eth1 lookup 10'")
+    # OutgoingInterface
+    node1.succeed("sudo ip rule | grep 'from all oif eth1 lookup 20'")
+    # From + To + SourcePort + DestinationPort
+    node1.succeed(
+        "sudo ip rule | grep 'from 192.168.1.1 to 192.168.1.2 sport 666 dport 667 lookup 30'"
+    )
+    # IPProtocol + InvertRule
+    node1.succeed("sudo ip rule | grep 'not from all ipproto tcp lookup 40'")
+    # FirewallMark without a mask
+    node1.succeed("sudo ip rule | grep 'from all fwmark 0x4 lookup 60'")
+    # FirewallMark with a mask
+    node1.succeed("sudo ip rule | grep 'from all fwmark 0x10/0x1f lookup 70'")
+  '';
+}

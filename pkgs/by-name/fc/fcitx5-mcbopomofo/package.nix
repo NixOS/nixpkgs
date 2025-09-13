@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-mcbopomofo";
-  version = "2.9.1";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "openvanilla";
     repo = "fcitx5-mcbopomofo";
     rev = version;
-    hash = "sha256-fHDNhZhSVgVuZLfRA3eJErm1gwhUZJw+emCXfeO5HVo=";
+    hash = "sha256-2TWJsEScC5rMz5dowJOQHA2Mjzsq+d9n2lKXdEWiELU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    extra-cmake-modules
     fcitx5
     fmt
     gtest

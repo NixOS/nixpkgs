@@ -81,7 +81,8 @@ stdenv.mkDerivation rec {
     jmtpfs
     lsof
     udisks2
-  ] ++ (lib.optionals ifuseSupport [ ifuse ]);
+  ]
+  ++ (lib.optionals ifuseSupport [ ifuse ]);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensubdiv";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-liy6pQyWMk7rw0usrCoLGzZLO7RAg0z2pV/GF2NnOkE=";
+    hash = "sha256-/22SeMzNNnrUgmPGpgbQwoYthdAdhRa615VhVJOvP9o=";
   };
 
   outputs = [
@@ -33,15 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     "static"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
+
   buildInputs =
     lib.optionals stdenv.hostPlatform.isUnix [
       libGLU
@@ -55,11 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXinerama
       xorg.libXi
     ]
-    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [ ocl-icd ]
-
+    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [
+      ocl-icd
+    ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
     ];
+
+  patches = [
+    # Prevent CMake from generating a redundant nested path like /nix/store/.../nix/store/...
+    ./cmake-config.patch
+  ];
 
   # It's important to set OSD_CUDA_NVCC_FLAGS,
   # because otherwise OSD might piggyback unwanted architectures:
@@ -70,24 +76,23 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  cmakeFlags =
-    [
-      (lib.mapAttrsToList lib.cmakeBool {
-        NO_TUTORIALS = true;
-        NO_REGRESSION = true;
-        NO_EXAMPLES = true;
-        NO_DX = stdenv.hostPlatform.isWindows;
-        NO_METAL = !stdenv.hostPlatform.isDarwin;
-        NO_OPENCL = !openclSupport;
-        NO_CUDA = !cudaSupport;
-      })
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [
-      (lib.mapAttrsToList lib.cmakeFeature {
-        GLEW_INCLUDE_DIR = "${glew.dev}/include";
-        GLEW_LIBRARY = "${glew.dev}/lib";
-      })
-    ];
+  cmakeFlags = [
+    (lib.mapAttrsToList lib.cmakeBool {
+      NO_TUTORIALS = true;
+      NO_REGRESSION = true;
+      NO_EXAMPLES = true;
+      NO_DX = stdenv.hostPlatform.isWindows;
+      NO_METAL = !stdenv.hostPlatform.isDarwin;
+      NO_OPENCL = !openclSupport;
+      NO_CUDA = !cudaSupport;
+    })
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [
+    (lib.mapAttrsToList lib.cmakeFeature {
+      GLEW_INCLUDE_DIR = "${glew.dev}/include";
+      GLEW_LIBRARY = "${glew.dev}/lib";
+    })
+  ];
 
   preBuild =
     let
@@ -105,8 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     else
       ''
-        moveToOutput "lib/*.a" $static
+        moveToOutput "lib/libosd*.a" $static
       '';
+
+  postFixup = ''
+    # Adjust static library path to reflect relocation to $static
+    sed -i -E "s|\\\$\{_IMPORT_PREFIX\}/lib/(libosd.*\.a)|$static/lib/\1|" \
+      $dev/lib/cmake/OpenSubdiv/OpenSubdivTargets-release.cmake
+  '';
 
   meta = {
     description = "Open-Source subdivision surface library";

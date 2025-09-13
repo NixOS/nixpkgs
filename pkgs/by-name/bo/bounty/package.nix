@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "bounty";
-  version = "0.1.0-unstable-25-01-29";
+  version = "0.1.0-unstable-2025-02-15";
 
   src = fetchFromGitHub {
     owner = "ghbountybot";
@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-dlfoA5bWtyHrsviPdFd6O47D/cglvhJzChOboyu1Io0=";
-  useFetchCargoVendor = true;
 
   doCheck = true;
 

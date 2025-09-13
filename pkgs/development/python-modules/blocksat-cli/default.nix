@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Blockstream";
     repo = "satellite";
     tag = "v${version}";
-    hash = "sha256-7lSK9IGu/K03xSDxZv+BSTJwLrQoHs+POBq/ixYTVR4=";
+    hash = "sha256-SH1MZx/ZkhhWhxhREqFCGoob58J2XMZSpe+q7UgiyF4=";
   };
 
   # Upstream setup.py installs both the CLI and GUI versions.
@@ -46,7 +46,8 @@ buildPythonPackage rec {
     python-gnupg
     qrcode
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -57,6 +58,8 @@ buildPythonPackage rec {
     # Non-NixOS package managers are not present in the build environment.
     "test_parse_upgradable_list_apt"
     "test_parse_upgradable_list_dnf"
+    # Fails due to GPG clearsign output lacking trailing newline in some setups.
+    "test_clearsign_verification"
   ];
 
   disabledTestPaths = [ "blocksatgui/tests/" ];

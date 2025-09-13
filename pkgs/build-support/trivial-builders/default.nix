@@ -203,6 +203,7 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
+      meta.mainProgram = name;
     };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
@@ -344,40 +345,36 @@ rec {
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
-      text =
-        ''
-          #!${runtimeShell}
-          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-        ''
-        + lib.optionalString (runtimeEnv != null) (
-          lib.concatStrings (
-            lib.mapAttrsToList (name: value: ''
-              ${lib.toShellVar name value}
-              export ${name}
-            '') runtimeEnv
-          )
+      text = ''
+        #!${runtimeShell}
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      ''
+      + lib.optionalString (runtimeEnv != null) (
+        lib.concatStrings (
+          lib.mapAttrsToList (name: value: ''
+            ${lib.toShellVar name value}
+            export ${name}
+          '') runtimeEnv
         )
-        + lib.optionalString (runtimeInputs != [ ]) ''
+      )
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
-          export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
-        ''
-        + ''
+        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+      ''
+      + ''
 
-          ${text}
-        '';
+        ${text}
+      '';
 
       checkPhase =
-        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
-        # but we still want to use writeShellApplication on those platforms
         let
-          shellcheckSupported =
-            lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler
-            && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
           excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
             "--exclude"
             (lib.concatStringsSep "," excludeShellChecks)
           ];
-          shellcheckCommand = lib.optionalString shellcheckSupported ''
+          # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+          # but we still want to use writeShellApplication on those platforms
+          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
             ${lib.getExe shellcheck-minimal} ${
@@ -674,8 +671,8 @@ rec {
           throw "linkFarm entries must be either attrs or a list!";
 
       linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-        ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
+        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
@@ -743,6 +740,7 @@ rec {
       name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook",
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
       propagatedBuildInputs ? [ ],
+      propagatedNativeBuildInputs ? [ ],
       # these will be buildInputs
       depsTargetTargetPropagated ? [ ],
       meta ? { },
@@ -761,6 +759,7 @@ rec {
           inherit meta;
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
+          inherit propagatedNativeBuildInputs;
           strictDeps = true;
           # TODO 2023-01, no backport: simplify to inherit passthru;
           passthru =
@@ -780,9 +779,6 @@ rec {
           substituteAll ${script} $out/nix-support/setup-hook
         ''
       );
-
-  # Remove after 25.05 branch-off
-  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead.";
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
@@ -1025,6 +1021,12 @@ rec {
       postPatch ? "",
       ...
     }@args:
+    assert lib.assertMsg (
+      !args ? meta
+    ) "applyPatches will not merge 'meta', change it in 'src' instead";
+    assert lib.assertMsg (
+      !args ? passthru
+    ) "applyPatches will not merge 'passthru', change it in 'src' instead";
     if patches == [ ] && prePatch == "" && postPatch == "" then
       src # nothing to do, so use original src to avoid additional drv
     else
@@ -1037,6 +1039,7 @@ rec {
             "tag"
             "url"
             "outputHash"
+            "outputHashAlgo"
           ] src
         );
       in
@@ -1054,19 +1057,17 @@ rec {
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }
-        # Carry and merge information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta || args ? meta) {
-          meta = src.meta or { } // args.meta or { };
+        # Carry (and merge) information from the underlying `src` if present.
+        // (optionalAttrs (src ? meta) {
+          inherit (src) meta;
         })
-        // (optionalAttrs (extraPassthru != { } || src ? passthru || args ? passthru) {
-          passthru = extraPassthru // src.passthru or { } // args.passthru or { };
+        // (optionalAttrs (extraPassthru != { } || src ? passthru) {
+          passthru = extraPassthru // src.passthru or { };
         })
-        # Forward any additional arguments to the derviation
+        # Forward any additional arguments to the derivation
         // (removeAttrs args [
           "src"
           "name"
-          "meta"
-          "passthru"
           "patches"
           "prePatch"
           "postPatch"

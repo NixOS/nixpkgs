@@ -5,7 +5,7 @@
   qt6,
   pkg-config,
   protobuf_27,
-  bazel,
+  bazel_7,
   ibus,
   unzip,
   xdg-utils,
@@ -24,7 +24,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
-    rev = version;
+    tag = version;
     hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
     fetchSubmodules = true;
   };
@@ -43,14 +43,18 @@ buildBazelPackage rec {
   dontAddBazelOpts = true;
   removeRulesCC = false;
 
-  inherit bazel;
+  bazel = bazel_7;
 
   fetchAttrs = {
-    sha256 = "sha256-+N7AhSemcfhq6j0IUeWZ0DyVvr1l5FbAkB+kahTy3pM=";
+    hash = "sha256-c+v2vWvTmwJ7MFh3VJlUh+iSINjsX66W9K0UBX5K/1s=";
 
-    # remove references of buildInputs and zip code files
     preInstall = ''
-      rm -rv $bazelOut/external/{ibus,qt_linux,zip_code_*}
+      # Remove zip code data. It will be replaced with jp-zip-codes from nixpkgs
+      rm -rv "$bazelOut"/external/zip_code_{jigyosyo,ken_all}
+      # Remove references to buildInputs
+      rm -rv "$bazelOut"/external/{ibus,qt_linux}
+      # Remove reference to the host platform
+      rm -rv "$bazelOut"/external/host_platform
     '';
   };
 
@@ -75,13 +79,12 @@ buildBazelPackage rec {
       --replace-fail "https://www.post.japanpost.jp/zipcode/dl/jigyosyo/zip/jigyosyo.zip" "file://${jp-zip-codes}/jigyosyo.zip"
   '';
 
-  preConfigure =
-    ''
-      cd src
-    ''
-    + lib.optionalString (dictionaries != [ ]) ''
-      cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
-    '';
+  preConfigure = ''
+    cd src
+  ''
+  + lib.optionalString (dictionaries != [ ]) ''
+    cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
+  '';
 
   buildAttrs.installPhase = ''
     runHook preInstall

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpdavis";
     repo = "python-jose";
     tag = version;
-    hash = "sha256-rPtOZ25aKIN+g3cyv8n6cNejoj3yKk4zpjdLDyEG1e4=";
+    hash = "sha256-8DQ0RBQ4ZgEIwcosgX3dzr928cYIQoH0obIOgk0+Ozs=";
   };
 
   pythonRelaxDeps = [
@@ -45,7 +45,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "jose" ];
 

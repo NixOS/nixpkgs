@@ -75,7 +75,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
-  ] ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   passthru = { inherit setupHooks; };
 

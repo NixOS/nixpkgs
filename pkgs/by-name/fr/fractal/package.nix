@@ -26,23 +26,24 @@
   xdg-desktop-portal,
   libseccomp,
   glycin-loaders,
+  libwebp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "10.1";
+  version = "12.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
-    tag = version;
-    hash = "sha256-61xiHVzmLMbLNZlobH6JVcvuO9eoFwqBZBo1rVtPYOc=";
+    tag = finalAttrs.version;
+    hash = "sha256-xeB6N4ljXGzysy5RnDRK1wPiIRUSDcl+5BIdp6NO5ZA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-e3IW8D4aLU6d36ErUHDUDiXF1lN4HCn5OCX6GwaT3iQ=";
+    inherit (finalAttrs) src;
+    hash = "sha256-CHduzW++BYzasFv/x0Q1T7EaTlo1EqYY2gxQJv+ek0A=";
   };
 
   patches = [
@@ -75,27 +76,27 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      gtksourceview5
-      lcms2
-      libadwaita
-      openssl
-      pipewire
-      libshumate
-      sqlite
-      xdg-desktop-portal
-      libseccomp
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-rs
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    gtksourceview5
+    lcms2
+    libadwaita
+    openssl
+    pipewire
+    libshumate
+    sqlite
+    xdg-desktop-portal
+    libseccomp
+    libwebp
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -107,13 +108,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix group messaging app";
-    homepage = "https://gitlab.gnome.org/GNOME/fractal";
-    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    homepage = "https://gitlab.gnome.org/World/fractal";
+    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "fractal";
   };
-}
+})

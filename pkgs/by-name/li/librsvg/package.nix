@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -50,52 +49,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.59.2";
+  version = "2.60.0";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withIntrospection [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7NKT+wzDOMFwFxu8e8++pnJdBByV8xOF3JNUCZM+RZc=";
+    hash = "sha256-C2/8zfbnCvyYdogvXSzp/88scTy6rxrZAXDap1Lh7sM=";
   };
-
-  patches = [
-    (fetchpatch {
-      # merged in 2.60.0-beta.0
-      name = "cross-introspection.patch";
-      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/84f24b1f5767f807f8d0442bbf3f149a0defcf78.patch";
-      hash = "sha256-FRyAYCCP3eu7YDUS6g7sKCdbq2nU8yQdbdVaQwLrlhE=";
-    })
-    (fetchpatch {
-      # merged in 2.60.0-beta.0; required for cross-gdk-pixbuf-loader.patch to apply
-      name = "Replace-CRLF-with-just-LF-in-a-few-remaining-files-that-had-them";
-      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/8c93369806283feafd060f4507111344e1110f79.patch";
-      hash = "sha256-FU6ZiWhXm8jPhGGuNKqlxDIEXu2bSfq1MWyQoADqLZA=";
-    })
-    (fetchpatch {
-      # merged in 2.60.0-beta.0; required for cross-gdk-pixbuf-loader.patch to apply
-      name = "do-not-look-for-gdk-pixbuf-query-loaders-in-cross-builds.patch";
-      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/ce2957acb7b0b5d7f75f47a3c503f5532aa698a6.patch";
-      hash = "sha256-f0Mdt4GjycIkM/k68KRsR0Hv2C+gaieQ4WnhjPbA5vs=";
-    })
-    (fetchpatch {
-      name = "cross-gdk-pixbuf-loader.patch";
-      url = "https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1095.patch";
-      hash = "sha256-4R/DfDkNn7WhgBy526v309FzK6znCt2dV/ooz4LYrVU=";
-    })
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-M8iNNWpYgLIm0X3sTjAaRIFYLIHnMyrkcsayFrLg25Y=";
+    hash = "sha256-DMkYsskjw6ARQsaHDRautT0oy8VqW/BJBfBVErxUe88=";
     dontConfigure = true;
   };
 
@@ -105,38 +77,36 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      pkg-config
-      meson
-      ninja
-      rustc
-      cargo-c
-      cargo-auditable-cargo-wrapper
-      python3Packages.docutils
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gi-docgen
-      vala # vala bindings require GObject introspection
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    meson
+    ninja
+    rustc
+    cargo-c
+    cargo-auditable-cargo-wrapper
+    python3Packages.docutils
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+    vala # vala bindings require GObject introspection
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      bzip2
-      dav1d
-      pango
-      freetype
-    ]
-    ++ lib.optionals withIntrospection [
-      vala # for share/vala/Makefile.vapigen
-    ];
+  buildInputs = [
+    libxml2
+    bzip2
+    dav1d
+    pango
+    freetype
+  ]
+  ++ lib.optionals withIntrospection [
+    vala # for share/vala/Makefile.vapigen
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -166,15 +136,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs \
       meson/cargo_wrapper.py \
       meson/makedef.py \
+      meson/query-rustc.py
 
     # Fix thumbnailer path
     substituteInPlace gdk-pixbuf-loader/librsvg.thumbnailer.in \
       --replace-fail '@bindir@/gdk-pixbuf-thumbnailer' '${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer'
-
-    # Fix pkg-config file Requires section.
-    # https://gitlab.gnome.org/GNOME/librsvg/-/issues/1150
-    substituteInPlace rsvg/meson.build \
-      --replace-fail 'requires: library_dependencies_sole,' 'requires: [cairo_dep, gio_dep, glib_dep, pixbuf_dep],'
   '';
 
   preCheck = ''

@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qZeH9xXQPIOJ87mvLahnJB3DuEgLX0EAXPvECgxNlq0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ygRyYFLNBCLnRhmO6DoK8fwvy/Y9jrOjWChzxc3CRPo=";
 
   nativeBuildInputs = [
@@ -38,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A multiplayer piano using UDP sockets that can be played using computer keyboard, in the terminal";
+    description = "Multiplayer piano using UDP sockets that can be played using computer keyboard, in the terminal";
     homepage = "https://github.com/ritiek/piano-rs";
     license = licenses.mit;
     mainProgram = "piano-rs";

@@ -39,30 +39,30 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs =
-    [
-      alsa-lib
-      hidapi
-      libusb1
-      libX11
-      libxcb
-      libXrandr
-      flatbuffers
-      protobuf
-      mbedtls
-      python3
-      qtbase
-      qtserialport
-      qtsvg
-      qtx11extras
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libcec
-    ++ lib.optional withRPiDispmanx libraspberrypi;
+  buildInputs = [
+    alsa-lib
+    hidapi
+    libusb1
+    libX11
+    libxcb
+    libXrandr
+    flatbuffers
+    protobuf
+    mbedtls
+    python3
+    qtbase
+    qtserialport
+    qtsvg
+    qtx11extras
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libcec
+  ++ lib.optional withRPiDispmanx libraspberrypi;
 
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin perl; # for macos bundle
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin perl; # for macos bundle
 
   patchPhase = ''
     patchShebangs test/testrunner.sh
@@ -76,7 +76,8 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_MBEDTLS_LIBS=ON"
     # "-DUSE_SYSTEM_QMDNS_LIBS=ON"  # qmdnsengine not in nixpkgs yet
     "-DENABLE_TESTS=ON"
-  ] ++ lib.optional (withRPiDispmanx == false) "-DENABLE_DISPMANX=OFF";
+  ]
+  ++ lib.optional (withRPiDispmanx == false) "-DENABLE_DISPMANX=OFF";
 
   doCheck = true;
   checkPhase = ''

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "WoLpH";
-    repo = pname;
+    repo = "python-utils";
     tag = "v${version}";
     hash = "sha256-lzLzYI5jShfIwQqvfA8UtPjGawXE80ww7jb/gPzpeDo=";
   };
@@ -41,11 +41,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.loguru;
+  ]
+  ++ optional-dependencies.loguru;
 
   pythonImportsCheck = [ "python_utils" ];
 
-  pytestFlagsArray = [ "_python_utils_tests" ];
+  enabledTestPaths = [ "_python_utils_tests" ];
 
   disabledTests = [
     # Flaky tests

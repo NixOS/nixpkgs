@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.6";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-HhepJp7y2YN05XcZhB/L08g+yOfTJPRzd2m4ALQJGvw=";
+    hash = "sha256-b7x6M2qt0OL5xBwmuOFcIS5MhlwUvA6cO5hOJ2ZiOrI=";
   };
 
   build-system = [
@@ -83,6 +83,12 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlags = [
+    # DeprecationWarning: Triggering of __jax_array__() during abstractification is deprecated.
+    # To avoid this error, either explicitly convert your object using jax.numpy.array(), or register your object as a pytree.
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
@@ -99,6 +105,9 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: [Chex] Function 'add' is traced > 1 times!
     "PadShardUnpadTest"
+
+    # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
+    "test_linen_to_nnx_metadata"
   ];
 
   passthru = {

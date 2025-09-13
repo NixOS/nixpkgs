@@ -5,7 +5,6 @@
   aioquic,
   beautifulsoup4,
   buildPythonPackage,
-  cacert,
   fetchFromGitHub,
   gunicorn,
   html5tagger,
@@ -14,6 +13,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  sanic-ext,
   sanic-routing,
   sanic-testing,
   setuptools,
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "24.12.0";
+  version = "25.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,11 +36,8 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-17Nr0iNeZC1sHm0JETIufdMVqrhORts1WxCh8cukCKg=";
+    hash = "sha256-tucLXWYPpALQrPYf+aiovKHYf2iouu6jezvNdukEu9w=";
   };
-
-  # https://github.com/sanic-org/sanic/issues/3031
-  patches = [ ./websockets-14.2-compat.patch ];
 
   build-system = [ setuptools ];
 
@@ -58,9 +55,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ext = [
-      # TODO: sanic-ext
-    ];
+    ext = [ sanic-ext ];
     http3 = [ aioquic ];
   };
 
@@ -71,20 +66,21 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
-  ] ++ optional-dependencies.http3;
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ]
+  ++ optional-dependencies.http3;
 
   preCheck = ''
     # Some tests depends on sanic on PATH
     PATH="$out/bin:$PATH"
     PYTHONPATH=$PWD:$PYTHONPATH
 
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-
     # needed for relative paths for some packages
     cd tests
+  ''
+  # Work around "OSError: AF_UNIX path too long"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace worker/test_socket.py \
+      --replace-fail '"./test.sock"' '"/tmp/test.sock"'
   '';
 
   disabledTests = [
@@ -98,6 +94,8 @@ buildPythonPackage rec {
     "test_input_is_dir"
     # Racy, e.g. Address already in use
     "test_logger_vhosts"
+    # Event loop is closed
+    "test_create_server_trigger_events"
   ];
 
   disabledTestPaths = [
@@ -107,6 +105,8 @@ buildPythonPackage rec {
     "typing/test_typing.py"
     # occasionally hangs
     "test_multiprocessing.py"
+    # Failed: async def functions are not natively supported.
+    "test_touchup.py"
   ];
 
   # Avoid usage of nixpkgs-review in darwin since tests will compete usage
@@ -120,7 +120,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ p0lyw0lf ];
     mainProgram = "sanic";
   };
 }

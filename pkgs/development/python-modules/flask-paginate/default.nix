@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_paginate" ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Pagination support for Flask";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "htop-dev";
-    repo = pname;
+    repo = "htop";
     rev = version;
     hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
   };
@@ -41,26 +41,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libnl
-    ]
-    ++ lib.optional sensorsSupport lm_sensors
-    ++ lib.optional systemdSupport systemd;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libnl
+  ]
+  ++ lib.optional sensorsSupport lm_sensors
+  ++ lib.optional systemdSupport systemd;
 
-  configureFlags =
-    [
-      "--enable-unicode"
-      "--sysconfdir=/etc"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-affinity"
-      "--enable-capabilities"
-      "--enable-delayacct"
-    ]
-    ++ lib.optional sensorsSupport "--enable-sensors";
+  configureFlags = [
+    "--enable-unicode"
+    "--sysconfdir=/etc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-affinity"
+    "--enable-capabilities"
+    "--enable-delayacct"
+  ]
+  ++ lib.optional sensorsSupport "--enable-sensors";
 
   postFixup =
     let
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       ${optionalPatch systemdSupport "${systemd}/lib/libsystemd.so"}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive process viewer";
     homepage = "https://htop.dev";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rob
       relrod
       SuperSandro2000

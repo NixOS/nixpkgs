@@ -64,6 +64,11 @@ rec {
         bits = 64;
       };
     };
+    isAbiElfv1 = {
+      abi = {
+        abi = "elfv1";
+      };
+    };
     # This ABI is the default in NixOS PowerPC64 BE, but not on mainline GCC,
     # so it sometimes causes issues in certain packages that makes the wrong
     # assumption on the used ABI.
@@ -255,16 +260,16 @@ rec {
         bits = 64;
       };
     };
-    isILP32 =
-      [
-        {
-          cpu = {
-            family = "wasm";
-            bits = 32;
-          };
-        }
-      ]
-      ++ map
+    isILP32 = [
+      {
+        cpu = {
+          family = "wasm";
+          bits = 32;
+        };
+      }
+    ]
+    ++
+      map
         (a: {
           abi = {
             abi = a;
@@ -338,6 +343,10 @@ rec {
     isMinGW = {
       kernel = kernels.windows;
       abi = abis.gnu;
+    };
+    isMsvc = {
+      kernel = kernels.windows;
+      abi = abis.msvc;
     };
     isWasi = {
       kernel = kernels.wasi;

@@ -17,7 +17,7 @@ in
       default = null;
       description = ''
         The terminal emulator to add to context-entry of nautilus. Supported terminal
-        emulators are listed in https://github.com/Stunkymonkey/nautilus-open-any-terminal#supported-terminal-emulators.
+        emulators are listed in <https://github.com/Stunkymonkey/nautilus-open-any-terminal#supported-terminal-emulators>.
       '';
     };
   };
@@ -28,7 +28,7 @@ in
       nautilus-open-any-terminal
     ];
 
-    environment.sessionVariables = lib.mkIf (!config.services.xserver.desktopManager.gnome.enable) {
+    environment.sessionVariables = lib.mkIf (!config.services.desktopManager.gnome.enable) {
       NAUTILUS_4_EXTENSION_DIR = "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
     };
 

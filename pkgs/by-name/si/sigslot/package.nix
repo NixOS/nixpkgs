@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sigslot";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "palacaze";
     repo = "sigslot";
     rev = "v${version}";
-    hash = "sha256-MKtVZLHp8UfXW8KJ3QjPMhxnt46xV+pA9NMqAX0iqiA=";
+    hash = "sha256-8JBZ6Xid/uAOfiPKgJKetpj/oBb8lRLPgjkMnrfTKaM=";
   };
 
   nativeBuildInputs = [ cmake ];

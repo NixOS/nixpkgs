@@ -37,15 +37,14 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-    [
-      glib
-      gnutls
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libnl
-      linuxHeaders
-    ];
+  buildInputs = [
+    glib
+    gnutls
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libnl
+    linuxHeaders
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc"

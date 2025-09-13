@@ -3,9 +3,12 @@
 }:
 
 let
-  inherit (pkgs) lib stdenv config;
-
-  libc = pkgs.stdenv.cc.libc;
+  inherit (pkgs)
+    lib
+    stdenv
+    config
+    libc
+    ;
 
   patchelf = pkgs.patchelf.overrideAttrs (previousAttrs: {
     NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or [ ]) ++ [

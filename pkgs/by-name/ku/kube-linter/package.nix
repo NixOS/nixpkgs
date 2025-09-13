@@ -9,16 +9,18 @@
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.6.8";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "stackrox";
-    repo = pname;
+    repo = "kube-linter";
     rev = "v${version}";
-    sha256 = "sha256-abfNzf+84BWHpvLQZKyzl7WBt7UHj2zqzKq3VCqAwwY=";
+    sha256 = "sha256-akuyMSgEtIV1+dxFlAgoVdhnKO4SyVP3pIABCjT52Kc=";
   };
 
-  vendorHash = "sha256-FUkGiJ/6G9vSYtAj0v9GT4OINbO3d/OKlJ0YwhONftY=";
+  vendorHash = "sha256-TETt2USmpKolx3nXk9kXknxoXpa/nRj4XZWeDvWFRZQ=";
+
+  excludedPackages = [ "tool-imports" ];
 
   ldflags = [
     "-s"
@@ -42,16 +44,16 @@ buildGoModule rec {
     command = "kube-linter version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Static analysis tool that checks Kubernetes YAML files and Helm charts";
     homepage = "https://kubelinter.io";
     changelog = "https://github.com/stackrox/kube-linter/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mtesseract
       stehessel
       Intuinewin
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -32,32 +32,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  propagatedBuildInputs =
-    [
-      blas
-      ipopt
-      lapack
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      example-robot-data
-      pinocchio
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.example-robot-data
-      python3Packages.pinocchio
-      python3Packages.scipy
-    ];
+  propagatedBuildInputs = [
+    blas
+    ipopt
+    lapack
+  ]
+  ++ lib.optionals (!pythonSupport) [
+    example-robot-data
+    pinocchio
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.example-robot-data
+    python3Packages.pinocchio
+    python3Packages.scipy
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)

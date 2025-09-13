@@ -10,6 +10,7 @@
 buildPythonApplication rec {
   pname = "twitch-chat-downloader";
   version = "2.5.4";
+  format = "setuptools";
 
   # NOTE: Using maintained fork because upstream has stopped working, and it has
   # not been updated in a while.

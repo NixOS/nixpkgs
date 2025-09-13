@@ -48,13 +48,13 @@ in
       default = 20 * 1024;
       type = types.int;
       example = 30720;
-      description = "The maximum disk space allocated to the runner in MB";
+      description = "The maximum disk space allocated to the runner in MiB (1024×1024 bytes).";
     };
     memorySize = mkOption {
       default = 3 * 1024;
       type = types.int;
       example = 8192;
-      description = "The runner's memory in MB";
+      description = "The runner's memory in MiB (1024×1024 bytes).";
     };
     min-free = mkOption {
       default = 1024 * 1024 * 1024;
@@ -125,6 +125,20 @@ in
     # Deployment is by image.
     # TODO system.switch.enable = false;?
     system.disableInstallerTools = true;
+
+    # Allow the system derivation to be substituted, so that
+    # users are less likely to run into a state where they need
+    # the builder running to build the builder if they just want
+    # to make a tweak that only affects the macOS side of things,
+    # like changing the QEMU args.
+    #
+    # TODO(winter): Move to qemu-vm? Trying it here for now as a
+    # low impact change that'll probably improve people's experience.
+    #
+    # (I have no clue what is going on in https://github.com/nix-darwin/nix-darwin/issues/1081
+    # though, as this fix would only apply to one person in that thread... hopefully someone
+    # comes across with a reproducer if this doesn't do it.)
+    system.systemBuilderArgs.allowSubstitutes = true;
 
     nix.settings = {
       min-free = cfg.min-free;

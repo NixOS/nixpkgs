@@ -96,13 +96,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${version}/debian/changelog";
     description = "Tool to create a Debian system in a chroot";
     homepage = "https://wiki.debian.org/Debootstrap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
     mainProgram = "debootstrap";
   };
 }

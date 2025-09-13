@@ -16,6 +16,7 @@
   glib-networking,
   gnused,
   gnutls,
+  hostname,
   iproute2,
   json-glib,
   krb5,
@@ -36,18 +37,17 @@
   systemd,
   udev,
   xmlto,
-  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "338";
+  version = "345";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-ZNvMLzkDh1SuyHuChWM0YykSYu152JHvjrKVm+u0Upw=";
+    hash = "sha256-dK2sMqPmxNKMKrlNkr7FoSaHY5Qn1dtNHX32d/IYu8U=";
     fetchSubmodules = true;
   };
 
@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.setuptools
     systemd
     xmlto
-    which
   ];
 
   buildInputs = [
@@ -81,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     python3Packages.pygobject3
     python3Packages.pip
+    bashInteractive
   ];
 
   postPatch = ''
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
 
     substituteInPlace src/**/*.c \
-      --replace '"/bin/sh"' "\"$(which sh)\""
+      --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
 
     # instruct users with problems to create a nixpkgs issue instead of nagging upstream directly
     substituteInPlace configure.ac \
@@ -184,8 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/share/cockpit/issue/update-issue \
       --prefix PATH : ${
         lib.makeBinPath [
-          iproute2
           gnused
+          hostname
+          iproute2
         ]
       }
 

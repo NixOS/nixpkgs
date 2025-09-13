@@ -66,11 +66,11 @@ stdenv.mkDerivation {
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://acg.loria.fr/";
     description = "Toolkit for developing ACG signatures and lexicon";
-    license = licenses.cecill20;
+    license = lib.licenses.cecill20;
     inherit (ocamlPackages.ocaml.meta) platforms;
-    maintainers = [ maintainers.jirkamarsik ];
+    maintainers = with lib.maintainers; [ jirkamarsik ];
   };
 }

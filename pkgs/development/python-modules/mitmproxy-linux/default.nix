@@ -12,7 +12,8 @@ buildPythonPackage {
   pyproject = true;
 
   postPatch = ''
-    substituteInPlace mitmproxy-linux/build.rs \
+    substituteInPlace ../mitmproxy-rs-*-vendor/aya-build-*/src/lib.rs \
+      --replace-fail '"+nightly",' "" \
       --replace-fail '"-Z",' "" \
       --replace-fail '"build-std=core",' ""
 
@@ -41,13 +42,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mitmproxy_linux" ];
 
-  meta =
-    {
-      inherit (mitmproxy-rs.meta) changelog license maintainers;
-    }
-    // {
-      description = "Linux Rust bits in mitmproxy";
-      homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-linux";
-      platforms = lib.platforms.linux;
-    };
+  meta = {
+    inherit (mitmproxy-rs.meta) changelog license maintainers;
+    description = "Linux Rust bits in mitmproxy";
+    homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-linux";
+    platforms = lib.platforms.linux;
+  };
 }

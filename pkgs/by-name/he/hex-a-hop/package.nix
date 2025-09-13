@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Puzzle game based on hexagonal tiles";
     mainProgram = "hex-a-hop";
-    homepage = "http://hexahop.sourceforge.net";
+    homepage = "https://hexahop.sourceforge.net";
     license = with lib.licenses; [
       gpl2Plus # Main code
       cc-by-30 # Assets

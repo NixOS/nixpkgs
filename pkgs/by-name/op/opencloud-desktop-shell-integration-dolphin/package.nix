@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = {
-    description = "This is the OpenCloud Desktop shell integration for the great KDE Dolphin in KDE Frameworks 6";
+    description = "OpenCloud Desktop shell integration for the great KDE Dolphin in KDE Frameworks 6";
     homepage = "https://github.com/opencloud-eu/desktop-shell-integration-dolphin";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ k900 ];

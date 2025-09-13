@@ -42,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   # ugly hack for xgettext to work during build
   env.LD_LIBRARY_PATH = "${lib.getLib expat}/lib";
 
+  # with -std=c99, the build fails due to implicit function declaration errors
+  # for the popen() and pclose() calls in src/tilda-lock-files.c
+  postPatch = ''
+    substituteInPlace configure.ac --replace-fail -std=c99 -std=gnu99
+  '';
+
   # The config locking scheme relies on the binary being called "tilda"
   # (`pgrep -C tilda`), so a simple `wrapProgram` won't suffice:
   postInstall = ''

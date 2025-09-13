@@ -54,10 +54,14 @@ let
 
   flutterTools =
     args.flutterTools or (callPackage ./flutter-tools.nix {
-      inherit dart version;
+      inherit
+        dart
+        engineVersion
+        patches
+        pubspecLock
+        version
+        ;
       flutterSrc = src;
-      inherit patches;
-      inherit pubspecLock;
       systemPlatform = stdenv.hostPlatform.system;
     });
 
@@ -69,7 +73,8 @@ let
       makeWrapper
       jq
       gitMinimal
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     strictDeps = true;
 
     preConfigure = ''
@@ -153,7 +158,8 @@ let
     doInstallCheck = true;
     nativeInstallCheckInputs = [
       which
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     installCheckPhase = ''
       runHook preInstallCheck
 
@@ -165,43 +171,44 @@ let
       runHook postInstallCheck
     '';
 
-    passthru =
-      {
-        # TODO: rely on engine.version instead of engineVersion
-        inherit
-          dart
-          engineVersion
-          artifactHashes
-          channel
-          ;
-        tools = flutterTools;
-        # The derivation containing the original Flutter SDK files.
-        # When other derivations wrap this one, any unmodified files
-        # found here should be included as-is, for tooling compatibility.
-        sdk = unwrapped;
-      }
-      // lib.optionalAttrs (engine != null) {
-        inherit engine;
-      };
+    passthru = {
+      # TODO: rely on engine.version instead of engineVersion
+      inherit
+        dart
+        engineVersion
+        artifactHashes
+        channel
+        ;
+      tools = flutterTools;
+      # The derivation containing the original Flutter SDK files.
+      # When other derivations wrap this one, any unmodified files
+      # found here should be included as-is, for tooling compatibility.
+      sdk = unwrapped;
+    }
+    // lib.optionalAttrs (engine != null) {
+      inherit engine;
+    };
 
-    meta = with lib; {
-      description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
+    meta = {
+      broken = (lib.versionOlder version "3.32") && useNixpkgsEngine;
+      description = "Makes it easy and fast to build beautiful apps for mobile and beyond";
       longDescription = ''
-        Flutter is Google’s UI toolkit for building beautiful,
-        natively compiled applications for mobile, web, and desktop from a single codebase.
+        Flutter is Google's SDK for crafting beautiful,
+        fast user experiences for mobile, web, and desktop from a single codebase.
       '';
       homepage = "https://flutter.dev";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      maintainers = with maintainers; [
+      mainProgram = "flutter";
+      maintainers = with lib.maintainers; [
         ericdallo
       ];
-      teams = [ teams.flutter ];
+      teams = [ lib.teams.flutter ];
     };
   };
 in

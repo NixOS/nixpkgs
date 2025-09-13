@@ -23,21 +23,20 @@ stdenv.mkDerivation (finalAttrs: {
     name = "muon-src";
     owner = "~lattis";
     repo = "muon";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-xTdyqK8t741raMhjjJBMbWnAorLMMdZ02TeMXK7O+Yw=";
   };
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
 
-  nativeBuildInputs =
-    [
-      pkgconf
-    ]
-    ++ lib.optionals (!embedSamurai) [ samurai ]
-    ++ lib.optionals buildDocs [
-      (python3.withPackages (ps: [ ps.pyyaml ]))
-      scdoc
-    ];
+  nativeBuildInputs = [
+    pkgconf
+  ]
+  ++ lib.optionals (!embedSamurai) [ samurai ]
+  ++ lib.optionals buildDocs [
+    (python3.withPackages (ps: [ ps.pyyaml ]))
+    scdoc
+  ];
 
   buildInputs = [
     curl
@@ -75,13 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     '';
 
-  postPatch =
-    ''
-      patchShebangs bootstrap.sh
-    ''
-    + lib.optionalString buildDocs ''
-      patchShebangs subprojects/meson-docs/docs/genrefman.py
-    '';
+  postPatch = ''
+    patchShebangs bootstrap.sh
+  ''
+  + lib.optionalString buildDocs ''
+    patchShebangs subprojects/meson-docs/docs/genrefman.py
+  '';
 
   # tests try to access "~"
   postConfigure = ''

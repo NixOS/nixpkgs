@@ -54,50 +54,48 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  configureFlags =
-    [
-      "--enable-introspection"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "--enable-kms-egl-platform"
-      "--enable-wayland-egl-platform"
-      "--enable-wayland-egl-server"
-      "--enable-gles1"
-      "--enable-gles2"
-      # Force linking against libGL.
-      # Otherwise, it tries to load it from the runtime library path.
-      "LIBS=-lGL"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--disable-glx"
-      "--without-x"
-    ]
-    ++ lib.optionals gstreamerSupport [
-      "--enable-cogl-gst"
-    ];
+  configureFlags = [
+    "--enable-introspection"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "--enable-kms-egl-platform"
+    "--enable-wayland-egl-platform"
+    "--enable-wayland-egl-server"
+    "--enable-gles1"
+    "--enable-gles2"
+    # Force linking against libGL.
+    # Otherwise, it tries to load it from the runtime library path.
+    "LIBS=-lGL"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-glx"
+    "--without-x"
+  ]
+  ++ lib.optionals gstreamerSupport [
+    "--enable-cogl-gst"
+  ];
 
   # TODO: this shouldn't propagate so many things
   # especially not gobject-introspection
-  propagatedBuildInputs =
-    [
-      glib
-      gdk-pixbuf
-      gobject-introspection
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      libgbm
-      mesa-gl-headers
-      libGL
-      xorg.libXrandr
-      xorg.libXfixes
-      xorg.libXcomposite
-      xorg.libXdamage
-    ]
-    ++ lib.optionals gstreamerSupport [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-    ];
+  propagatedBuildInputs = [
+    glib
+    gdk-pixbuf
+    gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libgbm
+    mesa-gl-headers
+    libGL
+    xorg.libXrandr
+    xorg.libXfixes
+    xorg.libXcomposite
+    xorg.libXdamage
+  ]
+  ++ lib.optionals gstreamerSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ];
 
   buildInputs = lib.optionals pangoSupport [
     pango
@@ -105,19 +103,18 @@ stdenv.mkDerivation rec {
     harfbuzz
   ];
 
-  env =
-    {
-      COGL_PANGO_DEP_CFLAGS = toString (
-        lib.optionals (stdenv.hostPlatform.isDarwin && pangoSupport) [
-          "-I${pango.dev}/include/pango-1.0"
-          "-I${cairo.dev}/include/cairo"
-          "-I${harfbuzz.dev}/include/harfbuzz"
-        ]
-      );
-    }
-    // lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    };
+  env = {
+    COGL_PANGO_DEP_CFLAGS = toString (
+      lib.optionals (stdenv.hostPlatform.isDarwin && pangoSupport) [
+        "-I${pango.dev}/include/pango-1.0"
+        "-I${cairo.dev}/include/cairo"
+        "-I${harfbuzz.dev}/include/harfbuzz"
+      ]
+    );
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   #doCheck = true; # all tests fail (no idea why)
 

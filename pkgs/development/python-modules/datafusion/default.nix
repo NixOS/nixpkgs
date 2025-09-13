@@ -57,11 +57,12 @@ buildPythonPackage rec {
     protoc
   ];
 
-  buildInputs =
-    [ protobuf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    protobuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   dependencies = [
     pyarrow
@@ -75,7 +76,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datafusion" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     pname
   ];

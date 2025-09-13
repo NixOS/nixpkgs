@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "opuslib";
   version = "3.0.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "orion-labs";
-    repo = pname;
+    repo = "opuslib";
     rev = "92109c528f9f6c550df5e5325ca0fcd4f86b0909";
     hash = "sha256-NxmC/4TTIEDVzrfMPN4PcT1JY4QCw8IBMy80XiM/o00=";
   };
@@ -47,8 +47,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/{decoder,encoder,hl_decoder,hl_encoder}.py"
+  enabledTestPaths = [
+    "tests/decoder.py"
+    "tests/encoder.py"
+    "tests/hl_decoder.py"
+    "tests/hl_encoder.py"
   ];
 
   meta = with lib; {

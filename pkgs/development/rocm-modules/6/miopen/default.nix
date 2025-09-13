@@ -151,16 +151,15 @@ stdenv.mkDerivation (finalAttrs: {
     # })
   ];
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
   enableParallelBuilding = true;
   env.ROCM_PATH = clr;
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [ rocm-runtime ];
@@ -173,73 +172,71 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
-  buildInputs =
-    [
-      hipblas
-      hipblas-common
-      rocblas
-      rocmlir
-      half
-      boost
-      sqlite
-      bzip2
-      nlohmann_json
-      frugally-deep
-      roctracer
-      rocrand
-      hipblaslt
-    ]
-    ++ lib.optionals withComposableKernel [
-      composable_kernel
-    ]
-    ++ lib.optionals buildDocs [
-      latex
-      doxygen
-      sphinx
-      rocm-docs-core
-      python3Packages.sphinx-rtd-theme
-      python3Packages.breathe
-      python3Packages.myst-parser
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-      zlib
-    ];
+  buildInputs = [
+    hipblas
+    hipblas-common
+    rocblas
+    rocmlir
+    half
+    boost
+    sqlite
+    bzip2
+    nlohmann_json
+    frugally-deep
+    roctracer
+    rocrand
+    hipblaslt
+  ]
+  ++ lib.optionals withComposableKernel [
+    composable_kernel
+  ]
+  ++ lib.optionals buildDocs [
+    latex
+    doxygen
+    sphinx
+    rocm-docs-core
+    python3Packages.sphinx-rtd-theme
+    python3Packages.breathe
+    python3Packages.myst-parser
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+    zlib
+  ];
 
-  cmakeFlags =
-    [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-      "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-      "-DGPU_ARCHS=${lib.concatStringsSep ";" gpuTargets}"
-      "-DMIOPEN_USE_SQLITE_PERFDB=ON"
-      "-DCMAKE_VERBOSE_MAKEFILE=ON"
-      "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
-      "-DCMAKE_BUILD_TYPE=Release"
+  cmakeFlags = [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    "-DGPU_ARCHS=${lib.concatStringsSep ";" gpuTargets}"
+    "-DMIOPEN_USE_SQLITE_PERFDB=ON"
+    "-DCMAKE_VERBOSE_MAKEFILE=ON"
+    "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
+    "-DCMAKE_BUILD_TYPE=Release"
 
-      # needs to stream to stdout so bzcat rather than bunzip2
-      "-DUNZIPPER=${bzip2}/bin/bzcat"
+    # needs to stream to stdout so bzcat rather than bunzip2
+    "-DUNZIPPER=${bzip2}/bin/bzcat"
 
-      "-DCMAKE_C_COMPILER=amdclang"
-      "-DCMAKE_CXX_COMPILER=amdclang++"
-      "-DROCM_PATH=${clr}"
-      "-DHIP_ROOT_DIR=${clr}"
-      (lib.cmakeBool "MIOPEN_USE_ROCBLAS" true)
-      (lib.cmakeBool "MIOPEN_USE_HIPBLASLT" true)
-      (lib.cmakeBool "MIOPEN_USE_COMPOSABLEKERNEL" withComposableKernel)
-      (lib.cmakeBool "MIOPEN_USE_HIPRTC" true)
-      (lib.cmakeBool "MIOPEN_USE_COMGR" true)
-      "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DMIOPEN_BACKEND=HIP"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_TESTS=ON"
-      "-DMIOPEN_TEST_ALL=ON"
-    ];
+    "-DCMAKE_C_COMPILER=amdclang"
+    "-DCMAKE_CXX_COMPILER=amdclang++"
+    "-DROCM_PATH=${clr}"
+    "-DHIP_ROOT_DIR=${clr}"
+    (lib.cmakeBool "MIOPEN_USE_ROCBLAS" true)
+    (lib.cmakeBool "MIOPEN_USE_HIPBLASLT" true)
+    (lib.cmakeBool "MIOPEN_USE_COMPOSABLEKERNEL" withComposableKernel)
+    (lib.cmakeBool "MIOPEN_USE_HIPRTC" true)
+    (lib.cmakeBool "MIOPEN_USE_COMGR" true)
+    "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DMIOPEN_BACKEND=HIP"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_TESTS=ON"
+    "-DMIOPEN_TEST_ALL=ON"
+  ];
 
   postPatch = ''
     substituteInPlace cmake/ClangTidy.cmake \
@@ -273,31 +270,30 @@ stdenv.mkDerivation (finalAttrs: {
       make -j$NIX_BUILD_CORES check
     '';
 
-  postInstall =
-    ''
-      rm $out/bin/install_precompiled_kernels.sh
-      ln -sf ${gfx900} $out/share/miopen/db/gfx900.kdb
-      ln -sf ${gfx906} $out/share/miopen/db/gfx906.kdb
-      ln -sf ${gfx908} $out/share/miopen/db/gfx908.kdb
-      ln -sf ${gfx90a} $out/share/miopen/db/gfx90a.kdb
-      ln -sf ${gfx1030} $out/share/miopen/db/gfx1030.kdb
-    ''
-    + lib.optionalString buildDocs ''
-      mv ../doc/html $out/share/doc/miopen-hip
-    ''
-    + lib.optionalString buildTests ''
-      mkdir -p $test/bin
-      mv bin/test_* $test/bin
-      patchelf --set-rpath $out/lib:${
-        lib.makeLibraryPath (
-          finalAttrs.buildInputs
-          ++ [
-            clr
-            rocm-comgr
-          ]
-        )
-      } $test/bin/*
-    '';
+  postInstall = ''
+    rm $out/bin/install_precompiled_kernels.sh
+    ln -sf ${gfx900} $out/share/miopen/db/gfx900.kdb
+    ln -sf ${gfx906} $out/share/miopen/db/gfx906.kdb
+    ln -sf ${gfx908} $out/share/miopen/db/gfx908.kdb
+    ln -sf ${gfx90a} $out/share/miopen/db/gfx90a.kdb
+    ln -sf ${gfx1030} $out/share/miopen/db/gfx1030.kdb
+  ''
+  + lib.optionalString buildDocs ''
+    mv ../doc/html $out/share/doc/miopen-hip
+  ''
+  + lib.optionalString buildTests ''
+    mkdir -p $test/bin
+    mv bin/test_* $test/bin
+    patchelf --set-rpath $out/lib:${
+      lib.makeLibraryPath (
+        finalAttrs.buildInputs
+        ++ [
+          clr
+          rocm-comgr
+        ]
+      )
+    } $test/bin/*
+  '';
 
   requiredSystemFeatures = [ "big-parallel" ];
 

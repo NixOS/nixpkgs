@@ -85,6 +85,16 @@ in
         '';
         default = true;
       };
+
+      extraArgs = lib.mkOption {
+        description = ''
+          Extra command-line arguments to pass to systemd-repart.
+
+          See {manpage}`systemd-repart(8)` for all available options.
+        '';
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+      };
     };
 
     systemd.repart = {
@@ -138,7 +148,8 @@ in
           'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
         '';
       }
-    ] ++ partitionAssertions;
+    ]
+    ++ partitionAssertions;
 
     # systemd-repart uses loopback devices for partition creation
     boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
@@ -177,6 +188,7 @@ in
                                   --dry-run=no \
                                   --empty=${initrdCfg.empty} \
                                   --discard=${lib.boolToString initrdCfg.discard} \
+                                  ${utils.escapeSystemdExecArgs initrdCfg.extraArgs} \
                                   ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
               ''
             ];

@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "provides a simple CRUD interface for dealing with per-dataset markers on honeycomb.io";
+    description = "Simple CRUD interface for dealing with per-dataset markers on honeycomb.io";
     homepage = "https://honeycomb.io/";
     license = licenses.asl20;
     maintainers = [ maintainers.iand675 ];

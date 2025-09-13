@@ -28,24 +28,22 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs =
-    [
-      ogre
-      freetype
-      boost
-      expat
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    ogre
+    freetype
+    boost
+    expat
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  cmakeFlags =
-    [
-      "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-    ];
+  cmakeFlags = [
+    "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     branch = "v0";

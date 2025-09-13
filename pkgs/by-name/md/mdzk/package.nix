@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     ./update-mdbook-for-rust-1.64.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+x4pOtszvdzI/zR55ezcxlS52GrWQTuBn7vbnqDTVac=";
 
   meta = with lib; {

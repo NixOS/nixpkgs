@@ -164,7 +164,7 @@ in
           };
         };
         default = { };
-        description = "Settings of uMurmur. For reference see https://github.com/umurmur/umurmur/blob/master/umurmur.conf.example";
+        description = "Settings of uMurmur. For reference see <https://github.com/umurmur/umurmur/blob/master/umurmur.conf.example>";
       };
 
       configFile = lib.mkOption rec {

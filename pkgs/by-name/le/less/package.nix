@@ -2,17 +2,17 @@
   lib,
   fetchurl,
   fetchpatch,
-  autoreconfHook,
   ncurses,
   pcre2,
   stdenv,
+  versionCheckHook,
   # Boolean options
   withSecure ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "less";
-  version = "668";
+  version = "679";
 
   # `less` is provided by the following sources:
   # - meta.homepage
@@ -21,25 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   # homepage, and only those not marked as beta.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KBn1VWTYbVQqu+yv2C/2HoGaPuyWf6o2zT5o8VlqRLg=";
+    hash = "sha256-m2iCDDT6igr2sOAbdPApi83UCgSJxhZJtHBYkIoVPXg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix configure parameters --with-secure=no and --without-secure.
-      url = "https://github.com/gwsw/less/commit/8fff6c56bfc833528b31ebdaee871f65fbe342b1.patch";
-      hash = "sha256-XV5XufivNWWLGeIpaP04YQPWcxIUKYYEINdT+eEx+WA=";
-      includes = [
-        "configure.ac"
-      ];
-    })
-  ];
-
-  # Need `autoreconfHook` since we patch `configure.ac`.
-  # TODO: Remove the `configure.ac` patch and `autoreconfHook` next release
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
 
   buildInputs = [
     ncurses
@@ -58,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.greenwoodsoftware.com/less/";

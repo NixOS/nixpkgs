@@ -64,6 +64,12 @@ lib.extendMkDerivation {
       # Go build flags.
       GOFLAGS ? [ ],
 
+      # Instead of building binary targets with 'go install', build test binaries with 'go test'.
+      # The binaries found in $out/bin can be executed as go tests outside of the sandbox.
+      # This is mostly useful outside of nixpkgs, for example to build integration/e2e tests
+      # that won't run within the sandbox.
+      buildTestBinaries ? false,
+
       ...
     }@args:
     {
@@ -202,7 +208,15 @@ lib.extendMkDerivation {
             outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
             # in case an overlay clears passthru by accident, don't fail evaluation
           }).overrideAttrs
-            (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
+            (
+              let
+                pos = builtins.unsafeGetAttrPos "passthru" finalAttrs;
+                posString =
+                  if pos == null then "unknown" else "${pos.file}:${toString pos.line}:${toString pos.column}";
+              in
+              finalAttrs.passthru.overrideModAttrs
+                or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: passthru.overrideModAttrs missing after overrideAttrs. Last overridden at ${posString}." overrideModAttrs)
+            );
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
@@ -338,8 +352,18 @@ lib.extendMkDerivation {
                   export NIX_BUILD_CORES=1
               fi
               for pkg in $(getGoDirs ""); do
-                echo "Building subPackage $pkg"
-                buildGoDir install "$pkg"
+                ${
+                  if buildTestBinaries then
+                    ''
+                      echo "Building test binary for $pkg"
+                      buildGoDir "test -c -o $GOPATH/bin/" "$pkg"
+                    ''
+                  else
+                    ''
+                      echo "Building subPackage $pkg"
+                      buildGoDir install "$pkg"
+                    ''
+                }
               done
             ''
           + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -359,7 +383,7 @@ lib.extendMkDerivation {
           ''
         );
 
-      doCheck = args.doCheck or true;
+      doCheck = args.doCheck or (!buildTestBinaries);
       checkPhase =
         args.checkPhase or ''
           runHook preCheck
@@ -394,11 +418,13 @@ lib.extendMkDerivation {
         # `passthru.overrideModAttrs` will be overridden
         # when users want to override `goModules`.
         overrideModAttrs = lib.toExtension overrideModAttrs;
-      } // passthru;
+      }
+      // passthru;
 
       meta = {
         # Add default meta information.
         platforms = go.meta.platforms or lib.platforms.all;
-      } // meta;
+      }
+      // meta;
     };
 }

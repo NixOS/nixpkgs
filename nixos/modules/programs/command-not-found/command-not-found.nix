@@ -33,10 +33,16 @@ in
 
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
+
+        Requires nix-channels to be set and downloaded (sudo nix-channels --update.)
+
+        See also nix-index and nix-index-database as an alternative for flakes-based systems.
+
+        Additionally, having the env var NIX_AUTO_RUN set will automatically run the matching package, and with NIX_AUTO_RUN_INTERACTIVE it will confirm the package before running.
       '';
     };
 
@@ -54,45 +60,22 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.bash.interactiveShellInit = ''
-      # This function is called whenever a command is not found.
       command_not_found_handle() {
-        local p='${commandNotFound}/bin/command-not-found'
-        if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
-          # Run the helper program.
-          "$p" "$@"
-          # Retry the command if we just installed it.
-          if [ $? = 126 ]; then
-            "$@"
-          else
-            return 127
-          fi
-        else
-          echo "$1: command not found" >&2
-          return 127
-        fi
+        '${commandNotFound}/bin/command-not-found' "$@"
       }
     '';
 
     programs.zsh.interactiveShellInit = ''
-      # This function is called whenever a command is not found.
       command_not_found_handler() {
-        local p='${commandNotFound}/bin/command-not-found'
-        if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
-          # Run the helper program.
-          "$p" "$@"
-
-          # Retry the command if we just installed it.
-          if [ $? = 126 ]; then
-            "$@"
-          else
-            return 127
-          fi
-        else
-          # Indicate than there was an error so ZSH falls back to its default handler
-          echo "$1: command not found" >&2
-          return 127
-        fi
+        '${commandNotFound}/bin/command-not-found' "$@"
       }
+    '';
+
+    # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
+    programs.fish.interactiveShellInit = ''
+      function fish_command_not_found
+         "${commandNotFound}/bin/command-not-found" $argv
+      end
     '';
 
     environment.systemPackages = [ commandNotFound ];

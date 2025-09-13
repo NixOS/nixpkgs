@@ -3,22 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  miniaudio,
   cffi,
   pytestCheckHook,
 }:
 
-let
-  # TODO: recheck after 1.59
-  miniaudio' = miniaudio.overrideAttrs (oldAttrs: rec {
-    version = "0.11.16"; # cffi breakage with 0.11.17
-    src = fetchFromGitHub {
-      inherit (oldAttrs.src) owner repo;
-      rev = "refs/tags/${version}";
-      hash = "sha256-POe/dYPJ25RKNGIhaLoqxm9JJ08MrTyHVN4NmaGOdwM=";
-    };
-  });
-in
 buildPythonPackage rec {
   pname = "miniaudio";
   version = "1.61";
@@ -31,14 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-H3o2IWGuMqLrJTzQ7w636Ito6f57WBtMXpXXzrZ7UD8=";
   };
 
-  postPatch = ''
-    rm -r miniaudio
-    ln -s ${miniaudio'} miniaudio
-    substituteInPlace build_ffi_module.py \
-      --replace-fail "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
-    substituteInPlace miniaudio.c \
-      --replace-fail "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
-  '';
+  # TODO: Properly unvendor miniaudio c library
 
   build-system = [ setuptools ];
 

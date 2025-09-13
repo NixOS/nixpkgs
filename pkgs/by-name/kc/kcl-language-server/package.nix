@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/kcl-lang/kcl/releases/tag/v${version}";
-    description = "A high-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
+    description = "High-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
     downloadPage = "https://github.com/kcl-lang/kcl/tree/v${version}/kclvm/tools/src/LSP";
     homepage = "https://www.kcl-lang.io/";
     license = lib.licenses.asl20;

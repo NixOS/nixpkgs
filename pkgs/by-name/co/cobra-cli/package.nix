@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  installShellFiles,
   go,
 }:
 
@@ -12,14 +13,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "spf13";
-    repo = pname;
+    repo = "cobra-cli";
     rev = "v${version}";
     sha256 = "sha256-E0I/Pxw4biOv7aGVzGlQOFXnxkc+zZaEoX1JmyMh6UE=";
   };
 
   vendorHash = "sha256-vrtGPQzY+NImOGaSxV+Dvch+GNPfL9XfY4lfCHTGXwY=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   allowGoReference = true;
 
@@ -35,12 +39,19 @@ buildGoModule rec {
       --prefix PATH : ${go}/bin
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    installShellCompletion --cmd cobra-cli \
+      --bash <($out/bin/cobra-cli completion bash) \
+      --fish <($out/bin/cobra-cli completion fish) \
+      --zsh <($out/bin/cobra-cli completion zsh) \
+  '';
+
+  meta = {
     description = "Cobra CLI tool to generate applications and commands";
     mainProgram = "cobra-cli";
     homepage = "https://github.com/spf13/cobra-cli/";
     changelog = "https://github.com/spf13/cobra-cli/releases/tag/${version}";
-    license = licenses.afl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.afl20;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

@@ -44,7 +44,14 @@ rec {
 
     :::
   */
-  addMetaAttrs = newAttrs: drv: drv // { meta = (drv.meta or { }) // newAttrs; };
+  addMetaAttrs =
+    newAttrs: drv:
+    if drv ? overrideAttrs then
+      drv.overrideAttrs (old: {
+        meta = (old.meta or { }) // newAttrs;
+      })
+    else
+      drv // { meta = (drv.meta or { }) // newAttrs; };
 
   /**
     Disable Hydra builds of given derivation.
@@ -289,8 +296,7 @@ rec {
   */
   availableOn =
     platform: pkg:
-    pkg != null
-    && ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
+    ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
     && all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
 
   /**

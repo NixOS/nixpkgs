@@ -13,16 +13,24 @@
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat";
-  version = "2025.3.17";
+  version = "2025.6.6";
   src = fetchFromGitHub {
     owner = "kieraneglin";
     repo = "pinchflat";
     rev = "v${version}";
-    hash = "sha256-XHYCYC3SEVyheBV6diE2pn1AJARml+aNNUjJw2tVKTk=";
+    hash = "sha256-5hHueaA0QGTDr4wViZMBpBFhPnl8uAaxy72LMHgZdWU=";
+
   };
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
+    overrides = _: super: {
+      exqlite = super.exqlite.overrideAttrs (_: {
+        preConfigure = ''
+          export ELIXIR_MAKE_CACHE_DIR="$TMPDIR/.cache"
+        '';
+      });
+    };
   };
   removeCookie = false;
 

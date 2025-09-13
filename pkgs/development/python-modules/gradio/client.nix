@@ -11,7 +11,6 @@
   hatch-fancy-pypi-readme,
 
   # dependencies
-  setuptools,
   fsspec,
   httpx,
   huggingface-hub,
@@ -32,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.10.0";
+  version = "1.11.0";
   pyproject = true;
 
   # no tests on pypi
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-6sfY8a6CCfkczsF4yvjOuUZOcyiXx1zK7pUHUtYMq/Q=";
+    hash = "sha256-dj8hJPXUBbFG9awP3o0vgyPt+gcCgzKKEQTEHkrEimA=";
   };
 
   sourceRoot = "${src.name}/client/python";
@@ -61,7 +60,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    setuptools # needed for 'pkg_resources'
     fsspec
     httpx
     huggingface-hub
@@ -88,10 +86,16 @@ buildPythonPackage rec {
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    #"-x" "-Wignore" # uncomment for debugging help
+  ];
+
+  enabledTestPaths = [
     "test/"
-    "-m 'not flaky'"
-    #"-x" "-W" "ignore" # uncomment for debugging help
+  ];
+
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

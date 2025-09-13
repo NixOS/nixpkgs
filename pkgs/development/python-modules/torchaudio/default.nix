@@ -15,6 +15,7 @@
   pybind11,
   sox,
   torch,
+  llvmPackages,
 
   cudaSupport ? torch.cudaSupport,
   cudaPackages,
@@ -76,7 +77,7 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.6.0";
+  version = "2.8.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -85,7 +86,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-WNdDBB2nShbPPW7GU5cMij00u5PUdN+j5pm41yrKnCA=";
+    hash = "sha256-SPa6ZWA2AWawfL4Z4mb1nddGaAsGEl/0dwweBpex2Wo=";
   };
 
   patches = [
@@ -112,28 +113,28 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    ninja
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals rocmSupport (
+    with rocmPackages;
     [
-      cmake
-      pkg-config
-      ninja
+      clr
+      rocblas
+      hipblas
     ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
-    ++ lib.optionals rocmSupport (
-      with rocmPackages;
-      [
-        clr
-        rocblas
-        hipblas
-      ]
-    );
+  );
 
   buildInputs = [
     ffmpeg_6-full
     pybind11
     sox
     torch.cxxdev
-  ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [ torch ];
 
@@ -159,8 +160,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     platforms =
-      lib.platforms.linux
-      ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+      lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

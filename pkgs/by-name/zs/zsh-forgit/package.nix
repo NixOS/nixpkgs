@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-forgit";
-  version = "25.05.0";
+  version = "25.09.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     tag = finalAttrs.version;
-    hash = "sha256-U+MtgunPEmo/kv/lQI2BBi2WUBgt3wFkaUdfRzJWoGQ=";
+    hash = "sha256-hbPiuuiyPOCtnByInhoA0atVDwNaMRfzp1n9dusg59I=";
   };
 
   strictDeps = true;
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -D bin/git-forgit $out/bin/git-forgit
     install -D completions/_git-forgit $out/share/zsh/site-functions/_git-forgit
-    install -D forgit.plugin.zsh $out/share/zsh/${finalAttrs.pname}/forgit.plugin.zsh
+    install -D forgit.plugin.zsh $out/share/zsh/zsh-forgit/forgit.plugin.zsh
     wrapProgram $out/bin/git-forgit \
       --prefix PATH : ${
         lib.makeBinPath [

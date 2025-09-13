@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-coordinates-schemas";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "asdf-format";
     repo = "asdf-coordinates-schemas";
     tag = version;
-    hash = "sha256-LuC0m25OqQwivK/Z3OfoCtdhBV87rk16XrkJxUxG07o=";
+    hash = "sha256-ZE86W93PzKWdLrI+LNvxzrwMjOTy1fBV2AVJAaFWDMo=";
   };
 
   build-system = [

@@ -49,7 +49,12 @@
   ];
   "llvm/gnu-install-dirs.patch" = [
     {
+      after = "22";
+      path = ../22;
+    }
+    {
       after = "21";
+      before = "22";
       path = ../21;
     }
     {
@@ -204,6 +209,12 @@
       path = ../12;
     }
   ];
+  "llvm/no-pipes.patch" = [
+    {
+      before = "16";
+      path = ../12;
+    }
+  ];
   "openmp/fix-find-tool.patch" = [
     {
       after = "17";
@@ -225,7 +236,23 @@
   "libclc/use-default-paths.patch" = [
     {
       after = "19";
+      before = "20";
       path = ../19;
+    }
+    {
+      after = "20";
+      path = ../20;
+    }
+  ];
+  "libclc/gnu-install-dirs.patch" = [
+    {
+      after = "16";
+      before = "21";
+      path = ../16;
+    }
+    {
+      after = "21";
+      path = ../21;
     }
   ];
 }

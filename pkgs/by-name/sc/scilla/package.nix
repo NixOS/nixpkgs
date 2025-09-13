@@ -27,12 +27,12 @@ buildGoModule rec {
     "-skip=TestIPToHostname"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Information gathering tool for DNS, ports and more";
     mainProgram = "scilla";
     homepage = "https://github.com/edoardottt/scilla";
     changelog = "https://github.com/edoardottt/scilla/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

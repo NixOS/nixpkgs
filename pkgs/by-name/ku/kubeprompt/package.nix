@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jlesquembre";
-    repo = pname;
+    repo = "kubeprompt";
     rev = version;
     hash = "sha256-is6Rz0tw/g4HyGJMTHj+r390HZAytVhfGVRzZ5wKZkU=";
   };

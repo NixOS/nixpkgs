@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

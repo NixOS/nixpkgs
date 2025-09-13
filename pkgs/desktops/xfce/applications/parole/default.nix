@@ -1,9 +1,15 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
   dbus,
   dbus-glib,
   gst_all_1,
+  glib,
   gtk3,
   libnotify,
   libX11,
@@ -11,24 +17,40 @@
   libxfce4util,
   taglib,
   xfconf,
+  gitUpdater,
 }:
 
-# Doesn't seem to find H.264 codec even though built with gst-plugins-bad.
-
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "parole";
-  version = "4.18.2";
+  version = "4.20.0";
 
-  sha256 = "sha256-C4dGiMYn51YuASsQeQs3Cbc+KkPqcOrsCMS+dYfP+Ps=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "parole";
+    tag = "parole-${finalAttrs.version}";
+    hash = "sha256-I1wZsuZ/NM5bH6QTJpwd5WL9cIGNtkAxA2j5vhhdaTE=";
+  };
 
-  buildInputs = with gst_all_1; [
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    dbus-glib # dbus-binding-tool
+    glib # glib-genmarshal
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
     dbus
     dbus-glib
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-ugly
+    glib
     gtk3
     libnotify
     libX11
@@ -38,9 +60,14 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "parole-"; };
+
+  meta = {
     description = "Modern simple media player";
+    homepage = "https://gitlab.xfce.org/apps/parole";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "parole";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiowebostv";
-  version = "0.7.3";
+  version = "0.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,8 +18,13 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aiowebostv";
     tag = "v${version}";
-    hash = "sha256-ssoWWLGP+0WGGtvOB0Pr1LMzAOh3qK1PHA99D16azeI=";
+    hash = "sha256-3O1NiFNzlWIR/9JR2Y7t9tL4t7tJ6haNwsS5r4m7lMM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   build-system = [ setuptools ];
 

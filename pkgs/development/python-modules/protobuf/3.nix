@@ -16,6 +16,7 @@ buildPythonPackage {
   inherit (protobuf) pname src;
 
   version = protobuf.version;
+  format = "setuptools";
 
   sourceRoot = "${protobuf.src.name}/python";
 

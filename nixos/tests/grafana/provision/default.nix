@@ -193,9 +193,7 @@ import ../../make-test-python.nix (
   {
     name = "grafana-provision";
 
-    meta = with maintainers; {
-      maintainers = [ willibutz ];
-    };
+    meta.maintainers = [ ];
 
     inherit nodes;
 

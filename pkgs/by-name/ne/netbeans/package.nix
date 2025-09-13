@@ -52,7 +52,7 @@ stdenv.mkDerivation {
       } \
       --prefix JAVA_HOME : ${jdk21.home} \
       --add-flags "--jdkhome ${jdk21.home} \
-      -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
+      -J-Dawt.useSystemAAFontSettings=gasp -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.

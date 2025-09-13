@@ -32,41 +32,15 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
-    rev = version;
-    hash = "sha256-DoYD8Hc5pd68+BhASw3mwwCdhu0vYHiELjVmVwU8FHs=";
+    tag = version;
+    hash = "sha256-yPePxdKrg41kycXl1fDKf1jWx0YD+K26w8z2LmQV0g0=";
   };
-
-  # recreates https://github.com/jowilf/starlette-admin/pull/630 which cannot be cherry-picked
-  postPatch = ''
-    test_files_to_fix=(
-      tests/mongoengine/test_auth.py
-      tests/odmantic/test_async_engine.py
-      tests/odmantic/test_auth.py
-      tests/odmantic/test_sync_engine.py
-      tests/sqla/test_async_engine.py
-      tests/sqla/test_auth.py
-      tests/sqla/test_multiple_pks.py
-      tests/sqla/test_sqla_and_pydantic.py
-      tests/sqla/test_sqla_utils.py
-      tests/sqla/test_sqlmodel.py
-      tests/sqla/test_sync_engine.py
-      tests/sqla/test_view_serialization.py
-      tests/test_auth.py
-    )
-    substituteInPlace "''${test_files_to_fix[@]}" \
-      --replace-fail  \
-        'from httpx import AsyncClient'  \
-        'from httpx import AsyncClient, ASGITransport' \
-      --replace-fail \
-        'AsyncClient(app=app,'  \
-        'AsyncClient(transport=ASGITransport(app=app),'
-  '';
 
   build-system = [ hatchling ];
 
@@ -118,20 +92,21 @@ buildPythonPackage rec {
     "test_api"
   ];
 
-  disabledTestPaths =
-    [
-      # odmantic is not packaged
-      "tests/odmantic"
-      # needs mongodb running on port 27017
-      "tests/mongoengine"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # very flaky, sandbox issues?
-      # libcloud.storage.types.ContainerDoesNotExistError
-      # sqlite3.OperationalError: attempt to write a readonly database
-      "tests/sqla/test_sync_engine.py"
-      "tests/sqla/test_async_engine.py"
-    ];
+  disabledTestPaths = [
+    # odmantic is not packaged
+    "tests/odmantic"
+    # beanie is not packaged
+    "tests/beanie"
+    # needs mongodb running on port 27017
+    "tests/mongoengine"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # very flaky, sandbox issues?
+    # libcloud.storage.types.ContainerDoesNotExistError
+    # sqlite3.OperationalError: attempt to write a readonly database
+    "tests/sqla/test_sync_engine.py"
+    "tests/sqla/test_async_engine.py"
+  ];
 
   pythonImportsCheck = [
     "starlette_admin"
@@ -146,7 +121,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
-    changelog = "https://github.com/jowilf/starlette-admin/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://jowilf.github.io/starlette-admin/changelog/";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };

@@ -25,25 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postUnpack = ''
     ln -s ${
-      runCommand "${finalAttrs.finalPackage.name}-zig-deps"
-        {
-          inherit (finalAttrs) src;
-
-          nativeBuildInputs = [ zig_0_14 ];
-
-          outputHashAlgo = null;
-          outputHashMode = "recursive";
-          outputHash = "sha256-wBIfLeaKtTow2Z7gjEgIFmqcTGWgpRWI+k0t294BslM=";
-        }
-        ''
-          export ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
-
-          runHook unpackPhase
-          cd $sourceRoot
-
-          zig build --fetch
-          mv $ZIG_GLOBAL_CACHE_DIR/p $out
-        ''
+      zig_0_14.fetchDeps {
+        inherit (finalAttrs)
+          src
+          pname
+          version
+          ;
+        hash = "sha256-wBIfLeaKtTow2Z7gjEgIFmqcTGWgpRWI+k0t294BslM=";
+      }
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 

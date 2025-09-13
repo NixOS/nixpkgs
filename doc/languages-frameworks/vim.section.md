@@ -177,7 +177,7 @@ Finally, there are some plugins that are also packaged in nodePackages because t
 Run the update script with a GitHub API token that has at least `public_repo` access. Running the script without the token is likely to result in rate-limiting (429 errors). For steps on creating an API token, please refer to [GitHub's token documentation](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token).
 
 ```sh
-nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --github-token=mytoken' # or set GITHUB_API_TOKEN environment variable
+nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --github-token=mytoken' # or set GITHUB_TOKEN environment variable
 ```
 
 Alternatively, set the number of processes to a lower count to avoid rate-limiting.
@@ -186,13 +186,18 @@ Alternatively, set the number of processes to a lower count to avoid rate-limiti
 nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --proc 1'
 ```
 
-If you want to update only certain plugins, you can specify them after the `update` command. Note that you must use the same plugin names as the `pkgs/applications/editors/vim/plugins/vim-plugin-names` file.
+To update only specific plugins, list them after the `update` command:
 
 ```sh
-nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater update "nvim-treesitter" "LazyVim"'
+nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater update "nvim-treesitter" "mini.nvim" "mini-nvim"'
 ```
 
-## How to maintain an out-of-tree overlay of vim plugins ? {#vim-out-of-tree-overlays}
+The updater script accepts plugin arguments in different formats:
+
+- `"mini.nvim"` := The GitHub repository name, the raw plugin name, or the alias defined in `vim-plugin-names`.
+- `"mini-nvim"` := The normalized plugin name, which matches the attribute name generated in `generated.nix`
+
+## How to maintain an out-of-tree overlay of vim plugins? {#vim-out-of-tree-overlays}
 
 You can use the updater script to generate basic packages out of a custom vim
 plugin list:

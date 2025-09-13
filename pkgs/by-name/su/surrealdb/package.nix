@@ -6,22 +6,20 @@
   openssl,
   rocksdb,
   testers,
-  surrealdb,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surrealdb";
-  version = "2.3.1";
+  version = "2.3.8";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    tag = "v${version}";
-    hash = "sha256-cseTLVs3LXksajOq9TULUbofwG/kp29sgulZ83QUXYk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PiX08u2MsSLIujQg57P6ofTOHCmbZhjVUot0zrQGOKQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-y5hzOGTJeOZ1JjJNsxo80KL1DnWL87DU1M1yxiOkeb0=";
+  cargoHash = "sha256-mS2/38pSPp6f3OXze+nYhFlcHGslCai6dPnPOQMWqxM=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -55,19 +53,19 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
-    package = surrealdb;
+    package = finalAttrs.finalPackage;
     command = "surreal version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       sikmir
       happysalada
       siriobalmelli
     ];
   };
-}
+})

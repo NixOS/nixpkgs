@@ -22,6 +22,19 @@ repo_url_prefix="https://github.com/microsoft/playwright/raw"
 temp_dir=$(mktemp -d)
 trap 'rm -rf "$temp_dir"' EXIT
 
+# Update playwright-mcp package
+mcp_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright-mcp/releases/latest | jq -r '.tag_name | sub("^v"; "")')
+update-source-version playwright-mcp "$mcp_version"
+
+# Update npmDepsHash for playwright-mcp
+pushd "$temp_dir" >/dev/null
+curl -fsSL -o package-lock.json "https://raw.githubusercontent.com/microsoft/playwright-mcp/v${mcp_version}/package-lock.json"
+mcp_npm_hash=$(prefetch-npm-deps package-lock.json)
+rm -f package-lock.json
+popd >/dev/null
+
+mcp_package_file="$root/../../../by-name/pl/playwright-mcp/package.nix"
+sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$mcp_npm_hash"'"#' -i "$mcp_package_file"
 
 
 # update binaries of browsers, used by playwright.
@@ -47,6 +60,9 @@ update_browser() {
         fi
     else
         if [ "$name" = "ffmpeg" ] || [ "$name" = "chromium-headless-shell" ]; then
+            suffix="linux"
+        elif [ "$name" = "chromium" ]; then
+            stripRoot="true"
             suffix="linux"
         elif [ "$name" = "firefox" ]; then
             stripRoot="true"
@@ -81,7 +97,7 @@ curl -fsSl \
       )
     ' > "$playwright_dir/browsers.json"
 
-# We currently use Chromium from nixpkgs, so we don't need to download it here
+update_browser "chromium" "linux"
 update_browser "chromium-headless-shell" "linux"
 update_browser "firefox" "linux"
 update_browser "webkit" "linux"

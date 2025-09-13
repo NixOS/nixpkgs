@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.8.2";
+  version = "2.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-OpEzctuCah/ueqw/D7ZadDLJLD3HqSdgAjFcEHhR47A=";
+    hash = "sha256-vcVJ9dLiZ3wfZU989slefSJoD2hKlRCwxRALvRGLZPA=";
   };
 
   build-system = [
@@ -58,11 +58,6 @@ buildPythonPackage rec {
     pyarrow
     pytest-xdist
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # pyarrow.lib.ArrowInvalid
-    "test_recordarray"
   ];
 
   disabledTestPaths = [

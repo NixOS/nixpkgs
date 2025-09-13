@@ -11,15 +11,23 @@
   ps,
   mount,
   iproute2,
+  python3,
+  jq,
+  wmctrl,
+  xdotool,
+  xclip,
+  xpra,
+  weston,
+  xwayland,
 }:
 stdenv.mkDerivation rec {
   pname = "x11docker";
-  version = "7.6.0";
+  version = "7.6.0-unstable-2024-04-04";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
-    rev = "v${version}";
-    sha256 = "sha256-DehAWrEvoE/zWbfjQmF5Z7HTaQL5WMA/279Ee1Xm47g=";
+    rev = "cb29a996597839239e482409b895353b1097ce3b";
+    sha256 = "sha256-NYMr2XZ4m6uvuIGO+nzX2ksxtVLJL4zy/JebxeAvqD4=";
   };
   nativeBuildInputs = [ makeWrapper ];
 
@@ -41,6 +49,17 @@ stdenv.mkDerivation rec {
           xorg.xdpyinfo
           xorg.xhost
           xorg.xinit
+          python3
+          jq
+          xorg.libxcvt
+          wmctrl
+          xdotool
+          xclip
+          xpra
+          xorg.xrandr
+          xorg.xauth
+          weston
+          xwayland
         ]
       }"
   '';

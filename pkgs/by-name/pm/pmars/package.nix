@@ -17,8 +17,7 @@ let
     "RWLIMIT"
   ];
   pkgConfigLibs =
-    lib.optionals enableXwinGraphics [ "x11" ]
-    ++ lib.optionals (!enableXwinGraphics) [ "ncurses" ];
+    lib.optionals enableXwinGraphics [ "x11" ] ++ lib.optionals (!enableXwinGraphics) [ "ncurses" ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmars";
@@ -35,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # call to undeclared function 'sighandler' & undefined sighandler on Darwin
     ./0002-fix-sighandler.patch
+
+    # ncurses' WINDOW struct was turned opaque for outside code, use functions for accessing values instead
+    ./0003-fix-ncurses-opaque-WINDOW.patch
   ];
 
   postPatch = ''
@@ -58,8 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals (pkgConfigLibs != [ ]) [ pkg-config ];
 
   buildInputs =
-    lib.optionals enableXwinGraphics [ libX11 ]
-    ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
+    lib.optionals enableXwinGraphics [ libX11 ] ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
 
   preConfigure = ''
     cd src

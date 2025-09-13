@@ -18,20 +18,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      install -Dm0755 usr/bin/jotta-cli usr/bin/jottad -t $out/bin/
+    install -Dm0755 usr/bin/jotta-cli usr/bin/jottad -t $out/bin/
 
-      runHook postInstall
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd jotta-cli \
-        --bash <($out/bin/jotta-cli completion bash) \
-        --fish <($out/bin/jotta-cli completion fish) \
-        --zsh <($out/bin/jotta-cli completion zsh)
-    '';
+    runHook postInstall
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jotta-cli \
+      --bash <($out/bin/jotta-cli completion bash) \
+      --fish <($out/bin/jotta-cli completion fish) \
+      --zsh <($out/bin/jotta-cli completion zsh)
+  '';
 
   passthru.tests = { inherit (nixosTests) jotta-cli; };
 

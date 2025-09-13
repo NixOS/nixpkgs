@@ -6,19 +6,19 @@
   pkg-config,
   qmake,
   qtbase,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qt6gtk2";
-  version = "0.5-unstable-2025-03-04";
+  version = "0.5";
 
   src = fetchFromGitLab {
     domain = "opencode.net";
     owner = "trialuser";
     repo = "qt6gtk2";
-    rev = "d7c14bec2c7a3d2a37cde60ec059fc0ed4efee67";
-    hash = "sha256-6xD0lBiGWC3PXFyM2JW16/sDwicw4kWSCnjnNwUT4PI=";
+    tag = finalAttrs.version;
+    hash = "sha256-G2TQ4LU8Cmvd+u6/s1ugbUkZcRXHTBm3+ISY0g/5/60=";
   };
 
   buildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK+2.0 integration plugins for Qt6";
@@ -45,4 +45,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.linux;
   };
-}
+})

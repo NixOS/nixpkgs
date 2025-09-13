@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cjBSWUBgfwdLnpneJ5XW2TdOFkNc+Rc/wyUp9arZzwg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fAre0jrpJ63adcg4AKCYzdQtCsd0MMMcWA0RsoHo6ig=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,8 +40,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    OUT_DIR=$releaseDir/build/iamb-*/out
-    installManPage $OUT_DIR/iamb.{1,5}
+    installManPage $src/docs/iamb.{1,5}
+    install -D $src/docs/iamb.svg -t $out/share/icons/hicolor/scalable/apps
+    install -D $src/docs/iamb.metainfo.xml $out/share/appdata/chat.iamb.iamb.appdata.xml
+    install -D $src/iamb.desktop -t $out/share/applications
   '';
 
   nativeInstallCheckInputs = [

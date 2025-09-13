@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -8,7 +9,7 @@
   esptool,
   git,
   inetutils,
-  stdenv,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -17,24 +18,42 @@ let
     self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
+
+      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+        };
+        build-system = with self; [ setuptools ];
+        doCheck = false;
+      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.4.2";
+  version = "2025.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "esphome";
+    repo = "esphome";
     tag = version;
-    hash = "sha256-vy/wjtl/IbdSOxAUsV4bl7VNEBTetsvIDh2V1gDHSMs=";
+    hash = "sha256-L3CKfZGPEaMv9nmKX0S9qRXtZrfleQqgN3KHJjIEZew=";
   };
 
-  build-systems = with python.pkgs; [
+  patches = [
+    # Use the esptool executable directly in the ESP32 post build script, that
+    # gets executed by platformio. This is required, because platformio uses its
+    # own python environment through `python -m esptool` and then fails to find
+    # the esptool library.
+    ./esp32-post-build-esptool-reference.patch
+  ];
+
+  build-system = with python.pkgs; [
     setuptools
-    argcomplete
   ];
 
   nativeBuildInputs = [
@@ -50,10 +69,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>="
-
-    # ensure component dependencies are available
-    cat requirements_optional.txt >> requirements.txt
+      --replace-fail "setuptools==80.9.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.46" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -74,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
     esphome-glyphsets
     freetype-py
     icmplib
+    jinja2
     kconfiglib
     packaging
     paho-mqtt
@@ -115,23 +133,25 @@ python.pkgs.buildPythonApplication rec {
   # Needed for tests
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      hypothesis
+      mock
+      pytest-asyncio
+      pytest-cov-stub
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [ versionCheckHook ];
+
+  disabledTestPaths = [
+    # platformio builds; requires networking for dependency resolution
+    "tests/integration"
   ];
 
-  disabledTests = [
-    # race condition, also visible in upstream tests
-    # tests/dashboard/test_web_server.py:78: IndexError
-    "test_devices_page"
-  ];
-
-  postCheck = ''
-    $out/bin/esphome --help > /dev/null
+  preCheck = ''
+    export PATH=$PATH:$out/bin
   '';
 
   postInstall =
@@ -145,22 +165,25 @@ python.pkgs.buildPythonApplication rec {
         --fish <(${argcomplete} --shell fish esphome)
     '';
 
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
+
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
     tests = { inherit (nixosTests) esphome; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [
-      globin
+    maintainers = with lib.maintainers; [
       hexa
     ];
     mainProgram = "esphome";

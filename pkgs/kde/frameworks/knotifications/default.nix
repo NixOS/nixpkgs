@@ -7,6 +7,8 @@
 mkKdeDerivation {
   pname = "knotifications";
 
+  hasPythonBindings = true;
+
   extraNativeBuildInputs = [ qttools ];
   extraBuildInputs = [
     qtdeclarative

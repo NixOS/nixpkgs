@@ -1,46 +1,64 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
+  replaceVars,
+  versionCheckHook,
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "15qdh8fby9xgfjxidcfv1xmrqqrxxapky7zmyn46qx1abhp9piax";
+  src = fetchFromGitHub {
+    owner = "Vimjas";
+    repo = "vint";
+    tag = "v${version}";
+    hash = "sha256-A0yXDkB/b9kEEXSoLeqVdmdm4p2PYL2QHqbF4FgAn30=";
   };
 
-  # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
-  disabled = !pythonAtLeast "3.5";
-
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
+  patches = [
+    # Otherwise, the following warning appears each time the binary is run:
+    # UserWarning: pkg_resources is deprecated as an API.
+    # This leads the `test/acceptance/test_cli.py::TestCLI::*` tests to fail
+    (replaceVars ./remove-pkg-resources.patch {
+      inherit version;
+    })
   ];
-  propagatedBuildInputs = [
+
+  postPatch = ''
+    substituteInPlace \
+      test/acceptance/test_cli.py \
+      test/acceptance/test_cli_vital.py \
+      --replace-fail \
+        "cmd = ['bin/vint'" \
+        "cmd = ['$out/bin/vint'"
+  '';
+
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     ansicolor
     chardet
     pyyaml
-    setuptools
   ];
 
-  # Unpin test dependency versions. This is fixed in master but not yet released.
-  preCheck = ''
-    sed -i 's/==.*//g' test-requirements.txt
-    sed -i 's/mock == 1.0.1/mock/g' setup.py
-  '';
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    pytest-cov-stub
+  ]);
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Fast and Highly Extensible Vim script Language Lint implemented by Python";
     homepage = "https://github.com/Kuniwak/vint";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "vint";
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

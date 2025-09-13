@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-potr";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

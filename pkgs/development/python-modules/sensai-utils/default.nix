@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sensai-utils";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "opcode81";
     repo = "sensAI-utils";
     tag = "v${version}";
-    hash = "sha256-XgZv76tLeTRCvNptasp8EiU2DC+HWkc1xhlCA+YiUZY=";
+    hash = "sha256-bAbgamJjB+NpPnZHqYOrOhatGGgjzy558BrF3GwHOHE=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities from sensAI, the Python library for sensible AI";
     homepage = "https://github.com/opcode81/sensAI-utils";
-    changelog = "https://github.com/opcode81/sensAI-utils/releases/tag/v${version}";
+    changelog = "https://github.com/opcode81/sensAI-utils/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ derdennisop ];
   };

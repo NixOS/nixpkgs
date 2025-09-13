@@ -5,15 +5,16 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3Packages,
+  python312Packages,
   squashfsTools,
+  cacert,
   stdenv,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.8.1";
+  version = "8.11.2";
 
   pyproject = true;
 
@@ -21,10 +22,16 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-gn2roiwNLUFJsuen2qGPvl4DyE6gPUQibS1Cn7cj2L8=";
+    hash = "sha256-Rc3OSRTTpYA7WKI/WEvCdq1SQnkO91FXzQscV2b93TI=";
   };
 
   patches = [
+    # We're using a later version of `craft-cli` than expected, which
+    # adds an extra deprecation warning to the CLI output, meaning that
+    # an expected error message looks slightly different. This patch corrects
+    # that by checking for the updated error message and can be dropped in a
+    # later release of snapcraft.
+    ./esm-test.patch
     # Snapcraft is only officially distributed as a snap, as is LXD. The socket
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
@@ -52,12 +59,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools>=69.0,<80.9.0' 'setuptools' \
+      --replace-fail 'gnupg' 'python-gnupg'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python312Packages; [
     attrs
     catkin-pkg
     click
@@ -101,15 +110,17 @@ python3Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python3Packages; [ setuptools-scm ];
+  build-system = with python312Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "click"
     "craft-parts"
+    "craft-providers"
     "cryptography"
     "docutils"
     "jsonschema"
     "pygit2"
+    "requests"
     "urllib3"
     "validators"
   ];
@@ -118,8 +129,13 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
+  preCheck = ''
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
   nativeCheckInputs =
-    with python3Packages;
+    with python312Packages;
     [
       pytest-check
       pytest-cov-stub
@@ -135,7 +151,7 @@ python3Packages.buildPythonApplication rec {
       squashfsTools
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_bin_echo"
@@ -162,7 +178,13 @@ python3Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
+    # Disabled because we're uisng a later version of a library than
+    # specified which changes the behaviour in a non-breaking way, apart
+    # from when a test is looking for a specific error message
+    "test_esm_error[core]"
+    "test_esm_error[core18]"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"
@@ -181,7 +203,11 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/canonical/snapcraft";
     changelog = "https://github.com/canonical/snapcraft/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

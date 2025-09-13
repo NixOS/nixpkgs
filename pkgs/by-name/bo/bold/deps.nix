@@ -4,17 +4,17 @@
 
 linkFarm "zig-packages" [
   {
-    name = "12207252f0592e53e8794d5a41409791d5c8c70e0de67bfba48844406619847cc971";
+    name = "zig_dis_x86_64-0.0.1-bnhOUXf6AwDf1MpMgHZImLwqhFbUp2Fl_MoxhtPEeo4N";
     path = fetchzip {
-      url = "https://github.com/kubkon/zig-dis-x86_64/archive/5203b9affc5045e000ae7963d988e155e98e396d.tar.gz";
-      hash = "sha256-JmrutmOUQ+UEs9CDSM46AFQMcmBNzj/n1c1lzQBuAbA=";
+      url = "https://github.com/kubkon/zig-dis-x86_64/archive/48c399d7f9d879f46a69d4a06af3fa0699286ba5.tar.gz";
+      hash = "sha256-JsuAWOZnwtBikyHQma4SFfkDP7kPDE1qxPnQpCzx8m0=";
     };
   }
   {
-    name = "1220e8870ca83e47b98807e89b5b636072413f6c09f9b26037e4c98c55e4960ac55a";
+    name = "zig_yaml-0.1.0-C1161miEAgBCwL3YAEQZwV_4GyaaT2Xqj9nKB6hNe_TL";
     path = fetchzip {
-      url = "https://github.com/kubkon/zig-yaml/archive/325dbdd276604dccf184c32fef9600b0ac48343d.tar.gz";
-      hash = "sha256-09r+LTrYHExHo1OtAMKIPTF9cj5GsDEd0FKCj++vwaw=";
+      url = "https://github.com/kubkon/zig-yaml/archive/refs/tags/0.1.1.tar.gz";
+      hash = "sha256-HfxM1MgdlnnD13LG9AWULu/jy5zMRa3nkLUqkKj1RC4=";
     };
   }
 ]

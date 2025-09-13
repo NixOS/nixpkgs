@@ -1,12 +1,13 @@
+{ runTest }:
 let
   tests = {
     wayland =
-      { pkgs, ... }:
+      { lib, pkgs, ... }:
       {
         imports = [ ./common/wayland-cage.nix ];
 
         # We scale vscodium to help OCR find the small "Untitled" text.
-        services.cage.program = "${pkgs.vscodium}/bin/codium --force-device-scale-factor=2";
+        services.cage.program = "${lib.getExe pkgs.vscodium} --force-device-scale-factor=2";
 
         environment.variables.NIXOS_OZONE_WL = "1";
         environment.variables.DISPLAY = "do not use";
@@ -14,7 +15,7 @@ let
         fonts.packages = with pkgs; [ dejavu_fonts ];
       };
     xorg =
-      { pkgs, ... }:
+      { lib, pkgs, ... }:
       {
         imports = [
           ./common/user-account.nix
@@ -24,7 +25,7 @@ let
         virtualisation.memorySize = 2047;
         services.xserver.enable = true;
         services.xserver.displayManager.sessionCommands = ''
-          ${pkgs.vscodium}/bin/codium --force-device-scale-factor=2
+          ${lib.getExe pkgs.vscodium} --force-device-scale-factor=2
         '';
         test-support.displayManager.auto.user = "alice";
       };
@@ -32,21 +33,18 @@ let
 
   mkTest =
     name: machine:
-    import ./make-test-python.nix (
-      { pkgs, ... }:
+    runTest (
+      { lib, ... }:
       {
         inherit name;
 
-        nodes = {
-          "${name}" = machine;
-        };
+        nodes."${name}" = machine;
 
-        meta = with pkgs.lib.maintainers; {
-          maintainers = [
-            synthetica
-            turion
-          ];
-        };
+        meta.maintainers = with lib.maintainers; [
+          synthetica
+          turion
+        ];
+
         enableOCR = true;
 
         testScript = ''
@@ -91,6 +89,5 @@ let
         '';
       }
     );
-
 in
-builtins.mapAttrs (k: v: mkTest k v) tests
+builtins.mapAttrs mkTest tests

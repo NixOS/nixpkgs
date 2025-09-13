@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-logger-plugins";
-  version = "1.2.3";
+  version = "1.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
+    repo = "snakemake-interface-logger-plugins";
     tag = "v${version}";
-    hash = "sha256-VHbta+R2a/K2L03IRu/Ya7dJzshIAvyK9cNIRbx8QqM=";
+    hash = "sha256-dXC6gV5Av8Ij3lVvgdEKzU2tAPiA5JdV3F2Xil5hjHs=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snakemake_interface_logger_plugins" ];
 
   meta = with lib; {
-    description = "A stable interface for interactions between Snakemake and its logger plugins";
+    description = "Stable interface for interactions between Snakemake and its logger plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-logger-plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

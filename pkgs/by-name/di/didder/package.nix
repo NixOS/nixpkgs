@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "makew0rld";
-    repo = pname;
+    repo = "didder";
     rev = "v${version}";
     hash = "sha256-wYAudEyOLxbNfk4M720absGkuWXcaBPyBAcmBNBaaWU=";
   };
@@ -30,9 +30,8 @@ buildGoModule rec {
   '';
 
   meta = src.meta // {
-    description = "An extensive, fast, and accurate command-line image dithering tool";
+    description = "Extensive, fast, and accurate command-line image dithering tool";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "didder";
   };
 }

@@ -143,7 +143,7 @@ runBuildTests {
   };
 
   yaml_1_1Atoms = shouldPass {
-    format = formats.yaml { };
+    format = formats.yaml_1_1 { };
     input = {
       null = null;
       false = false;
@@ -172,6 +172,40 @@ runBuildTests {
       path: ${./testfile}
       str: foo
       time: '22:30:00'
+      'true': true
+    '';
+  };
+
+  yaml_1_2Atoms = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      no = "no";
+      time = "22:30:00";
+    };
+    expected = ''
+      attrs:
+        foo: null
+      'false': false
+      float: 3.141
+      list:
+      - null
+      - null
+      no: no
+      'null': null
+      path: ${./testfile}
+      str: foo
+      time: 22:30:00
       'true': true
     '';
   };
@@ -663,6 +697,7 @@ runBuildTests {
       list = [1, 2]
       str = "foo"
       true = true
+
       [attrs]
       foo = "foo"
 
@@ -812,6 +847,31 @@ runBuildTests {
       null = nil
       path = "${./testfile}"
       str = "foo"
+    '';
+  };
+
+  nixConfAtoms = shouldPass {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = ''ignore-try = false'';
+    };
+    input = {
+      auto-optimise-store = true;
+      cores = 0;
+      store = "auto";
+    };
+    # note that null type is hard to test here,
+    # as it involves a trailing space our formatter will remove here
+    expected = ''
+      # WARNING: this file is generated from the nix.* options in
+      # your NixOS configuration, typically
+      # /etc/nixos/configuration.nix.  Do not edit it!
+      auto-optimise-store = true
+      cores = 0
+      store = auto
+
+      ignore-try = false
     '';
   };
 

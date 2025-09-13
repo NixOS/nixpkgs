@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "aperture";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PsmaNJxWkXiFDA7IGhT+Kx1GUvv23c8L8Jz21/b48oo=";
   };
 
@@ -19,12 +19,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/aperture" ];
 
-  meta = with lib; {
+  meta = {
     description = "L402 (Lightning HTTP 402) Reverse Proxy";
     homepage = "https://github.com/lightninglabs/aperture";
     changelog = "https://github.com/lightninglabs/aperture/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       sputn1ck
       HannahMR
     ];

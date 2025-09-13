@@ -51,6 +51,12 @@ noBrokenSymlinks() {
       symlinkTarget="$(realpath --no-symlinks --canonicalize-missing "$pathParent/$symlinkTarget")"
     fi
 
+    # use $TMPDIR like audit-tmpdir.sh
+    if [[ $symlinkTarget = "$TMPDIR"/* ]]; then
+      nixErrorLog "the symlink $path points to $TMPDIR directory: $symlinkTarget"
+      numDanglingSymlinks+=1
+      continue
+    fi
     if [[ $symlinkTarget != "$NIX_STORE"/* ]]; then
       nixInfoLog "symlink $path points outside the Nix store; ignoring"
       continue

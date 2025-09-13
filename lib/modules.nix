@@ -245,24 +245,26 @@ let
         };
       };
 
-      merged =
-        let
-          collected =
-            collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
-              (
-                {
-                  inherit
-                    lib
-                    options
-                    config
-                    specialArgs
-                    ;
-                  _class = class;
-                }
-                // specialArgs
-              );
-        in
-        mergeModules prefix (reverseList collected);
+      # This function takes an empty attrset as an argument.
+      # It could theoretically be replaced with its body,
+      # but such a binding is avoided to allow for earlier grabage collection.
+      doCollect =
+        { }:
+        collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ]) (
+          {
+            inherit
+              lib
+              options
+              specialArgs
+              ;
+            _class = class;
+            _prefix = prefix;
+            config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. If you are trying to achieve a conditional import behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
+          }
+          // specialArgs
+        );
+
+      merged = mergeModules prefix (reverseList (doCollect { }).modules);
 
       options = merged.matchedOptions;
 
@@ -358,12 +360,13 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        inherit (doCollect { }) graph;
         inherit extendModules type class;
       };
     in
     result;
 
-  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> ModulesTree
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
@@ -388,6 +391,7 @@ let
                 value = m;
                 _type = m._type;
                 expectedClass = class;
+                prefix = args._prefix;
               }
             )
         else if isList m then
@@ -422,8 +426,37 @@ let
         else
           m: m;
 
+      # isDisabled :: String -> [ { disabled, file } ] -> StructuredModule -> bool
+      #
+      # Figures out whether a `StructuredModule` is disabled.
+      isDisabled =
+        modulesPath: disabledList:
+        let
+          moduleKey =
+            file: m:
+            if isString m then
+              if substring 0 1 m == "/" then m else toString modulesPath + "/" + m
+
+            else if isConvertibleWithToString m then
+              if m ? key && m.key != toString m then
+                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
+              else
+                toString m
+
+            else if m ? key then
+              m.key
+
+            else if isAttrs m then
+              throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
+            else
+              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
+
+          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabledList;
+        in
+        structuredModule: elem structuredModule.key disabledKeys;
+
       /**
-        Collects all modules recursively into the form
+        Collects all modules recursively into a `[ StructuredModule ]` and a list of disabled modules:
 
           {
             disabled = [ <list of disabled modules> ];
@@ -491,36 +524,32 @@ let
         modulesPath:
         { disabled, modules }:
         let
-          moduleKey =
-            file: m:
-            if isString m then
-              if substring 0 1 m == "/" then m else toString modulesPath + "/" + m
-
-            else if isConvertibleWithToString m then
-              if m ? key && m.key != toString m then
-                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
-              else
-                toString m
-
-            else if m ? key then
-              m.key
-
-            else if isAttrs m then
-              throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
-            else
-              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
-
-          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
-          keyFilter = filter (attrs: !elem attrs.key disabledKeys);
+          keyFilter = filter (attrs: !isDisabled modulesPath disabled attrs);
         in
         map (attrs: attrs.module) (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
         });
 
+      toGraph =
+        modulesPath:
+        { disabled, modules }:
+        let
+          isDisabledModule = isDisabled modulesPath disabled;
+
+          toModuleGraph = structuredModule: {
+            disabled = isDisabledModule structuredModule;
+            inherit (structuredModule) key;
+            file = structuredModule.module._file;
+            imports = map toModuleGraph structuredModule.modules;
+          };
+        in
+        map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
-    modulesPath: initialModules: args:
-    filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    modulesPath: initialModules: args: {
+      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    };
 
   /**
     Wrap a module with a default location for reporting errors.
@@ -649,7 +678,13 @@ let
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
-        name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
+        name: _:
+        addErrorContext (context name) (
+          args.${name} or (addErrorContext
+            "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
+            config._module.args.${name}
+          )
+        )
       ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
@@ -884,19 +919,18 @@ let
       path = showOption loc;
       depth = length loc;
 
-      paragraphs =
-        [
-          "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
-        ]
-        ++ optional (actualTag == "option-type") ''
-          When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
-              ${comment}
-              ${name} = lib.mkOption {
-                description = ...;
-                type = <the type you wrote for ${name}>;
-                ...
-              };
-        '';
+      paragraphs = [
+        "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
+      ]
+      ++ optional (actualTag == "option-type") ''
+        When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
+            ${comment}
+            ${name} = lib.mkOption {
+              description = ...;
+              type = <the type you wrote for ${name}>;
+              ...
+            };
+      '';
 
       # Ideally we'd know the exact syntax they used, but short of that,
       # we can only reliably repeat the last. However, we repeat the
@@ -1087,6 +1121,7 @@ let
       files = map (def: def.file) res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
+      inherit (res.checkedAndMerged) valueMeta;
       # This allows options to be correctly displayed using `${options.path.to.it}`
       __toString = _: showOption loc;
     };
@@ -1130,7 +1165,14 @@ let
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then
+        if type.merge ? v2 then
+          # check and merge share the same closure
+          # .headError is either not-present, null, or a string describing the error
+          if checkedAndMerged.headError or null != null then
+            throw "A definition for option `${showOption loc}' is not of type `${type.description}'. TypeError: ${checkedAndMerged.headError.message}"
+          else
+            checkedAndMerged.value
+        else if all (def: type.check def.value) defsFinal then
           type.merge loc defsFinal
         else
           let
@@ -1142,6 +1184,43 @@ let
         # handling.  If changed here, please change it there too.)
         throw
           "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
+
+    checkedAndMerged =
+      (
+        # This function (which is immediately applied) checks that type.merge
+        # returns the proper attrset.
+        # Once use of the merge.v2 feature has propagated, consider removing this
+        # for an estimated one thousandth performance improvement (NixOS by nr.thunks).
+        {
+          headError,
+          value,
+          valueMeta,
+        }@args:
+        args
+      )
+        (
+          if type.merge ? v2 then
+            let
+              r = type.merge.v2 {
+                inherit loc;
+                defs = defsFinal;
+              };
+            in
+            r
+            // {
+              valueMeta = r.valueMeta // {
+                _internal = {
+                  inherit type;
+                };
+              };
+            }
+          else
+            {
+              headError = null;
+              value = mergedValue;
+              valueMeta = { };
+            }
+        );
 
     isDefined = defsFinal != [ ];
 
@@ -1552,13 +1631,11 @@ let
         New option path as list of strings.
       */
       to,
-
       /**
         Release number of the first release that contains the rename, ignoring backports.
         Set it to the upcoming release, matching the nixpkgs/.version file.
       */
       sinceRelease,
-
     }:
     doRename {
       inherit from to;
@@ -1625,25 +1702,24 @@ let
         ) from
       );
 
-      config =
-        {
-          warnings = filter (x: x != "") (
-            map (
-              f:
-              let
-                val = getAttrFromPath f config;
-                opt = getAttrFromPath f options;
-              in
-              optionalString (val != "_mkMergedOptionModule")
-                "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
-            ) from
-          );
-        }
-        // setAttrByPath to (
-          mkMerge (
-            optional (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from) (mergeFn config)
-          )
+      config = {
+        warnings = filter (x: x != "") (
+          map (
+            f:
+            let
+              val = getAttrFromPath f config;
+              opt = getAttrFromPath f options;
+            in
+            optionalString (val != "_mkMergedOptionModule")
+              "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
+          ) from
         );
+      }
+      // setAttrByPath to (
+        mkMerge (
+          optional (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from) (mergeFn config)
+        )
+      );
     };
 
   /**
@@ -1976,6 +2052,10 @@ let
           file != null && file != unknownModule
         ) ", while trying to load a module into ${toString file}";
 
+      into_prefix_maybe =
+        prefix:
+        optionalString (prefix != [ ]) ", while trying to load a module into ${code (showOption prefix)}";
+
       /**
         Format text with one line break between each list item.
       */
@@ -2023,12 +2103,13 @@ let
           value,
           _type,
           expectedClass ? null,
+          prefix,
         }:
         paragraphs (
           [
             ''
-              Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}.
-              A module is typically loaded by adding it the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
+              Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}${into_prefix_maybe prefix}.
+              A module is typically loaded by adding it to the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
               Please make sure that each of the list items is a module, and not a different kind of value.
             ''
           ]
@@ -2057,7 +2138,7 @@ let
                 '')
               ]
               ++ optionalMatch {
-                # We'll no more than 5 custom suggestions here.
+                # We'll add no more than 5 custom suggestions here.
                 # Please switch to `.modules.${class}` in your Module System application.
                 "nixos" = trim ''
                   or

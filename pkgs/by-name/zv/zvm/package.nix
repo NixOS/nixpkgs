@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "zvm";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${version}";
-    hash = "sha256-1m/sNthkT2+qOMGLqXFtoY2F7aFeq5xzENFIEXhp+Z8=";
+    hash = "sha256-M1xpE2Lq6XZgvH9J0c2Xj1BJNN+4TTGwp4iluVyVAJs=";
   };
 
-  vendorHash = "sha256-QiE+aqiesygClFvdjIlyaRiC1I3qybCPuMxt/3HQUyA=";
+  vendorHash = "sha256-wo+vA9AYXIjv6SGb7hNY6ZIVMyJ5enMd8gpQ6u3F7To=";
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";

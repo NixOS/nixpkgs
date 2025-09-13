@@ -152,6 +152,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.gnome.rygel.enable = mkDefault true;
       services.udisks2.enable = true;
@@ -245,15 +246,14 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals =
-        [
-          pkgs.xdg-desktop-portal-gtk
-        ]
-        ++ (with pkgs.pantheon; [
-          elementary-files
-          elementary-settings-daemon
-          xdg-desktop-portal-pantheon
-        ]);
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-gtk
+      ]
+      ++ (with pkgs.pantheon; [
+        elementary-files
+        elementary-settings-daemon
+        xdg-desktop-portal-pantheon
+      ]);
 
       xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 

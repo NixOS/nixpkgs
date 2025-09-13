@@ -21,12 +21,16 @@
   mupdf,
   enableDJVU ? true,
   djvulibre,
-  enableGOCR ? false,
-  gocr, # Disabled by default due to crashes
-  enableTesseract ? true,
-  leptonica,
+  enableGOCR ? false, # Disabled by default due to crashes
+  gocr,
+  # Tesseract support is currently broken
+  # See: https://github.com/NixOS/nixpkgs/issues/368349
+  enableTesseract ? false,
   tesseract5,
+  enableLeptonica ? true,
+  leptonica,
   opencl-headers,
+  fetchDebianPatch,
 }:
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
@@ -88,6 +92,20 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Fix-CMakeLists.patch
+    (fetchDebianPatch {
+      inherit pname;
+      version = "${version}+ds";
+      debianRevision = "3.1";
+      patch = "0007-k2pdfoptlib-k2ocr.c-conditionally-enable-tesseract-r.patch";
+      hash = "sha256-uJ9Gpyq64n/HKqo0hkQ2dnkSLCKNN4DedItPGzHfqR8=";
+    })
+    (fetchDebianPatch {
+      inherit pname;
+      version = "${version}+ds";
+      debianRevision = "3.1";
+      patch = "0009-willuslib-CMakeLists.txt-conditionally-add-source-fi.patch";
+      hash = "sha256-cBSlcuhsw4YgAJtBJkKLW6u8tK5gFwWw7pZEJzVMJDE=";
+    })
   ];
 
   postPatch = ''
@@ -239,10 +257,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableMuPDF mupdf_modded
     ++ lib.optional enableDJVU djvulibre
     ++ lib.optional enableGOCR gocr
-    ++ lib.optionals enableTesseract [
-      leptonica_modded
-      tesseract_modded
-    ];
+    ++ lib.optional enableTesseract tesseract_modded
+    ++ lib.optional (enableLeptonica || enableTesseract) leptonica_modded;
 
   dontUseCmakeBuildDir = true;
 

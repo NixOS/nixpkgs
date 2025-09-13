@@ -9,7 +9,6 @@
   eigen,
   python3,
   cairo,
-  pcre,
   pkg-config,
   swig,
   rapidjson,
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
     eigen
     python3
     cairo
-    pcre
-    swig
     rapidjson
     boost
     maeparser
@@ -50,6 +47,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    swig
     pkg-config
   ];
 

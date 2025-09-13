@@ -35,7 +35,8 @@ buildPythonPackage rec {
     jaraco-stream
     jaraco-text
     pytz
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

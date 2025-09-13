@@ -32,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X4c8UYTIl8jZ0bBd8ePQGxSRDOaWB6EXvTJ3CYpYNqw=";
+    hash = "sha256-v2VsFcgBkO1iitCM39Oqo1vrCHhV4vSUkQqjd0zE/Yc=";
   };
 
   build-system = [ flit-core ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     async = [ asgiref ];

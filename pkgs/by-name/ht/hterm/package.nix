@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.der-hammer.info/pages/terminal.html";
     changelog = "https://www.der-hammer.info/terminal/CHANGELOG.txt";
-    description = "A terminal program for serial communication";
+    description = "Terminal program for serial communication";
     # See https://www.der-hammer.info/terminal/LICENSE.txt
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
-  fetchpatch,
+  fetchDebianPatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,52 +18,65 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  patches = [
-    ./00-chntpw-build-arch-autodetect.patch
-    ./01-chntpw-install-target.patch
-    # Import various bug fixes from debian
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/04_get_abs_path";
-      sha256 = "17h0gaczqd5b792481synr1ny72frwslb779lm417pyrz6kh9q8n";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/06_correct_test_open_syscall";
-      sha256 = "00lg83bimbki988n71w54mmhjp9529r0ngm40d7fdmnc2dlpj3hd";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/07_detect_failure_to_write_key";
-      sha256 = "0pk6xnprh2pqyx4n4lw3836z6fqsw3mclkzppl5rhjaahriwxw4l";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/08_no_deref_null";
-      sha256 = "1g7pfmjaj0c2sm64s3api2kglj7jbgddjjd3r4drw6phwdkah0zs";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/09_improve_robustness";
-      sha256 = "1nszkdy01ixnain7cwdmfbhjngphw1300ifagc1wgl9wvghzviaa";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/11_improve_documentation";
-      sha256 = "0yql6hj72q7cq69rrspsjkpiipdhcwb0b9w5j8nhq40cnx9mgqgg";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/12_readonly_filesystem";
-      sha256 = "1kxcy7f2pl6fqgmjg8bnl3pl5wgiw5xnbyx12arinmqkkggp4fa4";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/13_write_to_hive";
-      sha256 = "1638lcyxjkrkmbr3n28byixny0qrxvkciw1xd97x48mj6bnwqrkv";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/14_improve_description";
-      sha256 = "11y5kc4dh4zv24nkb0jw2zwlifx6nzsd4jbizn63l6dbpqgb25rs";
-    })
-    (fetchpatch {
-      name = "17_hexdump-pointer-type.patch";
-      url = "https://git.launchpad.net/ubuntu/+source/chntpw/plain/debian/patches/17_hexdump-pointer-type.patch?id=aed501c87499f403293e7b9f505277567c2f3b52";
-      sha256 = "sha256-ir9LFl8FJq141OwF5SbyVMtjQ1kTMH1NXlHl0XZq7m8=";
-    })
-  ];
+  patches =
+    let
+      fetchChntpwDebianPatch =
+        { patch, hash }:
+        fetchDebianPatch {
+          inherit
+            hash
+            patch
+            pname
+            version
+            ;
+          debianRevision = "1.2";
+        };
+    in
+    [
+      ./00-chntpw-build-arch-autodetect.patch
+      ./01-chntpw-install-target.patch
+      # Import various bug fixes from debian
+      (fetchChntpwDebianPatch {
+        patch = "04_get_abs_path";
+        hash = "sha256-FuEEp/nZ3xNIpemcRTXPThxvQ7ZeB0REOqs0/Jl6AJ4=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "06_correct_test_open_syscall";
+        hash = "sha256-DQ55aRPM1uZOA6Q+C3ISJV0JayWFh2MRSnGuGtdAjwI=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "07_detect_failure_to_write_key";
+        hash = "sha256-lPDOY4ZKSZgLvfdPyurgGjvzzUCDU2JJ9/gKmK/tZl4=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "08_no_deref_null";
+        hash = "sha256-+gOoZuPwGp4byaNJ2dpb8kj6pohXDU1M1YIBqWR197w=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "09_improve_robustness";
+        hash = "sha256-SsX94ds80ccDe8pFAEbg8D4r4XK1cXZsVLbHAHybX9s=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "11_improve_documentation";
+        hash = "sha256-7+FXU7cMEAwtkoWnBRZnsN0Y75T66pyTwexgcSQ0FHs=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "12_readonly_filesystem";
+        hash = "sha256-RDly35sTVxuzEqH7ZXvh8fFC76B2oSfrw87QK9zxrM8=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "13_write_to_hive";
+        hash = "sha256-e2bM7TKyItJPaj3wyObuGQNve/QLCTvyqjNP2T2jaJg=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "14_improve_description";
+        hash = "sha256-OhexHr6rGTqM/XFJ0vS3prtI+RdcgjUtEfsT2AibxYc=";
+      })
+      (fetchChntpwDebianPatch {
+        patch = "17_hexdump-pointer-type.patch";
+        hash = "sha256-ir9LFl8FJq141OwF5SbyVMtjQ1kTMH1NXlHl0XZq7m8=";
+      })
+    ];
 
   installPhase = ''
     make install PREFIX=$out

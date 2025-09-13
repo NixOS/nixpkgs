@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
+    repo = "myst-parser";
     tag = "v${version}";
     hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
   };
@@ -51,7 +51,8 @@ buildPythonPackage rec {
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
-  ] ++ markdown-it-py.optional-dependencies.linkify;
+  ]
+  ++ markdown-it-py.optional-dependencies.linkify;
 
   disabledTests = [
     # sphinx 8.2 compat

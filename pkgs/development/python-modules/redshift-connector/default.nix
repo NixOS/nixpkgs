@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.1.6";
+  version = "2.1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     tag = "v${version}";
-    hash = "sha256-+tZMg0AmfmAFOqUQhOl+vHQVF1DApZbVNjGV4BkGRTg=";
+    hash = "sha256-q8TQYiPmm3w9Bh4+gvVW5XAa4FZ3+/MZqZL0RCgl77E=";
   };
 
   # remove addops as they add test directory and coverage parameters to pytest
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   # integration tests require a Redshift cluster
-  pytestFlagsArray = [ "test/unit" ];
+  enabledTestPaths = [ "test/unit" ];
 
   __darwinAllowLocalNetworking = true; # required for tests
 

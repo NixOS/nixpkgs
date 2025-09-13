@@ -1,25 +1,32 @@
 {
+  callPackage,
   lib,
   jq,
   runCommand,
   writeText,
   python3,
-  ...
 }:
 {
-  beforeResultDir,
-  afterResultDir,
+  combinedDir,
   touchedFilesJson,
+  githubAuthorId,
   byName ? false,
 }:
 let
+  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
+  # nix store paths around. These need to be turned into (fake) derivations again to track
+  # dependencies properly.
+  # We use two steps for evaluation, because we compare results from two different checkouts.
+  # CI additionalls spreads evaluation across multiple workers.
+  combined = if lib.isDerivation combinedDir then combinedDir else lib.toDerivation combinedDir;
+
   /*
     Derivation that computes which packages are affected (added, changed or removed) between two revisions of nixpkgs.
     Note: "platforms" are "x86_64-linux", "aarch64-darwin", ...
 
     ---
     Inputs:
-    - beforeResultDir, afterResultDir: The evaluation result from before and after the change.
+    - beforeDir, afterDir: The evaluation result from before and after the change.
       They can be obtained by running `nix-build -A ci.eval.full` on both revisions.
 
     ---
@@ -31,10 +38,10 @@ let
             changed: ["package2", "package3"],
             removed: ["package4"],
           },
-          labels: [
-            "10.rebuild-darwin: 1-10",
-            "10.rebuild-linux: 1-10"
-          ],
+          labels: {
+            "10.rebuild-darwin: 1-10": true,
+            "10.rebuild-linux: 1-10": true
+          },
           rebuildsByKernel: {
             darwin: ["package1", "package2"],
             linux: ["package1", "package2", "package3"]
@@ -65,7 +72,6 @@ let
       Example: { name = "python312Packages.numpy"; platform = "x86_64-linux"; }
   */
   inherit (import ./utils.nix { inherit lib; })
-    diff
     groupByKernel
     convertToPackagePlatformAttrs
     groupByPlatform
@@ -73,25 +79,14 @@ let
     getLabels
     ;
 
-  getAttrs =
-    dir:
-    let
-      raw = builtins.readFile "${dir}/outpaths.json";
-      # The file contains Nix paths; we need to ignore them for evaluation purposes,
-      # else there will be a "is not allowed to refer to a store path" error.
-      data = builtins.unsafeDiscardStringContext raw;
-    in
-    builtins.fromJSON data;
-  beforeAttrs = getAttrs beforeResultDir;
-  afterAttrs = getAttrs afterResultDir;
-
   # Attrs
-  # - keys: "added", "changed" and "removed"
+  # - keys: "added", "changed", "removed" and "rebuilds"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = diff beforeAttrs afterAttrs;
+  diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
 
-  rebuilds = diffAttrs.added ++ diffAttrs.changed;
-  rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
+  changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
+  rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
+  removedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.removed;
 
   changed-paths =
     let
@@ -103,30 +98,41 @@ let
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
-        attrdiff = lib.mapAttrs (_: extractPackageNames) diffAttrs;
+        attrdiff = lib.mapAttrs (_: extractPackageNames) { inherit (diffAttrs) added changed removed; };
         inherit
           rebuildsByPlatform
           rebuildsByKernel
           rebuildCountByKernel
           ;
         labels =
-          (getLabels rebuildCountByKernel)
-          # Adds "10.rebuild-*-stdenv" label if the "stdenv" attribute was changed
-          ++ lib.mapAttrsToList (kernel: _: "10.rebuild-${kernel}-stdenv") (
-            lib.filterAttrs (_: kernelRebuilds: kernelRebuilds ? "stdenv") rebuildsByKernel
-          );
+          getLabels rebuildCountByKernel
+          # Sets "10.rebuild-*-stdenv" label to whether the "stdenv" attribute was changed.
+          // lib.mapAttrs' (
+            kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
+          ) rebuildsByKernel
+          # Set the "11.by: package-maintainer" label to whether all packages directly
+          # changed are maintained by the PR's author.
+          // {
+            "11.by: package-maintainer" =
+              maintainers ? ${githubAuthorId}
+              && lib.all (lib.flip lib.elem maintainers.${githubAuthorId}) (
+                lib.flatten (lib.attrValues maintainers)
+              );
+          };
       }
     );
 
-  maintainers = import ./maintainers.nix {
-    changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
+  maintainers = callPackage ./maintainers.nix { } {
+    changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
+    removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
     inherit byName;
   };
 in
 runCommand "compare"
   {
-    nativeBuildInputs = [
+    # Don't depend on -dev outputs to reduce closure size for CI.
+    nativeBuildInputs = map lib.getBin [
       jq
       (python3.withPackages (
         ps: with ps; [
@@ -140,8 +146,8 @@ runCommand "compare"
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
     env = {
-      BEFORE_DIR = "${beforeResultDir}";
-      AFTER_DIR = "${afterResultDir}";
+      BEFORE_DIR = "${combined}/before";
+      AFTER_DIR = "${combined}/after";
     };
   }
   ''
@@ -149,6 +155,12 @@ runCommand "compare"
 
     cp ${changed-paths} $out/changed-paths.json
 
+    {
+      echo
+      echo "# Packages"
+      echo
+      jq -r -f ${./generate-step-summary.jq} < ${changed-paths}
+    } >> $out/step-summary.md
 
     if jq -e '(.attrdiff.added | length == 0) and (.attrdiff.removed | length == 0)' "${changed-paths}" > /dev/null; then
       # Chunks have changed between revisions
@@ -177,8 +189,6 @@ runCommand "compare"
         echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
       } >> $out/step-summary.md
     fi
-
-    jq -r -f ${./generate-step-summary.jq} < ${changed-paths} >> $out/step-summary.md
 
     cp "$maintainersPath" "$out/maintainers.json"
   ''

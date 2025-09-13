@@ -9,6 +9,6 @@
   }
   {
     path = "src/Browser/Avalonia.Browser/webapp";
-    hash = "sha256-LTQzT4ycLyGQs9T0sa2k/0wfG1GWCdeH9Wx2KeecOyU=";
+    hash = "sha256-aHF2enlIpeBi3a7rN0nBI24eztxC4nZC+g+4sRc12b4=";
   }
 ]

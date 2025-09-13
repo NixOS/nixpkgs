@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   pkg-config,
+  buildPackages,
   cmake,
   extra-cmake-modules,
   wayland-scanner,
@@ -11,7 +12,6 @@
   pango,
   expat,
   fribidi,
-  fmt,
   wayland,
   systemd,
   wayland-protocols,
@@ -29,7 +29,6 @@
   libthai,
   libdatrie,
   xcbutilkeysyms,
-  pcre,
   xcbutil,
   xcbutilwm,
   xcb-imdkit,
@@ -46,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.12";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-Jk7YY6nrY1Yn9KeNlRJbMF/fCMIlUVg/Elt7SymlK84=";
+    hash = "sha256-wLJZyoWjf02+m8Kw+IcfbZY2NnjMGtCWur2+w141eS4=";
   };
 
   prePatch = ''
@@ -68,9 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    extra-cmake-modules # required to please CMake
     expat
-    fmt
     isocodes
     cairo
     enchant
@@ -89,13 +86,16 @@ stdenv.mkDerivation rec {
     libsepol
     libXdmcp
     libxkbcommon
-    pcre
     xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit
     xkeyboard_config
     libxkbfile
+  ];
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
   ];
 
   strictDeps = true;

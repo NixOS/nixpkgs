@@ -65,48 +65,45 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      ncurses
-      pandoc
-      pkg-config
-      removeReferencesTo
-      zig_hook
-    ]
-    ++ lib.optionals (appRuntime == "gtk") [
-      glib # Required for `glib-compile-schemas`
-      wrapGAppsHook4
-    ];
+  nativeBuildInputs = [
+    ncurses
+    pandoc
+    pkg-config
+    removeReferencesTo
+    zig_hook
+  ]
+  ++ lib.optionals (appRuntime == "gtk") [
+    glib # Required for `glib-compile-schemas`
+    wrapGAppsHook4
+  ];
 
-  buildInputs =
-    [
-      glslang
-      oniguruma
-    ]
-    ++ lib.optional (appRuntime == "gtk" && withAdwaita) libadwaita
-    ++ lib.optional (appRuntime == "gtk") libX11
-    ++ lib.optional (renderer == "opengl") libGL
-    ++ lib.optionals (fontBackend == "fontconfig_freetype") [
-      bzip2
-      fontconfig
-      freetype
-      harfbuzz
-    ];
+  buildInputs = [
+    glslang
+    oniguruma
+  ]
+  ++ lib.optional (appRuntime == "gtk" && withAdwaita) libadwaita
+  ++ lib.optional (appRuntime == "gtk") libX11
+  ++ lib.optional (renderer == "opengl") libGL
+  ++ lib.optionals (fontBackend == "fontconfig_freetype") [
+    bzip2
+    fontconfig
+    freetype
+    harfbuzz
+  ];
 
-  zigBuildFlags =
-    [
-      "--system"
-      "${finalAttrs.deps}"
-      "-Dversion-string=${finalAttrs.version}"
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+    "-Dversion-string=${finalAttrs.version}"
 
-      "-Dapp-runtime=${appRuntime}"
-      "-Dfont-backend=${fontBackend}"
-      "-Dgtk-adwaita=${lib.boolToString withAdwaita}"
-      "-Drenderer=${renderer}"
-    ]
-    ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
-      inherit glslang;
-    };
+    "-Dapp-runtime=${appRuntime}"
+    "-Dfont-backend=${fontBackend}"
+    "-Dgtk-adwaita=${lib.boolToString withAdwaita}"
+    "-Drenderer=${renderer}"
+  ]
+  ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
+    inherit glslang;
+  };
 
   zigCheckFlags = finalAttrs.zigBuildFlags;
 

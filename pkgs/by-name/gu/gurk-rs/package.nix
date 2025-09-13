@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-PCeiJYeIeMgKoQYiDI6DPwNgJcSxw4gw6Ra1YmqsNys=";
 
   nativeBuildInputs = [

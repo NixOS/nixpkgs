@@ -6,8 +6,8 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "protocol";
-  version = "unstable-2019-03-28";
-  format = "setuptools";
+  version = "0-unstable-2019-03-28";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luismartingarcia";
@@ -18,8 +18,10 @@ python3.pkgs.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "scripts=['protocol', 'constants.py', 'specs.py']" "scripts=['protocol'], py_modules=['constants', 'specs']"
+      --replace-fail "scripts=['protocol', 'constants.py', 'specs.py']" "scripts=['protocol'], py_modules=['constants', 'specs']"
   '';
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   meta = with lib; {
     description = "ASCII Header Generator for Network Protocols";

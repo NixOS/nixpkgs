@@ -18,7 +18,7 @@
   dbus,
   xkbcomp,
   procps,
-  lsof,
+  gnugrep,
   coreutils,
   gsettings-desktop-schemas,
   speechd-minimal,
@@ -29,19 +29,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "47.3";
+  version = "48.6";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
-    hash = "sha256-GwsUW7aFzXTso+KMt7cJf5jRPuHMWLce3u06j5BFIxs=";
+    hash = "sha256-7cUDRODf1yR2tcFLOqclyiaHGOpt2JvE7ib0ULM51pY=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
       cat = "${coreutils}/bin/cat";
-      lsof = "${lsof}/bin/lsof";
+      grep = "${gnugrep}/bin/grep";
       pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })

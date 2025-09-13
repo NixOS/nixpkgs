@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bluecurrent-api";
-  version = "1.2.4";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bluecurrent";
     repo = "HomeAssistantAPI";
     tag = "v${version}";
-    hash = "sha256-NirWs06CkiSE3HPomQwBmX+XFhBxsM6ffE72mvlfxoY=";
+    hash = "sha256-PX0pD7X0o7OVtlz4Q5KuDBH83jtTaIdMnuLvAMTP8+U=";
   };
 
   build-system = [ setuptools ];

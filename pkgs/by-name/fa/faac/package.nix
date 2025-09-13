@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags =
-    lib.optional mp4v2Support "--with-external-mp4v2"
-    ++ lib.optional drmSupport "--enable-drm";
+    lib.optional mp4v2Support "--with-external-mp4v2" ++ lib.optional drmSupport "--enable-drm";
 
   hardeningDisable = [ "format" ];
 

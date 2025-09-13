@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.13";
+  version = "3.0.16";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-i3UNd1y88aOGBp2r9itBFd9w+UJQhleJQHZOiK0d26w=";
+    sha256 = "sha256-qAc9jKFpYgI0SdzKHhzmrPkWg4uSXDetD/oNEmHob2o=";
   };
 
   outputs = [
@@ -37,15 +37,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libdeflate
-      libunistring
-      ncurses
-      zlib
-    ]
-    ++ lib.optional qrcodegenSupport qrcodegen
-    ++ lib.optional multimediaSupport ffmpeg;
+  buildInputs = [
+    libdeflate
+    libunistring
+    ncurses
+    zlib
+  ]
+  ++ lib.optional qrcodegenSupport qrcodegen
+  ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
     lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"

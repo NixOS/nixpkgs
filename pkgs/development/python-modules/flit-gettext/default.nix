@@ -15,6 +15,7 @@
   # tests
   build,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -35,10 +36,6 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    sed -i "s/--cov//" pyproject.toml
-  '';
-
   nativeBuildInputs = [
     flit-scm
     wheel
@@ -53,8 +50,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     build
     pytestCheckHook
+    pytest-cov-stub
     wheel
-  ] ++ optional-dependencies.scm;
+  ]
+  ++ optional-dependencies.scm;
 
   disabledTests = [
     # tests for missing msgfmt, but we always provide it

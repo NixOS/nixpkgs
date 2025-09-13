@@ -53,17 +53,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      wxGTK32
-      perl
-      cryptopp.dev
-      libupnp
-      boost186
-    ]
-    ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  buildInputs = [
+    zlib
+    wxGTK32
+    perl
+    cryptopp.dev
+    libupnp
+    boost186
+  ]
+  ++ lib.optional httpServer libpng
+  ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "hachimarupop";
-  version = "unstable-2022-07-11";
+  version = "0-unstable-2022-07-11";
 
   src = fetchFromGitHub {
     owner = "noriokanisawa";

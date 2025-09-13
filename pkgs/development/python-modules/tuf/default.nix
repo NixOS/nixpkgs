@@ -6,7 +6,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   flit-core,
   requests,
   securesystemslib,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "tuf";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
@@ -31,13 +28,14 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      requests
-      securesystemslib
-    ]
-    ++ securesystemslib.optional-dependencies.pynacl
-    ++ securesystemslib.optional-dependencies.crypto;
+  dependencies = [
+    requests
+    securesystemslib
+  ]
+  ++ securesystemslib.optional-dependencies.pynacl
+  ++ securesystemslib.optional-dependencies.crypto;
+
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     freezegun

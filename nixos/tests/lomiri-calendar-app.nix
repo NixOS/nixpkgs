@@ -1,11 +1,7 @@
 { pkgs, lib, ... }:
 {
   name = "lomiri-calendar-app-standalone";
-  meta = {
-    maintainers = lib.teams.lomiri.members;
-    # This needs a Linux VM
-    platforms = lib.platforms.linux;
-  };
+  meta.maintainers = lib.teams.lomiri.members;
 
   nodes.machine =
     { config, pkgs, ... }:

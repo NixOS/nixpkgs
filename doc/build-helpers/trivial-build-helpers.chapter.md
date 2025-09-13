@@ -57,10 +57,10 @@ runCommandWith :: {
     You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
     :::
 
-[allowSubstitutes]: https://nixos.org/nix/manual/#adv-attr-allowSubstitutes
-[preferLocalBuild]: https://nixos.org/nix/manual/#adv-attr-preferLocalBuild
+[allowSubstitutes]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-allowSubstitutes
+[preferLocalBuild]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-preferLocalBuild
 [substituter]: https://nix.dev/manual/nix/latest/glossary#gloss-substituter
-[substitutes]: https://nix.dev/manual/nix/2.23/glossary#gloss-substitute
+[substitutes]: https://nix.dev/manual/nix/latest/glossary#gloss-substitute
 
 ::: {.example #ex-runcommandwith}
 # Invocation of `runCommandWith`
@@ -152,9 +152,7 @@ runCommandWith {
 
 Likewise, `runCommandCC name derivationArgs buildCommand` is equivalent to
 ```nix
-runCommandWith {
-  inherit name derivationArgs;
-} buildCommand
+runCommandWith { inherit name derivationArgs; } buildCommand
 ```
 :::
 
@@ -713,7 +711,10 @@ concatTextFile
   # Writes contents of files to /nix/store/<store path>
   concatText
   "my-file"
-  [ file1 file2 ]
+  [
+    file1
+    file2
+  ]
 
   # Writes contents of files to /nix/store/<store path>
   concatScript
@@ -790,7 +791,7 @@ The result is equivalent to the output of `nix-store -q --requisites`.
 For example,
 
 ```nix
-writeClosure [ (writeScriptBin "hi" ''${hello}/bin/hello'') ]
+writeClosure [ (writeScriptBin "hi" "${hello}/bin/hello") ]
 ```
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing
@@ -816,7 +817,7 @@ This produces the equivalent of `nix-store -q --references`.
 For example,
 
 ```nix
-writeDirectReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+writeDirectReferencesToFile (writeScriptBin "hi" "${hello}/bin/hello")
 ```
 
 produces an output path `/nix/store/<hash>-runtime-references` containing

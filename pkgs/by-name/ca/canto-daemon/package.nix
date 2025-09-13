@@ -6,6 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.8";
+  format = "pyproject";
   pname = "canto-daemon";
 
   src = fetchFromGitHub {
@@ -15,7 +16,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0fmsdn28z09bvivdkqcla5bnalky7k744iir25z70bv4pz1jcvnk";
   };
 
-  propagatedBuildInputs = with python3Packages; [ feedparser ];
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [ feedparser ];
 
   doCheck = false;
 

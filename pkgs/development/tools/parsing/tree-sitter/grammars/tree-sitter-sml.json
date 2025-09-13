@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/MatthewFluet/tree-sitter-sml",
+  "rev": "105585ae935d8662ab61ce2f5479c35d2b1e456e",
+  "date": "2024-08-27T08:47:35-04:00",
+  "path": "/nix/store/ry1dy2gixn8b77xrgslvmk9vkgicylrq-tree-sitter-sml",
+  "sha256": "1lfjihsmkb93h6naimppwddh203p4bkv9jj4wy8zr6hjawf35aw6",
+  "hash": "sha256-hqsyHFcSmvyR50TKtOcidwABW+P31qisgSOtWTWM0tE=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

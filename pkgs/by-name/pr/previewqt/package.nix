@@ -29,30 +29,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      exiv2
-      extra-cmake-modules
-      imagemagick
-      libarchive
-      libdevil
-      libraw
-      mpv
-      resvg
-      vips
-    ]
-    ++ [
-      qt6Packages.poppler
-      qt6Packages.qtmultimedia
-      qt6Packages.qtquick3d
-      qt6Packages.qtsvg
-      qt6Packages.qttools
-      qt6Packages.qtwebengine
-    ];
+  buildInputs = [
+    exiv2
+    imagemagick
+    libarchive
+    libdevil
+    libraw
+    mpv
+    resvg
+    vips
+  ]
+  ++ [
+    qt6Packages.poppler
+    qt6Packages.qtmultimedia
+    qt6Packages.qtquick3d
+    qt6Packages.qtsvg
+    qt6Packages.qttools
+    qt6Packages.qtwebengine
+  ];
 
   strictDeps = true;
 

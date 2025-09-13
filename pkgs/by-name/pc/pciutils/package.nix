@@ -13,20 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pciutils";
-  version = "3.13.0"; # with release-date database
+  version = "3.14.0"; # with release-date database
 
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
     rev = "v${version}";
-    hash = "sha256-buhq7SN6eH+sckvT5mJ8eP4C1EP/4CUFt3gooJohJW0=";
+    hash = "sha256-8wSvu8BGzETD1RfwL6/DfSCZcmuj1I+zNH033f48qNQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     which
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
   preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""

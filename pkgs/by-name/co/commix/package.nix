@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automated Command Injection Exploitation Tool";
     mainProgram = "commix";
     homepage = "https://github.com/commixproject/commix";
     changelog = "https://github.com/commixproject/commix/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

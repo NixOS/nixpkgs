@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "zpool-iostat-viz";
   version = "unstable-2021-11-13";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "chadmiller";
-    repo = pname;
+    repo = "zpool-iostat-viz";
     rev = "cdd8f3d882ab7a9990fb2d26af3e5b2bcc4bb312";
     sha256 = "sha256-vNXD5SauBpCtP7VPTumQ0/wXfW0PjtooS21cjpAole8=";
   };

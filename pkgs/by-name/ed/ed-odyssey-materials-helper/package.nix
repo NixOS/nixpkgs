@@ -3,31 +3,32 @@
   lib,
   fetchFromGitHub,
   gradle,
-  jdk23,
-  makeWrapper,
+  jdk24,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
   libglvnd,
   glib,
+  alsa-lib,
+  ffmpeg,
+  lsb-release,
   copyDesktopItems,
   makeDesktopItem,
-  nix-update-script,
+  writeScript,
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.156";
+  version = "2.247";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-T7Mh9QZRQbDJmW976bOg5YNQoFxJ2SUFl6qBjos8LSo=";
+    hash = "sha256-rngE5GUAzbpaIPgl0DpCboLLTXFk2zYSM53YPOVWRyg=";
   };
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -45,6 +46,15 @@ stdenv.mkDerivation rec {
       --replace-fail '"com.github.wille:oslib:master-SNAPSHOT"' '"com.github.wille:oslib:d6ee6549bb"'
     substituteInPlace application/src/main/java/module-info.java \
       --replace-fail 'requires oslib.master.SNAPSHOT;' 'requires oslib.d6ee6549bb;'
+
+    # remove "new version available" popup
+    substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
+      --replace-fail 'versionPopup();' ""
+
+    for f in build.gradle */build.gradle; do
+      substituteInPlace $f \
+        --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+    done
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -52,10 +62,21 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk24}"
+    "--stacktrace"
+  ];
 
   gradleBuildTask = "application:jpackage";
-  gradleUpdateTask = "application:nixDownloadDeps";
+
+  env = {
+    EDDN_SOFTWARE_NAME = "EDO Materials Helper";
+  };
+
+  preBuild = ''
+    # required to make EDDN_SOFTWARE_NAME work and for the program to know its own version
+    gradle $gradleFlags application:generateSecrets
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -72,17 +93,19 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    # The logs would go into the current directory, so the wrapper will cd to the config dir first
-    makeShellWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
-      --run 'mkdir -p ~/.config/odyssey-materials-helper/ && cd ~/.config/odyssey-materials-helper/' \
+    makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libXxf86vm
           glib
           libXtst
           libglvnd
+          alsa-lib
+          ffmpeg
         ]
-      } "''${gappsWrapperArgs[@]}"
+      } \
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]} \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [
@@ -98,7 +121,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
+    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
+  '';
+
+  passthru.updateScript = writeScript "update-ed-odyssey-materials-helper" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p nix-update
+
+    nix-update ed-odyssey-materials-helper # update version and hash
+    `nix-build --no-out-link -A ed-odyssey-materials-helper.mitmCache.updateScript` # update deps.json
+  '';
 
   meta = {
     description = "Helper for managing materials in Elite Dangerous Odyssey";
@@ -115,6 +151,9 @@ stdenv.mkDerivation rec {
       toasteruwu
     ];
     mainProgram = "ed-odyssey-materials-helper";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

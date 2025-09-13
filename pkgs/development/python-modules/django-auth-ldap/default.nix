@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-auth-ldap";
     repo = "django-auth-ldap";
     tag = version;
-    hash = "sha256-uOxncRsBwy+1ynESku7+5yaY1MPIo4V8ppE2zfcDkws=";
+    hash = "sha256-/Wy5ZCRBIeEXOFqQW4e+GzQWpZyI9o39TfFAVb7OYeo=";
   };
 
   build-system = [ setuptools-scm ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "django_auth_ldap" ];
 
   meta = with lib; {
+    changelog = "https://github.com/django-auth-ldap/django-auth-ldap/releases/tag/${src.tag}";
     description = "Django authentication backend that authenticates against an LDAP service";
     homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
     license = licenses.bsd2;

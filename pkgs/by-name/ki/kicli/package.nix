@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "anned20";
-    repo = pname;
+    repo = "kicli";
     rev = "v${version}";
     hash = "sha256-NXKo+zK5HnuMXRsi29lEhoo7RCagwvZdXXPNfp4pHtc=";
   };

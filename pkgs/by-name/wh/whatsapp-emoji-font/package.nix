@@ -4,21 +4,21 @@
   fetchFromGitHub,
   imagemagick,
   nix-update-script,
+  nototools,
   pngquant,
-  python3Packages,
   which,
   zopfli,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "whatsapp-emoji-linux";
-  version = "2.25.9.78-1";
+  version = "2.25.9.78-2";
 
   src = fetchFromGitHub {
     tag = version;
     owner = "dmlls";
     repo = "whatsapp-emoji-linux";
-    hash = "sha256-QopJUT6HAgvrRNQw6adHNOSZUoJO1qiFATXsDQOUf7w=";
+    hash = "sha256-qWI8aSqgwaCMgg97huwICT3Hsgke2Wgj5mQCcUuK6OQ=";
   };
 
   makeFlags = [
@@ -29,8 +29,8 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     imagemagick
+    nototools
     pngquant
-    python3Packages.nototools
     which
     zopfli
   ];

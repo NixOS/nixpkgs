@@ -10,6 +10,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "fastcov";
   version = "1.16";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "RPGillespie6";
@@ -32,7 +33,7 @@ python3Packages.buildPythonPackage rec {
   dontUseCmakeConfigure = true; # cmake is used for testing
 
   nativeCheckInputs = with python3Packages; [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
 

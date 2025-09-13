@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
   '';
   doCheck = false; # there are no tests to run
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-N0vje5ZU7B++f71BJKwkEfpbInpermH241f6oP1/fQE=";
 
   meta = {

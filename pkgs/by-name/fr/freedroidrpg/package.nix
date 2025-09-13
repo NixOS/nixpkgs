@@ -54,7 +54,8 @@ stdenv.mkDerivation {
     libjpeg
     libpng
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
 

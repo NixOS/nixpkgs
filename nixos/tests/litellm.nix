@@ -22,6 +22,6 @@ in
   '';
 
   meta = with lib.maintainers; {
-    maintainers = [ drupol ];
+    maintainers = [ ];
   };
 }

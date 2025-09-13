@@ -9,25 +9,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-TDxTj7VGzJzd6RWyVbe2ubpVS57bqq7OVvi23ZHmYDM=";
+    hash = "sha256-m6mXq62imJ9yVpH6M8O3I7Z4FDdnEtp9ADfMjD4RDM4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-R94D9/J+Zl86Rb4+5O2Hp9GmcwnRt+0wJ56CHFoy/zg=";
+  cargoHash = "sha256-E2mLpRCffFySzBZVtxS4YZPuTRhjU4LrFEfC1dbF6ug=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -46,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion pueue.{bash,fish} _pueue
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Nukesor/pueue";
     description = "Daemon for managing long running shell commands";
     longDescription = ''
@@ -61,7 +59,7 @@ rustPlatform.buildRustPackage rec {
       processed, even if you no longer have any active ssh sessions.
     '';
     changelog = "https://github.com/Nukesor/pueue/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 }

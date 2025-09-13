@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knowsmore";
-  version = "0.1.44";
+  version = "0.1.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "knowsmore";
     tag = "v${version}";
-    hash = "sha256-m9rleUMQdBrgmeLcoFGIWRm4PKiwiEXONnIfFDxOrHs=";
+    hash = "sha256-yY3BLouIUvSBeNlq4XcEHKLi00BWeGUXNOP2p5NIFXc=";
   };
 
   pythonRelaxDeps = [
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "knowsmore" ];
 
-  pytestFlagsArray = [ "tests/tests*" ];
+  enabledTestPaths = [ "tests/tests*" ];
 
   meta = with lib; {
     description = "Tool for pentesting Microsoft Active Directory";

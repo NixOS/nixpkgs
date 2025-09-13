@@ -8,6 +8,7 @@
   dbus,
   openssl,
   speechd-minimal,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Z/VqQKmfzqd1htMlXU8sDkOSw2xczb3tG53LVC0MZhM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tSlFMMZWsyZBXBeEW64s0eBt/qrAREfOpfxAgcTK4XQ=";
 
   buildInputs = [
@@ -35,9 +35,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     installShellFiles
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildFeatures = [ "tts" ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm644 "50-goxlr.rules" "$out/etc/udev/rules.d/50-goxlr.rules"

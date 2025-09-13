@@ -36,25 +36,24 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      blas
-      check
-      highs
-      lapack
-      suitesparse
-      trlib
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.cython
-      python3Packages.numpy
-      python3Packages.pip
-      python3Packages.pytest
-      python3Packages.setuptools
-      python3Packages.scipy
-      python3Packages.tox
-      python3Packages.wheel
-    ];
+  buildInputs = [
+    blas
+    check
+    highs
+    lapack
+    suitesparse
+    trlib
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.cython
+    python3Packages.numpy
+    python3Packages.pip
+    python3Packages.pytest
+    python3Packages.setuptools
+    python3Packages.scipy
+    python3Packages.tox
+    python3Packages.wheel
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "SLEQP_ENABLE_PYTHON" pythonSupport)
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "An active set-based NLP solver";
+    description = "Active set-based NLP solver";
     homepage = "https://github.com/chrhansk/sleqp";
     changelog = "https://github.com/chrhansk/sleqp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;

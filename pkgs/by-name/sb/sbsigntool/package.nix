@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     substituteInPlace configure.ac --replace "@@NIX_GNUEFI@@" "${gnu-efi}"
 
     lib/ccan.git/tools/create-ccan-tree --build-type=automake lib/ccan "talloc read_write_all build_assert array_size endian"
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
     automake --add-missing -Wno-portability
 
     ./configure --prefix=$out
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

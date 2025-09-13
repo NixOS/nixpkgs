@@ -43,32 +43,31 @@ buildDunePackage rec {
     pkg-config
   ];
 
-  propagatedBuildInputs =
-    [
-      cstruct
-      cstruct-lwt
-      mirage-net
-      mirage-mtime
-      mirage-crypto-rng
-      mirage-sleep
-      ipaddr-cstruct
-      macaddr
-      macaddr-cstruct
-      fmt
-      lwt
-      lwt-dllist
-      logs
-      duration
-      randomconv
-      ethernet
-      lru
-      metrics
-      arp
-      mirage-flow
-    ]
-    ++ lib.optionals withFreestanding [
-      ocaml-freestanding
-    ];
+  propagatedBuildInputs = [
+    cstruct
+    cstruct-lwt
+    mirage-net
+    mirage-mtime
+    mirage-crypto-rng
+    mirage-sleep
+    ipaddr-cstruct
+    macaddr
+    macaddr-cstruct
+    fmt
+    lwt
+    lwt-dllist
+    logs
+    duration
+    randomconv
+    ethernet
+    lru
+    metrics
+    arp
+    mirage-flow
+  ]
+  ++ lib.optionals withFreestanding [
+    ocaml-freestanding
+  ];
 
   doCheck = true;
   checkInputs = [

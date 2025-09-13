@@ -45,7 +45,7 @@ buildPythonPackage {
     textx-types-dsl
   ];
 
-  pytestFlagsArray = [ "tests/functional" ];
+  enabledTestPaths = [ "tests/functional" ];
   disabledTests = [
     "test_examples" # assertion error: 0 == 12
   ];

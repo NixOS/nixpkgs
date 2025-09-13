@@ -78,25 +78,25 @@ stdenv.mkDerivation rec {
     "-DBUILD_VIEWER=OFF"
     "-DBUILD_JAVA=OFF"
     (lib.cmakeBool "BUILD_TESTING" doCheck)
-  ] ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
+  ]
+  ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libpng
-      libtiff
-      zlib
-      lcms2
-    ]
-    ++ lib.optionals jpipServerSupport [
-      curl
-      fcgi
-    ]
-    ++ lib.optional (jpipLibSupport) jdk;
+  buildInputs = [
+    libpng
+    libtiff
+    zlib
+    lcms2
+  ]
+  ++ lib.optionals jpipServerSupport [
+    curl
+    fcgi
+  ]
+  ++ lib.optional (jpipLibSupport) jdk;
 
   # tests did fail on powerpc64
   doCheck = !stdenv.hostPlatform.isPower64 && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -127,12 +127,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source JPEG 2000 codec written in C language";
     homepage = "https://www.openjpeg.org/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
     changelog = "https://github.com/uclouvain/openjpeg/blob/v${version}/CHANGELOG.md";
   };
 }

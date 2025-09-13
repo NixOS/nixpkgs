@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     mkdir -p $out/bin
     sed -e "s@/usr/local@$out@" -i Makefile
+
+    runHook postConfigure
   '';
 
   makeFlags = [

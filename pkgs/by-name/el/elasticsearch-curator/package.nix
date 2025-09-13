@@ -78,11 +78,11 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
     homepage = "https://github.com/elastic/curator";
     changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       Elasticsearch Curator helps you curate, or manage, your Elasticsearch
       indices and snapshots by:
@@ -96,6 +96,6 @@ python3.pkgs.buildPythonApplication rec {
       * Perform various actions on the items which remain in the actionable list.
     '';
     mainProgram = "curator";
-    maintainers = with maintainers; [ basvandijk ];
+    maintainers = with lib.maintainers; [ basvandijk ];
   };
 }

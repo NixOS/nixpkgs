@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  installShellFiles,
   python3,
   rustPlatform,
   testers,
@@ -9,20 +10,30 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "asciinema";
-    version = "3.0.0-rc.4";
+    version = "3.0.0-rc.5";
 
     src = fetchFromGitHub {
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
       rev = "v${self.version}";
-      hash = "sha256-w1LV21EqHNC+LYMLpljGQrxmBJ8ztCQ7g3YbJ6ME5j0=";
+      hash = "sha256-CxssC3ftnXgxdvRO7CrVgBSVkh7DPjXRNRet4fB2BKc=";
     };
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-Q6HoKrcwa67lAsl4zgNYilo4LzPxySz2lE85ZdOSPpM=";
+    cargoHash = "sha256-OsynIQeGjXHD1E9iDH4P7Jksr1APtGZkchzZB0DawIw=";
+
+    env.ASCIINEMA_GEN_DIR = "gendir";
 
     nativeCheckInputs = [ python3 ];
+    nativeBuildInputs = [ installShellFiles ];
+
+    postInstall = ''
+      installManPage gendir/man/*
+      installShellCompletion --cmd asciinema \
+        --bash gendir/completion/asciinema.bash \
+        --fish gendir/completion/asciinema.fish \
+        --zsh gendir/completion/_asciinema
+    '';
 
     checkFlags = [
       # ---- pty::tests::exec_quick stdout ----

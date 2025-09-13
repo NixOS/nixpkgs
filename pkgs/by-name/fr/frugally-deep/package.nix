@@ -23,14 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yg2SMsYOOSOgsdwIH1bU3iPM45z6c7WeIrgOddt3um4=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals buildTests [
-      python3Packages.python
-      python3Packages.numpy
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals buildTests [
+    python3Packages.python
+    python3Packages.numpy
+  ];
 
   buildInputs = lib.optionals buildTests [
     doctest

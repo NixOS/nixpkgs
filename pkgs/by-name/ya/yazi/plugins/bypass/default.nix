@@ -5,17 +5,17 @@
 }:
 mkYaziPlugin {
   pname = "bypass.yazi";
-  version = "25.3.2-unstable-2025-04-22";
+  version = "25.3.2-unstable-2025-06-01";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "bypass.yazi";
-    rev = "17e86529b2aa8ea7c08e117debf7c55044f9edb4";
-    hash = "sha256-Q5g23sCGx9Ecm350ZiGKA1OaRieECWtF1xe22WzTtdY=";
+    rev = "c1e5fcf6eeed0bfceb57b9738da6db9d0fb8af56";
+    hash = "sha256-ZndDtTMkEwuIMXG4SGe4B95Nw4fChfFhxJHj+IY30Kc=";
   };
 
   meta = {
-    description = "Yazi plugin for skipping directories with only a single sub-directory.";
+    description = "Yazi plugin for skipping directories with only a single sub-directory";
     homepage = "https://github.com/Rolv-Apneseth/bypass.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

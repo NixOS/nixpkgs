@@ -18,6 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-58sOp3Tbgb+RhE2yLecqQKro97D5u5ug9mbUdO9r+fw=";
   };
 
+  # https://github.com/pahaz/sshtunnel/pull/301
+  patches = [ ./paramiko-4.0-compat.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [ paramiko ];

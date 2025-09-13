@@ -21,22 +21,22 @@
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "unstable-2023-11-06";
-  disabled = !python3.isPy3k;
+  version = "0-unstable-2025-06-16";
 
   # required for third_party directory creation
   src = fetchFromGitHub {
     owner = "ycm-core";
     repo = "ycmd";
-    rev = "0607eed2bc211f88f82657b7781f4fe66579855b";
-    hash = "sha256-SzEcMQ4lX7NL2/g9tuhA6CaZ8pX/DGs7Fla/gr+RcOU=";
+    rev = "9160b4eee67ea61c8501bad36d061bcec5340021";
+    hash = "sha256-MSzYX1vXuhd4TNxUfHWaRu7O0r89az1XjZBIZ6B3gBk=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     with python3.pkgs;
     with llvmPackages;
@@ -45,6 +45,7 @@ stdenv.mkDerivation {
       boost
       libllvm.all
       libclang.all
+      legacy-cgi
     ]
     ++ [
       jedi
@@ -69,47 +70,49 @@ stdenv.mkDerivation {
   # to be available
   #
   # symlink completion backends where ycmd expects them
-  installPhase =
-    ''
-      rm -rf ycmd/tests
-      find third_party -type d -name "test" -exec rm -rf {} +
+  installPhase = ''
+    rm -rf ycmd/tests
+    find third_party -type d -name "test" -exec rm -rf {} +
 
-      chmod +x ycmd/__main__.py
-      sed -i "1i #!${python3.interpreter}\
-      " ycmd/__main__.py
+    chmod +x ycmd/__main__.py
+    sed -i "1i #!${python3.interpreter}\
+    " ycmd/__main__.py
 
-      mkdir -p $out/lib/ycmd
-      cp -r ycmd/ CORE_VERSION *.so* *.dylib* $out/lib/ycmd/
+    mkdir -p $out/lib/ycmd
+    cp -r ycmd/ CORE_VERSION *.so* *.dylib* $out/lib/ycmd/
 
-      mkdir -p $out/bin
-      ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
+    mkdir -p $out/bin
+    ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
 
-      # Copy everything: the structure of third_party has been known to change.
-      # When linking our own libraries below, do so with '-f'
-      # to clobber anything we may have copied here.
-      mkdir -p $out/lib/ycmd/third_party
-      cp -r third_party/* $out/lib/ycmd/third_party/
+    ## Work-around CMake/Nix naming of `.so` output
+    ln -s $out/lib/ycmd/ycm_core.cpython-[[:digit:]-][^[:space:]]*-gnu${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/ycmd/ycm_core.so
 
-    ''
-    + lib.optionalString withGodef ''
-      TARGET=$out/lib/ycmd/third_party/godef
-      mkdir -p $TARGET
-      ln -sf ${godef}/bin/godef $TARGET
-    ''
-    + lib.optionalString withGopls ''
-      TARGET=$out/lib/ycmd/third_party/go/bin
-      mkdir -p $TARGET
-      ln -sf ${gopls}/bin/gopls $TARGET
-    ''
-    + lib.optionalString withRustAnalyzer ''
-      TARGET=$out/lib/ycmd/third_party/rust-analyzer
-      mkdir -p $TARGET
-      ln -sf ${rust-analyzer} $TARGET
-    ''
-    + lib.optionalString withTypescript ''
-      TARGET=$out/lib/ycmd/third_party/tsserver
-      ln -sf ${typescript} $TARGET
-    '';
+    # Copy everything: the structure of third_party has been known to change.
+    # When linking our own libraries below, do so with '-f'
+    # to clobber anything we may have copied here.
+    mkdir -p $out/lib/ycmd/third_party
+    cp -r third_party/* $out/lib/ycmd/third_party/
+
+  ''
+  + lib.optionalString withGodef ''
+    TARGET=$out/lib/ycmd/third_party/godef
+    mkdir -p $TARGET
+    ln -sf ${godef}/bin/godef $TARGET
+  ''
+  + lib.optionalString withGopls ''
+    TARGET=$out/lib/ycmd/third_party/go/bin
+    mkdir -p $TARGET
+    ln -sf ${gopls}/bin/gopls $TARGET
+  ''
+  + lib.optionalString withRustAnalyzer ''
+    TARGET=$out/lib/ycmd/third_party/rust-analyzer
+    mkdir -p $TARGET
+    ln -sf ${rust-analyzer} $TARGET
+  ''
+  + lib.optionalString withTypescript ''
+    TARGET=$out/lib/ycmd/third_party/tsserver
+    ln -sf ${typescript} $TARGET
+  '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
   # python won't be thrown off by argv[0]
@@ -120,6 +123,15 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Code-completion and comprehension server";
+    longDescription = ''
+      Note if YouCompleteMe Vim plugin complains with;
+
+      > ImportError: Python version mismatch: module was compiled for Python 3.13, but the interpreter version is incompatible: 3.10.18
+
+      ...  then set something similar to following in `programs.vim.extraConfig`;
+
+          let g:ycm_server_python_interpreter = "${python3.interpreter}"
+    '';
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;
@@ -127,6 +139,7 @@ stdenv.mkDerivation {
       rasendubi
       lnl7
       mel
+      S0AndS0
     ];
     platforms = platforms.all;
   };

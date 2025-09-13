@@ -12,20 +12,15 @@
 
 buildPythonPackage rec {
   pname = "lektricowifi";
-  version = "0.0.43";
+  version = "0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lektrico";
     repo = "lektricowifi";
     tag = "v.${version}";
-    hash = "sha256-NwM1WpH6tS0iAVpG2gSFJpDPPn9nECHAzpOnWzeYPH4=";
+    hash = "sha256-GkRZ+fBjLtiZ3dPsn/xeJ7c0cVMY6SHIs+wqhmXXOTk=";
   };
-
-  postPatch = ''
-    substituteInPlace tests/test_mocked_devices.py \
-      --replace-fail "from asyncmock import AsyncMock" "from unittest.mock import AsyncMock"
-  '';
 
   build-system = [ setuptools ];
 

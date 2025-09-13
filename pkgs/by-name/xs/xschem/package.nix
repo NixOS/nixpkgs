@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xschem";
-  version = "3.4.5";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "StefanSchippers";
     repo = "xschem";
     rev = version;
-    hash = "sha256-+ygwHkQOXmkoNgcuofwuaZcpYTAV6sOmvO4xeE+8DXE=";
+    hash = "sha256-ye97VJQ+2F2UbFLmGrZ8xSK9xFeF+Yies6fJKurPOD0=";
   };
 
   nativeBuildInputs = [
