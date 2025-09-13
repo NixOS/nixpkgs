@@ -137,9 +137,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
+  # Pre-genrating license index (needed as its located in the nix store)
   postInstall = ''
+    $out/bin/scancode-reindex-licenses
   '';
 
   pythonImportsCheck = [ "scancode" ];
