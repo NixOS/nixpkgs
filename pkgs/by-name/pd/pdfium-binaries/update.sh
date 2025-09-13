@@ -21,6 +21,6 @@ for i in \
     "aarch64-darwin mac-arm64"; do
     set -- $i
     prefetch=$(nix-prefetch-url --unpack "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$latestVersion/pdfium-$2.tgz")
-    hash=$(nix hash convert --hash-algo sha256 --to sri $prefetch)
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
     update-source-version pdfium-binaries $latestVersion $hash --system=$1 --ignore-same-version
 done

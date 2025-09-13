@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       version="$(jq -r .version <<<$core_json)"
       sha256="$(jq -r .sha256 <<<$core_json)"
-      hash="$(nix hash to-sri --type sha256 "$sha256")"
+      hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256")"
 
       if [ ! "$oldVersion" = "$version" ]; then
         update-source-version jenkins "$version" "$hash"

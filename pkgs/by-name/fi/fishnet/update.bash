@@ -14,7 +14,7 @@ new_nnue_big_file="$(
         grep --perl-regexp --only-matching 'EvalFileDefaultNameBig "\Knn-(\w+).nnue'
 )"
 new_nnue_big_hash="$(
-    nix hash to-sri --type sha256 "$(
+    nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(
         nix-prefetch-url --type sha256 "https://tests.stockfishchess.org/api/nn/${new_nnue_big_file}"
     )"
 )"
@@ -23,7 +23,7 @@ new_nnue_small_file="$(
         grep --perl-regexp --only-matching 'EvalFileDefaultNameSmall "\Knn-(\w+).nnue'
 )"
 new_nnue_small_hash="$(
-    nix hash to-sri --type sha256 "$(
+    nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(
         nix-prefetch-url --type sha256 "https://tests.stockfishchess.org/api/nn/${new_nnue_small_file}"
     )"
 )"

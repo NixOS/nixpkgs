@@ -61,8 +61,8 @@ buildGraalvmNativeImage rec {
 
     old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
 
-    curl -o clojure-lsp-standalone.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
-    new_jar_hash=$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | sed -re 's|[+]|\\&|g')
+    curl -o clojure-lsp-standalone.jar -sL "https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar"
+    new_jar_hash="$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | xargs -n1 nix --extra-experimental-features nix-command hash convert --hash-algo sha256)"
 
     rm -f clojure-lsp-standalone.jar
 
