@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "plux";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   # Tests are not available from PyPi
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "localstack";
     repo = "plux";
     tag = "v${version}";
-    hash = "sha256-2Sxn/LuiwTzByAAz7VlNLsxEiPIyJWXr86/76Anx+EU=";
+    hash = "sha256-daAFv5tIekWDq0iI/yolmuak0MMXXVCfAcbHcYY7Qd4=";
   };
 
   build-system = [
