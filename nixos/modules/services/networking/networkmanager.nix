@@ -240,7 +240,7 @@ in
           types.listOf networkManagerPluginPackage;
         default = [ ];
         example = literalExpression ''
-          [
+          with pkgs; [
             networkmanager-fortisslvpn
             networkmanager-iodine
             networkmanager-l2tp
