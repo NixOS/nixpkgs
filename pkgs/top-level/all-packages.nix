@@ -9892,11 +9892,6 @@ with pkgs;
 
   q4wine = kdePackages.callPackage ../applications/misc/q4wine { };
 
-  gpsbabel-gui = gpsbabel.override {
-    withGUI = true;
-    withDoc = true;
-  };
-
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   hachoir = with python3Packages; toPythonApplication hachoir;
