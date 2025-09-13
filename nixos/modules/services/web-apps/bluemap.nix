@@ -4,6 +4,7 @@
   pkgs,
   ...
 }:
+
 let
   cfg = config.services.bluemap;
   format = pkgs.formats.hocon { };
@@ -14,7 +15,7 @@ let
 
   mapsFolder = pkgs.linkFarm "maps" (
     lib.attrsets.mapAttrs' (
-      name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
+      name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value.settings)
     ) cfg.maps
   );
 
@@ -24,14 +25,29 @@ let
     ) cfg.storage
   );
 
-  configFolder = pkgs.linkFarm "bluemap-config" {
+  webappConfigFolder = pkgs.linkFarm "bluemap-config" {
     "maps" = mapsFolder;
     "storages" = storageFolder;
     "core.conf" = coreConfig;
     "webapp.conf" = webappConfig;
     "webserver.conf" = webserverConfig;
-    "packs" = pkgs.linkFarm "packs" cfg.packs;
+    "packs" = cfg.packs;
   };
+
+  renderConfigFolder =
+    name: value:
+    pkgs.linkFarm "bluemap-${name}-config" {
+      "maps" = pkgs.linkFarm "maps" {
+        "${name}.conf" = (format.generate "${name}.conf" value.settings);
+      };
+      "storages" = storageFolder;
+      "core.conf" = coreConfig;
+      "webapp.conf" = format.generate "webapp.conf" (
+        cfg.webappSettings // { "update-settings-file" = false; }
+      );
+      "webserver.conf" = webserverConfig;
+      "packs" = value.packs;
+    };
 
   inherit (lib) mkOption;
 in
@@ -46,6 +62,7 @@ in
 
   options.services.bluemap = {
     enable = lib.mkEnableOption "bluemap";
+    package = lib.mkPackageOption pkgs "bluemap" { };
 
     eula = mkOption {
       type = lib.types.bool;
@@ -85,7 +102,9 @@ in
 
     host = mkOption {
       type = lib.types.str;
-      description = "Domain on which nginx will serve the bluemap webapp";
+      default = "bluemap.${config.networking.domain}";
+      defaultText = lib.literalExpression "bluemap.\${config.networking.domain}";
+      description = "Domain to configure nginx for";
     };
 
     onCalendar = mkOption {
@@ -154,23 +173,42 @@ in
     maps = mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule {
-          freeformType = format.type;
           options = {
-            world = lib.mkOption {
+            packs = mkOption {
               type = lib.types.path;
-              description = "Path to world folder containing the dimension to render";
+              default = cfg.packs;
+              defaultText = lib.literalExpression "config.services.bluemap.packs";
+              description = "A set of resourcepacks/mods/bluemap-addons to extract models from loaded in alphabetical order";
+            };
+            settings = mkOption {
+              type = (
+                lib.types.submodule {
+                  freeformType = format.type;
+                  options = {
+                    world = mkOption {
+                      type = lib.types.path;
+                      description = "Path to world folder containing the dimension to render";
+                    };
+                  };
+                }
+              );
+              description = ''
+                Settings for files in `maps/`.
+                See the default for an example with good options for the different world types.
+                For valid values [consult upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/maps/map.conf).
+              '';
             };
           };
         }
       );
       default = {
-        "overworld" = {
+        "overworld".settings = {
           world = "${cfg.defaultWorld}";
           ambient-light = 0.1;
           cave-detection-ocean-floor = -5;
         };
 
-        "nether" = {
+        "nether".settings = {
           world = "${cfg.defaultWorld}/DIM-1";
           sorting = 100;
           sky-color = "#290000";
@@ -183,7 +221,7 @@ in
           max-y = 90;
         };
 
-        "end" = {
+        "end".settings = {
           world = "${cfg.defaultWorld}/DIM1";
           sorting = 200;
           sky-color = "#080010";
@@ -196,13 +234,13 @@ in
       };
       defaultText = lib.literalExpression ''
         {
-          "overworld" = {
+          "overworld".settings = {
             world = "''${cfg.defaultWorld}";
             ambient-light = 0.1;
             cave-detection-ocean-floor = -5;
           };
 
-          "nether" = {
+          "nether".settings = {
             world = "''${cfg.defaultWorld}/DIM-1";
             sorting = 100;
             sky-color = "#290000";
@@ -215,7 +253,7 @@ in
             max-y = 90;
           };
 
-          "end" = {
+          "end".settings = {
             world = "''${cfg.defaultWorld}/DIM1";
             sorting = 200;
             sky-color = "#080010";
@@ -228,10 +266,10 @@ in
         };
       '';
       description = ''
-        Settings for files in `maps/`.
-        If you define anything here you must define everything yourself.
-        See the default for an example with good options for the different world types.
-        For valid values [consult upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/maps/map.conf).
+        map-specific configuration.
+        These correspond to views in the webapp and are usually
+        different dimension of a world or different render settings of the same dimension.
+        If you set anything in this option you must configure all dimensions yourself!
       '';
     };
 
@@ -271,11 +309,12 @@ in
     };
 
     packs = mkOption {
-      type = lib.types.attrsOf lib.types.pathInStore;
-      default = { };
+      type = lib.types.path;
+      default = pkgs.linkFarm "packs" { };
+      defaultText = "An empty folder in the nix store";
       description = ''
-        A set of resourcepacks, datapacks, and mods to extract resources from,
-        loaded in alphabetical order.
+        A folder containing resourcepacks/mods to extract models from loaded in alphabetical order.
+        Can be overriden on a per-map basis with `services.bluemap.maps.<name>.packs`.
       '';
     };
   };
@@ -300,7 +339,18 @@ in
         UMask = "026";
       };
       script = ''
-        ${lib.getExe pkgs.bluemap} -c ${configFolder} -gs -r
+        # If web folder doesnt exist generate it
+        test -f "${cfg.webRoot}" || ${lib.getExe cfg.package} -c ${webappConfigFolder} -gs
+
+        # Render each minecraft map
+        ${lib.strings.concatStringsSep "\n" (
+          lib.attrsets.mapAttrsToList (
+            name: value: "${lib.getExe cfg.package} -c ${renderConfigFolder name value} -r"
+          ) cfg.maps
+        )}
+
+        # Generate updated webapp
+        ${lib.getExe cfg.package} -c ${webappConfigFolder} -gs
       '';
     };
 
