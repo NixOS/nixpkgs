@@ -1,25 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  libimobiledevice,
-  libirecovery,
-  libzip,
-  libusbmuxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, curl
+, libimobiledevice
+, libirecovery
+, libzip
+, libusbmuxd
+, libtatsu
+,
 }:
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "1.0.0+date=2023-05-23";
+  version = "1.0.0+date=2025-08-21";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "idevicerestore";
-    rev = "609f7f058487596597e8e742088119fdd46729df";
-    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
+    rev = "2914bf66cfb28c6d0fde43655dac05ea044d2907";
+    hash = "sha256-K0vzJskQIWlr5vxvi2Qkz9SQk8yiQYd4edMcIVpbm5A=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     libirecovery
     libzip
     libusbmuxd
+    libtatsu
     # Not listing other dependencies specified in
     # https://github.com/libimobiledevice/idevicerestore/blob/8a882038b2b1e022fbd19eaf8bea51006a373c06/README#L20
     # because they are inherited `libimobiledevice`.
