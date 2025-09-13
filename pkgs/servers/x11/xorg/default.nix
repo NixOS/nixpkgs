@@ -3,6 +3,7 @@
   lib,
   bdftopcf,
   font-alias,
+  font-bh-100dpi,
   font-bh-ttf,
   font-bh-type1,
   font-encodings,
@@ -118,6 +119,7 @@ self: with self; {
     ;
   encodings = font-encodings;
   fontalias = font-alias;
+  fontbh100dpi = font-bh-100dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
@@ -521,47 +523,6 @@ self: with self; {
       nativeBuildInputs = [
         pkg-config
         bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbh100dpi = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bh-100dpi";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bh-100dpi-1.0.4.tar.xz";
-        sha256 = "07mb9781c9yxzp3ifw317v4fbnmg9qyqv0244zfspylihkz5x3zx";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        fontutil
         mkfontscale
       ];
       buildInputs = [ fontutil ];
