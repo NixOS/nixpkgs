@@ -2,6 +2,7 @@
   lib,
   config,
   stdenv,
+  gcc12Stdenv,
   fetchFromGitHub,
   fetchurl,
   cmake,
@@ -53,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     autoAddDriverRunpath
   ];
 
+  # Override environment to force nvcc to use the correct host compiler
+  preBuild = lib.optionalString cudaSupport ''
+    export NVCC_APPEND_FLAGS="--compiler-bindir ${gcc12Stdenv.cc}/bin"
+  '';
+
   buildInputs = [
     duckx
     fmt
@@ -85,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/298997
     # https://github.com/nomic-ai/gpt4all/issues/3468
     (lib.cmakeBool "LLMODEL_KOMPUTE" false)
+  ]
+  ++ lib.optionals cudaSupport [
+    "-DCUDA_HOST_COMPILER=${gcc12Stdenv.cc}/bin/c++"
+    "-DCMAKE_CUDA_HOST_COMPILER=${gcc12Stdenv.cc}/bin/c++"
   ]
   ++ lib.optionals (!cudaSupport) [
     (lib.cmakeBool "LLMODEL_CUDA" false)
