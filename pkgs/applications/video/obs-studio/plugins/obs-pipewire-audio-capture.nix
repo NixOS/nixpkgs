@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "obs-pipewire-audio-capture";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nkd/AoMsEUUxQQH5CjbnPbNwAwkd1y6j2nCa1GIAFPs=";
+    sha256 = "sha256-GrfogPsqpQ976Gcc4JVdslAAWTj49PdspwVp/JXYXSQ=";
   };
 
   nativeBuildInputs = [
