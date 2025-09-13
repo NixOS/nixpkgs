@@ -201,4 +201,11 @@ stdenvNoCC.mkDerivation {
     exit_status = "%x";
     command = "%C";
   };
+
+  # Don't allow aliases anywhere in Nixpkgs for the metrics.
+  env.NIXPKGS_CONFIG = builtins.toFile "nixpkgs-config.nix" ''
+    {
+      allowAliases = false;
+    }
+  '';
 }
