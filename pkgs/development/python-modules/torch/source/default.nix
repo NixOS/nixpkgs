@@ -187,10 +187,6 @@ let
         # TODO: Retest after ROCm 6.4 or torch 2.8
         "gfx1010"
         "gfx1012"
-
-        # Strix Halo seems to be broken as well, see
-        # https://github.com/NixOS/nixpkgs/pull/440359.
-        "gfx1151"
       ] rocmPackages.clr.localGpuTargetsNoGenerics or rocmPackages.clr.gpuTargetsNoGenerics
     else
       throw "No GPU targets specified"
