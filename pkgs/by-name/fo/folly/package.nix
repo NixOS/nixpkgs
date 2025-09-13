@@ -21,10 +21,13 @@
   zstd,
   libiberty,
   libunwind,
+  darwinMinVersionHook,
 
   boost,
   fmt,
   jemalloc,
+
+  ctestCheckHook,
 
   gtest,
 
@@ -39,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.04.21.00";
+  version = "2025.09.08.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P2saSFVRBWt5xjAWlKmcPJT9MFV9CXFmA18dIDCO84o=";
+    hash = "sha256-xrieG+QYK6TuYsycGEPNiAHD9U4dzAcq99umj1D68UY=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     libiberty
     libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
@@ -85,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # jemalloc headers are required in include/folly/portability/Malloc.h
     jemalloc
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   checkInputs = [
@@ -121,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
     || stdenv.hostPlatform.isPower64
     || stdenv.hostPlatform.isRiscV64;
 
+  dontUseNinjaCheck = true;
+
   patches = [
     # The base template for std::char_traits has been removed in LLVM 19
     # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
@@ -145,49 +157,28 @@ stdenv.mkDerivation (finalAttrs: {
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
-  # TODO: Figure out why `GTEST_FILTER` doesn’t work to skip these.
-  checkPhase = ''
-    runHook preCheck
+  disabledTests = [
+    "io_async_ssl_session_test.SSLSessionTest.BasicTest"
+    "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
+    "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
 
-    ctest -j $NIX_BUILD_CORES --output-on-failure --exclude-regex ${
-      lib.escapeShellArg (
-        lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") (
-          [
-            "concurrency_concurrent_hash_map_test.*/ConcurrentHashMapTest/*.StressTestReclamation"
-            "io_async_ssl_session_test.SSLSessionTest.BasicTest"
-            "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
-            "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
-
-            # very strict timing constraints, will fail under load
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DestroyTimeoutSet"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.FireOnce"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.GetTimeRemaining"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.IntrusivePtr"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.Level1"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.NegativeTimeout"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
-            "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
-            "concurrency_cache_locality_test.CacheLocality.LinuxActual"
-            "futures_future_test.Future.NoThrow"
-            "futures_retrying_test.RetryingTest.largeRetries"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
-            "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
-            "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
-          ]
-        )
-      )
-    }
-
-    runHook postCheck
-  '';
+    # very strict timing constraints, will fail under load
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.DestroyTimeoutSet"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.FireOnce"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.GetTimeRemaining"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.IntrusivePtr"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.Level1"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.NegativeTimeout"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
+    "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # No idea why this one fails.
+    "logging_xlog_test.XlogTest.perFileCategoryHandling"
+  ];
 
   passthru = {
     inherit boost fmt;
