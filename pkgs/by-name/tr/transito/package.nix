@@ -32,6 +32,7 @@ buildGoModule rec {
     xorg.libX11
     xorg.libXcursor
     xorg.libXfixes
+    xorg.libxcb
     libGL
     sqlite
   ];
