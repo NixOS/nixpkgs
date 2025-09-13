@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   nixVersions,
   nixComponents ? nixVersions.nixComponents_2_30,
   cmake,
@@ -12,23 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-plugins";
-  version = "15.0.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    hash = "sha256-C4VqKHi6nVAHuXVhqvTRRyn0Bb619ez4LzgUWPH1cbM=";
+    hash = "sha256-yofHs1IyAkyMqrWlLkmnX+CmH+qsvlhKN1YZM4nRf1M=";
   };
-
-  patches = [
-    # https://github.com/shlevy/nix-plugins/pull/22
-    (fetchpatch2 {
-      name = "fix-build-nix-2.28.patch";
-      url = "https://github.com/shlevy/nix-plugins/commit/7279e18911fede252b95765d3920dd38b206271a.patch";
-      hash = "sha256-Mwjxg7IUVrBefGz1iRJBGqkVCDqG1v8qT4StrINkXH8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
