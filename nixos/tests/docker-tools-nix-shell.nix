@@ -1,5 +1,9 @@
 # nix-build -A nixosTests.docker-tools-nix-shell
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
   inherit (config.node.pkgs.dockerTools) examples;
 in
@@ -17,7 +21,7 @@ in
       { ... }:
       {
         virtualisation = {
-          diskSize = 3072;
+          diskSize = 4096;
           docker.enable = true;
         };
       };
@@ -34,61 +38,61 @@ in
 
     with subtest("buildNixShellImage: Can build a basic derivation"):
         docker.succeed(
-            "${examples.nix-shell-basic} | docker load",
+            "${examples.nix-shell-basic}/bin/stream-nix-shell-basic | docker load",
             "docker run --rm nix-shell-basic bash -c 'buildDerivation && $out/bin/hello' | grep '^Hello, world!$'"
         )
 
     with subtest("buildNixShellImage: Runs the shell hook"):
         docker.succeed(
-            "${examples.nix-shell-hook} | docker load",
+            "${examples.nix-shell-hook}/bin/stream-nix-shell-hook | docker load",
             "docker run --rm -it nix-shell-hook | grep 'This is the shell hook!'"
         )
 
     with subtest("buildNixShellImage: Sources stdenv, making build inputs available"):
         docker.succeed(
-            "${examples.nix-shell-inputs} | docker load",
+            "${examples.nix-shell-inputs}/bin/stream-nix-shell-inputs | docker load",
             "docker run --rm -it nix-shell-inputs | grep 'Hello, world!'"
         )
 
     with subtest("buildNixShellImage: passAsFile works"):
         docker.succeed(
-            "${examples.nix-shell-pass-as-file} | docker load",
+            "${examples.nix-shell-pass-as-file}/bin/stream-nix-shell-pass-as-file | docker load",
             "docker run --rm -it nix-shell-pass-as-file | grep 'this is a string'"
         )
 
     with subtest("buildNixShellImage: run argument works"):
         docker.succeed(
-            "${examples.nix-shell-run} | docker load",
+            "${examples.nix-shell-run}/bin/stream-nix-shell-run | docker load",
             "docker run --rm -it nix-shell-run | grep 'This shell is not interactive'"
         )
 
     with subtest("buildNixShellImage: command argument works"):
         docker.succeed(
-            "${examples.nix-shell-command} | docker load",
+            "${examples.nix-shell-command}/bin/stream-nix-shell-command | docker load",
             "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
         )
 
     with subtest("buildNixShellImage: home directory is writable by default"):
         docker.succeed(
-            "${examples.nix-shell-writable-home} | docker load",
+            "${examples.nix-shell-writable-home}/bin/stream-nix-shell-writable-home | docker load",
             "docker run --rm -it nix-shell-writable-home"
         )
 
     with subtest("buildNixShellImage: home directory can be made non-existent"):
         docker.succeed(
-            "${examples.nix-shell-nonexistent-home} | docker load",
+            "${examples.nix-shell-nonexistent-home}/bin/stream-nix-shell-nonexistent-home | docker load",
             "docker run --rm -it nix-shell-nonexistent-home"
         )
 
     with subtest("buildNixShellImage: can build derivations"):
         docker.succeed(
-            "${examples.nix-shell-build-derivation} | docker load",
+            "${examples.nix-shell-build-derivation}/bin/stream-nix-shell-build-derivation | docker load",
             "docker run --rm -it nix-shell-build-derivation"
         )
 
     with subtest("streamLayeredImage: with nix db"):
         docker.succeed(
-            "${examples.nix-layered} | docker load",
+            "${examples.nix-layered}/bin/stream-nix-layered | docker load",
             "docker run --rm ${examples.nix-layered.imageName} nix-store -q --references /bin/bash"
         )
   '';
