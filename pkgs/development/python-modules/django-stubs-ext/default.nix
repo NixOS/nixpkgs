@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "5.2.2";
+  version = "5.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "django-stubs";
     tag = version;
-    hash = "sha256-kF5g0/rkMQxYTfSrTqzZ6BuqGlE42K/AVhc1/ARc+/c=";
+    hash = "sha256-v+MlMy9XABb9gw3U6Xv+aXXF6AZuvu+OBdU5+8tE9Oo=";
   };
 
   postPatch = ''
