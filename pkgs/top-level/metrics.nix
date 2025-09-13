@@ -84,9 +84,9 @@ stdenvNoCC.mkDerivation {
       echo "$name.values $values" >> $out/nix-support/hydra-metrics
     }
 
-    run nixos.smallContainer nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.smallContainer.x86_64-linux --show-trace
-    run nixos.kde nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.kde.x86_64-linux --show-trace
-    run nixos.lapp nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.lapp.x86_64-linux --show-trace
+    run nixos.smallContainer nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.smallContainer.x86_64-linux --show-trace --no-gc-warning
+    run nixos.kde nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.kde.x86_64-linux --show-trace --no-gc-warning
+    run nixos.lapp nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.lapp.x86_64-linux --show-trace --no-gc-warning
     run nix-env.qa nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa
     run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --json
 
