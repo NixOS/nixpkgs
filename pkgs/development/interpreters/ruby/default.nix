@@ -432,4 +432,11 @@ in
     hash = "sha256-HYjYontEL93kqgbcmehrC78LKIlj2EMxEt1frHmP1e4=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
+
+  ruby_3_5 = generic {
+    version = rubyVersion "3" "5" "0" "preview1";
+    hash = "sha256-7PCcfrkC6Rza+cxVPNAMypuEiz/A4UKXhQ+asIzdRvA=";
+    cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
 }
