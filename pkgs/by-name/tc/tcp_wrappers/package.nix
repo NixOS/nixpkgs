@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "ftp://ftp.porcupine.org/pub/security/index.html";
-    license = "BSD-style";
+    license = lib.licenses.tcpWrappers;
     platforms = lib.platforms.linux;
   };
 }
