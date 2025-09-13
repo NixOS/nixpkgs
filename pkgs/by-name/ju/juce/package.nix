@@ -15,6 +15,7 @@
   libglvnd,
   webkitgtk_4_1,
   pcre2,
+  ladspa-sdk,
   libsysprof-capture,
   util-linuxMinimal,
   libselinux,
@@ -28,8 +29,17 @@
   libXtst,
   sqlite,
   fontconfig,
+
+  libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXinerama,
+  libXrandr,
+
   versionCheckHook,
   nix-update-script,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Adapted from https://gitlab.archlinux.org/archlinux/packaging/packages/juce/-/raw/4e6d34034b102af3cd762a983cff5dfc09e44e91/juce-6.1.2-cmake_install.patch
     # for Juce 8.0.4.
     ./juce-8.0.4-cmake_install.patch
+    ./cmake_extras_projucer_only.patch
   ];
 
   nativeBuildInputs = [
@@ -60,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl # libcurl.so
     (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
     pcre2 # libpcre2.pc
+    ladspa-sdk
     libsysprof-capture
     libthai
     libdatrie
@@ -81,6 +93,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ fontconfig ];
 
+  cmakeFlags = [ "-DJUCE_BUILD_EXTRAS=ON" ];
+
+  postInstall = ''
+    cp extras/Projucer/Projucer_artefacts/Release/Projucer $out/bin/Projucer
+    wrapProgram $out/bin/Projucer \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          alsa-lib
+          fontconfig
+          freetype
+          libGL
+          libX11
+          libXcursor
+          libXext
+          libXinerama
+          libXrandr
+        ]
+      }
+    ln -s $out/bin/Projucer $out/bin/projucer
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -90,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    projucerHook = callPackage ./projucerHook.nix { };
   };
 
   meta = {
