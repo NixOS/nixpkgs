@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin-__rdtsc.patch
+    # fix compilation with gcc15
+    # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
+    ./gcc15-fixes.patch
   ]
   # TODO: remove after update to version 4.2
   ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
