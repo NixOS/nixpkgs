@@ -149,6 +149,8 @@ with pkgs;
 
   cross = recurseIntoAttrs (callPackage ./cross { });
 
+  splicing = callPackage ./splicing { };
+
   php = recurseIntoAttrs (callPackages ./php { });
 
   go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
