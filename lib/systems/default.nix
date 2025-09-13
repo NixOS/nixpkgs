@@ -205,7 +205,7 @@ let
           system =
             {
               linux = "Linux";
-              windows = "Windows";
+              windows = if final.parsed.abi.name == "cygnus" then "CYGWIN_NT" else "Windows";
               darwin = "Darwin";
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
