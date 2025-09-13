@@ -227,4 +227,6 @@ with pkgs;
   build-environment-info = callPackage ./build-environment-info { };
 
   rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
+
+  home-assistant-component-tests = recurseIntoAttrs pkgs.home-assistant.tests.components;
 }
