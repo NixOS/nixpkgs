@@ -202,18 +202,15 @@ in
     };
 
     boot.kernelModules = mkOption {
-      type = attrNamesToTrue;
-      default = { };
+      type = types.listOf types.str;
+      default = [ ];
       description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
         mount the root file system should be added to
         {option}`boot.initrd.availableKernelModules` or
         {option}`boot.initrd.kernelModules`.
-
-        ${modulesTypeDesc}
       '';
-      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.availableKernelModules = mkOption {
@@ -244,14 +241,9 @@ in
     };
 
     boot.initrd.kernelModules = mkOption {
-      type = attrNamesToTrue;
-      default = { };
-      description = ''
-        Set of modules that are always loaded by the initrd.
-
-        ${modulesTypeDesc}
-      '';
-      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
+      type = types.listOf types.str;
+      default = [ ];
+      description = "List of modules that are always loaded by the initrd.";
     };
 
     boot.initrd.includeDefaultModules = mkOption {
