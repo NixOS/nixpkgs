@@ -2336,6 +2336,9 @@
   "cmake-build-dir": [
     "index.html#cmake-build-dir"
   ],
+  "cmake-build-type": [
+    "index.html#cmake-build-type"
+  ],
   "dont-use-cmake-configure": [
     "index.html#dont-use-cmake-configure"
   ],
