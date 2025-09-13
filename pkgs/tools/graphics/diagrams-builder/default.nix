@@ -50,7 +50,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "diagrams-builder";
+  pname = "diagrams-builder";
+  inherit (diagrams-builder) version;
 
   nativeBuildInputs = [ makeWrapper ];
 
