@@ -34,8 +34,9 @@ let
 
   backends = [
     "svg"
-    "cairo"
     "ps"
+    # See ../../../development/haskell-modules/configuration-common.nix:/diagrams-builder.=
+    # "cairo"
   ];
 
 in

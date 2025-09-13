@@ -3289,6 +3289,17 @@ with haskellLib;
   # 2025-04-23: missing test data
   llvm-pretty-bc-parser = dontCheck super.llvm-pretty-bc-parser;
 
+  # diagrams-builder wants diagrams-cairo < 1.5 for its cairo executable,
+  # but Stackage LTS 24 contains diagrams-cairo >= 1.5.
+  # As such it is difficult to provide (2025-09-13)
+  # ATTN: This needs to match ../../tools/graphics/diagrams-builder/default.nix:/backends
+  # TODO: can we reinstate this by manually passing an older version?
+  diagrams-builder = disableCabalFlag "cairo" (
+    super.diagrams-builder.override {
+      diagrams-cairo = null;
+    }
+  );
+
   # 2025-04-23: Allow bytestring >= 0.12
   # https://github.com/mrkkrp/wave/issues/48
   wave = doJailbreak super.wave;
