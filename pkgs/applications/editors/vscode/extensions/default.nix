@@ -4302,6 +4302,8 @@ let
         };
       };
 
+      slint.slint = callPackage ./slint.slint { };
+
       smcpeak.default-keys-windows = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "default-keys-windows";
