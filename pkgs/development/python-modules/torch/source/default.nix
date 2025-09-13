@@ -187,11 +187,7 @@ let
         # TODO: Retest after ROCm 6.4 or torch 2.8
         "gfx1010"
         "gfx1012"
-
-        # Strix Halo seems to be broken as well, see
-        # https://github.com/NixOS/nixpkgs/pull/440359.
-        "gfx1151"
-      ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
+      ] rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     else
       throw "No GPU targets specified"
   );
@@ -412,7 +408,7 @@ buildPythonPackage rec {
       export ROCM_PATH=${rocmtoolkit_joined}
       export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
       export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-      export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include -I${rocmtoolkit_joined}/include/rocblas"
+      export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include"
       python tools/amd_build/build_amd.py
     '';
 
