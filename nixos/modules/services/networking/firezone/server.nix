@@ -923,9 +923,13 @@ in
           {
             name = "firezone";
             ensureDBOwnership = true;
+            ensureClauses.superuser = true;
           }
         ];
         ensureDatabases = [ "firezone" ];
+        # Firezone uses an internal replication strategy
+        # that depends on a logical wal
+        settings.wal_level = "logical";
       };
 
       services.firezone.server.settings = {
