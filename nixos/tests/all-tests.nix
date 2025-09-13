@@ -651,6 +651,7 @@ in
   grub = runTest ./grub.nix;
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
+  gunicorn = runTest ./gunicorn.nix;
   gvisor = runTest ./gvisor.nix;
   h2o = import ./web-servers/h2o { inherit recurseIntoAttrs runTest; };
   hadoop = import ./hadoop {
@@ -711,6 +712,7 @@ in
   };
   oku = runTest ./oku.nix;
   oncall = runTest ./web-apps/oncall.nix;
+  otterwiki = runTest ./otterwiki.nix;
   overseerr = runTest ./overseerr.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
