@@ -1026,7 +1026,6 @@ self: super:
 
       # Bigelow & Holmes fonts
       # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
-      "fontbhlucidatypewriter100dpi"
       "fontbhlucidatypewriter75dpi"
     ];
 

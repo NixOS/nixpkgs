@@ -5,6 +5,7 @@
   font-alias,
   font-bh-100dpi,
   font-bh-75dpi,
+  font-bh-lucidatypewriter-100dpi,
   font-bh-ttf,
   font-bh-type1,
   font-encodings,
@@ -122,6 +123,7 @@ self: with self; {
   fontalias = font-alias;
   fontbh100dpi = font-bh-100dpi;
   fontbh75dpi = font-bh-75dpi;
+  fontbhlucidatypewriter100dpi = font-bh-lucidatypewriter-100dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
@@ -525,47 +527,6 @@ self: with self; {
       nativeBuildInputs = [
         pkg-config
         bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbhlucidatypewriter100dpi = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bh-lucidatypewriter-100dpi";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.4.tar.xz";
-        sha256 = "1wp87pijbydkpcmawsyas7vwhad2xg1mkkwigga2jjh9lknhkv3n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        fontutil
         mkfontscale
       ];
       buildInputs = [ fontutil ];
