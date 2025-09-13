@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   dependencies = [ six ];
 
+  build-system = [ poetry-core ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "treelib" ];
