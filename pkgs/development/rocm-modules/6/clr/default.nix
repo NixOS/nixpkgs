@@ -144,6 +144,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-nStJ22B/CM0fzQTvYjbHDbQt0GlE8DXxVK+UDU9BAx4=";
       url = "https://github.com/ROCm/clr/commit/21d764518363d74187deaef2e66c1a127bc5aa64.patch";
     })
+    (fetchpatch {
+      # CMake 4 compat
+      # [PATCH] SWDEV-509213 - make cmake_minimum_required consistent across clr
+      url = "https://github.com/ROCm/clr/commit/fcaefe97b862afe12aaac0147f1004e6dc595fce.patch";
+      hash = "sha256-hRZXbASbIOOETe+T4mDyyiRWLXd6RDKRieN2ns1w/rs=";
+    })
   ];
 
   postPatch = ''
