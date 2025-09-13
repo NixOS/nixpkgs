@@ -1911,6 +1911,8 @@ self: super: with self; {
 
   binsync = callPackage ../development/python-modules/binsync { };
 
+  biocutils = callPackage ../development/python-modules/biocutils { };
+
   biom-format = callPackage ../development/python-modules/biom-format { };
 
   biopandas = callPackage ../development/python-modules/biopandas { };
@@ -15691,6 +15693,8 @@ self: super: with self; {
       inherit python;
     };
   };
+
+  rds2py = callPackage ../development/python-modules/rds2py { };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
