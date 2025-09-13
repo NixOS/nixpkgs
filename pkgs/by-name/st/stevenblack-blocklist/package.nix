@@ -64,6 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       moni
       Guanran928
       frontear
+      pandapip1
     ];
   };
 })
