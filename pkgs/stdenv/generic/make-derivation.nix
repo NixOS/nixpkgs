@@ -225,14 +225,7 @@ let
 
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
-    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or
-    # fallback safe-ish set of flags
-    (
-      if isOpenBSD && isStatic then
-        knownHardeningFlags # Need pie, in fact
-      else
-        remove "pie" knownHardeningFlags
-    );
+    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
   stdenvHostSuffix = optionalString (hostPlatform != buildPlatform) "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
   userHook = config.stdenv.userHook or null;
