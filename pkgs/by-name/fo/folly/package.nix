@@ -129,6 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseNinjaCheck = true;
 
   patches = [
+    # Install the certificate files used by `libfolly_test_util` rather
+    # than leaving a dangling reference to the build directory in the
+    # `dev` output’s CMake files.
+    ./install-test-certs.patch
+
     # The base template for std::char_traits has been removed in LLVM 19
     # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
     ./char_traits.patch
