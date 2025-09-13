@@ -1,0 +1,21 @@
+diff --git a/xmake.lua b/xmake.lua
+index 78a0146..3da99de 100644
+--- a/xmake.lua
++++ b/xmake.lua
+@@ -20,14 +20,14 @@ option("tbox")
+ option_end()
+ 
+ local S7_VERSION = "20241230"
+-add_requires("s7 "..S7_VERSION, {system=false})
++add_requires("s7")
+ 
+ local TBOX_VERSION = "1.7.6"
+ if has_config("tbox") then
+     add_requires("apt::libtbox-dev", {alias="tbox"})
+ else
+     tbox_configs = {hash=true, ["force-utf8"]=true}
+-    add_requires("tbox " .. TBOX_VERSION, {system=false, configs=tbox_configs})
++    add_requires("tbox", {configs=tbox_configs})
+ end
+ 
+ target ("goldfish") do
