@@ -11,13 +11,13 @@
 buildKodiAddon {
   pname = "steam-launcher";
   namespace = "script.steam.launcher";
-  version = "3.5.1";
+  version = "3.7.11";
 
   src = fetchFromGitHub rec {
     owner = "teeedubb";
     repo = owner + "-xbmc-repo";
-    rev = "d5cea4b590b0ff08ac169b757946b7cb5145b983";
-    sha256 = "sha256-arBMMOoHQuHRcJ7eXD1jvA45Svei7c0srcBZkdAzqY0=";
+    rev = "8d0972909c3f1d0cd9e435e77f8b1f59314d52f0";
+    sha256 = "IYxl6X20qcnr1D/pNMOKBW9FfH9cXYon4Qi+wd7EvtI=";
   };
 
   propagatedBuildInputs = [
