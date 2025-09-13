@@ -5169,6 +5169,8 @@ self: super: with self; {
 
   filetype = callPackage ../development/python-modules/filetype { };
 
+  fill-voids = callPackage ../development/python-modules/fill-voids { };
+
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
