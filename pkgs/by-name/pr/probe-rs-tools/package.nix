@@ -6,6 +6,7 @@
   pkg-config,
   libusb1,
   openssl,
+  probe-rs-udev-rules,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libusb1
     openssl
+    probe-rs-udev-rules
   ];
 
   checkFlags = [
