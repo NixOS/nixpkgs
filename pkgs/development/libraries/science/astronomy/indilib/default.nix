@@ -87,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [
-      hjones2199
       sheepforce
       returntoreality
     ];
