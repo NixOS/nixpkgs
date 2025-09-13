@@ -371,3 +371,15 @@ diff -r -u gnustep-base-1.24.7/Source/NSPathUtilities.m gnustep-base-1.24.7.patc
  
    count = [paths count];
    for (i = 0; i < count; i++)
+
+--- gnustep-base-1.24.7/Headers/Foundation/Foundation.h
++++ gnustep-base-1.24.7/Headers/Foundation/Foundation.h
+@@ -1,5 +1,5 @@
+ #import <Foundation/NSZone.h>
+ 
+ #ifdef __has_include
+-#  if __has_include(<CoreFoundation/CoreFoundation.h>)
++#  if __has_include(<CoreFoundation/CoreFoundation.h>) && !__has_include(<CoreFoundation/ForSwiftFoundationOnly.h>)
+ #    include <CoreFoundation/CoreFoundation.h>
+ #  endif
+ #  if __has_include(<dispatch/dispatch.h>)
