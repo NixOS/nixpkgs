@@ -195,8 +195,6 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.9";
-
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
   # command:
@@ -207,14 +205,15 @@ let
   kbd' = if withPam then kbd else kbd.override { withVlock = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname;
+  version = "257.9";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3Ig5TXhK99iOu41k4c5CgC4R3HhBftSAb9UbXvFY6lo=";
   };
 
@@ -456,7 +455,7 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    (lib.mesonOption "version-tag" version)
+    (lib.mesonOption "version-tag" finalAttrs.version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
@@ -491,7 +490,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sbat-distro-summary" "NixOS")
     (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
     (lib.mesonOption "sbat-distro-pkgname" pname)
-    (lib.mesonOption "sbat-distro-version" version)
+    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
 
     # Users
     (lib.mesonOption "system-uid-max" "999")

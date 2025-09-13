@@ -9182,6 +9182,7 @@ with pkgs;
     zig_0_15
     ;
 
+  # If this is updated, the default zls version should also be updated to match the default zig version.
   zig = zig_0_15;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
@@ -9192,7 +9193,7 @@ with pkgs;
     ;
 
   # This should be kept updated to ensure the default zls version matches the default zig version.
-  zls = zls_0_14;
+  zls = zls_0_15;
 
   libzint = zint-qt.override { withGUI = false; };
 

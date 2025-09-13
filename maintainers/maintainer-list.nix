@@ -25387,6 +25387,12 @@
     matrix = "@tensor5:matrix.org";
     name = "Nicola Squartini";
   };
+  Tenzer = {
+    email = "nixpkgs@tenzer.dk";
+    github = "Tenzer";
+    githubId = 68696;
+    name = "Jeppe Fihl-Pearson";
+  };
   teohz = {
     email = "gitstuff@teohz.com";
     github = "teohz";
@@ -29003,4 +29009,3 @@
   };
   # keep-sorted end
 }
-# Keep the list alphabetically sorted.

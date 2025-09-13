@@ -1659,6 +1659,12 @@ self: super: with self; {
 
   backoff = callPackage ../development/python-modules/backoff { };
 
+  backports-asyncio-runner =
+    if pythonAtLeast "3.11" then
+      null
+    else
+      callPackage ../development/python-modules/backports-asyncio-runner { };
+
   backports-datetime-fromisoformat =
     callPackage ../development/python-modules/backports-datetime-fromisoformat
       { };
