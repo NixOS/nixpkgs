@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httm";
-  version = "0.48.4";
+  version = "0.48.5";
 
   src = fetchFromGitHub {
     owner = "kimono-koans";
     repo = "httm";
     rev = version;
-    hash = "sha256-636Two3kGtzpx6gQfvBKhhz5BQflP8joYpw0CY5UnoA=";
+    hash = "sha256-d/yARvzoNkepI4nR22Z0UVBwqRymrmh9oY7ff9g3Lio=";
   };
 
-  cargoHash = "sha256-95xqzwFcTusL50Ue6dsM2BhD6J2Fi/qsrGQYniFVVd4=";
+  cargoHash = "sha256-ZUQ4Q7W6rB17U5mrZWI6UwyfuYLzRk+zm4MpuYU/oAE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
