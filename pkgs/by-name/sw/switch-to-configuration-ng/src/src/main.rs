@@ -894,20 +894,19 @@ impl std::fmt::Display for Job {
     }
 }
 
-fn new_dbus_proxies(
-    conn: &LocalConnection,
-) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
-    (
-        conn.with_proxy(
-            "org.freedesktop.systemd1",
-            "/org/freedesktop/systemd1",
-            Duration::from_millis(10000),
-        ),
-        conn.with_proxy(
-            "org.freedesktop.login1",
-            "/org/freedesktop/login1",
-            Duration::from_millis(10000),
-        ),
+fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1",
+        Duration::from_millis(10000),
+    )
+}
+
+fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.login1",
+        "/org/freedesktop/login1",
+        Duration::from_millis(10000),
     )
 }
 
@@ -946,7 +945,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     }
 
     let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
-    let (systemd, _) = new_dbus_proxies(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
 
     let nixos_activation_done = Rc::new(RefCell::new(false));
     let _nixos_activation_done = nixos_activation_done.clone();
@@ -1140,7 +1139,8 @@ won't take effect until you reboot the system.
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
-    let (systemd, logind) = new_dbus_proxies(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
+    let logind = login1_proxy(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
