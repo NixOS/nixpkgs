@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   cmake,
+  espeak-ng,
   fetchpatch,
   ffmpeg,
   fontconfig,
@@ -18,6 +20,7 @@
   libusb1,
   libwebp,
   nix-update-script,
+  onnxruntime,
   optipng,
   piper-tts,
   pkg-config,
@@ -33,14 +36,26 @@
   speechSupport ? true,
   unrarSupport ? false,
 }:
-
+let
+  espeak-ng' = espeak-ng.overrideAttrs {
+    version = "1.53-dev";
+    src = fetchFromGitHub {
+      owner = "espeak-ng";
+      repo = "espeak-ng";
+      rev = "0d451f8c1c6ae837418b823bd9c4cbc574ea9ff5";
+      hash = "sha256-wpPi+YjSLhsEWfE3KEbL4A7o48qtz9fLRZ/u4xGOM2g=";
+    };
+    # Patches from espeak-ng base are either already applied in 1.53 dev or are not relevant for Calibre
+    patches = [ ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.7.0";
+  version = "8.10.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LP5Yfjdz2GB/6LvvvNd7XPuBYSTKyJ5JE1PeuPL6kyQ=";
+    hash = "sha256-ByDUoF9C5FE8ZlQ/zP4H43b9+zUIsgah5/FO5mtXsMU=";
   };
 
   patches = [
@@ -78,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    espeak-ng'
     ffmpeg
     fontconfig
     hunspell
@@ -90,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
+    onnxruntime
     piper-tts
     podofo_0_10
     poppler-utils
