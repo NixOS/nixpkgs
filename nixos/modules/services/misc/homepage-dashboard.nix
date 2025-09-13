@@ -241,6 +241,11 @@ in
         HOMEPAGE_ALLOWED_HOSTS = cfg.allowedHosts;
       };
 
+      path = with pkgs; [
+        # for `ping` property on services
+        unixtools.ping
+      ];
+
       serviceConfig = {
         Type = "simple";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
