@@ -45,7 +45,7 @@ let
 
   limesurveyConfig = pkgs.writeText "config.php" ''
     <?php
-      return \array_merge(
+      return \array_merge_recursive(
         \json_decode('${builtins.toJSON cfg.config}', true),
         [
           'config' => [
@@ -304,6 +304,7 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
+        userquestionthemerootdir = "${stateDir}/upload/themes/question";
         force_ssl = mkIf (
           cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL
         ) "on";
