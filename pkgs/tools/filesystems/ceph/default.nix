@@ -42,6 +42,7 @@
   cunit,
   e2fsprogs,
   doxygen,
+  getopt,
   gperf,
   graphviz,
   gnugrep,
@@ -502,6 +503,10 @@ rec {
       # from a systemd unit for example.
       substituteInPlace src/client/fuse_ll.cc \
         --replace-fail "mount -i -o remount" "${util-linux}/bin/mount -i -o remount"
+
+      substituteInPlace src/{ceph-osd-prestart.sh,ceph-post-file.in,init-ceph.in} \
+        --replace-fail "GETOPT=/usr/local/bin/getopt" "GETOPT=${getopt}/bin/getopt" \
+        --replace-fail "GETOPT=getopt" "GETOPT=${getopt}/bin/getopt"
 
       # The install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       export PYTHONPATH=$PYTHONPATH:$lib/${sitePackages}:$out/${sitePackages}
