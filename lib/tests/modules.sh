@@ -257,6 +257,10 @@ checkConfigError 'A definition for option .* is not of type.*between.*-21 and 43
 # types.either
 checkConfigOutput '^42$' config.value ./declare-either.nix ./define-value-int-positive.nix
 checkConfigOutput '^"24"$' config.value ./declare-either.nix ./define-value-string.nix
+
+# Check regression detected in https://github.com/NixOS/nixpkgs/issues/438459
+# Can be removed after 26.05 release.
+checkConfigOutput '^"bar"$' config.foo ./freeform-either.nix
 # types.oneOf
 checkConfigOutput '^42$' config.value ./declare-oneOf.nix ./define-value-int-positive.nix
 checkConfigOutput '^\[\]$' config.value ./declare-oneOf.nix ./define-value-list.nix

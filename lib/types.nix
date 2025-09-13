@@ -106,6 +106,14 @@ let
     in
     if invalidDefs != [ ] then { message = "Definition values: ${showDefs invalidDefs}"; } else null;
 
+  # Compat helper for merge to safely access the .value of merge.v2
+  checkHeadError =
+    loc: descr: checkedAndMerged:
+    if checkedAndMerged.headError or null != null then
+      throw "A definition for option `${showOption loc}' is not of type `${descr}'. TypeError: ${checkedAndMerged.headError.message}"
+    else
+      checkedAndMerged.value;
+
   outer_types = rec {
     isType = type: x: (x._type or "") == type;
 
@@ -715,7 +723,7 @@ let
           merge = {
             __functor =
               self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
+              checkHeadError loc description (self.v2 { inherit loc defs; });
             v2 =
               { loc, defs }:
               let
@@ -828,7 +836,7 @@ let
           merge = {
             __functor =
               self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
+              checkHeadError loc description (self.v2 { inherit loc defs; });
             v2 =
               { loc, defs }:
               let
@@ -1252,7 +1260,7 @@ let
           merge = {
             __functor =
               self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
+              checkHeadError loc description (self.v2 { inherit loc defs; });
             v2 =
               { loc, defs }:
               let
@@ -1417,7 +1425,16 @@ let
           merge = {
             __functor =
               self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
+              let
+                cm = (self.v2 { inherit loc defs; });
+              in
+              if cm.headError ? fallback then
+                lib.warn (
+                  cm.headError.message
+                  + "\nIf you are the module maintainer, please fix the type. This will be turned into an error after 26.05"
+                ) cm.headError.fallback
+              else
+                checkHeadError loc description cm;
             v2 =
               { loc, defs }:
               let
@@ -1452,6 +1469,9 @@ let
                       };
                       headError = {
                         message = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
+                        # Specific for either, to ease migrations
+                        # until 26.05 this is a warning, afterwards it will be removed
+                        fallback = mergeOneOption loc defs;
                       };
                       value = abort "(t.merge.v2 defs).value must only be accessed when `.headError == null`. This is a bug in code that consumes a module system type.";
                     };
@@ -1501,7 +1521,7 @@ let
           merge = {
             __functor =
               self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
+              checkHeadError loc description (self.v2 { inherit loc defs; });
             v2 =
               { loc, defs }:
               let
@@ -1568,7 +1588,7 @@ let
             merge = {
               __functor =
                 self: loc: defs:
-                (self.v2 { inherit loc defs; }).value;
+                checkHeadError loc elemType.description (self.v2 { inherit loc defs; });
               v2 =
                 { loc, defs }:
                 let
