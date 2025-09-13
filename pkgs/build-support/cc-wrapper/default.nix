@@ -144,6 +144,9 @@ let
     && libcxx == null
     && !targetPlatform.isDarwin
     && !(targetPlatform.useLLVM or false)
+    # Should be using LLVM libc with the LLVM libc
+    # Also, prevent infinite recursion with this:
+    && !(targetPlatform.libc == "llvm")
     && !(targetPlatform.useAndroidPrebuilt or false)
     && !(targetPlatform.isiOS or false)
     && gccForLibs != null;
@@ -650,6 +653,7 @@ stdenvNoCC.mkDerivation {
           && targetPlatform.isLinux
           && !(targetPlatform.useAndroidPrebuilt or false)
           && !(targetPlatform.useLLVM or false)
+          && !(targetPlatform.libc == "llvm")
           && gccForLibs != null
         )
         (
