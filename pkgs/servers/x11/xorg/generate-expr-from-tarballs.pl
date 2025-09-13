@@ -62,17 +62,31 @@ $pcMap{"xcb-cursor"} = "xcbutilcursor";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
+$pcMap{"xcomposite"} = "libXcomposite";
 $pcMap{"xcursor"} = "libXcursor";
+$pcMap{"xdamage"} = "libXdamage";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xfont"} = "libXfont";
+$pcMap{"xfont2"} = "libXfont2";
+$pcMap{"xft"} = "libXft";
+$pcMap{"xi"} = "libXi";
+$pcMap{"xinerama"} = "libXinerama";
+$pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
+$pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
+$pcMap{"xpresent"} = "libXpresent";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
+$pcMap{"xres"} = "libXres";
+$pcMap{"xscrnsaver"} = "libXScrnSaver";
+$pcMap{"xshmfence"} = "libxshmfence";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
+$pcMap{"xtst"} = "libXtst";
 $pcMap{"xv"} = "libXv";
 $pcMap{"xvmc"} = "libXvMC";
 $pcMap{"xvmc-wrapper"} = "libXvMC";
@@ -329,7 +343,13 @@ print OUT <<EOF;
   font-bh-type1,
   font-encodings,
   font-mutt-misc,
+  font-schumacher-misc,
+  font-screen-cyrillic,
+  font-sony-misc,
+  font-sun-misc,
   font-util,
+  font-winitzki-cyrillic,
+  font-xfree86-type1,
   gccmakedep,
   ico,
   imake,
@@ -341,6 +361,7 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libsm,
+  libwindowswm,
   libx11,
   libxau,
   libxaw,
@@ -352,16 +373,30 @@ print OUT <<EOF;
   libxcb-render-util,
   libxcb-util,
   libxcb-wm,
-  libxcvt,
+  libxcomposite,
   libxcursor,
+  libxcvt,
+  libxdamage,
   libxdmcp,
   libxext,
   libxfixes,
+  libxfont_1,
+  libxfont_2,
+  libxft,
+  libxi,
+  libxinerama,
+  libxkbfile,
   libxmu,
+  libxp,
   libxpm,
+  libxpresent,
   libxrandr,
   libxrender,
+  libxres,
+  libxscrnsaver,
+  libxshmfence,
   libxt,
+  libxtst,
   libxv,
   libxvmc,
   libxxf86dga,
@@ -433,6 +468,8 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    libxkbfile
+    libxshmfence
     listres
     lndir
     luit
@@ -488,24 +525,43 @@ self: with self; {
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
+  fontschumachermisc = font-schumacher-misc;
+  fontscreencyrillic = font-screen-cyrillic;
+  fontsonymisc = font-sony-misc;
+  fontsunmisc = font-sun-misc;
   fontutil = font-util;
+  fontwinitzkicyrillic = font-winitzki-cyrillic;
+  fontxfree86type1 = font-xfree86-type1;
   libAppleWM = libapplewm;
   libFS = libfs;
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
   libSM = libsm;
+  libWindowsWM = libwindowswm;
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
+  libXcomposite = libxcomposite;
   libXcursor = libxcursor;
+  libXdamage = libxdamage;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXfont = libxfont_1;
+  libXft = libxft;
+  libXi = libxi;
+  libXinerama = libxinerama;
   libXmu = libxmu;
+  libXp = libxp;
   libXpm = libxpm;
+  libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
   libXt = libxt;
+  libXtst = libxtst;
   libXv = libxv;
   libXvMC = libxvmc;
   libXxf86dga = libxxf86dga;
