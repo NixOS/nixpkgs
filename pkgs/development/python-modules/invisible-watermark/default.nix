@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "invisible-watermark";
-  version = "0.2.0";
+  version = "0.1.5";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
