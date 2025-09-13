@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.4.5";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-kzY/ZT5Ld6oQnl8vHBaMfdAgZljTcWCFafIbuRS21ro=";
+    hash = "sha256-N5TDKQKgmVCUevjJKIXJYje3bIBPXKLX53kQP7DdSUA=";
   };
 
-  cargoHash = "sha256-A1LABL99mXson3gw8CaDbMH4afzyGMcaK0A8+aeK7T0=";
+  cargoHash = "sha256-oGkM9kvPM3HU8SGj7Hpe6xcy5dzjGxEyKjck68CpeBA=";
 
   patches = [
     # Patch out the remote upgrade (deno update) check.
@@ -187,6 +187,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=watcher"
     "--skip=node_unit_tests::_fs_watch_test"
     "--skip=js_unit_tests::fs_events_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
+    "--skip=tests::test_userspace_resolver"
   ];
 
   __darwinAllowLocalNetworking = true;
