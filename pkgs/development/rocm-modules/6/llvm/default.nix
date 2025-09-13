@@ -123,6 +123,32 @@ let
     monorepoSrc = llvmSrcFixed;
     doCheck = false;
   });
+  origLlvm = llvmPackages_18.libllvm;
+  # Hacky way to avoid nixfmt indenting the entire scope body suggested by @emilazy
+  overrideLlvmPackagesRocm =
+    f:
+    let
+      overridenScope = llvmPackagesRocm.overrideScope (final: prev: f { inherit final prev; });
+    in
+    {
+      inherit (overridenScope)
+        # Expose only a limited set of packages that we care about for ROCm
+        bintools
+        compiler-rt
+        compiler-rt-libc
+        clang
+        clang-tools
+        clang-unwrapped
+        libcxx
+        libunwind
+        lld
+        llvm
+        rocm-merged-llvm
+        rocmcxx
+        rocmClangStdenv
+        openmp
+        ;
+    };
   sysrootCompiler =
     cc: name: paths:
     let
@@ -185,13 +211,8 @@ let
     + (lib.optionalString llvmPackagesRocm.stdenv.cc.isClang " -flto=thin -ffat-lto-objects")
     + (lib.optionalString profilableStdenv " -fno-omit-frame-pointer -momit-leaf-frame-pointer -gz -g1");
 in
-rec {
-  inherit (llvmPackagesRocm) libunwind;
-  inherit (llvmPackagesRocm) libcxx;
-  # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
-  # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
-  # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
-  llvm = (llvmPackagesRocm.llvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
+overrideLlvmPackagesRocm (s: {
+  libllvm = (s.prev.libllvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
     dontStrip = profilableStdenv;
     nativeBuildInputs = old.nativeBuildInputs ++ [ removeReferencesTo ];
     buildInputs = old.buildInputs ++ [
@@ -205,6 +226,7 @@ rec {
     '';
     LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
     cmakeFlags =
+      # TODO: Remove in followup, tblgen now works correctly but would rebuild
       (builtins.filter tablegenUsage old.cmakeFlags)
       ++ [
         llvmTargetsFlag
@@ -245,8 +267,7 @@ rec {
     '';
   });
   lld =
-    (llvmPackagesRocm.lld.override {
-      libllvm = llvm;
+    (s.prev.lld.override {
       ninja = emptyDirectory;
     }).overrideAttrs
       (old: {
@@ -265,6 +286,7 @@ rec {
         env.NIX_BUILD_ID_STYLE = "fast";
         LDFLAGS = "-Wl,--build-id=sha1,--icf=all,--compress-debug-sections=zlib";
         cmakeFlags =
+          # TODO: Remove in followup, tblgen now works correctly but would rebuild
           (builtins.filter tablegenUsage old.cmakeFlags)
           ++ [
             llvmTargetsFlag
@@ -302,8 +324,7 @@ rec {
       });
   clang-unwrapped =
     (
-      (llvmPackagesRocm.clang-unwrapped.override {
-        libllvm = llvm;
+      (s.prev.clang-unwrapped.override {
         ninja = emptyDirectory;
       }).overrideAttrs
       (
@@ -328,10 +349,10 @@ rec {
               url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
               relative = "clang";
             })
-            # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
-            # Once we can switch to overrideScope this can be removed
+            # FIXME: Temporarily kept for rebuild avoidance
+            # Should be dropped in followup and we no longer need to filter out the original application
             (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${llvm.lib}/lib";
+              libllvmLibdir = "${s.final.libllvm.lib}/lib";
             })
           ];
           nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -354,6 +375,7 @@ rec {
           requiredSystemFeatures = (old.requiredSystemFeatures or [ ]) ++ [ "big-parallel" ];
           # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
           cmakeFlags =
+            # TODO: Remove in followup, tblgen now works correctly but would rebuild
             (builtins.filter tablegenUsage old.cmakeFlags)
             ++ [
               llvmTargetsFlag
@@ -397,13 +419,14 @@ rec {
       )
     )
     // {
-      libllvm = llvm;
+      libllvm = s.final.libllvm;
     };
   # A clang that understands standard include searching in a GNU sysroot and will put GPU libs in include path
   # in the right order
   # and expects its libc to be in the sysroot
   rocmcxx =
-    (sysrootCompiler clang-unwrapped "rocmcxx" (
+    with s.final;
+    (sysrootCompiler s.final.clang-unwrapped "rocmcxx" (
       listUsefulOutputs (
         [
           clang-unwrapped
@@ -427,10 +450,7 @@ rec {
       isClang = true;
       isGNU = false;
     };
-  clang-tools = llvmPackagesRocm.clang-tools.override {
-    inherit clang-unwrapped clang;
-  };
-  compiler-rt-libc = llvmPackagesRocm.compiler-rt-libc.overrideAttrs (old: {
+  compiler-rt-libc = (s.prev.compiler-rt-libc.override { libllvm = origLlvm; }).overrideAttrs (old: {
     patches = old.patches ++ [
       (fetchpatch {
         name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
@@ -440,35 +460,32 @@ rec {
       })
     ];
   });
-  compiler-rt = compiler-rt-libc;
-  bintools = wrapBintoolsWith {
-    bintools = llvmPackagesRocm.bintools-unwrapped.override {
-      inherit lld llvm;
-    };
-  };
+  compiler-rt = s.final.compiler-rt-libc;
 
-  clang = rocmcxx;
+  clang = s.final.rocmcxx;
 
   # Emulate a monolithic ROCm LLVM build to support building ROCm's in-tree LLVM projects
   rocm-merged-llvm = symlinkJoin {
     name = "rocm-llvm-merge";
-    paths = [
-      llvm
-      llvm.dev
-      lld
-      lld.lib
-      lld.dev
-      libunwind
-      libunwind.dev
-      compiler-rt
-      compiler-rt.dev
-      rocmcxx
-    ]
-    ++ lib.optionals useLibcxx [
-      libcxx
-      libcxx.out
-      libcxx.dev
-    ];
+    paths =
+      with s.final;
+      [
+        llvm
+        llvm.dev
+        lld
+        lld.lib
+        lld.dev
+        libunwind
+        libunwind.dev
+        compiler-rt
+        compiler-rt.dev
+        rocmcxx
+      ]
+      ++ lib.optionals useLibcxx [
+        libcxx
+        libcxx.out
+        libcxx.dev
+      ];
     postBuild = builtins.unsafeDiscardStringContext ''
       found_files=$(find $out -name '*.cmake')
       if [ -z "$found_files" ]; then
@@ -476,7 +493,7 @@ rec {
           exit 1
       fi
 
-      for target in ${clang-unwrapped.out} ${clang-unwrapped.lib} ${clang-unwrapped.dev}; do
+      for target in ${s.final.clang-unwrapped.out} ${s.final.clang-unwrapped.lib} ${s.final.clang-unwrapped.dev}; do
         if grep "$target" $found_files; then
             >&2 echo "Unexpected ref to $target (clang-unwrapped) found"
             # exit 1
@@ -488,12 +505,11 @@ rec {
     llvm-src = llvmSrc;
   };
 
-  rocmClangStdenv = overrideCC (
-    if useLibcxx then llvmPackagesRocm.libcxxStdenv else llvmPackagesRocm.stdenv
-  ) clang;
+  rocmClangStdenv = with s.final; overrideCC (if useLibcxx then libcxxStdenv else stdenv) clang;
 
   # Projects
   openmp =
+    with s.final;
     (llvmPackagesRocm.openmp.override {
       stdenv = rocmClangStdenv;
       llvm = rocm-merged-llvm;
@@ -526,4 +542,8 @@ rec {
           libffi
         ];
       });
-}
+
+  # AMD has a separate MLIR impl which we package under rocmPackages.rocmlir
+  # It would be an error to rely on the original mlir package from this scope
+  mlir = null;
+})

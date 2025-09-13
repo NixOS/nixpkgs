@@ -13,6 +13,7 @@
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
+  generateSplicesForMkScope,
   patchesFn ? lib.id,
   # Allows passthrough to packages via newScope in ./common/default.nix.
   # This makes it possible to do
@@ -65,19 +66,19 @@ let
         callPackage ./common (
           {
             inherit (stdenvAdapters) overrideCC;
-            buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
-            targetLlvmLibraries =
-              # Allow overriding targetLlvmLibraries; this enables custom runtime builds.
-              packageSetArgs.targetLlvmLibraries or targetPackages."llvmPackages_${attrName}".libraries
-                or llvmPackages."${attrName}".libraries;
-            targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
             inherit
               officialRelease
               gitRelease
               monorepoSrc
               version
               patchesFn
+              bootBintools
+              bootBintoolsNoLibc
               ;
+
+            buildLlvmPackages = buildPackages."llvmPackages_${attrName}";
+            targetLlvmPackages = targetPackages."llvmPackages_${attrName}" or llvmPackages."${attrName}";
+            otherSplices = generateSplicesForMkScope "llvmPackages_${attrName}";
           }
           // packageSetArgs # Allow overrides.
         )
