@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   sphinx,
+  sphinx-last-updated-by-git,
   sphinx-pytest,
   defusedxml,
   pytestCheckHook,
@@ -23,9 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-b8eo77Ab9w8JR6mLqXcIWeTkuJFTHjJBk440fksBbyw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ sphinx ];
+  dependencies = [
+    sphinx
+    sphinx-last-updated-by-git
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
