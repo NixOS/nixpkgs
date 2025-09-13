@@ -66,6 +66,9 @@ stdenv.mkDerivation (
       runHook preInstall
       mkdir $out
       mv parser $out/
+      if [[ -f $src/tree-sitter.json ]]; then
+        ln -s $src/tree-sitter.json $out/
+      fi
       if [[ -d queries ]]; then
         cp -r queries $out
       fi
