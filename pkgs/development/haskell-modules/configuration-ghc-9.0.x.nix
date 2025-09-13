@@ -65,6 +65,15 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_1_0_0;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   # Only required for ghc >= 9.2
   nothunks = super.nothunks.override {
     wherefrom-compat = null;
@@ -82,18 +91,17 @@ self: super: {
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
-  # For GHC < 9.2, os-string is not required.
-  hashable =
+  # hashable >= 1.5 only supports GHC >= 9.6 / base >= 4.18
+  hashable = self.hashable_1_4_7_0;
+  hashable_1_4_7_0 =
+    # extra deps for GHC < 9.4
     addBuildDepends
       [
         self.data-array-byte
         self.base-orphans
       ]
-      (
-        super.hashable.override {
-          os-string = null;
-        }
-      );
+      # For GHC < 9.2, os-string is not required
+      (super.hashable_1_4_7_0.override { os-string = null; });
 
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
@@ -116,7 +124,7 @@ self: super: {
       (markBroken super.haskell-language-server);
 
   # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
-  hpack_0_38_1 = dontCheck super.hpack_0_38_1;
+  hpack = dontCheck super.hpack;
 
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute self.ghc-tags_1_5;

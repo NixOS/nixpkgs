@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cabal2nix curl jq haskellPackages.cabal2nix-unstable -I nixpkgs=.
+#!nix-shell -i bash -p curl jq haskellPackages.cabal2nix-unstable.bin nix-prefetch-scripts -I nixpkgs=.
 #
 # This script will update the spago derivation to the latest version using
 # cabal2nix.
