@@ -2,9 +2,9 @@
   taglib-ruby = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0r8g7zdncc6243d000jn0grc1n70rn9mx16vggy3q7c4wgsa37xi";
+      sha256 = "sha256-UbkPI6std1khoJdpD8x3K1AJ9gsfkT7k9As6mv7Msa4=";
       type = "gem";
     };
-    version = "0.7.1";
+    version = "2.0.0";
   };
 }
