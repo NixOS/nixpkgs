@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pageedit";
-  version = "2.5.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = "pageedit";
     tag = finalAttrs.version;
-    hash = "sha256-Tkc8iOH+HG3ULrdUvVdeOzAl0i1R3QFaZ1U/vjCKGjo=";
+    hash = "sha256-9+kWfyOfwbWh41cTXpP0raCY/dblQZP0PWFzGV+f4dY=";
   };
 
   nativeBuildInputs = with qt6Packages; [
