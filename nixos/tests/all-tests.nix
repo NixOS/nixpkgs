@@ -855,7 +855,6 @@ in
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
   lxc = handleTest ./lxc { };
-  lxd = pkgs.recurseIntoAttrs (handleTest ./lxd { inherit handleTestOn; });
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
   ly = runTest ./ly.nix;
