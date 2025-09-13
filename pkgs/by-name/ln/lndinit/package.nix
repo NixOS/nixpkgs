@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "lndinit";
-  version = "0.1.22-beta";
+  version = "0.1.26-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndinit";
     rev = "v${version}";
-    hash = "sha256-KXCObRUhXTEeb48hnQYrnb55g+nJomr52IIVpFDn+nY=";
+    hash = "sha256-Mqb7dclVQWiQCRO42ama3c5Gn3ZREK8HsjOJSk6Iguw=";
   };
 
-  vendorHash = "sha256-peyLhDEH9DKHAQfxVCvv92DErHjidA3DSjpN357Px6M=";
+  vendorHash = "sha256-ZmggWcI8RsWV17o8yfimbuIDDr7s15rdQFETTyj+83c=";
 
   subPackages = [ "." ];
 
