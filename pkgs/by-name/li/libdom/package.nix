@@ -5,14 +5,14 @@
   fetchpatch,
   expat,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
   libparserutils,
   libwapcaplet,
   libhubbub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libdom";
+  pname = "libdom";
   version = "0.4.2";
 
   src = fetchurl {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-    buildsystem
+    netsurf-buildsystem
     libhubbub
     libparserutils
     libwapcaplet
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   enableParallelBuilding = true;
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       in other projects under a more permissive license.
     '';
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })

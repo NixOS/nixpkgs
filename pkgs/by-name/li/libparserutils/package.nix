@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
   perl,
-  buildsystem,
+  netsurf-buildsystem,
   libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libparserutils";
+  pname = "libparserutils";
   version = "0.2.5";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     perl
-    buildsystem
+    netsurf-buildsystem
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
     homepage = "https://www.netsurf-browser.org/projects/libparserutils/";
     description = "Parser building library for netsurf browser";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
