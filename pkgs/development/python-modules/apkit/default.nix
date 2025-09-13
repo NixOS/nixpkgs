@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "apkit";
-  version = "unstable-2022-08-23";
+  version = "release_0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
