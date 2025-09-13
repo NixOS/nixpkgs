@@ -112,16 +112,6 @@ self: super:
       )
   ) { };
 
-  appres = super.appres.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-    ];
-    meta = attrs.meta // {
-      mainProgram = "appres";
-    };
-  });
-
   bitmap = addMainProgram super.bitmap { };
 
   editres = super.editres.overrideAttrs (attrs: {
