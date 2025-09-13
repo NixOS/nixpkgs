@@ -24,6 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ShieldMnt";
     repo = "invisible-watermark";
+    # nixpkgs-update: no auto update
     rev = "e58e451cff7e092457cd915e445b1a20b64a7c8f"; # No git tag, see https://github.com/ShieldMnt/invisible-watermark/issues/22
     hash = "sha256-6SjVpKFtiiLLU7tZ3hBQr0KT/YEQyywJj0e21/dJRzk=";
   };
