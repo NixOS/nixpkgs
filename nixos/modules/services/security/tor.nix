@@ -91,6 +91,9 @@ let
         (enum [ "auto" ])
       ]);
     default = null;
+    description = ''
+      Port number or "auto".
+    '';
   };
   optionPorts =
     optionName:
@@ -114,6 +117,7 @@ let
             SessionGroup = lib.mkOption {
               type = nullOr int;
               default = null;
+              description = descriptionGeneric "SocksPort";
             };
           }
           // lib.genAttrs isolateFlags (
@@ -121,6 +125,7 @@ let
             lib.mkOption {
               type = types.bool;
               default = false;
+              description = descriptionGeneric "SocksPort";
             }
           );
           config = {
@@ -183,6 +188,7 @@ let
             SessionGroup = lib.mkOption {
               type = nullOr int;
               default = null;
+              description = descriptionGeneric "SocksPort";
             };
           }
           // lib.genAttrs flags (
@@ -190,6 +196,7 @@ let
             lib.mkOption {
               type = types.bool;
               default = false;
+              description = descriptionGeneric "SocksPort";
             }
           );
           config = lib.mkIf doConfig {
@@ -204,6 +211,7 @@ let
   optionFlags = lib.mkOption {
     type = with lib.types; listOf str;
     default = [ ];
+    internal = true;
   };
   optionORPort =
     optionName:
@@ -239,6 +247,7 @@ let
                   lib.mkOption {
                     type = types.bool;
                     default = false;
+                    description = descriptionGeneric "ORPort";
                   }
                 );
                 config = {
@@ -725,7 +734,9 @@ in
                         { ... }:
                         {
                           options = {
-                            port = optionPort;
+                            port = optionPort // {
+                              description = "Virtual port number.";
+                            };
                             target = lib.mkOption {
                               default = null;
                               type = nullOr (
@@ -735,11 +746,14 @@ in
                                     options = {
                                       unix = optionUnix;
                                       addr = optionAddress;
-                                      port = optionPort;
+                                      port = optionPort // {
+                                        description = "Port number."; # we shouldn't accept auto here
+                                      };
                                     };
                                   }
                                 )
                               );
+                              description = descriptionGeneric "HiddenServicePort";
                             };
                           };
                         }
@@ -922,6 +936,7 @@ in
                         lib.mkOption {
                           type = types.bool;
                           default = false;
+                          description = descriptionGeneric "ControlPort";
                         }
                       );
                       config = {
