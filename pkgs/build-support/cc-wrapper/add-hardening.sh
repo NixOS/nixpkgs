@@ -156,7 +156,7 @@ for flag in "${!hardeningEnableMap[@]}"; do
       ;;
     trivialautovarinit)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling trivialautovarinit >&2; fi
-      hardeningCFlagsBefore+=('-ftrivial-auto-var-init=pattern')
+      hardeningCFlagsBefore+=('-ftrivial-auto-var-init=zero')
       ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
