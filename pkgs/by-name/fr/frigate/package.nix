@@ -10,7 +10,6 @@
   frigate,
   nixosTests,
 }:
-
 let
   version = "0.16.1";
 
@@ -59,10 +58,109 @@ let
     hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
   };
 
-  # TODO: OpenVino model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L64-L77
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L120-L123
-  # Convert https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2 with https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/build_ov_model.py into OpenVino IR format
+  # SSDLite MobileNetV2 model from TensorFlow
+  ssdlite_mobilenet_v2_tensorflow = fetchurl {
+    url = "http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz";
+    hash = "sha256-VCRFzOg02/u33xmRQl1HXoWi1+xoxgpPJiuxiqwQyLI=";
+  };
+
+  # Convert SSDLite MobileNetV2 model from TensorFlow using modern OpenVINO API
+  openvino_model = stdenv.mkDerivation {
+    pname = "frigate-openvino-model";
+    inherit version;
+
+    src = ssdlite_mobilenet_v2_tensorflow;
+
+    nativeBuildInputs = [
+      python3Packages.python
+      python3Packages.openvino
+    ];
+
+    buildPhase = ''
+      # Extract TensorFlow model
+      mkdir -p models
+      cd models
+      tar -xzf $src
+      cd ..
+
+      # Create conversion script using modern OpenVINO API (simplified)
+      cat > convert_model.py << 'EOF'
+      import openvino as ov
+      import numpy as np
+      from openvino import opset8 as ops
+      from openvino import Model, Type
+
+      model_path = "./models/ssdlite_mobilenet_v2_coco_2018_05_09/frozen_inference_graph.pb"
+
+      # Convert TF model to OpenVINO IR
+      ov_model = ov.convert_model(input_model=model_path, input=[1, 300, 300, 3])
+
+      # Deterministic selection by shapes for this known model
+      outs = list(ov_model.outputs)
+      boxes = [o for o in outs if list(o.get_shape())[-1] == 4][0]
+      twod = [o for o in outs if len(list(o.get_shape())) == 2][:2]
+      scores, classes = twod[0], twod[1]
+
+      # Fixed N for this model (TF SSDLite MobileNet V2 COCO uses max_total_detections=100)
+      N = 100
+
+      # Reshape to [1, N, X]
+      pat_1n4 = ops.constant(np.array([1, N, 4], dtype=np.int64))
+      pat_1n1 = ops.constant(np.array([1, N, 1], dtype=np.int64))
+
+      boxes_1n4 = ops.reshape(boxes, pat_1n4, False)
+      scores_1n1 = ops.reshape(scores, pat_1n1, False)
+      classes_1n1 = ops.reshape(classes, pat_1n1, False)
+
+      # Ensure f32 for concat
+      boxes_1n4 = ops.convert(boxes_1n4, Type.f32)
+      scores_1n1 = ops.convert(scores_1n1, Type.f32)
+      classes_1n1 = ops.convert(classes_1n1, Type.f32)
+
+      # Reorder TF boxes [ymin, xmin, ymax, xmax] -> [xmin, ymin, xmax, ymax]
+      # Use Gather with explicit i64 indices and axis=2
+      reorder_idx = ops.constant(np.array([1, 0, 3, 2], dtype=np.int64))
+      axis2 = ops.constant(np.array(2, dtype=np.int64))
+      boxes_xyxy = ops.gather(boxes_1n4, reorder_idx, axis2)
+
+      # image_id = 0 for all detections
+      image_ids = ops.constant(np.zeros((1, N, 1), dtype=np.float32))
+
+      # Build [1, N, 7] => [image_id, label, confidence, x_min, y_min, x_max, y_max]
+      det_1n7 = ops.concat([image_ids, classes_1n1, scores_1n1, boxes_xyxy], axis=2)
+
+      # Reshape to [1, 1, N, 7] and expose as single output
+      det_11n7 = ops.reshape(det_1n7, ops.constant(np.array([1, 1, N, 7], dtype=np.int64)), False)
+      det_11n7.set_friendly_name("DetectionOutput")
+      ov_model = Model([det_11n7], ov_model.get_parameters(), "ssd_mobilenet_v2_detection")
+
+      # Validate Frigate SSD expectations: 1 output; shape [1,1,N,7]
+      outs = list(ov_model.outputs)
+      shape0 = list(outs[0].get_shape())
+      if not (len(outs) == 1 and len(shape0) >= 4 and shape0[0] == 1 and shape0[1] == 1 and shape0[3] == 7):
+        raise RuntimeError(f"Frigate SSD validation failed. outputs={len(outs)}, shape={shape0}")
+
+      # Save model (FP16 weights)
+      ov.save_model(ov_model, "./models/ssdlite_mobilenet_v2.xml", compress_to_fp16=True)
+
+      # Note: runtime smoke test omitted in build sandbox to avoid plugin/CPU env issues
+      EOF
+
+      # Run the conversion
+      python3 convert_model.py
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp models/ssdlite_mobilenet_v2.xml $out/
+      cp models/ssdlite_mobilenet_v2.bin $out/
+    '';
+
+    meta = {
+      description = "OpenVINO model files for Frigate object detection (SSD MobileNet v2)";
+    };
+  };
+
   coco_91cl_bkgr = fetchurl {
     url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
@@ -195,6 +293,9 @@ python3Packages.buildPythonApplication rec {
 
     cp --no-preserve=mode ${coco_91cl_bkgr} $out/share/frigate/coco_91cl_bkgr.txt
     sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
+
+    cp --no-preserve=mode ${openvino_model}/ssdlite_mobilenet_v2.xml $out/share/frigate/
+    cp --no-preserve=mode ${openvino_model}/ssdlite_mobilenet_v2.bin $out/share/frigate/
 
     runHook postInstall
   '';
