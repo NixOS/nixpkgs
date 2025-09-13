@@ -720,6 +720,7 @@ with haskellLib;
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
+    # FIXME: should use overrideSrc
     version = "1.7.9";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
@@ -732,6 +733,7 @@ with haskellLib;
   cachix = (
     overrideCabal
       (drv: {
+        # FIXME: should use overrideSrc
         version = "1.7.9";
         src = pkgs.fetchFromGitHub {
           owner = "cachix";
@@ -746,15 +748,9 @@ with haskellLib;
         '';
       })
       (
-        lib.pipe
-          (super.cachix.override {
-            nix = self.hercules-ci-cnix-store.nixPackage;
-          })
-          [
-            (addBuildTool self.hercules-ci-cnix-store.nixPackage)
-            (addBuildTool pkgs.buildPackages.pkg-config)
-            (addBuildDepend self.hnix-store-nar)
-          ]
+        super.cachix.override {
+          nix = self.hercules-ci-cnix-store.nixPackage;
+        }
       )
   );
 
