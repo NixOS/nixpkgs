@@ -2832,6 +2832,22 @@ let
         };
       };
 
+      lixquid.calculator = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "calculator";
+          publisher = "lixquid";
+          version = "0.2.0";
+          sha256 = "sha256-q2/IDcHs7oQlGNMdxZKzgHphyCMnhhCQGe8YSrZXrr4=";
+        };
+        meta = {
+          description = "Calculation commands and tools for VS Code.";
+          downdoaldPage = "https://marketplace.visualstudio.com/items?itemName=lixquid.calculator";
+          homepage = "https://github.com/lixquid/vscode-calculator";
+          license = lib.licenses.gpl3;
+          maintainers = [ ];
+        };
+      };
+
       llvm-org.lldb-vscode = llvmPackages.lldb;
 
       llvm-vs-code-extensions.lldb-dap = callPackage ./llvm-vs-code-extensions.lldb-dap { };
