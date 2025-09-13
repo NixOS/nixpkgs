@@ -13,6 +13,7 @@
   libva,
   libxkbcommon,
   libxml2_13,
+  makeDesktopItem,
   makeShellWrapper,
   minizip,
   nss,
@@ -39,6 +40,15 @@ let
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "plex-desktop";
+  };
+  desktopItem = makeDesktopItem {
+    name = "plex-desktop";
+    desktopName = "Plex";
+    exec = "plex-desktop";
+    icon = "${plex-desktop}/meta/gui/icon.png";
+    terminal = false;
+    categories = [ "AudioVideo" ];
+    startupWMClass = "Plex";
   };
   plex-desktop = stdenv.mkDerivation {
     inherit pname version meta;
@@ -133,11 +143,8 @@ buildFHSEnv {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
-    install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
-    substituteInPlace $out/share/applications/plex-desktop.desktop \
-      --replace-fail \
-      'Icon=''${SNAP}/meta/gui/icon.png' \
-      'Icon=${plex-desktop}/meta/gui/icon.png'
+    install -m 444 -D ${desktopItem}/share/applications/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
+    install -m 444 -D ${plex-desktop}/meta/gui/icon.png $out/share/icons/hicolor/scalable/apps/plex-desktop.png
   '';
 
   runScript = writeShellScript "plex-desktop.sh" ''
