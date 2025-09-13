@@ -15,7 +15,7 @@ for flag in @hardening_unsupported_flags@; do
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(pie relro bindnow)
+  declare -a allHardeningFlags=(relro bindnow)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -36,16 +36,6 @@ fi
 
 for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
-    pie)
-      if [[ ! (" ${params[*]} " =~ " -shared " \
-            || " ${params[*]} " =~ " -static " \
-            || " ${params[*]} " =~ " -r " \
-            || " ${params[*]} " =~ " -Ur " \
-            || " ${params[*]} " =~ " -i ") ]]; then
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningLDFlags+=('-pie')
-      fi
-      ;;
     relro)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling relro >&2; fi
       hardeningLDFlags+=('-z' 'relro')

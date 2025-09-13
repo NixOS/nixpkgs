@@ -32,9 +32,7 @@ buildGoModule rec {
     env GOFLAGS="" go generate ./viz/static
 
     # Necessary for building Musl
-    if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
-        export GOFLAGS="-buildmode=pie $GOFLAGS"
-    fi
+    export GOFLAGS="-buildmode=pie $GOFLAGS"
   '';
 
   tags = [
