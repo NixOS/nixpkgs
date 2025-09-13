@@ -21,6 +21,9 @@ pnpmConfigHook() {
 
     echo "Configuring pnpm store"
 
+    # `pnpm prune` and possibly other commands give a confirmation prompt that would be automatically denied
+    export CI=true
+
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
     export npm_config_arch="@npmArch@"
