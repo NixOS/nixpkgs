@@ -37,7 +37,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "${GIT_VERSION}";
+    tag = GIT_VERSION;
     hash = "sha256-/RZqBNmyBZI6CO2ffS6p8T4wse1MKytNMphXFdkTOWQ=";
   };
 
@@ -53,7 +53,7 @@ buildBazelPackage rec {
       {
         aarch64-linux = "sha256-jgh+wEqZba30MODmgmPoQn1ErNmm40d16jB/kE2jYPg=";
         x86_64-linux = "sha256-kiI/LX0l9ERxItsqiAyl+BP3QnLr0Ly2YVb988M4jVs=";
-        aarch64-darwin = "sha256-bkw4ErWYblzr3lQhoXSBqIBHjXzhZHeTKdT0E/YsiFQ=";
+        aarch64-darwin = "sha256-Ivx6KCzAxy6DAffVirb90ZMSGTIS/UXQEhZQebFjV3s=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -94,13 +94,18 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server";
     homepage = "https://github.com/chipsalliance/verible";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hzeller
       newam
+    ];
+    badPlatforms = [
+      # ERROR: no such package '@@bazel_tools~xcode_configure_extension~local_config_xcode//':
+      # BUILD file not found in directory '' of external repository
+      "aarch64-darwin"
     ];
   };
 }
