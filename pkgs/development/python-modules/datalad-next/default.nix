@@ -13,34 +13,32 @@
   psutil,
   pytestCheckHook,
   pythonAtLeast,
-  setuptools,
+  hatchling,
+  hatch-vcs,
   unzip,
-  versioneer,
   webdavclient3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "datalad-next";
-  version = "1.5.0";
+  version = "1.5.0-unstable-2025-07-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad-next";
-    tag = version;
-    hash = "sha256-fqP6nG2ncDRg48kvlsmPjNBOzfQp9+7wTcGvsYVrRzA=";
+    rev = "2d2b1526c1e396964dd3ffdbb37597adefe7682d";
+    hash = "sha256-47cRxaxOGzR6hDfiW2hS3MNHp2aP9rxtWNxV+33PPfs=";
   };
-
-  postPatch = ''
-    # Remove vendorized versioneer.py
-    rm versioneer.py
-  '';
 
   nativeBuildInputs = [ git ];
 
+  # our version does not comply with PEP440
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "1.5.0.dev0";
+
   build-system = [
-    setuptools
-    versioneer
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -97,6 +95,8 @@ buildPythonPackage rec {
     "test_compressed_file_stay_compressed"
     "test_ls_file_collection_tarfile"
     "test_iter_tar"
+    "test_delete_method"
+    "test_delete_timeout"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError
