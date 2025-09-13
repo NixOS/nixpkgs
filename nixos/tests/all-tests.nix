@@ -1509,6 +1509,7 @@ in
   tmate-ssh-server = runTest ./tmate-ssh-server.nix;
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
+  tpm2 = runTest ./tpm2.nix;
   tpm-ek = handleTest ./tpm-ek { };
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
