@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.26";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GuTxFgK5nfP4l36uqSOMrOkiwTi/T2ywcLh4LDNkKsI=";
+    hash = "sha256-HekCCloEEj+Y1D882psdLRAVkthy/u33G8pV/xeGikY=";
   };
 
   patches = [
