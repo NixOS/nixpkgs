@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "4.3.0";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "asdf-format";
     repo = "asdf";
     tag = version;
-    hash = "sha256-sCjDZ/6KiFH9LbdDpco8z1xRgJe0dm0HVhpRbO51RDI=";
+    hash = "sha256-Jrsl5RvxUrjWq/S4OQWkAcl3rGCu+D4ti27DXJC92jo=";
   };
 
   build-system = [
