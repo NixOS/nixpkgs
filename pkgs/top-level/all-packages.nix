@@ -11731,8 +11731,6 @@ with pkgs;
 
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 
-  googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
-
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpsbabel-gui = gpsbabel.override {
