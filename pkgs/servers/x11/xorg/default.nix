@@ -1983,11 +1983,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "libXres";
-      version = "1.2.2";
+      version = "1.2.3";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXres-1.2.2.tar.xz";
-        sha256 = "0pvlzahqd8fcyq10wi7ipbxvgrg93hn0vqsymhw7b6sb93rlcx4s";
+        url = "mirror://xorg/individual/lib/libXres-1.2.3.tar.xz";
+        sha256 = "1p39xfpgckp22v60h36wvy2zbpmqgra585krja4nmj6n05a8zpnj";
       };
       hardeningDisable = [
         "bindnow"
