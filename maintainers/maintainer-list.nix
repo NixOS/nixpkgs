@@ -27718,4 +27718,3 @@
   };
   # keep-sorted end
 }
-# Keep the list alphabetically sorted.
