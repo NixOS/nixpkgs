@@ -2,19 +2,17 @@
   lib,
   writeShellScriptBin,
   buildGoModule,
-  makeWrapper,
+  makeBinaryWrapper,
   darwin,
   fetchFromGitHub,
   coreutils,
   net-tools,
-  util-linux,
+  util-linuxMinimal,
   stdenv,
   dmidecode,
   bashInteractive,
   nix-update-script,
-  nixosTests,
-  testers,
-  amazon-ssm-agent,
+  versionCheckHook,
 }:
 
 let
@@ -40,14 +38,14 @@ let
     "sessionworker" = "ssm-session-worker";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amazon-ssm-agent";
   version = "3.3.2299.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8jqsAGnfn6+a+Zs9XfIyHzG/+jPO+UoSVsm0GHthq3E=";
   };
 
@@ -63,7 +61,7 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
@@ -94,12 +92,12 @@ buildGoModule rec {
       --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-      --replace-fail '"script"' '"${util-linux}/bin/script"'
+      --replace-fail '"script"' '"${util-linuxMinimal}/bin/script"'
 
     substituteInPlace agent/rebooter/rebooter_unix.go \
       --replace-fail "/sbin/shutdown" "shutdown"
 
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
@@ -154,14 +152,11 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [ bashInteractive ]}"
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
-    tests = {
-      inherit (nixosTests) amazon-ssm-agent;
-      version = testers.testVersion {
-        package = amazon-ssm-agent;
-        command = "amazon-ssm-agent --version";
-      };
-    };
     updateScript = nix-update-script { };
   };
 
@@ -169,7 +164,7 @@ buildGoModule rec {
 
   meta = {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
-    changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
+    changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
@@ -179,4 +174,4 @@ buildGoModule rec {
       arianvp
     ];
   };
-}
+})
