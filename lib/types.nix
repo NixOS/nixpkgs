@@ -1008,6 +1008,106 @@ let
         merge = mergeEqualOption;
       };
 
+      # A value produced by `lib.ron.mkRaw`
+      rawRon = mkOptionType {
+        name = "rawRon";
+        description = "raw RON";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-raw";
+        merge = mergeEqualOption;
+      };
+
+      # A value produced by `lib.ron.mkChar`
+      ronChar = mkOptionType {
+        name = "ronChar";
+        description = "RON char";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-char";
+        merge = mergeEqualOption;
+      };
+
+      # A value produced by `lib.ron.mkEnum`
+      ronEnum =
+        variants:
+        assert lib.assertMsg (builtins.all isString variants) "All variants in the enum must be strings.";
+        mkOptionType {
+          name = "ronEnum";
+          description =
+            let
+              show = v: ''"${v}"'';
+            in
+            if variants == [ ] then
+              "impossible (empty RON enum)"
+            else if length variants == 1 then
+              "RON enum variant ${show (head variants)} (singular RON enum)"
+            else
+              "one of the following RON enum variants: ${concatMapStringsSep ", " show variants}";
+          descriptionClass = if length variants < 2 then "noun" else "conjunction";
+          check = x: x._type or null == "ron-enum" && builtins.elem x.variant variants;
+          merge = mergeEqualOption;
+          functor = defaultFunctor "ronEnum" // {
+            payload = { inherit variants; };
+            type = payload: types.ronEnum payload.variants;
+            binOp = a: b: { variants = unique (a.variants + b.variants); };
+          };
+        };
+
+      # A value produced by `lib.ron.mkMap`
+      ronMap = mkOptionType {
+        name = "ronMap";
+        description = "RON map";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-map";
+        emptyValue.value = {
+          _type = "ron-map";
+          value = [ ];
+        };
+        merge = _loc: defs: {
+          _type = "ron-map";
+          value = concatLists (map (def: def.value.value) defs);
+        };
+      };
+
+      # A value produced by `lib.ron.mkNamedStruct`
+      ronNamedStruct = mkOptionType {
+        name = "ronNamedStruct";
+        description = "RON named struct";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-named-struct";
+        merge = mergeEqualOption;
+      };
+
+      # A value produced by `lib.ron.mkOptional`
+      ronOptional = mkOptionType {
+        name = "ronOptional";
+        description = "raw RON";
+        descriptionClass = "noun";
+        check = x: x._type or null == "ron-optional";
+        merge = mergeEqualOption;
+      };
+
+      # A value produced by `lib.ron.mkTuple`
+      ronTuple =
+        size:
+        mkOptionType {
+          name = "ronTuple";
+          description = "RON tuple";
+          descriptionClass = "noun";
+          check = x: x._type or null == "ron-tuple";
+          merge = mergeEqualOption;
+          emptyValue.value = {
+            _type = "ron-tuple";
+            value = [ ];
+          };
+          functor = defaultFunctor "ronTuple" // {
+            payload = { inherit size; };
+            type = payload: types.ronTuple payload.size;
+            binOp = a: b: {
+              size = if a.size == b.size then a.size else throw "The tuple sizes do not match.";
+            };
+          };
+        };
+
       uniq = unique { message = ""; };
 
       unique =
