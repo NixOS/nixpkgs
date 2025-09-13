@@ -7,7 +7,7 @@
   python3Packages,
   versionCheckHook,
   nix-update-script,
-
+  withDocs ? true,
   prefix ? "uutils-",
   buildMulticallBinary ? true,
 
@@ -29,6 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-VcwdCi40Tm8J3t0qFSFGvRwW6B5cCDj1wm+H3i20axo=";
   };
+
+  postPatch = ''
+    # don't enforce the building of the man page
+    substituteInPlace GNUmakefile \
+      --replace 'install: build' 'install:'
+  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
