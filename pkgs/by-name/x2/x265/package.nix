@@ -55,6 +55,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin-__rdtsc.patch
+    # fix compilation with gcc15
+    # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
+    (fetchpatch2 {
+      url = "https://bitbucket.org/reenignearcher/x265_git/commits/43e696a388ddf4ce5f4b9f756e726544b6310092/raw";
+      stripLen = 1;
+      hash = "sha256-QSxo7hGNjRk+d/s3chlmiLmj0h8xSsjEnon7hITK5nY=";
+    })
   ]
   # TODO: remove after update to version 4.2
   ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
