@@ -8,6 +8,8 @@
   cargo,
   dump_syms,
   python3,
+  xcodebuild,
+  cctools,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
@@ -41,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     dump_syms
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcodebuild
+    cctools.libtool
   ];
 
   buildPhase = ''
@@ -71,6 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
       # deps/sqlcipher
       bsd3
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
