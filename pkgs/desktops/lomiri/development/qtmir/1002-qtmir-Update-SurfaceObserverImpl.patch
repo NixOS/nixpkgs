@@ -1,0 +1,29 @@
+diff --git a/demos/qtmir-demo-shell/main.cpp b/demos/qtmir-demo-shell/main.cpp
+index 2a5a6a3..4d36d6f 100644
+--- a/demos/qtmir-demo-shell/main.cpp
++++ b/demos/qtmir-demo-shell/main.cpp
+@@ -43,9 +43,6 @@ inline QString stringFromEdid(const miroil::Edid& edid)
+     str += QString::fromStdString(edid.vendor);
+     str += QString("%1%2").arg(edid.product_code).arg(edid.serial_number);
+ 
+-    for (int i = 0; i < 4; i++) {
+-        str += QString::fromStdString(edid.descriptors[i].string_value());
+-    }
+     return str;
+ }
+ 
+diff --git a/src/modules/QtMir/Application/mirsurface.cpp b/src/modules/QtMir/Application/mirsurface.cpp
+index b37bae3..6af3671 100644
+--- a/src/modules/QtMir/Application/mirsurface.cpp
++++ b/src/modules/QtMir/Application/mirsurface.cpp
+@@ -135,6 +135,10 @@ public:
+     void application_id_set_to(mir::scene::Surface const* /* surf */, std::string const& /* application_id */) override {};
+ #endif
+ 
++#if MIR_SERVER_VERSION >= MIR_VERSION_NUMBER(2, 22, 0)
++    void mirror_mode_set_to(mir::scene::Surface const* /* surf */, MirMirrorMode /* mirror_mode */) override {};
++#endif
++
+ #else
+     void attrib_changed(MirWindowAttrib, int) override;
+     void resized_to(mir::geometry::Size const&) override;
