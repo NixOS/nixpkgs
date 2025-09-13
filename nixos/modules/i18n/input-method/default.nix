@@ -28,6 +28,7 @@ let
       ''
         mkdir -p $out/etc/gtk-2.0/
         GTK_PATH=${cfg.package}/lib/gtk-2.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk2.dev "gtk-query-immodules-2.0"} > $out/etc/gtk-2.0/immodules.cache
+        sed 's|Created by .*bin/gtk-query-|Created by bin/gtk-query-|' -i $out/etc/gtk-2.0/immodules.cache
       '';
 
   gtk3_cache =
@@ -42,6 +43,7 @@ let
       ''
         mkdir -p $out/etc/gtk-3.0/
         GTK_PATH=${cfg.package}/lib/gtk-3.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk3.dev "gtk-query-immodules-3.0"} > $out/etc/gtk-3.0/immodules.cache
+        sed 's|Created by .*bin/gtk-query-|Created by bin/gtk-query-|' -i $out/etc/gtk-3.0/immodules.cache
       '';
 
 in
