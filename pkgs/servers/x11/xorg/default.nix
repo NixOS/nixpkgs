@@ -1543,11 +1543,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "libXScrnSaver";
-      version = "1.2.4";
+      version = "1.2.5";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXScrnSaver-1.2.4.tar.xz";
-        sha256 = "1zi0r6mqa1g0hhsp02cdsjcxmsbipiv0v65c1h4pl84fydcjikbm";
+        url = "mirror://xorg/individual/lib/libXScrnSaver-1.2.5.tar.xz";
+        sha256 = "004drphnsckx30g8xn554a1nr17p1zhl2547fpif0lvjhigkcmsh";
       };
       hardeningDisable = [
         "bindnow"
