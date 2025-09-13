@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmocka # cmake expects cmocka module
   ];
 
-  # BUILD file already exists in the source
-  # TODO: make unconditional on staging.
-  cmakeBuildDir = if stdenv.isDarwin then "build.dir" else null;
+  # BUILD file already exists in the source; this causes issues on
+  # case‐insensitive Darwin systems.
+  cmakeBuildDir = "build.dir";
 
   cmakeFlags =
     lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"
