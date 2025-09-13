@@ -41,15 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseNinjaCheck = true;
 
-  # Fix build with modern gcc
-  # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=stringop-overflow";
-
-  # Fix undefined reference errors with version script under LLVM.
-  NIX_LDFLAGS = lib.optionalString (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
-
   # The memory leak test fails on static Linux, despite passing on
   # dynamic Musl.
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
@@ -62,6 +53,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace test/CMakeLists.txt \
       --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
+
+  env = {
+    # Fix build with modern gcc
+    # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=stringop-overflow";
+
+    # Fix undefined reference errors with version script under LLVM.
+    NIX_LDFLAGS = lib.optionalString (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "--undefined-version";
+  };
 
   meta = {
     description = "Intel Thread Building Blocks C++ Library";
