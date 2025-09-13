@@ -379,16 +379,20 @@ print OUT <<EOF;
   transset,
   util-macros,
   viewres,
+  x11perf,
   xauth,
   xbacklight,
   xbitmaps,
+  xcalc,
   xcb-proto,
   xcmsdb,
+  xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
   xev,
+  xeyes,
   xfontsel,
   xfsinfo,
   xgamma,
@@ -443,14 +447,18 @@ self: with self; {
     smproxy
     transset
     viewres
+    x11perf
     xauth
     xbacklight
     xbitmaps
+    xcalc
     xcmsdb
+    xcompmgr
     xconsole
     xcursorgen
     xdriinfo
     xev
+    xeyes
     xfontsel
     xfsinfo
     xgamma
