@@ -9198,6 +9198,12 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
+  gekoke = {
+    email = "nixpkgs@grigorjan.net";
+    github = "gekoke";
+    githubId = 63151928;
+    name = "Gregor Grigorjan";
+  };
   geluk = {
     email = "johan+nix@geluk.io";
     github = "geluk";
