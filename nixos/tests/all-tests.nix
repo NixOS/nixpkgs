@@ -418,6 +418,7 @@ in
   cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
   darling-dmg = runTest ./darling-dmg.nix;
+  darwin-installBinaryPackage = import ./darwin/installBinaryPackage.nix { inherit pkgs runTest; };
   dae = runTest ./dae.nix;
   davis = runTest ./davis.nix;
   db-rest = runTest ./db-rest.nix;
