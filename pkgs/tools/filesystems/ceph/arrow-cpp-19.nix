@@ -31,7 +31,6 @@
   curl,
   flatbuffers,
   gflags,
-  glog,
   google-cloud-cpp,
   grpc,
   gtest,
@@ -154,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     flatbuffers
     gflags
-    glog
     gtest
     libbacktrace
     lz4
@@ -213,7 +211,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
-    "-DARROW_USE_GLOG=ON"
     "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
     "-DARROW_WITH_BZ2=ON"
