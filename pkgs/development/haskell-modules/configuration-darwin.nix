@@ -116,19 +116,6 @@ self: super:
     # https://github.com/fpco/haskell-filesystem/issues/37
     system-fileio = dontCheck super.system-fileio;
 
-    llvm-hs = overrideCabal (oldAttrs: {
-      # One test fails on darwin.
-      doCheck = false;
-      # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
-      # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
-      # when called from GHC, probably because clang is version 7, but we are
-      # using LLVM8.
-      preCompileBuildDriver = ''
-        substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
-      ''
-      + (oldAttrs.preCompileBuildDriver or "");
-    }) super.llvm-hs;
-
     sym = markBroken super.sym;
 
     yesod-core = super.yesod-core.overrideAttrs (drv: {
@@ -169,14 +156,6 @@ self: super:
       ''
       + (drv.postPatch or "");
     }) super.HTF;
-
-    # conditional dependency via a cabal flag
-    cas-store = overrideCabal (drv: {
-      libraryHaskellDepends = [
-        self.kqueue
-      ]
-      ++ (drv.libraryHaskellDepends or [ ]);
-    }) super.cas-store;
 
     # We are lacking pure pgrep at the moment for tests to work
     tmp-postgres = dontCheck super.tmp-postgres;

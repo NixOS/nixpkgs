@@ -306,13 +306,11 @@ let
         krank
         lambdabot
         lhs2tex
-        madlang
         matterhorn
         mkjson
         mueval
         naproche
         niv
-        nix-delegate
         nix-deploy
         nix-diff
         nix-output-monitor
@@ -337,10 +335,7 @@ let
         spacecookie
         spago
         specup
-        splot
         stack
-        stack2nix
-        stutter
         stylish-haskell
         taffybar
         tamarin-prover

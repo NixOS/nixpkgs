@@ -64,6 +64,10 @@ let
         ];
 
         programs.keep-sorted.enable = true;
+        settings.formatter.keep-sorted.excludes = [
+          # Contains keep-sorted string in sed replacement
+          "maintainers/scripts/haskell/exclude.nu"
+        ];
 
         # This uses nixfmt underneath, the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
