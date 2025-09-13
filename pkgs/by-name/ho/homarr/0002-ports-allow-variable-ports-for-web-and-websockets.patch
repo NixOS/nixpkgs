@@ -1,0 +1,105 @@
+From 3d24f4cf46b72d8bd57e36d57d5dae9744410088 Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <821688+tebriel@users.noreply.github.com>
+Date: Fri, 1 Aug 2025 23:28:13 -0400
+Subject: [PATCH] ports: allow variable ports for web and websockets
+
+---
+ apps/nextjs/src/app/[locale]/_client-providers/trpc.tsx | 4 +++-
+ apps/nextjs/src/app/[locale]/manage/about/page.tsx      | 4 +++-
+ apps/websocket/src/main.ts                              | 6 ++++--
+ packages/api/src/shared.ts                              | 4 +++-
+ 4 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/apps/nextjs/src/app/[locale]/_client-providers/trpc.tsx b/apps/nextjs/src/app/[locale]/_client-providers/trpc.tsx
+index 0e36cb4a..1c02db0d 100644
+--- a/apps/nextjs/src/app/[locale]/_client-providers/trpc.tsx
++++ b/apps/nextjs/src/app/[locale]/_client-providers/trpc.tsx
+@@ -22,6 +22,8 @@ import { clientApi } from "@homarr/api/client";
+ import { createHeadersCallbackForSource, getTrpcUrl } from "@homarr/api/shared";
+ import { env } from "@homarr/common/env";
+ 
++const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT ?? 3001;
++
+ const getWebSocketProtocol = () => {
+   // window is not defined on server side
+   if (typeof window === "undefined") {
+@@ -32,7 +34,7 @@ const getWebSocketProtocol = () => {
+ };
+ 
+ const constructWebsocketUrl = () => {
+-  const fallback = `${getWebSocketProtocol()}://localhost:3001/websockets`;
++  const fallback = `${getWebSocketProtocol()}://localhost:${WEBSOCKET_PORT}/websockets`;
+   if (typeof window === "undefined") {
+     return fallback;
+   }
+diff --git a/apps/nextjs/src/app/[locale]/manage/about/page.tsx b/apps/nextjs/src/app/[locale]/manage/about/page.tsx
+index ece27553..04513269 100644
+--- a/apps/nextjs/src/app/[locale]/manage/about/page.tsx
++++ b/apps/nextjs/src/app/[locale]/manage/about/page.tsx
+@@ -29,6 +29,8 @@ import type githubContributorsJson from "../../../../../../../static-data/contri
+ import type crowdinContributorsJson from "../../../../../../../static-data/translators.json";
+ import classes from "./about.module.css";
+ 
++const WEB_PORT = process.env.WEB_PORT ?? 3000;
++
+ export async function generateMetadata() {
+   const t = await getScopedI18n("management");
+ 
+@@ -39,7 +41,7 @@ export async function generateMetadata() {
+ 
+ const getHostAsync = async () => {
+   if (process.env.HOSTNAME) {
+-    return `${process.env.HOSTNAME}:3000`;
++    return `${process.env.HOSTNAME}:${WEB_PORT}`;
+   }
+ 
+   return (await headers()).get("host");
+diff --git a/apps/websocket/src/main.ts b/apps/websocket/src/main.ts
+index f819c3df..db5bd6e6 100644
+--- a/apps/websocket/src/main.ts
++++ b/apps/websocket/src/main.ts
+@@ -7,8 +7,10 @@ import { parseCookies } from "@homarr/common";
+ import { db } from "@homarr/db";
+ import { logger } from "@homarr/log";
+ 
++const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT ?? 3001;
++
+ const wss = new WebSocketServer({
+-  port: 3001,
++  port: WEBSOCKET_PORT,
+ });
+ const handler = applyWSSHandler({
+   wss,
+@@ -55,7 +57,7 @@ wss.on("connection", (websocket, incomingMessage) => {
+     logger.info(`➖ Connection (${wss.clients.size}) ${code} ${reason.toString()}`);
+   });
+ });
+-logger.info("✅ WebSocket Server listening on ws://localhost:3001");
++logger.info(`✅ WebSocket Server listening on ws://localhost:${WEBSOCKET_PORT}`);
+ 
+ process.on("SIGTERM", () => {
+   logger.info("SIGTERM");
+diff --git a/packages/api/src/shared.ts b/packages/api/src/shared.ts
+index 4ef9b7a4..a81fa84f 100644
+--- a/packages/api/src/shared.ts
++++ b/packages/api/src/shared.ts
+@@ -1,5 +1,7 @@
+ import { defaultShouldDehydrateQuery, QueryClient } from "@tanstack/react-query";
+ 
++const WEB_PORT = process.env.WEB_PORT ?? 3000;
++
+ /**
+  * Creates a headers callback for a given source
+  * It will set the x-trpc-source header and cookies if needed
+@@ -41,7 +43,7 @@ async function importCookiesAsync() {
+ 
+ function getBaseUrl() {
+   if (typeof window !== "undefined") return window.location.origin;
+-  return `http://${process.env.HOSTNAME ?? "localhost"}:3000`;
++  return `http://${process.env.HOSTNAME ?? "localhost"}:${WEB_PORT}`;
+ }
+ 
+ export const trpcPath = "/api/trpc";
+-- 
+2.49.0
+

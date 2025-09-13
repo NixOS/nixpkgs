@@ -1,0 +1,35 @@
+From 389deca03ef429a0624e38549f9c536c30bb6c1c Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <821688+tebriel@users.noreply.github.com>
+Date: Fri, 1 Aug 2025 16:34:43 -0400
+Subject: [PATCH] font: replace remote google font with local
+
+---
+ apps/nextjs/src/app/[locale]/layout.tsx | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/apps/nextjs/src/app/[locale]/layout.tsx b/apps/nextjs/src/app/[locale]/layout.tsx
+index afb773f7..e6be37a7 100644
+--- a/apps/nextjs/src/app/[locale]/layout.tsx
++++ b/apps/nextjs/src/app/[locale]/layout.tsx
+@@ -1,5 +1,5 @@
+ import type { Metadata, Viewport } from "next";
+-import { Inter } from "next/font/google";
++import localFont from "next/font/local";
+ 
+ import "@homarr/notifications/styles.css";
+ import "@homarr/spotlight/styles.css";
+@@ -32,10 +32,7 @@ import { AuthProvider } from "./_client-providers/session";
+ import { TRPCReactProvider } from "./_client-providers/trpc";
+ import { composeWrappers } from "./compose";
+ 
+-const fontSans = Inter({
+-  subsets: ["latin"],
+-  variable: "--font-sans",
+-});
++const fontSans = localFont({ src: '../Inter.ttf' });
+ 
+ // eslint-disable-next-line no-restricted-syntax
+ export const generateMetadata = async (): Promise<Metadata> => ({
+-- 
+2.49.0
+
