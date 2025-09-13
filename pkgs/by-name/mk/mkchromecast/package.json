@@ -1,0 +1,26 @@
+{
+  "name": "mkchromecast",
+  "version": "0.3.8",
+  "description": "Cast sound and video form to chromecast devices",
+  "main": "html5-video-streamer.js",
+  "optionalDependencies": {
+    "webcast-osx-audio": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muammar/mkchromecast.git"
+  },
+  "keywords": [
+    "chromecast"
+  ],
+  "author": "Muammar El Khatib",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/muammar/mkchromecast/issues"
+  },
+  "homepage": "https://github.com/muammar/mkchromecast#readme"
+}
