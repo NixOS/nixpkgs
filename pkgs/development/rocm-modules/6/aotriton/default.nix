@@ -11,7 +11,7 @@
   xz,
   writableTmpDirAsHomeHook,
   pkg-config,
-  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
+  gpuTargets ? clr.localGpuTargetsNoGenerics or clr.gpuTargetsNoGenerics,
   # for passthru.tests
   aotriton,
   hello,
