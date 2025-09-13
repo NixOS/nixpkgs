@@ -123,10 +123,10 @@ let
     ifneq \"\$(BuildFlavour)\" \"\"
     include mk/flavours/\$(BuildFlavour).mk
     endif
-    BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
+    BUILD_SPHINX_HTML = ${lib.toUpper (lib.boolToYesNo enableDocs)}
     BUILD_SPHINX_PDF = NO
 
-    WITH_TERMINFO = ${if enableTerminfo then "YES" else "NO"}
+    WITH_TERMINFO = ${lib.toUpper (lib.boolToYesNo enableTerminfo)}
   ''
   +
     # Note [HADDOCK_DOCS]:
@@ -140,15 +140,15 @@ let
     # If this is solved in the future, we'd like to unconditionally
     # build the haddock program (removing the `enableHaddockProgram` option).
     ''
-      HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+      HADDOCK_DOCS = ${lib.toUpper (lib.boolToYesNo enableHaddockProgram)}
       # Build haddocks for boot packages with hyperlinking
       EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
 
-      DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
+      DYNAMIC_GHC_PROGRAMS = ${lib.toUpper (lib.boolToYesNo enableShared)}
       BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
     ''
   + lib.optionalString (targetPlatform != hostPlatform) ''
-    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    Stage1Only = ${lib.toUpper (lib.boolToYesNo (!(targetPlatform.system == hostPlatform.system)))}
     CrossCompilePrefix = ${targetPrefix}
   ''
   + lib.optionalString (!enableProfiledLibs) ''

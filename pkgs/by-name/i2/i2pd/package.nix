@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "USE_UPNP=${if upnpSupport then "yes" else "no"}"
+    "USE_UPNP=${lib.boolToYesNo upnpSupport}"
   ];
 
   enableParallelBuilding = true;

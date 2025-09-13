@@ -102,11 +102,11 @@ let
     '') cfg.listenAddresses}
     Listen /run/cups/cups.sock
 
-    DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
+    DefaultShared ${boolToYesNo cfg.defaultShared}
 
-    Browsing ${if cfg.browsing then "Yes" else "No"}
+    Browsing ${boolToYesNo cfg.browsing}
 
-    WebInterface ${if cfg.webInterface then "Yes" else "No"}
+    WebInterface ${boolToYesNo cfg.webInterface}
 
     LogLevel ${cfg.logLevel}
 
