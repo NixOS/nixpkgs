@@ -329,8 +329,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = gen' {
-    version = "9.0.0";
-    hash = "sha256-j609eClspRgRPz0pAWYXx/k2fcAF+TK9nZO/RbpGBys=";
+    version = "9.1.0-rc-3";
+    hash = "sha256-bxPYKplDSYtmUaHYuZA6Zj3umnUr6ONIC2xE8Midnaw=";
     defaultJava = jdk21;
   };
   gradle_8 = gen' {
