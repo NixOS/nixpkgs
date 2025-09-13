@@ -11,7 +11,7 @@
   darcs,
   findutils,
   gawk,
-  git,
+  gitMinimal,
   git-lfs,
   gnused,
   jq,
@@ -73,7 +73,7 @@ rec {
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
-    git
+    gitMinimal
     git-lfs
   ];
   nix-prefetch-hg = mkPrefetchScript "hg" ../../../build-support/fetchhg/nix-prefetch-hg [
