@@ -2436,6 +2436,27 @@ with haskellLib;
     }
   );
 
+  # Pick bound changes from development branch, same commit also adds support for Cabal >= 3.14
+  glirc = lib.pipe super.glirc [
+    (warnAfterVersion "2.41")
+    # Revisions only partially (?) include the changes we want
+    (overrideCabal {
+      revision = null;
+      editedCabalFile = null;
+    })
+    (appendPatch (
+      pkgs.fetchpatch {
+        name = "glirc-bounds-plus-cabal-3.14.patch";
+        url = "https://github.com/glguy/irc-core/commit/00ab04700e45f6f7f2ffe4ac992ca73505407516.patch";
+        hash = "sha256-XX6y3lR/a6ofcpkuqczC2A5IyHsAsRfAB+x4hdKu9+o=";
+        includes = [
+          "glirc.cabal"
+          "Setup.hs"
+        ];
+      }
+    ))
+  ];
+
   # 2025-02-11: Too strict bounds on base < 4.17
   ema = doJailbreak super.ema;
 
