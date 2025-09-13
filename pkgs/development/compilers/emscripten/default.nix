@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   python3,
   nodejs,
   closurecompiler,
@@ -51,10 +50,14 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+  ];
   buildInputs = [
     nodejs
-    python3
   ];
 
   patches = [
