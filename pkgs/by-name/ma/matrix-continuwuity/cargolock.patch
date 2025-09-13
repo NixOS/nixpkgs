@@ -1,0 +1,28 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 5d7192b6..272fd798 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3901,7 +3901,7 @@ dependencies = [
+ [[package]]
+ name = "resolv-conf"
+ version = "0.7.4"
+-source = "git+https://forgejo.ellis.link/continuwuation/resolv-conf?rev=56251316cc4127bcbf36e68ce5e2093f4d33e227#56251316cc4127bcbf36e68ce5e2093f4d33e227"
++source = "git+https://github.com/savyajha/resolv-conf?rev=5cf2c11e4fd8e9e90baa508649a0b3e5588bfc7e#5cf2c11e4fd8e9e90baa508649a0b3e5588bfc7e"
+ 
+ [[package]]
+ name = "rgb"
+diff --git a/Cargo.toml b/Cargo.toml
+index c656e183..daf909e6 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -593,8 +593,8 @@ rev = "e4ae7628fe4fcdacef9788c4c8415317a4489941"
+ # Allows no-aaaa option in resolv.conf
+ # Use 1-indexed line numbers when displaying parse error messages
+ [patch.crates-io.resolv-conf]
+-git = "https://forgejo.ellis.link/continuwuation/resolv-conf"
+-rev = "56251316cc4127bcbf36e68ce5e2093f4d33e227"
++git = "https://github.com/savyajha/resolv-conf"
++rev = "5cf2c11e4fd8e9e90baa508649a0b3e5588bfc7e"
+ 
+ #
+ # Our crates
