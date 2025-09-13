@@ -1,0 +1,11 @@
+#badge {
+    inline-size: 225px;
+    block-size: 80px;
+    background-image: url("logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#brand::before {
+    content: "${PRETTY_NAME}";
+}
