@@ -16095,6 +16095,8 @@ self: super: with self; {
 
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
+  roifile = callPackage ../development/python-modules/roifile { };
+
   roku = callPackage ../development/python-modules/roku { };
 
   rokuecp = callPackage ../development/python-modules/rokuecp { };
