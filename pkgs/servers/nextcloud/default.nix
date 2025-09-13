@@ -23,7 +23,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
+        url = "https://download.nextcloud.com/server/daily/nextcloud-master-daily-2025-09-02.tar.bz2";
         inherit hash;
       };
 
@@ -67,6 +67,12 @@ in
   nextcloud31 = generic {
     version = "31.0.8";
     hash = "sha256-YhF9t4P+d1Z3zotoD0tIwTuVkWV/7TtQi9w6MrQRXLA=";
+    packages = nextcloud31Packages;
+  };
+
+  nextcloud32 = generic {
+    version = "32.0.0";
+    hash = "sha256-XXcbklOU2wJDbz0ClXWxtDgr/OvkxnqVLUacDmV0fT8=";
     packages = nextcloud31Packages;
   };
 
