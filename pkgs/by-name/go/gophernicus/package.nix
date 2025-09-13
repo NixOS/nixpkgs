@@ -10,6 +10,7 @@
   xinetdSupport ? lib.meta.availableOn stdenv.hostPlatform xinetd,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,7 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-v";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.gophernicus;
+  };
 
   meta = {
     description = "Modern full-featured (and hopefully) secure gopher daemon";
