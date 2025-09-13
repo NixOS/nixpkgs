@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
-  version = "3.4.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     tag = "v${version}";
-    hash = "sha256-RI5+SbVPtIEaudNV+S/HiKDATRy93CIQX/RvNJmBoos=";
+    hash = "sha256-T0yx2A/C//NTV7919wcQWdal0BpHWgFS/FVeCru69HM=";
   };
 
-  cargoHash = "sha256-i6ovc8aWgB9mABuSetdFNPKjOIRKFig2mbowY2djxWA=";
+  cargoHash = "sha256-iRhWsrGGRQD/zDyF8pON8qCNY9FCdeTjPTXCLaj8RRw=";
 
   meta = {
     description = "Terminal-based HTTP/REST client";
