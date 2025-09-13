@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cpu-info";
     maintainers = with lib.maintainers; [ pawelchcki ];
     pkgConfigModules = [ "libcpuinfo" ];
-    platforms = lib.platforms.all;
+    # https://github.com/pytorch/cpuinfo/blob/877328f188a3c7d1fa855871a278eb48d530c4c0/CMakeLists.txt#L98
+    platforms = lib.platforms.x86 ++ lib.platforms.aarch ++ lib.platforms.riscv;
   };
 })
