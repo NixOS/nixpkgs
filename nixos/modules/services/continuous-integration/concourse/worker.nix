@@ -13,8 +13,8 @@ in
   meta.maintainers = with lib.maintainers; [ lenianiva ];
 
   options.services.concourse.worker = {
-    enable = lib.mkEnableOption "A container-based automation system written in Go. (The worker part)";
-    package = lib.mkPackageOption pkgs [ "concourse" "executable" ] { };
+    enable = lib.mkEnableOption "Concourse worker";
+    package = lib.mkPackageOption pkgs "concourse" { };
     auto-restart = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -99,8 +99,8 @@ in
       };
     };
     args = lib.mkOption {
-      type = lib.types.str;
-      default = "";
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       description = "Extra options to pass to concourse executable";
     };
     environment = lib.mkOption {
@@ -108,7 +108,7 @@ in
       type = lib.types.attrsOf lib.types.str;
       example = lib.literalExpression ''
         {
-          CONCOURSE_CONTAINERD_DNS_SERVER="1.1.1.1,8.8.8.8";
+          CONCOURSE_CONTAINERD_DNS_SERVER = "1.1.1.1,8.8.8.8";
         }
       '';
       description = "Concourse web server environment variables [documentation](https://concourse-ci.org/concourse-worker.html#web-running)";
@@ -144,14 +144,13 @@ in
         # From `containerd`
         ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
         serviceConfig = {
-          # Worker must be run as root, because it needs to launch containers
-          #WorkingDirectory = cfg.workDir;
           StateDirectory = cfg.workDir;
           StateDirectoryMode = "0777";
-          #UMask = "0007";
           ConfigurationDirectory = "concourse-worker";
           EnvironmentFile = cfg.environmentFile;
-          ExecStart = "${cfg.package.override { withWebUI = false; }}/bin/concourse worker ${cfg.args}";
+          ExecStart = "${
+            cfg.package.override { withWebUI = false; }
+          }/bin/concourse worker ${builtins.concatStringsSep " " cfg.args}";
           Restart = if cfg.auto-restart then "on-failure" else "no";
           RestartSec = 15;
 
@@ -184,9 +183,6 @@ in
           #RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
 
           # Do not filter control groups and system calls since this needs to run a container runtime
-          #ProtectControlGroups = true;
-          #SystemCallArchitectures = "native";
-          #SystemCallFilter = "~@clock @privileged @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap";
         };
         environment = {
           CONCOURSE_WORK_DIR = cfg.workDir;
@@ -204,14 +200,14 @@ in
           CONCOURSE_RUNTIME = cfg.runtime.type;
           CONCOURSE_RESOURCE_TYPES = lib.defaultTo "${pkgs.concourse.resource-types}" cfg.resourceTypes;
         }
-        // lib.ifEnable useContainerd {
+        // lib.optionalAttrs useContainerd {
           CONCOURSE_CONTAINERD_BIN = lib.defaultTo "${pkgs.containerd}/bin/containerd" cfg.runtime.bin;
           CONCOURSE_CONTAINERD_INIT_BIN = "${pkgs.concourse.init}/init";
           CONCOURSE_CONTAINERD_CONFIG = cfg.runtime.configFile;
           CONCOURSE_CONTAINERD_DNS_SERVER = cfg.runtime.dnsServer;
           CONCOURSE_CONTAINERD_CNI_PLUGINS_DIR = "${pkgs.cni-plugins}/bin";
         }
-        // lib.ifEnable useGuardian {
+        // lib.optionalAttrs useGuardian {
           CONCOURSE_GARDEN_BIN = cfg.runtime.bin;
           CONCOURSE_GARDEN_CONFIG = cfg.runtime.configFile;
           CONCOURSE_GARDEN_DNS_SERVER = cfg.runtime.dnsServer;
