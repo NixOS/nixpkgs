@@ -231,7 +231,9 @@ in
 
       path = [ chronyPkg ];
 
-      unitConfig.ConditionCapability = "CAP_SYS_TIME";
+      unitConfig = lib.mkIf (!lib.elem "-x" cfg.extraFlags && !cfg.enableRTCTrimming) {
+        ConditionCapability = "CAP_SYS_TIME";
+      };
       serviceConfig = {
         Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
