@@ -29,7 +29,7 @@
       virtualisation.memorySize = 2047;
 
       services.xserver.enable = true;
-      services.xserver.desktopManager.pantheon.enable = true;
+      services.desktopManager.pantheon.enable = true;
       services.displayManager = {
         autoLogin.enable = true;
         autoLogin.user = nodes.machine.users.users.alice.name;

@@ -10,7 +10,7 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.desktopManager.pantheon;
+  cfg = config.services.desktopManager.pantheon;
   serviceCfg = config.services.pantheon;
 
   nixos-gsettings-desktop-schemas = pkgs.pantheon.elementary-gsettings-schemas.override {
@@ -28,6 +28,13 @@ in
     maintainers = teams.pantheon.members;
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "pantheon" ]
+      [ "services" "desktopManager" "pantheon" ]
+    )
+  ];
+
   options = {
 
     services.pantheon = {
@@ -40,7 +47,7 @@ in
 
     };
 
-    services.xserver.desktopManager.pantheon = {
+    services.desktopManager.pantheon = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -98,7 +105,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
+      services.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
         pkgs.pantheon.pantheon-agent-geoclue2
       ] config.environment.pantheon.excludePackages;
 

@@ -15,7 +15,7 @@
       virtualisation.memorySize = 2047;
 
       services.xserver.enable = true;
-      services.xserver.desktopManager.pantheon.enable = true;
+      services.desktopManager.pantheon.enable = true;
 
       # We ship pantheon.appcenter by default when this is enabled.
       services.flatpak.enable = true;

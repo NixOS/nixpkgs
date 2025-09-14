@@ -6,7 +6,7 @@ Pantheon is the desktop environment created for the elementary OS distribution. 
 
 All of Pantheon is working in NixOS and the applications should be available, aside from a few [exceptions](https://github.com/NixOS/nixpkgs/issues/58161). To enable Pantheon, set
 ```nix
-{ services.xserver.desktopManager.pantheon.enable = true; }
+{ services.desktopManager.pantheon.enable = true; }
 ```
 This automatically enables LightDM and Pantheon's LightDM greeter. If you'd like to disable this, set
 ```nix
@@ -25,8 +25,8 @@ You can also use [](#opt-environment.pantheon.excludePackages) to remove any oth
 
 Wingpanel and Switchboard work differently than they do in other distributions, as far as using plugins. You cannot install a plugin globally (like with {option}`environment.systemPackages`) to start using it. You should instead be using the following options:
 
-  - [](#opt-services.xserver.desktopManager.pantheon.extraWingpanelIndicators)
-  - [](#opt-services.xserver.desktopManager.pantheon.extraSwitchboardPlugs)
+  - [](#opt-services.desktopManager.pantheon.extraWingpanelIndicators)
+  - [](#opt-services.desktopManager.pantheon.extraSwitchboardPlugs)
 
 to configure the programs with plugs or indicators.
 
