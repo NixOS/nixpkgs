@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   perl,
@@ -34,6 +35,11 @@ stdenv.mkDerivation rec {
   patches = [
     # See: <https://github.com/RsyncProject/rsync/pull/790>
     ./fix-tests-in-darwin-sandbox.patch
+    # fix compilation with gcc15
+    (fetchpatch {
+      url = "https://github.com/RsyncProject/rsync/commit/a4b926dcdce96b0f2cc0dc7744e95747b233500a.patch";
+      hash = "sha256-UiEQJ+p2gtIDYNJqnxx4qKgItKIZzCpkHnvsgoxBmSE=";
+    })
   ];
 
   nativeBuildInputs = [
