@@ -7,7 +7,8 @@
   installShellFiles,
   nix-update-script,
   python3Packages,
-  testers,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -49,6 +50,8 @@ python3Packages.buildPythonPackage rec {
 
   nativeCheckInputs = [
     gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ]
   ++ (with python3Packages; [
     argcomplete
@@ -59,13 +62,12 @@ python3Packages.buildPythonPackage rec {
     pytest7CheckHook
   ]);
 
+  versionCheckProgramArg = "version";
+
   pythonImportsCheck = [ "commitizen" ];
 
   # The tests require a functional git installation
-  # which requires a valid HOME directory.
   preCheck = ''
-    export HOME="$(mktemp -d)"
-
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
     git init .
@@ -97,19 +99,15 @@ python3Packages.buildPythonPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = commitizen;
-      command = "cz version";
-    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
-    changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "cz";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
       anthonyroussel
     ];
