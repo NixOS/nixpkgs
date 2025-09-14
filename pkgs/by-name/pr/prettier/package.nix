@@ -5,8 +5,11 @@
 
   ```nix
   pkgs.prettier.override {
-    plugins = with pkgs.nodePackages; [
-      prettier-plugin-toml
+    plugins = with pkgs.prettier.plugins; [
+      prettier-plugin-php
+      prettier-plugin-pug
+      prettier-plugin-ruby
+      prettier-plugin-xml
       # ...
     ];
   }
