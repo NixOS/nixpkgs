@@ -10,7 +10,8 @@
   clr,
   gfortran,
   gtest,
-  msgpack,
+  boost,
+  msgpack-cxx,
   amd-blis,
   libxml2,
   python3,
@@ -65,7 +66,7 @@ let
   # FIXME(LunNova@): cmake files need patched to include this properly or
   # maybe we improve the toolchain to use config files + assemble a sysroot
   # so system wide include assumptions work
-  cFlags = "-Wno-switch -fopenmp -I${zstd.dev}/include -I${amd-blis}/include/blis/ -I${msgpack}/include";
+  cFlags = "-Wno-switch -fopenmp -I${lib.getDev zstd}/include -I${amd-blis}/include/blis/ -I${lib.getDev msgpack-cxx}/include";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     lapack-reference
 
     # Tensile deps - not optional, building without tensile isn't actually supported
-    msgpack # FIXME: not included in cmake!
+    msgpack-cxx
     libxml2
     python3Packages.msgpack
     python3Packages.joblib
@@ -158,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-Wno-dev"
+    (lib.cmakeFeature "Boost_INCLUDE_DIR" "${lib.getDev boost}/include") # msgpack FindBoost fails to find boost
     (lib.cmakeFeature "GPU_TARGETS" gpuTargets')
     (lib.cmakeBool "BUILD_TESTING" buildTests)
     (lib.cmakeBool "HIPBLASLT_ENABLE_BLIS" true)

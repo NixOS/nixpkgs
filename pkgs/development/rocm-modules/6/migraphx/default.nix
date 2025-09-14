@@ -18,7 +18,8 @@
   abseil-cpp,
   half,
   nlohmann_json,
-  msgpack,
+  boost,
+  msgpack-cxx,
   sqlite,
   oneDNN,
   blaze,
@@ -83,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8iOBoRBygTvn9eX5f9cG0kBHKgKSeflqHkV6Qwh/ruA=";
   };
 
+  patches = [
+    ./msgpack-6-compat.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -112,7 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
     half
     nlohmann_json
-    msgpack
+    boost
+    msgpack-cxx
     sqlite
     oneDNN'
     blaze

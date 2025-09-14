@@ -10,7 +10,8 @@
   clr,
   python3,
   tensile,
-  msgpack,
+  boost,
+  msgpack-cxx,
   libxml2,
   gtest,
   gfortran,
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals buildTensile [
     zstd
-    msgpack
+    msgpack-cxx
     libxml2
     python3Packages.msgpack
     python3Packages.zstandard
@@ -87,12 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pyyaml
   ];
 
-  env.CXXFLAGS = "-fopenmp -I${hipblas-common}/include -I${roctracer}/include";
+  env.CXXFLAGS = "-fopenmp -I${lib.getDev boost}/include -I${hipblas-common}/include -I${roctracer}/include";
   # Fails to link tests with undefined symbol: cblas_*
   env.LDFLAGS = lib.optionalString (buildTests || buildBenchmarks) "-Wl,--as-needed -lcblas";
   env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
 
   cmakeFlags = [
+    (lib.cmakeFeature "Boost_INCLUDE_DIR" "${lib.getDev boost}/include") # msgpack FindBoost fails to find boost
     (lib.cmakeFeature "CMAKE_EXECUTE_PROCESS_COMMAND_ECHO" "STDERR")
     (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getBin gfortran}/bin/gfortran")
     (lib.cmakeFeature "CMAKE_Fortran_COMPILER_AR" "${lib.getBin gfortran}/bin/ar")
