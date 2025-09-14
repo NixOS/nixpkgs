@@ -5629,8 +5629,7 @@ with pkgs;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
 
-  # many packages still fail with latest version
-  tbb = tbb_2020;
+  tbb = tbb_2022;
 
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
