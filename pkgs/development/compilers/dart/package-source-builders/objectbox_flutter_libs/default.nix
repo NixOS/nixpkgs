@@ -18,11 +18,12 @@ let
     aarch64-linux = "aarch64";
   };
 
-  objectbox-sync = fetchzip {
-    url = "https://github.com/objectbox/objectbox-c/releases/download/v4.0.2/objectbox-sync-linux-${arch}.tar.gz";
+  objectbox-c = fetchzip {
+    name = "objectbox-linux-4.0.2";
+    url = "https://github.com/objectbox/objectbox-c/releases/download/v4.0.2/objectbox-linux-${arch}.tar.gz";
     hash = selectSystem {
-      x86_64-linux = "sha256-VXTuCYg0ZItK+lAs7xkNlxO0rUPnbRZOP5RAXbcRyjM=";
-      aarch64-linux = "sha256-kNlrBRR/qDEhdU34f4eDQLgYkYAIfFC8/of4rgL+m6k=";
+      x86_64-linux = "sha256-v51/m+v/FjryZuJphVb35jKgQk6DtEu+uHEzUzmeKMo=";
+      aarch64-linux = "sha256-trpF71hpJA6+DFQ3cTKOyyjtLKf8aFHf6JWb6Jxm4eo=";
     };
     stripRoot = false;
     meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
 
   patches = [
     (replaceVars ./CMakeLists.patch {
-      OBJECTBOX_SHARED_LIBRARY = "${objectbox-sync}/lib/libobjectbox.so";
+      OBJECTBOX_SHARED_LIBRARY = "${objectbox-c}/lib/libobjectbox.so";
     })
   ];
 
