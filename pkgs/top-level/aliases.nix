@@ -2386,6 +2386,7 @@ mapAliases {
   taro = taproot-assets; # Added 2023-07-04
   tbb_2020 = throw "tbb_2020 has been removed because it is unmaintained upstream and had no remaining users; use onetbb"; # Added 2025-09-14
   tbb_2021 = throw "tbb_2021 has been removed because it is unmaintained upstream and had no remaining users; use onetbb"; # Added 2025-09-13
+  tbb_2022 = onetbb; # Added 2025-09-14
   tcl-fcgi = tclPackages.tcl-fcgi; # Added 2024-10-02
   tclcurl = tclPackages.tclcurl; # Added 2024-10-02
   tcllib = tclPackages.tcllib; # Added 2024-10-02
