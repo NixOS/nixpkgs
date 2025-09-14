@@ -7,7 +7,7 @@
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  pnpm_10_29_2,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -15,19 +15,19 @@
 stdenv.mkDerivation rec {
   pname = "folo";
 
-  version = "0.6.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
-    tag = "v${version}";
-    hash = "sha256-huVk5KcsepDwtdWMm9pvn31GE1felbH1pR3mGqlSWRs=";
+    tag = "desktop/v${version}";
+    hash = "sha256-+k09Psuf6Bvjoc9Z1O0u2v44IIsaSQF1QbjJM6cWlUw=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_11
     makeWrapper
     imagemagick
   ];
@@ -37,10 +37,11 @@ stdenv.mkDerivation rec {
       pname
       version
       src
+      pnpmInstallFlags
       ;
-    pnpm = pnpm_10_29_2;
+    pnpm = pnpm_11;
     fetcherVersion = 3;
-    hash = "sha256-EP7bpbJUcKmHm7KMlKc0Fz2u0niQ3jC7YN/9pp7vucE=";
+    hash = "sha256-dF0nnBBpJaFq6MYCZVMMt4D85EWDv8zsGEbVnyhP0kE=";
   };
 
   env = {
@@ -68,6 +69,16 @@ stdenv.mkDerivation rec {
 
   dontCheckForBrokenSymlinks = true;
 
+  # Several build scripts import transitive dependencies directly (e.g.
+  # ast-kit from unplugin-ast).
+  pnpmInstallFlags = [ "--shamefully-hoist" ];
+
+  postPatch = ''
+    # pnpm 11 verifies node_modules before every `pnpm run` which conflicts
+    # with --shamefully-hoist
+    echo 'verifyDepsBeforeRun: false' >> pnpm-workspace.yaml
+  '';
+
   desktopItem = makeDesktopItem {
     name = "folo";
     desktopName = "Folo";
@@ -87,13 +98,13 @@ stdenv.mkDerivation rec {
 
     # Build desktop app.
     cd apps/desktop
-    pnpm --offline --no-inline-css build:electron-vite
+    pnpm run build:electron-vite
     cd ../..
 
     # Remove dev dependencies.
     CI=true pnpm --ignore-scripts prune --prod
     # Clean up broken symlinks left behind by `pnpm prune`
-    find node_modules/.bin -xtype l -delete
+    [ -d node_modules/.bin ] && find node_modules/.bin -xtype l -delete
 
     runHook postBuild
   '';
