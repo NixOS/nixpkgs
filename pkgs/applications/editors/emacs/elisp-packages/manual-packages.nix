@@ -41,6 +41,8 @@ lib.packagesFromDirectoryRecursive {
 
   lua = callPackage ./manual-packages/lua { inherit (pkgs) lua; };
 
+  nethack = callPackage ./manual-packages/nethack { inherit (pkgs) nethack; };
+
   straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
 
   structured-haskell-mode = self.shm;
