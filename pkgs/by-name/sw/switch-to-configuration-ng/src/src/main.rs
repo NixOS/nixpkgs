@@ -201,6 +201,7 @@ fn required_env(var: &str) -> anyhow::Result<String> {
 struct UnitState {
     state: String,
     substate: String,
+    managed_by_nixos: bool,
 }
 
 // Asks the currently running systemd instance via dbus which units are active. Returns a hash
@@ -222,29 +223,44 @@ fn get_active_units(
                 active_state,
                 sub_state,
                 following,
-                _unit_path,
+                unit_path,
                 _job_id,
                 _job_type,
                 _job_path,
             )| {
+                let unit_managed_by_nixos = systemd_manager
+                    .connection
+                    .with_proxy(
+                        "org.freedesktop.systemd1",
+                        unit_path,
+                        Duration::from_millis(5000),
+                    )
+                    .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+                    .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
+                    .unwrap_or_default();
+
                 if following.is_empty() && active_state != "inactive" {
-                    Some((id, active_state, sub_state))
+                    Some((id, active_state, sub_state, unit_managed_by_nixos))
                 } else {
                     None
                 }
             },
         )
-        .fold(HashMap::new(), |mut acc, (id, active_state, sub_state)| {
-            acc.insert(
-                id,
-                UnitState {
-                    state: active_state,
-                    substate: sub_state,
-                },
-            );
+        .fold(
+            HashMap::new(),
+            |mut acc, (id, active_state, sub_state, managed_by_nixos)| {
+                acc.insert(
+                    id,
+                    UnitState {
+                        state: active_state,
+                        substate: sub_state,
+                        managed_by_nixos,
+                    },
+                );
 
-            acc
-        }))
+                acc
+            },
+        ))
 }
 
 // This function takes a single ini file that specified systemd configuration like unit
@@ -1189,6 +1205,12 @@ won't take effect until you reboot the system.
         .context("Invalid regex for matching systemd unit names")?;
 
     for (unit, unit_state) in &current_active_units {
+        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
+        // /run/systemd/generator*)
+        if !unit_state.managed_by_nixos {
+            continue;
+        }
+
         let current_unit_file = Path::new("/etc/systemd/system").join(unit);
         let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
 
