@@ -18,16 +18,16 @@
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-/8GFrMQvr2dXtK5Cyi5mc+9wxJ95jCzkpZ2Xk6ULrp8=";
+    hash = "sha256-NzgmkxG58XvaxcIcu9J0VeRjCQ922rJOp3IWX49dgIU=";
   };
 
-  vendorHash = "sha256-C610AlCpY7hpW4AQbT9HYaRxJdLmpqgQbi5mIsdSTrM=";
+  vendorHash = "sha256-dG5D7a13TbVurjqFbKwiZ5IOPul39sCmyPCCzRx0NEY=";
 
   nativeBuildInputs = [
     copyDesktopItems
