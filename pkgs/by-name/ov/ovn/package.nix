@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  gnused,
   libbpf,
   libcap_ng,
   nix-update-script,
@@ -15,18 +14,29 @@
   unbound,
   xdp-tools,
 }:
-
-stdenv.mkDerivation rec {
+let
+  withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
   version = "25.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix test failure with musl libc.
+    # https://patchwork.ozlabs.org/project/ovn/patch/20250912035054.50593-1-ihar.hrachyshka@gmail.com/
+    ./0001-tests-Expect-musl-error-string-for-EIO-errno.patch
+    # Fix sandbox test failure.
+    # https://patchwork.ozlabs.org/project/ovn/patch/20250912035054.50593-2-ihar.hrachyshka@gmail.com/
+    ./0002-tests-Use-localhost-when-setting-wrong-ovn-remote.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -49,7 +59,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure --with-dbdir=/var/lib/openvswitch
+    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
@@ -61,15 +71,14 @@ stdenv.mkDerivation rec {
     "--sbindir=$(out)/bin"
     "--enable-ssl"
   ]
-  ++ lib.optional stdenv.hostPlatform.isStatic "--with-openssl=${lib.getLib openssl.dev}";
+  ++ lib.optional stdenv.hostPlatform.isStatic withOpensslConfigureFlag;
 
   enableParallelBuilding = true;
 
-  # disable tests due to networking issues and because individual tests can't be skipped easily
-  doCheck = false;
+  doCheck = true;
 
   nativeCheckInputs = [
-    gnused
+    openssl # used to generate certificates used for test services
     procps
   ];
 
@@ -93,6 +102,10 @@ stdenv.mkDerivation rec {
     sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
   '';
 
+  env = {
+    SKIP_UNSTABLE = "yes";
+  };
+
   # https://docs.ovn.org/en/latest/topics/testing.html
   preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
@@ -106,15 +119,18 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open Virtual Network";
     longDescription = ''
       OVN (Open Virtual Network) is a series of daemons that translates virtual network configuration into OpenFlow, and installs them into Open vSwitch.
     '';
-    homepage = "https://github.com/ovn-org/ovn";
-    changelog = "https://github.com/ovn-org/ovn/blob/${src.rev}/NEWS";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ adamcstephens ];
-    platforms = platforms.linux;
+    homepage = "https://www.ovn.org";
+    changelog = "https://github.com/ovn-org/ovn/blob/refs/tags/${finalAttrs.src.tag}/NEWS";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      booxter
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})
