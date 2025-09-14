@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "tbb";
+  pname = "onetbb";
   version = "2022.2.0";
 
   outputs = [
@@ -73,16 +73,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Intel Thread Building Blocks C++ Library";
-    homepage = "http://threadingbuildingblocks.org/";
+    description = "oneAPI Threading Building Blocks";
+    homepage = "https://uxlfoundation.github.io/oneTBB/";
     license = lib.licenses.asl20;
     longDescription = ''
-      Intel Threading Building Blocks offers a rich and complete approach to
-      expressing parallelism in a C++ program. It is a library that helps you
-      take advantage of multi-core processor performance without having to be a
-      threading expert. Intel TBB is not just a threads-replacement library. It
-      represents a higher-level, task-based parallelism that abstracts platform
-      details and threading mechanisms for scalability and performance.
+      oneAPI Threading Building Blocks (oneTBB) is a runtime-based
+      parallel programming model for C++ code that uses tasks. The
+      template-based runtime library can help you harness the latent
+      performance of multi-core processors.
     '';
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
