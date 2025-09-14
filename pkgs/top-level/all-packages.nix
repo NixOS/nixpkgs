@@ -5628,8 +5628,6 @@ with pkgs;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
 
-  tbb = onetbb;
-
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
   };
