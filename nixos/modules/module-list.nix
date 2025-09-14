@@ -346,7 +346,8 @@
   ./programs/wayland/hyprlock.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/miracle-wm.nix
-  ./programs/wayland/niri.nix
+  ./programs/wayland/niri/default.nix
+  ./programs/wayland/niri/xwayland-satellite.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/uwsm.nix
