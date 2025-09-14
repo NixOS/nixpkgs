@@ -11620,6 +11620,10 @@ with pkgs;
     ];
   };
 
+  floorp-bin = wrapFirefox floorp-bin-unwrapped {
+    pname = "floorp-bin";
+  };
+
   formiko =
     with python3Packages;
     callPackage ../applications/editors/formiko {
