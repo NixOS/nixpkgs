@@ -5,12 +5,12 @@
   ...
 }:
 let
-  cfg = config.services.concourse-web;
+  cfg = config.services.concourse.web;
 in
 {
   meta.maintainers = with lib.maintainers; [ lenianiva ];
 
-  options.services.concourse-web = {
+  options.services.concourse.web = {
     enable = lib.mkEnableOption "A container-based automation system written in Go. (The web server part)";
     package = lib.mkPackageOption pkgs [ "concourse" "executable" ] { };
     user = lib.mkOption {
@@ -18,51 +18,46 @@ in
       default = "concourse";
       description = "User account under which concourse runs.";
     };
-    session-signing-key = lib.mkOption {
+    sessionSigningKey = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Path to session signing private key";
     };
-    auto-restart = lib.mkOption {
+    autoRestart = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Automatically restart failed servers";
     };
     network = {
-      peer-address = lib.mkOption {
+      peerAddress = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Address to reach this `web` node from another `web` node";
       };
-      bind-port = lib.mkOption {
+      bindPort = lib.mkOption {
         type = lib.types.int;
         default = 8080;
         description = "Web interface bind port";
       };
-      external-url = lib.mkOption {
+      externalUrl = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = "URL visible from the outside accessible by Concourse users";
       };
-      api-max-conns = lib.mkOption {
+      apiMaxConns = lib.mkOption {
         type = lib.types.int;
         default = 10;
         description = "Maximum number of API connections";
       };
-      backend-max-conns = lib.mkOption {
+      backendMaxConns = lib.mkOption {
         type = lib.types.int;
         default = 50;
         description = "Maximum number of backend connections";
       };
-      cluster-name = lib.mkOption {
+      clusterName = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Name of this cluster";
-      };
-      p2p-volume-streaming = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Set to true to let the workers use p2p volume streaming.";
       };
     };
     postgres = {
@@ -99,21 +94,21 @@ in
       };
     };
     tsa = {
-      bind-ip = lib.mkOption {
+      bindIP = lib.mkOption {
         type = lib.types.str;
         default = "0.0.0.0";
         description = "TSA binding ip";
       };
-      bind-port = lib.mkOption {
+      bindPort = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
         default = 2222;
         description = "TSA binding port";
       };
-      host-key = lib.mkOption {
+      hostKey = lib.mkOption {
         type = lib.types.str;
         description = "Path to TSA host key";
       };
-      authorized-keys = lib.mkOption {
+      authorizedKeys = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Path to TSA authorized keys";
@@ -174,7 +169,7 @@ in
           ConfigurationDirectory = "concourse-web";
           EnvironmentFile = cfg.environmentFile;
           ExecStart = "${cfg.package}/bin/concourse web ${cfg.args}";
-          Restart = if cfg.auto-restart then "on-failure" else "no";
+          Restart = if cfg.autoRestart then "on-failure" else "no";
           RestartSec = 15;
           CapabilityBoundingSet = "";
           # Security
@@ -202,25 +197,23 @@ in
           SystemCallFilter = "~@clock @privileged @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap";
         };
         environment = {
-          CONCOURSE_BIND_PORT = toString cfg.network.bind-port;
-          CONCOURSE_PEER_ADDRESS = cfg.network.peer-address;
-          CONCOURSE_EXTERNAL_URL = cfg.network.external-url;
-          CONCOURSE_API_MAX_CONNS = lib.mapNullable toString cfg.network.api-max-conns;
-          CONCOURSE_BACKEND_MAX_CONNS = lib.mapNullable toString cfg.network.backend-max-conns;
-          CONCOURSE_CLUSTER_NAME = cfg.network.cluster-name;
+          CONCOURSE_BIND_PORT = toString cfg.network.bindPort;
+          CONCOURSE_PEER_ADDRESS = cfg.network.peerAddress;
+          CONCOURSE_EXTERNAL_URL = cfg.network.externalUrl;
+          CONCOURSE_API_MAX_CONNS = lib.mapNullable toString cfg.network.apiMaxConns;
+          CONCOURSE_BACKEND_MAX_CONNS = lib.mapNullable toString cfg.network.backendMaxConns;
+          CONCOURSE_CLUSTER_NAME = cfg.network.clusterName;
 
           CONCOURSE_POSTGRES_PORT = toString cfg.postgres.port;
           CONCOURSE_POSTGRES_SOCKET = cfg.postgres.socket;
           CONCOURSE_POSTGRES_DATABASE = cfg.postgres.database;
           CONCOURSE_POSTGRES_USER = cfg.postgres.user;
           CONCOURSE_POSTGRES_PASSWORD = cfg.postgres.password;
-          CONCOURSE_SESSION_SIGNING_KEY = cfg.session-signing-key;
-          CONCOURSE_TSA_BIND_IP = cfg.tsa.bind-ip;
-          CONCOURSE_TSA_BIND_PORT = toString cfg.tsa.bind-port;
-          CONCOURSE_TSA_HOST_KEY = cfg.tsa.host-key;
-          CONCOURSE_TSA_AUTHORIZED_KEYS = cfg.tsa.authorized-keys;
-
-          CONCOURSE_ENABLE_P2P_VOLUME_STREAMING = toString cfg.network.p2p-volume-streaming;
+          CONCOURSE_SESSION_SIGNING_KEY = cfg.sessionSigningKey;
+          CONCOURSE_TSA_BIND_IP = cfg.tsa.bindIP;
+          CONCOURSE_TSA_BIND_PORT = toString cfg.tsa.bindPort;
+          CONCOURSE_TSA_HOST_KEY = cfg.tsa.hostKey;
+          CONCOURSE_TSA_AUTHORIZED_KEYS = cfg.tsa.authorizedKeys;
         }
         // cfg.environment;
       };
