@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-discord-rpc";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "patryk-ku";
     repo = "music-discord-rpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tPIm07q5HWosqhA3zefyuwM+fIztNZe1sSpB/NmUIoE=";
+    hash = "sha256-+MSrGrnjkyLTCqQiSC2OIGAMgA2oLFqvUtud0kwTTGA=";
   };
 
-  cargoHash = "sha256-3MJAvCc0ekUQ+eM5n8MdPNxXJWUgV76vi/Rq7GhhEPE=";
+  cargoHash = "sha256-Waw/7ErijLSq1RYtjlmtjP8vHYl3wXmRAXvGvH3wOZA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     mkdir --parents $out/etc/systemd/user
-    substitute $src/mpris-discord-rpc.service $out/etc/systemd/user/mpris-discord-rpc.service \
-      --replace-fail /usr/bin/mpris-discord-rpc $out/bin/mpris-discord-rpc
+    substitute music-discord-rpc.service $out/etc/systemd/user/music-discord-rpc.service \
+      --replace-fail /usr/bin/music-discord-rpc $out/bin/music-discord-rpc
   '';
 
   meta = {
@@ -42,6 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/patryk-ku/music-discord-rpc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lukaswrz ];
-    mainProgram = "mpris-discord-rpc";
+    mainProgram = "music-discord-rpc";
   };
 })
