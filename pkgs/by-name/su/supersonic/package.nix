@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NzgmkxG58XvaxcIcu9J0VeRjCQ922rJOp3IWX49dgIU=";
   };
 
@@ -88,13 +88,14 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
     description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    platforms = platforms.linux ++ lib.optionals (!waylandSupport) platforms.darwin;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${src.tag}";
+    platforms = lib.platforms.linux ++ lib.optionals (!waylandSupport) lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zane
       sochotnicky
     ];
