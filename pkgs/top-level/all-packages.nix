@@ -283,7 +283,7 @@ with pkgs;
   cve = with python3Packages; toPythonApplication cvelib;
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    tbb = tbb_2021;
+    tbb = tbb_2022;
     cereal = cereal_1_3_2;
     opencv = opencv.override { enableGtk3 = true; };
   };
@@ -6863,7 +6863,7 @@ with pkgs;
 
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_14) stdenv clang llvm;
-    tbb = tbb_2021;
+    tbb = tbb_2022;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
@@ -7333,7 +7333,7 @@ with pkgs;
 
   cctag = callPackage ../development/libraries/cctag {
     stdenv = clangStdenv;
-    tbb = tbb_2021;
+    tbb = tbb_2022;
   };
 
   ceedling = callPackage ../development/tools/ceedling { };

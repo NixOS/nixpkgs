@@ -170,6 +170,7 @@ python.pkgs.buildPythonApplication rec {
     "django-allauth"
     "django-guardian"
     "filelock"
+    "ocrmypdf"
     "rapidfuzz"
     "redis"
   ];
