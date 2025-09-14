@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ncclient";
     repo = "ncclient";
     tag = "v${version}";
-    hash = "sha256-GSa7UkBwbwggFqwNFTg2KNqGV5412EE41ma/dzPIEuU=";
+    hash = "sha256-vSX+9nTl4r6vnP/vmavdmdChzOC8P2G093/DQNMQwS4=";
   };
 
   build-system = [
