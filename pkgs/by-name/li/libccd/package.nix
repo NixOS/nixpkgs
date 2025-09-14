@@ -26,6 +26,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # fix for CMake v4
+  # ref https://github.com/danfis/libccd/pull/82, not merged yet
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.11)" \
+      "cmake_minimum_required(VERSION 3.12)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
