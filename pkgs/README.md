@@ -205,8 +205,8 @@ Other than that, PR titles have meaning only for humans.
 It is recommended to keep the PR title in sync with the commit title, to make it easier to find.
 For PRs with multiple commits, the PR title should be a general summary of these commits.
 
-[!NOTE]
-Marking a PR as a draft does not prevent automatic builds.
+> [!NOTE]
+> Marking a PR as a draft does not prevent automatic builds.
 
 ## Category Hierarchy
 [categories]: #category-hierarchy
