@@ -4,6 +4,7 @@
   perlPackages,
   fetchFromGitHub,
   shortenPerlShebang,
+  nix-update-script,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -39,6 +40,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
