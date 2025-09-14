@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   boost,
   zlib,
@@ -15,15 +14,15 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "thrift";
-    tag = "v0.21.0";
-    hash = "sha256-OF/pFG8OXROsyYGf6jgfVTYTrTc8UB5QJh4gbostFfU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gGAO+D0A/hEoHMm6OvRBc1Mks9y52kfd0q/Sg96pdW4=";
   };
 
   # Workaround to make the Python wrapper not drop this package:
@@ -97,4 +96,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor ];
   };
-}
+})
