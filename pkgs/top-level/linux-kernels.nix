@@ -290,31 +290,116 @@ in
 
         linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
       }
-      // lib.optionalAttrs config.allowAliases {
-        linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
-        linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
-        linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
-        linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
-        linux_6_13 = throw "linux 6.13 was removed because it has reached its end of life upstream";
-        linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
-        linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
+      // (
+        let
+          aliases = {
+            linux_4_19 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it will reach its end of life within 24.11";
+            };
+            linux_6_9 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it has reached its end of life upstream";
+            };
+            linux_6_10 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it has reached its end of life upstream";
+            };
+            linux_6_11 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it has reached its end of life upstream";
+            };
+            linux_6_13 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it has reached its end of life upstream";
+            };
+            linux_6_14 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it has reached its end of life upstream";
+            };
+            linux_6_15 = {
+              type = "alias";
+              release = "25.11";
+              reason = "it has reached its end of life upstream";
+            };
 
-        linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
-        linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
-        linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
-        linux_6_6_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+            linux_5_10_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+            };
+            linux_5_15_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+            };
+            linux_6_1_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+            };
+            linux_6_6_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+            };
 
-        linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
-        linux_5_4_hardened = throw "linux_5_4_hardened was removed because it was broken";
-        linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
-        linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
-        linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
-        linux_6_13_hardened = throw "linux 6.13 was removed because it has reached its end of life upstream";
-        linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
-        linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
+            linux_4_19_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 4.19 was removed because it will reach its end of life within 24.11";
+            };
+            linux_5_4_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux_5_4_hardened was removed because it was broken";
+            };
+            linux_6_9_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 6.9 was removed because it has reached its end of life upstream";
+            };
+            linux_6_10_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 6.10 was removed because it has reached its end of life upstream";
+            };
+            linux_6_11_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 6.11 was removed because it has reached its end of life upstream";
+            };
+            linux_6_13_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 6.13 was removed because it has reached its end of life upstream";
+            };
+            linux_6_14_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 6.14 was removed because it has reached its end of life upstream";
+            };
+            linux_6_15_hardened = {
+              type = "alias";
+              release = "25.11";
+              reason = "linux 6.15 was removed because it has reached its end of life upstream";
+            };
 
-        linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
-      }
+            linux_ham = {
+              type = "alias";
+              release = "25.11";
+              reason = "in favour of the standard kernel packages";
+            };
+          };
+        in
+        (lib.mapAttrs (lib.makeAlias kernels) aliases) // { _isAlias = name: aliases ? ${name}; }
+      )
     )
   );
   /*
