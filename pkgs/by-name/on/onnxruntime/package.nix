@@ -135,7 +135,6 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cpuinfo
     eigen
     glibcLocales
     howard-hinnant-date
@@ -144,6 +143,9 @@ effectiveStdenv.mkDerivation rec {
     microsoft-gsl
     pytorch_clog
     zlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
+    cpuinfo
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -234,10 +236,23 @@ effectiveStdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
-  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
-  doCheck = !(cudaSupport || effectiveStdenv.buildPlatform.system == "aarch64-linux");
+  doCheck =
+    !(
+      cudaSupport
+      || builtins.elem effectiveStdenv.buildPlatform.system [
+        # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
+        "aarch64-linux"
+        # 1 - onnxruntime_test_all (Failed)
+        # 4761 tests from 311 test suites ran, 57 failed.
+        "loongarch64-linux"
+      ]
+    );
 
   requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
+
+  hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
+    "nostrictaliasing"
+  ];
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \

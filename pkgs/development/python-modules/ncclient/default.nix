@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.19";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ncclient";
     repo = "ncclient";
     tag = "v${version}";
-    hash = "sha256-ZAZMazf1PB54MbHyhSuSpg0IWSSqinE2DvHD+L8GKu8=";
+    hash = "sha256-GSa7UkBwbwggFqwNFTg2KNqGV5412EE41ma/dzPIEuU=";
   };
 
   build-system = [

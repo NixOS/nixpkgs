@@ -369,6 +369,11 @@ in
     (mkRemovedOptionModule [ "services" "gateone" ] ''
       The gateone module was removed since the package was removed alongside much other obsolete python 2.
     '')
+    (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
+      LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+      Consider migrating or switching to Incus, or remove from your configuration.
+      https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

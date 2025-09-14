@@ -26773,6 +26773,43 @@ with self;
     };
   };
 
+  nsdiff = buildPerlPackage {
+    pname = "nsdiff";
+    version = "1.85";
+
+    src = fetchurl {
+      url = "https://dotat.at/prog/nsdiff/DNS-nsdiff-1.85.tar.gz";
+      hash = "sha256-yo4WDa/xZL+5m+i3RnqDBZkGcl+tqR118laRez0xNAA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    preFixup = ''
+      # nsdiff requires dig and named-compilezone
+      wrapProgram $out/bin/nsdiff --prefix PATH : ${
+        with pkgs;
+        lib.makeBinPath [
+          dig
+          dnsutils
+        ]
+      }
+      # nsvi requires dig and nsdiff
+      wrapProgram $out/bin/nsvi --prefix PATH : ${lib.makeBinPath [ pkgs.dig ]}
+      # nspatch only requires nsdiff
+    '';
+
+    meta = {
+      description = "Create a \"nsupdate\" script from DNS zone file differences";
+      homepage = "https://dotat.at/prog/nsdiff/";
+      license = with lib.licenses; [
+        mit0
+        bsd0
+      ];
+      maintainers = [ maintainers.mynacol ];
+      mainProgram = "nsdiff";
+    };
+  };
+
   PackageConstants = buildPerlPackage {
     pname = "Package-Constants";
     version = "0.06";

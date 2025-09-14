@@ -1509,7 +1509,31 @@ mapAliases {
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
   lumail = throw "'lumail' has been removed since its upstream is unavailable"; # Added 2025-05-07
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
-  lxd = lib.warnOnInstantiate "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01
+  lxd = throw ''
+    LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+    Consider migrating or switching to Incus, or remove from your configuration.
+    https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+  ''; # Added 2025-09-05
+  lxd-lts = throw ''
+    LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+    Consider migrating or switching to Incus, or remove from your configuration.
+    https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+  ''; # Added 2025-09-05
+  lxd-ui = throw ''
+    LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+    Consider migrating or switching to Incus, or remove from your configuration.
+    https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+  ''; # Added 2025-09-05
+  lxd-unwrapped = throw ''
+    LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+    Consider migrating or switching to Incus, or remove from your configuration.
+    https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+  ''; # Added 2025-09-05
+  lxd-unwrapped-lts = throw ''
+    LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+    Consider migrating or switching to Incus, or remove from your configuration.
+    https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+  ''; # Added 2025-09-05
 
   lxde = {
     gtk2-x11 = throw "'lxde.gtk2-x11' has been removed. Use 'gtk2-x11' directly.";
@@ -1529,7 +1553,6 @@ mapAliases {
     lxtask = throw "'lxtask' has been moved to top-level. Use 'lxtask' directly"; # added 2025-08-31
   };
 
-  lxd-unwrapped = lib.warnOnInstantiate "lxd-unwrapped has been renamed to lxd-unwrapped-lts" lxd-unwrapped-lts; # Added 2024-04-01
   lxdvdrip = throw "'lxdvdrip' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   lzma = throw "'lzma' has been renamed to/replaced by 'xz'"; # Converted to throw 2024-10-17
   lzwolf = throw "'lzwolf' has been removed because it's no longer maintained upstream. Consider using 'ecwolf'"; # Added 2025-03-02
@@ -2047,6 +2070,7 @@ mapAliases {
   psstop = throw "'psstop' has been removed because the upstream repo has been archived"; # Added 2025-05-10
   ptask = throw "'ptask' has been removed because its upstream is unavailable"; # Added 2025-05-10
   purple-signald = throw "'purple-signald' has been removed due to lack of upstream maintenance"; # Added 2025-05-17
+  purple-matrix = throw "'purple-matrix' has been unmaintained since April 2022, so it was removed."; # Added 2025-09-01
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxlib = throw "pxlib has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
   pxview = throw "pxview has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
@@ -2708,7 +2732,6 @@ mapAliases {
     purple-googlechat
     purple-hangouts
     purple-lurch
-    purple-matrix
     purple-mm-sms
     purple-plugin-pack
     purple-slack

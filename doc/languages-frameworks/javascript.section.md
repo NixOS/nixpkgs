@@ -15,13 +15,13 @@ Searching online for prior art can be helpful if you are running into solved pro
 
 ### Github {#javascript-finding-examples-github}
 
-- Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
-- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&type=code>
+- Searching Nix files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+language%3ANix&type=code>
+- Searching just `flake.nix` files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+path%3A**%2Fflake.nix&type=code>
 
 ### Gitlab {#javascript-finding-examples-gitlab}
 
-- Searching Nix files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+extension%3Anix>
-- Searching just `flake.nix` files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+filename%3Aflake.nix>
+- Searching Nix files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+extension%3Anix>
+- Searching just `flake.nix` files for `yarnConfigHook`: <https://gitlab.com/search?scope=blobs&search=yarnConfigHook+filename%3Aflake.nix>
 
 ## Tools overview {#javascript-tools-overview}
 
@@ -668,7 +668,8 @@ To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup p
 
 #### yarn2nix {#javascript-yarn2nix}
 
-WARNING: The `yarn2nix` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `yarn2nix` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
+> [!WARNING]
+> The `yarn2nix` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `yarn2nix` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
 ##### Preparation {#javascript-yarn2nix-preparation}
 
@@ -686,6 +687,9 @@ If the downloaded files contain the `package.json` and `yarn.lock` files they ca
 ```
 
 ##### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
+
+> [!WARNING]
+> The `mkYarnPackage` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `mkYarnPackage` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
 `mkYarnPackage` will by default try to generate a binary. For packages only generating static assets (Svelte, Vue, React, Webpack, ...), you will need to explicitly override the build step with your instructions.
 
