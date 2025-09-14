@@ -12,7 +12,6 @@
   python3,
   libarchive,
   libmsym,
-  msgpack,
   qttools,
   wrapQtAppsHook,
 }:
@@ -78,7 +77,6 @@ stdenv.mkDerivation rec {
     glew
     libarchive
     libmsym
-    msgpack
     qttools
   ];
 
