@@ -257,7 +257,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libsndfile
     libtiff
     libwebp
-    (manifold.override { tbb_2021 = tbb; })
+    manifold
     opencolorio
     openexr
     openimageio
