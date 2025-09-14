@@ -7,7 +7,7 @@
   cmake,
   mimalloc,
   ninja,
-  tbb_2022,
+  onetbb,
   zlib,
   zstd,
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    tbb_2022
+    onetbb
     zlib
     zstd
   ]

@@ -27,7 +27,7 @@
   opencascade-occt_7_6_1,
   openvdb,
   qhull,
-  tbb_2022,
+  onetbb,
   wxGTK32,
   xorg,
   libbgcode,
@@ -54,7 +54,6 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2022 = openvdb.override { tbb = tbb_2022; };
   wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
@@ -122,9 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
     nanosvg-fltk
     nlopt
     opencascade-override'
-    openvdb_tbb_2022
+    openvdb
     qhull
-    tbb_2022
+    onetbb
     wxGTK-override'
     xorg.libX11
     libbgcode

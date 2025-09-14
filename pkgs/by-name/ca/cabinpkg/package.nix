@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  tbb_2022,
+  onetbb,
   libgit2,
   curl,
   fmt,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libgit2
     fmt
-    tbb_2022
+    onetbb
     nlohmann_json
     curl
   ];

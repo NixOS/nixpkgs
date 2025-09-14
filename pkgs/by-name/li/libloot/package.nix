@@ -18,7 +18,7 @@
   gtest,
   icu,
   spdlog,
-  tbb_2022,
+  onetbb,
   yaml-cpp,
 }:
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     icu
     spdlog
-    tbb_2022
+    onetbb
 
     finalAttrs.passthru.yaml-cpp # has merge-key support
     finalAttrs.passthru.libloadorder

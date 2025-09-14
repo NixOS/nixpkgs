@@ -11,7 +11,7 @@
   scipopt-papilo,
   scipopt-zimpl,
   ipopt,
-  tbb_2022,
+  onetbb,
   boost,
   gfortran,
   criterion,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gmp
     readline
     zlib
-    tbb_2022
+    onetbb
     boost
     gfortran
     criterion
