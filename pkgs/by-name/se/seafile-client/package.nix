@@ -5,15 +5,12 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  qttools,
-  qt5compat,
+  qt6,
   libuuid,
   seafile-shared,
   jansson,
   libsearpc,
   withShibboleth ? true,
-  qtwebengine,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,17 +37,17 @@ stdenv.mkDerivation rec {
     libuuid
     pkg-config
     cmake
-    wrapQtAppsHook
-    qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
   buildInputs = [
-    qt5compat
+    qt6.qt5compat
     seafile-shared
     jansson
     libsearpc
   ]
-  ++ lib.optional withShibboleth qtwebengine;
+  ++ lib.optional withShibboleth qt6.qtwebengine;
 
   cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
