@@ -183,6 +183,15 @@ let
         sha512 = "MjYsKHO5O7mCsmRGxWcLWheFqN9DJ/2TmngvjKXihe6efViPqc274+Fx/4fYj/r03+ESvBdTXK0V6tA3rgez1g==";
       };
     };
+    "linguist-languages-8.2.0" = {
+      name = "linguist-languages";
+      packageName = "linguist-languages";
+      version = "8.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/linguist-languages/-/linguist-languages-8.2.0.tgz";
+        sha512 = "KCUUH9x97QWYU0SXOCGxUrZR6cSfuQrMhABB7L/0I8N0LXOeaKe7+RZs7FAwvWCV2qKfZ4Wv1luLq4OfMezSJg==";
+      };
+    };
     "math-intrinsics-1.1.0" = {
       name = "math-intrinsics";
       packageName = "math-intrinsics";
@@ -199,6 +208,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz";
         sha512 = "rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==";
+      };
+    };
+    "php-parser-3.2.5" = {
+      name = "php-parser";
+      packageName = "php-parser";
+      version = "3.2.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/php-parser/-/php-parser-3.2.5.tgz";
+        sha512 = "M1ZYlALFFnESbSdmRtTQrBFUHSriHgPhgqtTF/LCbZM4h7swR5PHtUceB2Kzby5CfqcsYwBn7OXTJ0+8Sajwkw==";
       };
     };
     "prettier-3.6.2" = {
@@ -240,6 +258,29 @@ let
   };
 in
 {
+  "@prettier/plugin-php" = nodeEnv.buildNodePackage {
+    name = "_at_prettier_slash_plugin-php";
+    packageName = "@prettier/plugin-php";
+    version = "0.24.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@prettier/plugin-php/-/plugin-php-0.24.0.tgz";
+      sha512 = "x9l65fCE/pgoET6RQowgdgG8Xmzs44z6j6Hhg3coINCyCw9JBGJ5ZzMR2XHAM2jmAdbJAIgqB6cUn4/3W3XLTA==";
+    };
+    dependencies = [
+      sources."linguist-languages-8.2.0"
+      sources."php-parser-3.2.5"
+      sources."prettier-3.6.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Prettier PHP Plugin";
+      homepage = "https://github.com/prettier/prettier-php#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   "@prettier/plugin-pug" = nodeEnv.buildNodePackage {
     name = "_at_prettier_slash_plugin-pug";
     packageName = "@prettier/plugin-pug";
