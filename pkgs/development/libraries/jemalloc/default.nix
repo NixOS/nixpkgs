@@ -15,7 +15,7 @@
   disableInitExecTls ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
   version = "5.3.0-unstable-2025-09-12";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
 
   configureFlags = [
-    "--with-version=${lib.versions.majorMinor version}.0-0-g${src.rev}"
+    "--with-version=${lib.versions.majorMinor finalAttrs.version}.0-0-g${finalAttrs.src.rev}"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
   ]
   # see the comment on stripPrefix
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # jemalloc is unable to correctly detect transparent hugepage support on
   # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
   # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
-  ++ lib.optionals (stdenv.hostPlatform.isAarch32 && lib.versionOlder version "5") [
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 && lib.versionOlder finalAttrs.version "5") [
     "--disable-thp"
     "je_cv_thp=no"
   ]
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.all;
   };
-}
+})
