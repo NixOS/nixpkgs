@@ -33,7 +33,6 @@
       services.displayManager = {
         autoLogin.enable = true;
         autoLogin.user = nodes.machine.users.users.alice.name;
-        defaultSession = "pantheon-wayland";
       };
 
       # We ship pantheon.appcenter by default when this is enabled.

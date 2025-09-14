@@ -121,7 +121,14 @@ in
 
       # Without this, elementary LightDM greeter will pre-select non-existent `default` session
       # https://github.com/elementary/greeter/issues/368
-      services.displayManager.defaultSession = mkDefault "pantheon";
+      services.displayManager.defaultSession = mkDefault "pantheon-wayland";
+      programs.dconf.profiles.user.databases = [
+        {
+          settings."io/elementary/greeter" = {
+            last-session-type = "pantheon-wayland";
+          };
+        }
+      ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
