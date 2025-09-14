@@ -115,7 +115,7 @@ in
       { config, pkgs, ... }:
       {
         users = {
-          users.${config.services.concourse-web.user} = {
+          users.${config.services.concourse.web.user} = {
             description = "Concourse service";
             isSystemUser = true;
             group = "staff";
@@ -132,20 +132,20 @@ in
         };
         services = {
           openssh.enable = true;
-          concourse-web = {
+          concourse.web = {
             enable = true;
             postgres = {
               inherit database password;
               user = username;
             };
-            auto-restart = false;
-            network.bind-port = serverPort;
-            session-signing-key = "${session-signing-key}";
+            autoRestart = false;
+            network.bindPort = serverPort;
+            sessionSigningKey = "${session-signing-key}";
             tsa = {
-              bind-ip = "0.0.0.0";
-              bind-port = serverTSAPort;
-              host-key = "${tsa-host-key}";
-              authorized-keys = "${worker-key-pub}";
+              bindIP = "0.0.0.0";
+              bindPort = serverTSAPort;
+              hostKey = "${tsa-host-key}";
+              authorizedKeys = "${worker-key-pub}";
             };
             environment = {
               CONCOURSE_ADD_LOCAL_USER = "${ccusername}:${ccpassword}";
@@ -200,21 +200,21 @@ in
       { config, pkgs, ... }:
       {
         services = {
-          concourse-worker = {
+          concourse.worker = {
             enable = true;
             auto-restart = false;
             tsa = {
               host = "${ip.server}:${toString serverTSAPort}";
-              public-key = "${tsa-host-key-pub}";
-              worker-private-key = "${worker-key}";
+              publicKey = "${tsa-host-key-pub}";
+              workerPrivateKey = "${worker-key}";
             };
             runtime = {
               type = "containerd";
               #config = "${guardian-config}";
             };
             environment = {
-              CONCOURSE_BIND_IP = "127.0.0.1";
-              CONCOURSE_BIND_PORT = "9001";
+              #CONCOURSE_BIND_IP = "127.0.0.1";
+              #CONCOURSE_BIND_PORT = "9001";
               #CONCOURSE_GARDEN_EXTERNAL_IP = ip.worker;
               CONCOURSE_CONTAINERD_EXTERNAL_IP = ip.worker;
               #CONCOURSE_CONTAINERD_DNS_PROXY_ENABLE = "true";
