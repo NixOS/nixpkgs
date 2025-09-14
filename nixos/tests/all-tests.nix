@@ -1146,7 +1146,6 @@ in
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
-  pantheon-wayland = runTest ./pantheon-wayland.nix;
   paperless = runTest ./paperless.nix;
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
