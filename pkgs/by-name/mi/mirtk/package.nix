@@ -41,6 +41,13 @@ stdenv.mkDerivation {
   # unclear if specific to Nixpkgs
   doCheck = false;
 
+  postPatch = ''
+    # Their old `FindTBB` module conflicts with others.
+    rm CMake/Modules/FindTBB.cmake
+    substituteInPlace CMake/Modules/CMakeLists.txt \
+      --replace-fail '"FindTBB.cmake"' ""
+  '';
+
   postInstall = ''
     install -Dm644 -t "$out/share/bash-completion/completions/mirtk" share/completion/bash/mirtk
   '';
