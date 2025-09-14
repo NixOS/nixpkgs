@@ -823,7 +823,7 @@ fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
     };
 
     let Ok(unit) = String::from_utf8(output.stdout) else {
-        eprintln!("Unable to convert systemd-espape output to valid UTF-8");
+        eprintln!("Unable to convert systemd-escape output to valid UTF-8");
         die();
     };
 
