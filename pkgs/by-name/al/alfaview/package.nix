@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "9.22.12";
 
   src = fetchurl {
-    url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
+    url = "https://assets.alfaview.com/stable/linux/deb/alfaview_${version}.deb";
     hash = "sha256-WMy05L4z1j1izQthFX5gZGO0Vg3gPHnwXblP8E7psnk=";
   };
 
@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
     homepage = "https://alfaview.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
