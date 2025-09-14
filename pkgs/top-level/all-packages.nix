@@ -1873,16 +1873,6 @@ with pkgs;
     '';
   };
 
-  stack2nix =
-    with haskell.lib;
-    overrideCabal (justStaticExecutables haskellPackages.stack2nix) (_: {
-      executableToolDepends = [ makeWrapper ];
-      postInstall = ''
-        wrapProgram $out/bin/stack2nix \
-          --prefix PATH ":" "${git}/bin:${cabal-install}/bin"
-      '';
-    });
-
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -3540,8 +3530,6 @@ with pkgs;
 
   xz = callPackage ../tools/compression/xz { };
 
-  madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
-
   mailnag = callPackage ../applications/networking/mailreaders/mailnag {
     availablePlugins = {
       # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
@@ -4172,8 +4160,6 @@ with pkgs;
 
   solc-select = with python3Packages; toPythonApplication solc-select;
 
-  splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
-
   sshfs = sshfs-fuse; # added 2017-08-14
 
   inherit (callPackages ../tools/misc/sshx { })
@@ -4198,8 +4184,6 @@ with pkgs;
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
   stoken = callPackage ../tools/security/stoken (config.stoken or { });
-
-  stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
 
   strongswanTNC = strongswan.override { enableTNC = true; };
   strongswanTPM = strongswan.override { enableTPM2 = true; };
@@ -5166,8 +5150,6 @@ with pkgs;
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
 
   krank = haskell.lib.compose.justStaticExecutables haskellPackages.krank;
-
-  stylish-cabal = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-cabal;
 
   lhs2tex = haskellPackages.lhs2tex;
 
@@ -15035,7 +15017,6 @@ with pkgs;
     nixComponents = nixVersions.nixComponents_2_31;
   };
 
-  nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.compose.justStaticExecutables haskellPackages.nix-deploy;
   nix-derivation = haskellPackages.nix-derivation.bin;
   nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
