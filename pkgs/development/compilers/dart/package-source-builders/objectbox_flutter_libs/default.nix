@@ -25,6 +25,7 @@ let
       aarch64-linux = "sha256-kNlrBRR/qDEhdU34f4eDQLgYkYAIfFC8/of4rgL+m6k=";
     };
     stripRoot = false;
+    meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library
   };
 in
 stdenv.mkDerivation {
