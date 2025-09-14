@@ -1659,6 +1659,12 @@ self: super: with self; {
 
   backoff = callPackage ../development/python-modules/backoff { };
 
+  backports-asyncio-runner =
+    if pythonAtLeast "3.11" then
+      null
+    else
+      callPackage ../development/python-modules/backports-asyncio-runner { };
+
   backports-datetime-fromisoformat =
     callPackage ../development/python-modules/backports-datetime-fromisoformat
       { };
@@ -1910,6 +1916,8 @@ self: super: with self; {
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
   binsync = callPackage ../development/python-modules/binsync { };
+
+  biocutils = callPackage ../development/python-modules/biocutils { };
 
   biom-format = callPackage ../development/python-modules/biom-format { };
 
@@ -7321,6 +7329,8 @@ self: super: with self; {
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
+  j2lint = callPackage ../development/python-modules/j2lint { };
+
   jaconv = callPackage ../development/python-modules/jaconv { };
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
@@ -11426,6 +11436,8 @@ self: super: with self; {
   parsimonious = callPackage ../development/python-modules/parsimonious { };
 
   parsley = callPackage ../development/python-modules/parsley { };
+
+  parsnip = callPackage ../development/python-modules/parsnip { };
 
   parso = callPackage ../development/python-modules/parso { };
 

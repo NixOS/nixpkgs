@@ -159,6 +159,15 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
         };
+
+        patches = [
+          # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+          (fetchpatch2 {
+            name = "lix-lowdown-1.4.0.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+            hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+          })
+        ];
       };
     };
 
