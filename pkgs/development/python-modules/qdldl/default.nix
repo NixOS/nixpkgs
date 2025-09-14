@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
   cmake,
   numpy,
   pybind11,
   setuptools,
   scipy,
   pytestCheckHook,
+  qdldl,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-XHdvYWORHDYy/EIqmlmFQZwv+vK3I+rPIrvcEW1JyIw=";
   };
 
+  # use up-to-date qdldl for CMake v4
+  patches = [
+    (replaceVars ./use-qdldl.patch {
+      inherit qdldl;
+    })
+  ];
+
   dontUseCmakeConfigure = true;
 
   build-system = [
@@ -34,6 +43,10 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     scipy
+  ];
+
+  propagatedBuildInputs = [
+    qdldl
   ];
 
   pythonImportsCheck = [ "qdldl" ];
