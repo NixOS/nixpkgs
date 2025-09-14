@@ -6,7 +6,7 @@
   meta.maintainers = lib.teams.pantheon.members;
 
   nodes.machine =
-    { nodes, ... }:
+    { ... }:
 
     let
       videosAutostart = pkgs.writeTextFile {
@@ -30,10 +30,6 @@
 
       services.xserver.enable = true;
       services.desktopManager.pantheon.enable = true;
-      services.displayManager = {
-        autoLogin.enable = true;
-        autoLogin.user = nodes.machine.users.users.alice.name;
-      };
 
       # We ship pantheon.appcenter by default when this is enabled.
       services.flatpak.enable = true;
@@ -44,6 +40,8 @@
       # We don't ship gnome-text-editor in Pantheon module, we add this line mainly
       # to catch eval issues related to this option.
       environment.pantheon.excludePackages = [ pkgs.gnome-text-editor ];
+
+      programs.ydotool.enable = true;
     };
 
   enableOCR = true;
@@ -55,6 +53,20 @@
     in
     ''
       machine.wait_for_unit("display-manager.service")
+
+      with subtest("Test we can see usernames in elementary-greeter"):
+          machine.wait_for_text("${user.description}")
+          machine.wait_until_succeeds("pgrep -f io.elementary.greeter-compositor")
+          # Ensure the password box is focused by clicking it.
+          # Workaround for https://github.com/NixOS/nixpkgs/issues/211366.
+          machine.succeed("ydotool mousemove -a 220 275")
+          machine.succeed("ydotool click 0xC0")
+          machine.sleep(2)
+          machine.screenshot("elementary_greeter_lightdm")
+
+      with subtest("Login with elementary-greeter"):
+          machine.send_chars("${user.password}\n")
+          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
 
       with subtest("Wait for wayland server"):
           machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")
