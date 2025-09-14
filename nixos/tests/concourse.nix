@@ -98,7 +98,7 @@ let
   };
 in
 {
-  name = concoursePackage.pname;
+  name = "concourse";
   meta.maintainers = with lib.maintainers; [
     lenianiva
   ];
@@ -121,14 +121,7 @@ in
             group = "staff";
             useDefaultShell = true;
           };
-          groups.staff = {
-            name = "staff";
-            members = [
-              "admin"
-              username
-              "postgres"
-            ];
-          };
+          groups.staff = { };
         };
         services = {
           openssh.enable = true;
@@ -139,10 +132,12 @@ in
               user = username;
             };
             autoRestart = false;
-            network.bindPort = serverPort;
+            network = {
+              externalUrl = "http://${ip.server}:${toString serverPort}";
+              bindPort = serverPort;
+            };
             sessionSigningKey = "${session-signing-key}";
             tsa = {
-              bindIP = "0.0.0.0";
               bindPort = serverTSAPort;
               hostKey = "${tsa-host-key}";
               authorizedKeys = "${worker-key-pub}";
@@ -208,17 +203,8 @@ in
               publicKey = "${tsa-host-key-pub}";
               workerPrivateKey = "${worker-key}";
             };
-            runtime = {
-              type = "containerd";
-              #config = "${guardian-config}";
-            };
             environment = {
-              #CONCOURSE_BIND_IP = "127.0.0.1";
-              #CONCOURSE_BIND_PORT = "9001";
-              #CONCOURSE_GARDEN_EXTERNAL_IP = ip.worker;
               CONCOURSE_CONTAINERD_EXTERNAL_IP = ip.worker;
-              #CONCOURSE_CONTAINERD_DNS_PROXY_ENABLE = "true";
-              #CONCOURSE_CONTAINERD_ALLOW_HOST_ACCESS = "true";
             };
           };
         };
@@ -275,7 +261,6 @@ in
             plan:
             - task: hello-world-task
               config:
-                # Tells Concourse which type of worker this task should run on
                 platform: linux
                 image_resource:
                   type: registry-image
@@ -296,6 +281,7 @@ in
       worker.start()
 
       client.start()
+      client.wait_for_unit("default.target")
 
       # Login to concourse
       client.succeed("fly login --target ${target} --concourse-url http://${ip.server}:${toString serverPort} --username ${ccusername} --password ${ccpassword}")
@@ -311,6 +297,7 @@ in
       server.wait_for_open_port(${toString dockerPort})
       client.succeed("docker push ${image-id}:${image-tag}")
 
+      worker.wait_for_unit("default.target")
       worker.wait_for_unit("concourse-worker")
 
       # Send a task and wait until it succeeds

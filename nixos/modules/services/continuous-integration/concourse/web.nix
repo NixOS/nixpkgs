@@ -11,8 +11,8 @@ in
   meta.maintainers = with lib.maintainers; [ lenianiva ];
 
   options.services.concourse.web = {
-    enable = lib.mkEnableOption "A container-based automation system written in Go. (The web server part)";
-    package = lib.mkPackageOption pkgs [ "concourse" "executable" ] { };
+    enable = lib.mkEnableOption "Concourse web server";
+    package = lib.mkPackageOption pkgs "concourse" { };
     user = lib.mkOption {
       type = lib.types.str;
       default = "concourse";
@@ -35,13 +35,12 @@ in
         description = "Address to reach this `web` node from another `web` node";
       };
       bindPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 8080;
         description = "Web interface bind port";
       };
       externalUrl = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
+        type = lib.types.str;
         description = "URL visible from the outside accessible by Concourse users";
       };
       apiMaxConns = lib.mkOption {
@@ -63,12 +62,12 @@ in
     postgres = {
       host = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = "127.0.0.1";
+        default = null;
         description = "Host of postgresql database";
       };
       port = lib.mkOption {
-        type = lib.types.int;
-        default = 5432;
+        type = lib.types.nullOr lib.types.port;
+        default = null;
         description = "Port of postgresql database";
         example = "config.services.postgresql.settings.port";
       };
@@ -100,7 +99,7 @@ in
         description = "TSA binding ip";
       };
       bindPort = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
+        type = lib.types.nullOr lib.types.port;
         default = 2222;
         description = "TSA binding port";
       };
@@ -115,8 +114,8 @@ in
       };
     };
     args = lib.mkOption {
-      type = lib.types.str;
-      default = "";
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       description = "Extra options to pass to concourse executable";
     };
     environment = lib.mkOption {
@@ -124,14 +123,8 @@ in
       type = lib.types.attrsOf lib.types.str;
       example = lib.literalExpression ''
         {
-          CONCOURSE_POSTGRES_PORT = toString config.services.postgresql.settings.port;
-          CONCOURSE_POSTGRES_SOCKET = "/var/run/postgresql";
-          CONCOURSE_POSTGRES_HOST=127.0.0.1 # default
-          CONCOURSE_POSTGRES_DATABASE=atc   # default
           CONCOURSE_POSTGRES_USER=my-user
           CONCOURSE_POSTGRES_PASSWORD=my-password
-          CONCOURSE_TSA_HOST_KEY=/etc/concourse/host-key
-          CONCOURSE_TSA_AUTHORIZED_KEYS=/etc/concourse/authorized_worker_keys.pub
         }
       '';
       description = "Concourse web server environment variables [documentation](https://concourse-ci.org/concourse-web.html#web-running)";
@@ -139,7 +132,7 @@ in
     environmentFile = lib.mkOption {
       type = with lib.types; coercedTo path (f: [ f ]) (listOf path);
       default = [ ];
-      example = [ "/root/concourse-web.env" ];
+      example = [ "/run/concourse-web.env" ];
       description = ''
         File to load environment variables
         from. This is helpful for specifying secrets.
@@ -168,7 +161,7 @@ in
           UMask = "0007";
           ConfigurationDirectory = "concourse-web";
           EnvironmentFile = cfg.environmentFile;
-          ExecStart = "${cfg.package}/bin/concourse web ${cfg.args}";
+          ExecStart = "${lib.getExe cfg.package} web ${builtins.concatStringsSep " " cfg.args}";
           Restart = if cfg.autoRestart then "on-failure" else "no";
           RestartSec = 15;
           CapabilityBoundingSet = "";
@@ -204,7 +197,7 @@ in
           CONCOURSE_BACKEND_MAX_CONNS = lib.mapNullable toString cfg.network.backendMaxConns;
           CONCOURSE_CLUSTER_NAME = cfg.network.clusterName;
 
-          CONCOURSE_POSTGRES_PORT = toString cfg.postgres.port;
+          CONCOURSE_POSTGRES_PORT = lib.mapNullable toString cfg.postgres.port;
           CONCOURSE_POSTGRES_SOCKET = cfg.postgres.socket;
           CONCOURSE_POSTGRES_DATABASE = cfg.postgres.database;
           CONCOURSE_POSTGRES_USER = cfg.postgres.user;
