@@ -57,6 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # Cursed system‐dependent(?!) failure with libc++ because another
+  # test in the same process sets the global locale; skip for now.
+  #
+  # See:
+  # * <https://github.com/llvm/llvm-project/issues/39399>
+  # * <https://github.com/llvm/llvm-project/issues/123309>
+  ${if stdenv.cc.libcxx != null then "patches" else null} = [
+    ./disable-timestamp-test.patch
+  ];
+
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     inherit (python3.pkgs) pikepdf;
