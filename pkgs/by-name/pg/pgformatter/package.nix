@@ -9,13 +9,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.6";
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    hash = "sha256-EJLAP1uBmWxWEsdLJYTuViMv4o0iEi2fqy79ixyRijU=";
+    hash = "sha256-m9xVzov0KtWLfC+24YBiE7UFaLqpwpzOyXpjMPHuito=";
   };
 
   outputs = [ "out" ];
