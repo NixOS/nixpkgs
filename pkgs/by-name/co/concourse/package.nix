@@ -4,6 +4,7 @@
   yarn-berry_4,
   buildGo125Module,
   fetchFromGitHub,
+  fetchzip,
   lib,
   stdenv,
   writeScript,
@@ -132,7 +133,7 @@ stdenv.mkDerivation rec {
   resource-types = stdenv.mkDerivation {
     pname = "resource-types";
     inherit version;
-    src = fetchTarball {
+    src = fetchzip {
       url = "https://github.com/concourse/concourse/releases/download/v${version}/concourse-${version}-linux-amd64.tgz";
       sha256 = "0f0kblsig0d3j4swynxj16pa5iycxa92bd4pm5vzxqr3nn4w2ncl";
     };
