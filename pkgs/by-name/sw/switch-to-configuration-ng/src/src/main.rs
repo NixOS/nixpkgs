@@ -197,18 +197,17 @@ fn required_env(var: &str) -> anyhow::Result<String> {
     std::env::var(var).with_context(|| format!("missing required environment variable ${var}"))
 }
 
-#[derive(Debug)]
-struct UnitState {
+struct UnitState<'a, 'b> {
     state: String,
     substate: String,
-    managed_by_nixos: bool,
+    proxy: Proxy<'a, &'b LocalConnection>,
 }
 
 // Asks the currently running systemd instance via dbus which units are active. Returns a hash
 // where the key is the name of each unit and the value a hash of load, state, substate.
-fn get_active_units(
-    systemd_manager: &Proxy<'_, &LocalConnection>,
-) -> Result<HashMap<String, UnitState>> {
+fn get_active_units<'a, 'b>(
+    systemd_manager: &Proxy<'a, &'b LocalConnection>,
+) -> Result<HashMap<String, UnitState<'a, 'b>>> {
     let units = systemd_manager
         .list_units_by_patterns(Vec::new(), Vec::new())
         .context("Failed to list systemd units")?;
@@ -220,47 +219,39 @@ fn get_active_units(
                 id,
                 _description,
                 _load_state,
-                active_state,
-                sub_state,
+                state,
+                substate,
                 following,
                 unit_path,
                 _job_id,
                 _job_type,
                 _job_path,
             )| {
-                let unit_managed_by_nixos = systemd_manager
-                    .connection
-                    .with_proxy(
-                        "org.freedesktop.systemd1",
-                        unit_path,
-                        Duration::from_millis(5000),
-                    )
-                    .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-                    .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
-                    .unwrap_or_default();
+                let proxy = systemd_manager.connection.with_proxy(
+                    "org.freedesktop.systemd1",
+                    unit_path,
+                    Duration::from_millis(5000),
+                );
 
-                if following.is_empty() && active_state != "inactive" {
-                    Some((id, active_state, sub_state, unit_managed_by_nixos))
+                if following.is_empty() && state != "inactive" {
+                    Some((
+                        id,
+                        UnitState {
+                            state,
+                            substate,
+                            proxy,
+                        },
+                    ))
                 } else {
                     None
                 }
             },
         )
-        .fold(
-            HashMap::new(),
-            |mut acc, (id, active_state, sub_state, managed_by_nixos)| {
-                acc.insert(
-                    id,
-                    UnitState {
-                        state: active_state,
-                        substate: sub_state,
-                        managed_by_nixos,
-                    },
-                );
+        .fold(HashMap::new(), |mut acc, (id, unit_state)| {
+            acc.insert(id, unit_state);
 
-                acc
-            },
-        ))
+            acc
+        }))
 }
 
 // This function takes a single ini file that specified systemd configuration like unit
@@ -1207,7 +1198,12 @@ won't take effect until you reboot the system.
     for (unit, unit_state) in &current_active_units {
         // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
         // /run/systemd/generator*)
-        if !unit_state.managed_by_nixos {
+        if !unit_state
+            .proxy
+            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
+            .unwrap_or_default()
+        {
             continue;
         }
 
