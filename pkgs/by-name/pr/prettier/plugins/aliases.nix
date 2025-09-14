@@ -34,6 +34,7 @@ in
 
 mapAliases {
   ## De-scope -> https://prettier.io/docs/plugins/#official-plugins
+  prettier-plugin-pug = pkgs.prettier.plugins."@prettier/plugin-pug";
   prettier-plugin-ruby = pkgs.prettier.plugins."@prettier/plugin-ruby";
   prettier-plugin-xml = pkgs.prettier.plugins."@prettier/plugin-xml";
 }

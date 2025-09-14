@@ -1,4 +1,5 @@
 [
-  "@prettier/plugin-ruby"
+  "@prettier/plugin-pug"
+, "@prettier/plugin-ruby"
 , "@prettier/plugin-xml"
 ]
