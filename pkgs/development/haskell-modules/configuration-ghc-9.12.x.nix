@@ -128,19 +128,4 @@ with haskellLib;
   interpolate =
     assert super.ghc.version == "9.12.2";
     dontCheck super.interpolate;
-
-  #
-  # Multiple issues
-  #
-
-  doctest-parallel = overrideCabal (drv: {
-    patches = drv.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        name = "doctest-0.23.0-ghc-9.12.patch";
-        url = "https://github.com/martijnbastiaan/doctest-parallel/commit/d3df7aa5d223f3daeb676c8a7efe093ee743d54f.patch";
-        sha256 = "sha256-92CtqBCulfOTjLAeC205cIrqL/2CBP1YFLijTVcTD2M=";
-        includes = [ "src/Test/DocTest/Helpers.hs" ];
-      })
-    ];
-  }) (dontCheck (doJailbreak super.doctest-parallel)); # Cabal >=2.4 && <3.13
 }
