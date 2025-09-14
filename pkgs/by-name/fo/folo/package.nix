@@ -1,6 +1,7 @@
 {
   electron,
   fetchFromGitHub,
+  nix-update-script,
   imagemagick,
   lib,
   makeDesktopItem,
@@ -119,6 +120,13 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^desktop/v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
+  };
 
   meta = {
     description = "Next generation information browser";
