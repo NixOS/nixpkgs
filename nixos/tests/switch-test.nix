@@ -627,6 +627,17 @@ in
                 (pkgs.writeText "dbus-reload-dummy" "dbus reload dummy")
               ];
             };
+
+          generators.configuration =
+            { lib, pkgs, ... }:
+            {
+              systemd.generators.simple-generator = pkgs.writeShellScript "simple-generator" ''
+                ${lib.getExe' pkgs.coreutils "cat"} >$1/simple-generated.service <<EOF
+                [Service]
+                ExecStart=${lib.getExe' pkgs.coreutils "sleep"} infinity
+                EOF
+              '';
+            };
         };
       };
 
@@ -1520,5 +1531,13 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
+
+      with subtest("generators"):
+          out = switch_to_specialisation("${machine}", "generators")
+          # The service is not started by anything, so we start it manually
+          machine.succeed("systemctl start simple-generated.service && systemctl is-active simple-generated.service")
+          out = switch_to_specialisation("${machine}", "")
+          # Assert switching to a different generation doesn't touch units created by generators
+          machine.succeed("systemctl is-active simple-generated.service")
     '';
 }
