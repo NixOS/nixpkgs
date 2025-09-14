@@ -170,6 +170,16 @@ with lib.maintainers;
     shortName = "c3d2";
   };
 
+  cachix = {
+    # Verify additions to this team with at least one existing member of the team.
+    members = [
+      domenkozar
+      sandydoo
+    ];
+    scope = "Group registration for packages maintained by Cachix.";
+    shortName = "Cachix employees";
+  };
+
   categorization = {
     members = [
       aleksana
