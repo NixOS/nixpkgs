@@ -489,6 +489,7 @@ in
   endlessh-go = runTest ./endlessh-go.nix;
   engelsystem = runTest ./engelsystem.nix;
   enlightenment = runTest ./enlightenment.nix;
+  ente = runTest ./ente;
   env = runTest ./env.nix;
   envfs = runTest ./envfs.nix;
   envoy = runTest {
@@ -855,7 +856,6 @@ in
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
   lxc = handleTest ./lxc { };
-  lxd = pkgs.recurseIntoAttrs (handleTest ./lxd { inherit handleTestOn; });
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
   ly = runTest ./ly.nix;

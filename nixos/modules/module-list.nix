@@ -1574,6 +1574,7 @@
   ./services/web-apps/echoip.nix
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
+  ./services/web-apps/ente.nix
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/fediwall.nix
   ./services/web-apps/fider.nix
@@ -1921,8 +1922,6 @@
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
-  ./virtualisation/lxd-agent.nix
-  ./virtualisation/lxd.nix
   ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix

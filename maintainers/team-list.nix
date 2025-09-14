@@ -271,6 +271,7 @@ with lib.maintainers;
   cuda = {
     members = [
       connorbaker
+      GaetanLepage
       prusnak
       samuela
       SomeoneSerge
@@ -818,7 +819,7 @@ with lib.maintainers;
       megheaiulian
       mkg20001
     ];
-    scope = "All things linuxcontainers. LXC, Incus, LXD and related packages.";
+    scope = "All things linuxcontainers. Incus, LXC, and related packages.";
     shortName = "lxc";
   };
 

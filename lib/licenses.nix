@@ -157,6 +157,11 @@ lib.mapAttrs mkLicense (
       fullName = "Artistic License 2.0";
     };
 
+    asl11 = {
+      spdxId = "Apache-1.1";
+      fullName = "Apache License 1.1";
+    };
+
     asl20 = {
       spdxId = "Apache-2.0";
       fullName = "Apache License 2.0";
@@ -277,11 +282,6 @@ lib.mapAttrs mkLicense (
       fullName = "Business Source License 1.1";
       free = false;
       redistributable = true;
-    };
-
-    caossl = {
-      fullName = "Computer Associates Open Source Licence Version 1.0";
-      url = "http://jxplorer.org/licence.html";
     };
 
     cal10 = {
@@ -937,6 +937,11 @@ lib.mapAttrs mkLicense (
       fullName = "Lucent Public License v1.02";
     };
 
+    lsof = {
+      spdxId = "lsof";
+      fullName = "lsof License"; # also known as Purdue BSD-Style License
+    };
+
     miros = {
       spdxId = "MirOS";
       fullName = "MirOS License";
@@ -1164,11 +1169,6 @@ lib.mapAttrs mkLicense (
       fullName = "Public Domain";
     };
 
-    purdueBsd = {
-      fullName = "Purdue BSD-Style License"; # also known as lsof license
-      url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
-    };
-
     prosperity30 = {
       fullName = "Prosperity-3.0.0";
       free = false;
@@ -1185,14 +1185,9 @@ lib.mapAttrs mkLicense (
       fullName = "Q Public License 1.0";
     };
 
-    qwt = {
-      fullName = "Qwt License, Version 1.0";
-      url = "https://qwt.sourceforge.io/qwtlicense.html";
-    };
-
-    radiance = {
-      fullName = "The Radiance Software License, Version 2.0";
-      url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
+    qwtException = {
+      spdxId = "Qwt-exception-1.0";
+      fullName = "Qwt exception 1.0";
     };
 
     ruby = {
