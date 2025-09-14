@@ -121,19 +121,21 @@ linkFarm name [
     };
   }
   {
-    name = "thespian-0.0.1-owFOjlgaBgCqc3FCnB4Xyg8-9jyIDWgHSJMGx_nt5Kcc";
+    name = "thespian-0.0.1-owFOjk0aBgC8w9ibeiVdhftyEIaVIHCnubsJWfkktE8v";
     path = fetchZigArtifact {
       name = "thespian";
-      url = "https://github.com/neurocyte/thespian/archive/ccdcbbff09f945eec063ebf889581db3e1312107.tar.gz";
-      hash = "sha256-qY/9CVgD6btprY4alo5/21EBJ9ORIivlcKY8wPPHa4k=";
+      url = "git+https://github.com/neurocyte/thespian#f2980d3a747abdf0d18a01596dd8b953dd3e6243";
+      hash = "sha256-b9tDjLa1uyaeQ0HSkCkuiIPVFI2e6AmMk2zwuFNxN/U=";
+      rev = "f2980d3a747abdf0d18a01596dd8b953dd3e6243";
     };
   }
   {
-    name = "cbor-1.0.0-RcQE_GDyAABovyRXoYFX8zD_NVOLGDc9l5g09-W-svMR";
+    name = "cbor-1.0.0-RcQE_JEoAQA8hP-nnKcQjGZa-5T3JO4cLhnNhrAdzPGf";
     path = fetchZigArtifact {
       name = "cbor";
-      url = "https://github.com/neurocyte/cbor/archive/5ea4b7319146f29bb1aa9acf65982feaba9edc3d.tar.gz";
-      hash = "sha256-0QN34UG28U3lnlb9sVWV6otrpHBN2Kv2GZwZ3BYz2GQ=";
+      url = "git+https://github.com/neurocyte/cbor#3bdf25183ec3644445ef6a8457c4a3f5f73b622b";
+      hash = "sha256-WH0vq6GPiqh+lax2q2eg5AlSQKwPnjy97OyvCScuDMk=";
+      rev = "3bdf25183ec3644445ef6a8457c4a3f5f73b622b";
     };
   }
   {
@@ -177,20 +179,21 @@ linkFarm name [
     };
   }
   {
-    name = "vaxis-0.1.0-BWNV_HwOCQCw5wTV63hQGSc1QJzsNcytH6sGf1GBc0hP";
+    name = "vaxis-0.5.1-BWNV_AsQCQDvfb-li1CZEOBG_YsteinP9qI-PpV47-jf";
     path = fetchZigArtifact {
       name = "vaxis";
-      url = "https://github.com/neurocyte/libvaxis/archive/6137cb4c44a7350996f0946a069739e5075d1f23.tar.gz";
-      hash = "sha256-EVvjwYTIw6SKeqqGHNMm9zRVgpo+TRjtrUl1Mg8tJ8M=";
+      url = "git+https://github.com/neurocyte/libvaxis?ref=main#846ddb8bf483e8a7eb25628d6c34ba7e781155b6";
+      hash = "sha256-RFZ8XXYoaIQMJkIgmo1YY+3HYSlArHWNSEYPv8fSGpU=";
+      rev = "846ddb8bf483e8a7eb25628d6c34ba7e781155b6";
     };
   }
   {
-    name = "zigimg-0.1.0-lly-O6N2EABOxke8dqyzCwhtUCAafqP35zC7wsZ4Ddxj";
+    name = "zigimg-0.1.0-8_eo2nWlEgCddu8EGLOM_RkYshx3sC8tWv-yYA4-htS6";
     path = fetchZigArtifact {
       name = "zigimg";
-      url = "git+https://github.com/TUSF/zigimg#31268548fe3276c0e95f318a6c0d2ab10565b58d";
-      hash = "sha256-oblfr2FIzuqq0FLo/RrzCwUX1NJJuT53EwD3nP3KwN0=";
-      rev = "31268548fe3276c0e95f318a6c0d2ab10565b58d";
+      url = "git+https://github.com/zigimg/zigimg#74caab5edd7c5f1d2f7d87e5717435ce0f0affa1";
+      hash = "sha256-/07Aq+f4SU1PgZaOXyDc32xjJ2ufMTseGXpFsx8llFY=";
+      rev = "74caab5edd7c5f1d2f7d87e5717435ce0f0affa1";
     };
   }
   {

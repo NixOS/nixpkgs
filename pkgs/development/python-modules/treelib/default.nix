@@ -2,23 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   six,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "treelib";
-  version = "1.7.1";
-  format = "setuptools";
+  version = "1.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "caesar0301";
     repo = "treelib";
     tag = "v${version}";
-    hash = "sha256-+6Ur2hEhUxHccZLdWHCyCkdI6Zr/wGTBIIzzbpEEiSY=";
+    hash = "sha256-jvaZVy+FUcCcIdvWK6zFL8IBVH+hMiPMmv5shFXLo0k=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

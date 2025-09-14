@@ -2,21 +2,29 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   testers,
 }:
 buildGoModule (finalAttrs: {
   pname = "wrtag";
-  version = "0.15.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "wrtag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ev/dfj6WpBZzOaN1RXHcEmkd2pVLX92J/VhoMXYGPPw=";
+    hash = "sha256-I4lvkyw2vJH29CdNhNc1qhlFdIq00QHPRlaP13UjlJQ=";
   };
 
-  vendorHash = "sha256-es6pfWw3NqKKV9jfsgQhEU6IbWeptqbP0yvum/BxOuI=";
+  vendorHash = "sha256-bqqt/p4wzYpz/nkM9ZgzVYHo/I5bUkG/pvY6irx6Z+w=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion contrib/completions/wrtag.{fish,bash}
+    installShellCompletion contrib/completions/metadata.fish
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

@@ -10,7 +10,7 @@
   check,
   json_c,
   libmodulemd,
-  libsmartcols,
+  util-linux,
   sqlite,
   librepo,
   libyaml,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
-    repo = pname;
+    repo = "libdnf";
     tag = version;
     hash = "sha256-NAnE8VPz2j7h/gB1A4FDwG/x7ki7QEmBjcfvOb6/+VY=";
   };
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cppunit
     openssl
     json_c
-    libsmartcols
+    util-linux
     libyaml
     libmodulemd
     zchunk

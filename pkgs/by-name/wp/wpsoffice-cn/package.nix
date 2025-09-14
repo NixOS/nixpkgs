@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
     libmysqlclient
     llvmPackages.openmp
     dbus
-    libsForQt5.fcitx5-qt
   ];
 
   dontWrapQtApps = true;
@@ -169,11 +168,11 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
-    license = licenses.unfreeRedistributable;
+    license = licenses.unfree;
     maintainers = with maintainers; [
       mlatus
       th0rgal
-      rewine
+      wineee
       pokon548
     ];
   };

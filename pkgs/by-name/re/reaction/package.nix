@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F/vewPUqBXq5HsD2aWPEpvTlt4MAPmaGadZMR568HFQ=";
+    hash = "sha256-lcd0yY8o5eGa1bP5WsA9K/K7gtjRVorS/Rm0bno0AOY=";
   };
 
-  cargoHash = "sha256-YvTeZJqVMRr0Iw8jynWigQPs1Y+gMao4zQnNdQxhGlM=";
+  cargoHash = "sha256-ZRTgzVz8ia763cMBx9U1NIy9W6gDUVhwNr6wDqU1Ulo=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "5.1.2";
+  version = "5.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "noxdafox";
     repo = "pebble";
     tag = version;
-    hash = "sha256-VQ6611HMj19Sq5IXqKNqVHEau8OZu8HEYFRe5LKivaI=";
+    hash = "sha256-17kAIvHI2/6p8Chm7pTkLWP+QcnIcARpH+OBVerbefQ=";
   };
 
   build-system = [

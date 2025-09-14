@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Dhcpm is a CLI tool for constructing & sending DHCP messages";
+    description = "CLI tool for constructing & sending DHCP messages";
     homepage = "https://github.com/leshow/dhcpm";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jmbaur ];

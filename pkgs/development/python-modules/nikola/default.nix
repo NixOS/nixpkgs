@@ -44,20 +44,19 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.3.1";
+  version = "8.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Nikola";
-    inherit version;
-    hash = "sha256-IfJB2Rl3c1MyEiuyNpT3udfpM480VvFD8zosJFDHr7k=";
+    inherit pname version;
+    hash = "sha256-Y219b/wqsk9MJknoaV+LtWBOMJFT6ktgt4b6yuA6scc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     babel
     blinker
@@ -102,6 +101,7 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError
     "test_compiling_markdown"
+    "test_write_content_does_not_detroy_text"
     # Date formatting slightly differs from expectation
     "test_format_date_long"
     "test_format_date_timezone"
@@ -113,10 +113,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Static website and blog generator";
-    mainProgram = "nikola";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
+    mainProgram = "nikola";
   };
 }

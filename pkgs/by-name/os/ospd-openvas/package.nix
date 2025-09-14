@@ -18,6 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "defusedxml"
+    "lxml"
     "packaging"
     "psutil"
     "python-gnupg"

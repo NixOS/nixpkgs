@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused nixfmt
 # shellcheck shell=bash
 
 set -Eeuo pipefail
@@ -218,6 +218,12 @@ netcore_target_packages () {
                      "Microsoft.NETCore.App.Runtime.Mono.$rid"
                  ) ;;
         esac
+    fi
+
+    if versionAtLeast "$version" 10; then
+        pkgs+=(
+            "Microsoft.NETCore.App.Runtime.NativeAOT.$rid"
+        )
     fi
 
     generate_package_list "$version" '      ' "${pkgs[@]}"

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gradle,
   jdk24,
-  makeWrapper,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
@@ -19,18 +18,17 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.199";
+  version = "2.247";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-1d5OzhAFo0s5xshJCdfWufo5Xb0UtHzUPdR6fwuaGYQ=";
+    hash = "sha256-rngE5GUAzbpaIPgl0DpCboLLTXFk2zYSM53YPOVWRyg=";
   };
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -72,9 +70,13 @@ stdenv.mkDerivation rec {
   gradleBuildTask = "application:jpackage";
 
   env = {
-    # The source no longer contains this, so this has been extracted from the binary releases
-    SENTRY_DSN = "https://1aacf97280717f749dfc93a1713f9551@o4507814449774592.ingest.de.sentry.io/4507814504759376";
+    EDDN_SOFTWARE_NAME = "EDO Materials Helper";
   };
+
+  preBuild = ''
+    # required to make EDDN_SOFTWARE_NAME work and for the program to know its own version
+    gradle $gradleFlags application:generateSecrets
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -91,9 +93,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    # The logs would go into the current directory, so the wrapper will cd to the config dir first
-    makeShellWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
-      --run 'mkdir -p ~/.config/odyssey-materials-helper/ && cd ~/.config/odyssey-materials-helper/' \
+    makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libXxf86vm

@@ -63,11 +63,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.52";
+  version = "1.0.54";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iB2kc3hPlcyCkLsHgMCvyBDKKNV14z1a/V5xU7KaoTY=";
+    hash = "sha256-0ez2XMIhfdQRik2vwavyfFhbXLV48715kfxkC3lkP/I=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency

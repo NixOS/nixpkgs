@@ -23,17 +23,18 @@
 
   # tests
   pytestCheckHook,
+  udevCheckHook,
 }:
 buildPythonPackage rec {
   pname = "cynthion";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "cynthion";
     tag = version;
-    hash = "sha256-xL1/ckX+xKUQpugQkLB3SlZeNcBEaTMascTgoQ4C+hA=";
+    hash = "sha256-NAsELeOnWgMa6iWCJ0+hpbHIO3BsZBv0N/nK1XP+IpU=";
   };
 
   sourceRoot = "${src.name}/cynthion/python";
@@ -43,6 +44,8 @@ buildPythonPackage rec {
       --replace-fail '"setuptools-git-versioning<2"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
+
+  nativeBuildInputs = [ udevCheckHook ];
 
   build-system = [
     setuptools
@@ -71,6 +74,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "cynthion" ];
+
+  # Make udev rules available for NixOS option services.udev.packages
+  postInstall = ''
+    install -Dm444 \
+      -t $out/lib/udev/rules.d \
+      build/lib/cynthion/assets/54-cynthion.rules
+  '';
 
   meta = {
     description = "Python package and utilities for the Great Scott Gadgets Cynthion USB Test Instrument";

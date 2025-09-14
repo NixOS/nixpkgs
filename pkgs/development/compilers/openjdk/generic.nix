@@ -8,6 +8,7 @@
   fetchpatch,
 
   buildPackages,
+  autoPatchelfHook,
   pkg-config,
   autoconf,
   lndir,
@@ -45,7 +46,6 @@
 
   versionCheckHook,
 
-  bash,
   liberation_ttf,
   cacert,
 
@@ -242,7 +242,13 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
+    unzip
+    zip
+    which
+    # Probably for BUILD_CC but not sure, not in closure.
+    zlib
   ]
   ++ lib.optionals atLeast11 [
     autoconf
@@ -255,13 +261,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!atLeast11 && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # Certificates generated using keytool in `installPhase`
     buildPackages.jdk8
-  ]
-  ++ [
-    unzip
-    zip
-    which
-    # Probably for BUILD_CC but not sure, not in closure.
-    zlib
   ]
   ++ lib.optionals atLeast21 [
     ensureNewerSourcesForZipFilesHook
@@ -277,49 +276,35 @@ stdenv.mkDerivation (finalAttrs: {
     file
     cups
     freetype
-  ]
-  ++ lib.optionals (atLeast11 && !atLeast21) [
-    harfbuzz
-  ]
-  ++ [
     alsa-lib
     libjpeg
     giflib
-  ]
-  ++ lib.optionals atLeast11 [
-    libpng
-    zlib # duplicate
-    lcms2
-  ]
-  ++ [
     libX11
     libICE
-  ]
-  ++ lib.optionals (!atLeast11) [
     libXext
-  ]
-  ++ [
     libXrender
-  ]
-  ++ lib.optionals atLeast11 [
-    libXext
-  ]
-  ++ [
     libXtst
     libXt
-    libXtst # duplicate
     libXi
     libXinerama
     libXcursor
     libXrandr
     fontconfig
   ]
+  ++ lib.optionals (atLeast11 && !atLeast21) [
+    harfbuzz
+  ]
+  ++ lib.optionals atLeast11 [
+    libpng
+    zlib # duplicate
+    lcms2
+  ]
   ++ lib.optionals (!headless && enableGtk) [
     (if atLeast11 then gtk3 else gtk2)
     glib
   ];
 
-  propagatedBuildInputs = lib.optionals (!atLeast11) [ setJavaClassPath ];
+  propagatedBuildInputs = [ setJavaClassPath ];
 
   nativeInstallCheckInputs = lib.optionals atLeast23 [
     versionCheckHook
@@ -328,14 +313,13 @@ stdenv.mkDerivation (finalAttrs: {
   # JDK's build system attempts to specifically detect
   # and special-case WSL, and we don't want it to do that,
   # so pass the correct platform names explicitly
-  ${if atLeast17 then "configurePlatforms" else null} = [
+  configurePlatforms = lib.optionals atLeast17 [
     "build"
     "host"
   ];
 
   # https://openjdk.org/groups/build/doc/building.html
   configureFlags = [
-    "--with-boot-jdk=${jdk-bootstrap'.home}"
     # https://github.com/openjdk/jdk/blob/471f112bca715d04304cbe35c6ed63df8c7b7fee/make/autoconf/util_paths.m4#L315
     # Ignoring value of READELF from the environment. Use command line variables instead.
     "READELF=${stdenv.cc.targetPrefix}readelf"
@@ -344,6 +328,12 @@ stdenv.mkDerivation (finalAttrs: {
     "NM=${stdenv.cc.targetPrefix}nm"
     "OBJDUMP=${stdenv.cc.targetPrefix}objdump"
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+    "--with-boot-jdk=${jdk-bootstrap'.home}"
+    "--enable-unlimited-crypto"
+    "--with-native-debug-symbols=internal"
+    "--with-stdc++lib=dynamic"
+    "--with-zlib=system"
+    "--with-giflib=system"
   ]
   ++ (
     if atLeast23 then
@@ -366,10 +356,6 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ [
-    "--enable-unlimited-crypto"
-    "--with-native-debug-symbols=internal"
-  ]
   ++ lib.optionals (!atLeast21) (
     if atLeast11 then
       [
@@ -381,23 +367,10 @@ stdenv.mkDerivation (finalAttrs: {
         "--disable-freetype-bundling"
       ]
   )
-  ++ (
-    if atLeast11 then
-      [
-        "--with-libjpeg=system"
-        "--with-giflib=system"
-        "--with-libpng=system"
-        "--with-zlib=system"
-        "--with-lcms=system"
-      ]
-    else
-      [
-        "--with-zlib=system"
-        "--with-giflib=system"
-      ]
-  )
-  ++ [
-    "--with-stdc++lib=dynamic"
+  ++ lib.optionals atLeast11 [
+    "--with-libjpeg=system"
+    "--with-libpng=system"
+    "--with-lcms=system"
   ]
   ++ lib.optionals (featureVersion == "11") [
     "--disable-warnings-as-errors"
@@ -422,14 +395,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = if atLeast17 then [ "images" ] else [ "all" ];
 
-  separateDebugInfo = atLeast11;
-  __structuredAttrs = atLeast11;
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   # -j flag is explicitly rejected by the build system:
   #     Error: 'make -jN' is not supported, use 'make JOBS=N'
   # Note: it does not make build sequential. Build system
   # still runs in parallel.
   enableParallelBuilding = false;
+
+  preConfigure =
+    # Set number of jobs to use when building.
+    ''
+      configureFlags+=("--with-jobs=''${NIX_BUILD_CORES}")
+    '';
 
   env = {
     NIX_CFLAGS_COMPILE =
@@ -481,13 +460,14 @@ stdenv.mkDerivation (finalAttrs: {
     DISABLE_HOTSPOT_OS_VERSION_CHECK = "ok";
   };
 
-  ${if atLeast23 then "versionCheckProgram" else null} = "${placeholder "out"}/bin/java";
+  versionCheckProgram = lib.optionalString atLeast23 "${placeholder "out"}/bin/java";
 
-  ${if !atLeast11 then "doCheck" else null} = false; # fails with "No rule to make target 'y'."
+  # Fails with "No rule to make target 'y'."
+  doCheck = false;
 
   doInstallCheck = atLeast23;
 
-  ${if atLeast17 then "postPatch" else null} = ''
+  postPatch = ''
     chmod +x configure
     patchShebangs --build configure
   ''
@@ -496,84 +476,83 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build make/scripts
   '';
 
-  ${if !atLeast17 then "preConfigure" else null} = ''
-    chmod +x configure
-    substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
-  ''
-  + lib.optionalString (!atLeast11) ''
-    substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "${stdenv.shell}"
-    substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
-  '';
-
   installPhase = ''
     mkdir -p $out/lib
-
     mv build/*/images/${if atLeast11 then "jdk" else "j2sdk-image"} $out/lib/openjdk
-
-    # Remove some broken manpages.
+  ''
+  # Remove some broken manpages.
+  + ''
     rm -rf $out/lib/openjdk/man/ja*
-
-    # Mirror some stuff in top-level.
+  ''
+  # Mirror some stuff in top-level.
+  + ''
     mkdir -p $out/share
+    ln -s $out/lib/openjdk/bin $out/bin
     ln -s $out/lib/openjdk/include $out/include
     ln -s $out/lib/openjdk/man $out/share/man
   ''
-  + lib.optionalString atLeast17 ''
-
-    # IDEs use the provided src.zip to navigate the Java codebase (https://github.com/NixOS/nixpkgs/pull/95081)
-  ''
+  # IDEs use the provided src.zip to navigate the Java codebase (https://github.com/NixOS/nixpkgs/pull/95081)
   + lib.optionalString atLeast11 ''
     ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
   ''
+  # jni.h expects jni_md.h to be in the header search path.
   + ''
-
-    # jni.h expects jni_md.h to be in the header search path.
     ln -s $out/include/linux/*_md.h $out/include/
-
-    # Remove crap from the installation.
-    rm -rf $out/lib/openjdk/demo${lib.optionalString (!atLeast11) " $out/lib/openjdk/sample"}
-    ${lib.optionalString headless (
+  ''
+  # Remove crap from the installation.
+  + (
+    ''
+      rm -rf $out/lib/openjdk/demo
+    ''
+    + lib.optionalString (!atLeast11) ''
+      rm -rf $out/lib/openjdk/sample
+    ''
+    + lib.optionalString headless (
       if atLeast11 then
         ''
           rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
         ''
       else
         ''
-          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
+          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libfontmanager}.so
           rm $out/lib/openjdk/jre/bin/policytool
           rm $out/lib/openjdk/bin/{policytool,appletviewer}
         ''
-    )}
-  ''
-  + lib.optionalString (!atLeast11) ''
-
+    )
+  )
+  + lib.optionalString (!atLeast11) (
     # Move the JRE to a separate output
-    mkdir -p $jre/lib/openjdk
-    mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
-    mkdir $out/lib/openjdk/jre
-    lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+    ''
+      mkdir -p $jre/lib/openjdk
+      mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
+      mkdir $out/lib/openjdk/jre
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
+      ln -s $jre/lib/openjdk/jre $out/jre
+      ln -s $jre/lib/openjdk/jre/bin $jre/bin
+    ''
     # Make sure cmm/*.pf are not symlinks:
     # https://youtrack.jetbrains.com/issue/IDEA-147272
-    rm -rf $out/lib/openjdk/jre/lib/cmm
-    ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
-
+    + ''
+      rm -rf $out/lib/openjdk/jre/lib/cmm
+      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
+    ''
     # Setup fallback fonts
-    ${lib.optionalString (!headless) ''
+    + lib.optionalString (!headless) ''
       mkdir -p $jre/lib/openjdk/jre/lib/fonts
       ln -s ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
-    ''}
-
+    ''
     # Remove duplicate binaries.
-    for i in $(cd $out/lib/openjdk/bin && echo *); do
-      if [ "$i" = java ]; then continue; fi
-      if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
-        ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
-      fi
-    done
-
+    + ''
+      for i in $(ls $out/lib/openjdk/bin); do
+        if [ "$i" = java ]; then continue; fi
+        if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
+          ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
+        fi
+      done
+    ''
     # Generate certificates.
-    (
+    + ''
       cd $jre/lib/openjdk/jre/lib/security
       rm cacerts
       perl ${./8/generate-cacerts.pl} ${
@@ -582,73 +561,41 @@ stdenv.mkDerivation (finalAttrs: {
         else
           "keytool"
       } ${cacert}/etc/ssl/certs/ca-bundle.crt
-    )
-  ''
-  + ''
-
-    ln -s $out/lib/openjdk/bin $out/bin
-  ''
-  + lib.optionalString (!atLeast11) ''
-    ln -s $jre/lib/openjdk/jre/bin $jre/bin
-    ln -s $jre/lib/openjdk/jre $out/jre
-  '';
+    ''
+  );
 
   preFixup =
-    (
-      if atLeast11 then
-        ''
-          # Propagate the setJavaClassPath setup hook so that any package
-          # that depends on the JDK has $CLASSPATH set up properly.
-          mkdir -p $out/nix-support
-          #TODO or printWords?  cf https://github.com/NixOS/nixpkgs/pull/27427#issuecomment-317293040
-          echo -n "${setJavaClassPath}" > $out/nix-support/propagated-build-inputs
-        ''
-      else
-        ''
-          # Propagate the setJavaClassPath setup hook from the JRE so that
-          # any package that depends on the JRE has $CLASSPATH set up
-          # properly.
-          mkdir -p $jre/nix-support
-          printWords ${setJavaClassPath} > $jre/nix-support/propagated-build-inputs
-        ''
-    )
-    + ''
-
-      # Set JAVA_HOME automatically.
+    # Set JAVA_HOME automatically.
+    ''
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
+    ''
+    # Propagate the setJavaClassPath setup hook from the JRE so that
+    # any package that depends on the JRE has $CLASSPATH set up
+    # properly.
+    + lib.optionalString (!atLeast11) ''
+      mkdir -p $jre/nix-support
+      printWords "${setJavaClassPath}" > $jre/nix-support/propagated-build-inputs
     '';
 
+  # If binaries in the jre output have RPATH dependencies on libraries from the out output, Nix will
+  # detect a cyclic reference and abort the build.
+  # To fix that, we need to patch the binaries from each output in separate auto-patchelf executions.
+  dontAutoPatchelf = true;
   postFixup = ''
-    # Build the set of output library directories to rpath against
-    LIBDIRS=""
-    for output in $(getAllOutputNames); do
-      if [ "$output" = debug ]; then continue; fi
-      LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | ${
-        if atLeast17 then "sort -u" else "sort | uniq"
-      } | tr '\n' ':'):$LIBDIRS"
-    done
-    # Add the local library paths to remove dependencies on the bootstrap
-    for output in $(getAllOutputNames); do
-      if [ "$output" = debug ]; then continue; fi
-      OUTPUTDIR=$(eval echo \$$output)
-      BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
-      echo "$BINLIBS" | while read i; do
-        patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
-        patchelf --shrink-rpath "$i" || true
-      done
-    done
+    autoPatchelf -- $out
+  ''
+  + lib.optionalString (!atLeast11) ''
+    autoPatchelf -- $jre
   '';
 
-  # TODO: The OpenJDK 8 derivation got this wrong.
-  disallowedReferences = [
-    (if atLeast11 then jdk-bootstrap' else jdk-bootstrap)
-  ];
+  disallowedReferences = [ jdk-bootstrap' ];
 
   passthru = {
     home = "${finalAttrs.finalPackage}/lib/openjdk";
+    # Shouldn't this be `jdk-bootstrap = jdk-bootstrap'`?
     inherit jdk-bootstrap;
     inherit (source) updateScript;
   }

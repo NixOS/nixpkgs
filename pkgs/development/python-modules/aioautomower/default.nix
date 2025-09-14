@@ -8,11 +8,13 @@
   ical,
   mashumaro,
   poetry-core,
+  poetry-dynamic-versioning,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  python-dateutil,
   syrupy,
   time-machine,
   tzlocal,
@@ -20,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2025.6.0";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    tag = version;
-    hash = "sha256-6V3utjqCLQmO2iuWdn6kE8oz9XcJ/sCfeSMWmxL/2NE=";
+    tag = "v${version}";
+    hash = "sha256-ds/wNPaZYQ8Tk/GyqYrWYL99oU73JWc/3KBsMULBass=";
   };
 
   postPatch = ''
@@ -38,13 +40,17 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
   dependencies = [
     aiohttp
     ical
     mashumaro
     pyjwt
+    python-dateutil
     tzlocal
   ];
 
@@ -68,6 +74,9 @@ buildPythonPackage rec {
     # Timezone mismatches
     "test_full_planner_event"
     "test_sinlge_planner_event"
+    "test_set_datetime"
+    "test_message_event"
+    "test_async_get_messages"
   ];
 
   meta = with lib; {

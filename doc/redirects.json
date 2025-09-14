@@ -130,6 +130,15 @@
   "minor-ghc-deprecation": [
     "index.html#minor-ghc-deprecation"
   ],
+  "modules": [
+    "index.html#modules"
+  ],
+  "modules-generic": [
+    "index.html#modules-generic"
+  ],
+  "modules-generic-meta-maintainers": [
+    "index.html#modules-generic-meta-maintainers"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -487,6 +496,9 @@
   "module-system-lib-evalModules-return-value-_configurationClass": [
     "index.html#module-system-lib-evalModules-return-value-_configurationClass"
   ],
+  "module-system-lib-evalModules-return-value-graph": [
+    "index.html#module-system-lib-evalModules-return-value-graph"
+  ],
   "part-stdenv": [
     "index.html#part-stdenv"
   ],
@@ -562,6 +574,9 @@
   "strictflexarrays3": [
     "index.html#strictflexarrays3"
   ],
+  "glibcxxassertions": [
+    "index.html#glibcxxassertions"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -609,6 +624,9 @@
   ],
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
+  ],
+  "var-go-buildTestBinaries": [
+    "index.html#var-go-buildTestBinaries"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -1653,6 +1671,12 @@
   ],
   "fetchfromsourcehut": [
     "index.html#fetchfromsourcehut"
+  ],
+  "fetchfromradicle": [
+    "index.html#fetchfromradicle"
+  ],
+  "fetchradiclepatch": [
+    "index.html#fetchradiclepatch"
   ],
   "requirefile": [
     "index.html#requirefile"
@@ -4569,6 +4593,9 @@
   ],
   "sec-interop.cylonedx-fod": [
     "index.html#sec-interop.cylonedx-fod"
+  ],
+  "sec-uv": [
+    "index.html#sec-uv"
   ],
   "module-system-module-argument-_prefix": [
     "index.html#module-system-module-argument-_prefix"

@@ -23,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "scalar-fastapi";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scalar_fastapi";
     inherit version;
-    hash = "sha256-r5GoX6f7Ru078WcRvGNyhyYDxL1w4yjbfHvlf+ZF/sc=";
+    hash = "sha256-0qANeCaueAP1SYYvuzTJNOfth9nkNTiIe/zejznq2VI=";
   };
 
   build-system = [

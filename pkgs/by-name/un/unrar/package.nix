@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
-  version = "7.1.9";
+  version = "7.1.10";
 
   src = fetchzip {
     url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
     stripRoot = false;
-    hash = "sha256-CkeE97RcEyCwOX4NKZG2d63ZvxsYFN8Y1swJ9ODb8sk=";
+    hash = "sha256-qUqUJ7NZyF+/skmdYMeE+u6KoHswcJvQSnRQ8rAKXp8=";
   };
 
   sourceRoot = finalAttrs.src.name;
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     cp -a unrar libunrar
-    make -C libunrar lib
-    make -C unrar -j1
+    make -C libunrar lib -j$NIX_BUILD_CORES
+    make -C unrar -j$NIX_BUILD_CORES
 
     runHook postBuild
   '';

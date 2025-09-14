@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
-    rev = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
     hash = "sha256-vrRIirWQLbbe1l07AqqHK/StWo0egKuivdKT5R8Rx58=";
 
     # the repository's .gitattributes file contains the lines "/Tst/

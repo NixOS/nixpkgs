@@ -5,14 +5,12 @@
   makeWrapper,
 
   # runtime dependencies
-  nix, # for nix-prefetch-url
   nix-prefetch-git,
   git, # for git ls-remote
 }:
 
 let
   runtimePath = lib.makeBinPath [
-    nix
     nix-prefetch-git
     git
   ];

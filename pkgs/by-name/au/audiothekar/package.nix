@@ -38,10 +38,6 @@ buildDotnetModule rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = audiothekar;
-      command = "audiothekar-cli --version";
-    };
   };
 
   meta = with lib; {

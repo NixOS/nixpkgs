@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   meson,
   ninja,
@@ -12,6 +11,7 @@
   wrapGAppsHook3,
   editorconfig-core-c,
   granite,
+  gsettings-desktop-schemas,
   gtk3,
   gtksourceview4,
   gtkspell3,
@@ -26,23 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "8.0.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    hash = "sha256-muW7K9cFITZaoNi3id+iplmokN5sSE8x1CVQ62+myUU=";
+    hash = "sha256-4IGun7MnrMRmpXD0Kxm/ND4C3pFVhjHqDeP6jUmRg7k=";
   };
-
-  patches = [
-    # Fix build with GCC 14
-    # https://github.com/elementary/code/pull/1606
-    (fetchpatch {
-      url = "https://github.com/elementary/code/commit/9b8347adcbb94f3186815413d927eecc51be2ccf.patch";
-      hash = "sha256-VhpvWgOGniOEjxBOjvX30DZIRGalxfPlb9j1VaOAJTA=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -58,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     editorconfig-core-c
     granite
+    gsettings-desktop-schemas
     gtk3
     gtksourceview4
     gtkspell3

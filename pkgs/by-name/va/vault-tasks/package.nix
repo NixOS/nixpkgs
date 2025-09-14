@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.12.0";
+  version = "0.13.0";
 in
 rustPlatform.buildRustPackage {
   pname = "vault-tasks";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "louis-thevenet";
     repo = "vault-tasks";
     rev = "v${version}";
-    hash = "sha256-PMqGqvyxgkGRVahQ+ruDA0vFT0162DrZU92nT4SMTGw=";
+    hash = "sha256-XWeY2l82n51O4/LKPOJZOXf7PCRPOUshFg832iDvmuA=";
   };
 
-  cargoHash = "sha256-34c5i2kIoQuTkm1SF7bYX109noVGaGJ47b2FCxQUyB8=";
+  cargoHash = "sha256-znc2oKpovsXyrUhKvBVMorv7yWM39xNgaNDiq/5I6Dg=";
 
   nativeBuildInputs = [
     installShellFiles

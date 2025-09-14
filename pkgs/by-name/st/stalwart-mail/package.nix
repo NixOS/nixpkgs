@@ -64,7 +64,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-  };
+  }
+  //
+    lib.optionalAttrs
+      (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
+      {
+        JEMALLOC_SYS_WITH_LG_PAGE = 16;
+      };
 
   postInstall = ''
     mkdir -p $out/etc/stalwart

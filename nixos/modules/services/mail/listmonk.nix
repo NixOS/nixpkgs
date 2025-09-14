@@ -36,13 +36,13 @@ let
   '';
 
   databaseSettingsOpts = with lib.types; {
-    freeformType = oneOf [
+    freeformType = attrsOf (oneOf [
       (listOf str)
       (listOf (attrsOf anything))
       str
       int
       bool
-    ];
+    ]);
 
     options = {
       "app.notify_emails" = lib.mkOption {

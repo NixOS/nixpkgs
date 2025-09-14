@@ -9,6 +9,20 @@ on:
       headBranch:
         required: true
         type: string
+      mergedSha:
+        required: true
+        type: string
+      ownersCanFail:
+        required: true
+        type: boolean
+      targetSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+      OWNER_RO_APP_PRIVATE_KEY:
+        required: true
 
 permissions: {}
 
@@ -17,33 +31,17 @@ defaults:
     shell: bash
 
 jobs:
-  no-channel-base:
-    name: no channel base
-    if: contains(fromJSON(inputs.baseBranch).type, 'channel')
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - run: |
-          cat <<EOF
-          The nixos-* and nixpkgs-* branches are pushed to by the channel
-          release script and should not be merged into directly.
-
-          Please target the equivalent release-* branch or master instead.
-          EOF
-          exit 1
-
-  cherry-pick:
-    if: |
-      github.event_name == 'pull_request' ||
-      (fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development'))
+  commits:
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 3
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          fetch-depth: 0
-          filter: tree:0
           path: trusted
+          sparse-checkout: |
+            ci/github-script
 
       - name: Install dependencies
         run: npm install bottleneck
@@ -53,19 +51,92 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - name: Check cherry-picks
+      - name: Check commits
         id: check
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          TARGETS_STABLE: ${{ fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development') }}
         with:
           script: |
+            const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
             require('./trusted/ci/github-script/commits.js')({
               github,
               context,
               core,
               dry: context.eventName == 'pull_request',
+              cherryPicks: context.eventName == 'pull_request' || targetsStable,
             })
 
       - name: Log current API rate limits
         env:
           GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+  # For checking code owners, this job depends on a GitHub App with the following permissions:
+  # - Permissions:
+  #   - Repository > Administration: read-only
+  #   - Organization > Members: read-only
+  # - Install App on this repository, setting these variables:
+  #   - OWNER_RO_APP_ID (variable)
+  #   - OWNER_RO_APP_PRIVATE_KEY (secret)
+  #
+  # This should not use the same app as the job to request reviewers, because this job requires
+  # handling untrusted PR input.
+  owners:
+    runs-on: ubuntu-24.04-arm
+    continue-on-error: ${{ inputs.ownersCanFail }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: .github/actions
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
+
+      - uses: cachix/install-nix-action@7be5dee1421f63d07e71ce6e0a9f8a4b07c2a487 # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
+
+      - name: Build codeowners validator
+        run: nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A codeownersValidator
+
+      - uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
+        if: github.event_name == 'pull_request_target' && vars.OWNER_RO_APP_ID
+        id: app-token
+        with:
+          app-id: ${{ vars.OWNER_RO_APP_ID }}
+          private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Validate codeowners
+        if: steps.app-token.outputs.token
+        env:
+          OWNERS_FILE: nixpkgs/untrusted/ci/OWNERS
+          GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY_PATH: nixpkgs/untrusted
+          OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
+          # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
+          EXPERIMENTAL_CHECKS: "avoid-shadowing"
+        run: result/bin/codeowners-validator
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: gh api /rate_limit | jq

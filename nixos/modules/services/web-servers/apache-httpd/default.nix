@@ -48,8 +48,6 @@ let
   ) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
   vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
-  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
-  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkListenInfo =
     hostOpts:
@@ -914,13 +912,14 @@ in
     systemd.services.httpd = {
       description = "Apache HTTPD";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
       after = [
         "network.target"
       ]
-      ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-      ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
-      before = map (certName: "acme-${certName}.service") dependentCertNames;
+      # Ensure httpd runs with baseline certificates in place.
+      ++ map (certName: "acme-${certName}.service") vhostCertNames;
+      # Ensure httpd runs (with current config) before the actual ACME jobs run
+      before = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
       restartTriggers = [ cfg.configFile ];
 
       path = [
@@ -960,19 +959,17 @@ in
 
     # postRun hooks on cert renew can't be used to restart Apache since renewal
     # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
-    # which allows the acme-finished-$cert.target to signify the successful updating
+    # which allows the acme-order-renew-$cert.service to signify the successful updating
     # of certs end-to-end.
     systemd.services.httpd-config-reload =
       let
-        sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
-        sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+        sslServices = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
       in
       mkIf (vhostCertNames != [ ]) {
         wantedBy = sslServices ++ [ "multi-user.target" ];
         # Before the finished targets, after the renew services.
         # This service might be needed for HTTP-01 challenges, but we only want to confirm
         # certs are updated _after_ config has been reloaded.
-        before = sslTargets;
         after = sslServices;
         restartTriggers = [ cfg.configFile ];
         # Block reloading if not all certs exist yet.

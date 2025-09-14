@@ -10,12 +10,12 @@
 }:
 let
   pname = "cup-docker";
-  version = "3.4.0";
+  version = "3.4.2";
   src = fetchFromGitHub {
     owner = "sergi0g";
     repo = "cup";
     tag = "v${version}";
-    hash = "sha256-ciH3t2L2eJhk1+JXTqEJSuHve8OuVod7AuQ3iFWmKRE=";
+    hash = "sha256-gKKSrd58F8pe/fy29gLY/4ugfhVXI0yyUnIarIMF/L8=";
   };
   web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${pname}-web";
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage {
     pname
     ;
 
-  cargoHash = "sha256-L9zugOwlPwpdtjV87dT1PH7FAMJYHYFuvfyOfPe5b2k=";
+  cargoHash = "sha256-1VSbv6lDRRLZIu7hYrAqzQmvxcuhnPU0rcWfg7Upcm4=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [

@@ -14,7 +14,7 @@
   makeWrapper,
   napi-rs-cli,
   nix-update-script,
-  nodejs_20,
+  nodejs_22,
   pkg-config,
   rustc,
   rustPlatform,
@@ -34,23 +34,23 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.6.1";
+  version = "2025.8.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-dYeq0YkQwmRve++RcMWnAuJyslaTZ4VIV4V/lMgSauQ=";
+    hash = "sha256-cYSzAdrUvZrYPQ01uPJ6I1yJvTQtdV2rV0GTF6yKVCk=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
-    # The nixpkgs tooling trips over upstreams inconsistent lock files, so we fixed them by running npm install open@10.2.1 and cargo b
-    ./fix-lock-files.diff
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
     ./set-exe-path.patch
+    # ensure that the desktop proxy is correctly located in libexec
+    ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
     # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
@@ -62,14 +62,19 @@ buildNpmPackage' rec {
     rm -r bitwarden_license
 
     substituteInPlace apps/desktop/src/main.ts --replace-fail '%%exePath%%' "$out/bin/bitwarden"
+    substituteInPlace apps/desktop/src/main/native-messaging.main.ts \
+      --replace-fail '%%desktopProxyPath%%' "$out/libexec/desktop_proxy"
 
     # force canUpdate to false
     # will open releases page instead of trying to update files
     substituteInPlace apps/desktop/src/main/updater.main.ts \
       --replace-fail 'this.canUpdate =' 'this.canUpdate = false; let _dummy ='
+
+    # unneeded for desktop, and causes errors
+    rm -r apps/cli
   '';
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
   makeCacheWritable = true;
   npmFlags = [
@@ -82,7 +87,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-yzOz1X75Wz/NwjlGHL439bEek082vJBL/9imnla3SyU=";
+  npmDepsHash = "sha256-1SDXXsfyJDMjg4v0i9jDh7Y7m6LXd0vW4g0vRLeDXD8=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -92,7 +97,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-mt7zWKgH21khAIrfpBFzb+aS2V2mV56zMqCSLzDhGfQ=";
+    hash = "sha256-NWdzdlsRTUoipTCIe/q4jehNBzf9/sBVW0qf6iTsbhU=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -131,6 +136,10 @@ buildNpmPackage' rec {
 
     pushd apps/desktop/desktop_native/napi
     npm run build
+    popd
+
+    pushd apps/desktop/desktop_native/proxy
+    cargo build --bin desktop_proxy --release -j $NIX_BUILD_CORES --offline
     popd
   '';
 
@@ -175,6 +184,8 @@ buildNpmPackage' rec {
 
   installPhase = ''
     runHook preInstall
+
+    install -Dm755 -t $out/libexec apps/desktop/desktop_native/target/release/desktop_proxy
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications

@@ -111,6 +111,18 @@ let
     "swift-remote-mirror-headers"
   ];
 
+  clangForWrappers = clang.override (prev: {
+    extraBuildCommands =
+      prev.extraBuildCommands
+      # We need to use the resource directory corresponding to Swift’s
+      # version of Clang instead of passing along the one from the
+      # `cc-wrapper` flags.
+      + ''
+        substituteInPlace $out/nix-support/cc-cflags \
+          --replace-fail " -resource-dir=$out/resource-root" ""
+      '';
+  });
+
   # Build a tool used during the build to create a custom clang wrapper, with
   # which we wrap the clang produced by the swift build.
   #
@@ -130,11 +142,14 @@ let
     unwrappedClang="$targetFile-unwrapped"
 
     mv "$targetFile" "$unwrappedClang"
-    sed < '${clang}/bin/clang' > "$targetFile" \
+    sed < '${clangForWrappers}/bin/clang' > "$targetFile" \
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
       -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
-      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|"
+      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|" \
+    ${lib.optionalString (clang.libcxx != null) ''
+      -e 's|$NIX_CXXSTDLIB_COMPILE_${clang.suffixSalt}|-isystem '$SWIFT_BUILD_ROOT'/libcxx/include/c++/v1|g'
+    ''}
     chmod a+x "$targetFile"
   '';
 
@@ -146,13 +161,12 @@ let
   # executable uses $0 to detect what tool is called.
   wrapperParams = {
     inherit bintools;
-    default_cc_wrapper = clang; # Instead of `@out@` in the original.
     coreutils_bin = lib.getBin coreutils;
     gnugrep_bin = gnugrep;
     suffixSalt = lib.replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
     use_response_file_by_default = 1;
     swiftDriver = "";
-    # NOTE: @prog@ needs to be filled elsewhere.
+    # NOTE: @cc_wrapper@ and @prog@ need to be filled elsewhere.
   };
   swiftWrapper = runCommand "swift-wrapper.sh" wrapperParams ''
     # Make empty to avoid adding the SDK’s modules in the bootstrap wrapper. Otherwise, the SDK conflicts with the
@@ -168,7 +182,11 @@ let
     mv "$targetFile" "$unwrappedSwift"
     sed < '${swiftWrapper}' > "$targetFile" \
       -e "s|@prog@|'$unwrappedSwift'|g" \
-      -e 's|exec "$prog"|exec -a "$0" "$prog"|g'
+      -e 's|@cc_wrapper@|${clangForWrappers}|g' \
+      -e 's|exec "$prog"|exec -a "$0" "$prog"|g' \
+    ${lib.optionalString (clang.libcxx != null) ''
+      -e 's|$NIX_CXXSTDLIB_COMPILE_${clang.suffixSalt}|-isystem '$SWIFT_BUILD_ROOT'/libcxx/include/c++/v1|g'
+    ''}
     chmod a+x "$targetFile"
   '';
 
@@ -308,10 +326,12 @@ stdenv.mkDerivation {
 
      patch -p1 -d swift -i ${./patches/swift-cmake-3.25-compat.patch}
      patch -p1 -d swift -i ${./patches/swift-wrap.patch}
-     patch -p1 -d swift -i ${./patches/swift-nix-resource-root.patch}
      patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
-     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
-     patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
+     patch -p1 -d swift -i ${
+       replaceVars ./patches/swift-linux-fix-linking.patch {
+         inherit clang;
+       }
+     }
      patch -p1 -d swift -i ${
        replaceVars ./patches/swift-darwin-plistbuddy-workaround.patch {
          inherit swiftArch;
@@ -354,6 +374,19 @@ stdenv.mkDerivation {
            stripLen = 1;
            hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
          })
+
+         # Fix the build with modern libc++.
+         (fetchpatch {
+           name = "add-cstdio.patch";
+           url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
+           stripLen = 1;
+           hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
+         })
+         (fetchpatch {
+           url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+           stripLen = 1;
+           hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+         })
        ]
      }; do
        patch -p1 -d llvm-project/lldb -i $lldbPatch
@@ -361,7 +394,7 @@ stdenv.mkDerivation {
 
      patch -p1 -d llvm-project/clang -i ${./patches/clang-toolchain-dir.patch}
      patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
-     patch -p1 -d llvm-project/clang -i ${../../llvm/12/clang/purity.patch}
+     patch -p1 -d llvm-project/clang -i ${./patches/clang-purity.patch}
      patch -p2 -d llvm-project/clang -i ${
        fetchpatch {
          name = "clang-cmake-fix-interpreter.patch";
@@ -419,6 +452,14 @@ stdenv.mkDerivation {
      patchShebangs .
 
      ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+       patch -p1 -d swift-corelibs-libdispatch -i ${
+         # Fix the build with modern Clang.
+         fetchpatch {
+           url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/30bb8019ba79cdae0eb1dc0c967c17996dd5cc0a.patch";
+           hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
+         }
+       }
+
        # NOTE: This interferes with ABI stability on Darwin, which uses the system
        # libraries in the hardcoded path /usr/lib/swift.
        fixCmakeFiles .
@@ -426,7 +467,11 @@ stdenv.mkDerivation {
   '';
 
   # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
-  hardeningDisable = lib.optional stdenv.hostPlatform.isAarch64 "zerocallusedregs";
+  # > clang-15-unwrapped: error: argument unused during compilation: '-fstack-clash-protection' [-Werror,-Wunused-command-line-argument]
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "zerocallusedregs"
+    "stackclashprotection"
+  ];
 
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
@@ -469,6 +514,19 @@ stdenv.mkDerivation {
     cmakeFlags="-GNinja"
     buildProject swift-cmark
 
+    ${lib.optionalString (clang.libcxx != null) ''
+      # Install the libc++ headers corresponding to the LLVM version of
+      # Swift’s Clang.
+      cmakeFlags="
+        -GNinja
+        -DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi
+        -DLIBCXXABI_INSTALL_INCLUDE_DIR=$dev/include/c++/v1
+      "
+      ninjaFlags="install-cxx-headers install-cxxabi-headers"
+      buildProject libcxx llvm-project/runtimes
+      unset ninjaFlags
+    ''}
+
     # Some notes:
     # - The Swift build just needs Clang.
     # - We can further reduce targets to just our targetPlatform.
@@ -485,6 +543,10 @@ stdenv.mkDerivation {
       }
     "
     buildProject llvm llvm-project/llvm
+
+    # Ensure that the built Clang can find the runtime libraries by
+    # copying the symlinks from the main wrapper.
+    cp -P ${clang}/resource-root/{lib,share} $SWIFT_BUILD_ROOT/llvm/lib/clang/15.0.0/
 
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -658,7 +720,7 @@ stdenv.mkDerivation {
     mv llvm/bin/clang-15{-unwrapped,}
     mv swift/bin/swift-frontend{-unwrapped,}
 
-    mkdir $out $lib
+    mkdir $lib
 
     # Install clang binaries only. We hide these with the wrapper, so they are
     # for private use by Swift only.
@@ -693,14 +755,8 @@ stdenv.mkDerivation {
     ln -s $lib/lib/swift $out/lib/swift
 
     # Swift has a separate resource root from Clang, but locates the Clang
-    # resource root via subdir or symlink. Provide a default here, but we also
-    # patch Swift to prefer NIX_CC if set.
-    #
-    # NOTE: We don't symlink directly here, because that'd add a run-time dep
-    # on the full Clang compiler to every Swift executable. The copy here is
-    # just copying the 3 symlinks inside to smaller closures.
-    mkdir $lib/lib/swift/clang
-    cp -P ${clang}/resource-root/* $lib/lib/swift/clang/
+    # resource root via subdir or symlink.
+    mv $SWIFT_BUILD_ROOT/llvm/lib/clang/15.0.0 $lib/lib/swift/clang
   '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -755,6 +811,10 @@ stdenv.mkDerivation {
       swiftStaticModuleSubdir
       swiftStaticLibSubdir
       ;
+
+    tests = {
+      cxx-interop-test = callPackage ../cxx-interop-test { };
+    };
 
     # Internal attr for the wrapper.
     _wrapperParams = wrapperParams;

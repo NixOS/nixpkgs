@@ -7,7 +7,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytest-tornado,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   pytz,
   setuptools,
@@ -31,6 +31,10 @@ buildPythonPackage rec {
     hash = "sha256-tFEm9yXf8CqcipSYtM7JM6WQ5Qm0YtgWhZvZOBAzy+w=";
   };
 
+  postPatch = ''
+    sed -i "/addopts/d" pyproject.toml
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
@@ -45,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytest-tornado
-    pytestCheckHook
+    pytest8_3CheckHook
     pytz
     tornado
     twisted

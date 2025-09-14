@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   name = "eigenwallet";
-  version = "2.0.3";
+  version = "3.0.0-beta.8";
 
   src = fetchurl {
-    url = "https://github.com/eigenwallet/core/releases/download/${finalAttrs.version}/UnstoppableSwap_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-2uOsZ6IvaQes+FYGQ0cNYlySzjyNwf/3fqk3DJzN+WI=";
+    url = "https://github.com/eigenwallet/core/releases/download/${finalAttrs.version}/eigenwallet_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-9quyDsCQsGGTESdBg5BLbUaXCWhhxz3xmqkanCIdreE=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Protocol and desktop application for swapping Monero and Bitcoin";
-    homepage = "https://unstoppableswap.net";
+    homepage = "https://eigenwallet.org";
     maintainers = with lib.maintainers; [ JacoMalan1 ];
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -25,15 +25,19 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "6.3.0";
+  version = "6.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
     tag = "v${version}";
-    hash = "sha256-AqnyQdLkg2vobVJ84X15AB0Yyj3gZf4rP3pEdk3MqZ4=";
+    hash = "sha256-nnnVtNXQ7Sa4wXl0ay3OyjvOq2j90pTwhK24WR8mrBo=";
   };
+
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
 
   build-system = [
     setuptools

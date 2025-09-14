@@ -24,6 +24,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=oliver-ni.scheme-fmt";
     homepage = "https://github.com/oliver-ni/scheme-fmt";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ tuynia ];
   };
 }

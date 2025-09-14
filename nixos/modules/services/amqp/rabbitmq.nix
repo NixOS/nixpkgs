@@ -109,8 +109,8 @@ in
           will be merged into these options by RabbitMQ at runtime to
           form the final configuration.
 
-          See https://www.rabbitmq.com/configure.html#config-items
-          For the distinct formats, see https://www.rabbitmq.com/configure.html#config-file-formats
+          See <https://www.rabbitmq.com/configure.html#config-items>
+          For the distinct formats, see <https://www.rabbitmq.com/configure.html#config-file-formats>
         '';
       };
 
@@ -127,8 +127,8 @@ in
           The contents of this option will be merged into the `configItems`
           by RabbitMQ at runtime to form the final configuration.
 
-          See the second table on https://www.rabbitmq.com/configure.html#config-items
-          For the distinct formats, see https://www.rabbitmq.com/configure.html#config-file-formats
+          See the second table on <https://www.rabbitmq.com/configure.html#config-items>
+          For the distinct formats, see <https://www.rabbitmq.com/configure.html#config-file-formats>
         '';
       };
 

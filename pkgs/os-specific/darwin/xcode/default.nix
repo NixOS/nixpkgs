@@ -46,6 +46,7 @@ let
         description = "Apple's XCode SDK";
         license = licenses.unfree;
         platforms = platforms.darwin ++ platforms.linux;
+        hydraPlatforms = [ ];
         sourceProvenance = [ sourceTypes.binaryNativeCode ];
       };
 

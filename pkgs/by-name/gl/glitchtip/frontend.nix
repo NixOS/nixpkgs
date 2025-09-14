@@ -9,21 +9,19 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
-  version = "5.0.9";
+  version = "5.1.1";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iNTGs+rq2TVDIBcLV4wMmWxwBvwWqKXytowLD7SRFEw=";
+    hash = "sha256-WKh5w6AVyKhkGvGsy2Wv4Z01UaKTctDSfEhOek2Y84w=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src patches;
-    hash = "sha256-81Z1NijHuvG9I4pdsUQ1cS3OdfAtHoiSdmrpu1KUpWE=";
+    inherit (finalAttrs) src;
+    hash = "sha256-G2DZhHfTWi0qCAMs+IP7T2XEecBwTX12Dk3O0pD8ZJw=";
   };
-
-  patches = [ ./update_esbuild.patch ];
 
   postPatch = ''
     jq '.devDependencies |= del(.cypress, ."cypress-localstorage-commands")' package.json | sponge package.json

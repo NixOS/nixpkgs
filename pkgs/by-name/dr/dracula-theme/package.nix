@@ -8,7 +8,7 @@
 
 let
   themeName = "Dracula";
-  version = "4.0.0-unstable-2025-06-11";
+  version = "4.0.0-unstable-2025-08-31";
 in
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
@@ -17,8 +17,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "gtk";
-    rev = "0bf693bf6af37478fb6cf7e5452960c75155febf";
-    hash = "sha256-zS34Z7oS+k8J3N65Ih5zLJzK36Y8BD5SSoNjh3qkuQc=";
+    rev = "1e6067a6b9246c0bddd4655d962f90e110f842f6";
+    hash = "sha256-UWon2riHFD1szSQglwUBePuiTsk0znj01MZmJwvPGGM=";
   };
 
   propagatedUserEnvPkgs = [

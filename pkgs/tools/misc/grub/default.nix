@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromSavannah,
+  fetchgit,
   flex,
   bison,
   python3,
@@ -28,6 +28,7 @@
   efiSupport ? false,
   zfsSupport ? false,
   xenSupport ? false,
+  xenPvhSupport ? false,
   kbdcompSupport ? false,
   ckbcomp,
 }:
@@ -60,24 +61,23 @@ let
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) efiSystemsBuild
-  );
-  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) pcSystems
-  );
+  xenSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+  };
 
-  gnulib = fetchFromSavannah {
-    repo = "gnulib";
+  xenPvhSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
+  };
+
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
+
+  gnulib = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/gnulib.git";
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
-  };
-
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "grub-2.12";
-    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
   # The locales are fetched from translationproject.org at build time,
@@ -88,10 +88,20 @@ let
     hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
   };
 in
+
+assert zfsSupport -> zfs != null;
+assert !(efiSupport && (xenSupport || xenPvhSupport));
+assert !(xenSupport && xenPvhSupport);
+
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
-  inherit src;
+
+  src = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/grub.git";
+    tag = "grub-${version}";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
+  };
 
   patches = [
     ./fix-bash-completion.patch
@@ -605,7 +615,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
-    "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+    "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ]
+  ++ lib.optionals xenPvhSupport [
+    "--with-platform=xen_pvh"
+    "--target=${xenPvhSystemsBuild.${stdenv.hostPlatform.system}.target}"
   ];
 
   # save target that grub is compiled for
@@ -653,16 +667,15 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms =
-      if xenSupport then
-        [
-          "x86_64-linux"
-          "i686-linux"
-        ]
+      if efiSupport then
+        lib.attrNames efiSystemsBuild
+      else if xenSupport then
+        lib.attrNames xenSystemsBuild
+      else if xenPvhSupport then
+        lib.attrNames xenPvhSystemsBuild
       else
         platforms.gnu ++ platforms.linux;
 
     maintainers = [ ];
-
-    broken = !(efiSupport -> canEfi) || !(zfsSupport -> zfs != null) || (efiSupport && xenSupport);
   };
 }

@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "claude-dev";
     publisher = "saoudrizwan";
-    version = "3.20.5";
-    hash = "sha256-sxByZXSNuxVrW4WWKvNCmR2SZ6tR5CDxGXdLyHoegwc=";
+    version = "3.27.1";
+    hash = "sha256-+gCQ9p/FI7LlORC0sMwD501iCh5cDurqv2UzOs43ckU=";
   };
 
   meta = {
@@ -16,6 +16,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://github.com/cline/cline";
     homepage = "https://github.com/cline/cline";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ ];
   };
 }

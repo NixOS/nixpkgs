@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "hid";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P4CeKSq1LEQ1rRRCyO8gW+TJyk7rgPtHx9mODHVSeyo=";
+    hash = "sha256-XKEpp7lDSs5ePkKcEJKhZ5L+/68Geka2ZunFhocs3P4=";
   };
 
   postPatch = ''

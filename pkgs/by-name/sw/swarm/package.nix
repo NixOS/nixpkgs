@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage = "http://spinroot.com/";
     license = licenses.free;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

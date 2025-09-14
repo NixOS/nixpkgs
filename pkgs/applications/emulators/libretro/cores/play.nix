@@ -14,13 +14,13 @@
 }:
 mkLibretroCore {
   core = "play";
-  version = "0-unstable-2025-07-23";
+  version = "0-unstable-2025-08-25";
 
   src = fetchFromGitHub {
     owner = "jpd002";
     repo = "Play-";
-    rev = "78c184bca1063d5482cbfad924af72dd23ebbff1";
-    hash = "sha256-0n6PQqepc7xKVMf8slN9aOodzBbt7J2c68z7200q07M=";
+    rev = "fe54d0a413f8e7268bc8a321e691a562edd6b257";
+    hash = "sha256-d+bVkM8BsZ9eiHaSNCC4b156EjOqyQn93lOyy6FLbks=";
     fetchSubmodules = true;
   };
 

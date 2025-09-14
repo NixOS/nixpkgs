@@ -15,7 +15,7 @@
   cinnamon-desktop,
   cinnamon-session,
   cinnamon-settings-daemon,
-  cinnamon-common,
+  cinnamon,
   bulky,
 }:
 
@@ -35,7 +35,7 @@ let
     cinnamon-desktop
     cinnamon-session
     cinnamon-settings-daemon
-    cinnamon-common
+    cinnamon
     gnome-terminal
     gsettings-desktop-schemas
     gtk3

@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Plugin that extends Orthanc with support for the DICOMweb protocols";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      drupol
       dvcorreia
     ];
     platforms = lib.platforms.linux;

@@ -1,20 +1,23 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "1.5.35";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "TandoorRecipes";
     repo = "recipes";
-    rev = version;
-    hash = "sha256-pzujKBUNVILFrgsCWuYFvO48AYPbBpxS1im1dj7NpMw=";
+    tag = version;
+    hash = "sha256-FCCXzWaWjmsWidg1MgUIJtH+KN/gA1d7KBLRj3/1Fec=";
   };
 
-  yarnHash = "sha256-P8TqHa5t3oWEYUQDD7VrGTWHJ3y68OhQa3YzQpceJgw=";
+  yarnHash = "sha256-vwPwJK+nGuhjJC5BdijAKOv7sgrdev63PWhuZXMD1E0=";
 
   meta = {
     homepage = "https://tandoor.dev/";
     changelog = "https://github.com/TandoorRecipes/recipes/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    maintainers = with lib.maintainers; [
+      jvanbruegge
+      ryand56
+    ];
   };
 }

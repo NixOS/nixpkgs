@@ -57,8 +57,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "checkpoint==";
+  disabledTests = [
+    # assert 1.0000000000000004 == 1.0000000000000002
+    # https://github.com/langchain-ai/langgraph/issues/5845
+    "test_embed_with_path"
+  ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpoint==";
+    };
   };
 
   meta = {
@@ -67,7 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

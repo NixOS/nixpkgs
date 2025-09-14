@@ -12,13 +12,13 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipscan";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchurl {
-    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_amd64.deb";
-    hash = "sha256-UPkUwZV3NIeVfL3yYvqOhm4X5xW+40GOlZGy8WGhYmk=";
+    url = "https://github.com/angryip/ipscan/releases/download/${finalAttrs.version}/ipscan_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-5H6QCT7Z3EOJks/jLBluTCgJbqpRMW5iheds9nl4ktU=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp usr/lib/ipscan/ipscan-linux64-${version}.jar $out/share/${pname}-${version}.jar
+    cp usr/lib/ipscan/ipscan-linux64-${finalAttrs.version}.jar $out/share/${finalAttrs.pname}-${finalAttrs.version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
           glib
         ]
       }" \
-      --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
+      --add-flags "-Xmx256m -cp $out/share/${finalAttrs.pname}-${finalAttrs.version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications
     cp usr/share/applications/ipscan.desktop $out/share/applications/ipscan.desktop
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
     description = "Angry IP Scanner - fast and friendly network scanner";
     mainProgram = "ipscan";
     homepage = "https://angryip.org";
-    downloadPage = "https://github.com/angryip/ipscan/releases/tag/${version}";
-    changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";
+    downloadPage = "https://github.com/angryip/ipscan/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/angryip/ipscan/blob/${finalAttrs.version}/CHANGELOG";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
       totoroot
     ];
   };
-}
+})

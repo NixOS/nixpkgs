@@ -75,7 +75,7 @@ in
         type = settingsFormat.type;
         default = { };
         description = ''
-          Contents of the dgraph config. For more details see https://dgraph.io/docs/deploy/config
+          Contents of the dgraph config. For more details see <https://dgraph.io/docs/deploy/config>
         '';
       };
 

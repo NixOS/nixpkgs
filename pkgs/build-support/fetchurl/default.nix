@@ -191,7 +191,22 @@ let
         outputHash = "";
       }
     else
-      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty urls_}";
+      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
+
+  resolvedUrl =
+    let
+      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorName = lib.head mirrorSplit;
+      mirrorList =
+        if lib.hasAttr mirrorName mirrors then
+          mirrors."${mirrorName}"
+        else
+          throw "unknown mirror:// site ${mirrorName}";
+    in
+    if mirrorSplit == null || mirrorName == null then
+      url
+    else
+      "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
 in
 
 assert
@@ -279,7 +294,7 @@ stdenvNoCC.mkDerivation (
 
     inherit meta;
     passthru = {
-      inherit url;
+      inherit url resolvedUrl;
     }
     // passthru;
   }

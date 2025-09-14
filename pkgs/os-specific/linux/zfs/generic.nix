@@ -221,10 +221,8 @@ let
           "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
           "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
         ]
-        ++ kernelModuleMakeFlags
+        ++ map (f: "KERNEL_${f}") kernelModuleMakeFlags
       );
-
-      makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
       enableParallelBuilding = true;
 
@@ -341,19 +339,19 @@ let
         # `boot.zfs.enabled` property is `readOnly`, excluding platforms where ZFS
         # does not build is the only way to produce a NixOS installer on such
         # platforms.
-        # https://github.com/openzfs/zfs/blob/6723d1110f6daf93be93db74d5ea9f6b64c9bce5/config/always-arch.m4#L12
+        # https://github.com/openzfs/zfs/blob/077269bfeddf2d35eb20f98289ac9d017b4a32ff/lib/libspl/include/sys/isa_defs.h#L267-L270
         platforms =
           with lib.systems.inspect.patterns;
-          map (p: p // isLinux) (
-            [
-              isx86_32
-              isx86_64
-              isPower
-              isAarch64
-              isSparc
-            ]
-            ++ isArmv7
-          );
+          map (p: p // isLinux) ([
+            isx86
+            isAarch
+            isPower
+            isS390
+            isSparc
+            isMips
+            isRiscV64
+            isLoongArch64
+          ]);
 
         inherit maintainers;
         mainProgram = "zfs";

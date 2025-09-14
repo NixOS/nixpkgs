@@ -7,36 +7,34 @@
   cairo,
   fetchurl,
   flac,
-  gcc12,
+  gcc14,
   gssdp,
   gupnp,
   gupnp-av,
   lame,
   libgmpris,
   libusb-compat-0_1,
-  llvmPackages_14,
+  llvmPackages_19,
   mpg123,
   rpmextract,
   wavpack,
 
   callPackage,
-  rygel ? null,
-}@inputs:
+}:
 let
-  # FIXME: Replace with gnome.rygel once hqplayerd releases a new version.
-  rygel-hqplayerd = inputs.rygel or (callPackage ./rygel.nix { });
+  rygel-hqplayerd = callPackage ./rygel.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "5.5.0-13";
+  version = "5.13.2-39";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc37/${pname}-${version}.fc37.x86_64.rpm";
-    hash = "sha256-yfdgsQu2w56apq5lyD0JcEkM9/EtlfdZQ9I5x1BBOcU=";
+    url = "https://www.signalyst.eu/bins/hqplayerd/fc37/hqplayerd-${version}.fc37.x86_64.rpm";
+    hash = "sha256-4wB32xFYpGcBdLqSZFkNXoS7IerPS8f6KIpn13ulqUY=";
   };
 
   unpackPhase = ''
-    ${rpmextract}/bin/rpmextract $src
+    rpmextract $src
   '';
 
   nativeBuildInputs = [
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cairo
     flac
-    gcc12.cc.lib
+    gcc14.cc.lib
     rygel-hqplayerd
     gssdp
     gupnp
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
     lame
     libgmpris
     libusb-compat-0_1
-    llvmPackages_14.openmp
+    llvmPackages_19.openmp
     mpg123
     wavpack
   ];

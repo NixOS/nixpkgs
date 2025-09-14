@@ -57,10 +57,10 @@ runCommandWith :: {
     You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
     :::
 
-[allowSubstitutes]: https://nixos.org/nix/manual/#adv-attr-allowSubstitutes
-[preferLocalBuild]: https://nixos.org/nix/manual/#adv-attr-preferLocalBuild
+[allowSubstitutes]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-allowSubstitutes
+[preferLocalBuild]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-preferLocalBuild
 [substituter]: https://nix.dev/manual/nix/latest/glossary#gloss-substituter
-[substitutes]: https://nix.dev/manual/nix/2.23/glossary#gloss-substitute
+[substitutes]: https://nix.dev/manual/nix/latest/glossary#gloss-substitute
 
 ::: {.example #ex-runcommandwith}
 # Invocation of `runCommandWith`

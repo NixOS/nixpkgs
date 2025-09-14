@@ -38,14 +38,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.18.0";
+    version = "0.19.1";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-S9SZ9UfohEHfwmXmHsTeSW45BHTJA4wPdFQXsX3Pk34=";
+      hash = "sha256-1BvjKlpUD4gJJOlrc2wsl9Pv2x1TBcejYsGiliMrwao=";
     };
 
     nativeBuildInputs = [
@@ -67,7 +67,6 @@ let
     ];
 
     cmakeFlags = [
-      "-D CMAKE_BUILD_TYPE=Release"
       "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
       "-G Ninja"
     ]
@@ -156,6 +155,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       nezia
       jaspersurmont
+      iedame
     ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";

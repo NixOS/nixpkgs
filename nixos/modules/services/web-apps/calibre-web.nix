@@ -160,6 +160,9 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
+        # fix book cover cache directory defaults to a path under /nix/store/
+        environment.CACHE_DIR = "/var/cache/calibre-web";
+
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
@@ -178,6 +181,9 @@ in
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
           Restart = "on-failure";
+
+          CacheDirectory = "calibre-web";
+          CacheDirectoryMode = "0750";
         }
         // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
           StateDirectory = cfg.dataDir;

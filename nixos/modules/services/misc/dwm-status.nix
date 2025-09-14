@@ -66,7 +66,7 @@ in
           };
         };
         description = ''
-          Config options for dwm-status, see https://github.com/Gerschtli/dwm-status#configuration
+          Config options for dwm-status, see <https://github.com/Gerschtli/dwm-status#configuration>
           for available options.
         '';
       };

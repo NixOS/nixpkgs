@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-pkcs11";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danni";
     repo = "python-pkcs11";
-    rev = "v${version}";
-    sha256 = "0kncbipfpsb7m7mhv5s5b9wk604h1j08i2j26fn90pklgqll0xhv";
+    tag = "v${version}";
+    sha256 = "sha256-iCfcVVzAwwg69Ym1uVimSzYZBQmC+Yppl5YXDaLIcqc=";
   };
 
   nativeBuildInputs = [

@@ -27,7 +27,10 @@ buildPythonPackage {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    "lxml"
+    "numpy"
+  ];
 
   dependencies = [
     cssselect

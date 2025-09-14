@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/xjasonlyu/tun2socks";
-    description = "tun2socks - powered by gVisor TCP/IP stack";
+    description = "Routes network traffic from any application through a proxy";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tun2socks";

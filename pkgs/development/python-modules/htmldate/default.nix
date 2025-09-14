@@ -38,6 +38,8 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  pythonRelaxDeps = [ "lxml" ];
+
   optional-dependencies = {
     speed = [
       faust-cchardet

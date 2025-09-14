@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qview";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "jurplel";
     repo = "qView";
     rev = version;
-    hash = "sha256-kFptDhmFu9LX99P6pCfxRbu4iVhWl4br+n6LO+yrGsw=";
+    hash = "sha256-EcXhwJcgBLdXa/FQ5LuENlzwnLw4Gt2BGlBO1p5U8tI=";
   };
 
   qmakeFlags = lib.optionals (!x11Support) [ "CONFIG+=NO_X11" ];

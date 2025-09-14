@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
-  version ? "1.15.2",
+  version ? "1.19.1",
 }:
 
 let
@@ -15,11 +15,11 @@ let
   # the meilisearch module accordingly and to remove the meilisearch_1_11
   # attribute from all-packages.nix at that point too.
   hashes = {
-    "1.15.2" = "sha256-aTgfgPuyRcjr/DxxyuKOFXfBcDponVmKz5PpGbnsmd0=";
+    "1.19.1" = "sha256-gB8hqA8kWXQxziP/HuTB43wFppjEVLCPo3AoGMnaJqs=";
     "1.11.3" = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
   };
   cargoHashes = {
-    "1.15.2" = "sha256-eBGxVtE25txA17zxXdlSC6Vbrm+/v1fA7iTIBDvQ71M=";
+    "1.19.1" = "sha256-74gOVO5lixR4R3PVOIhTsLPzXIORSvvePFbNgDeWn2E=";
     "1.11.3" = "sha256-cEJTokDJQuc9Le5+3ObMDNJmEhWEb+Qh0TV9xZkD9D8=";
   };
 in

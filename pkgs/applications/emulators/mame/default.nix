@@ -7,7 +7,6 @@
   SDL2_ttf,
   copyDesktopItems,
   expat,
-  fetchpatch,
   fetchurl,
   flac,
   fontconfig,
@@ -38,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.278";
+  version = "0.280";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-YJt+in9QV7a0tQZnfqFP3Iu6XQD0sryjud4FcgokYFg=";
+    hash = "sha256-+bXohqzecHvXt9DKPbBBQoq9RX/LPX0O6kJf64wIrW8=";
   };
 
   outputs = [
@@ -117,16 +116,6 @@ stdenv.mkDerivation rec {
     # that you run MAME changing to install directory, so we add absolute paths
     # here
     ./001-use-absolute-paths.diff
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # coreaudio_sound.cpp compares __MAC_OS_X_VERSION_MIN_REQUIRED to 1200
-    # instead of 120000, causing it to try to use a constant that isn't
-    # actually defined yet when targeting macOS 11 like Nixpkgs does.
-    # Backport mamedev/mame#13890 until the next time we update MAME.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/mamedev/mame/pull/13890.patch";
-      hash = "sha256-Fqpw4fHEMns4tSSIjc1p36ss+J9Tc/O0cnN3HI/ratM=";
-    })
   ];
 
   # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,

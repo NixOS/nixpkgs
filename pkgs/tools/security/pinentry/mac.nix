@@ -7,6 +7,7 @@
   libgpg-error,
   makeBinaryWrapper,
   texinfo,
+  xcbuild,
   common-updater-scripts,
   writers,
 }:
@@ -27,6 +28,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gettext-0.25.patch
+
+    # Fix the build with xcbuild’s inferior `PlistBuddy(8)`.
+    ./fix-with-xcbuild-plistbuddy.patch
   ];
 
   # use pregenerated nib files because generating them requires XCode
@@ -38,16 +42,14 @@ stdenv.mkDerivation rec {
     cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
   '';
 
-  # Unfortunately, PlistBuddy from xcbuild is not compatible enough pinentry-mac’s build process.
-  sandboxProfile = ''
-    (allow process-exec (literal "/usr/libexec/PlistBuddy"))
-  '';
-
   strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook
     makeBinaryWrapper
     texinfo
+
+    # for `PlistBuddy(8)`
+    xcbuild
   ];
 
   configureFlags = [

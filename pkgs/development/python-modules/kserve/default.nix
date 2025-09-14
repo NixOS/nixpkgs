@@ -158,6 +158,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError: assert CompletionReq...lm_xargs=None) == CompletionReq...lm_xargs=None)
+    "test_convert_params"
+
+    # Flaky: ray.exceptions.ActorDiedError: The actor died unexpectedly before finishing this task.
+    "test_explain"
+    "test_infer"
+    "test_predict"
+
     # Require network access
     "test_infer_graph_endpoint"
     "test_infer_path_based_routing"

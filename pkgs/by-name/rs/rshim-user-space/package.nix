@@ -1,28 +1,35 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
   autoconf,
   automake,
-  makeBinaryWrapper,
-  pkg-config,
-  pciutils,
-  libusb1,
+  bashNonInteractive,
+  coreutils,
+  fetchFromGitHub,
   fuse,
-  busybox,
+  gawk,
+  gnugrep,
+  gnused,
+  lib,
+  libusb1,
+  makeBinaryWrapper,
+  pciutils,
+  pkg-config,
+  procps,
   pv,
+  stdenv,
+  which,
+  util-linux,
   withBfbInstall ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
     rev = "rshim-${version}";
-    hash = "sha256-J/gCACqpUY+KraVOLWpd+UVyZ1f2o77EfpAgUVtZL9w=";
+    hash = "sha256-w2+1tUDWYmgDC0ycWGdtVfdbkZCmtvwXm47qK5PCCfg=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +65,16 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bfb-install \
       --set PATH ${
         lib.makeBinPath [
-          busybox
+          bashNonInteractive
+          coreutils
+          gawk
+          gnugrep
+          gnused
+          pciutils
+          procps
           pv
+          util-linux
+          which
         ]
       }
   '';

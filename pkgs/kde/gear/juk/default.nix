@@ -1,15 +1,15 @@
 {
   mkKdeDerivation,
+  qtmultimedia,
   qtsvg,
-  phonon,
   taglib,
 }:
 mkKdeDerivation {
   pname = "juk";
 
   extraBuildInputs = [
+    qtmultimedia
     qtsvg
-    phonon
     taglib
   ];
 

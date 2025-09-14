@@ -20,7 +20,8 @@ in
         {
           options = {
             passwordFile = lib.mkOption {
-              type = lib.types.str;
+              type = with lib.types; nullOr str;
+              default = null;
               description = ''
                 Read the repository password from a file.
               '';
@@ -146,6 +147,21 @@ in
               ];
             };
 
+            command = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = ''
+                Command to pass to --stdin-from-command. If null or an empty array, and `paths`/`dynamicFilesFrom`
+                are also null, no backup command will be run.
+              '';
+              example = [
+                "sudo"
+                "-u"
+                "postgres"
+                "pg_dumpall"
+              ];
+            };
+
             exclude = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [ ];
@@ -238,7 +254,7 @@ in
 
             runCheck = lib.mkOption {
               type = lib.types.bool;
-              default = (builtins.length config.services.restic.backups.${name}.checkOpts > 0);
+              default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
               defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
@@ -327,14 +343,50 @@ in
           RandomizedDelaySec = "5h";
         };
       };
+      commandbackup = {
+        command = [
+          "\${lib.getExe pkgs.sudo}"
+          "-u postgres"
+          "\${pkgs.postgresql}/bin/pg_dumpall"
+        ];
+        extraBackupArgs = [ "--tag database" ];
+        repository = "s3:example.com/mybucket";
+        passwordFile = "/etc/nixos/secrets/restic-password";
+        environmentFile = "/etc/nixos/secrets/restic-environment";
+        pruneOpts = [
+          "--keep-daily 14"
+          "--keep-weekly 4"
+          "--keep-monthly 2"
+          "--group-by tags"
+        ];
+      };
     };
   };
 
   config = {
-    assertions = lib.mapAttrsToList (n: v: {
-      assertion = (v.repository == null) != (v.repositoryFile == null);
-      message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
-    }) config.services.restic.backups;
+    assertions = lib.flatten (
+      lib.mapAttrsToList (name: backup: [
+        {
+          assertion =
+            ((backup.repository == null) != (backup.repositoryFile == null))
+            || (backup.environmentFile != null);
+          message = "services.restic.backups.${name}: exactly one of repository, repositoryFile or environmentFile should be set";
+        }
+        {
+          assertion =
+            let
+              fileBackup = (backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null;
+              commandBackup = backup.command != [ ];
+            in
+            !(fileBackup && commandBackup);
+          message = "services.restic.backups.${name}: cannot do both a command backup and a file backup at the same time.";
+        }
+        {
+          assertion = (backup.passwordFile != null) || (backup.environmentFile != null);
+          message = "services.restic.backups.${name}: passwordFile or environmentFile must be set";
+        }
+      ]) config.services.restic.backups
+    );
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
@@ -351,7 +403,9 @@ in
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
         filesFromTmpFile = "/run/restic-backups-${name}/includes";
-        doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
+        fileBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
+        commandBackup = backup.command != [ ];
+        doBackup = fileBackup || commandBackup;
         pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
           (resticCmd + " unlock")
           (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
@@ -397,11 +451,15 @@ in
           serviceConfig = {
             Type = "oneshot";
             ExecStart =
-              (lib.optionals doBackup [
+              lib.optionals doBackup [
                 "${resticCmd} backup ${
-                  lib.concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)
-                } --files-from=${filesFromTmpFile}"
-              ])
+                  lib.concatStringsSep " " (
+                    backup.extraBackupArgs
+                    ++ lib.optionals fileBackup (excludeFlags ++ [ "--files-from=${filesFromTmpFile}" ])
+                    ++ lib.optionals commandBackup ([ "--stdin-from-command=true --" ] ++ backup.command)
+                  )
+                }"
+              ]
               ++ pruneCmd
               ++ checkCmd;
             User = backup.user;
@@ -419,7 +477,7 @@ in
             ${lib.optionalString (backup.backupPrepareCommand != null) ''
               ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
             ''}
-            ${lib.optionalString (backup.initialize) ''
+            ${lib.optionalString backup.initialize ''
               ${resticCmd} cat config > /dev/null || ${resticCmd} init
             ''}
             ${lib.optionalString (backup.paths != null && backup.paths != [ ]) ''
@@ -435,7 +493,7 @@ in
             ${lib.optionalString (backup.backupCleanupCommand != null) ''
               ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
             ''}
-            ${lib.optionalString doBackup ''
+            ${lib.optionalString fileBackup ''
               rm ${filesFromTmpFile}
             ''}
           '';
@@ -446,7 +504,7 @@ in
       name: backup:
       lib.nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
-        timerConfig = backup.timerConfig;
+        inherit (backup) timerConfig;
       }
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
@@ -464,7 +522,7 @@ in
         ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
           (lib.filterAttrs (n: v: v != null && n != "PATH"))
           (lib.mapAttrs (_: v: "${v}"))
-          (lib.toShellVars)
+          lib.toShellVars
         ]}
         PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitmux";
-  version = "0.11.3";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "arl";
     repo = "gitmux";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Jw2yl95vCQ5JcRGvBeLlGuAagTHUf+IEF7XvzehcMvU=";
+    sha256 = "sha256-TObnmV/NiMCcyC9zG0OcCuCqUChQZmpqPptQUDtF85A=";
   };
 
   vendorHash = "sha256-MvvJGB9KPMYeqYclmAAF6qlU7vrJFMPToogbGDRoCpU=";

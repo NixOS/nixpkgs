@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq git pnpm_10 sd
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq git nodejs pnpm sd
 # shellcheck shell=bash
 set -euo pipefail
 nixpkgs="$(pwd)"

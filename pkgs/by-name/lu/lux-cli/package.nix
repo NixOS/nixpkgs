@@ -6,10 +6,11 @@
   lib,
   libgit2,
   libgpg-error,
-  luajit,
+  lua5_4,
   makeWrapper,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
   versionCheckHook,
@@ -17,18 +18,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.11.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yjd8nqrypgdS2UtAANv1TtuGtZPaWm7LhVrHPghf5hg=";
+    hash = "sha256-jVKCjAYeWjy2jDOHEb6vu4ZNTXrSETgUt6NIE++trPE=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-iKZ4FJ0IL1lnKuYTmFvx8umoB0z8M8xnvgb/GMfGKkI=";
+  cargoHash = "sha256-Kv8wYxPGainwayru9pWBplg2PNcC86ZTAmDp9M4G1bQ=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    perl
     pkg-config
   ];
 
@@ -48,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gpgme
     libgit2
     libgpg-error
-    luajit
+    lua5_4
     openssl
   ];
 
@@ -61,13 +63,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = "--lib"; # Disable impure integration tests
 
   nativeCheckInputs = [
-    luajit
+    lua5_4
     nix
   ];
 
   postBuild = ''
     cargo xtask dist-man
     cargo xtask dist-completions
+  '';
+
+  postInstall = ''
+    installManPage target/dist/lx.1
+    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {

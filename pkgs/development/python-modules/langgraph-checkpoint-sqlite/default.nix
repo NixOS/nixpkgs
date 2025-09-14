@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.10";
+  version = "2.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointsqlite==${version}";
-    hash = "sha256-570rXAxS4p2b7fc1aqSNArXHTz7G2GjZQDqMlqK7Jso=";
+    hash = "sha256-v/gRYkiS4AR1epWwPdG/QYbnUYte894kHTn5F58pVGI=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
@@ -74,8 +74,12 @@ buildPythonPackage rec {
     "test_search"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "checkpointsqlite==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpointsqlite==";
+    };
   };
 
   meta = {
@@ -84,7 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-sqlite";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

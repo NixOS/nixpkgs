@@ -41,17 +41,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "9.0.1";
+  version = "11.0.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-3VurTHOM7FMRJzmQ5tBmW4E0mw7hePCnff0vhxPsKfE=";
+    hash = "sha256-R4YQHU1ZYLO45hLJPgXb6HUiQ8nuC6oyN1blPJ1hUs8=";
   };
 
-  vendorHash = "sha256-7R42Aa04wCba90xLTX2p6oNX58OpfDDKegqwDw3Ycbk=";
+  vendorHash = "sha256-IWlovmpnnQlP4J/eRkiOgmGyZR6uvBwfRzwW3Ui9dWE=";
 
   # See upstream Makefile
   # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
@@ -63,7 +63,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v9/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v11/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
@@ -93,12 +93,13 @@ buildGoModule rec {
   meta = with lib; {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
-    license = licenses.mit;
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       adamcstephens
       emilylange
       christoph-heiss
+      tebriel
     ];
     mainProgram = "forgejo-runner";
   };

@@ -17,6 +17,7 @@
   requests-mock,
   hypothesis,
   jsonschema,
+  lxml,
   git,
   squashfsTools,
   socat,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.18.0";
+  version = "2.20.1";
 
   pyproject = true;
 
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-mjmWB6kgQNY++aAb9Ql/1cISGqX1mivz62y0Sa65FwM=";
+    hash = "sha256-YTyoJzot7GkRp+szo+a3wx5mWWJcYj7ke7kcxri9n10=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    lxml
     overrides
     pydantic
     pyxdg
@@ -90,6 +92,11 @@ buildPythonPackage rec {
     "test_get_build_packages"
     # Relies upon certain paths being present that don't make sense on Nix.
     "test_java_plugin_jre_not_17"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # This test is flaky on arm64, I think due to a mock library misbehaving
+    # on arm64.
+    "test_get_build_commands_is_reentrant"
   ];
 
   disabledTestPaths = [
@@ -119,7 +126,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-parts";
     changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

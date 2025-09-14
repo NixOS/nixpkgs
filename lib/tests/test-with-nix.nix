@@ -18,8 +18,6 @@
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
   {
     buildInputs = [
-      (import ./check-eval.nix)
-      (import ./fetchers.nix)
       (import ../path/tests {
         inherit pkgs;
       })
@@ -70,6 +68,12 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
 
     echo "Running lib/tests/systems.nix"
     [[ $(nix-instantiate --eval --strict lib/tests/systems.nix | tee /dev/stderr) == '[ ]' ]];
+
+    echo "Running lib/tests/misc.nix"
+    [[ $(nix-instantiate --eval --strict lib/tests/misc.nix | tee /dev/stderr) == '[ ]' ]];
+
+    echo "Running lib/tests/fetchers.nix"
+    [[ $(nix-instantiate --eval --strict lib/tests/fetchers.nix | tee /dev/stderr) == '[ ]' ]];
 
     mkdir $out
     echo success > $out/${nix.version}

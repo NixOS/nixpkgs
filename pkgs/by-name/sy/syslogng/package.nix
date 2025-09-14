@@ -35,8 +35,7 @@
   gperf,
   withGrpc ? true,
   grpc,
-  # see https://github.com/syslog-ng/syslog-ng/pull/5263
-  protobuf_29,
+  protobuf,
 }:
 let
   python-deps =
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    rev = "syslog-ng-${finalAttrs.version}";
+    tag = "syslog-ng-${finalAttrs.version}";
     hash = "sha256-/hLrUwJhA0jesOl7gmWHfTVO2M7IG8QNPRzc/TIGTH4=";
     fetchSubmodules = true;
   };
@@ -111,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     rdkafka
   ]
   ++ (lib.optionals withGrpc [
-    protobuf_29
+    protobuf
     grpc
   ]);
 

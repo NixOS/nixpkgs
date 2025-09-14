@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "gobbles your terminal";
+    description = "Rust rewrite of Devour";
     homepage = "https://github.com/EmperorPenguin18/gobble";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vuimuich ];

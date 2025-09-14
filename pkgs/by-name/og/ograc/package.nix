@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-rWU8rOGLUrSkXLkHib8qkkiOZvuGbSJ4knFrHuD+R44=";
 
   meta = with lib; {
-    description = "like cargo, but backwards";
+    description = "Like cargo, but backwards";
     mainProgram = "ograc";
     homepage = "https://crates.io/crates/ograc";
     license = licenses.agpl3Plus;

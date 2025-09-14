@@ -11,22 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gren";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "gren-lang";
     repo = "compiler";
     tag = finalAttrs.version;
-    hash = "sha256-lF0m/ffmwuuhNIFlwnztxVwXF1mtiKZBCnJQYfyo9UA=";
+    hash = "sha256-P8Y6JOgxGAVWT9DfbNLHVJnsPBcrUkHEumkU56riI10=";
   };
 
-  buildInputs = [
-    nodejs
-  ];
+  buildInputs = [ nodejs ];
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -41,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/gren";
   versionCheckProgramArg = "--version";
@@ -51,9 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Compiler for the Gren programming language";
+    description = "Programming language for simple and correct applications";
     homepage = "https://gren-lang.org";
     license = lib.licenses.bsd3;
+    platforms = lib.intersectLists haskellPackages.ghc.meta.platforms nodejs.meta.platforms;
     mainProgram = "gren";
     maintainers = with lib.maintainers; [
       robinheghan

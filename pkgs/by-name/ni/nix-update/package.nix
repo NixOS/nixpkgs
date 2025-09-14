@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nix-update";
-  version = "1.11.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-update";
     tag = version;
-    hash = "sha256-G5YehePEMhTgxCnLp8Dg+bDHvOe+QltlCkQHVwMtYx0=";
+    hash = "sha256-ygbAx4TV9NFjpttn+4ELT3Zfu/tiRyigO7R4WT/ntTw=";
   };
 
   build-system = [ python3Packages.setuptools ];

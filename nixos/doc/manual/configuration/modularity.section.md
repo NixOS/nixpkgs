@@ -33,7 +33,7 @@ Here, we include two modules from the same directory, `vpn.nix` and
 {
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
   environment.systemPackages = [ pkgs.vim ];
 }
 ```

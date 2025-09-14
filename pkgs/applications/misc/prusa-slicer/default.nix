@@ -8,7 +8,7 @@
   wrapGAppsHook3,
   boost186,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     binutils
     boost186 # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
     cereal
-    cgal
+    cgal_5
     curl
     dbus
     eigen

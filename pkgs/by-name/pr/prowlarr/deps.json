@@ -609,8 +609,8 @@
   },
   {
     "pname": "Polly",
-    "version": "8.5.2",
-    "hash": "sha256-IrN06ddOIJ0VYuVefe3LvfW0kX20ATRQkEBg9CBomRA="
+    "version": "8.6.0",
+    "hash": "sha256-wlvYcfcOExa3LopwRFO4axW682jkUZvioHe+kznspHk="
   },
   {
     "pname": "Polly.Contrib.WaitAndRetry",
@@ -619,8 +619,8 @@
   },
   {
     "pname": "Polly.Core",
-    "version": "8.5.2",
-    "hash": "sha256-PAwsWqrCieCf/7Y87fV7XMKoaY2abCQNtI+4oyyMifk="
+    "version": "8.6.0",
+    "hash": "sha256-NEGMMQ+3+i4ytsGekKfP1trUe0mRZP7MV0eBiSFXHW8="
   },
   {
     "pname": "RestSharp",

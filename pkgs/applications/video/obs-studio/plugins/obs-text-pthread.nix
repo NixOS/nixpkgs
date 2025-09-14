@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-text-pthread";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-text-pthread";
     rev = version;
-    sha256 = "sha256-zrgxKs3jmrwQJiEgKfZz1BOVToTLauQXtFYcuFlV71o=";
+    sha256 = "sha256-YjMZfDSO5VRIY+HBGniNV3HG5vs+zbiqfbrPKs9v804=";
   };
 
   nativeBuildInputs = [

@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland
     wayland-protocols
+    wayland-scanner # For cross, build uses $PKG_CONFIG to look for wayland-scanner
   ];
 
   enableParallelBuilding = true;
@@ -234,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Intelligent Input Bus, input method framework";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "ibus";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.101";
+  version = "0.9.103";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-yaRwHQopkkZ8gLEhuJuzAiY/enWNdL3B+POGV2ykOWA=";
+    hash = "sha256-n7VVfk6bvO97tY7woEYUAuxEay/fN6F0eWBDohqIBD0=";
   };
 
-  cargoHash = "sha256-F26/IDq3/Il6BBCkKUy59T47sI20DAabeSjt3Kdqu+Y=";
+  cargoHash = "sha256-Nfm2KdyIgJ2rxYKn6r4lZbNkEWNQ+UAdkMiZAJfbzo8=";
 
   cargoBuildFlags = [
     "-p"

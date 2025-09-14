@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coin";
-  version = "4.0.3";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "coin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dUFmcUOdNc3ZFtr+Hnh3Q3OY/JA/WxmiRJiU2RFSSus=";
+    hash = "sha256-2lfy33Qx0AjKDfwwRn7hjaz7mPQsr7MRB9v75qshGjM=";
   };
 
   nativeBuildInputs = [ cmake ];

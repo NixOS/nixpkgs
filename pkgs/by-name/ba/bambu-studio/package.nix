@@ -7,9 +7,9 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost186,
+  boost183,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -35,7 +35,7 @@
   pcre,
   systemd,
   tbb_2021,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -54,15 +54,15 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "01.10.02.76";
+  version = "02.02.01.60";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
-    rev = "v${version}";
-    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ttv0LwJ0GnDhmxofP7c3CJMawad8AhAToZFOvoK3Zow=";
   };
 
   nativeBuildInputs = [
@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost186
+    boost183
     cereal
-    cgal
+    cgal_5
     curl
     dbus
     eigen
@@ -102,13 +102,13 @@ stdenv.mkDerivation rec {
     openvdb
     pcre
     tbb_2021
-    webkitgtk_4_0
+    webkitgtk_4_1
     wxGTK'
     xorg.libX11
-    opencv.cxxdev
+    opencv
   ]
   ++ lib.optionals withSystemd [ systemd ]
-  ++ checkInputs;
+  ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -117,12 +117,6 @@ stdenv.mkDerivation rec {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
-    # Fix the build with newer Boost versions. All but one commit is
-    # from <https://github.com/bambulab/BambuStudio/pull/3968>.
-    ./0001-Replace-deprecated-boost-filesystem-string_file.hpp-.patch
-    ./0002-Replace-deprecated-Boost-methods-options.patch
-    ./0003-Fix-additional-Boost-upgrade-issues.patch
-    ./0004-Remove-deprecated-Boost-filesystem-header.patch
   ];
 
   doCheck = true;
@@ -142,11 +136,11 @@ stdenv.mkDerivation rec {
     # It seems to be a known issue for Eigen:
     # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
     "-Wno-ignored-attributes"
-    "-I${opencv.out}/include/opencv4"
+    "-I${opencv}/include/opencv4"
   ];
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
+  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
 
   # TODO: macOS
   prePatch = ''
@@ -191,7 +185,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       zhaofengli
@@ -200,4 +194,4 @@ stdenv.mkDerivation rec {
     mainProgram = "bambu-studio";
     platforms = lib.platforms.linux;
   };
-}
+})

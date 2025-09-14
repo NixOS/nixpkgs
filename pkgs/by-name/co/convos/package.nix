@@ -119,7 +119,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = {
     homepage = "https://convos.chat";
-    description = "Convos is the simplest way to use IRC in your browser";
+    description = "IRC browser client";
     mainProgram = "convos";
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ sgo ];

@@ -32,6 +32,9 @@ let
       hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
       fetchSubmodules = true;
     };
+    patches = [
+      ../../../by-name/wx/wxGTK31/0001-fix-assertion-using-hide-in-destroy.patch
+    ];
   });
 
   versions = {

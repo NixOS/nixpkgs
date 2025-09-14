@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Serial-Studio";
     repo = "Serial-Studio";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-q3RWy3HRs5NG0skFb7PSv8jK5pI5rtbccP8j38l8kjM=";
     fetchSubmodules = true;
   };

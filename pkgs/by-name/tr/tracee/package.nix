@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 
-  clang_14,
+  clang,
   pkg-config,
 
   elfutils,
@@ -37,10 +37,13 @@ buildGoModule rec {
 
   enableParallelBuilding = true;
   # needed to build bpf libs
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [
+    "stackprotector"
+    "zerocallusedregs"
+  ];
 
   nativeBuildInputs = [
-    clang_14
+    clang
     pkg-config
   ];
   buildInputs = [

@@ -1,6 +1,5 @@
 {
   lib,
-  nix-update-script,
   buildPythonPackage,
   fetchPypi,
   hatchling,
@@ -15,19 +14,14 @@
 
 buildPythonPackage rec {
   pname = "openai-agents";
-  version = "0.0.13";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "openai_agents";
-    hash = "sha256-a4AxXnXAa1MCxfKtui+eo4RflGFdrtRwa/uHF0D1YaU=";
+    hash = "sha256-YZxRyM5J+EFHSp5hlXPW9/lqRkMpAHUhRa0EMJq3Cuk=";
   };
-
-  # OpenAI 1.76.0 seems to not build currently
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "openai>=1.76.0" "openai"
-  '';
 
   build-system = [
     hatchling
@@ -46,8 +40,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "agents"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/openai/openai-agents-python/releases/tag/${version}";

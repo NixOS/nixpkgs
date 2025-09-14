@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "aiosonic";
-  version = "0.22.0";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "sonic182";
     repo = "aiosonic";
     tag = version;
-    hash = "sha256-wBYGiSTSRhi11uqTyGgF1YpnBVoDraCr2GKC8VkQEWc=";
+    hash = "sha256-Yh1AD/tBHQBpwAA86XuP9UuXnCAFcMw/XSv6z46XP0k=";
   };
 
   postPatch = ''
@@ -113,7 +113,7 @@ buildPythonPackage rec {
     ];
 
   meta = {
-    changelog = "https://github.com/sonic182/aiosonic/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sonic182/aiosonic/blob/${src.tag}/CHANGELOG.md";
     description = "Very fast Python asyncio http client";
     license = lib.licenses.mit;
     homepage = "https://github.com/sonic182/aiosonic";

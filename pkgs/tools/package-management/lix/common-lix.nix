@@ -57,7 +57,7 @@ assert lib.assertMsg (
   rustc,
   toml11,
   pegtl,
-  python3,
+  buildPackages,
   pkg-config,
   rapidcheck,
   sqlite,
@@ -100,6 +100,7 @@ let
   isLegacyParser = lib.versionOlder version "2.91";
   hasDtraceSupport = lib.versionAtLeast version "2.93";
   parseToYAML = lib.versionAtLeast version "2.93";
+  usesCapnp = lib.versionAtLeast version "2.94";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -137,19 +138,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
-    (python3.pythonOnBuildForHost.withPackages (p: [
-      p.pytest
-      p.pytest-xdist
-      p.python-frontmatter
-      p.toml
-    ]))
+    (buildPackages.python3.withPackages (
+      p:
+      [
+        p.python-frontmatter
+        p.toml
+      ]
+      ++ lib.optionals finalAttrs.doInstallCheck [
+        p.aiohttp
+        p.pytest
+        p.pytest-xdist
+      ]
+      ++ lib.optionals usesCapnp [ p.pycapnp ]
+    ))
     pkg-config
     flex
     jq
     meson
     ninja
     cmake
-    python3
     # Required for libstd++ assertions that leaks inside of the final binary.
     removeReferencesTo
 
@@ -174,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
   ++ lib.optionals pastaFod [ passt ]
   ++ lib.optionals parseToYAML [ yq ]
+  ++ lib.optionals usesCapnp [ capnproto ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs = [
@@ -229,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462
-    lib.optionalString (!enableStatic) ''
+    lib.optionalString (lib.versionOlder version "2.91" && !enableStatic) ''
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
@@ -290,16 +298,15 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $devdoc/nix-support
       echo "devdoc internal-api $devdoc/share/doc/nix/internal-api" >> $devdoc/nix-support/hydra-build-products
     ''
-    + lib.optionalString (!hasExternalLixDoc) ''
+    + lib.optionalString (lib.versionOlder version "2.94" && !hasExternalLixDoc) ''
       # We do not need static archives.
-      # FIXME(Raito): why are they getting installed _at all_ ?
       rm $out/lib/liblix_doc.a
     ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString (lib.versionOlder version "2.91" && stdenv.hostPlatform.isDarwin) ''
       for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \

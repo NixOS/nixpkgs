@@ -85,7 +85,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''
+    description = "First-person role-playing game / dungeon crawler";
+    longDescription = ''
       A cross-platform, open source port of Arx Fatalis, a 2002
       first-person role-playing game / dungeon crawler
       developed by Arkane Studios.

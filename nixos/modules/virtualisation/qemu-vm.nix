@@ -20,25 +20,17 @@ let
 
   cfg = config.virtualisation;
 
-  opt = options.virtualisation;
-
   qemu = cfg.qemu.package;
 
   hostPkgs = cfg.host.pkgs;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  driveOpts =
+  driveOptions =
     { ... }:
     {
 
       options = {
-
-        file = mkOption {
-          type = types.str;
-          description = "The file image used for this drive.";
-        };
-
         driveExtraOpts = mkOption {
           type = types.attrsOf types.str;
           default = { };
@@ -299,7 +291,9 @@ let
 
     ${lib.pipe cfg.emptyDiskImages [
       (lib.imap0 (
-        idx: size: ''
+        idx:
+        { size, ... }:
+        ''
           test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
         ''
       ))
@@ -477,7 +471,21 @@ in
     };
 
     virtualisation.emptyDiskImages = mkOption {
-      type = types.listOf types.ints.positive;
+      type = types.listOf (
+        types.coercedTo types.ints.positive (size: { inherit size; }) (
+          types.submodule {
+            options.size = mkOption {
+              type = types.ints.positive;
+              description = "The size of the disk in MiB";
+            };
+            options.driveConfig = mkOption {
+              type = lib.types.submodule driveOptions;
+              default = { };
+              description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
+            };
+          }
+        )
+      );
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
@@ -829,7 +837,18 @@ in
       };
 
       drives = mkOption {
-        type = types.listOf (types.submodule driveOpts);
+        type = types.listOf (
+          types.submodule {
+            imports = [ driveOptions ];
+
+            options = {
+              file = mkOption {
+                type = types.str;
+                description = "The file image used for this drive.";
+              };
+            };
+          }
+        );
         description = "Drives passed to qemu.";
       };
 
@@ -1310,10 +1329,16 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0 (
+        idx: imgCfg:
+        lib.mkMerge [
+          {
+            file = "$(pwd)/empty${toString idx}.qcow2";
+            driveExtraOpts.werror = "report";
+          }
+          imgCfg.driveConfig
+        ]
+      ) cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via

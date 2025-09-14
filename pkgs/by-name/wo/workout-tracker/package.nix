@@ -5,17 +5,16 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  ...
 }:
 let
   pname = "workout-tracker";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     tag = "v${version}";
-    hash = "sha256-CJiUSN0QmZD5B/KPlHY2SySQC3D/+aVdydS4mYTabz0=";
+    hash = "sha256-MS4+dbJUh+oHWcQKe84VWW2e3hbZM4dgDWl6ZkFQkDo=";
   };
 
   assets = buildNpmPackage {

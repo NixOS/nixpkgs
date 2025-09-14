@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VxbaxqyIAwmjjbgfTajqwPQC3bp7g/JNVNx9yy/3tus=";
     fetchSubmodules = true;
   };

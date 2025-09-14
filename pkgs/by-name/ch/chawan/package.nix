@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-n0hyAT6XuNJTpjLlYiiDER1xrz8nwT+Q2kSkg28Y8zE=";
+    hash = "sha256-pUwwqFvTtLAGFQG62W90hEH+yPN+ifa5BDRYNh/Jupg=";
   };
 
   patches = [ ./mancha-augment-path.diff ];

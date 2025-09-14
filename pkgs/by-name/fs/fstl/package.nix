@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fstl";
-  version = "0.11.0";
+  version = "0.11.1";
 
   nativeBuildInputs = [
     cmake
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "fstl-app";
     repo = "fstl";
     rev = "v" + version;
-    hash = "sha256-6V1L5aUZQl4zAkXD7yY8Ap0+QXgogQNxaTyZAxHFqM4=";
+    hash = "sha256-puDYXANiyTluSlmnT+gnNPA5eCcw0Ny6md6Ock6pqLc=";
   };
 
   meta = with lib; {

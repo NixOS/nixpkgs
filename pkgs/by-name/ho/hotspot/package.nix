@@ -10,7 +10,7 @@
   kddockwidgets,
   kdePackages,
   libelf,
-  linuxPackages,
+  perf,
   qt6,
   rustc-demangle,
   zstd,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [
     "--suffix PATH : ${
       lib.makeBinPath [
-        linuxPackages.perf
+        perf
         binutils
       ]
     }"

@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "rymdport";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
     rev = "v${version}";
-    hash = "sha256-Eezitq66NkTYUxGt5/sVrB486irPigeCARjZVW6nTK4=";
+    hash = "sha256-5INmb8zMFUB8ibA+ACNWoL54tOhWYHF85MZzRNRmJow=";
   };
 
   vendorHash = "sha256-WPJj3zlEJeghRw0lHHUXm7n0a6d8Yf78s7jnBwmAZ4U=";

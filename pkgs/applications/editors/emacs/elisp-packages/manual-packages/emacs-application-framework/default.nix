@@ -1,5 +1,6 @@
 {
   # Basic
+  stdenv,
   lib,
   melpaBuild,
   fetchFromGitHub,
@@ -42,12 +43,14 @@ let
   pythonEnv = python3.withPackages pythonPkgs;
 
   otherPackageLists = [
-    [
-      git
-      nodejs
-      wmctrl
-      xdotool
-    ]
+    (
+      [
+        git
+        nodejs
+        wmctrl
+      ]
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform xdotool) [ xdotool ]
+    )
   ]
   ++ appOtherDeps;
   otherPkgs = builtins.concatLists (otherPackageLists);
@@ -66,13 +69,13 @@ in
 melpaBuild (finalAttrs: {
 
   pname = "eaf";
-  version = "0-unstable-2025-08-01";
+  version = "0-unstable-2025-08-22";
 
   src = fetchFromGitHub {
     owner = "emacs-eaf";
     repo = "emacs-application-framework";
-    rev = "f7431199fb3143f4487213b7ea6a16a3d037b2ff";
-    hash = "sha256-qpaLizkxuOKd/9kfym3+xAssVm+sV3IlxLCApv+yUz8=";
+    rev = "dc5f6e7fa21a15b5e05c7722c2b8f32158aeab82";
+    hash = "sha256-wWC5Ma9p/k0GLcGpPn7NO0KqkIXmEbaQc7TJ2ImMIr4=";
   };
 
   packageRequires = [

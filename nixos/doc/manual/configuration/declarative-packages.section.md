@@ -35,7 +35,7 @@ The first column in the output is the *attribute name*, such as
 
 Note: the `nixos` prefix tells us that we want to get the package from
 the `nixos` channel and works only in CLI tools. In declarative
-configuration use `pkgs` prefix (variable).
+configuration, use `pkgs` prefix (variable).
 
 To "uninstall" a package, remove it from
 [](#opt-environment.systemPackages) and run `nixos-rebuild switch`.

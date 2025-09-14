@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ovn";
-  version = "25.03.1";
+  version = "25.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${version}";
-    hash = "sha256-nDW3jwZ0RE9i+5+8eRKb7P7KQxiGd22dn/s7bzx/CjQ=";
+    hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
     fetchSubmodules = true;
   };
 
@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libbpf
     libcap_ng
     numactl
     openssl
     unbound
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    libbpf
     xdp-tools
   ];
 
@@ -58,7 +60,8 @@ stdenv.mkDerivation rec {
     "--with-dbdir=/var/lib/ovn"
     "--sbindir=$(out)/bin"
     "--enable-ssl"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "--with-openssl=${lib.getLib openssl.dev}";
 
   enableParallelBuilding = true;
 

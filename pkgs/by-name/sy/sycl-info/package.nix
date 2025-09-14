@@ -23,6 +23,11 @@ stdenv.mkDerivation {
     sha256 = "0fy0y1rcfb11p3vijd8wym6xkaicav49pv2bv2l18rma929n1m1m";
   };
 
+  patches = [
+    # fix error caused by upgrading lyra from 1.6.1 to 1.7.0
+    ./fix-lyra-message.patch
+  ];
+
   buildInputs = [
     nlohmann_json
     ronn

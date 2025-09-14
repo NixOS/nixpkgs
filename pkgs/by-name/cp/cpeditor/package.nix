@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cpeditor.org";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.rewine ];
+    maintainers = [ lib.maintainers.wineee ];
     mainProgram = "cpeditor";
   };
 })

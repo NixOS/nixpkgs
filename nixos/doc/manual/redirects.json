@@ -26,6 +26,9 @@
   "modular-service-portability": [
     "index.html#modular-service-portability"
   ],
+  "modular-service-review": [
+    "index.html#modular-service-review"
+  ],
   "modular-services": [
     "index.html#modular-services"
   ],
@@ -335,6 +338,9 @@
   "sec-userborn": [
     "index.html#sec-userborn"
   ],
+  "sec-restrict-usage-time": [
+    "index.html#sec-restrict-usage-time"
+  ],
   "ch-file-systems": [
     "index.html#ch-file-systems"
   ],
@@ -604,6 +610,12 @@
   ],
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
+  ],
+  "module-services-immich": [
+    "index.html#module-services-immich"
+  ],
+  "module-services-immich-vectorchord-migration": [
+    "index.html#module-services-immich-vectorchord-migration"
   ],
   "module-services-paisa": [
     "index.html#module-services-paisa"
@@ -1467,6 +1479,9 @@
   ],
   "module-security-acme-fix-jws": [
     "index.html#module-security-acme-fix-jws"
+  ],
+  "module-security-acme-reload-dependencies": [
+    "index.html#module-security-acme-reload-dependencies"
   ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"

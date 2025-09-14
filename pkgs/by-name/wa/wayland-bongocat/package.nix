@@ -6,15 +6,16 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-bongocat";
-  version = "1.2.2";
+  version = "1.2.5";
   src = fetchFromGitHub {
     owner = "saatvik333";
     repo = "wayland-bongocat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7IsWg0VE6Sqo0elOAUicmWGasXrvBeGeBRP/mDVgfzI=";
+    hash = "sha256-VkBuqmen6s/LDFu84skQ3wOpIeURZ5e93lvAiEdny70=";
   };
 
   # Package dependencies
@@ -44,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Package information
   meta = {

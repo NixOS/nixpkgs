@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.7.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${version}";
-    hash = "sha256-nZoa2Uwd8cHl0H4LM8swHjce7HktpGdcD+6ykfoQ90M=";
+    hash = "sha256-UsnGLBCt3uodzaBLeOKV4eYEoxwHkUlHDBAe6kAleDc=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -151,6 +151,10 @@ buildPythonPackage rec {
 
     # Fails in nixpkgs-review due to a port conflict with simultaneous python builds
     "test_config_compatibility"
+
+    # Fails with `sandbox=false` by mis-configuring the model it's using.
+    # AttributeError: 'DistributedDataParallel' object has no attribute '_ignored_modules'. Did you mean: 'named_modules'?
+    "test_ignored_modules_regex"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
@@ -172,7 +176,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://huggingface.co/docs/accelerate";
     description = "Simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
-    changelog = "https://github.com/huggingface/accelerate/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/accelerate/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "accelerate";

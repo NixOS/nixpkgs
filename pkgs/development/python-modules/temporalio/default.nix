@@ -5,9 +5,12 @@
   cargo,
   fetchFromGitHub,
   maturin,
+  nexusrpc,
+  nix-update-script,
+  nixosTests,
   pythonOlder,
   poetry-core,
-  protobuf,
+  protobuf5,
   python-dateutil,
   rustc,
   rustPlatform,
@@ -19,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.12.0";
+  version = "1.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +31,7 @@ buildPythonPackage rec {
     owner = "temporalio";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-u74zbzYNVxMi0sdiPlBoEU+wAa24JmMksz7hGvraDeM=";
+    hash = "sha256-uxjZ3aINVP4g5UTzhGW7H/7dyaZlAqBuXH9uVS1zax0=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +42,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-OIapL1+g6gIgyVzdB68PuK2K2RIr01DSm/UbCdt9kNY=";
+    hash = "sha256-yE5mShJ++Zx+5AwsotGn20b7dC6BEbTiIy1xST9du+U=";
   };
 
   cargoRoot = "temporalio/bridge";
@@ -54,7 +57,8 @@ buildPythonPackage rec {
   '';
 
   dependencies = [
-    protobuf
+    nexusrpc
+    protobuf5
     types-protobuf
     typing-extensions
   ]
@@ -75,6 +79,11 @@ buildPythonPackage rec {
     "temporalio.client"
     "temporalio.worker"
   ];
+
+  passthru = {
+    tests = { inherit (nixosTests) temporal; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Temporal Python SDK";

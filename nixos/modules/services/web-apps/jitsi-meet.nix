@@ -235,7 +235,7 @@ in
 
       # required for muc_breakout_rooms
       package = lib.mkDefault (
-        config.services.prosody.package.override {
+        pkgs.prosody.override {
           withExtraLuaPackages = p: with p; [ cjson ];
         }
       );
@@ -307,7 +307,6 @@ in
         "speakerstats"
         "external_services"
         "conference_duration"
-        "end_conference"
         "muc_lobby_rooms"
         "muc_breakout_rooms"
         "av_moderation"
@@ -348,7 +347,9 @@ in
           ''
             muc_mapper_domain_base = "${cfg.hostName}"
 
-            cross_domain_websocket = true;
+            http_cors_override = {
+              websocket = { enabled = true }
+            }
             consider_websocket_secure = true;
 
             unlimited_jids = {
@@ -381,7 +382,6 @@ in
           conference_duration_component = "conferenceduration.${cfg.hostName}"
           end_conference_component = "endconference.${cfg.hostName}"
 
-          c2s_require_encryption = false
           lobby_muc = "lobby.${cfg.hostName}"
           breakout_rooms_muc = "breakout.${cfg.hostName}"
           room_metadata_component = "metadata.${cfg.hostName}"
@@ -528,7 +528,7 @@ in
         ProtectSystem = "strict";
         ProtectClock = true;
         ProtectHome = true;
-        ProtectProc = true;
+        ProtectProc = "noaccess";
         ProtectKernelLogs = true;
         PrivateTmp = true;
         PrivateDevices = true;

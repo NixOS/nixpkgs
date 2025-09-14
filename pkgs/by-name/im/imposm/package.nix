@@ -33,7 +33,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = {
-    description = "Imposm imports OpenStreetMap data into PostGIS";
+    description = "Imports OpenStreetMap data into PostGIS";
     homepage = "https://imposm.org/";
     changelog = "https://github.com/omniscale/imposm3/releases/tag/${src.rev}";
     license = lib.licenses.apsl20;

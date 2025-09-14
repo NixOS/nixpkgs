@@ -22,6 +22,7 @@ let
           "SpeedMeterIntervalSec"
           "ManageForeignRoutingPolicyRules"
           "ManageForeignRoutes"
+          "ManageForeignNextHops"
           "RouteTable"
           "IPv6PrivacyExtensions"
           "IPv4Forwarding"
@@ -32,6 +33,7 @@ let
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
+        (assertValueOneOf "ManageForeignNextHops" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (
           boolValues
           ++ [
@@ -1884,6 +1886,11 @@ let
   networkdOptions = {
     networkConfig = mkOption {
       default = { };
+      defaultText = lib.literalExpression ''
+        {
+          IPv6PrivacyExtensions = true;
+        }
+      '';
       example = {
         SpeedMeter = true;
         ManageForeignRoutingPolicyRules = false;
@@ -3127,7 +3134,10 @@ let
       };
 
       config = {
-        networkConfig = optionalAttrs (config.routeTables != { }) {
+        networkConfig = {
+          IPv6PrivacyExtensions = lib.mkOptionDefault true;
+        }
+        // optionalAttrs (config.routeTables != { }) {
           RouteTable = mapAttrsToList (name: number: "${name}:${toString number}") config.routeTables;
         };
       };

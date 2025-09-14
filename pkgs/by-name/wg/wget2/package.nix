@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
@@ -100,7 +104,7 @@ stdenv.mkDerivation rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Successor of GNU Wget, a file and recursive website downloader";
     longDescription = ''
       Designed and written from scratch it wraps around libwget, that provides the basic
@@ -111,11 +115,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/gnuwget/wget2";
     # wget2 GPLv3+; libwget LGPLv3+
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "wget2";
   };
 }

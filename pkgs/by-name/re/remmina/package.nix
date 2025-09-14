@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.40";
+  version = "1.4.41";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AfZ9tWoaZTRs7GZOdli74e7/X/OMgbvfez9BipoZ/ng=";
+    hash = "sha256-0KUwZ81CyuLa05Cwe7wJrTbM1Dp9mAzNBI5pR7FKTOU=";
   };
 
   nativeBuildInputs = [
@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     harfbuzz
     python3
-    wayland
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     fuse3
     libappindicator-gtk3
     libdbusmenu-gtk3
+    wayland
   ]
   ++ lib.optionals withLibsecret [ libsecret ]
   ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]

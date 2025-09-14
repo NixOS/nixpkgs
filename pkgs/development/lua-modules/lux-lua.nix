@@ -9,6 +9,7 @@
   lux-cli,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
 }:
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
+    perl
     pkg-config
   ];
 
@@ -39,8 +41,11 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    lua
     openssl
+  ];
+
+  propagatedBuildInputs = [
+    lua
   ];
 
   doCheck = false; # lux-lua tests are broken in nixpkgs
@@ -56,14 +61,19 @@ rustPlatform.buildRustPackage rec {
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
     cargo xtask-${luaFeature} dist
+    mkdir -p $out
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -D -v target/dist/${luaVersionDir}/* -t $out/${luaVersionDir}
-    install -D -v target/dist/lib/pkgconfig/* -t $out/lib/pkgconfig
+    cp -r target/dist/share $out
+    cp -r target/dist/lib $out
+    mkdir -p $out/lib/lua
+    ln -s $out/share/lux-lua/${luaVersionDir} $out/lib/lua/${luaVersionDir}
     runHook postInstall
   '';
 

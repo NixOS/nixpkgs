@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Composing and deciphering C (or C++) declarations or casts, aka ''gibberish.''";
+    description = "Composing and deciphering C (or C++) declarations or casts, aka 'gibberish'";
     homepage = "https://github.com/paul-j-lucas/cdecl";
     changelog = "https://github.com/paul-j-lucas/cdecl/blob/cdecl-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;

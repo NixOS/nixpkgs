@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "basedmypy";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,13 +40,18 @@ buildPythonPackage rec {
     owner = "KotlinIsland";
     repo = "basedmypy";
     tag = "v${version}";
-    hash = "sha256-/43wVQoW/BbRD8j8Oypq5yz79ZTyAkLD4T8/aUg/QT8=";
+    hash = "sha256-IzRKOReSgio5S5PG8iD9VQF9R1GEqBAIDeeCtq+ZVXg=";
   };
 
   postPatch = ''
     substituteInPlace \
       pyproject.toml \
       --replace-warn 'types-setuptools==' 'types-setuptools>='
+  ''
+  # __closed__ returns None at runtime (not a bool)
+  + ''
+    substituteInPlace test-data/unit/lib-stub/typing_extensions.pyi \
+      --replace-fail "__closed__: bool" "__closed__: None"
   '';
 
   build-system = [
@@ -119,7 +124,13 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isi686 [
     # https://github.com/python/mypy/issues/15221
     "mypyc/test/test_run.py"
-  ];
+  ]
+  ++
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && pythonOlder "3.13")
+      [
+        # mypy/test/testsolve.py::SolveSuite::test_simple_constraints_with_dynamic_type: [Any | A] != [Any]
+        "mypy/test/testsolve.py"
+      ];
 
   passthru.updateScript = nix-update-script { };
 

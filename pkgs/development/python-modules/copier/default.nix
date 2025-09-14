@@ -6,6 +6,8 @@
   fetchFromGitHub,
   funcy,
   git,
+  hatchling,
+  hatch-vcs,
   iteration-utilities,
   jinja2,
   jinja2-ansible-filters,
@@ -17,8 +19,6 @@
   packaging,
   pathspec,
   plumbum,
-  poetry-core,
-  poetry-dynamic-versioning,
   pydantic,
   pygments,
   pyyaml,
@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "copier";
-  version = "9.6.0";
+  version = "9.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,14 +39,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-mezmXrOvfqbZGZadNZklQZt/OEKqRYnwugNkZc88t6o=";
+    hash = "sha256-vO807Jzl04DkiHPBhu3cGK0bhn2Cd2dT1nKznQKP/p0=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
-    changelog = "https://github.com/copier-org/copier/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/copier-org/copier/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ greg ];
     mainProgram = "copier";

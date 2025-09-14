@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.211";
+  version = "2.216";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-ZFJqNIsuWVph3U73lbcXVKXgzt+5cPxetvcAAzt0jvg=";
+    hash = "sha256-DiO5+IQfhBuzK3GE41XCm5ik0f/fyibt6V0714uDiYE=";
   };
 
   outputs = [

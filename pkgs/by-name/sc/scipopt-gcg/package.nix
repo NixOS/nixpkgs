@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -14,16 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-gcg";
-  version = "371";
+  version = "372";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.1";
+  scipVersion = "9.2.3";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
     tag = "v${version}";
-    hash = "sha256-+rD8tGE49Irg9xZTD3Ay87ISSeRI4kbBpCj5ppyENbo=";
+    hash = "sha256-Sx0ZSca7XBT4GqxWt3bzelaXlI7kZCJo+by22mtTFhA=";
   };
 
   nativeBuildInputs = [

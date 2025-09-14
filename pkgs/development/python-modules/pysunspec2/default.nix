@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysunspec2";
-  version = "1.2.1";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "sunspec";
     repo = "pysunspec2";
     tag = "v${version}";
-    hash = "sha256-N3Daa1l2uzRbj2GpgdulzNhqxtRLvxZuEHxlKMsAdso=";
+    hash = "sha256-a5dync6B0KA1Qus/3xfDzASirEh7yLuiUrQXB2jMVQw=";
     fetchSubmodules = true;
   };
 

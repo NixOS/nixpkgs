@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    hash = "sha256-AErY8Gy1AkYY/vpXoSE8zhyJd/nboMw+9BO3j6N7CNc=";
+    hash = "sha256-32H2Q/JdT5v0xrdsZfSJobJ4Dxx63LPgbiB9OKIyc1U=";
   };
 
   nativeBuildInputs = [
@@ -68,10 +68,6 @@ stdenv.mkDerivation rec {
     # We prefer stable path here.
     substituteInPlace data/x.dm.slick-greeter.gschema.xml \
       --replace-fail "/usr/share/onboard" "/run/current-system/sw/share/onboard"
-
-    # This image is really just a fallback.
-    substituteInPlace src/user-prompt-box.vala \
-      --replace-fail "/usr/share/cinnamon/faces/" "/run/current-system/sw/share/cinnamon/faces/"
 
     patchShebangs files/usr/bin/*
   '';

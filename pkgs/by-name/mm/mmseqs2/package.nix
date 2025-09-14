@@ -26,13 +26,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmseqs2";
-  version = "17-b804f";
+  version = "18-8cc5c";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "mmseqs2";
     tag = finalAttrs.version;
-    hash = "sha256-nmvFoW+Ey18NcM2w14Ak/3D/Kic52Vka/RxvBd0YoKI=";
+    hash = "sha256-xOdtAE6qpEOH13ubs7KEFAEwsYbB3a5t+QXTC+QxgLs=";
   };
 
   nativeBuildInputs = [

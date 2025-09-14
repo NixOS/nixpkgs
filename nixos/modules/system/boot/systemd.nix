@@ -107,11 +107,16 @@ let
     # Maintaining state across reboots.
     "systemd-random-seed.service"
   ]
-  ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service")
+  ++ optionals cfg.package.withBootloader [
+    "systemd-boot-random-seed.service"
+    "systemd-bless-boot.service"
+  ]
   ++ [
     "systemd-backlight@.service"
     "systemd-rfkill.service"
     "systemd-rfkill.socket"
+
+    "boot-complete.target"
 
     # Hibernate / suspend.
     "hibernate.target"
@@ -548,6 +553,11 @@ in
       group = (
         mkMerge [
           (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
+        ]
+      );
+      shadow = (
+        mkMerge [
+          (mkAfter [ "systemd" ])
         ]
       );
     };

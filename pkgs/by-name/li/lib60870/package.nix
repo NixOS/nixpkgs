@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  mbedtls_2,
+  mbedtls,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ mbedtls_2 ];
+  buildInputs = [ mbedtls ];
 
-  cmakeFlags = [ (lib.cmakeBool "WITH_MBEDTLS" true) ];
+  cmakeFlags = [ (lib.cmakeBool "WITH_MBEDTLS3" true) ];
 
   env.NIX_LDFLAGS = "-lmbedcrypto -lmbedx509 -lmbedtls";
 

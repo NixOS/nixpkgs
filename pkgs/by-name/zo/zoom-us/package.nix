@@ -15,7 +15,6 @@
   # Whether to support XDG portals at all
   xdgDesktopPortalSupport ? (
     plasma6XdgDesktopPortalSupport
-    || plasma5XdgDesktopPortalSupport
     || lxqtXdgDesktopPortalSupport
     || gnomeXdgDesktopPortalSupport
     || hyprlandXdgDesktopPortalSupport
@@ -25,9 +24,6 @@
 
   # This is Plasma 6 (KDE) XDG portal support
   plasma6XdgDesktopPortalSupport ? false,
-
-  # This is Plasma 5 (KDE) XDG portal support
-  plasma5XdgDesktopPortalSupport ? false,
 
   # This is LXQT XDG portal support
   lxqtXdgDesktopPortalSupport ? false,
@@ -58,25 +54,25 @@ let
   # Zoom versions are released at different times per platform and often with different versions.
   # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.5.7.60598";
-  versions.x86_64-darwin = "6.5.7.60598";
+  versions.aarch64-darwin = "6.5.11.62892";
+  versions.x86_64-darwin = "6.5.11.62892";
 
   # This is the fallback version so that evaluation can produce a meaningful result.
-  versions.x86_64-linux = "6.5.7.3298";
+  versions.x86_64-linux = "6.5.11.4015";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-o7ZxDYQS0J9Tl8kECSms1XQ6CVgxt453lDuFyZSZBv4=";
+      hash = "sha256-ofSy5DCYc3mR5hXOflIHf2JQB+F/7aXwascJGnb/MK0=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-y5/8xNtQTAbsXwbajFfzx0iNPEMQ0S+DAw2eS2mf5SQ=";
+      hash = "sha256-G6kmyxKpGyTb2Lm2hdhcTznrZR3P6YPZXOiDeSR0vfQ=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-6gzgJmB+/cwcEToQpniVVZyQZcqzblQG/num0X+xUIE=";
+      hash = "sha256-h4NZNDNTksmQcSbhbM16NmXh8LRZA5wZptWqKMGe80Y=";
     };
   };
 
@@ -209,6 +205,7 @@ let
       pkgs.xorg.libXtst
       pkgs.xorg.libxcb
       pkgs.xorg.libxshmfence
+      pkgs.xorg.xcbutilcursor
       pkgs.xorg.xcbutilimage
       pkgs.xorg.xcbutilkeysyms
       pkgs.xorg.xcbutilrenderutil
@@ -221,7 +218,6 @@ let
     ]
     ++ lib.optional xdgDesktopPortalSupport pkgs.xdg-desktop-portal
     ++ lib.optional plasma6XdgDesktopPortalSupport pkgs.kdePackages.xdg-desktop-portal-kde
-    ++ lib.optional plasma5XdgDesktopPortalSupport pkgs.plasma5Packages.xdg-desktop-portal-kde
     ++ lib.optional lxqtXdgDesktopPortalSupport pkgs.lxqt.xdg-desktop-portal-lxqt
     ++ lib.optionals gnomeXdgDesktopPortalSupport [
       pkgs.xdg-desktop-portal-gnome

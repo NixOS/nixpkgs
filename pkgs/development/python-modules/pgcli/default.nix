@@ -73,7 +73,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [
-      dywedir
       SuperSandro2000
     ];
   };

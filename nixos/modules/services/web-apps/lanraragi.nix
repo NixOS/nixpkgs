@@ -23,7 +23,7 @@ in
       };
 
       openFirewall = lib.mkEnableOption "" // {
-        description = "Open ports in the firewall for the Radarr web interface.";
+        description = "Open ports in the firewall for LANraragi's web interface.";
       };
 
       passwordFile = lib.mkOption {

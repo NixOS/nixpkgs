@@ -9,7 +9,7 @@
   freezegun,
   home-assistant-bluetooth,
   poetry-core,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pysnooz";
   version = "0.10.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -31,15 +31,20 @@ buildPythonPackage rec {
     hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
   };
 
+  patches = [
+    # https://github.com/AustinBrunkhorst/pysnooz/pull/20
+    ./bleak-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
-      --replace 'Events = "^0.4"' 'Events = ">=0.4"'
+      --replace-fail 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
+      --replace-fail 'Events = "^0.4"' 'Events = ">=0.4"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-sensor-state-data
@@ -50,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-cov-stub
     pytest-mock
     pytestCheckHook

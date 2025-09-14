@@ -228,6 +228,10 @@ let
               with lib.versions;
               lib.switch self.coq.version [
                 {
+                  case = range "8.19" "8.20";
+                  out = "3.15";
+                }
+                {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
                 }
@@ -245,6 +249,7 @@ let
           };
         })
       );
+      wasmcert = callPackage ../development/coq-modules/wasmcert { };
       waterproof = callPackage ../development/coq-modules/waterproof { };
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma { };
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.1";
+  version = "0.8.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
     rev = "v${version}";
-    hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
+    hash = "sha256-6A4zpe3GvHHf235Ovr2RT/cJgj7bWasn96yqy73pVgY=";
   };
 
   propagatedBuildInputs = [

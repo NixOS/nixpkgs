@@ -172,6 +172,11 @@ in
         assertion = cfg.settings.dynamic_tuning -> cfg.settings.daemon;
         message = "`services.tuned.settings.dynamic_tuning` requires `services.tuned.settings.daemon` to be `true`.";
       }
+
+      {
+        assertion = cfg.ppdSupport -> config.services.upower.enable;
+        message = "`services.tuned.ppdSupport` requires `services.upower` to be enabled.";
+      }
     ]
     # Declare service conflicts, also sourced from `tuned.service`
     ++
@@ -218,6 +223,11 @@ in
       # Many DEs (like GNOME and KDE Plasma) enable PPD by default
       # Let's try to make it easier to transition by only enabling this module
       power-profiles-daemon.enable = false;
+
+      # NOTE: Required by `tuned-ppd` for handling power supply changes
+      # (i.e., `services.tuned.ppdSettings.main.battery_detection`)
+      # https://github.com/NixOS/nixpkgs/issues/431105
+      upower.enable = lib.mkIf cfg.ppdSupport true;
     };
 
     systemd = {

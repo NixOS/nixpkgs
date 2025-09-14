@@ -1,4 +1,5 @@
 {
+  stdenv,
   comma,
   fetchFromGitHub,
   installShellFiles,
@@ -8,6 +9,7 @@
   nix,
   rustPlatform,
   testers,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,8 +50,9 @@ rustPlatform.buildRustPackage rec {
       "$out/share/comma/command-not-found.nu" \
       "$out/share/comma/command-not-found.fish" \
       --replace-fail "comma --ask" "$out/bin/comma --ask"
-
-    "$out/bin/comma" --mangen > comma.1
+  ''
+  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ${stdenv.hostPlatform.emulator buildPackages} "$out/bin/comma" --mangen > comma.1
     installManPage comma.1
   '';
 
