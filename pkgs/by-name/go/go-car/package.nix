@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ipld";
     repo = "go-car";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-I1CVOoENQ5Qecl+8o4jbQYvXDYTPsU8QRcxCLwkJdng=";
   };
 
