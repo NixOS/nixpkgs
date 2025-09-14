@@ -14,7 +14,7 @@
 let
   self = python3Packages.buildPythonApplication rec {
     pname = "ifstate";
-    version = "2.0.0";
+    version = "1.13.8";
     pyproject = true;
 
     src = fetchFromGitea {
@@ -22,7 +22,7 @@ let
       owner = "liske";
       repo = "ifstate";
       tag = version;
-      hash = "sha256-YxLyiTVLN4nxc2ppqGGnYCGudbdPLSLV8EwDURtpO0U=";
+      hash = "sha256-xJyizL98Iho+SWXBeOR5QP9WMIqOTSWCImMrYPZP0Lg=";
     };
 
     postPatch = ''
