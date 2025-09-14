@@ -12826,9 +12826,6 @@ with pkgs;
     ;
   rke2 = rke2_stable;
 
-  rofi-unwrapped = callPackage ../applications/misc/rofi { };
-  rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
-
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
   rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {
     backend = "wayland";
