@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "annapurna-sil";
   version = "2.100";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/annapurna/AnnapurnaSIL-${version}.zip";
+    url = "https://software.sil.org/downloads/r/annapurna/AnnapurnaSIL-${finalAttrs.version}.zip";
     hash = "sha256-TFaCchtd9SRGsU9r+m8QOvZfc7/FJxwclkSfbLwf6/4=";
   };
 
@@ -17,19 +17,19 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 OFL.txt OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 OFL.txt OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/annapurna-sil-${finalAttrs.version}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://software.sil.org/annapurna";
     description = "Unicode-based font family with broad support for writing systems that use the Devanagari script";
     longDescription = ''
       Annapurna SIL is a Unicode-based font family with broad support for writing systems that use the Devanagari script. Inspired by traditional calligraphic forms, the design is intended to be highly readable, reasonably compact, and visually attractive.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.kmein ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ kmein ];
   };
-}
+})
