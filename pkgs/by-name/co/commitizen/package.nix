@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.8.3";
+  version = "4.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-ukmLvv1/Ez04UhwXcb5QYiVWXCV7LvYd13Go6ASxsxI=";
+    hash = "sha256-vHA+TvKs9TOu/0/FpxLHHbDgshQFhP9Dwe6ZMnUOBKc=";
   };
 
   pythonRelaxDeps = [
@@ -37,6 +37,7 @@ python3Packages.buildPythonPackage rec {
     charset-normalizer
     colorama
     decli
+    deprecated
     importlib-metadata
     jinja2
     packaging
@@ -51,7 +52,6 @@ python3Packages.buildPythonPackage rec {
   ]
   ++ (with python3Packages; [
     argcomplete
-    deprecated
     py
     pytest-freezer
     pytest-mock
