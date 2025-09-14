@@ -2,39 +2,18 @@
   lib,
   commitizen,
   fetchFromGitHub,
-  buildPythonPackage,
   gitMinimal,
-  pythonOlder,
   stdenv,
   installShellFiles,
-  poetry-core,
   nix-update-script,
+  python3Packages,
   testers,
-  argcomplete,
-  charset-normalizer,
-  colorama,
-  decli,
-  importlib-metadata,
-  jinja2,
-  packaging,
-  pyyaml,
-  questionary,
-  termcolor,
-  tomlkit,
-  py,
-  pytest-freezer,
-  pytest-mock,
-  pytest-regressions,
-  pytest7CheckHook,
-  deprecated,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "commitizen";
   version = "4.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
@@ -49,11 +28,11 @@ buildPythonPackage rec {
     "termcolor"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = with python3Packages; [ poetry-core ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     argcomplete
     charset-normalizer
     colorama
@@ -68,15 +47,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
+  ]
+  ++ (with python3Packages; [
     argcomplete
     deprecated
-    gitMinimal
     py
     pytest-freezer
     pytest-mock
     pytest-regressions
     pytest7CheckHook
-  ];
+  ]);
 
   pythonImportsCheck = [ "commitizen" ];
 
@@ -105,7 +86,7 @@ buildPythonPackage rec {
 
   postInstall =
     let
-      register-python-argcomplete = lib.getExe' argcomplete "register-python-argcomplete";
+      register-python-argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
     in
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd cz \
