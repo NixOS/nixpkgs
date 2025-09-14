@@ -1,16 +1,18 @@
 {
   src,
   version,
-  config,
   lib,
-  pkgs,
+  meta,
   stdenv,
   glibc,
-  ...
 }:
 stdenv.mkDerivation {
-  pname = "init";
+  pname = "concourse-init";
   inherit version;
+  meta = meta // {
+    platforms = lib.platforms.linux;
+    description = "Container init executable";
+  };
   src = "${src}/cmd/init";
   buildInputs = [
     glibc.static

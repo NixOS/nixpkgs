@@ -12,7 +12,7 @@ in
 
   options.services.concourse.web = {
     enable = lib.mkEnableOption "A container-based automation system written in Go. (The web server part)";
-    package = lib.mkPackageOption pkgs [ "concourse" "executable" ] { };
+    package = lib.mkPackageOption pkgs "concourse" { };
     user = lib.mkOption {
       type = lib.types.str;
       default = "concourse";

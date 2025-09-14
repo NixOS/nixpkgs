@@ -1,14 +1,14 @@
 {
   version,
-  config,
-  lib,
-  pkgs,
   fetchzip,
+  meta,
   stdenv,
-  ...
 }:
 stdenv.mkDerivation {
   pname = "resource-types";
+  meta = meta // {
+    description = "Resource types for concourse worker";
+  };
   inherit version;
   src =
     fetchzip

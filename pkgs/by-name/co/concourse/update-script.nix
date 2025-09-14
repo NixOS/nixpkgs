@@ -1,14 +1,11 @@
 {
   version,
-  config,
   lib,
-  pkgs,
   nix-update,
   elm2nix,
   nixfmt,
   writeShellScript,
   jq,
-  ...
 }:
 
 writeShellScript "update-concourse" ''

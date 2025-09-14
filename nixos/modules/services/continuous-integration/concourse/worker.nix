@@ -14,7 +14,7 @@ in
 
   options.services.concourse.worker = {
     enable = lib.mkEnableOption "A container-based automation system written in Go. (The worker part)";
-    package = lib.mkPackageOption pkgs [ "concourse" "executable" ] { };
+    package = lib.mkPackageOption pkgs "concourse" { };
     auto-restart = lib.mkOption {
       type = lib.types.bool;
       default = true;
