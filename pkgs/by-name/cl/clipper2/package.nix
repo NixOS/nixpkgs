@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
     "-DCLIPPER2_TESTS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Polygon Clipping and Offsetting - C++ Only";
