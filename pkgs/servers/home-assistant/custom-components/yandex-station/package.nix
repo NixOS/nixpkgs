@@ -39,6 +39,7 @@ buildHomeAssistantComponent rec {
   ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
 
   meta = {
+    changelog = "https://github.com/AlexxIT/YandexStation/releases/tag/${src.tag}";
     description = "Controlling Yandex.Station and other smart home devices with Alice from Home Assistant";
     homepage = "https://github.com/AlexxIT/YandexStation";
     license = lib.licenses.mit;
