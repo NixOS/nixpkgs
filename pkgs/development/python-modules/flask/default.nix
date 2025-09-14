@@ -67,7 +67,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://flask.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${
+    changelog = "https://flask.palletsprojects.com/en/stable/changes/#version-${
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
