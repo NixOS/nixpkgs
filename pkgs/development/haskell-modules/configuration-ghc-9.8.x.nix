@@ -101,6 +101,6 @@ in
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_2_20250515;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_3_20250912;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }
