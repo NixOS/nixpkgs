@@ -9,8 +9,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "shfmt";
     publisher = "mkhl";
-    version = "1.3.1";
-    hash = "sha256-V7pXPwabmUJLC/T0X4dsc52IZa7SaN70zd4mCjqk4X4=";
+    version = "1.4.0";
+    hash = "sha256-5qi2BRwftuW9Isveb7vRwPPPu2w7LTfhNO0xHFNruGI=";
   };
 
   postInstall = ''

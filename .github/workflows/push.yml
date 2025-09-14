@@ -2,7 +2,6 @@ name: Push
 
 on:
   push:
-    # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
       - master
       - staging

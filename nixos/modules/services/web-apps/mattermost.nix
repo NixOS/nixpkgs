@@ -668,7 +668,7 @@ in
               }
             else if cfg.database.driver == "mysql" then
               {
-                charset = "utf8mb4,utf8";
+                charset = "utf8mb4";
                 writeTimeout = "60s";
                 readTimeout = "60s";
               }
@@ -682,7 +682,7 @@ in
               }
             else if config.mattermost.database.driver == "mysql" then
               {
-                charset = "utf8mb4,utf8";
+                charset = "utf8mb4";
                 writeTimeout = "60s";
                 readTimeout = "60s";
               }

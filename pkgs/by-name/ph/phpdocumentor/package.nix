@@ -40,6 +40,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpdoc.org";
     license = lib.licenses.mit;
     mainProgram = "phpdoc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ lib.maintainers.patka ];
   };
 })

@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "authlib"
+    "fitdecode"
     "flask"
     "flask-limiter"
     "flask-migrate"

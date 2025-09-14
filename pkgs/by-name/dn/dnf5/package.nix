@@ -15,7 +15,7 @@
   json_c,
   libmodulemd,
   librepo,
-  libsmartcols,
+  util-linux,
   libsolv,
   libxml2,
   libyaml,
@@ -25,7 +25,7 @@
   sphinx,
   sqlite,
   systemd,
-  testers,
+  versionCheckHook,
   toml11,
   zchunk,
   nix-update-script,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     libmodulemd
     librepo
-    libsmartcols
+    util-linux
     libsolv
     libxml2
     libyaml
@@ -115,10 +115,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontFixCmake = true;
 
-  passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Next-generation RPM package management system";

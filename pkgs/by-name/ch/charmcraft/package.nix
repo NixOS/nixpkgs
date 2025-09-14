@@ -44,7 +44,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.5.2";
+  version = "3.5.3";
 
   pyproject = true;
 
@@ -52,7 +52,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-WpiLi8raY1f6+Jjlamp+eDh429gjSwSufNfoPOcGIgU=";
+    hash = "sha256-SPWbHyHp1SIwDmcpBftUJ7SXggkGsxPvZyfRVm67KFM=";
   };
 
   postPatch = ''
@@ -132,7 +132,11 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/canonical/charmcraft";
     changelog = "https://github.com/canonical/charmcraft/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

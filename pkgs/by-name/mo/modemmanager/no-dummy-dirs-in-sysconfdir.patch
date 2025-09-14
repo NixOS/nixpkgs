@@ -18,3 +18,14 @@ index 5dc3b6a0..25a948a1 100644
  mkdir_cmd = 'mkdir -p ${DESTDIR}@0@'
 -meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_fccunlockdiruser))
  meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_fccunlockdirpackage))
+diff --git a/data/dispatcher-modem-setup/meson.build b/data/dispatcher-modem-setup/meson.build
+index 812152a3..7527022b 100644
+--- a/data/dispatcher-modem-setup/meson.build
++++ b/data/dispatcher-modem-setup/meson.build
+@@ -22,5 +22,4 @@ install_data(
+ )
+ 
+ mkdir_cmd = 'mkdir -p ${DESTDIR}@0@'
+-meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_modemsetupdiruser))
+ meson.add_install_script('sh', '-c', mkdir_cmd.format(mm_prefix / mm_modemsetupdirpackage))
+ 

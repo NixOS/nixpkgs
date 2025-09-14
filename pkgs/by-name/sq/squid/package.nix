@@ -17,16 +17,15 @@
   ipv6 ? true,
   nixosTests,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "7.0.1";
+  version = "7.1";
 
   src = fetchurl {
     url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Bw3Y5iGtItRdcAYF6xnSysG2zae3PwTzRXjTw/2N35s=";
+    hash = "sha256-djtaeFYc7cTkdjT6QrjmuNRsh8lJoVG056wjltL5feo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -81,17 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     cd test-suite/
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin $out/libexec $out/etc $out/share
+  # exit from test-suite/ dir back to src root for correct makefile
+  postCheck = ''
     cd ..
-    cp src/squid $out/bin
-    cp src/unlinkd $out/libexec
-    cp src/mime.conf.default $out/etc/mime.conf
-    cp src/log/file/log_file_daemon $out/libexec
-    cp -r icons $out/share
-    cp -r errors $out/share
-    runHook postInstall
+  '';
+
+  # remove unusual nixos paths (pre-made /var dirs, config grammar) and rename sbin output
+  postInstall = ''
+    rm -r $out/var
+    rm $out/share/mib.txt
+    mv $out/sbin $out/bin
   '';
 
   passthru.tests.squid = nixosTests.squid;

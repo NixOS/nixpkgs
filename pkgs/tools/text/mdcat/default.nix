@@ -22,6 +22,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j6BFXx5cyjE3+fo1gGKlqpsxrm3i9HfQ9tJGNNjjLwo=";
   };
 
+  patches = [
+    ./fix-clippy.diff
+  ];
+
   nativeBuildInputs = [
     pkg-config
     asciidoctor

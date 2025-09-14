@@ -30,4 +30,5 @@ in
   boost186 = makeBoost ./1.86.nix;
   boost187 = makeBoost ./1.87.nix;
   boost188 = makeBoost ./1.88.nix;
+  boost189 = makeBoost ./1.89.nix;
 }

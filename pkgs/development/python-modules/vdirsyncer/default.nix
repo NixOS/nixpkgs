@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pythonOlder,
   click,
   click-log,
@@ -28,25 +29,20 @@
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.19.3";
+  version = "0.20.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5DeFH+uYXew1RGVPj5z23RCbCwP34ZlWCGYDCS/+so8=";
+    hash = "sha256-/rGlM1AKlcFP0VVzOhBW/jWRklU9gsB8a6BPy/xAsS0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  pythonRelaxDeps = [ "aiostream" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     click
     click-log

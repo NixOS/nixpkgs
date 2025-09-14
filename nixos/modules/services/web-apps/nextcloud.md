@@ -65,8 +65,8 @@ The management command [`occ`](https://docs.nextcloud.com/server/stable/admin_ma
 invoked by using the `nextcloud-occ` wrapper that's globally available on a system with Nextcloud enabled.
 
 It requires elevated permissions to become the `nextcloud` user. Given the way the privilege
-escalation is implemented, parameters passed via the environment to Nextcloud (e.g. `OC_PASS`) are
-currently ignored.
+escalation is implemented, parameters passed via the environment to Nextcloud are
+currently ignored, except for `OC_PASS` and `NC_PASS`.
 
 Custom service units that need to run `nextcloud-occ` either need elevated privileges
 or the systemd configuration from `nextcloud-setup.service` (recommended):

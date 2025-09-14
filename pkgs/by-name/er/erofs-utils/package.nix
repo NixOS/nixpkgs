@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${finalAttrs.version}";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
-      ehmry
       nikstur
       jmbaur
     ];

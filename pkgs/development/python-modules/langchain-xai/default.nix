@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-xai";
-  version = "0.3.72";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-xai==${version}";
+    hash = "sha256-nae7KwCKjkvenOO8vErxFQStHolc+N8EUuK6U8r48Kc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/xai";
@@ -70,8 +70,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_xai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-xai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-xai==";
+    };
   };
 
   meta = {

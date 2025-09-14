@@ -25,6 +25,7 @@ let
     escapeShellArg
     concatMapStringsSep
     sourceFilesBySuffices
+    modules
     ;
 
   common = import ./common.nix;
@@ -129,7 +130,16 @@ let
   '';
 
   portableServiceOptions = buildPackages.nixosOptionsDoc {
-    inherit (evalModules { modules = [ ../../modules/system/service/portable/service.nix ]; }) options;
+    inherit
+      (evalModules {
+        modules = [
+          (modules.importApply ../../modules/system/service/portable/service.nix {
+            pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
+          })
+        ];
+      })
+      options
+      ;
     inherit revision warningsAreErrors;
     transformOptions =
       opt:

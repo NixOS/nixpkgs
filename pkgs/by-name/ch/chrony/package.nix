@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.7";
+  version = "4.8";
 
   src = fetchurl {
     url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-wN5BqMBR5dMrEBtfcBS5jKl4sY5ZLzDOaEC21GAtlHs=";
+    hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
   };
 
   outputs = [

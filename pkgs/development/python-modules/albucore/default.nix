@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.33";
+  version = "0.0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albucore";
     tag = version;
-    hash = "sha256-OQYIvJM3pLna5rr1H7pVDhUR9sLmx032AZ9SWXQqMjc=";
+    hash = "sha256-frVMPW3au/6vPRY89GIt7chCPkUMl13DpPqCPqIjz/o=";
   };
 
   pythonRelaxDeps = [ "opencv-python" ];
@@ -40,10 +40,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # albumentations doesn't support newer versions of albucore
+  # and has been archived upstream in favor of relicensed `albumentationsx`
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "High-performance image processing library to optimize and extend Albumentations with specialized functions for image transformations";
     homepage = "https://github.com/albumentations-team/albucore";
-    changelog = "https://github.com/albumentations-team/albucore/releases/tag/${src.tag}";
+    changelog = "https://github.com/albumentations-team/albucore/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

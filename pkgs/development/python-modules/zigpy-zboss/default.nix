@@ -5,7 +5,7 @@
   fetchFromGitHub,
   jsonschema,
   lib,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-mock,
   pytestCheckHook,
   setuptools,
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zigpy_zboss" ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-mock
     pytestCheckHook
   ];

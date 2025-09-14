@@ -25,7 +25,7 @@ jobs:
           sparse-checkout: |
             ci/github-script
       - id: prepare
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             require('./ci/github-script/prepare.js')({
@@ -38,7 +38,7 @@ jobs:
 
       - name: Determine changed files
         id: files
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             const files = (await github.paginate(github.rest.pulls.listFiles, {
@@ -76,6 +76,9 @@ jobs:
     name: Merge Group
     needs: [prepare]
     uses: ./.github/workflows/merge-group.yml
+    # Those are actually only used on the merge_group event, but will throw an error if not set.
+    permissions:
+      statuses: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
@@ -87,7 +90,7 @@ jobs:
     name: PR
     needs: [prepare]
     uses: ./.github/workflows/pr.yml
-    # Those are not actually used on pull_request, but will throw an error if not set.
+    # Those are actually only used on the pull_request_target event, but will throw an error if not set.
     permissions:
       issues: write
       pull-requests: write
@@ -102,7 +105,7 @@ jobs:
     name: Push
     needs: [prepare]
     uses: ./.github/workflows/push.yml
-    # Those are not actually used on push, but will throw an error if not set.
+    # Those are not actually used on the push or pull_request events, but will throw an error if not set.
     permissions:
       statuses: write
     secrets:

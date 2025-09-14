@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.13.1";
+  version = "3.14.0";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    hash = "sha256-gBQrz6CNlUyhxeLmY6tNtxpaQJSEW00r7MGyIDtYdiY=";
+    hash = "sha256-pOtdvu7sVe+n2FzItM6SA2sFhOwE48Tk5L+cbK7TTq8=";
   };
 
   nativeBuildInputs = [
@@ -138,6 +138,11 @@ stdenv.mkDerivation rec {
     # Replace absolute path in desktop file to correctly point to nix store
     substituteInPlace $out/share/applications/unityhub.desktop \
       --replace-fail /opt/unityhub/unityhub $out/opt/unityhub/unityhub
+
+    # This file is used by auto updater to determine whether this install is
+    # a .deb, .rpm, etc. Remove this to disable the auto updater, which auto
+    # downloads the update, in addition to being useless.
+    rm $out/opt/unityhub/resources/package-type
 
     runHook postInstall
   '';

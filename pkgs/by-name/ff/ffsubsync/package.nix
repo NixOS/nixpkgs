@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ffsubsync";
-  version = "0.4.29";
+  version = "0.4.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
     tag = version;
-    hash = "sha256-XMFobdr/nzr5pXjz/jWa/Pp14ITdbxAce0Iz+5qcBO4=";
+    hash = "sha256-Px4WaeFn6SS6VUsm0bAKmdVtqQzXX12PRKO1n6UNxdM=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

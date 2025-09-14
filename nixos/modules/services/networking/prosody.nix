@@ -763,7 +763,7 @@ in
           Force certificate authentication for server-to-server connections?
           This provides ideal security, but requires servers you communicate
           with to support encryption AND present valid, trusted certificates.
-          For more information see https://prosody.im/doc/s2s#security
+          For more information see <https://prosody.im/doc/s2s#security>
         '';
       };
 

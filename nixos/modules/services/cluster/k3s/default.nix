@@ -82,6 +82,8 @@ let
         nativeBuildInputs = with pkgs; [
           kubernetes-helm
           cacert
+          # Helm requires HOME to refer to a writable dir
+          writableTmpDirAsHomeHook
         ];
       }
       ''
@@ -293,7 +295,7 @@ let
           description = ''
             Extra HelmChart field definitions that are merged with the rest of the HelmChart
             custom resource. This can be used to set advanced fields or to overwrite
-            generated fields. See https://docs.k3s.io/helm#helmchart-field-definitions
+            generated fields. See <https://docs.k3s.io/helm#helmchart-field-definitions>
             for possible fields.
           '';
         };
@@ -630,7 +632,7 @@ in
             finalImageTag = "21.1.2-debian-11-r0";
           })
 
-          config.services.k3s.package.airgapImages
+          config.services.k3s.package.airgap-images
         ]
       '';
       description = ''

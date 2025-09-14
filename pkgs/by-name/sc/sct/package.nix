@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       raskin
       somasis
     ];
-    license = licenses.publicDomain;
+    license = licenses.isc;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
   };
 }

@@ -27,7 +27,7 @@ pkgs.testers.runNixOSTest {
     machine.wait_for_unit("default.target")
     machine.succeed("su -- root -c 'systemctl start pulseaudio'")
     machine.succeed("su -- alice -c 'mkdir -p /home/alice/.config/pulsemeeter'")
-    version = machine.execute("su -- alice -c 'pulsemeeter -s | head -n 4 | tail -n 1'")
-    assert version == (0, 'Pulsemeeter version: \x1b[1m${version}\x1b[0m\n')
+    version = machine.execute("su -- alice -c 'pulsemeeter -v'")
+    assert version == (0, '${version}\n')
   '';
 }

@@ -56,7 +56,6 @@ stdenv.mkDerivation {
     description = "Collection of games made with raylib";
     homepage = "https://www.raylib.com/games.html";
     license = licenses.zlib;
-    maintainers = with maintainers; [ ehmry ];
     inherit (raylib.meta) platforms;
   };
 }

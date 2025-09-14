@@ -75,6 +75,9 @@ buildPythonPackage rec {
 
   # cmake is only used for tests
   dontUseCmakeConfigure = true;
+  setupHooks = [
+    ./append-cmakeFlags.sh
+  ];
 
   disabledTestMarks = [
     "isolated"

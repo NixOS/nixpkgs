@@ -55,7 +55,10 @@ stdenv.mkDerivation rec {
     description = "Telescope auto-guidance application";
     changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ hjones2199 ];
+    maintainers = with lib.maintainers; [
+      hjones2199
+      returntoreality
+    ];
     platforms = lib.platforms.linux;
   };
 }

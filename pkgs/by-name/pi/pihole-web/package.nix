@@ -5,7 +5,6 @@
   pihole,
   pihole-ftl,
   procps,
-  ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {

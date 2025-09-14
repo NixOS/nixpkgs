@@ -11,6 +11,7 @@
   numactl,
   libffi,
   llvmPackages,
+  replaceVarsWith,
   coreutils,
   targetPackages,
 
@@ -214,6 +215,20 @@ let
     coreutils # for cat
   ]
   ++ lib.optionals useLLVM [
+    # Allow the use of newer LLVM versions; see the script for details.
+    (replaceVarsWith {
+      name = "subopt";
+      src = ./subopt.bash;
+      dir = "bin";
+      isExecutable = true;
+      preBuild = ''
+        name=opt
+      '';
+      replacements = {
+        inherit (stdenv) shell;
+        opt = lib.getExe' llvmPackages.llvm "opt";
+      };
+    })
     (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)

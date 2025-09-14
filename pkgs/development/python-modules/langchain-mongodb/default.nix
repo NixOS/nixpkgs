@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.3.72";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-mongodb==${version}";
+    hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
@@ -66,8 +66,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-mongodb==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-mongodb==";
+    };
   };
 
   meta = {

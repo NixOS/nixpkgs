@@ -60,6 +60,8 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
+  cargoBuildFlags = [ "-p lsp-ai" ];
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };

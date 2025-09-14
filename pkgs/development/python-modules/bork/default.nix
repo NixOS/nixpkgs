@@ -34,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "build"
     "packaging"
     "urllib3"
   ];

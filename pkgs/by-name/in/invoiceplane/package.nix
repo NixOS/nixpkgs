@@ -3,7 +3,7 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  nodejs,
+  applyPatches,
   php,
   yarnConfigHook,
   yarnBuildHook,
@@ -24,23 +24,26 @@ php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "InvoicePlane";
-    repo = "InvoicePlane";
-    tag = "v${version}";
-    hash = "sha256-XNjdFWP5AEulbPZcMDXYSdDhaLWlgu3nnCSFnjUjGpk=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "InvoicePlane";
+      repo = "InvoicePlane";
+      tag = "v${version}";
+      hash = "sha256-XNjdFWP5AEulbPZcMDXYSdDhaLWlgu3nnCSFnjUjGpk=";
+    };
+    patches = [
+      # Fix composer.json validation
+      # See https://github.com/InvoicePlane/InvoicePlane/pull/1306
+      ./fix_composer_validation.patch
+    ];
   };
 
   patches = [
     # yarn.lock missing some resolved attributes and fails
     ./fix-yarn-lock.patch
-
-    # Fix composer.json validation
-    # See https://github.com/InvoicePlane/InvoicePlane/pull/1306
-    ./fix_composer_validation.patch
   ];
 
-  vendorHash = "sha256-qnWLcEabQpu0Yp4Q2NWQm4XFV4YW679cvXo6p/dDECI=";
+  vendorHash = "sha256-UCYAnECuIbIYg1T4I8I9maXVKXJc1zkyauBuIy5frTY=";
 
   nativeBuildInputs = [
     yarnConfigHook

@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  replaceVars,
   qlementine,
   cmake,
   ninja,
@@ -21,18 +19,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus-quest-editor";
-  version = "2.0.0";
+  inherit (solarus) version;
 
-  src = fetchFromGitLab {
-    owner = "solarus-games";
-    repo = "solarus-quest-editor";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GTslxValldReWGb3x67zRPrvQUuCO/HQSXOEQlJfAmw=";
-  };
-
-  patches = [
-    (replaceVars ./qlementine-src.patch { qlementine-src = qlementine.src; })
-  ];
+  src = solarus.src + "/editor";
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -55,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtsvg
     glm
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "SOLARUS_USE_LOCAL_QLEMENTINE" true)
+    (lib.cmakeFeature "SOLARUS_QLEMENTINE_LOCAL_PATH" "${qlementine.src}")
   ];
 
   meta = {

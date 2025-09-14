@@ -544,7 +544,6 @@ broken-packages:
   - boring-window-switcher # failure in job https://hydra.nixos.org/build/233252547 at 2023-09-02
   - borsh # failure in job https://hydra.nixos.org/build/252718760 at 2024-03-16
   - bot # failure in job https://hydra.nixos.org/build/233230089 at 2023-09-02
-  - botan-bindings # failure in job https://hydra.nixos.org/build/253695799 at 2024-03-31
   - botpp # failure in job https://hydra.nixos.org/build/233201674 at 2023-09-02
   - bottom # failure in job https://hydra.nixos.org/build/233225154 at 2023-09-02
   - bound-simple # failure in job https://hydra.nixos.org/build/233201896 at 2023-09-02

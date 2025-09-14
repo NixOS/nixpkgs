@@ -60,7 +60,7 @@ runCommandWith :: {
 [allowSubstitutes]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-allowSubstitutes
 [preferLocalBuild]: https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-preferLocalBuild
 [substituter]: https://nix.dev/manual/nix/latest/glossary#gloss-substituter
-[substitutes]: https://nix.dev/manual/nix/2.23/glossary#gloss-substitute
+[substitutes]: https://nix.dev/manual/nix/latest/glossary#gloss-substitute
 
 ::: {.example #ex-runcommandwith}
 # Invocation of `runCommandWith`

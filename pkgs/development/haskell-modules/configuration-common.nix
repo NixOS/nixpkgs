@@ -563,6 +563,16 @@ with haskellLib;
           # TODO(@sternenseemann): submit upstreamable patch resolving this
           # (this should be possible by also taking PREFIX into account).
           ./patches/git-annex-no-usr-prefix.patch
+          # https://git-annex.branchable.com/bugs/flaky_test_failure_add_dup/
+          (pkgs.fetchpatch {
+            name = "git-annex-workaround-for-git-2.50_bis.patch";
+            url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=cf449837ea9ab7687d8a157f21cad31ddf5bbfb6";
+            sha256 = "sha256-HmNJ85dLht5Hy85AUkjACnET9YLPP2MshYHsApUax+I=";
+            excludes = [
+              "doc/**"
+              "CHANGELOG"
+            ];
+          })
         ];
 
         postPatch = ''
@@ -1831,16 +1841,6 @@ with haskellLib;
   # https://github.com/biocad/servant-openapi3/issues/30
   servant-openapi3 = dontCheck super.servant-openapi3;
 
-  # Point hspec 2.7.10 to correct dependencies
-  hspec_2_7_10 = super.hspec_2_7_10.override {
-    hspec-discover = self.hspec-discover_2_7_10;
-    hspec-core = self.hspec-core_2_7_10;
-  };
-  hspec-discover_2_7_10 = super.hspec-discover_2_7_10.override {
-    hspec-meta = self.hspec-meta_2_7_8;
-  };
-  hspec-core_2_7_10 = doJailbreak (dontCheck super.hspec-core_2_7_10);
-
   # Disable test cases that were broken by insignificant changes in icu 76
   # https://github.com/haskell/text-icu/issues/108
   text-icu = overrideCabal (drv: {
@@ -1980,32 +1980,6 @@ with haskellLib;
   # Test suite doesn't support base16-bytestring >= 1.0
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
-
-  # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
-  ghc-bignum = super.ghc-bignum or self.mkDerivation {
-    pname = "ghc-bignum";
-    version = "1.0";
-    sha256 = "0xl848q8z6qx2bi6xil0d35lra7wshwvysyfblki659d7272b1im";
-    description = "GHC BigNum library";
-    license = lib.licenses.bsd3;
-    # ghc-bignum is not buildable if none of the three backends
-    # is explicitly enabled. We enable Native for now as it doesn't
-    # depend on anything else as opposed to GMP and FFI.
-    # Apply patch which fixes a compilation failure we encountered.
-    # Will need to be kept until we can drop ghc-bignum entirely,
-    # i. e. if GHC 8.10.* and 8.8.* have been removed.
-    configureFlags = [
-      "-f"
-      "Native"
-    ];
-    patches = [
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
-        sha256 = "sha256-Y9WW0KDQ/qY2L9ObPvh1i/6lxXIlprbxzdSBDfiaMtE=";
-        relative = "libraries/ghc-bignum";
-      })
-    ];
-  };
 
   # 2021-04-09: too strict time bound
   # PR pending https://github.com/zohl/cereal-time/pull/2
@@ -2625,7 +2599,6 @@ with haskellLib;
   # 2025-02-06: Allow tasty-quickcheck == 0.11.*
   # https://github.com/google/ghc-source-gen/issues/120
   ghc-source-gen = doJailbreak super.ghc-source-gen;
-  ghc-source-gen_0_4_5_0 = doJailbreak super.ghc-source-gen_0_4_5_0;
   # https://github.com/byteverse/bytebuild/issues/20#issuecomment-2652113837
   bytebuild = doJailbreak super.bytebuild;
   # https://github.com/haskellari/lattices/issues/132
@@ -3218,6 +3191,154 @@ with haskellLib;
   # and therefore aren't uploaded to hackage
   # Needs to be fixed upstream
   haskore = dontCheck (doJailbreak super.haskore);
+
+  # 2025-08-01: Fixes few build errors related to pointers.
+  # https://github.com/haskell-cryptography/botan/pull/17
+  botan-bindings = appendPatch (pkgs.fetchpatch2 {
+    url = "https://github.com/haskell-cryptography/botan/commit/99de68c3938187b7ab740c6534ec032a4a236747.patch";
+    sha256 = "sha256-v255WFO9HsRuTAWFZG27TYbpoK7rJ1AuiCFNFIV18mI=";
+    stripLen = 1;
+  }) super.botan-bindings;
+
+  # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
+  # checks in a cryptography related package.
+  botan-low = overrideCabal (drv: {
+    testFlags =
+      drv.testFlags or [ ]
+      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+        # botan-low-cipher-tests
+        "/AES-128/SIV/can incrementally / online encipher a message/"
+        "/AES-128/SIV/can incrementally / online decipher a message/"
+        "/AES-128/SIV/has parity between online and offline/"
+        "/AES-192/SIV/can incrementally / online encipher a message/"
+        "/AES-192/SIV/can incrementally / online decipher a message/"
+        "/AES-192/SIV/has parity between online and offline/"
+        "/AES-256/SIV/can incrementally / online encipher a message/"
+        "/AES-256/SIV/can incrementally / online decipher a message/"
+        "/AES-256/SIV/has parity between online and offline/"
+        "/ARIA-128/SIV/can incrementally / online encipher a message/"
+        "/ARIA-128/SIV/can incrementally / online decipher a message/"
+        "/ARIA-128/SIV/has parity between online and offline/"
+        "/ARIA-192/SIV/can incrementally / online encipher a message/"
+        "/ARIA-192/SIV/can incrementally / online decipher a message/"
+        "/ARIA-192/SIV/has parity between online and offline/"
+        "/ARIA-256/SIV/can incrementally / online encipher a message/"
+        "/ARIA-256/SIV/can incrementally / online decipher a message/"
+        "/ARIA-256/SIV/has parity between online and offline/"
+        "/Camellia-128/SIV/can incrementally / online encipher a message/"
+        "/Camellia-128/SIV/can incrementally / online decipher a message/"
+        "/Camellia-128/SIV/has parity between online and offline/"
+        "/Camellia-192/SIV/can incrementally / online encipher a message/"
+        "/Camellia-192/SIV/can incrementally / online decipher a message/"
+        "/Camellia-192/SIV/has parity between online and offline/"
+        "/Camellia-256/SIV/can incrementally / online encipher a message/"
+        "/Camellia-256/SIV/can incrementally / online decipher a message/"
+        "/Camellia-256/SIV/has parity between online and offline/"
+        "/Noekeon/SIV/can incrementally / online encipher a message/"
+        "/Noekeon/SIV/can incrementally / online decipher a message/"
+        "/Noekeon/SIV/has parity between online and offline/"
+        "/SEED/SIV/can incrementally / online encipher a message/"
+        "/SEED/SIV/can incrementally / online decipher a message/"
+        "/SEED/SIV/has parity between online and offline/"
+        "/SM4/SIV/can incrementally / online encipher a message/"
+        "/SM4/SIV/can incrementally / online decipher a message/"
+        "/SM4/SIV/has parity between online and offline/"
+        "/Serpent/SIV/can incrementally / online encipher a message/"
+        "/Serpent/SIV/can incrementally / online decipher a message/"
+        "/Serpent/SIV/has parity between online and offline/"
+        "/Twofish/SIV/can incrementally / online encipher a message/"
+        "/Twofish/SIV/can incrementally / online decipher a message/"
+        "/Twofish/SIV/has parity between online and offline/"
+        "/AES-128/CCM/can incrementally / online encipher a message/"
+        "/AES-128/CCM/can incrementally / online decipher a message/"
+        "/AES-128/CCM/has parity between online and offline/"
+        "/AES-192/CCM/can incrementally / online encipher a message/"
+        "/AES-192/CCM/can incrementally / online decipher a message/"
+        "/AES-192/CCM/has parity between online and offline/"
+        "/AES-256/CCM/can incrementally / online encipher a message/"
+        "/AES-256/CCM/can incrementally / online decipher a message/"
+        "/AES-256/CCM/has parity between online and offline/"
+        "/ARIA-128/CCM/can incrementally / online encipher a message/"
+        "/ARIA-128/CCM/can incrementally / online decipher a message/"
+        "/ARIA-128/CCM/has parity between online and offline/"
+        "/ARIA-192/CCM/can incrementally / online encipher a message/"
+        "/ARIA-192/CCM/can incrementally / online decipher a message/"
+        "/ARIA-192/CCM/has parity between online and offline/"
+        "/ARIA-256/CCM/can incrementally / online encipher a message/"
+        "/ARIA-256/CCM/can incrementally / online decipher a message/"
+        "/ARIA-256/CCM/has parity between online and offline/"
+        "/Camellia-128/CCM/can incrementally / online encipher a message/"
+        "/Camellia-128/CCM/can incrementally / online decipher a message/"
+        "/Camellia-128/CCM/has parity between online and offline/"
+        "/Camellia-192/CCM/can incrementally / online encipher a message/"
+        "/Camellia-192/CCM/can incrementally / online decipher a message/"
+        "/Camellia-192/CCM/has parity between online and offline/"
+        "/Camellia-256/CCM/can incrementally / online encipher a message/"
+        "/Camellia-256/CCM/can incrementally / online decipher a message/"
+        "/Camellia-256/CCM/has parity between online and offline/"
+        "/Noekeon/CCM/can incrementally / online encipher a message/"
+        "/Noekeon/CCM/can incrementally / online decipher a message/"
+        "/Noekeon/CCM/has parity between online and offline/"
+        "/SEED/CCM/can incrementally / online encipher a message/"
+        "/SEED/CCM/can incrementally / online decipher a message/"
+        "/SEED/CCM/has parity between online and offline/"
+        "/SM4/CCM/can incrementally / online encipher a message/"
+        "/SM4/CCM/can incrementally / online decipher a message/"
+        "/SM4/CCM/has parity between online and offline/"
+        "/Serpent/CCM/can incrementally / online encipher a message/"
+        "/Serpent/CCM/can incrementally / online decipher a message/"
+        "/Serpent/CCM/has parity between online and offline/"
+        "/Twofish/CCM/can incrementally / online encipher a message/"
+        "/Twofish/CCM/can incrementally / online decipher a message/"
+        "/Twofish/CCM/has parity between online and offline/"
+        # botan-low-mpi-tests
+        "/can compute the modular inverse/"
+        # botan-low-pubkey-dsa-tests
+        "/modp/srp/1024/privKeyLoadDSA/"
+        "/modp/srp/1024/pubKeyLoadDSA/"
+        "/modp/srp/1536/privKeyLoadDSA/"
+        "/modp/srp/1536/pubKeyLoadDSA/"
+        "/modp/srp/2048/privKeyLoadDSA/"
+        "/modp/srp/2048/pubKeyLoadDSA/"
+        "/modp/srp/3072/privKeyLoadDSA/"
+        "/modp/srp/3072/pubKeyLoadDSA/"
+        "/modp/srp/4096/privKeyLoadDSA/"
+        "/modp/srp/4096/pubKeyLoadDSA/"
+        "/modp/srp/6144/privKeyLoadDSA/"
+        "/modp/srp/6144/pubKeyLoadDSA/"
+        "/modp/srp/8192/privKeyLoadDSA/"
+        "/modp/srp/8192/pubKeyLoadDSA/"
+        # botan-low-pubkey-decrypt-tests
+        "/SM2 sm2p256v1 SHA-256/decrypt/"
+        # botan-low-pubkey-encrypt-tests
+        "/SM2 sm2p256v1 SHA-256/encrypt/"
+        # botan-low-pwdhash-tests
+        "/Scrypt/pwdhashTimed/"
+        # botan-low-srp6-tests
+        "/ffdhe/ietf/2048/can negotiate a shared secret/"
+        "/ffdhe/ietf/3072/can negotiate a shared secret/"
+        "/ffdhe/ietf/4096/can negotiate a shared secret/"
+        "/ffdhe/ietf/6144/can negotiate a shared secret/"
+        "/ffdhe/ietf/8192/can negotiate a shared secret/"
+        "/modp/ietf/1024/can negotiate a shared secret/"
+        "/modp/ietf/1536/can negotiate a shared secret/"
+        "/modp/ietf/2048/can negotiate a shared secret/"
+        "/modp/ietf/3072/can negotiate a shared secret/"
+        "/modp/ietf/4096/can negotiate a shared secret/"
+        "/modp/ietf/6144/can negotiate a shared secret/"
+        "/modp/ietf/8192/can negotiate a shared secret/"
+        "/modp/srp/1024/can negotiate a shared secret/"
+        "/modp/srp/1536/can negotiate a shared secret/"
+        "/modp/srp/2048/can negotiate a shared secret/"
+        "/modp/srp/3072/can negotiate a shared secret/"
+        "/modp/srp/4096/can negotiate a shared secret/"
+        "/modp/srp/6144/can negotiate a shared secret/"
+        "/modp/srp/8192/can negotiate a shared secret/"
+        "/dsa/jce/1024/can negotiate a shared secret/"
+        "/dsa/botan/2048/can negotiate a shared secret/"
+        "/dsa/botan/3072/can negotiate a shared secret/"
+      ]);
+  }) super.botan-low;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

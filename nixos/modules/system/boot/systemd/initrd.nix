@@ -481,7 +481,6 @@ in
       settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
       contents = {
-        "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 
@@ -503,6 +502,8 @@ in
 
         "/bin".source = "${initrdBinEnv}/bin";
         "/sbin".source = "${initrdBinEnv}/sbin";
+        "/usr/bin".source = "${initrdBinEnv}/bin";
+        "/usr/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;

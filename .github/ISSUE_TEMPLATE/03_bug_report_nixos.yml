@@ -103,7 +103,7 @@ body:
 
         Please note that the maintainer attribute name does not always match the maintainer's GitHub username. If that occurs, try looking in [`maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix) for the maintainer attribute name, and checking if the maintainer has a listed GitHub username.
 
-        If in doubt, check `git blame` for whoever last touched the module, or check the associated package's maintainers. Please add the mentions above the `---` characters.
+        If in doubt, check the associated package's maintainers. Please add the mentions above the `---` characters.
       value: |2
 
 

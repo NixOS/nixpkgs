@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "urllib3"
     "beautifulsoup4"
+    "lxml"
   ];
 
   meta = {

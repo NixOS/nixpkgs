@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "PyGithub";
     repo = "PyGithub";
     tag = "v${version}";
-    hash = "sha256-meWuetrgE2ks3BEQedrvrfYEVAJsFGgYO6GXPRUcJv4=";
+    hash = "sha256-36taxa95WrpQw0UUlmnWX4XFslAAuuoousxNh5O5uDA=";
   };
 
   build-system = [

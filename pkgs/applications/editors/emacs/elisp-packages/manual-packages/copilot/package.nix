@@ -8,7 +8,7 @@
   nodejs,
   s,
   melpaBuild,
-  copilot-language-server-fhs,
+  copilot-language-server,
 }:
 melpaBuild (finalAttrs: {
   pname = "copilot";
@@ -26,7 +26,7 @@ melpaBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace copilot.el \
       --replace-fail "defcustom copilot-server-executable \"copilot-language-server\"" \
-                     "defcustom copilot-server-executable \"${lib.getExe copilot-language-server-fhs}\""
+                     "defcustom copilot-server-executable \"${lib.getExe copilot-language-server}\""
   '';
 
   packageRequires = [

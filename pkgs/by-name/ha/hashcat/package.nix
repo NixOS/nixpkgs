@@ -21,25 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat";
-  version = "7.0.0";
+  version = "7.1.2";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "sha256-hCtx0NNLAgAFiCR6rp/smg/BMnfyzTpqSSWw8Jszv3U=";
+    sha256 = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
   };
-
-  patches = [
-    ./0001-python-shebangs.patch
-  ];
 
   postPatch = ''
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
-      --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
-      --replace "/usr/bin/ar" "ar" \
-      --replace "/usr/bin/sed" "sed" \
-      --replace '-i ""' '-i'
+      --replace-fail "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
+      --replace-fail "/usr/bin/ar" "ar" \
+      --replace-fail "/usr/bin/sed" "sed" \
+      --replace-fail '-i ""' '-i'
   '';
 
   nativeBuildInputs = [

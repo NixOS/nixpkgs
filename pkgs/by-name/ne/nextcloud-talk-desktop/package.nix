@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-talk-desktop";
-  version = "1.2.5";
+  version = "1.2.6";
 
   # Building from source would require building also building Server and Talk components
   # See https://github.com/nextcloud/talk-desktop?tab=readme-ov-file#%EF%B8%8F-prerequisites
   src = fetchzip {
     url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${finalAttrs.version}/Nextcloud.Talk-linux-x64.zip";
-    hash = "sha256-Jozdyxd02LocmbRrR2pB7EtIRIjd988JtDhlCNbumks=";
+    hash = "sha256-uCqmcDZ5iaeT8nCss3Y2nen4N5nzMKu0dkTU/gapVow=";
     stripRoot = false;
   };
 

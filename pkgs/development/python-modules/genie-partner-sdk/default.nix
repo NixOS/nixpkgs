@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "genie-partner-sdk";
-  version = "1.0.9";
+  version = "1.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "genie_partner_sdk";
-    hash = "sha256-9fnKbC/Kiu5DYF3Sz4EksOJbJzRG7C+H3Ku2uE3eTTY=";
+    hash = "sha256-eNeN+mtpPzY6p0iVo/ot0eLza/aeJP70PxNHx7/MVoY=";
   };
 
   nativeBuildInputs = [ hatchling ];

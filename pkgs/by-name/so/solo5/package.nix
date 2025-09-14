@@ -95,7 +95,6 @@ stdenv.mkDerivation {
     description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";
     license = licenses.isc;
-    maintainers = [ maintainers.ehmry ];
     platforms = mapCartesianProduct ({ arch, os }: "${arch}-${os}") {
       arch = [
         "aarch64"

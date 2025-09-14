@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/VoiDD/fjo";
     license = lib.licenses.agpl3Only;
     mainProgram = "berg";
-    maintainers = with lib.maintainers; [ ehmry ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

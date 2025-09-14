@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.services.paperless;
+  opt = options.services.paperless;
 
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
@@ -323,6 +324,17 @@ in
       };
     };
 
+    configureNginx = lib.mkEnableOption "" // {
+      description = "Whether to configure nginx as a reverse proxy.";
+    };
+
+    domain = lib.mkOption {
+      type = with lib.types; nullOr str;
+      default = null;
+      example = "paperless.example.com";
+      description = "Domain under which paperless will be available.";
+    };
+
     exporter = {
       enable = lib.mkEnableOption "regular automatic document exports";
 
@@ -377,8 +389,36 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.configureNginx -> cfg.domain != null;
+            message = "${opt.configureNginx} requires ${opt.domain} to be configured.";
+          }
+        ];
+
         services.paperless.manage = manage;
         environment.systemPackages = [ manage ];
+
+        services.nginx = lib.mkIf cfg.configureNginx {
+          enable = true;
+          upstreams.paperless.servers."${cfg.address}:${toString cfg.port}" = { };
+          virtualHosts.${cfg.domain} = {
+            forceSSL = lib.mkDefault true;
+            locations = {
+              "/".proxyPass = "http://paperless";
+              "/static/" = {
+                root = config.services.paperless.package;
+                extraConfig = ''
+                  rewrite ^/(.*)$ /lib/paperless-ngx/$1 break;
+                '';
+              };
+              "/ws/status" = {
+                proxyPass = "http://paperless";
+                proxyWebsockets = true;
+              };
+            };
+          };
+        };
 
         services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
 
@@ -394,6 +434,9 @@ in
         };
 
         services.paperless.settings = lib.mkMerge [
+          (lib.mkIf (cfg.domain != null) {
+            PAPERLESS_URL = "https://${cfg.domain}";
+          })
           (lib.mkIf cfg.database.createLocally {
             PAPERLESS_DBENGINE = "postgresql";
             PAPERLESS_DBHOST = "/run/postgresql";
@@ -598,7 +641,7 @@ in
 
         services.gotenberg = lib.mkIf cfg.configureTika {
           enable = true;
-          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.15.3/docker/compose/docker-compose.sqlite-tika.yml#L64-L69
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
           chromium.disableJavascript = true;
           extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
         };

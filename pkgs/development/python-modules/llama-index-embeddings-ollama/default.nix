@@ -4,7 +4,7 @@
   fetchPypi,
   llama-index-core,
   ollama,
-  poetry-core,
+  hatchling,
   pythonOlder,
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "ollama" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core

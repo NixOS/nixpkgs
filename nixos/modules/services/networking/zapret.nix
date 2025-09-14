@@ -26,13 +26,11 @@ in
     params = lib.mkOption {
       default = [ ];
       type = with lib.types; listOf str;
-      example = ''
-        [
-          "--dpi-desync=fake,disorder2"
-          "--dpi-desync-ttl=1"
-          "--dpi-desync-autottl=2"
-        ]
-      '';
+      example = [
+        "--dpi-desync=fake,disorder2"
+        "--dpi-desync-ttl=1"
+        "--dpi-desync-autottl=2"
+      ];
       description = ''
         Specify the bypass parameters for Zapret binary.
         There are no universal parameters as they vary between different networks, so you'll have to find them yourself.
@@ -44,14 +42,12 @@ in
     whitelist = lib.mkOption {
       default = [ ];
       type = with lib.types; listOf str;
-      example = ''
-        [
-          "youtube.com"
-          "googlevideo.com"
-          "ytimg.com"
-          "youtu.be"
-        ]
-      '';
+      example = [
+        "youtube.com"
+        "googlevideo.com"
+        "ytimg.com"
+        "youtu.be"
+      ];
       description = ''
         Specify a list of domains to bypass. All other domains will be ignored.
         You can specify either whitelist or blacklist, but not both.
@@ -63,11 +59,9 @@ in
     blacklist = lib.mkOption {
       default = [ ];
       type = with lib.types; listOf str;
-      example = ''
-        [
-          "example.com"
-        ]
-      '';
+      example = [
+        "example.com"
+      ];
       description = ''
         Specify a list of domains NOT to bypass. All other domains will be bypassed.
         You can specify either whitelist or blacklist, but not both.
@@ -124,12 +118,10 @@ in
     udpPorts = lib.mkOption {
       default = [ ];
       type = with lib.types; listOf str;
-      example = ''
-        [
-          "50000:50099"
-          "1234"
-        ]
-      '';
+      example = [
+        "50000:50099"
+        "1234"
+      ];
       description = ''
         List of UDP ports to route.
         Port ranges are delimited with a colon like this "50000:50099".

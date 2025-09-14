@@ -82,7 +82,7 @@ makeOverridable (
           postFetch = optionalString (vc == "hg") ''
             rm -f "$out/.hg_archival.txt"
           ''; # impure file; see #12002
-          passthru = {
+          passthru = (args.passthru or { }) // {
             gitRepoUrl = urlFor "git";
           };
         };

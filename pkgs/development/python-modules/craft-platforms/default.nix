@@ -60,7 +60,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-platforms";
     changelog = "https://github.com/canonical/craft-platforms/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

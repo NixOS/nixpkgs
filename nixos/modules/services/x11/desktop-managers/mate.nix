@@ -114,7 +114,6 @@ in
     })
     (mkIf cfg.enableWaylandSession {
       programs.wayfire.enable = true;
-      programs.wayfire.plugins = [ pkgs.wayfirePlugins.firedecor ];
 
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${pkgs.mate.mate-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 

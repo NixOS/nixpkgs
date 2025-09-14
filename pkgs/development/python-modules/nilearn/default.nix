@@ -19,18 +19,20 @@
   packaging,
 
   pytestCheckHook,
+  pytest-timeout,
+  numpydoc,
 }:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
     tag = version;
-    hash = "sha256-olA3Yqf+upMJZiwpQp6HDSMxe9OssGLGMdHbZARg0+Y=";
+    hash = "sha256-jUP/gUMUVveX8m2VbyilTsx5OppuYVXH1qKeEfEVajQ=";
   };
 
   postPatch = ''
@@ -39,8 +41,8 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    hatch-vcs
     hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -55,14 +57,10 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # https://github.com/nilearn/nilearn/issues/2608
-    "test_clean_confounds"
-
-    # [XPASS(strict)] invalid checks should fail
-    "test_check_estimator_invalid_group_sparse_covariance"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+    numpydoc
   ];
 
   # do subset of tests which don't fetch resources

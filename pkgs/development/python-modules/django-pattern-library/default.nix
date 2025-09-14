@@ -15,6 +15,7 @@
   beautifulsoup4,
   pytestCheckHook,
   pytest-django,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     beautifulsoup4
     pytestCheckHook
     pytest-django
+    mkdocs # only needed for jinja2, we don't build docs
   ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings.dev";

@@ -2,35 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytest-cov-stub,
   pytest-mock,
-  pytest-socket,
   pytestCheckHook,
   requests,
   responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.19.2";
+  version = "0.18.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
     tag = version;
-    hash = "sha256-me62VPjKU+vh0vo4Fl86sEse1QZYD2zDpxchSiUcxTY=";
+    hash = "sha256-FUnD5JVS816XQYqXGSDnypqcYuKVhEeFIFcENf8BkcU=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-mock
-    pytest-socket
     pytestCheckHook
     responses
   ];

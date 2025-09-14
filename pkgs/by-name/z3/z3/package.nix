@@ -18,7 +18,6 @@
   ninja,
   testers,
   useCmakeBuild ? (!ocamlBindings), # TODO: remove gnu make build once cmake supports ocaml
-  ...
 }:
 
 assert pythonBindings -> !stdenv.hostPlatform.isStatic;

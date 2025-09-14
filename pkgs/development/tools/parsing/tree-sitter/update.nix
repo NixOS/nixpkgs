@@ -209,7 +209,7 @@ let
       repo = "tree-sitter-viml";
     };
     "tree-sitter-yaml" = {
-      orga = "ikatyang";
+      orga = "tree-sitter-grammars";
       repo = "tree-sitter-yaml";
     };
     "tree-sitter-zig" = {
@@ -343,6 +343,10 @@ let
     "tree-sitter-gemini" = {
       orga = "blessanabraham";
       repo = "tree-sitter-gemini";
+    };
+    "tree-sitter-go-template" = {
+      orga = "ngalaiko";
+      repo = "tree-sitter-go-template";
     };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";

@@ -190,8 +190,8 @@ in
 
         See also:
 
-        - https://docs.frigate.video/configuration/hardware_acceleration
-        - https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets
+        - <https://docs.frigate.video/configuration/hardware_acceleration>
+        - <https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets>
       '';
     };
 
@@ -217,7 +217,7 @@ in
             description = ''
               Attribute set of cameras configurations.
 
-              https://docs.frigate.video/configuration/cameras
+              <https://docs.frigate.video/configuration/cameras>
             '';
           };
 
@@ -227,6 +227,17 @@ in
               default = "/var/lib/frigate/frigate.db";
               description = ''
                 Path to the SQLite database used
+              '';
+            };
+          };
+
+          ffmpeg = {
+            path = mkOption {
+              type = coercedTo package toString str;
+              default = pkgs.ffmpeg-headless;
+              example = literalExpression "pkgs.ffmpeg-full";
+              description = ''
+                Package providing the ffmpeg and ffprobe executables below the bin/ directory.
               '';
             };
           };

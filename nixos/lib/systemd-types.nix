@@ -95,7 +95,7 @@ let
               minimal, "recommended" includes "required", and
               "suggested" includes "recommended".
 
-              See: https://systemd.io/ELF_DLOPEN_METADATA/
+              See: <https://systemd.io/ELF_DLOPEN_METADATA/>
             '';
           };
 

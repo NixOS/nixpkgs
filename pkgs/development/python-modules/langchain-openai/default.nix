@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.72";
+  version = "0.3.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-openai==${version}";
+    hash = "sha256-HpAdCHxmfGJcqXArvtlYagNuEBGBjrbICIwh9nI0qMQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -102,8 +102,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-openai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-openai==";
+    };
   };
 
   meta = {

@@ -11,7 +11,9 @@ let
   mkOcamlPackages =
     ocaml:
     (lib.makeScope newScope (
-      self: with self; {
+      self:
+      with self;
+      {
         inherit ocaml;
 
         ### A ###
@@ -118,8 +120,6 @@ let
 
         binning = callPackage ../development/ocaml-modules/binning { };
 
-        biocaml = throw "biocaml has been removed"; # 2025-06-04
-
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
         bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
@@ -144,6 +144,8 @@ let
         brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
 
         brr = callPackage ../development/ocaml-modules/brr { };
+
+        bstr = callPackage ../development/ocaml-modules/bstr { };
 
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
@@ -546,7 +548,7 @@ let
           in
           {
             ppx_deriving_0_15 = ppx_deriving_ "0.15";
-            ppx_deriving = ppx_deriving_ "0.33.0";
+            ppx_deriving_0_33 = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -659,7 +661,6 @@ let
 
         gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
         gen = callPackage ../development/ocaml-modules/gen { };
@@ -871,7 +872,7 @@ let
           else
             null;
 
-        janeStreet =
+        janeStreet = lib.recurseIntoAttrs (
           if lib.versionOlder "5.1" ocaml.version then
             import ../development/ocaml-modules/janestreet/0.17.nix {
               inherit self;
@@ -928,7 +929,8 @@ let
             }
           else
             import ../development/ocaml-modules/janestreet {
-            };
+            }
+        );
 
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -1323,6 +1325,7 @@ let
         multicore-bench = callPackage ../development/ocaml-modules/multicore-bench { };
 
         multicore-magic = callPackage ../development/ocaml-modules/multicore-magic { };
+        multicore-magic-dscheck = callPackage ../development/ocaml-modules/multicore-magic/dscheck.nix { };
 
         multipart_form = callPackage ../development/ocaml-modules/multipart_form { };
 
@@ -1424,8 +1427,6 @@ let
         ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
-
-        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -1834,17 +1835,6 @@ let
 
         resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
-        resto = callPackage ../development/ocaml-modules/resto { };
-        resto-acl = callPackage ../development/ocaml-modules/resto/acl.nix { };
-        resto-cohttp = callPackage ../development/ocaml-modules/resto/cohttp.nix { };
-        resto-cohttp-client = callPackage ../development/ocaml-modules/resto/cohttp-client.nix { };
-        resto-cohttp-self-serving-client =
-          callPackage ../development/ocaml-modules/resto/cohttp-self-serving-client.nix
-            { };
-        resto-cohttp-server = callPackage ../development/ocaml-modules/resto/cohttp-server.nix { };
-        resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
-        resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
-
         result = callPackage ../development/ocaml-modules/ocaml-result { };
 
         rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
@@ -2221,6 +2211,11 @@ let
 
         ### End ###
 
+      }
+      // lib.optionalAttrs config.allowAliases {
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
+        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }
     )).overrideScope
       liftJaneStreet;

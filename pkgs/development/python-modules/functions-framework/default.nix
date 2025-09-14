@@ -35,6 +35,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "cloudevents"
+  ];
   dependencies = [
     click
     cloudevents

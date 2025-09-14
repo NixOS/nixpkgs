@@ -81,6 +81,7 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless-spec = [ pyyaml ];
     idp-oidc = [
       oauthlib
       pyjwt

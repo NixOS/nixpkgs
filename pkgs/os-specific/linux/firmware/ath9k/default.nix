@@ -164,7 +164,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       # see NOTICE.txt for details
       bsd3 # almost everything; "the ClearBSD licence"
-      gpl2ClasspathPlus # **/*cmnos_printf.c, only three files
+      gpl2Plus # **/*cmnos_printf.c, only three files
+      classpathException20 # **/*cmnos_printf.c, only three files
       mit # **/xtos, **/xtensa
     ];
 

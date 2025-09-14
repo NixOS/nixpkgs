@@ -77,6 +77,8 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsToListRecursive
+    mapAttrsToListRecursiveCond
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -2006,6 +2008,39 @@ runTests {
 
   # ATTRSETS
 
+  testGenAttrs = {
+    expr = attrsets.genAttrs [ "foo" "bar" ] (name: "x_" + name);
+    expected = {
+      foo = "x_foo";
+      bar = "x_bar";
+    };
+  };
+  testGenAttrs' = {
+    expr = attrsets.genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s));
+    expected = {
+      x_foo = "y_foo";
+      x_bar = "y_bar";
+    };
+  };
+  testGenAttrs'Example2 = {
+    expr = attrsets.genAttrs' [
+      {
+        x = "foo";
+        y = "baz";
+      }
+    ] (s: lib.nameValuePair ("x_" + s.x) ("y_" + s.y));
+    expected = {
+      x_foo = "y_baz";
+    };
+  };
+  testGenAttrs'ConflictingName = {
+    # c.f. warning of genAttrs'
+    expr = attrsets.genAttrs' [ "foo" "bar" "baz" ] (s: nameValuePair "foo" s);
+    expected = {
+      foo = "foo";
+    };
+  };
+
   testConcatMapAttrs = {
     expr =
       concatMapAttrs
@@ -3175,6 +3210,111 @@ runTests {
     ];
   };
 
+  testDocOptionVisiblity = {
+    expr =
+      let
+        submodule =
+          { lib, ... }:
+          {
+            freeformType = lib.types.attrsOf (
+              lib.types.submodule {
+                options.bar = lib.mkOption { };
+              }
+            );
+            options.foo = lib.mkOption { };
+          };
+
+        module =
+          { lib, ... }:
+          {
+            options = {
+              shallow = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "shallow";
+              };
+              transparent = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "transparent";
+              };
+              "true" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = true;
+              };
+              "false" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = false;
+              };
+              "internal" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                internal = true;
+              };
+            };
+          };
+
+        options =
+          (evalModules {
+            modules = [ module ];
+          }).options;
+      in
+      pipe options [
+        optionAttrSetToDocList
+        (filter (opt: !(builtins.elem "_module" opt.loc)))
+        (map (
+          opt:
+          nameValuePair opt.name {
+            inherit (opt) visible internal;
+          }
+        ))
+        listToAttrs
+      ];
+    expected = {
+      shallow = {
+        visible = true;
+        internal = false;
+      };
+      transparent = {
+        visible = false;
+        internal = false;
+      };
+      "transparent.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "transparent.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "true" = {
+        visible = true;
+        internal = false;
+      };
+      "true.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "true.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "false" = {
+        visible = false;
+        internal = false;
+      };
+      "internal" = {
+        visible = true;
+        internal = true;
+      };
+      "internal.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "internal.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+    };
+  };
+
   testAttrsWithName = {
     expr =
       let
@@ -3531,6 +3671,118 @@ runTests {
       133
       233
       333
+    ];
+  };
+
+  testMapAttrsToListRecursive = {
+    expr = mapAttrsToListRecursive (p: v: "${concatStringsSep "." p}=${v}") {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "a.b=A"
+      "c.d=B"
+      "c.e.f=C"
+      "c.e.g=D"
+      "h.i.j.k=E"
+    ];
+  };
+
+  testMapAttrsToListRecursiveWithLists = {
+    expr = mapAttrsToListRecursive (p: v: v) {
+      a = [ ];
+      b = {
+        c = [ [ ] ];
+      };
+      d = {
+        e = {
+          f = [ [ [ ] ] ];
+        };
+      };
+    };
+    expected = [
+      [ ]
+      [ [ ] ]
+      [ [ [ ] ] ]
+    ];
+  };
+
+  testMapAttrsToListRecursiveCond = {
+    expr = mapAttrsToListRecursiveCond (p: as: !(as ? stop)) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          stop = null;
+          f = "C";
+          g = {
+            h = "D";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        stop = null;
+        f = "C";
+        g = {
+          h = "D";
+        };
+      }
+    ];
+  };
+
+  testMapAttrsToListRecursiveCondPath = {
+    expr = mapAttrsToListRecursiveCond (p: as: length p < 2) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        f = "C";
+        g = "D";
+      }
+      {
+        j = {
+          k = "E";
+        };
+      }
     ];
   };
 

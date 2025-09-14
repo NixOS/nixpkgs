@@ -40,7 +40,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/albertodonato/snap-helpers";
     changelog = "https://github.com/albertodonato/snap-helpers/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

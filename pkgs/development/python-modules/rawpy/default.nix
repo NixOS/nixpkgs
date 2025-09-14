@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # rawpy._rawpy.LibRawFileUnsupportedError: b'Unsupported file format or not RAW file'
+    "testCropSizeSigma"
     "testFoveonFileOpenAndPostProcess"
     "testThumbExtractBitmap"
   ];

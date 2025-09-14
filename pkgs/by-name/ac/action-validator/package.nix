@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "action-validator";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpalmer";
     repo = "action-validator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pqWowcc/3NHtVcNDZ+4opgtwttcKdUVoi4qkv56JvY4=";
+    hash = "sha256-irBK27De9W5BSNIQynguOY8oPgA7K03dleE/0YvY75o=";
     fetchSubmodules = true;
   };
 

@@ -146,11 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.0.3";
+  version = "10.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XIkSZ7FTSndEZduLGg38sMXm1+y29xNFYlrfTgiJlFs=";
+    hash = "sha256-4FFzSbUMpz6+wvqFsGBQ1cRjymXHOIM72PwfFfGAvlE=";
   };
 
   depsBuildBuild = [
@@ -169,8 +169,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl
 
-    # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    (python3Packages.python.withPackages (ps: with ps; [ distlib ]))
+    # For python changes other than simple package additions, ping @dramforever for review.
+    # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
+    python3Packages.distlib
+    # Hooks from the python package are needed to add `$pythonPath` so
+    # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
+    python3Packages.python
   ]
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
   ++ lib.optionals enableDocs [
@@ -296,6 +300,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace-fail "'VERSION'" "'QEMU_VERSION'"
+    substituteInPlace docs/conf.py \
+      --replace-fail "'../VERSION'" "'../QEMU_VERSION'"
     substituteInPlace python/qemu/machine/machine.py \
       --replace-fail /var/tmp "$TMPDIR"
   '';

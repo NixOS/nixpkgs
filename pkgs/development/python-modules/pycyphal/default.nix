@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pycyphal";
-  version = "1.18.0";
+  version = "1.24.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pycyphal";
     tag = version;
-    hash = "sha256-XkH0wss8ueh/Wwz0lhvQShOp3a4X9lNdosT/sMe7p4Q=";
+    hash = "sha256-yrGKmJW4W8bPazKHWkwgNWDPiQYg1KTEuI7hC3yOWek=";
     fetchSubmodules = true;
   };
 

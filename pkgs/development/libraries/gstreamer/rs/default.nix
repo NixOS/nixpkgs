@@ -127,17 +127,6 @@ let
       ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
-
-  # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
-  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or [ ]) ++ [
-      (fetchpatch {
-        name = "cargo-c-test-rlib-fix.patch";
-        url = "https://github.com/lu-zero/cargo-c/commit/dd02009d965cbd664785149a90d702251de747b3.diff";
-        hash = "sha256-Az0WFF9fc5+igcV8C/QFhq5GE4PAyGEO84D9ECxx3v0=";
-      })
-    ];
-  });
 in
 assert lib.assertMsg (invalidPlugins == [ ])
   "Invalid gst-plugins-rs plugin${
@@ -187,11 +176,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Disable uriplaylistbin test that requires network access.
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/676
-    # TODO: Remove in 0.14, it has been replaced by a different fix:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2140
-    ./ignore-network-tests.patch
+    # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
+    ./ignore-tests.patch
+    (fetchpatch {
+      name = "x264enc-test-fix.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/commit/c0c9888d66e107f9e0b6d96cd3a85961c7e97d9a.diff";
+      hash = "sha256-/ILdPDjI20k5l9Qf/klglSuhawmFUs9mR+VhBnQqsWw=";
+    })
   ];
 
   strictDeps = true;
@@ -205,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     cargo
-    cargo-c'
+    cargo-c
     nasm
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -268,12 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      # Applies patches.
-      # TODO: remove with 0.14
-      inherit mopidy;
-    };
-
     updateScript = nix-update-script {
       # use numbered releases rather than gstreamer-* releases
       # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772

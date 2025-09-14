@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpp-jwt";
-  version = "1.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "arun11299";
     repo = "cpp-jwt";
     rev = "v${version}";
-    sha256 = "sha256-l1FevNhGX7vouKmGh/ypCcmZQLMpHJ4JFUp5dnNMEwg=";
+    sha256 = "sha256-TyLYTk7vlpNmYJxaH9zhGwFvv1BEcShTDr7JYfgu6f0=";
   };
 
   cmakeFlags = [

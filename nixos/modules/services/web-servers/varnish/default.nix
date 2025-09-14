@@ -80,7 +80,7 @@ let
       port = mkOption {
         description = "The port to use for IP sockets. If port is not specified, port 80 (http) is used.";
         default = null;
-        type = with types; nullOr int;
+        type = with types; nullOr port;
       };
       proto = mkOption {
         description = "PROTO can be 'HTTP' (the default) or 'PROXY'.  Both version 1 and 2 of the proxy protocol can be used.";

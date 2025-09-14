@@ -6,7 +6,7 @@
 }:
 
 let
-  pihole = pkgs.pihole;
+  pihole = cfg.piholePackage;
   makePayload =
     list:
     builtins.toJSON {
@@ -29,8 +29,8 @@ in
     ${lib.getExe' pkgs.procps "kill"} -s SIGRTMIN $(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})
   fi
 
-  source ${pihole}/usr/share/pihole/advanced/Scripts/api.sh
-  source ${pihole}/usr/share/pihole/advanced/Scripts/utils.sh
+  source ${pihole}/share/pihole/advanced/Scripts/api.sh
+  source ${pihole}/share/pihole/advanced/Scripts/utils.sh
 
   any_failed=0
 

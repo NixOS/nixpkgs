@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "SDK to perform actions on Outscale API";
     homepage = "https://github.com/outscale/osc-sdk-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    maintainers = [ ];
   };
 }

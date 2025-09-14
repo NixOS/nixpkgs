@@ -399,5 +399,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ michaelshmitty ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

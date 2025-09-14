@@ -22,6 +22,8 @@
   makeWrapper,
   nixosTests,
   ffmpeg,
+  autoconf,
+  automake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -160,6 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gettext
+    autoconf
+    automake
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
     with xorg;

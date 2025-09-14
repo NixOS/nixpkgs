@@ -47,9 +47,9 @@ in
 
   options = {
     services.desktopManager.cosmic = {
-      enable = lib.mkEnableOption "Enable the COSMIC desktop environment";
+      enable = lib.mkEnableOption "COSMIC desktop environment";
 
-      showExcludedPkgsWarning = lib.mkEnableOption "Disable the warning for excluding core packages." // {
+      showExcludedPkgsWarning = lib.mkEnableOption "the warning for excluding core packages" // {
         default = true;
       };
 

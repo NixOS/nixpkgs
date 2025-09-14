@@ -54,8 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-groq==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-groq==";
+    };
   };
 
   meta = {

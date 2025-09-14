@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.14.1";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     tag = "v${version}";
-    hash = "sha256-PBUKLvP9h7AhYbaxjAC749sQqYJLAjNpWfME8t84D0k=";
+    hash = "sha256-vtVktc77OT7OANVXnLvEQx+NEQBPrTE5FFynXhpsK7o=";
   };
 
   postPatch = ''

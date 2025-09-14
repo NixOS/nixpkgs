@@ -14,16 +14,16 @@ let
 in
 buildNpmPackage rec {
   pname = "httptoolkit";
-  version = "1.22.0";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
     tag = "v${version}";
-    hash = "sha256-8zvY/40hcZcoMojARktf5dpCsFFQk6h7P5KwukbEnjw=";
+    hash = "sha256-6iiXOBVtPLdW9MWUcu2Hggm7uPHudASebRPQ34JJTMQ=";
   };
 
-  npmDepsHash = "sha256-yDXakndCGelLNTHD0atsb5MlWFiG8vINfNvsTTAXRTE=";
+  npmDepsHash = "sha256-n4he0Z9XPQIZ8vZcWA7Vo36Oz5RGPGdnV2VJVu5OZRg=";
 
   makeCacheWritable = true;
 

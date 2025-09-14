@@ -190,7 +190,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Next-generation Java client toolkit";
     homepage = "https://openjdk.org/projects/openjfx/";
-    license = lib.licenses.gpl2Classpath;
+    license = with lib.licenses; [
+      gpl2
+      classpathException20
+    ];
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };

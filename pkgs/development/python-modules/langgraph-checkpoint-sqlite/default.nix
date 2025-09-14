@@ -74,8 +74,12 @@ buildPythonPackage rec {
     "test_search"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "checkpointsqlite==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpointsqlite==";
+    };
   };
 
   meta = {

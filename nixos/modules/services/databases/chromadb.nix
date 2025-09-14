@@ -19,6 +19,12 @@ in
 
   meta.maintainers = with lib.maintainers; [ ];
 
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "chromadb" "logFile" ] ''
+      ChromaDB has removed the --log-path parameter that logFile relied on.
+    '')
+  ];
+
   options = {
     services.chromadb = {
       enable = mkEnableOption "ChromaDB, an open-source AI application database.";
@@ -44,14 +50,6 @@ in
         default = 8000;
         description = ''
           Defined the port number to listen.
-        '';
-      };
-
-      logFile = mkOption {
-        type = types.path;
-        default = "/var/log/chromadb/chromadb.log";
-        description = ''
-          Specifies the location of file for logging output.
         '';
       };
 
@@ -81,7 +79,7 @@ in
         StateDirectory = "chromadb";
         WorkingDirectory = "/var/lib/chromadb";
         LogsDirectory = "chromadb";
-        ExecStart = "${lib.getExe cfg.package} run --path ${cfg.dbpath} --host ${cfg.host} --port ${toString cfg.port} --log-path ${cfg.logFile}";
+        ExecStart = "${lib.getExe cfg.package} run --path ${cfg.dbpath} --host ${cfg.host} --port ${toString cfg.port}";
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

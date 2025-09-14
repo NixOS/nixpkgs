@@ -30,12 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-xAF9Tdr+IM3lU+mcNcAWATJLZOVvbx0llqznqHLVqDc=";
   };
 
-  postPatch = ''
-    # Fixed for >= 2.0.0
-    substituteInPlace setup.cfg \
-      --replace-fail "long_description_content_type = rst" "long_description_content_type = text/x-rst"
-  '';
-
   build-system = [ setuptools ];
 
   optional-dependencies = {
@@ -68,10 +62,8 @@ buildPythonPackage rec {
   preCheck = ''
     substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
       --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-      --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
+    substituteInPlace okonomiyaki/platforms/_platform.py \
+      --replace-fail 'name.split()[0]' '(name.split() or [""])[0]'
   '';
 
   pythonImportsCheck = [ "okonomiyaki" ];

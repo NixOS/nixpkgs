@@ -181,7 +181,7 @@ in
       default = "validate";
       description = ''
         Controls the level of DNSSEC processing done by the PowerDNS Recursor.
-        See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
+        See <https://doc.powerdns.com/md/recursor/dnssec/> for a detailed explanation.
       '';
     };
 

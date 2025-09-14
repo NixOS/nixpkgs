@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     mainProgram = "swayidle";
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
     platforms = platforms.linux;
   };
 }

@@ -60,7 +60,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.50.1";
+  version = "2.51.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-fj5sNt7L2PHu3RTULbZnS+A2ccIgSGS++ipBdWxcj8Q=";
+    hash = "sha256-YKfCJRzC5YjVzYe65WcmBhfG3gwi3KnNv8TH0riZC2I=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -120,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+    substituteInPlace contrib/credential/libsecret/Makefile \
+        --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
   + lib.optionalString doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
@@ -299,12 +301,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a contrib $out/share/git/
     mkdir -p $out/share/bash-completion/completions
     ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
-    # only readme, developed in another repo
-    rm -r contrib/hooks/multimail
-    mkdir -p $out/share/git-core/contrib
-    cp -a contrib/hooks/ $out/share/git-core/contrib/
-    substituteInPlace $out/share/git-core/contrib/hooks/pre-auto-gc-battery \
-      --replace ' grep' ' ${gnugrep}/bin/grep' \
 
     # grep is a runtime dependency, need to patch so that it's found
     substituteInPlace $out/libexec/git-core/git-sh-setup \

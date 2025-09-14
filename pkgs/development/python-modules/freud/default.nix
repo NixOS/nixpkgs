@@ -1,18 +1,28 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
+
+  # build-system
+  scikit-build-core,
   cython,
   oldest-supported-numpy,
-  scikit-build,
-  setuptools,
-  tbb,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
+
+  # buildInputs
+  tbb_2022,
+  nanobind,
+
+  # dependencies
   numpy,
   rowan,
   scipy,
+  parsnip,
+
+  # tests
   pytestCheckHook,
   python,
   gsd,
@@ -22,24 +32,16 @@
 
 buildPythonPackage rec {
   pname = "freud";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "freud";
     tag = "v${version}";
-    hash = "sha256-3THoGPjfaDy2s96+Oaf1f2SDzxTaqRDQlNa3gZ/ytUU=";
+    hash = "sha256-JX3pbzNTj85UTAtWYnDRvtJSjS27qgY/vitaAjmXbjA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # https://github.com/glotzerlab/freud/issues/1269
-    (fetchpatch {
-      url = "https://github.com/glotzerlab/freud/commit/8f636e3815737945e45da5b9996b5f69df07c9a5.patch";
-      hash = "sha256-PLorRrYj16oBWHYzXDq62kECzVTtyr+1Z20DJqTkXxg=";
-    })
-  ];
 
   # Because we prefer to not `leaveDotGit`, we need to fool upstream into
   # thinking we left the .git files in the submodules, so cmake won't think we
@@ -51,20 +53,27 @@ buildPythonPackage rec {
     touch extern/{voro++,fsph,Eigen}/.git
   '';
 
-  nativeBuildInputs = [
-    cmake
+  build-system = [
+    scikit-build-core
     cython
     oldest-supported-numpy
-    scikit-build
-    setuptools
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
   dontUseCmakeConfigure = true;
-  buildInputs = [ tbb ];
+  buildInputs = [
+    tbb_2022
+    nanobind
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     rowan
     scipy
+    parsnip
   ];
 
   nativeCheckInputs = [
@@ -72,14 +81,6 @@ buildPythonPackage rec {
     gsd
     matplotlib
     sympy
-  ];
-  disabledTests = [
-    # https://github.com/glotzerlab/freud/issues/961
-    #
-    # For x86_64-linux, see:
-    #
-    # https://github.com/glotzerlab/freud/issues/961#issuecomment-2553344968
-    "test_docstring"
   ];
   # On top of cd $out due to https://github.com/NixOS/nixpkgs/issues/255262 ,
   # we need to also copy the tests because otherwise pytest won't find them.

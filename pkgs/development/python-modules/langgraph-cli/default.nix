@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "2.1.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpoint==${version}";
-    hash = "sha256-UY3AChShKfOrtOQzOm5vi3Yy3rlBc+TAje9L2L6My/U=";
+    tag = "cli==${version}";
+    hash = "sha256-me9Qn7wwDsls419LOoRnYgIgmCblqLEFwNdH3I/tv0U=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -80,8 +80,12 @@ buildPythonPackage rec {
     "test_build_command_shows_wolfi_warning"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "cli==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "cli==";
+    };
   };
 
   meta = {

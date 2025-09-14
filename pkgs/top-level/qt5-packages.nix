@@ -33,6 +33,7 @@ makeScopeWithSplicing' {
         let
           mkFrameworks = import ../development/libraries/kde-frameworks;
           attrs = {
+            inherit config;
             inherit libsForQt5;
             inherit (pkgs) lib fetchurl;
           };
@@ -73,16 +74,6 @@ makeScopeWithSplicing' {
 
         fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
-        fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
-
-        fcitx5-configtool = callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
-
-        fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
-
-        fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
-
-        fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
-
         futuresql = callPackage ../development/libraries/futuresql { };
 
         qgpgme = callPackage ../development/libraries/gpgme { };
@@ -109,13 +100,9 @@ makeScopeWithSplicing' {
 
         kproperty = callPackage ../development/libraries/kproperty { };
 
-        kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
-
         kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
-
-        kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
         ldutils = callPackage ../development/libraries/ldutils { };
 
@@ -128,8 +115,6 @@ makeScopeWithSplicing' {
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
         libopenshot = callPackage ../development/libraries/libopenshot { };
-
-        packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
         libopenshot-audio = callPackage ../development/libraries/libopenshot-audio { };
 
@@ -179,8 +164,6 @@ makeScopeWithSplicing' {
         qca-qt5 = self.qca;
 
         qcoro = callPackage ../development/libraries/qcoro { };
-
-        qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
         qcustomplot = callPackage ../development/libraries/qcustomplot { };
 

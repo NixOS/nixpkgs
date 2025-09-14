@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "2.0.7";
+  version = "2.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "intake";
     repo = "intake";
     tag = version;
-    hash = "sha256-F13jbAQP3G3cKeAegM1w/t32xyC0BgL9/67aIlzA4SE=";
+    hash = "sha256-Mjf4CKLFrIti9pFP6HTt1D/iYw0WMowLIfMdfM7Db+E=";
   };
 
   nativeBuildInputs = [

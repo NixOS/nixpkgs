@@ -26,7 +26,7 @@
   scipy,
   tqdm,
   trimesh,
-  tyro,
+  typing-extensions,
   websockets,
   yourdfpy,
 
@@ -43,6 +43,7 @@
   # pyliblzfse,
   robot-descriptions,
   torch,
+  tyro,
 
   # nativeCheckInputs
   pytestCheckHook,
@@ -50,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "viser";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nerfstudio-project";
     repo = "viser";
     tag = "v${version}";
-    hash = "sha256-zufWYq4HvkmbSawTq8G7TheWNpspRL/dptyLuGnUQ2U=";
+    hash = "sha256-AS5D6pco6wzQ414yxvv0K9FB3tfP1BvqigRLJJXDduU=";
   };
 
   postPatch = ''
@@ -108,7 +109,7 @@ buildPythonPackage rec {
     scipy
     tqdm
     trimesh
-    tyro
+    typing-extensions
     websockets
     yourdfpy
   ];
@@ -130,6 +131,7 @@ buildPythonPackage rec {
       # pyliblzfse
       robot-descriptions
       torch
+      tyro
     ];
   };
 

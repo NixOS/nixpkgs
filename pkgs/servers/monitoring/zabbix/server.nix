@@ -48,6 +48,8 @@ import ./versions.nix (
       inherit hash;
     };
 
+    enableParallelBuilding = true;
+
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
@@ -59,7 +61,7 @@ import ./versions.nix (
       libiconv
       libxml2
       openssl
-      (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
+      (if lib.versionAtLeast version "7.4" then pcre2 else pcre)
       zlib
     ]
     ++ optional odbcSupport unixODBC

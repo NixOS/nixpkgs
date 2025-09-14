@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librelp";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "librelp";
     rev = "v${version}";
-    sha256 = "sha256-VJlvFiOsIyiu0kBU8NkObtt9j2ElrSzJtvE8wtSlOus=";
+    sha256 = "sha256-VWW5EM1INxBACoQsIN+mxsJjUKDFbfh2mqdvB/3W6Xw=";
   };
 
   nativeBuildInputs = [

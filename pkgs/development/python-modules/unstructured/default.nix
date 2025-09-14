@@ -116,7 +116,7 @@
   grpcio,
 }:
 let
-  version = "0.18.12";
+  version = "0.18.14";
 in
 buildPythonPackage rec {
   pname = "unstructured";
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-YZsfpfkvjkNStYhU4lC3I/Hr1ahJ1wccyJ8lckwejaA=";
+    hash = "sha256-vr+RvODTIdQvs8XB5HKbS9DaElYH7T0Az72zIYMvxcs=";
   };
 
   build-system = [ setuptools ];

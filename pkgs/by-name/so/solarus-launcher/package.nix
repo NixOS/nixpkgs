@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
   replaceVars,
   cmake,
   ninja,
@@ -23,14 +22,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus-launcher";
-  version = "2.0.0";
+  inherit (solarus) version;
 
-  src = fetchFromGitLab {
-    owner = "solarus-games";
-    repo = "solarus-launcher";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-zBJnHzYJyhfzP1m6TgMkDLRA3EXC1oG8PC0Jq/fC2+Q=";
-  };
+  src = solarus.src + "/launcher";
 
   patches = [
     (replaceVars ./github-fetches.patch {

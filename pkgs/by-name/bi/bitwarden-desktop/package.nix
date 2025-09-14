@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.7.0";
+  version = "2025.8.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-i1osaSK2Nnjnt2j/bS6VEMi4j5UvEEHf+RVt0901DvA=";
+    hash = "sha256-cYSzAdrUvZrYPQ01uPJ6I1yJvTQtdV2rV0GTF6yKVCk=";
   };
 
   patches = [
@@ -49,6 +49,8 @@ buildNpmPackage' rec {
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
     ./set-exe-path.patch
+    # ensure that the desktop proxy is correctly located in libexec
+    ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
     # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
@@ -60,6 +62,8 @@ buildNpmPackage' rec {
     rm -r bitwarden_license
 
     substituteInPlace apps/desktop/src/main.ts --replace-fail '%%exePath%%' "$out/bin/bitwarden"
+    substituteInPlace apps/desktop/src/main/native-messaging.main.ts \
+      --replace-fail '%%desktopProxyPath%%' "$out/libexec/desktop_proxy"
 
     # force canUpdate to false
     # will open releases page instead of trying to update files
@@ -83,7 +87,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-NnkT+NO3zUI71w9dSinnPeJbOlWBA4IHAxnMlYUmOT4=";
+  npmDepsHash = "sha256-1SDXXsfyJDMjg4v0i9jDh7Y7m6LXd0vW4g0vRLeDXD8=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -93,7 +97,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-nhQUUj7Hz21fnbhqrQL4eYInPNlNLVgbkWylWMRJkAk=";
+    hash = "sha256-NWdzdlsRTUoipTCIe/q4jehNBzf9/sBVW0qf6iTsbhU=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -132,6 +136,10 @@ buildNpmPackage' rec {
 
     pushd apps/desktop/desktop_native/napi
     npm run build
+    popd
+
+    pushd apps/desktop/desktop_native/proxy
+    cargo build --bin desktop_proxy --release -j $NIX_BUILD_CORES --offline
     popd
   '';
 
@@ -176,6 +184,8 @@ buildNpmPackage' rec {
 
   installPhase = ''
     runHook preInstall
+
+    install -Dm755 -t $out/libexec apps/desktop/desktop_native/target/release/desktop_proxy
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications

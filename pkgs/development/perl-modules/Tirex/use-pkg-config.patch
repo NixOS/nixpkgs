@@ -6,7 +6,7 @@
 -CXXFLAGS = `mapnik-config --cflags` $(CFLAGS)
 +CXXFLAGS += `pkg-config --cflags libmapnik` -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
  CXXFLAGS += -Wall -Wextra -pedantic -Wredundant-decls -Wdisabled-optimization -Wctor-dtor-privacy -Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo -Wold-style-cast
--LDFLAGS= `mapnik-config --libs --ldflags --dep-libs`
+-LDFLAGS= `mapnik-config --libs --ldflags --dep-libs` -lboost_filesystem
 +LDFLAGS += `pkg-config --libs libmapnik` -lboost_filesystem
 
  backend-mapnik: renderd.o metatilehandler.o networklistener.o networkmessage.o networkrequest.o networkresponse.o debuggable.o requesthandler.o

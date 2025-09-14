@@ -20,7 +20,8 @@ in
         {
           options = {
             passwordFile = lib.mkOption {
-              type = lib.types.str;
+              type = with lib.types; nullOr str;
+              default = null;
               description = ''
                 Read the repository password from a file.
               '';
@@ -366,8 +367,10 @@ in
     assertions = lib.flatten (
       lib.mapAttrsToList (name: backup: [
         {
-          assertion = (backup.repository == null) != (backup.repositoryFile == null);
-          message = "services.restic.backups.${name}: exactly one of repository or repositoryFile should be set";
+          assertion =
+            ((backup.repository == null) != (backup.repositoryFile == null))
+            || (backup.environmentFile != null);
+          message = "services.restic.backups.${name}: exactly one of repository, repositoryFile or environmentFile should be set";
         }
         {
           assertion =
@@ -377,6 +380,10 @@ in
             in
             !(fileBackup && commandBackup);
           message = "services.restic.backups.${name}: cannot do both a command backup and a file backup at the same time.";
+        }
+        {
+          assertion = (backup.passwordFile != null) || (backup.environmentFile != null);
+          message = "services.restic.backups.${name}: passwordFile or environmentFile must be set";
         }
       ]) config.services.restic.backups
     );

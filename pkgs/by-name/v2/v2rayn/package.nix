@@ -19,18 +19,15 @@
   nix-update-script,
 }:
 
-let
-  version = "7.13.8";
-in
-buildDotnetModule {
+buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  inherit version;
+  version = "7.14.4";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
-    tag = version;
-    hash = "sha256-ygQh3fB2G0FA187Nmmb6lG2FaduN2zOZIStuMWvqEGk=";
+    tag = finalAttrs.version;
+    hash = "sha256-zfQza07GhYFEHwl4w5hqqE9JP/0yY5KIj0zRRNmAECA=";
     fetchSubmodules = true;
   };
 
@@ -41,15 +38,17 @@ buildDotnetModule {
   postPatch = ''
     chmod +x v2rayN/ServiceLib/Sample/proxy_set_linux_sh
     patchShebangs v2rayN/ServiceLib/Sample/proxy_set_linux_sh
+    chmod +x v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
+    patchShebangs v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
     substituteInPlace v2rayN/ServiceLib/Global.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
-    substituteInPlace v2rayN/ServiceLib/Handler/CoreAdminHandler.cs \
+    substituteInPlace v2rayN/ServiceLib/Manager/CoreAdminManager.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
       --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
-    substituteInPlace v2rayN/ServiceLib/Handler/CoreHandler.cs \
+    substituteInPlace v2rayN/ServiceLib/Manager/CoreManager.cs \
       --replace-fail 'Environment.GetEnvironmentVariable(Global.LocalAppData) == "1"' "false"
   '';
 
@@ -93,10 +92,7 @@ buildDotnetModule {
       icon = "v2rayn";
       genericName = "v2rayN";
       desktopName = "v2rayN";
-      categories = [
-        "Network"
-        "Application"
-      ];
+      categories = [ "Network" ];
       terminal = false;
       comment = "A GUI client for Windows and Linux, support Xray core and sing-box-core and others";
     })
@@ -119,4 +115,4 @@ buildDotnetModule {
       "aarch64-linux"
     ];
   };
-}
+})

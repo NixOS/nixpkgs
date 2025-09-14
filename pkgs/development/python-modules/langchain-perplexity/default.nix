@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-perplexity";
-  version = "0.3.72";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-perplexity==${version}";
+    hash = "sha256-4KYLyhGbG8Y8cDGffE4/8OM61eAKRFTgxKDKMTQExic=";
   };
 
   sourceRoot = "${src.name}/libs/partners/perplexity";
@@ -60,8 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_perplexity" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-perplexity==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-perplexity==";
+    };
   };
 
   meta = {

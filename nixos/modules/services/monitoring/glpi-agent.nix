@@ -45,7 +45,7 @@ in
         default = { };
         description = ''
           GLPI Agent configuration options.
-          See https://glpi-agent.readthedocs.io/en/latest/configuration.html for all available options.
+          See <https://glpi-agent.readthedocs.io/en/latest/configuration.html> for all available options.
 
           The 'server' option is mandatory and must point to your GLPI server.
         '';

@@ -11,6 +11,7 @@
   bzip2,
   celt,
   ffmpeg,
+  gmp,
   jack2,
   lame,
   libX11,
@@ -37,7 +38,6 @@
   x264,
   xvidcore,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
   version = "20.14.1";
@@ -90,6 +90,7 @@ rustPlatform.buildRustPackage rec {
     bzip2
     celt
     ffmpeg
+    gmp
     jack2
     lame
     libX11

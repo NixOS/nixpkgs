@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "5.5.0";
+  version = "5.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "containers";
     repo = "podman-py";
     tag = "v${version}";
-    hash = "sha256-c8uU5WZsZufi/QNJkXh2Z1bmoM/oOm6+rggm4J+pnIc=";
+    hash = "sha256-VlPhW0FL51EQQRlDrd0F3ByXu/xpydXLSCM5umzpIW0=";
   };
 
   build-system = [ setuptools ];
@@ -59,6 +59,12 @@ buildPythonPackage rec {
     "SecretsIntegrationTest"
     "SystemIntegrationTest"
     "VolumesIntegrationTest"
+  ];
+
+  disabledTestPaths = [
+    # Access to the host's filesystem
+    "podman/tests/integration/test_container_create.py"
+    "podman/tests/unit/test_utils.py"
   ];
 
   meta = with lib; {

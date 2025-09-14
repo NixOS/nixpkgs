@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "django-upgrade";
-  version = "1.22.2";
+  version = "1.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-upgrade";
     tag = version;
-    hash = "sha256-QhowVqvN1kODKFLp2uA9CXLWqNJl1p5kC5z4rjRqKNk=";
+    hash = "sha256-QvjXDnXQuRqnpWbnmqeDL3gNFiYIlG87QQVXsYc99YQ=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Automatically upgrade your Django projects";
     homepage = "https://github.com/adamchainz/django-upgrade";
-    changelog = "https://github.com/adamchainz/django-upgrade/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/adamchainz/django-upgrade/blob/${version}/docs/changelog.rst";
     mainProgram = "django-upgrade";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kalekseev ];

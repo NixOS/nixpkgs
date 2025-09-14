@@ -17,19 +17,16 @@
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
-  # Enables the use of Equicord from nixpkgs instead of
-  # letting Equibop manage it's own version
-  withSystemEquicord ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uod94pP261Alq+dby+/diiLT0KFjXswVapwXYAAAkbs=";
+    hash = "sha256-0OtCxz7g1xMmnkDke34deaS3dx5b8bGOC0Vbq6BIObg=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -40,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     fetcherVersion = 1;
-    hash = "sha256-0UNScJAdpcMOcBHGGG+SeGQon89qLXTCNmaxEswNFBI=";
+    hash = "sha256-MDqAncWdU2rIQAGF/wx2gWxDf74P3fp3w4nA8b6AITw=";
   };
 
   nativeBuildInputs = [
@@ -65,12 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./disable_update_checking.patch
-  ]
-  ++ lib.optional withSystemEquicord (
-    replaceVars ./use_system_equicord.patch {
-      inherit equicord;
-    }
-  );
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

@@ -13,8 +13,6 @@ in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
-
   # Disable GHC 9.0.x core libraries.
   array = null;
   base = null;
@@ -171,8 +169,6 @@ self: super: {
   ghc-exactprint = self.ghc-exactprint_0_6_4;
 
   retrie = dontCheck self.retrie_1_1_0_0;
-
-  apply-refact = self.apply-refact_0_9_3_0;
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;

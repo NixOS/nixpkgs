@@ -43,7 +43,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
-    "azure.multiapi.storage"
+    "azure.multiapi.storagev2"
   ];
 
   meta = {

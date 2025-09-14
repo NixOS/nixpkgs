@@ -36,17 +36,48 @@ $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
+$pcMap{"dmx"} = "libdmx";
+$pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
+$pcMap{"ice"} = "libICE";
+$pcMap{"libfs"} = "libFS";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"sm"} = "libSM";
 $pcMap{"x11"} = "libX11";
 $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
+$pcMap{"xaw6"} = "libXaw";
+$pcMap{"xaw7"} = "libXaw";
 $pcMap{"xbitmaps"} = "xbitmaps";
+$pcMap{"xcb-atom"} = "xcbutil";
+$pcMap{"xcb-aux"} = "xcbutil";
+$pcMap{"xcb-errors"} = "xcbutilerrors";
+$pcMap{"xcb-event"} = "xcbutil";
+$pcMap{"xcb-ewmh"} = "xcbutilwm";
+$pcMap{"xcb-icccm"} = "xcbutilwm";
+$pcMap{"xcb-image"} = "xcbutilimage";
+$pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
+$pcMap{"xcb-util"} = "xcbutil";
+$pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
+$pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xmu"} = "libXmu";
+$pcMap{"xmuu"} = "libXmu";
+$pcMap{"xpm"} = "libXpm";
+$pcMap{"xrandr"} = "libXrandr";
+$pcMap{"xrender"} = "libXrender";
+$pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
+$pcMap{"xv"} = "libXv";
+$pcMap{"xvmc"} = "libXvMC";
+$pcMap{"xvmc-wrapper"} = "libXvMC";
+$pcMap{"xxf86dga"} = "libXxf86dga";
+$pcMap{"xxf86misc"} = "libXxf86misc";
+$pcMap{"xxf86vm"} = "libXxf86vm";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -287,32 +318,90 @@ print OUT <<EOF;
 {
   lib,
   bdftopcf,
+  font-adobe-100dpi,
+  font-adobe-75dpi,
+  font-adobe-utopia-100dpi,
+  font-adobe-utopia-75dpi,
+  font-adobe-utopia-type1,
   font-alias,
+  font-bh-ttf,
+  font-bh-type1,
+  font-encodings,
+  font-mutt-misc,
   font-util,
   gccmakedep,
+  ico,
   imake,
+  libapplewm,
+  libdmx,
+  libfontenc,
+  libfs,
+  libice,
   libpciaccess,
   libpthread-stubs,
+  libsm,
   libx11,
   libxau,
+  libxaw,
   libxcb,
+  libxcb-errors,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-util,
+  libxcb-wm,
   libxcvt,
+  libxcursor,
   libxdmcp,
   libxext,
+  libxfixes,
+  libxmu,
+  libxpm,
+  libxrandr,
+  libxrender,
+  libxt,
+  libxv,
+  libxvmc,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   lndir,
   luit,
   makedepend,
+  mkfontscale,
   pixman,
   sessreg,
+  transset,
   util-macros,
   xbitmaps,
   xcb-proto,
+  xcmsdb,
+  xcursorgen,
+  xcursor-themes,
+  xdriinfo,
+  xev,
+  xfsinfo,
+  xgamma,
+  xgc,
+  xhost,
+  xkbutils,
   xkeyboard-config,
+  xkill,
+  xlsatoms,
+  xlsclients,
+  xlsfonts,
+  xmodmap,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xprop,
+  xrandr,
+  xrefresh,
   xtrans,
+  xvinfo,
+  xwininfo,
+  xwud,
 }:
 
 self: with self; {
@@ -320,29 +409,87 @@ self: with self; {
   inherit
     bdftopcf
     gccmakedep
+    ico
     imake
+    libdmx
+    libfontenc
     libpciaccess
     libxcb
     libxcvt
     lndir
     luit
     makedepend
+    mkfontscale
     pixman
     sessreg
+    transset
     xbitmaps
+    xcmsdb
+    xcursorgen
+    xdriinfo
+    xev
+    xfsinfo
+    xgamma
+    xgc
+    xhost
+    xkbutils
+    xkill
+    xlsatoms
+    xlsclients
+    xlsfonts
+    xmodmap
     xorgproto
+    xprop
+    xrandr
+    xrefresh
     xtrans
+    xvinfo
+    xwininfo
+    xwud
     ;
+  encodings = font-encodings;
+  fontadobe100dpi = font-adobe-100dpi;
+  fontadobe75dpi = font-adobe-75dpi;
+  fontadobeutopia100dpi = font-adobe-utopia-100dpi;
+  fontadobeutopia75dpi = font-adobe-utopia-75dpi;
+  fontadobeutopiatype1 = font-adobe-utopia-type1;
   fontalias = font-alias;
+  fontbhttf = font-bh-ttf;
+  fontbhtype1 = font-bh-type1;
+  fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
+  libAppleWM = libapplewm;
+  libFS = libfs;
+  libICE = libice;
   libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
+  libXaw = libxaw;
+  libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
+  libXfixes = libxfixes;
+  libXmu = libxmu;
+  libXpm = libxpm;
+  libXrandr = libxrandr;
+  libXrender = libxrender;
+  libXt = libxt;
+  libXv = libxv;
+  libXvMC = libxvmc;
+  libXxf86dga = libxxf86dga;
+  libXxf86misc = libxxf86misc;
+  libXxf86vm = libxxf86vm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilerrors = libxcb-errors;
+  xcbutilimage = libxcb-image;
+  xcbutilkeysyms = libxcb-keysyms;
+  xcbutil = libxcb-util;
+  xcbutilrenderutil = libxcb-render-util;
+  xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
+  xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgsgmldoctools = xorg-sgml-doctools;

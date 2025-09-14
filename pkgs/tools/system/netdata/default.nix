@@ -58,14 +58,14 @@
   withSystemdUnits ? stdenv.hostPlatform.isLinux,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.6.2";
+  version = "2.6.3";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XtU+oGynAnpwWTinwXVjtRYsTwIyAhkiRqY9CaOo7B0=";
+    hash = "sha256-J6QHeukhtHHLx92NGtoOmPwq6gvL9eyVYBQiDD1cEDk=";
     fetchSubmodules = true;
   };
 

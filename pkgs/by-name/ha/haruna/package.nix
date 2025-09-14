@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     ffmpeg-headless
     kdePackages.kconfig
     kdePackages.kcoreaddons
+    kdePackages.kdeclarative
     kdePackages.kfilemetadata
     kdePackages.ki18n
     kdePackages.kiconthemes

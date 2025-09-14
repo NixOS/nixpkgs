@@ -24,6 +24,12 @@ abandoned by the kernel developers, even on stable NixOS versions. If you
 pin your kernel onto a non-longterm version, expect your evaluation to fail as
 soon as the version is out of maintenance.
 
+A kernel will be removed from nixpkgs when the first batch of stable kernels
+_after_ the final release is published. E.g. when 6.15.11 is the final release
+of the 6.15 series and is released together with 6.16.3 and 6.12.43, it will be
+removed on the release of 6.16.4 and 6.12.44. Custom kernel variants such
+as linux-hardened are also affected by this.
+
 Longterm versions of kernels will be removed before the next stable NixOS that will
 exceed the maintenance period of the kernel version.
 

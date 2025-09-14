@@ -297,9 +297,9 @@ in
     discordAuthentication = lib.mkOption {
       description = ''
         To configure Discord auth, you'll need to create an application at
-        https://discord.com/developers/applications/
+        <https://discord.com/developers/applications/>
 
-        See https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6
+        See <https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6>
         for details on setting up your Discord app.
       '';
       default = null;

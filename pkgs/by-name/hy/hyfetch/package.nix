@@ -4,7 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  makeBinaryWrapper,
+  makeWrapper,
   pciutils,
   versionCheckHook,
   nix-update-script,
@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyfetch";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
     tag = finalAttrs.version;
-    hash = "sha256-OaMwUTBBpFrco2Wcodb7+3ywdD5bXDebBFEoJYsgAbE=";
+    hash = "sha256-Y9v2vrpTPlsgFRoo33NDVoyQSgUD/stKQLJXzUxFesA=";
   };
 
-  cargoHash = "sha256-xm8q4EG7qfaz/Ru/FVRiWIQW2Tjh9Ar0MquVQVLDSRA=";
+  cargoHash = "sha256-auOeH/1KtxS7a1APOtCMwNTdEQ976BL/jEKj2ADaakQ=";
 
   nativeBuildInputs = [
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
   ];
 
   # NOTE: The HyFetch project maintains an updated version of neofetch renamed

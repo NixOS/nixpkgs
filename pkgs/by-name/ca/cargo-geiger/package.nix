@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "geiger-rs";
     repo = "cargo-geiger";
     tag = "cargo-geiger-${version}";
-    hash = "sha256-OW/LOZUCGOIl7jeWnzt4SXTo3gplJx/wbC21S1TdZx0=";
+    hash = "sha256-dZ71WbTKsR6g5UhWuJNfNAAqNNxbTgwL5fsgkm50BaM=";
   };
 
-  cargoHash = "sha256-aDgpEfX0QRkQD6c4ant6uSN18WLHVnZISRr7lyu9IzA=";
+  cargoHash = "sha256-GgCmUNOwvyTB82Y/ddgJIAb1SpO4mRPjECqCagJ8GmE=";
 
   buildInputs = [
     openssl

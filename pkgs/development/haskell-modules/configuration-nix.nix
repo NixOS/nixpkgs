@@ -507,27 +507,38 @@ builtins.intersectAttrs super {
   # LLVM input that llvm-ffi declares.
   llvm-ffi =
     let
-      chosenLlvmVersion = 20;
-      nextLlvmAttr = "llvmPackages_${toString (chosenLlvmVersion + 1)}";
-      shouldUpgrade =
-        pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
+      currentDefaultVersion = lib.versions.major pkgs.llvmPackages.llvm.version;
+      latestSupportedVersion = lib.versions.major super.llvm-ffi.version;
     in
-    lib.warnIf shouldUpgrade
-      "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
-      lib.pipe
-      super.llvm-ffi
+    lib.pipe super.llvm-ffi (
       [
-        # ATTN: There is no matching flag for the latest supported LLVM version,
-        # so you may need to remove this when updating chosenLlvmVersion
-        (enableCabalFlag "LLVM${toString chosenLlvmVersion}00")
         (addBuildDepends [
-          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.lib
-          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.dev
+          pkgs.llvmPackages.llvm.lib
+          pkgs.llvmPackages.llvm.dev
         ])
-      ];
+      ]
+      # There is no matching flag for the latest supported LLVM version.
+      ++ lib.optional (currentDefaultVersion != latestSupportedVersion) (
+        enableCabalFlag "LLVM${currentDefaultVersion}00"
+      )
+    );
 
-  # Needs help finding LLVM.
-  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
+  # Forces the LLVM backend; upstream signalled intent to remove this
+  # in 2017: <https://github.com/SeanRBurton/spaceprobe/issues/1>.
+  spaceprobe = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace spaceprobe.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.spaceprobe;
+
+  # Forces the LLVM backend.
+  GlomeVec = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace GlomeVec.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.GlomeVec;
 
   # Tries to run GUI in tests
   leksah = dontCheck (
@@ -638,15 +649,9 @@ builtins.intersectAttrs super {
   tasty = overrideCabal (drv: {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [ ])
-      ++
-        lib.optionals
-          (
-            !(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)
-            || (self.ghc.isGhcjs or false)
-          )
-          [
-            self.unbounded-delays
-          ];
+      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)) [
+        self.unbounded-delays
+      ];
   }) super.tasty;
 
   tasty-discover = overrideCabal (drv: {
@@ -1870,4 +1875,6 @@ builtins.intersectAttrs super {
 
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
   cpython = doJailbreak super.cpython;
+
+  botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 }

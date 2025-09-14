@@ -6,35 +6,39 @@
   six,
   pytest-cov-stub,
   pytest-datadir,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "jproperties";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "2.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tblue";
     repo = "python-jproperties";
-    rev = "v${version}";
-    hash = "sha256-O+ALeGHMNjW1dc9IRyLzO81k8DW2vbGjuZqXxgrhYjo=";
+    tag = "v${version}";
+    hash = "sha256-wnhEcPWAFUXR741/LZT3TXqxrU70JZe+90AkVEA3A+k=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools_scm ~= 3.3" "setuptools_scm"
+  '';
 
-  propagatedBuildInputs = [ six ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-datadir
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "setuptools_scm ~= 3.3" "setuptools_scm"
-  '';
 
   disabledTestPaths = [
     # TypeError: 'PosixPath' object...
@@ -45,9 +49,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Java Property file parser and writer for Python";
-    mainProgram = "propconv";
     homepage = "https://github.com/Tblue/python-jproperties";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "propconv";
   };
 }

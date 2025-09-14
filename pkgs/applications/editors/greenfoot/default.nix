@@ -55,7 +55,10 @@ stdenv.mkDerivation rec {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2ClasspathPlus;
+    license = with licenses; [
+      gpl2Plus
+      classpathException20
+    ];
     mainProgram = "greenfoot";
     maintainers = [ maintainers.chvp ];
     platforms = platforms.linux;

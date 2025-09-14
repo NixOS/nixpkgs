@@ -1,0 +1,60 @@
+From 9e4e58b647c17c5fa098c8a74e221f88d3cb1a43 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Sun, 24 Aug 2025 07:41:30 -0700
+Subject: [PATCH] [AMD] Search HIP_PATH, hipconfig, and ROCM_PATH for
+ libamdhip64
+
+Search for libamdhip64 from HIP_PATH env var, hipconfig --path output,
+and ROCM_PATH before looking in system-wide ldconfig or /opt/rocm.
+
+The system-wide ROCm path isn't guaranteed to be where the ROCm
+install we're building against is located, so follow typical ROCm
+lib behavior and look under env paths first.
+
+This is especially important for non-FHS distros like NixOS
+where /opt/rocm never exists, but may be useful in more
+typical distros if multiple ROCm installs are present
+to ensure the right libamdhip64.so is picked up.
+---
+ third_party/amd/backend/driver.py | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/third_party/amd/backend/driver.py b/third_party/amd/backend/driver.py
+index af8e1a5c8097..57b0f7388c60 100644
+--- a/third_party/amd/backend/driver.py
++++ b/third_party/amd/backend/driver.py
+@@ -110,6 +110,34 @@ def _get_path_to_hip_runtime_dylib():
+                 return f
+             paths.append(f)
+ 
++    # HIP_PATH should point to HIP SDK root if set
++    env_hip_path = os.getenv("HIP_PATH")
++    if env_hip_path:
++        hip_lib_path = os.path.join(env_hip_path, "lib", lib_name)
++        if os.path.exists(hip_lib_path):
++            return hip_lib_path
++        paths.append(hip_lib_path)
++
++    # if available, `hipconfig --path` prints the HIP SDK root
++    try:
++        hip_root = subprocess.check_output(["hipconfig", "--path"]).decode().strip()
++        if hip_root:
++            hip_lib_path = os.path.join(hip_root, "lib", lib_name)
++            if os.path.exists(hip_lib_path):
++                return hip_lib_path
++            paths.append(hip_lib_path)
++    except (subprocess.CalledProcessError, FileNotFoundError):
++        # hipconfig may not be available
++        pass
++
++    # ROCm lib dir based on env var
++    env_rocm_path = os.getenv("ROCM_PATH")
++    if env_rocm_path:
++        rocm_lib_path = os.path.join(env_rocm_path, "lib", lib_name)
++        if os.path.exists(rocm_lib_path):
++            return rocm_lib_path
++        paths.append(rocm_lib_path)
++
+     # Afterwards try to search the loader dynamic library resolution paths.
+     libs = subprocess.check_output(["/sbin/ldconfig", "-p"]).decode(errors="ignore")
+     # each line looks like the following:

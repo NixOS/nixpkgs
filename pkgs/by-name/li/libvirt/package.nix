@@ -330,7 +330,7 @@ stdenv.mkDerivation rec {
       (feat "udev" isLinux)
       (feat "json_c" true)
 
-      (driver "ch" isLinux)
+      (driver "ch" (isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64)))
       (driver "esx" true)
       (driver "interface" isLinux)
       (driver "libvirtd" true)

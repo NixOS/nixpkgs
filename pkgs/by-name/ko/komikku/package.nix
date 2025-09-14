@@ -23,7 +23,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.85.0";
+  version = "1.86.0";
   pyproject = false;
 
   src = fetchFromGitea {
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     tag = "v${version}";
-    hash = "sha256-ll6F6aVOoqRxzoTrBHdkUAV8CWFVPSt8mNPRqPw4oec=";
+    hash = "sha256-LIiwQVXT0RWCli9twFA+cmf/LzKK9JjbRVA2xVu/XX4=";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  ...
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ddh";

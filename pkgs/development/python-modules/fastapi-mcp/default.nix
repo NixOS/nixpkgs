@@ -20,7 +20,7 @@
 
   # tests
   coverage,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytestCheckHook,
 }:
@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     coverage
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-cov-stub
     pytestCheckHook
   ];

@@ -43,6 +43,7 @@
   util-linux,
   wxGTK32,
   xorg,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     tinyxml
     wxGTK32
+    xz
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-utils

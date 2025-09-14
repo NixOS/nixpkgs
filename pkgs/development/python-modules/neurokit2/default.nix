@@ -11,6 +11,7 @@
   matplotlib,
   numpy,
   pandas,
+  pywavelets,
   requests,
   scikit-learn,
   scipy,
@@ -22,6 +23,7 @@
   plotly,
   pytest-cov-stub,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -49,6 +51,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
+    pywavelets
     requests
     scikit-learn
     scipy
@@ -61,6 +64,7 @@ buildPythonPackage rec {
     astropy
     coverage
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
