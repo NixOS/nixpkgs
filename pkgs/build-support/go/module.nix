@@ -250,6 +250,9 @@ lib.extendMkDerivation {
             export GOPATH="$TMPDIR/go"
             export GOPROXY=off
             export GOSUMDB=off
+            if [ -f "$NIX_CC_FOR_TARGET/nix-support/dynamic-linker" ]; then
+              export GO_LDSO=$(cat $NIX_CC_FOR_TARGET/nix-support/dynamic-linker)
+            fi
             cd "$modRoot"
           ''
           + lib.optionalString (finalAttrs.vendorHash != null) ''
