@@ -276,183 +276,182 @@ in
             # the systemd's entry about the DynamicUser=,
             # so that ssh won't fail with: "No user exists for uid $UID".
             environment.LD_LIBRARY_PATH = config.system.nssModules.path;
-            serviceConfig =
-              {
-                ExecStartPre =
-                  # Recursively remove any residual permissions
-                  # given on local+descendant datasets (source, target or target's parent)
-                  # to any currently unknown (hence unused) systemd dynamic users (UID/GID range 61184…65519),
-                  # which happens when a crash has occurred
-                  # during any previous run of a syncoid-*.service (not only this one).
-                  map
-                    (
-                      dataset:
-                      "+"
-                      + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
-                        set -eu
-                        zfs allow "$1" |
-                        sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
-                        {
-                          declare -a uids
-                          while read -r role id; do
-                            if [ "$id" -ge 61184 ] && [ "$id" -le 65519 ]; then
-                              case "$role" in
-                                (user) uids+=("$id");;
-                              esac
-                            fi
-                          done
-                          zfs unallow -r -u "$(printf %s, "''${uids[@]}")" "$1"
-                        }
-                      ''
-                      + " "
-                      + lib.escapeShellArg dataset
-                    )
-                    (
-                      localDatasetName c.source
-                      ++ localDatasetName c.target
-                      ++ map builtins.dirOf (localDatasetName c.target)
-                    )
-                  ++
-                    # For a local source, allow the localSourceAllow ZFS permissions.
-                    map (
-                      dataset:
-                      "+/run/booted-system/sw/bin/zfs allow $USER "
-                      + lib.escapeShellArgs [
-                        (lib.concatStringsSep "," c.localSourceAllow)
-                        dataset
-                      ]
-                    ) (localDatasetName c.source)
-                  ++
-                    # For a local target, check if the dataset exists before delegating permissions,
-                    # and if it doesn't exist, delegate it to the parent dataset.
-                    # This should solve the case of provisioning new datasets.
-                    map (
-                      dataset:
-                      "+"
-                      + pkgs.writeShellScript "zfs-allow-target" ''
-                        dataset="$1"
-                        # Run a ZFS list on the dataset to check if it exists
-                        zfs list "$dataset" >/dev/null 2>/dev/null ||
-                          dataset="$(dirname "$dataset")"
-                        zfs allow "$USER" ${lib.escapeShellArg (lib.concatStringsSep "," c.localTargetAllow)} "$dataset"
-                      ''
-                      + " "
-                      + lib.escapeShellArg dataset
-                    ) (localDatasetName c.target);
-                ExecStopPost =
-                  let
-                    zfsUnallow = dataset: "+/run/booted-system/sw/bin/zfs unallow $USER " + lib.escapeShellArg dataset;
-                  in
-                  map zfsUnallow (localDatasetName c.source)
-                  ++
-                    # For a local target, unallow both the dataset and its parent,
-                    # because at this stage we have no way of knowing if the allow command
-                    # did execute on the parent dataset or not in the ExecStartPre=.
-                    # We can't run the same if-then-else in the post hook
-                    # since the dataset should have been created at this point.
-                    lib.concatMap (dataset: [
-                      (zfsUnallow dataset)
-                      (zfsUnallow (builtins.dirOf dataset))
-                    ]) (localDatasetName c.target);
-                ExecStart = lib.escapeShellArgs (
-                  [ "${cfg.package}/bin/syncoid" ]
-                  ++ lib.optionals c.useCommonArgs cfg.commonArgs
-                  ++ lib.optional c.recursive "--recursive"
-                  ++ lib.optionals (c.sshKey != null) [
-                    "--sshkey"
-                    "\${CREDENTIALS_DIRECTORY}/${if lib.length sshKeyCred > 1 then lib.head sshKeyCred else "sshKey"}"
-                  ]
-                  ++ c.extraArgs
-                  ++ [
-                    "--sendoptions"
-                    c.sendOptions
-                    "--recvoptions"
-                    c.recvOptions
-                    "--no-privilege-elevation"
-                    c.source
-                    c.target
-                  ]
-                );
-                DynamicUser = true;
-                NFTSet = lib.optional config.networking.nftables.enable "user:inet:filter:nixos_syncoid_uids";
-                # Prevent SSH control sockets of different syncoid services from interfering
-                PrivateTmp = true;
-                # Permissive access to /proc because syncoid
-                # calls ps(1) to detect ongoing `zfs receive`.
-                ProcSubset = "all";
-                ProtectProc = "default";
-
-                # The following options are only for optimizing:
-                # systemd-analyze security | grep syncoid-'*'
-                AmbientCapabilities = "";
-                CapabilityBoundingSet = "";
-                DeviceAllow = [ "/dev/zfs" ];
-                LockPersonality = true;
-                MemoryDenyWriteExecute = true;
-                NoNewPrivileges = true;
-                PrivateDevices = true;
-                PrivateMounts = true;
-                PrivateNetwork = lib.mkDefault false;
-                PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
-                ProtectClock = true;
-                ProtectControlGroups = true;
-                ProtectHome = true;
-                ProtectHostname = true;
-                ProtectKernelLogs = true;
-                ProtectKernelModules = true;
-                ProtectKernelTunables = true;
-                ProtectSystem = "strict";
-                RemoveIPC = true;
-                RestrictAddressFamilies = [
-                  "AF_UNIX"
-                  "AF_INET"
-                  "AF_INET6"
-                ];
-                RestrictNamespaces = true;
-                RestrictRealtime = true;
-                RestrictSUIDSGID = true;
-                RootDirectory = "/run/syncoid/${escapeUnitName name}";
-                BindPaths = [ "/dev/zfs" ];
-                BindReadOnlyPaths = [
-                  builtins.storeDir
-                  "/etc"
-                  "/run"
-                  # Some programs hardcode /var/run
-                  # eg. /var/run/avahi-daemon/socket to resolve *.local mDNS domains
-                  "/var/run"
-                  "/bin/sh"
-                ];
-                # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
-                InaccessiblePaths = [ "-+/run/syncoid/${escapeUnitName name}" ];
-                MountAPIVFS = true;
-                # Create RootDirectory= in the host's mount namespace.
-                RuntimeDirectory = [ "syncoid/${escapeUnitName name}" ];
-                RuntimeDirectoryMode = "700";
-                SystemCallFilter = [
-                  "@system-service"
-                  # Groups in @system-service which do not contain a syscall listed by:
-                  # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' syncoid …
-                  # awk >perf.syscalls -F "," '$1 > 0 {sub("syscalls:sys_enter_","",$3); print $3}' perf.log
-                  # systemd-analyze syscall-filter | grep -v -e '#' | sed -e ':loop; /^[^ ]/N; s/\n //; t loop' | grep $(printf ' -e \\<%s\\>' $(cat perf.syscalls)) | cut -f 1 -d ' '
-                  "~@aio"
-                  "~@chown"
-                  "~@keyring"
-                  "~@memlock"
-                  "~@privileged"
-                  "~@resources"
-                  "~@setuid"
-                ];
-                SystemCallArchitectures = "native";
-                # This is for BindPaths= and BindReadOnlyPaths=
-                # to allow traversal of directories they create in RootDirectory=.
-                UMask = "0066";
-              }
-              // (
-                if lib.length sshKeyCred > 1 then
-                  { LoadCredentialEncrypted = [ c.sshKey ]; }
-                else
-                  { LoadCredential = [ "sshKey:${c.sshKey}" ]; }
+            serviceConfig = {
+              ExecStartPre =
+                # Recursively remove any residual permissions
+                # given on local+descendant datasets (source, target or target's parent)
+                # to any currently unknown (hence unused) systemd dynamic users (UID/GID range 61184…65519),
+                # which happens when a crash has occurred
+                # during any previous run of a syncoid-*.service (not only this one).
+                map
+                  (
+                    dataset:
+                    "+"
+                    + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
+                      set -eu
+                      zfs allow "$1" |
+                      sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
+                      {
+                        declare -a uids
+                        while read -r role id; do
+                          if [ "$id" -ge 61184 ] && [ "$id" -le 65519 ]; then
+                            case "$role" in
+                              (user) uids+=("$id");;
+                            esac
+                          fi
+                        done
+                        zfs unallow -r -u "$(printf %s, "''${uids[@]}")" "$1"
+                      }
+                    ''
+                    + " "
+                    + lib.escapeShellArg dataset
+                  )
+                  (
+                    localDatasetName c.source
+                    ++ localDatasetName c.target
+                    ++ map builtins.dirOf (localDatasetName c.target)
+                  )
+                ++
+                  # For a local source, allow the localSourceAllow ZFS permissions.
+                  map (
+                    dataset:
+                    "+/run/booted-system/sw/bin/zfs allow $USER "
+                    + lib.escapeShellArgs [
+                      (lib.concatStringsSep "," c.localSourceAllow)
+                      dataset
+                    ]
+                  ) (localDatasetName c.source)
+                ++
+                  # For a local target, check if the dataset exists before delegating permissions,
+                  # and if it doesn't exist, delegate it to the parent dataset.
+                  # This should solve the case of provisioning new datasets.
+                  map (
+                    dataset:
+                    "+"
+                    + pkgs.writeShellScript "zfs-allow-target" ''
+                      dataset="$1"
+                      # Run a ZFS list on the dataset to check if it exists
+                      zfs list "$dataset" >/dev/null 2>/dev/null ||
+                        dataset="$(dirname "$dataset")"
+                      zfs allow "$USER" ${lib.escapeShellArg (lib.concatStringsSep "," c.localTargetAllow)} "$dataset"
+                    ''
+                    + " "
+                    + lib.escapeShellArg dataset
+                  ) (localDatasetName c.target);
+              ExecStopPost =
+                let
+                  zfsUnallow = dataset: "+/run/booted-system/sw/bin/zfs unallow $USER " + lib.escapeShellArg dataset;
+                in
+                map zfsUnallow (localDatasetName c.source)
+                ++
+                  # For a local target, unallow both the dataset and its parent,
+                  # because at this stage we have no way of knowing if the allow command
+                  # did execute on the parent dataset or not in the ExecStartPre=.
+                  # We can't run the same if-then-else in the post hook
+                  # since the dataset should have been created at this point.
+                  lib.concatMap (dataset: [
+                    (zfsUnallow dataset)
+                    (zfsUnallow (builtins.dirOf dataset))
+                  ]) (localDatasetName c.target);
+              ExecStart = lib.escapeShellArgs (
+                [ "${cfg.package}/bin/syncoid" ]
+                ++ lib.optionals c.useCommonArgs cfg.commonArgs
+                ++ lib.optional c.recursive "--recursive"
+                ++ lib.optionals (c.sshKey != null) [
+                  "--sshkey"
+                  "\${CREDENTIALS_DIRECTORY}/${if lib.length sshKeyCred > 1 then lib.head sshKeyCred else "sshKey"}"
+                ]
+                ++ c.extraArgs
+                ++ [
+                  "--sendoptions"
+                  c.sendOptions
+                  "--recvoptions"
+                  c.recvOptions
+                  "--no-privilege-elevation"
+                  c.source
+                  c.target
+                ]
               );
+              DynamicUser = true;
+              NFTSet = lib.optional config.networking.nftables.enable "user:inet:filter:nixos_syncoid_uids";
+              # Prevent SSH control sockets of different syncoid services from interfering
+              PrivateTmp = true;
+              # Permissive access to /proc because syncoid
+              # calls ps(1) to detect ongoing `zfs receive`.
+              ProcSubset = "all";
+              ProtectProc = "default";
+
+              # The following options are only for optimizing:
+              # systemd-analyze security | grep syncoid-'*'
+              AmbientCapabilities = "";
+              CapabilityBoundingSet = "";
+              DeviceAllow = [ "/dev/zfs" ];
+              LockPersonality = true;
+              MemoryDenyWriteExecute = true;
+              NoNewPrivileges = true;
+              PrivateDevices = true;
+              PrivateMounts = true;
+              PrivateNetwork = lib.mkDefault false;
+              PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectHome = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectSystem = "strict";
+              RemoveIPC = true;
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              RootDirectory = "/run/syncoid/${escapeUnitName name}";
+              BindPaths = [ "/dev/zfs" ];
+              BindReadOnlyPaths = [
+                builtins.storeDir
+                "/etc"
+                "/run"
+                # Some programs hardcode /var/run
+                # eg. /var/run/avahi-daemon/socket to resolve *.local mDNS domains
+                "/var/run"
+                "/bin/sh"
+              ];
+              # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
+              InaccessiblePaths = [ "-+/run/syncoid/${escapeUnitName name}" ];
+              MountAPIVFS = true;
+              # Create RootDirectory= in the host's mount namespace.
+              RuntimeDirectory = [ "syncoid/${escapeUnitName name}" ];
+              RuntimeDirectoryMode = "700";
+              SystemCallFilter = [
+                "@system-service"
+                # Groups in @system-service which do not contain a syscall listed by:
+                # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' syncoid …
+                # awk >perf.syscalls -F "," '$1 > 0 {sub("syscalls:sys_enter_","",$3); print $3}' perf.log
+                # systemd-analyze syscall-filter | grep -v -e '#' | sed -e ':loop; /^[^ ]/N; s/\n //; t loop' | grep $(printf ' -e \\<%s\\>' $(cat perf.syscalls)) | cut -f 1 -d ' '
+                "~@aio"
+                "~@chown"
+                "~@keyring"
+                "~@memlock"
+                "~@privileged"
+                "~@resources"
+                "~@setuid"
+              ];
+              SystemCallArchitectures = "native";
+              # This is for BindPaths= and BindReadOnlyPaths=
+              # to allow traversal of directories they create in RootDirectory=.
+              UMask = "0066";
+            }
+            // (
+              if lib.length sshKeyCred > 1 then
+                { LoadCredentialEncrypted = [ c.sshKey ]; }
+              else
+                { LoadCredential = [ "sshKey:${c.sshKey}" ]; }
+            );
           }
           cfg.service
           c.service
