@@ -1,3 +1,20 @@
+/**
+  # Example
+
+  Prettier with plugins and Vim Home Manager configuration
+
+  ```nix
+  pkgs.prettier.override {
+    plugins = with pkgs.prettier.plugins; [
+      prettier-plugin-php
+      prettier-plugin-pug
+      prettier-plugin-ruby
+      prettier-plugin-xml
+      # ...
+    ];
+  }
+  ```
+*/
 {
   fetchFromGitHub,
   lib,
@@ -6,6 +23,7 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+  pkgs,
   plugins ? [ ],
 }:
 let
@@ -49,7 +67,14 @@ let
   nodeEntryPointOf =
     plugin:
     let
-      pluginDir = "${plugin.outPath}/lib/node_modules/${plugin.pname}";
+      pluginDir =
+        let
+          possiblePackageJsonPaths = [
+            "${plugin.outPath}/lib/node_modules/${plugin.packageName}/package.json"
+            "${plugin.outPath}/package.json"
+          ];
+        in
+        builtins.dirOf (lib.head (lib.filter (x: builtins.pathExists x) possiblePackageJsonPaths));
 
       packageJsonAttrs = builtins.fromJSON (builtins.readFile "${pluginDir}/package.json");
 
@@ -64,10 +89,10 @@ let
       pathAbsoluteFallback
     else
       lib.warn ''
-        ${plugin.pname}: error context, tried finding entry point under;
+        ${plugin.packageName}: error context, tried finding entry point under;
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
-      '' throw "${plugin.pname}: does not provide parse-able entry point";
+      '' throw "${plugin.packageName}: does not provide parse-able entry point";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -117,7 +142,26 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    plugins = import ./plugins {
+      inherit
+        fetchFromGitHub
+        nodejs
+        stdenv
+        ;
+      inherit (pkgs)
+        fetchYarnDeps
+        pnpm_9
+        yarnBuildHook
+        yarnConfigHook
+        yarnInstallHook
+        ;
+      inherit (pkgs.ruby)
+        gems
+        ;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/prettier/prettier/blob/${finalAttrs.version}/CHANGELOG.md";
