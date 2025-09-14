@@ -10,8 +10,12 @@
   buildPackages,
   pkgsBuildTarget,
   targetPackages,
+  # for testing
   testers,
+  runCommand,
+  bintools,
   skopeo,
+  clickhouse-backup,
   buildGo125Module,
 }:
 
@@ -19,6 +23,7 @@ let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo125Module; };
+  clickhouse-backupTest = clickhouse-backup.override { buildGoModule = buildGo125Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -70,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
     ./go-env-go_ldso.patch
+    ./go-default-pie.patch
   ];
 
   inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
@@ -179,6 +185,23 @@ stdenv.mkDerivation (finalAttrs: {
         command = "go version";
         version = "go${finalAttrs.version}";
       };
+      # Picked clickhouse-backup as a package that sets CGO_ENABLED=0
+      # Running and outputting the right version proves a working ELF interpreter was picked
+      clickhouse-backup = testers.testVersion { package = clickhouse-backupTest; };
+      clickhouse-backup-is-pie = runCommand "has-pie" { meta.broken = stdenv.hostPlatform.isStatic; } ''
+        ${lib.optionalString (!isCross) ''
+          if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe clickhouse-backup} | grep -Fq "GCC: (GNU)"; then
+            echo "${lib.getExe clickhouse-backup} has a GCC .comment, but it should have used the internal go linker"
+            exit 1
+          fi
+        ''}
+        if ${lib.getExe' bintools "readelf"} -h ${lib.getExe clickhouse-backup} | grep -q "Type:.*DYN"; then
+          touch $out
+        else
+          echo "ERROR: clickhouse-backup is NOT PIE"
+          exit 1
+        fi
+      '';
     };
   };
 
