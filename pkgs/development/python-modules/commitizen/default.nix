@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   gitMinimal,
-  pythonOlder,
   stdenv,
   installShellFiles,
   poetry-core,
@@ -31,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.7.1";
+  version = "4.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-SSj9K1ujwi/KNzugB0mIo0VMOz3WbCQ6X07ztB0JJsU=";
+    hash = "sha256-vHA+TvKs9TOu/0/FpxLHHbDgshQFhP9Dwe6ZMnUOBKc=";
   };
 
   pythonRelaxDeps = [
@@ -58,6 +55,7 @@ buildPythonPackage rec {
     charset-normalizer
     colorama
     decli
+    deprecated
     importlib-metadata
     jinja2
     packaging
@@ -69,7 +67,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     argcomplete
-    deprecated
     gitMinimal
     py
     pytest-freezer
