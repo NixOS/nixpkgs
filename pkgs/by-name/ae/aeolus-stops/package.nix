@@ -4,37 +4,35 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stops";
   version = "0.4.0";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/stops-${finalAttrs.version}.tar.bz2";
     hash = "sha256-DnmguOAGyw9nv88ekJfbC04Qwbsw5tXEAaKeiCQR/LA=";
   };
 
   outputHashMode = "recursive";
   outputHash = "sha256-gGHowq7g7MZmnhrpqG+3wNLwQCtpiBB88euIKeQIpJ0=";
 
-  subdir = "share/Aeolus/stops";
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${subdir}
-    cp -r * $out/${subdir}
+    mkdir -p $out/share/Aeolus/stops
+    cp -r * $out/share/Aeolus/stops
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aeolus synthesizer instrument definitions";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       nico202
       orivej
     ];
   };
-}
+})
