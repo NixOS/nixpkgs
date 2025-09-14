@@ -33,7 +33,7 @@
   python,
   qt6,
   setuptools,
-  tbb,
+  onetbb,
   withDocs ? false,
   withOsl ? true,
   withTools ? false,
@@ -126,7 +126,7 @@ buildPythonPackage rec {
     opencolorio
     openimageio
     ptex
-    tbb
+    onetbb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11

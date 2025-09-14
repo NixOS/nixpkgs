@@ -10,7 +10,7 @@
   fltk,
   vtk,
   zlib,
-  tbb,
+  onetbb,
 }:
 
 stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     fltk
     libGLU
     python3
-    tbb
+    onetbb
     vtk
     zlib
   ];

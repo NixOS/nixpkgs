@@ -10,7 +10,7 @@
   flex,
   llvmPackages,
   ncurses,
-  tbb,
+  onetbb,
   # the default test target is sse4, but that is not supported by all Hydra agents
   testedTargets ?
     if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     flex
     python3
     llvmPackages.libllvm.dev
-    tbb
+    onetbb
   ];
 
   buildInputs = with llvmPackages; [
