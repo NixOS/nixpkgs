@@ -21,13 +21,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.14.4";
+  version = "7.14.10";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-zfQza07GhYFEHwl4w5hqqE9JP/0yY5KIj0zRRNmAECA=";
+    hash = "sha256-/taZqeCyFu3KlMdgXmUgLfQwBzbolopti61U3xzEvOc=";
     fetchSubmodules = true;
   };
 
@@ -46,8 +46,6 @@ buildDotnetModule (finalAttrs: {
       --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
-    substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
-      --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
     substituteInPlace v2rayN/ServiceLib/Manager/CoreManager.cs \
       --replace-fail 'Environment.GetEnvironmentVariable(Global.LocalAppData) == "1"' "false"
   '';
