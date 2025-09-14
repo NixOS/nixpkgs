@@ -569,6 +569,7 @@
   ./services/desktops/gnome/sushi.nix
   ./services/desktops/gnome/tinysparql.nix
   ./services/desktops/gvfs.nix
+  ./services/desktops/linyaps.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
   ./services/desktops/pipewire/pipewire.nix
