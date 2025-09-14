@@ -1,3 +1,4 @@
 [
-  "@prettier/plugin-xml"
+  "@prettier/plugin-ruby"
+, "@prettier/plugin-xml"
 ]

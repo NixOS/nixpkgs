@@ -51,6 +51,27 @@ let
   };
 in
 {
+  "@prettier/plugin-ruby" = nodeEnv.buildNodePackage {
+    name = "_at_prettier_slash_plugin-ruby";
+    packageName = "@prettier/plugin-ruby";
+    version = "4.0.4";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@prettier/plugin-ruby/-/plugin-ruby-4.0.4.tgz";
+      sha512 = "lCpvfS/dQU5WrwN3AQ5vR8qrvj2h5gE41X08NNzAAXvHdM4zwwGRcP2sHSxfu6n6No+ljWCVx95NvJPFTTjCTg==";
+    };
+    dependencies = [
+      sources."prettier-3.6.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "prettier plugin for the Ruby programming language";
+      homepage = "https://github.com/prettier/plugin-ruby#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   "@prettier/plugin-xml" = nodeEnv.buildNodePackage {
     name = "_at_prettier_slash_plugin-xml";
     packageName = "@prettier/plugin-xml";
