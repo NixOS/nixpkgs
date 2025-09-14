@@ -16878,7 +16878,9 @@ self: super: with self; {
 
   skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
 
-  skytemple-ssb-emulator = callPackage ../development/python-modules/skytemple-ssb-emulator { };
+  skytemple-ssb-emulator = callPackage ../development/python-modules/skytemple-ssb-emulator {
+    inherit (pkgs) libpcap;
+  };
 
   slack-bolt = callPackage ../development/python-modules/slack-bolt { };
 
