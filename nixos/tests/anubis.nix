@@ -1,4 +1,36 @@
 { lib, ... }:
+let
+  legacyBotPolicyJSON = ''
+    {
+      "bots": [
+        {
+          "import": "(data)/bots/_deny-pathological.yaml"
+        },
+        {
+          "import": "(data)/meta/ai-block-aggressive.yaml"
+        },
+        {
+          "import": "(data)/crawlers/_allow-good.yaml"
+        },
+        {
+          "import": "(data)/bots/aggressive-brazilian-scrapers.yaml"
+        },
+        {
+          "import": "(data)/common/keep-internet-working.yaml"
+        },
+        {
+          "name": "generic-browser",
+          "user_agent_regex": "Mozilla|Opera",
+          "action": "CHALLENGE"
+        }
+      ],
+      "dnsbl": false,
+      "status_codes": {
+        "CHALLENGE": 200,
+        "DENY": 200
+      }
+    }'';
+in
 {
   name = "anubis";
   meta.maintainers = with lib.maintainers; [
@@ -88,7 +120,7 @@
 
       services.anubis = {
         defaultOptions = {
-          botPolicy = lib.importJSON "${config.services.anubis.package.src}/data/botPolicies.json";
+          botPolicy = builtins.fromJSON legacyBotPolicyJSON;
           settings = {
             DIFFICULTY = 3;
             USER_DEFINED_DEFAULT = true;
