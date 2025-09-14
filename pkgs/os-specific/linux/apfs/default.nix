@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfs";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bv3WGcIKx5RVj+cQg0U5U1zGPRzjxMlCZmol9QvAmc4=";
+    hash = "sha256-/qJ8QvnVhVXvuxeZ/UYLTXGMPPVnC7fHOSWI1B15r/M=";
   };
 
   hardeningDisable = [ "pic" ];
