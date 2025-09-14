@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cmake,
   numpy,
   pybind11,
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   version = "0.1.7.post5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CxOZ4cSbW+1arI/WPvCKtwjTQMN/tCb+ABKLwfNrKG4=";
+  src = fetchFromGitHub {
+    owner = "osqp";
+    repo = "qdldl-python";
+    tag = "v${version}";
+    hash = "sha256-XHdvYWORHDYy/EIqmlmFQZwv+vK3I+rPIrvcEW1JyIw=";
   };
 
   dontUseCmakeConfigure = true;
