@@ -50,13 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   # see the comment on stripPrefix
   ++ lib.optional stripPrefix "--with-jemalloc-prefix="
   ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
-  # jemalloc is unable to correctly detect transparent hugepage support on
-  # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
-  # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
-  ++ lib.optionals (stdenv.hostPlatform.isAarch32 && lib.versionOlder finalAttrs.version "5") [
-    "--disable-thp"
-    "je_cv_thp=no"
-  ]
   # The upstream default is dependent on the builders' page size
   # https://github.com/jemalloc/jemalloc/issues/467
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
