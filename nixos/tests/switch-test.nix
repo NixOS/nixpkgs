@@ -91,6 +91,14 @@ in
             virtualisation.fileSystems."/".device = lib.mkForce "auto";
           };
 
+          automount.configuration = {
+            virtualisation.fileSystems."/testauto" = {
+              device = "tmpfs";
+              fsType = "tmpfs";
+              options = [ "x-systemd.automount" ];
+            };
+          };
+
           swap.configuration.swapDevices = lib.mkVMOverride [
             {
               device = "/swapfile";
@@ -837,9 +845,21 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
+          # add an automount
+          out = switch_to_specialisation("${machine}", "automount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: testauto.automount\n")
+          # remove the automount
+          out = switch_to_specialisation("${machine}", "")
+          assert_contains(out, "stopping the following units: testauto.automount\n")
+          assert_lacks(out, "reloading the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_lacks(out, "the following new units were started:")
 
       with subtest("swaps"):
-          switch_to_specialisation("${machine}", "")
           # add a swap
           out = switch_to_specialisation("${machine}", "swap")
           assert_lacks(out, "stopping the following units:")
