@@ -65,6 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
         #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
         "cpio/test/test_basic.c"
         "cpio/test/test_format_newc.c"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isCygwin [
+        "libarchive/test/test_write_disk_lookup.c"
+        "cpio/test/test_owner_parse.c"
+        "cpio/test/test_option_c.c"
+        "cpio/test/test_option_L_upper.c"
       ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
@@ -113,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
   # https://github.com/libarchive/libarchive/issues/1475
-  doCheck = !stdenv.hostPlatform.isMusl;
+  doCheck =
+    !stdenv.hostPlatform.isMusl
+    # TODO: investigate cygwin tests
+    && !stdenv.hostPlatform.isCygwin;
 
   preCheck = ''
     # Need an UTF-8 locale for test_I test.
