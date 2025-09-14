@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   opencv-python,
   torch,
   onnx,
@@ -18,7 +19,7 @@
 buildPythonPackage rec {
   pname = "invisible-watermark";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -29,7 +30,9 @@ buildPythonPackage rec {
     hash = "sha256-6SjVpKFtiiLLU7tZ3hBQr0KT/YEQyywJj0e21/dJRzk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     opencv-python
     torch
     pillow
@@ -92,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imwatermark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating and decoding invisible image watermarks";
     mainProgram = "invisible-watermark";
     homepage = "https://github.com/ShieldMnt/invisible-watermark";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }
