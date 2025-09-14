@@ -9,12 +9,12 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "mpris-discord-rpc";
+  pname = "music-discord-rpc";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "patryk-ku";
-    repo = "mpris-discord-rpc";
+    repo = "music-discord-rpc";
     tag = "v${finalAttrs.version}";
     hash = "sha256-tPIm07q5HWosqhA3zefyuwM+fIztNZe1sSpB/NmUIoE=";
   };
@@ -37,9 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Linux Discord rich presence for music, using MPRIS with album cover and progress bar support";
-    homepage = "https://github.com/patryk-ku/mpris-discord-rpc";
-    changelog = "https://github.com/patryk-ku/mpris-discord-rpc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    description = "Cross-platform Discord rich presence for music with album cover and progress bar support";
+    homepage = "https://github.com/patryk-ku/music-discord-rpc";
+    changelog = "https://github.com/patryk-ku/music-discord-rpc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lukaswrz ];
     mainProgram = "mpris-discord-rpc";
