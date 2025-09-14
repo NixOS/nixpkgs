@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Semi-random text typer";
     mainProgram = "randtype";
     homepage = "https://benkibbey.wordpress.com/randtype/";
-    maintainers = with maintainers; [ dandellion ];
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/randtype.x86_64-darwin
   };
 }

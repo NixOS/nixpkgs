@@ -55,11 +55,11 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~zethra/license";
     description = "Command-line tool to easily add license to your project";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "license";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

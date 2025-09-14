@@ -32,11 +32,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rank_bm25" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of BM25 Algorithms in Python";
     homepage = "https://github.com/dorianbrown/rank_bm25";
     changelog = "https://github.com/dorianbrown/rank_bm25/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

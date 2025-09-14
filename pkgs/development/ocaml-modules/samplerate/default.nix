@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libsamplerate ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-samplerate";
     description = "Interface for libsamplerate";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

@@ -75,11 +75,11 @@ buildTopkgPackage {
 
   buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
 
-  meta = with lib; {
+  meta = {
     description = "Logging infrastructure for OCaml";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    license = lib.licenses.isc;
   };
 }

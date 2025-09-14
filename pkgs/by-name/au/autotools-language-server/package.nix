@@ -29,11 +29,11 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Autotools language server, support configure.ac, Makefile.am, Makefile";
     homepage = "https://github.com/Freed-Wu/autotools-language-server";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "autotools-language-server";
   };
 }

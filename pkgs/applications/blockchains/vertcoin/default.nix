@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Digital currency with mining decentralisation and ASIC resistance as a key focus";
     homepage = "https://vertcoin.org/";
-    license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -53,10 +53,10 @@ buildPythonPackage rec {
     "pyu2f/tests/hid/linux_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "U2F host library for interacting with a U2F device over USB";
     homepage = "https://github.com/google/pyu2f";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

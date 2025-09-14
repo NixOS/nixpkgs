@@ -77,14 +77,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ad-hoc ClojureScript scripting of Mac applications via Apple's Open Scripting Architecture";
     homepage = "https://github.com/babashka/obb";
-    license = licenses.epl10;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [
       willcohen
     ];
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
 
     # https://hydra.nixos.org/job/nixpkgs/trunk/obb.aarch64-darwin/all
     broken = true;

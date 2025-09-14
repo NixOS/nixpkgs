@@ -32,7 +32,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTFS to SQLite import utility";
     longDescription = ''
       Mobsql is a Go library and command-line application
@@ -43,9 +43,9 @@ buildGoModule rec {
       to the database simulatenously).
     '';
     homepage = "https://git.sr.ht/~mil/mobsql";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "mobsql";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

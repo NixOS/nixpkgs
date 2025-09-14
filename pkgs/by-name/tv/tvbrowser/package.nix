@@ -74,19 +74,19 @@ stdenv.mkDerivation rec {
 
   passthru.tests.startwindow = callPackage ./test.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Electronic TV Program Guide";
     downloadPage = "https://www.tvbrowser.org/index.php?id=tv-browser";
     homepage = "https://www.tvbrowser.org/";
     changelog = "https://www.tvbrowser.org/index.php?id=news";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       fromSource
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "tvbrowser";
-    maintainers = with maintainers; [ yarny ];
+    maintainers = with lib.maintainers; [ yarny ];
     longDescription = ''
       TV-Browser shows TV program data arranged like in printed
       TV programs after downloading it from the internet.

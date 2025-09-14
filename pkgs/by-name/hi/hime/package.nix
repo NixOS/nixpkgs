@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath $out/lib/hime:$hime_rpath $out/bin/hime
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://hime-ime.github.io/";
     downloadPage = "https://github.com/hime-ime/hime/downloads";
     description = "Useful input method engine for Asia region";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ yanganto ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yanganto ];
   };
 }

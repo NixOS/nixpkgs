@@ -40,15 +40,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Mesh optimization library that makes meshes smaller and faster to render";
     homepage = "https://github.com/zeux/meshoptimizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bouk
       lillycham
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "gltfpack";
   };
 }

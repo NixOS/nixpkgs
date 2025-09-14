@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     "-DMMG_INSTALL_PRIVATE_HEADERS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source software for bidimensional and tridimensional remeshing";
     homepage = "http://www.mmgtools.org/";
-    platforms = platforms.unix;
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ mkez ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ mkez ];
   };
 }

@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to dump info about DRM devices";
     mainProgram = "drm_info";
     homepage = "https://gitlab.freedesktop.org/emersion/drm_info";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kiskae ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

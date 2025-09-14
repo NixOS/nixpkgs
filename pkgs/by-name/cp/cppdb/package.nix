@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "--no-warn-unused-cli" ];
   env.NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cppcms.com/sql/cppdb/";
     description = "C++ Connectivity library that supports MySQL, PostgreSQL, Sqlite3 databases and generic ODBC drivers";
-    platforms = platforms.linux;
-    license = licenses.boost;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

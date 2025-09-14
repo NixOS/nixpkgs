@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiopulse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Rollease Acmeda Automate Pulse hub protocol implementation";
     longDescription = ''
       The Rollease Acmeda Pulse Hub is a WiFi hub that communicates with
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/atmurray/aiopulse";
     changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

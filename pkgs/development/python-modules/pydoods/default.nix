@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydoods" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the DOODS service";
     homepage = "https://github.com/snowzach/pydoods";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

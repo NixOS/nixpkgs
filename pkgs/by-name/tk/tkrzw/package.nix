@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # memory intensive
 
-  meta = with lib; {
+  meta = {
     description = "Set of implementations of DBM";
     homepage = "https://dbmx.net/tkrzw/";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }

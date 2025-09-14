@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Compute functions of 2- and 3-dimensional regions";
     homepage = "https://github.com/sandialabs/verdict";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     changelog = "https://github.com/sandialabs/verdict/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
   };
 })

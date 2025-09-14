@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "dptrp1" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/janten/dpt-rp1-py";
     description = "Python script to manage Sony DPT-RP1 without Digital Paper App";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mt-caret ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mt-caret ];
     mainProgram = "dptrp1";
   };
 }

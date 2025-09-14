@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     cp -a README $out/doc/README.driver
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openprinting.org/driver/epson-201401w";
     description = "Epson printer driver (L456, L455, L366, L365, L362, L360, L312, L310, L222, L220, L132, L130)";
     longDescription = ''
@@ -75,11 +75,11 @@ stdenv.mkDerivation {
           drivers = [ pkgs.epson-201401w ];
         };
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       epson
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.lunarequest ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.lunarequest ];
   };
 }

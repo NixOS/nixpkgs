@@ -58,11 +58,11 @@ buildPythonPackage rec {
   # Tests use sockets
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
     changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

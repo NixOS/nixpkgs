@@ -115,12 +115,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
     changelog = "https://github.com/graphql-python/gql/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gql-cli";
   };
 }

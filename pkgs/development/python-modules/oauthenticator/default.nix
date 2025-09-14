@@ -78,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oauthenticator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authenticate JupyterHub users with common OAuth providers";
     homepage = "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

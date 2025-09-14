@@ -33,9 +33,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/byroot/pysrt";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     description = "Python library used to edit or create SubRip files";
     mainProgram = "srt";
   };

@@ -53,10 +53,10 @@ buildPythonPackage rec {
     "panphon.distance"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for using the International Phonetic Alphabet with phonological features";
     homepage = "https://github.com/dmort27/panphon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

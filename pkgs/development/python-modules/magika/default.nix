@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = magika; };
 
-  meta = with lib; {
+  meta = {
     description = "Detect file content types with deep learning";
     homepage = "https://github.com/google/magika";
     changelog = "https://github.com/google/magika/blob/python-v${version}/python/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mihaimaruseac ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mihaimaruseac ];
     mainProgram = "magika-python-client";
     # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;

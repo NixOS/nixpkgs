@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WMI client for Linux (binary)";
     mainProgram = "wmic";
     homepage = "https://www.openvas.org";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Old-school drum-kit sampler synthesizer with stereo fx";
     mainProgram = "drumkv1_jack";
     homepage = "http://drumkv1.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.theredstonedev ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.theredstonedev ];
   };
 }

@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python XML Signature and XAdES library";
     homepage = "https://github.com/XML-Security/signxml";
     changelog = "https://github.com/XML-Security/signxml/blob/${src.tag}/Changes.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "railroad" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to generate SVG railroad syntax diagrams";
     homepage = "https://github.com/tabatkins/railroad-diagrams";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     maintainers = [ ];
   };
 }

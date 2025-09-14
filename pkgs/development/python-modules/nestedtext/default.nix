@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nestedtext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Human friendly data format";
     longDescription = ''
       NestedText is a file format for holding data that is to be entered,
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://nestedtext.org";
     changelog = "https://github.com/KenKundert/nestedtext/blob/v${version}/doc/releases.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
 }

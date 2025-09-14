@@ -27,12 +27,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
     homepage = "https://github.com/ThatOneCalculator/NerdFetch";
-    maintainers = with maintainers; [ ByteSudoer ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = lib.licenses.mit;
     mainProgram = "nerdfetch";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

@@ -42,12 +42,12 @@ buildPythonPackage rec {
   # Project has no tests. pythonImportsCheck requires MinIO configuration
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Web application that allows for Karton task and queue introspection";
     mainProgram = "karton-dashboard";
     homepage = "https://github.com/CERT-Polska/karton-dashboard";
     changelog = "https://github.com/CERT-Polska/karton-dashboard/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

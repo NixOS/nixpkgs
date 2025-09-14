@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://drobilla.net/software/suil";
     description = "Lightweight C library for loading and wrapping LV2 plugin UIs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

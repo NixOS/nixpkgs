@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwdblib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the mwdb service";
     mainProgram = "mwdb";
     homepage = "https://github.com/CERT-Polska/mwdblib";
     changelog = "https://github.com/CERT-Polska/mwdblib/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

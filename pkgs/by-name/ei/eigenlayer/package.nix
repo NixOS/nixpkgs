@@ -25,12 +25,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.eigenlayer.xyz/";
     changelog = "https://github.com/Layr-Labs/eigenlayer-cli/releases/tag/${src.rev}";
     description = "Utility that manages core operator functionalities like local keys, operator registration and updates";
     mainProgram = "eigenlayer";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ selfuryon ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ selfuryon ];
   };
 }

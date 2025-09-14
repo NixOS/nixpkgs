@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     url = "https://invisible-island.net/archives/diffstat/";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Read output of diff and display a histogram of the changes";
     mainProgram = "diffstat";
     longDescription = ''
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
       reviewing large, complex patch files.
     '';
     homepage = "https://invisible-island.net/diffstat/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

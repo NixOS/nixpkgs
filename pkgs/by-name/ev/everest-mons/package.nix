@@ -38,10 +38,10 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mons.coloursofnoise.ca/";
     description = "Commandline Everest installer and mod manager for Celeste";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     mainProgram = "mons";
   };

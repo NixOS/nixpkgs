@@ -38,10 +38,10 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Provides a command line interface to interact with CredHub servers";
     homepage = "https://github.com/cloudfoundry-incubator/credhub-cli";
-    maintainers = with maintainers; [ ris ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
+    license = lib.licenses.asl20;
   };
 }

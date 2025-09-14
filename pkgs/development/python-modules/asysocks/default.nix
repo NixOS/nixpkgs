@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asysocks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Socks4/5 client and server library";
     homepage = "https://github.com/skelsec/asysocks";
     changelog = "https://github.com/skelsec/asysocks/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

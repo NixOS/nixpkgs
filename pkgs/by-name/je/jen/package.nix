@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qYEnKFC1Y24TEY0dXa9N7QNvxhHULq+vd4Wej/RK8HQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI generation tool for creating large datasets";
     mainProgram = "jen";
     homepage = "https://github.com/whitfin/jen";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

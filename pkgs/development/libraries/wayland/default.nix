@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
@@ -105,9 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
       rendering).
     '';
     homepage = "https://wayland.freedesktop.org/";
-    license = licenses.mit; # Expat version
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       codyopel
       qyliss
     ];

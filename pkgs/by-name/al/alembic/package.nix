@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open framework for storing and sharing scene data";
     homepage = "http://alembic.io/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       guibou
       tmarkus
     ];

@@ -82,13 +82,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer FPS game designed for competitive gaming (engine only)";
     homepage = "http://www.warsow.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

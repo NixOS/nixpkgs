@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python base classes for rich path objects";
     homepage = "https://github.com/barneygale/pathlib-abc";
     changelog = "https://github.com/barneygale/pathlib-abc/blob/${version}/CHANGES.rst";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     maintainers = [ ];
   };
 }

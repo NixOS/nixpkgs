@@ -39,11 +39,11 @@ buildGoModule rec {
 
   doCheck = (stdenv.system != "aarch64-darwin");
 
-  meta = with lib; {
+  meta = {
     description = "POSIX-compliant AWK interpreter written in Go";
     homepage = "https://benhoyt.com/writings/goawk/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "goawk";
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with lib.maintainers; [ abbe ];
   };
 }

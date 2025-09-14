@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typing_inspect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Runtime inspection utilities for Python typing module";
     homepage = "https://github.com/ilevkivskyi/typing_inspect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
   };
 }

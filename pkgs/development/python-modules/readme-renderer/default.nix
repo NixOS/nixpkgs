@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "readme_renderer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
     changelog = "https://github.com/pypa/readme_renderer/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

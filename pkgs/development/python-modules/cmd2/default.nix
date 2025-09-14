@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cmd2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
     changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ teto ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

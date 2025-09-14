@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DeaDBeeF StatusNotifier Plugin";
     homepage = "https://github.com/vovochka404/deadbeef-statusnotifier-plugin";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.kurnevsky ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.kurnevsky ];
+    platforms = lib.platforms.linux;
   };
 }

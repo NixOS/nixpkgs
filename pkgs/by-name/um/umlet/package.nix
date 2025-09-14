@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/umlet"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source UML tool with a simple user interface";
     longDescription = ''
       UMLet is a free, open-source UML tool with a simple user interface:
@@ -53,10 +53,10 @@ stdenv.mkDerivation {
       Linux.
     '';
     homepage = "https://www.umlet.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ oxzi ];
+    platforms = lib.platforms.all;
     mainProgram = "umlet";
   };
 }

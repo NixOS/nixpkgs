@@ -38,10 +38,10 @@ buildPythonPackage rec {
   # don't update to 4.0.0, version was yanked
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Cython hash tables that assume keys are pre-hashed";
     homepage = "https://github.com/explosion/preshed";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

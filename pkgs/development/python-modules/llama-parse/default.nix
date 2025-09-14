@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_parse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse files into RAG-Optimized formats";
     homepage = "https://pypi.org/project/llama-parse/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

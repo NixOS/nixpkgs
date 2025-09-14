@@ -56,11 +56,11 @@ stdenv.mkDerivation {
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     inherit description;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ cizra ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ cizra ];
+    platforms = lib.platforms.all;
     homepage = "https://github.com/tome2/tome2";
   };
 }

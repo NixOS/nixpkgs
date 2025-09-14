@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "injector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python dependency injection framework, inspired by Guice";
     homepage = "https://github.com/alecthomas/injector";
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

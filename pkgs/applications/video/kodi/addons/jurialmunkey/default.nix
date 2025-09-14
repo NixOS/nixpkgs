@@ -27,10 +27,10 @@ buildKodiAddon rec {
     pythonPath = "resources/modules";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jurialmunkey/script.module.jurialmunkey/tree/main";
     description = "Common code required by TMDbHelper and other related jurialmunkey add-ons";
-    license = licenses.gpl3Plus;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

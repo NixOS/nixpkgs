@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     ./test.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bestouff/genext2fs";
     description = "Tool to generate ext2 filesystem images without requiring root privileges";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "genext2fs";
   };
 }

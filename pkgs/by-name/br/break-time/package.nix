@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Break timer that forces you to take a break";
     mainProgram = "break-time";
     homepage = "https://github.com/cdepillabout/break-time";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ cdepillabout ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ cdepillabout ];
+    platforms = lib.platforms.linux;
   };
 }

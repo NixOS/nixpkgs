@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/olets/zsh-abbr";
     description = "Zsh manager for auto-expanding abbreviations, inspired by fish shell";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-nc-sa-40
       hl3
     ];
-    maintainers = with maintainers; [ icy-thought ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ icy-thought ];
+    platforms = lib.platforms.all;
   };
 }

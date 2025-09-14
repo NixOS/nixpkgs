@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Accelerated BLAST compatible local sequence aligner";
     mainProgram = "diamond";
     longDescription = ''

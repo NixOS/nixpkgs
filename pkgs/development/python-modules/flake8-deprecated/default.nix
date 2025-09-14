@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_deprecated" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 plugin that warns about deprecated method calls";
     homepage = "https://github.com/gforcada/flake8-deprecated";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lopsided98 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lopsided98 ];
   };
 }

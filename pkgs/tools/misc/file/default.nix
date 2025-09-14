@@ -62,13 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://darwinsys.com/file";
     description = "Program that shows the type of files";
-    maintainers = with maintainers; [ doronbehar ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "file";
   };
 })

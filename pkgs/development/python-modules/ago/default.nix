@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ago" ];
 
-  meta = with lib; {
+  meta = {
     description = "Human Readable Time Deltas";
     homepage = "https://git.unturf.com/python/ago";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

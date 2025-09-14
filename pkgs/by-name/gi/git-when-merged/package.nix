@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -D --target-directory $out/bin/ bin/git-when-merged
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helps you figure out when and why a commit was merged into a branch";
     longDescription = ''
       If you use standard Git workflows, then you create a feature
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       merged into the current branch?"
     '';
     homepage = "https://github.com/mhagger/git-when-merged";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = python3.meta.platforms;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with lib.maintainers; [ DamienCassou ];
     mainProgram = "git-when-merged";
   };
 }

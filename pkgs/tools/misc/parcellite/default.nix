@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${which}/bin:${xdotool}/bin")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight GTK clipboard manager";
     homepage = "https://github.com/rickyrockrat/parcellite";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "parcellite";
   };
 }

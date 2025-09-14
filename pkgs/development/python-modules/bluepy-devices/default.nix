@@ -22,10 +22,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "bluepy_devices" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python BTLE Device Interface for bluepy";
     homepage = "https://github.com/bimbar/bluepy_devices";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

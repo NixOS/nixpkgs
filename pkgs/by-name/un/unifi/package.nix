@@ -38,16 +38,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) unifi; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ui.com";
     description = "Controller for Ubiquiti UniFi access points";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       globin
       patryk27
     ];

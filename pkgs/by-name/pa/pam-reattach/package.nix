@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fabianishere/pam_reattach";
     description = "Reattach to the user's GUI session on macOS during authentication (for Touch ID support in tmux)";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lockejan ];
-    platforms = platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lockejan ];
+    platforms = lib.platforms.darwin;
   };
 }

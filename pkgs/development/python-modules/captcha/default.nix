@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Captcha library that generates audio and image CAPTCHAs";
     homepage = "https://github.com/lepture/captcha";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

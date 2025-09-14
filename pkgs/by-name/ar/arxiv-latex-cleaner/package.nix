@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google-research/arxiv-latex-cleaner";
     description = "Easily clean the LaTeX code of your paper to submit to arXiv";
     mainProgram = "arxiv_latex_cleaner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arkivm ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arkivm ];
   };
 }

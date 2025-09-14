@@ -70,12 +70,12 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, yet powerful tool that allows you to plot and manipulate your data with ease";
     homepage = "https://apps.gnome.org/Graphs";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "graphs";
     teams = [ lib.teams.gnome-circle ];
-    platforms = platforms.linux; # locale.bindtextdomain only available on linux
+    platforms = lib.platforms.linux; # locale.bindtextdomain only available on linux
   };
 }

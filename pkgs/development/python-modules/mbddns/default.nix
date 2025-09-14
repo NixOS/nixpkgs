@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mbddns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mythic Beasts Dynamic DNS updater";
     homepage = "https://github.com/thinkl33t/mb-ddns";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

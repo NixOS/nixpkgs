@@ -78,11 +78,11 @@ buildDotnetModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ".NET C# and Visual Basic compiler";
     homepage = "https://github.com/dotnet/roslyn";
     mainProgram = "csc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ corngood ];
   };
 }

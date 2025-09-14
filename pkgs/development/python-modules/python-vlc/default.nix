@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vlc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for VLC, the cross-platform multimedia player and framework";
     homepage = "https://wiki.videolan.org/PythonBinding";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

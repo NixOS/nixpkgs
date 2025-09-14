@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "release" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source 3D voxel editor";
     mainProgram = "goxel";
     homepage = "https://guillaumechereau.github.io/goxel/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       tilpner
       fgaz
     ];

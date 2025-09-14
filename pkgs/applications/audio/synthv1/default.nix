@@ -31,12 +31,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Old-school 4-oscillator subtractive polyphonic synthesizer with stereo fx";
     mainProgram = "synthv1_jack";
     homepage = "https://synthv1.sourceforge.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

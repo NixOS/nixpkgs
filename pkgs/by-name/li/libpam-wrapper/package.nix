@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   # We must use linux-pam, using openpam will result in broken fprintd.
   buildInputs = [ linux-pam ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for testing PAM modules";
     homepage = "https://cwrap.org/pam_wrapper.html";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

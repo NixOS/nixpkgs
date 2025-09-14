@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       --replace /etc/gpservice $out/etc/gpservice;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
     homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.jerith666 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.jerith666 ];
+    platforms = lib.platforms.linux;
   };
 }

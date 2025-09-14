@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "statsd/tests.py" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ ];
+  meta = {
+    maintainers = with lib.maintainers; [ ];
     description = "Simple statsd client";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
 }

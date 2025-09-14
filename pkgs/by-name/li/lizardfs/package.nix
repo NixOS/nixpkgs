@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     systemdMinimal
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lizardfs.com";
     description = "Highly reliable, scalable and efficient distributed file system";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       rushmorem
       shamilton
     ];

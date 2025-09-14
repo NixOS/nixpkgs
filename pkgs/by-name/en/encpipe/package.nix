@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encryption tool";
     homepage = "https://github.com/jedisct1/encpipe";
-    license = licenses.isc;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "encpipe";
   };
 }

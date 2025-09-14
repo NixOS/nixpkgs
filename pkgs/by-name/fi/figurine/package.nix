@@ -24,11 +24,11 @@ buildGoModule rec {
     "-X main.currentSha=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arsham/figurine";
     description = "Print your name in style";
     mainProgram = "figurine";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ironicbadger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ironicbadger ];
   };
 }

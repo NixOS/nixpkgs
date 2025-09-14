@@ -23,11 +23,11 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OCR tool to convert pictures to LaTeX";
     homepage = "https://mathpix.com/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.hiro98 ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.hiro98 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mathpix-snipping-tool";
   };

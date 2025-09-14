@@ -49,11 +49,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mounts archives as read-only file systems by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount";
     changelog = "https://github.com/mxmlnkn/ratarmount/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
     mainProgram = "ratarmount";
   };

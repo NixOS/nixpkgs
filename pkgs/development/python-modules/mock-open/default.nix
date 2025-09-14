@@ -17,9 +17,9 @@ buildPythonPackage rec {
     sha256 = "0qlz4y8jqxsnmqg03yp9f87rmnjrvmxm5qvm6n1218gm9k5dixbm";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nivbend/mock-open";
     description = "Better mock for file I/O";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

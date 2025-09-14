@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
 
   postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 
-  meta = with lib; {
+  meta = {
     description = "Basic set of icons";
     homepage = "https://tango.freedesktop.org/Tango_Icon_Library";
-    platforms = platforms.linux;
-    license = licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.publicDomain;
   };
 }

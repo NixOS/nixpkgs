@@ -202,12 +202,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gftools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Misc tools for working with the Google Fonts library";
     homepage = "https://github.com/googlefonts/gftools";
     changelog = "https://github.com/googlefonts/gftools/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gftools";
-    maintainers = with maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_readme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

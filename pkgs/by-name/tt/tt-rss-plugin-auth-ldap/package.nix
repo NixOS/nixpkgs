@@ -24,11 +24,11 @@ stdenv.mkDerivation {
     tests = { inherit (nixosTests) tt-rss; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for TT-RSS to authenticate users via ldap";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/hydrian/TTRSS-Auth-LDAP";
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.all;
   };
 }

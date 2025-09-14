@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     install -D functions/{,.edit}* $outdir/functions
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/marlonrichert/zsh-edit";
     description = "Set of powerful extensions to the Zsh command line editor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ deejayem ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ deejayem ];
+    platforms = lib.platforms.all;
   };
 }

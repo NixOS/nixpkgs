@@ -56,11 +56,11 @@ buildPythonPackage rec {
     stripe = [ stripe ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
     changelog = "https://github.com/jazzband/django-payments/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

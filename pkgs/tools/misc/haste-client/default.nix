@@ -8,12 +8,12 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "haste" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to the AnyStyle Parser and Finder";
     homepage = "https://rubygems.org/gems/haste";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.unix;
     mainProgram = "haste";
   };
 }

@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X=go.mondoo.com/cnspec.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source, cloud-native security and policy project";
     homepage = "https://github.com/mondoohq/cnspec";
     changelog = "https://github.com/mondoohq/cnspec/releases/tag/v${version}";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       fab
       mariuskimmina
     ];

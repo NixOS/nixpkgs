@@ -23,11 +23,11 @@ buildGhidraExtension {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (ghidra.meta) homepage license;
     description = "Finds functions using ML";
     downloadPage = "https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Extensions/MachineLearning";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];

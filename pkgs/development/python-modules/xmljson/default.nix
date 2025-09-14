@@ -17,11 +17,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ lxml ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts XML into dictionary structures and vice-versa";
     mainProgram = "xml2json";
     homepage = "https://github.com/sanand0/xmljson";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ rakesh4g ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

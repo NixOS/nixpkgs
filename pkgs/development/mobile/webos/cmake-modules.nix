@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   setupHook = ./cmake-setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     description = "CMake modules needed to build Open WebOS components";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

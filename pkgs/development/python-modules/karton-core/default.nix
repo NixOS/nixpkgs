@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed malware processing framework";
     homepage = "https://karton-core.readthedocs.io/";
     changelog = "https://github.com/CERT-Polska/karton/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       chivay
       fab
     ];

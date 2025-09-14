@@ -23,10 +23,10 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0") "nonstd is not available fo
     postPatch = lib.optionalString (duneVersion != "1") "dune upgrade";
     doCheck = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://bitbucket.org/smondet/nonstd";
       description = "Non-standard mini-library";
-      license = licenses.isc;
-      maintainers = [ maintainers.alexfmpe ];
+      license = lib.licenses.isc;
+      maintainers = [ lib.maintainers.alexfmpe ];
     };
   }

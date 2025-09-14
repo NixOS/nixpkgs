@@ -56,12 +56,12 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "NAT-aware multipath traceroute tool";
     homepage = "https://dublin-traceroute.net/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ baloo ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ baloo ];
+    platforms = lib.platforms.unix;
     mainProgram = "dublin-traceroute";
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -126,11 +126,11 @@ buildPythonPackage rec {
 
   doCheck = false; # error: infinite recursion encountered
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
     description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
 }

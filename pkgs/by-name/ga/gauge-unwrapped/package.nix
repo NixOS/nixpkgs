@@ -28,12 +28,12 @@ buildGoModule rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Light weight cross-platform test automation";
     mainProgram = "gauge";
     homepage = "https://gauge.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       vdemeester
       marie
     ];

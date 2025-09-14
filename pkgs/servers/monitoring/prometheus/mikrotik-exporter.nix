@@ -22,11 +22,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) mikrotik; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Prometheus MikroTik device(s) exporter";
     mainProgram = "mikrotik-exporter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmilata ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmilata ];
   };
 }

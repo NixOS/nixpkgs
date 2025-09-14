@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "7000+ Material Design Icons from the Community";
     longDescription = ''
       Material Design Icons' growing icon collection allows designers and
@@ -39,9 +39,9 @@ stdenvNoCC.mkDerivation rec {
       color and size they need for any project.
     '';
     homepage = "https://materialdesignicons.com";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       vlaci
       dixslyf
     ];

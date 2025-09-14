@@ -65,12 +65,12 @@ buildPythonApplication {
   # There are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kryogenix.org/code/hushboard/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keysmashes ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ keysmashes ];
   };
 }

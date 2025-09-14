@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/lfc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Polyglot coordination language";
     longDescription = ''
       Lingua Franca (LF) is a polyglot coordination language for concurrent
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       embedded code to distributed cloud and edge applications.
     '';
     homepage = "https://github.com/lf-lang/lingua-franca";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ revol-xut ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ revol-xut ];
   };
 }

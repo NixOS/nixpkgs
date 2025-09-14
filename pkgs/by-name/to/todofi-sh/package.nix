@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Todo-txt + Rofi = Todofi.sh";
     mainProgram = "todofi.sh";
     homepage = "https://github.com/hugokernel/todofi.sh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ewok ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ewok ];
+    platforms = lib.platforms.linux;
   };
 }

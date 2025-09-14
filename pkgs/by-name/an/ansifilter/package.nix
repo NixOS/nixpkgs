@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "conf_dir=/etc/ansifilter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert ANSI to other formats";
     mainProgram = "ansifilter";
     longDescription = ''
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       (HTML, TeX, LaTeX, RTF, Pango or BBCode)
     '';
     homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.html";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.Adjective-Object ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.Adjective-Object ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

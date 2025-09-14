@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests.fakeroute = nixosTests.fakeroute;
 
-  meta = with lib; {
+  meta = {
     description = ''
       Make your machine appears to be anywhere on the internet in a traceroute
     '';
     homepage = "https://maxwell.eurofusion.eu/git/rnhmjoj/fakeroute";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     mainProgram = "fakeroute";
   };
 }

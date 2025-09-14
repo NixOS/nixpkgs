@@ -78,10 +78,10 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://gmplib.org/";
       description = "GNU multiple precision arithmetic library";
-      license = with licenses; [
+      license = with lib.licenses; [
         lgpl3Only
         gpl2Only
       ];
@@ -108,7 +108,7 @@ let
         asymptotically faster algorithms.
       '';
 
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
       maintainers = [ ];
     };
   };

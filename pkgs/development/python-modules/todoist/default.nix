@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "todoist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Todoist Python API library";
     homepage = "https://todoist-python.readthedocs.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

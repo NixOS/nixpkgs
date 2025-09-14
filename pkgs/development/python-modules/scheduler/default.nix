@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scheduler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple in-process python scheduler library with asyncio, threading and timezone support";
     homepage = "https://pypi.org/project/scheduler/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ pinpox ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ pinpox ];
   };
 }

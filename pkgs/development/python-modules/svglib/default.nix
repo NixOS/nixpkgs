@@ -43,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svglib.svglib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python library for reading and converting SVG";
     mainProgram = "svg2pdf";
     homepage = "https://github.com/deeplook/svglib";
     changelog = "https://github.com/deeplook/svglib/blob/v${version}/CHANGELOG.rst";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ trepetti ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ trepetti ];
   };
 }

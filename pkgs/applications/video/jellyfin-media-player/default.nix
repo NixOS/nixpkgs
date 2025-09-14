@@ -82,10 +82,10 @@ mkDerivation rec {
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";
     description = "Jellyfin Desktop Client based on Plex Media Player";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       mit
     ];
@@ -95,7 +95,7 @@ mkDerivation rec {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jojosch
       kranzes
       paumr

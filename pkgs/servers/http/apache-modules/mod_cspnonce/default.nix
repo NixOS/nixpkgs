@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Apache2 module that makes it dead simple to add nonce values to the CSP";
     homepage = "https://github.com/wyattoday/mod_cspnonce";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dasj19 ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dasj19 ];
   };
 }

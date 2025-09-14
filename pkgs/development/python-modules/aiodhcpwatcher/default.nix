@@ -45,12 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodhcpwatcher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Watch for DHCP packets with asyncio";
     homepage = "https://github.com/bdraco/aiodhcpwatcher";
     changelog = "https://github.com/bdraco/aiodhcpwatcher/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.linux;
   };
 }

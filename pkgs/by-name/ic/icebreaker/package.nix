@@ -37,11 +37,11 @@ buildGoModule {
       --set-default GIN_MODE release
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web app that allows students to ask real-time, anonymous questions during class";
     homepage = "https://github.com/jonhoo/icebreaker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "icebreaker";
   };
 }

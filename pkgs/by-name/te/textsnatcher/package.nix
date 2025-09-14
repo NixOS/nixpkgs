@@ -56,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Copy Text from Images with ease, Perform OCR operations in seconds";
     homepage = "https://textsnatcher.rf.gd/";
     changelog = "https://github.com/RajSolai/TextSnatcher/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "com.github.rajsolai.textsnatcher";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

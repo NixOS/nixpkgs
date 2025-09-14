@@ -68,11 +68,11 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/jupyter-server/pytest-jupyter/releases/tag/v${version}";
       description = "Pytest plugin for testing Jupyter core libraries and extensions";
       homepage = "https://github.com/jupyter-server/pytest-jupyter";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [ ];
     };
   };

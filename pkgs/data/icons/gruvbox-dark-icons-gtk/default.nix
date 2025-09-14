@@ -36,11 +36,11 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  meta = with lib; {
+  meta = {
     description = "Gruvbox icons for GTK based desktop environments";
     homepage = "https://github.com/jmattheis/gruvbox-dark-gtk";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.nomisiv ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.nomisiv ];
   };
 }

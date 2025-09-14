@@ -133,17 +133,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IDE layer for Neovim";
     homepage = "https://www.lunarvim.org/";
     changelog = "https://github.com/LunarVim/LunarVim/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       prominentretail
       lebensterben
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "lvim";
   };
 })

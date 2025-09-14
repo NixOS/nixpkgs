@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bracex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bash style brace expansion for Python";
     homepage = "https://github.com/facelessuser/bracex";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

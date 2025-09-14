@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interface components for OpenPGP";
     mainProgram = "seahorse-daemon";
     homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     # ImportError: lib/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so
     # cannot open shared object file: No such file or directory
     broken = stdenv.buildPlatform != stdenv.hostPlatform;

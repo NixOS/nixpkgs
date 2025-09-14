@@ -32,10 +32,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standard Health Checking Service for gRPC";
     homepage = "https://pypi.org/project/grpcio-health-checking/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

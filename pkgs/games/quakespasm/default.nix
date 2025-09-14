@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Engine for iD software's Quake";
     homepage = "https://quakespasm.sourceforge.net/";
     longDescription = ''
@@ -125,8 +125,8 @@ stdenv.mkDerivation rec {
       and smoother mouse input - though no CD support.
     '';
 
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ mikroskeem ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mikroskeem ];
     mainProgram = "quake";
   };
 }

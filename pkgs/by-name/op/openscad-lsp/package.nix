@@ -28,13 +28,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "LSP (Language Server Protocol) server for OpenSCAD";
     mainProgram = "openscad-lsp";
     homepage = "https://github.com/Leathong/openscad-LSP";
     changelog = "https://github.com/Leathong/openscad-LSP/releases/tag/${finalAttrs.src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       c-h-johnson
       curious
     ];

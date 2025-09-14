@@ -103,13 +103,13 @@ buildPythonPackage rec {
     install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qtile.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
     ];

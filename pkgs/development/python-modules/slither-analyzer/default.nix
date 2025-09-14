@@ -86,7 +86,7 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Static Analyzer for Solidity";
     longDescription = ''
       Slither is a Solidity static analysis framework written in Python 3. It
@@ -95,9 +95,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/trailofbits/slither";
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "slither";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       arturcygan
       fab
       hellwolf

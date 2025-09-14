@@ -38,11 +38,11 @@ buildPythonPackage rec {
   # requires checkout from mono-repo and a mock account
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-monitor-ingestion_${version}/sdk/monitor/azure-monitor-ingestion/CHANGELOG.md";
     description = "Send custom logs to Azure Monitor using the Logs Ingestion API";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/monitor/azure-monitor-ingestion";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

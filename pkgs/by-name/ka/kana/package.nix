@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = with lib; {
+  meta = {
     description = "Learn Japanese hiragana and katakana characters";
     homepage = "https://gitlab.gnome.org/fkinoshita/kana";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "kana";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

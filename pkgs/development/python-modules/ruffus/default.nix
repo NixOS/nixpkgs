@@ -47,10 +47,10 @@ buildPythonPackage rec {
     '';
   pythonImportsCheck = [ "ruffus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight Python Computational Pipeline Management";
     homepage = "http://www.ruffus.org.uk";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

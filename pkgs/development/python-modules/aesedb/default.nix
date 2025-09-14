@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aesedb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for JET databases";
     mainProgram = "antdsparse";
     homepage = "https://github.com/skelsec/aesedb";
     changelog = "https://github.com/skelsec/aesedb/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

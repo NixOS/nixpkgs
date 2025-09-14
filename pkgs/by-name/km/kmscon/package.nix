@@ -67,12 +67,12 @@ stdenv.mkDerivation {
     ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KMS/DRM based System Console";
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

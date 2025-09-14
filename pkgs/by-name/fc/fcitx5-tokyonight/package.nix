@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 theme based on Tokyo Night color";
     homepage = "https://github.com/ch3n9w/fcitx5-Tokyonight";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Guanran928 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Guanran928 ];
+    platforms = lib.platforms.all;
   };
 }

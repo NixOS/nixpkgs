@@ -221,12 +221,12 @@ stdenv.mkDerivation (
       inherit (finalAttrs.src) owner repo;
     };
     passthru.tensilelite = tensile';
-    meta = with lib; {
+    meta = {
       description = "Library that provides general matrix-matrix operations with a flexible API";
       homepage = "https://github.com/ROCm/hipBLASlt";
-      license = with licenses; [ mit ];
-      teams = [ teams.rocm ];
-      platforms = platforms.linux;
+      license = with lib.licenses; [ mit ];
+      teams = [ lib.teams.rocm ];
+      platforms = lib.platforms.linux;
     };
   }
 )

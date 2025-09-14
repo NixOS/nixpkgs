@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyannote.pipeline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tunable pipelines";
     homepage = "https://github.com/pyannote/pyannote-pipeline";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannote-pipeline";
   };

@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trailrunner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to walk paths and run things";
     homepage = "https://github.com/omnilib/trailrunner";
     changelog = "https://github.com/omnilib/trailrunner/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

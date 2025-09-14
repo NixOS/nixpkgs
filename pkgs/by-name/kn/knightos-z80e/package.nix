@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-Denable-sdl=YES" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://knightos.org/";
     description = "Z80 calculator emulator and debugger";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

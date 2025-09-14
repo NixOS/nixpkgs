@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openwrt_luci_rpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with the OpenWrt Luci RPC interface";
     longDescription = ''
       This module allows you to use the Luci RPC interface to fetch connected devices
@@ -36,7 +36,7 @@ buildPythonPackage rec {
       OpenWrt.
     '';
     homepage = "https://github.com/fbradyirl/openwrt-luci-rpc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matt-snider ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matt-snider ];
   };
 }

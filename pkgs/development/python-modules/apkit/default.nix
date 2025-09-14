@@ -28,10 +28,10 @@ buildPythonPackage {
   # This package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Audio processing toolkit";
     homepage = "https://github.com/hwp/apkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

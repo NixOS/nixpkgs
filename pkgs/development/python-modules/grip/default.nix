@@ -56,11 +56,11 @@ buildPythonPackage rec {
     py.test -xm "not assumption"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
     mainProgram = "grip";
     homepage = "https://github.com/joeyespo/grip";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

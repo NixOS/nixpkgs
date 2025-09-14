@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast C based HTML 5 parsing for python";
     homepage = "https://html5-parser.readthedocs.io";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

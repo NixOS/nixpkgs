@@ -31,11 +31,11 @@ python3.pkgs.buildPythonApplication {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Script to extract the cover of an epub book and create a thumbnail for it";
     homepage = "https://github.com/marianosimone/epub-thumbnailer";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "epub-thumbnailer";
   };
 }

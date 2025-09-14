@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hatasmota" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to help parse and construct Tasmota MQTT messages";
     homepage = "https://github.com/emontnemery/hatasmota";
     changelog = "https://github.com/emontnemery/hatasmota/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

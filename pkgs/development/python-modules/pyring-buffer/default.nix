@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyring_buffer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python ring buffer for bytes";
     homepage = "https://github.com/rhasspy/pyring-buffer";
     changelog = "https://github.com/rhasspy/pyring-buffer/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

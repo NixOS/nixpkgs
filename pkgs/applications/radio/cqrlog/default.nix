@@ -99,12 +99,12 @@ stdenv.mkDerivation rec {
              "$out/bin/.cqrlog-wrapped"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux logging program for amateur radio operators";
     mainProgram = "cqrlog";
     homepage = "https://www.cqrlog.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -19,12 +19,12 @@ stdenv.mkDerivation {
   #   https://sourceforge.net/p/libipfix/code/ci/a501612c6b8ac6f2df16b366f7a92211382bae6b/
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libipfix.sourceforge.net/";
     description = "C library that implements the IPFIX protocol defined by the IP Flow Information Export working group of the IETF";
     mainProgram = "ipfix_collector";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lewo ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lewo ];
   };
 }

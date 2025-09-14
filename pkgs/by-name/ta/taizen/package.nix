@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Curses-based mediawiki browser";
     homepage = "https://github.com/oppiliappan/taizen";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "taizen";
   };
 }

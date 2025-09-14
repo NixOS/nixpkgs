@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorpcx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transport, protocol and framing-independent async RPC client and server implementation";
     homepage = "https://github.com/kyuupichan/aiorpcX";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

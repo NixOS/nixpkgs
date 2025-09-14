@@ -69,19 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "svg-backend" (if svgSupport then svgBackend else "none"))
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${finalAttrs.version}";
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
     mainProgram = "fuzzel";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fionera
       rodrgz
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 })

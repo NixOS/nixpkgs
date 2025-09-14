@@ -22,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Loadmaster/fpattern";
     description = "Filename pattern matching library functions for DOS, Windows, and Unix";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hughobrien ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hughobrien ];
+    platforms = with lib.platforms; linux;
   };
 })

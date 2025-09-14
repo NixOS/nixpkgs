@@ -32,11 +32,11 @@ buildPythonPackage rec {
     "test_translate_remote_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bidirectional HTML-python translator";
     mainProgram = "airium";
     homepage = "https://gitlab.com/kamichal/airium";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hulr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hulr ];
   };
 }

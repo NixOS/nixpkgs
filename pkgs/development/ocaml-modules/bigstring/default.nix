@@ -27,10 +27,10 @@ buildDunePackage rec {
   # Circular dependency with bigstring-unix
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/c-cube/ocaml-bigstring";
     description = "Bigstring built on top of bigarrays, and convenient functions";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.alexfmpe ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.alexfmpe ];
   };
 }

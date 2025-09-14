@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-x61oImdXsLD/lU4hNcrQ2rjH5hAvTMEDJn4H3cVG6X4=";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Djot CLI";
     mainProgram = "jotdown";
     homepage = "https://github.com/hellux/jotdown";
     changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

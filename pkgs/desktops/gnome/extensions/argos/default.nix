@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create GNOME Shell extensions in seconds";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ andersk ];
     homepage = "https://github.com/p-e-w/argos";
   };
 }

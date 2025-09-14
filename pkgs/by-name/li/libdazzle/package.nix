@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to delight your users with fancy features";
     mainProgram = "dazzle-list-counters";
     longDescription = ''
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       enough to work for everyone.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/libdazzle";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -35,11 +35,11 @@ buildPythonApplication rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/languitar/pass-git-helper";
     description = "Git credential helper interfacing with pass, the standard unix password manager";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       hmenke
       vanzef
     ];

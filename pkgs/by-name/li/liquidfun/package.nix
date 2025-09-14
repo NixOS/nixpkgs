@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2D physics engine based on Box2D";
-    maintainers = with maintainers; [ qknight ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ qknight ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://google.github.io/liquidfun/";
   };
 }

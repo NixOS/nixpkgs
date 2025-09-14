@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snowplow_tracker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal snowplow event tracker";
     homepage = "https://github.com/dbt-labs/snowplow-python-tracker";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mausch
       tjni
     ];

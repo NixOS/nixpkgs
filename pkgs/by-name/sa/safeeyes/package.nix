@@ -77,11 +77,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = safeeyes; };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://slgobinath.github.io/SafeEyes";
     description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "safeeyes";
   };
 }

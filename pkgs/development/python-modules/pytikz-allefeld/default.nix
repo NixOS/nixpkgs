@@ -48,10 +48,10 @@ buildPythonPackage {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/allefeld/pytikz";
     description = "Python interface to TikZ";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find and optionally remove unneeded includes in C or C++ source files";
     mainProgram = "deheader";
     longDescription = ''
@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://catb.org/~esr/deheader";
     changelog = "https://gitlab.com/esr/deheader/-/blob/master/NEWS.adoc";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ kaction ];
 
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

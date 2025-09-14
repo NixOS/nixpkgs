@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${lib.getDev SDL}/include/SDL" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quick tactics game";
     homepage = "https://www.gnu.org/software/liquidwar6/";
-    maintainers = [ maintainers.raskin ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

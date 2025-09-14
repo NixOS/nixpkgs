@@ -47,14 +47,14 @@ rustPlatform.buildRustPackage rec {
     export APOLLO_CONFIG_HOME="$PWD"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for interacting with ApolloGraphQL's developer tooling, including managing self-hosted and GraphOS graphs";
     mainProgram = "rover";
     homepage = "https://www.apollographql.com/docs/rover";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.ivanbrennan
-      maintainers.aaronarinder
+      lib.maintainers.ivanbrennan
+      lib.maintainers.aaronarinder
     ];
   };
 }

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -m755 -D speedread $out/bin/speedread
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal-based open source Spritz-alike";
     longDescription = ''
       Speedread is a command line filter that shows input text as a
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
       pace than usual as the eye can stay fixed on a single place.
     '';
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.oxij ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.oxij ];
     mainProgram = "speedread";
   };
 }

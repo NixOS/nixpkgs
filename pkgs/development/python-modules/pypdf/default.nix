@@ -81,11 +81,11 @@ buildPythonPackage rec {
     "enable_socket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ javaes ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ javaes ];
   };
 }

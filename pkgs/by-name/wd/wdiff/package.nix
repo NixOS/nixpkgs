@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/wdiff/";
     description = "Comparing files on a word by word basis";
     mainProgram = "wdiff";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -39,16 +39,16 @@ stdenv.mkDerivation rec {
     )
     ++ [ "-DLIBUV_INCLUDE_DIR=${lib.getDev libuv}/include" ];
 
-  meta = with lib; {
+  meta = {
     description = "DataStax CPP cassandra driver";
     longDescription = ''
       A modern, feature-rich and highly tunable C/C++ client
       library for Apache Cassandra 2.1+ using exclusively Cassandra’s
       binary protocol and Cassandra Query Language v3.
     '';
-    license = with licenses; [ asl20 ];
-    platforms = platforms.x86_64;
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.x86_64;
     homepage = "https://docs.datastax.com/en/developer/cpp-driver/";
-    maintainers = [ maintainers.npatsakula ];
+    maintainers = [ lib.maintainers.npatsakula ];
   };
 }

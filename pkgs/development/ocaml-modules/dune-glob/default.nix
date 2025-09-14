@@ -19,10 +19,10 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (dune_3.meta) homepage;
     description = "Glob string matching language supported by dune";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -30,10 +30,10 @@ buildPythonPackage rec {
   # pypi distribution contains no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple dependency injection library";
     homepage = "https://github.com/bentoml/simple_di";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sauyon ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sauyon ];
   };
 }

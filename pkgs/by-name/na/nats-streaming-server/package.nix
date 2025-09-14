@@ -20,10 +20,10 @@ buildGoModule rec {
   # tests fail and ask to `go install`
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "NATS Streaming System Server";
-    license = licenses.asl20;
-    maintainers = [ maintainers.swdunlop ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.swdunlop ];
     homepage = "https://nats.io/";
     mainProgram = "nats-streaming-server";
   };

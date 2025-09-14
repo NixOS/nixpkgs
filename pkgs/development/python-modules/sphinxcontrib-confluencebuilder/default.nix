@@ -39,12 +39,12 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Confluence builder for sphinx";
     homepage = "https://github.com/sphinx-contrib/confluencebuilder";
     changelog = "https://github.com/sphinx-contrib/confluencebuilder/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd1;
-    maintainers = with maintainers; [ graysonhead ];
+    license = lib.licenses.bsd1;
+    maintainers = with lib.maintainers; [ graysonhead ];
     mainProgram = "sphinx-build-confluence";
   };
 }

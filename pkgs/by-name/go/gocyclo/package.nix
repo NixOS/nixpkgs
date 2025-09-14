@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Calculate cyclomatic complexities of functions in Go source code";
     mainProgram = "gocyclo";
     homepage = "https://github.com/fzipp/gocyclo";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

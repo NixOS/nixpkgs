@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyjuicenet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read and control Juicenet/Juicepoint/Juicebox based EVSE devices";
     homepage = "https://github.com/jesserockz/python-juicenet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

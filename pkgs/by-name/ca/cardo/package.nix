@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Large Unicode font specifically designed for the needs of classicists, Biblical scholars, medievalists, and linguists";
     longDescription = ''
       Cardo is a large Unicode font specifically designed for the needs of
@@ -36,8 +36,8 @@ stdenvNoCC.mkDerivation {
       a variety of punctuation and space characters.
     '';
     homepage = "http://scholarsfonts.net/cardofnt.html";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ kmein ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

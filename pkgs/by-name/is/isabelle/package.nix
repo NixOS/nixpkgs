@@ -228,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generic proof assistant";
 
     longDescription = ''
@@ -237,16 +237,16 @@ stdenv.mkDerivation (finalAttrs: {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # source bundles binary dependencies
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [
-      maintainers.jwiegley
-      maintainers.jvanbruegge
+      lib.maintainers.jwiegley
+      lib.maintainers.jvanbruegge
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
   passthru.withComponents =

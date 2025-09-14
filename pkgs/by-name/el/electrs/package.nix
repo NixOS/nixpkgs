@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Efficient re-implementation of Electrum Server in Rust";
     homepage = "https://github.com/romanz/electrs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "electrs";
   };
 })

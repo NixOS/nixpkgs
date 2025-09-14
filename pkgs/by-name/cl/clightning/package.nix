@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-Wno-error=gnu-folding-constant";
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
       c-lightning is a standard compliant implementation of the Lightning
@@ -105,11 +105,11 @@ stdenv.mkDerivation rec {
       parties for any amount.
     '';
     homepage = "https://github.com/ElementsProject/lightning";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       prusnak
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

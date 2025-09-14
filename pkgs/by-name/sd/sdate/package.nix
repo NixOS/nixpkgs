@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.df7cb.de/projects/sdate";
     description = "Eternal september version of the date program";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ edef ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ edef ];
+    platforms = lib.platforms.all;
     mainProgram = "sdate";
   };
 }

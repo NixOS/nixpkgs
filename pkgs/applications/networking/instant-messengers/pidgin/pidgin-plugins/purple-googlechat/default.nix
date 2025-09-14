@@ -31,11 +31,11 @@ stdenv.mkDerivation {
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/EionRobb/purple-googlechat";
     description = "Native Google Chat support for pidgin";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

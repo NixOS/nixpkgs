@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx blockdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

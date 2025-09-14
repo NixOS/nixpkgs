@@ -75,15 +75,15 @@ buildPythonPackage rec {
     rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       natsukium
       yrashk
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

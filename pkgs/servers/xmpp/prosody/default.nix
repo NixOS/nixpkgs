@@ -111,13 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) prosody prosody-mysql; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source XMPP application server written in Lua";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://prosody.im";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "prosody";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       toastal
       mirror230469
     ];

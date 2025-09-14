@@ -19,14 +19,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py3nvml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 Bindings for the NVIDIA Management Library";
     mainProgram = "py3smi";
     homepage = "https://pypi.org/project/py3nvml/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       bsd2
     ];
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

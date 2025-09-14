@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = bundlerUpdateScript "pws";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line password safe";
     homepage = "https://github.com/janlelis/pws";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       swistak35
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "pws";
   };
 }

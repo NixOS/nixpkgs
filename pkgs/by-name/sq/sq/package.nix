@@ -47,12 +47,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for data";
     mainProgram = "sq";
     homepage = "https://sq.io/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

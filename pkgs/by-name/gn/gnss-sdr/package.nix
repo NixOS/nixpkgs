@@ -114,10 +114,10 @@ gnuradio.pkgs.mkDerivation rec {
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

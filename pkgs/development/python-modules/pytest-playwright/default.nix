@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_playwright" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to write end-to-end browser tests with Playwright";
     homepage = "https://github.com/microsoft/playwright-pytest";
     changelog = "https://github.com/microsoft/playwright-pytest/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

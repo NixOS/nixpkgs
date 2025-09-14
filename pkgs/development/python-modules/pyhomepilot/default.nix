@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomepilot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with the Rademacher HomePilot API";
     homepage = "https://github.com/nico0302/pyhomepilot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

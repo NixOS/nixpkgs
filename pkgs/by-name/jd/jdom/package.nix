@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java-based solution for accessing, manipulating, and outputting XML data from Java code";
     homepage = "http://www.jdom.org";
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsdOriginal;
   };
 }

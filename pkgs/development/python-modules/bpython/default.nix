@@ -63,12 +63,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bpython" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       flokli
       dotlambda
     ];

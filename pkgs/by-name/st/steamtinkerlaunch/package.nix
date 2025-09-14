@@ -106,12 +106,12 @@ stdenvNoCC.mkDerivation {
       ln -sfn $out/bin/steamtinkerlaunch $steamcompattool/
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux wrapper tool for use with the Steam client for custom launch options and 3rd party programs";
     mainProgram = "steamtinkerlaunch";
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       urandom
       surfaceflinger
     ];

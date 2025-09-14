@@ -44,10 +44,10 @@ buildPythonApplication rec {
   # Needs internet to run tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Analyze problems of competitive programming and automatically generate boilerplate";
     homepage = "https://github.com/online-judge-tools/template-generator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sei40kr ];
   };
 }

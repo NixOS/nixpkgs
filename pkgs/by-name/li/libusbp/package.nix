@@ -32,15 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pololu/libusbp";
     changelog = "https://github.com/pololu/libusbp/blob/${finalAttrs.src.rev}/README.md#version-history";
     description = "Pololu USB Library (also known as libusbp)";
     longDescription = ''
       libusbp is a cross-platform C library for accessing USB devices
     '';
-    platforms = platforms.all;
-    license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ bzizou ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = with lib.maintainers; [ bzizou ];
   };
 })

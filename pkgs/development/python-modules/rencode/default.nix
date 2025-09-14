@@ -47,10 +47,10 @@ buildPythonPackage rec {
     rm -r rencode
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aresch/rencode";
     description = "Fast (basic) object serialization similar to bencode";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

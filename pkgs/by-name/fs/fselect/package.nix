@@ -27,14 +27,14 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/fselect.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Find files with SQL-like queries";
     homepage = "https://github.com/jhspetersson/fselect";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "fselect";
   };
 }

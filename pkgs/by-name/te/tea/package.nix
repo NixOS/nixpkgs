@@ -19,11 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-mKCsBPBWs3+61em53cEB0shTLXgUg4TivJRogy1tYXw=";
 
-  meta = with lib; {
+  meta = {
     description = "Gitea official CLI client";
     homepage = "https://gitea.com/gitea/tea";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       j4m3s
       techknowlogick
     ];

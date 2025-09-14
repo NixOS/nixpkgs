@@ -31,12 +31,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Copy/paste anything over the network";
     homepage = "https://github.com/jedisct1/piknik";
     changelog = "https://github.com/jedisct1/piknik/blob/${src.rev}/ChangeLog";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "piknik";
   };
 }

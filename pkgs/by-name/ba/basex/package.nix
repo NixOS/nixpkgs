@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XML database and XPath/XQuery processor";
     longDescription = ''
       BaseX is a very fast and light-weight, yet powerful XML database and
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
       modes, BaseX offers a client/server architecture.
     '';
     homepage = "https://basex.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

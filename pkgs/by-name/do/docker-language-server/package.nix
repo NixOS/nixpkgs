@@ -37,11 +37,11 @@ buildGoModule rec {
     "-X 'github.com/docker/docker-language-server/internal/pkg/cli/metadata.Version=${version}'"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/docker/docker-language-server";
     description = "Language server for providing language features for file types in the Docker ecosystem (Dockerfiles, Compose files, and Bake files)";
     mainProgram = "docker-language-server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ baongoc124 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ baongoc124 ];
   };
 }

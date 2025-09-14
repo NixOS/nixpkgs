@@ -34,15 +34,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for the analysis of Python import statements";
     homepage = "https://github.com/mgedmin/findimports";
     changelog = "https://github.com/mgedmin/findimports/blob/${version}/CHANGES.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only # or
       gpl3Only
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "findimports";
   };
 }

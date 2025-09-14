@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # but the format doesn't accept -isystem directives
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python package for easy C++ declarations navigation";
     homepage = "https://github.com/gccxml/pygccxml";
     changelog = "https://github.com/CastXML/pygccxml/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.boost;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "catfish-"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/apps/catfish/start";
     description = "Handy file search tool";
     mainProgram = "catfish";
@@ -69,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       You can configure it to your needs by using several command line
       options.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.xfce ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 })

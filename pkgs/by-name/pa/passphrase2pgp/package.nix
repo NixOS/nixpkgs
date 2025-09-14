@@ -33,11 +33,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Predictable, passphrase-based PGP key generator";
     mainProgram = "passphrase2pgp";
     homepage = "https://github.com/skeeto/passphrase2pgp";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

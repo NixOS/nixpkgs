@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for APIs defined in protocol buffers";
     homepage = "https://github.com/googleapis/api-linter/";
     changelog = "https://github.com/googleapis/api-linter/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "api-linter";
   };
 }

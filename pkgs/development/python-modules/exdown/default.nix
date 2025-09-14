@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exdown" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract code blocks from markdown";
     homepage = "https://github.com/nschloe/exdown";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

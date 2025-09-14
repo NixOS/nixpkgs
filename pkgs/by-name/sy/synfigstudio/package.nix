@@ -145,11 +145,11 @@ stdenv.mkDerivation {
     inherit ETL synfig;
   };
 
-  meta = with lib; {
+  meta = {
     description = "2D animation program";
     homepage = "https://www.synfig.org";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "varint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Basic varint implementation in python";
     homepage = "https://github.com/fmoo/python-varint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

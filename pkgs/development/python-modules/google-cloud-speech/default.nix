@@ -53,11 +53,11 @@ buildPythonPackage rec {
     "google.cloud.speech_v1p1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Speech API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-speech";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-speech-v${version}/packages/google-cloud-speech/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

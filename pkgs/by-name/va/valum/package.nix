@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     fcgi
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/valum-framework/valum";
     description = "Web micro-framework written in Vala";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     # Likely broken by GLib 2.74 switch to PCRE 2.
     # https://github.com/valum-framework/valum/issues/238

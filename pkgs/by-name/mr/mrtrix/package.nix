@@ -126,12 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
         done
       '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
-    license = licenses.mpl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl20;
   };
 })

@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "http_sfv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse and serialise HTTP structured field values";
     homepage = "https://github.com/mnot/http_sfv";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

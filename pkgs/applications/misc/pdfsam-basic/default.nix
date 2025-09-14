@@ -50,16 +50,16 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/torakiki/pdfsam";
     description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
     mainProgram = "pdfsam-basic";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with lib.maintainers; [ _1000101 ];
   };
 }

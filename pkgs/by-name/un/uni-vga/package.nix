@@ -65,10 +65,10 @@ stdenv.mkDerivation {
     "bdf"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unicode VGA font";
-    maintainers = [ maintainers.ftrvxmtrx ];
+    maintainers = [ lib.maintainers.ftrvxmtrx ];
     homepage = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

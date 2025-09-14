@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BDF to PSF converter";
     homepage = "https://packages.debian.org/sid/bdf2psf";
     longDescription = ''
       Font converter to generate console fonts from BDF source fonts
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.all;
     mainProgram = "bdf2psf";
   };
 }

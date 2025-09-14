@@ -101,19 +101,19 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf */.libs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
     changelog = "https://github.com/sleuthkit/sleuthkit/blob/${finalAttrs.src.rev}/NEWS.txt";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       gfrascadorio
     ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # dependencies
     ];
-    license = licenses.ipl10;
+    license = lib.licenses.ipl10;
   };
 })

@@ -59,12 +59,12 @@ python3.pkgs.buildPythonApplication rec {
     "cfripper"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for analysing CloudFormation templates";
     homepage = "https://github.com/Skyscanner/cfripper";
     changelog = "https://github.com/Skyscanner/cfripper/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cfripper";
   };
 }

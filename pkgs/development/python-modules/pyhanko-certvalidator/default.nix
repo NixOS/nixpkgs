@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhanko_certvalidator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/certvalidator";
     changelog = "https://github.com/MatthiasValvekens/certvalidator/blob/v${version}/changelog.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

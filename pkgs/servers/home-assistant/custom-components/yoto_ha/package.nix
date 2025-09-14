@@ -21,11 +21,11 @@ buildHomeAssistantComponent rec {
     yoto-api
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cdnninja/yoto_ha/releases/tag/${src.tag}";
     description = "Home Assistant Integration for Yoto";
     homepage = "https://github.com/cdnninja/yoto_ha";
-    maintainers = with maintainers; [ seberm ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ seberm ];
+    license = lib.licenses.mit;
   };
 }

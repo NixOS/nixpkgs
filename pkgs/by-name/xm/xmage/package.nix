@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/xmage
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Magic Another Game Engine";
     mainProgram = "xmage";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       abueide
     ];

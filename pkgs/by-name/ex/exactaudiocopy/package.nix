@@ -84,12 +84,12 @@ symlinkJoin {
     desktopItem
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Precise CD audio grabber for creating perfect quality rips using CD and DVD drives";
     homepage = "https://www.exactaudiocopy.de/";
     changelog = "https://www.exactaudiocopy.de/en/index.php/resources/whats-new/whats-new/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.brendanreis ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.brendanreis ];
     platforms = wine.meta.platforms;
   };
 }

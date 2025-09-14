@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python parser for the Coffeescript Object Notation (CSON)";
     homepage = "https://github.com/avakar/pycson";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ xworld21 ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ xworld21 ];
   };
 }

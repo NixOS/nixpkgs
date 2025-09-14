@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libvolk.org/";
     description = "Vector Optimized Library of Kernels";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.all;
   };
 })

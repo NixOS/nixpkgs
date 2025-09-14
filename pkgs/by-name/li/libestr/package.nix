@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0910ifzcs8kpd3srrr4fvbacgh2zrc6yn7i4rwfj6jpzhlkjnqs6";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libestr.adiscon.com/";
     description = "Some essentials for string handling";
-    license = licenses.lgpl21;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
   };
 }

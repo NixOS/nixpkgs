@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SRI-CSL/libpoly";
     description = "C library for manipulating polynomials";
-    license = licenses.lgpl3;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
   };
 }

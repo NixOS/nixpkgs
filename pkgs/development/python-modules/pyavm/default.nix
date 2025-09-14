@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyavm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple pure-python AVM meta-data handling";
     homepage = "https://astrofrog.github.io/pyavm/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

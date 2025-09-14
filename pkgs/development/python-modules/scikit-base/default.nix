@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skbase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Base classes for creating scikit-learn-like parametric objects, and tools for working with them";
     homepage = "https://github.com/sktime/skbase";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kirillrdy ];
   };
 }

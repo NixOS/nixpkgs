@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
       -o $out/share/openEMS/matlab/h5readatt_octave.oct
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Electromagnetic Field Solver";
     homepage = "https://wiki.openems.de/index.php/Main_Page.html";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
 }

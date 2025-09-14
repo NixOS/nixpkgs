@@ -96,11 +96,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Various utility functions and datatypes for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

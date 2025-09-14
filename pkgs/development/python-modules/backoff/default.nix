@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backoff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Function decoration for backoff and retry";
     homepage = "https://github.com/litl/backoff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }

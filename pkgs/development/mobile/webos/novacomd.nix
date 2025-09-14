@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) novacomd; };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for communicating with WebOS devices";
     mainProgram = "novacomd";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

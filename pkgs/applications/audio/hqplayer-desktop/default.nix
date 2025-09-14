@@ -111,12 +111,12 @@ stdenv.mkDerivation {
     patchelf --replace-needed libomp.so.5 libomp.so $out/bin/.hqplayer5*-wrapped
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.signalyst.com";
     description = "High-end upsampling multichannel software HD-audio player";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

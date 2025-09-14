@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Examine the contents of the IE's cookie files for forensic purposes";
     mainProgram = "galleta";
     homepage = "https://sourceforge.net/projects/odessa/files/Galleta";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 })

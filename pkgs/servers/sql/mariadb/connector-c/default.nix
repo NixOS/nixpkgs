@@ -84,10 +84,10 @@ stdenv.mkDerivation {
     install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client library that can be used to connect to MySQL or MariaDB";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ globin ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ globin ];
+    platforms = lib.platforms.all;
   };
 }

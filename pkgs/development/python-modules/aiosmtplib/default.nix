@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosmtplib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
     changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "tests/test_http.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Neoteroi/mkdocs-plugins";
     description = "Plugins for MkDocs";
     changelog = "https://github.com/Neoteroi/mkdocs-plugins/releases/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];

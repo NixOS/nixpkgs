@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Disk usage utility for Mac OS X";
     homepage = "https://www.derlien.com";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [ emilytrau ];
     platforms = [ "x86_64-darwin" ];
   };
 })

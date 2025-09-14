@@ -24,13 +24,13 @@ stdenvNoCC.mkDerivation rec {
     touch $out/lib/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Development headers and linker scripts for TI MSP430 microcontrollers
     '';
     homepage = "https://www.ti.com/tool/msp430-gcc-opensource";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "msp430-none" ];
-    maintainers = with maintainers; [ aerialx ];
+    maintainers = with lib.maintainers; [ aerialx ];
   };
 }

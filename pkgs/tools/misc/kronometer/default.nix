@@ -18,11 +18,11 @@ mkDerivation rec {
     sha256 = "sha256-dbnhom8PRo0Bay3DzS2P0xQSrJaMXD51UadQL3z6xHY=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/utilities/kronometer/";
     description = "Stopwatch application";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "kronometer";
   };
   nativeBuildInputs = [

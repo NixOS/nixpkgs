@@ -57,11 +57,11 @@ buildPythonPackage rec {
   # Segmentation fault
   # pythonImportsCheck = [ "superqt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Missing widgets and components for Qt-python (napari/superqt)";
     homepage = "https://github.com/napari/superqt";
     changelog = "https://github.com/pyapp-kit/superqt/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

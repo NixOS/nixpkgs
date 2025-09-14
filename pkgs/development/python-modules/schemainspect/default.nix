@@ -108,10 +108,10 @@ buildPythonPackage {
     rm -r ./source/deploy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Schema inspection for PostgreSQL, and potentially others";
     homepage = "https://github.com/djrobstep/schemainspect";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ bpeetz ];
+    license = with lib.licenses; [ unlicense ];
+    maintainers = with lib.maintainers; [ bpeetz ];
   };
 }

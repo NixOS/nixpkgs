@@ -122,12 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
     serverBin = "valkey-server";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://valkey.io/";
     description = "High-performance data structure server that primarily serves key/value workloads";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

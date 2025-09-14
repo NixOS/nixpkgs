@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analyze Windows Recycle Bin INFO2 file";
     mainProgram = "rifiuti";
     homepage = "https://sourceforge.net/projects/odessa/files/Rifiuti";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 })

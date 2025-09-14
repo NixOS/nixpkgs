@@ -37,11 +37,11 @@ buildGoModule rec {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "NixOS host manager written in Golang";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dbcdk/morph";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       adamt
       johanot
     ];

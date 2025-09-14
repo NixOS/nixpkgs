@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shamir_mnemonic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of SLIP-0039";
     mainProgram = "shamir";
     homepage = "https://github.com/trezor/python-shamir-mnemonic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

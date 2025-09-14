@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     ./c++17.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://htmlcxx.sourceforge.net/";
     description = "Simple non-validating css1 and html parser for C++";
     mainProgram = "htmlcxx";
-    license = licenses.lgpl2;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.all;
   };
 }

@@ -31,11 +31,11 @@ buildGoModule rec {
     package = clickhouse-backup;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for easy ClickHouse backup and restore using object storage for backup files";
     mainProgram = "clickhouse-backup";
     homepage = "https://github.com/Altinity/clickhouse-backup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devusb ];
   };
 }

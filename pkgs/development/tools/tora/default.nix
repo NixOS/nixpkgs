@@ -74,11 +74,11 @@ mkDerivation {
     ''--prefix PATH : ${lib.getBin graphviz}/bin''
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tora SQL tool";
     mainProgram = "tora";
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
   };
 }

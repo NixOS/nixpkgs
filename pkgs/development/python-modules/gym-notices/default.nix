@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gym_notices" ];
 
-  meta = with lib; {
+  meta = {
     description = "Notices for Python package Gym";
     homepage = "https://github.com/Farama-Foundation/gym-notices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ billhuang ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ billhuang ];
   };
 }

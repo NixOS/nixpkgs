@@ -28,11 +28,11 @@ buildDunePackage {
     smoke-test = nixosTests.atd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Syntax for cross-language type definitions";
     homepage = "https://github.com/mjambon/atd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aij ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aij ];
     mainProgram = "atdcat";
   };
 }

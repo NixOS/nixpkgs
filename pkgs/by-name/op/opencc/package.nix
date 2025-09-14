@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "ver."; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BYVoid/OpenCC";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Project for conversion between Traditional and Simplified Chinese";
     longDescription = ''
       Open Chinese Convert (OpenCC) is an opensource project for conversion between
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       phrase-level conversion, variant conversion and regional idioms among Mainland China,
       Taiwan and Hong kong.
     '';
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ sifmelcara ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

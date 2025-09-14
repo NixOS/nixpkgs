@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     eglexternalplatform
   ];
 
-  meta = with lib; {
+  meta = {
     description = "EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hedning ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hedning ];
   };
 }

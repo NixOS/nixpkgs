@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dict2xml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to convert a Python dictionary into an XML string";
     homepage = "https://github.com/delfick/python-dict2xml";
     changelog = "https://github.com/delfick/python-dict2xml/releases/tag/release-${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ johnazoidberg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johnazoidberg ];
   };
 }

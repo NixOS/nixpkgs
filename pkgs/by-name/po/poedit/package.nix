@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform gettext catalogs (.po files) editor";
     mainProgram = "poedit";
     homepage = "https://www.poedit.net/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dasj19 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dasj19 ];
     # configure: error: GTK+ build of wxWidgets is required
     broken = stdenv.hostPlatform.isDarwin;
   };

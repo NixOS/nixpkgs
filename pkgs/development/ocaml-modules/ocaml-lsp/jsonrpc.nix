@@ -104,10 +104,10 @@ buildDunePackage rec {
         result
       ];
 
-  meta = with lib; {
+  meta = {
     description = "Jsonrpc protocol implementation in OCaml";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

@@ -21,11 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Louvain Community Detection Library";
     homepage = "https://github.com/meelgroup/louvain-community";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ t4ccer ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ t4ccer ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -71,11 +71,11 @@ buildPythonPackage rec {
     "google.cloud.firestore_admin_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Firestore API client library";
     homepage = "https://github.com/googleapis/python-firestore";
     changelog = "https://github.com/googleapis/python-firestore/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

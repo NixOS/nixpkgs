@@ -75,12 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-quality network audio streaming";
     homepage = "https://sonobus.net/";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ PowerUser64 ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ PowerUser64 ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sonobus";
   };

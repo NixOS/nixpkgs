@@ -25,11 +25,11 @@ buildLua {
   nativeBuildInputs = [ luaPackages.moonscript ];
   scriptPath = "build/webm.lua";
 
-  meta = with lib; {
+  meta = {
     description = "Simple WebM maker for mpv, with no external dependencies";
     homepage = "https://github.com/ekisu/mpv-webm";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

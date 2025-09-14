@@ -18,10 +18,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";
 
-  meta = with lib; {
+  meta = {
     description = "Set of utilities for checking Go sources";
     homepage = "https://gitlab.com/opennota/check";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

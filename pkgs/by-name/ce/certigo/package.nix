@@ -17,10 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-hBuR6a0gBhuYICbuiHxJdbDr4hLF4mQvIcMr5FHfOu8=";
 
-  meta = with lib; {
+  meta = {
     description = "Utility to examine and validate certificates in a variety of formats";
     homepage = "https://github.com/square/certigo";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "certigo";
   };

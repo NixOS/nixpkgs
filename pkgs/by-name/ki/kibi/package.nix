@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/kibi --prefix XDG_DATA_DIRS : "$out/share"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Text editor in ≤1024 lines of code, written in Rust";
     homepage = "https://github.com/ilai-deutel/kibi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ robertodr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ robertodr ];
     mainProgram = "kibi";
   };
 }

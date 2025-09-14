@@ -31,15 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.intel.com/";
     changelog = "https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/${finalAttrs.src.rev}";
     description = "Microcode for Intel processors";
-    license = licenses.unfreeRedistributableFirmware;
+    license = lib.licenses.unfreeRedistributableFirmware;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ felixsinger ];
+    maintainers = with lib.maintainers; [ felixsinger ];
   };
 })

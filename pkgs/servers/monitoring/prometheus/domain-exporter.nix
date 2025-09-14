@@ -22,12 +22,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) domain; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/caarlos0/domain_exporter";
     description = "Exports the expiration time of your domains as prometheus metrics";
     mainProgram = "domain_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mmilata
       peterhoeg
       caarlos0

@@ -25,11 +25,11 @@ buildPythonPackage rec {
     sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.terminal-notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Wrapper for Mac OS 10.8 Notification Center";
     homepage = "https://pypi.python.org/pypi/pync";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

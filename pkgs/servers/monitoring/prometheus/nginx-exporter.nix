@@ -33,12 +33,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 
-  meta = with lib; {
+  meta = {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
     mainProgram = "nginx-prometheus-exporter";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

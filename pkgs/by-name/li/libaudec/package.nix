@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and resampling audio files";
     homepage = "https://www.zrythm.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "audec";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

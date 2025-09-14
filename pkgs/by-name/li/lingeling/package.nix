@@ -49,11 +49,11 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast SAT solver";
     homepage = "http://fmv.jku.at/lingeling/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ urdfdom-headers ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";
     homepage = "https://github.com/ros/urdfdom";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.all;
   };
 }

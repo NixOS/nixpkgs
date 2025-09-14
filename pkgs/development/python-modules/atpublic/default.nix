@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "public" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.com/warsaw/public/-/blob/${version}/docs/NEWS.rst";
     description = "Python decorator and function which populates a module's __all__ and globals";
     homepage = "https://public.readthedocs.io/";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       This is a very simple decorator and function which populates a module's
       __all__ and optionally the module globals.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

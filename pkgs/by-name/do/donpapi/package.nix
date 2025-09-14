@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "donpapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for dumping DPAPI credentials remotely";
     homepage = "https://github.com/login-securite/DonPAPI";
     changelog = "https://github.com/login-securite/DonPAPI/releases/tag/V${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "donpapi";
     broken = stdenv.hostPlatform.isDarwin;
   };

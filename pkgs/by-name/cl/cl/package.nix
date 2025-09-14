@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     cp -ruv c_src doc ebin include priv src $DIR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tonyrog/cl";
     description = "OpenCL binding for Erlang";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

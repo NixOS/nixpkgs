@@ -113,12 +113,12 @@ buildPythonPackage rec {
     command = "${rasterio}/bin/rio --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python package to read and write geospatial raster data";
     mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

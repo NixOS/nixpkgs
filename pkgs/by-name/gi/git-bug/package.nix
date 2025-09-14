@@ -42,11 +42,11 @@ buildGoModule rec {
     installManPage doc/man/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed bug tracker embedded in Git";
     homepage = "https://github.com/git-bug/git-bug";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       royneary
       DeeUnderscore
       sudoforge

@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyannote.core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced data structures for handling temporal segments with attached labels";
     homepage = "https://github.com/pyannote/pyannote-core";
     changelog = "https://github.com/pyannote/pyannote-core/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

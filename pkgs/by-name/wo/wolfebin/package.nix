@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     install -m 755 wolfebin_server.py $out/bin/wolfebin_server
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thejoshwolfe/wolfebin";
     description = "Quick and easy file sharing";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andrewrk ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andrewrk ];
+    platforms = lib.platforms.all;
   };
 }

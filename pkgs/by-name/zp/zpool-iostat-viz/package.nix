@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication {
     installManPage zpool-iostat-viz.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "\"zpool iostats\" for humans; find the slow parts of your ZFS pool";
     homepage = "https://github.com/chadmiller/zpool-iostat-viz";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ julm ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ julm ];
     mainProgram = "zpool-iostat-viz";
   };
 }

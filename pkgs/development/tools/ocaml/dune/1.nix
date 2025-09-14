@@ -36,11 +36,11 @@ else
     dontAddStaticConfigureFlags = true;
     configurePlatforms = [ ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://dune.build/";
       description = "Composable build system";
-      maintainers = [ maintainers.vbgl ];
-      license = licenses.mit;
+      maintainers = [ lib.maintainers.vbgl ];
+      license = lib.licenses.mit;
       inherit (ocaml.meta) platforms;
     };
   }

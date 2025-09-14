@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     xorg.libXt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "X Window System logo display demo";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xlogo";
-    maintainers = with maintainers; [ raboof ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "xlogo";
   };
 }

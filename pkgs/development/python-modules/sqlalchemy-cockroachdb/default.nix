@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_cockroachdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "CockroachDB dialect for SQLAlchemy";
     homepage = "https://github.com/cockroachdb/sqlalchemy-cockroachdb/tree/master/sqlalchemy_cockroachdb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pinpox ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pinpox ];
   };
 }

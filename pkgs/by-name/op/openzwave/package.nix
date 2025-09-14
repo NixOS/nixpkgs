@@ -56,11 +56,11 @@ stdenv.mkDerivation {
       --replace "-Werror" "-Werror -Wno-format"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
     homepage = "http://www.openzwave.net/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

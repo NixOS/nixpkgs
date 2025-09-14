@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Libphonenumber command-line wrapper";
     mainProgram = "pn";
     homepage = "https://github.com/Orange-OpenSource/pn";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

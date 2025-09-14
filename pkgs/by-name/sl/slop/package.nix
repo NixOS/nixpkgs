@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     libSM
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Queries a selection from the user and prints to stdout";
     platforms = lib.platforms.linux;
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "slop";
   };

@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
     homepage = "http://xpisar.wz.cz/libisds/";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.mmahut ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.linux;
   };
 }

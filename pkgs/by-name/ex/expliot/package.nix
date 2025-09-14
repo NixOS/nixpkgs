@@ -71,7 +71,7 @@ buildPythonApplication rec {
     "expliot"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IoT security testing and exploitation framework";
     mainProgram = "expliot";
     longDescription = ''
@@ -83,7 +83,7 @@ buildPythonApplication rec {
       purpose of the framework i.e. IoT exploitation.
     '';
     homepage = "https://expliot.readthedocs.io/";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

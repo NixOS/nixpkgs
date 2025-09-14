@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     install -D -m755 $src/git-fire $out/bin/git-fire
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Push ALL changes in a git repository
     '';
@@ -27,9 +27,9 @@ stdenv.mkDerivation {
       In the event of an emergency (fire, etc.), automatically commit all changes/files in a repository, pushing to all known remotes all commits and stashes.
     '';
     homepage = "https://github.com/qw3rtman/git-fire";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ swflint ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ swflint ];
     mainProgram = "git-fire";
   };
 }

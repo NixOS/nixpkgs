@@ -46,11 +46,11 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
     homepage = "https://github.com/anthwlock/untrunc";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

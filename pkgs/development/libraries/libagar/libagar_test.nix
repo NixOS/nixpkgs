@@ -38,13 +38,13 @@ stdenv.mkDerivation {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Tests for libagar";
     mainProgram = "agartest";
     homepage = "http://libagar.org/index.html";
-    license = with licenses; bsd3;
-    maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
+    license = with lib.licenses; bsd3;
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = with lib.platforms; linux;
   };
 }

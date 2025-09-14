@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) bpf;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
     description = "Shows, manipulates, and pretty-prints debugging information in DWARF, CTF, and BTF formats";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
 
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bosu
       martinetd
     ];

@@ -32,12 +32,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_podcast" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tkem/mopidy-podcast";
     description = "Mopidy extension for browsing and playing podcasts";
-    license = licenses.asl20;
-    maintainers = [
-      maintainers.daneads
-    ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.daneads ];
   };
 }

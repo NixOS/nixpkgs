@@ -36,12 +36,12 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions";
     homepage = "https://github.com/facebook/ktfmt";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ktfmt";
-    maintainers = with maintainers; [ ghostbuster91 ];
+    maintainers = with lib.maintainers; [ ghostbuster91 ];
     inherit (jre_headless.meta) platforms;
   };
 }

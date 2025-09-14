@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-CURFy92K4aNF9xC8ik6RDadRAvlw8p3Xc+gWE2un6cc=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/piqoni/matcha";
     description = "Daily digest generator from a list of RSS feeds";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "matcha";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

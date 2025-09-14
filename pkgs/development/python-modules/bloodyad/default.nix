@@ -65,11 +65,11 @@ buildPythonPackage rec {
     "test_certificate_authentications"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
     changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

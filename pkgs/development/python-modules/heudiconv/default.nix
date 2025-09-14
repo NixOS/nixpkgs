@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "test_bvals_are_zero"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible DICOM converter for organizing imaging data";
     homepage = "https://heudiconv.readthedocs.io";
     changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

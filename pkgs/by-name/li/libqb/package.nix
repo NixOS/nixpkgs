@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     sed -i '/# --enable-new-dtags:/,/--enable-new-dtags is required/ d' configure.ac
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clusterlabs/libqb";
     description = "Library providing high performance logging, tracing, ipc, and poll";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -62,11 +62,11 @@ stdenvNoCC.mkDerivation rec {
     tests.moonraker = nixosTests.moonraker;
   };
 
-  meta = with lib; {
+  meta = {
     description = "API web server for Klipper";
     homepage = "https://github.com/Arksine/moonraker";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
     mainProgram = "moonraker";
   };
 }

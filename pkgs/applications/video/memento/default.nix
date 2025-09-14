@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${yt-dlp}/bin" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mpv-based video player for studying Japanese";
     homepage = "https://ripose-jp.github.io/Memento/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.linux;
     mainProgram = "memento";
   };
 })

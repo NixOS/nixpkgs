@@ -59,10 +59,10 @@ buildPythonPackage rec {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster tokenizer for the json-stream Python library";
     homepage = "https://github.com/smheidrich/py-json-stream-rs-tokenizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winter ];
   };
 }

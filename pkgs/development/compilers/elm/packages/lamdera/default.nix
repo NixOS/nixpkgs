@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     install -m755 -D $src $out/bin/lamdera
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lamdera.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     description = "Delightful platform for full-stack web apps";
     platforms = [
       "aarch64-linux"
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [ Zimmi48 ];
+    maintainers = with lib.maintainers; [ Zimmi48 ];
   };
 }

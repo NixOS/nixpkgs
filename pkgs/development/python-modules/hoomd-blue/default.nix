@@ -56,10 +56,10 @@ buildPythonPackage rec {
   doCheck = false;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://glotzerlab.engin.umich.edu/hoomd-blue/";
     description = "HOOMD-blue is a general-purpose particle simulation toolkit";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
     # Has compilation errors since some dependencies got updated, will probably

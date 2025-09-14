@@ -27,10 +27,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fleep" ];
 
-  meta = with lib; {
+  meta = {
     description = "File format determination library";
     homepage = "https://github.com/floyernick/fleep-py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-nfSJ9RkzFAWlxlfoUKk8ZmIXDJXoSyHCGgRgMy9FDkw=";
   cargoDepsName = pname;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to select active boot partition on ARM Macs";
     homepage = "https://crates.io/crates/asahi-bless";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukaslihotzki ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukaslihotzki ];
     mainProgram = "asahi-bless";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

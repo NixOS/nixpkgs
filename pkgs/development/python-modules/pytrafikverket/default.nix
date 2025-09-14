@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytrafikverket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to get data from the Swedish Transport Administration (Trafikverket) API";
     homepage = "https://github.com/gjohansson-ST/pytrafikverket";
     changelog = "https://github.com/gjohansson-ST/pytrafikverket/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

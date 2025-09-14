@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
   };
 
-  meta = with lib; {
+  meta = {
     description = "File open routines to safely open a file when in the presence of an attack";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.all;
     homepage = "https://research.cs.wisc.edu/mist/safefile/";
   };
 }

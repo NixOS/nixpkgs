@@ -153,12 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package and build manager for D programs and libraries";
     homepage = "https://code.dlang.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "dub";
-    maintainers = with maintainers; [ jtbx ];
+    maintainers = with lib.maintainers; [ jtbx ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

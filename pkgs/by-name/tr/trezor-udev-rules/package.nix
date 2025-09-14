@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) trezord; };
 
-  meta = with lib; {
+  meta = {
     description = "Udev rules for Trezor";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/common/udev";
   };
 }

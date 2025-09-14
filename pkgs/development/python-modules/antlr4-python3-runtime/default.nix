@@ -36,10 +36,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Runtime for ANTLR";
     mainProgram = "pygrun";
     homepage = "https://www.antlr.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic interface to the RabbitMQ Management HTTP API";
     homepage = "https://github.com/deslum/pyrabbit2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

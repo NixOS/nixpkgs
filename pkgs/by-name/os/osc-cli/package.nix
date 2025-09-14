@@ -35,11 +35,11 @@ python3.pkgs.buildPythonApplication rec {
   # Skipping tests as they require working access and secret keys
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Official Outscale CLI providing connectors to Outscale API";
     homepage = "https://github.com/outscale/osc-cli";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nicolas-goudry ];
     mainProgram = "osc-cli";
   };
 }

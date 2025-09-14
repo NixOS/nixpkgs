@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "test_list_patch_jobs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud OS Config API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-os-config";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-os-config-v${version}/packages/google-cloud-os-config/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

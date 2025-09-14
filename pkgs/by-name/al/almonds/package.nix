@@ -25,11 +25,11 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Mandelbrot fractal viewer";
     mainProgram = "almonds";
     homepage = "https://github.com/Tenchi2xh/Almonds";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

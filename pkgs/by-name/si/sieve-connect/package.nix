@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
       implemented by timsieved in Cyrus IMAP.
     '';
     homepage = "https://github.com/philpennock/sieve-connect";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ das_j ];
     mainProgram = "sieve-connect";
   };
 }

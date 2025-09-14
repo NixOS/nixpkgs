@@ -37,11 +37,11 @@ buildGoModule rec {
     mv $out/bin/sx $out/bin/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line network scanner";
     homepage = "https://github.com/v-byte-cpu/sx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sx-go";
   };
 }

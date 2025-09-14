@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "curated_tokenizers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight piece tokenization library";
     homepage = "https://github.com/explosion/curated-tokenizers";
     changelog = "https://github.com/explosion/curated-tokenizers/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danieldk ];
   };
 }

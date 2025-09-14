@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
   ];
 
-  meta = with lib; {
+  meta = {
     description = "End-to-end encryption library for instant messaging. Part of the Linphone project";
     homepage = "https://www.linphone.org/technical-corner/lime";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

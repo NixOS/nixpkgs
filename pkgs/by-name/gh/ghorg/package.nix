@@ -35,7 +35,7 @@ buildGoModule rec {
       --zsh <($out/bin/ghorg completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Quickly clone an entire org/users repositories into one directory";
     longDescription = ''
       ghorg allows you to quickly clone all of an orgs, or users repos into a
@@ -47,8 +47,8 @@ buildGoModule rec {
       - Performing Audits
     '';
     homepage = "https://github.com/gabrie30/ghorg";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vidbina ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vidbina ];
     mainProgram = "ghorg";
   };
 }

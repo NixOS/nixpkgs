@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyDOE" ];
 
-  meta = with lib; {
+  meta = {
     description = "Design of experiments for Python";
     homepage = "https://github.com/tisimst/pyDOE";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

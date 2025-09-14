@@ -48,10 +48,10 @@ stdenv.mkDerivation {
       --set PATH "$out/bin:${coreutils}/bin:${parallel}/bin:${findutils}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for archiving photos for saving to long term storage or serving over the web";
     homepage = "https://github.com/danielgtaylor/jpeg-archive";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

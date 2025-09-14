@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for extracting/editing files from AliceSoft games";
     homepage = "https://github.com/nunuhara/alice-tools";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = if withGUI then "galice" else "alice";
   };
 })

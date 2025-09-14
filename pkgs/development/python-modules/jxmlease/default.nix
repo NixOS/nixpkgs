@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   unittestFlagsArray = [ "-v" ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts between XML and intelligent Python data structures";
     homepage = "https://github.com/Juniper/jxmlease";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

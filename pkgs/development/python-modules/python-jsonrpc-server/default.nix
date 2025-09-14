@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyls_jsonrpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for erver implementation of the JSON RPC 2.0 protocol";
     homepage = "https://github.com/palantir/python-jsonrpc-server";
     changelog = "https://github.com/palantir/python-jsonrpc-server/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

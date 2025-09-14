@@ -28,12 +28,12 @@ mkDerivation rec {
 
   buildInputs = [ standard-library ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "New Categories library";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       alexarice
       turion
     ];

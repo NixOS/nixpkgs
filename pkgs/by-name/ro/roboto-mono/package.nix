@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "0fkx2z97k29n1392bf76iwdyz44yp86hmqah7ai6bikzlia38qa0";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.google.com/fonts/specimen/Roboto+Mono";
     description = "Google Roboto Mono fonts";
     longDescription = ''
@@ -85,8 +85,8 @@ stdenv.mkDerivation {
       wider glyphs are adjusted for weight. Curved caps like 'C' and 'O'
       take on the straighter sides from Roboto Condensed.
     '';
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

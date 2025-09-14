@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tcxparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple parser for Garmin TCX files";
     homepage = "https://github.com/vkurup/python-tcxparser";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

@@ -19,11 +19,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocaml-ppx/ocaml-syntax-shims";
     description = "Backport new syntax to older OCaml versions";
     mainProgram = "ocaml-syntax-shims";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

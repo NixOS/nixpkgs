@@ -32,10 +32,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "acunetix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Acunetix Web Vulnerability Scanner SDK for Python";
     homepage = "https://github.com/hikariatama/acunetix";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

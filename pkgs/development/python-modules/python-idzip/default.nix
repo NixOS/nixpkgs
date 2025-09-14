@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "test_bufferedio_compat"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Seekable, gzip compatible, compression format";
     mainProgram = "idzip";
     homepage = "https://github.com/bauman/python-idzip";
     changelog = "https://github.com/bauman/python-idzip/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

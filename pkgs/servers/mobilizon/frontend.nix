@@ -19,11 +19,11 @@ buildNpmPackage {
     cp -r priv/static $out/static
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for the Mobilizon server";
     homepage = "https://joinmobilizon.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       minijackson
       erictapen
     ];

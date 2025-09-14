@@ -33,10 +33,10 @@ buildPythonPackage rec {
     "test_pylint_plugin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Verbose logging for Python's logging module";
     homepage = "https://github.com/xolox/python-verboselogs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

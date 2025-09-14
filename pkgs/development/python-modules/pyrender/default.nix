@@ -93,11 +93,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrender" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyrender.readthedocs.io/en/latest/";
     description = "Easy-to-use glTF 2.0-compliant OpenGL renderer for visualization of 3D scenes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

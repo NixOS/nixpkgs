@@ -36,14 +36,14 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_unique_mus.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
     homepage = "https://github.com/pysathq/pysat";
     changelog = "https://pysathq.github.io/updates/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.marius851000
-      maintainers.chrjabs
+      lib.maintainers.marius851000
+      lib.maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
   };

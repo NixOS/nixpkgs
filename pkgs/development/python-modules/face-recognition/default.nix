@@ -40,8 +40,8 @@ buildPythonPackage rec {
   # Disables tests when running with cuda due to https://github.com/NixOS/nixpkgs/issues/225912
   doCheck = !config.cudaSupport;
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://github.com/ageitgey/face_recognition";
     maintainers = [ ];
     description = "World's simplest facial recognition api for Python and the command line";

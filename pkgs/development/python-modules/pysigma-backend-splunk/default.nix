@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.splunk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support Splunk for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-splunk";
     changelog = "https://github.com/SigmaHQ/pySigma-backend-splunk/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

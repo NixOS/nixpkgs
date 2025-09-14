@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     cp ${ivanDesktop}/share/applications/* $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical roguelike game";
     longDescription = ''
       Iter Vehemens ad Necem (IVAN) is a graphical roguelike game, which currently
@@ -86,8 +86,8 @@ stdenv.mkDerivation rec {
       This is a fan continuation of IVAN by members of Attnam.com
     '';
     homepage = "https://attnam.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "ivan";
   };

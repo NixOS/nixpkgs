@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cmd2_ext_test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin supports testing of a cmd2 application";
     homepage = "https://github.com/python-cmd2/cmd2/tree/master/plugins/ext_test";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

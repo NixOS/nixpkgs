@@ -35,11 +35,11 @@ buildGoModule rec {
     "-X github.com/naggie/dstask.GIT_COMMIT=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ stianlagstad ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stianlagstad ];
+    platforms = lib.platforms.linux;
   };
 }

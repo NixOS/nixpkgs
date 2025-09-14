@@ -52,11 +52,11 @@ buildGoModule rec {
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Build system for microservices";
     mainProgram = "bob";
     homepage = "https://bob.build";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zuzuleinen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zuzuleinen ];
   };
 }

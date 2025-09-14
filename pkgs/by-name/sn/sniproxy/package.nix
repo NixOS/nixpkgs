@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
     udns
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dlundquist/sniproxy";
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       womfoo
       raitobezarius
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "sniproxy";
   };
 

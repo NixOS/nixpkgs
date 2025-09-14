@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qnap_qsw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with the QNAP QSW API";
     homepage = "https://github.com/Noltari/python-qnap-qsw";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

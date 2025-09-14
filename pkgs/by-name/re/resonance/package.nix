@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Intuitive GTK4/LibAdwaita music player";
     homepage = "https://github.com/nate-xyz/resonance";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "resonance";
-    maintainers = with maintainers; [ Guanran928 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ Guanran928 ];
+    platforms = lib.platforms.linux;
   };
 })

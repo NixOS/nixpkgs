@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     cp bin/mbpfan $out/bin
     cp mbpfan.conf $out/etc
   '';
-  meta = with lib; {
+  meta = {
     description = "Daemon that uses input from coretemp module and sets the fan speed using the applesmc module";
     mainProgram = "mbpfan";
     homepage = "https://github.com/dgraziotin/mbpfan";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

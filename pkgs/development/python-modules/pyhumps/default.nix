@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "humps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to convert strings (and dictionary keys) between snake case, camel case and pascal case";
     homepage = "https://github.com/nficano/humps";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ unlicense ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

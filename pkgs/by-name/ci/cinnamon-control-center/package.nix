@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "Collection of configuration plugins used in cinnamon-settings";
     mainProgram = "cinnamon-control-center";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydiscourse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for working with Discourse";
     mainProgram = "pydiscoursecli";
     homepage = "https://github.com/pydiscourse/pydiscourse";
     changelog = "https://github.com/pydiscourse/pydiscourse/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Dettorer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Dettorer ];
   };
 }

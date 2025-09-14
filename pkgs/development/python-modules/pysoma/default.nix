@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the HTTP API provided by SOMA Connect";
     homepage = "https://pypi.org/project/pysoma";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dropmqttapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python MQTT API for DROP water management products";
     homepage = "https://github.com/ChandlerSystems/dropmqttapi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

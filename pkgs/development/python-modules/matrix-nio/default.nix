@@ -161,12 +161,12 @@ buildPythonPackage rec {
     inherit opsdroid pantalaimon zulip;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/poljar/matrix-nio";
     changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
     description = "Python Matrix client library, designed according to sans I/O principles";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       tilpner
       symphorien
     ];

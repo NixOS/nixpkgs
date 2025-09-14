@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     xorg.libSM
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigmavirus24/x11-ssh-askpass";
     description = "Lightweight passphrase dialog for OpenSSH or other open variants of SSH";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

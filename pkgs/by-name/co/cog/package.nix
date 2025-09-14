@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${libwpe-fdo}/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small single “window” launcher for the WebKit WPE port";
     homepage = "https://github.com/Igalia/cog";
     mainProgram = "cog";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthewbauer ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthewbauer ];
+    platforms = lib.platforms.linux;
   };
 }

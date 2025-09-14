@@ -144,13 +144,13 @@ buildPythonPackage rec {
 
   postCheck = "popd";
 
-  meta = with lib; {
+  meta = {
     broken = true;
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

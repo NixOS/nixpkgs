@@ -58,11 +58,11 @@ python3Packages.buildPythonApplication rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Curses interface for transmission";
     mainProgram = "tremc";
     homepage = "https://github.com/tremc/tremc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kashw2 ];
   };
 }

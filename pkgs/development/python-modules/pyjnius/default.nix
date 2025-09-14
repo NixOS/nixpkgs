@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jnius" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to access Java classes as Python classes using the Java Native Interface (JNI)";
     homepage = "https://github.com/kivy/pyjnius";
     changelog = "https://github.com/kivy/pyjnius/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

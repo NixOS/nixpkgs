@@ -133,12 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://muon.build/";
     description = "Implementation of Meson build system in C99";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # typical `ar failure`
     mainProgram = "muon";
   };

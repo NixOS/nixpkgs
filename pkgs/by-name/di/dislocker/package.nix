@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     mbedtls_2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Read BitLocker encrypted partitions in Linux";
     homepage = "https://github.com/aorimn/dislocker";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elitak ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ elitak ];
+    platforms = lib.platforms.unix;
   };
 }

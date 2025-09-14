@@ -21,11 +21,11 @@ buildGoModule rec {
   # https://github.com/sorenisanerd/gotty/issues/13
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Share your terminal as a web application";
     mainProgram = "gotty";
     homepage = "https://github.com/sorenisanerd/gotty";
-    maintainers = with maintainers; [ prusnak ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
+    license = lib.licenses.mit;
   };
 }

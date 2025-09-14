@@ -32,10 +32,10 @@ buildPythonPackage rec {
       --replace "'gsettings'" "'${glib.bin}/bin/gsettings'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Detect OS Dark Mode from Python";
     homepage = "https://github.com/albertosottile/darkdetect";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -22,9 +22,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "/bin/bash" "${pkgs.bash}/bin/bash"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standard Python readline extension statically linked against the GNU readline library";
     homepage = "https://github.com/ludwigschwardt/python-gnureadline";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

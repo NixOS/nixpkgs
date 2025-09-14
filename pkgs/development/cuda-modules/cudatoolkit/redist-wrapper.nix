@@ -73,8 +73,8 @@ symlinkJoin rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper substituting the deprecated runfile-based CUDA installation";
-    license = licenses.nvidiaCuda;
+    license = lib.licenses.nvidiaCuda;
   };
 }

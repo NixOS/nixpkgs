@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
     mainProgram = "CEmu";
     homepage = "https://ce-programming.github.io/CEmu";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ultrafast memory-efficient short read aligner";
-    license = licenses.artistic2;
+    license = lib.licenses.artistic2;
     homepage = "https://bowtie-bio.sourceforge.net";
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.all;
   };
 }

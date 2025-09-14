@@ -47,11 +47,11 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-serialization-text-v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Text serialization implementation for Kiota generated clients in Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/text";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-text-${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

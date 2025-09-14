@@ -13,9 +13,9 @@ mkDiscoursePlugin rec {
     rev = "06ba5daa9aabd0487f2f30b944b6500f1f481308";
     sha256 = "sha256-T08Q36k2hb9wVimKIa4O5mWcrr6VBTfHvhRJiLBiRPY=";
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/discourse/${name}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Basic OAuth2 plugin for use with Discourse";
   };
 }

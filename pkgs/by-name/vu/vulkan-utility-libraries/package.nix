@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ vulkan-headers ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of utility libraries for Vulkan";
     homepage = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 })

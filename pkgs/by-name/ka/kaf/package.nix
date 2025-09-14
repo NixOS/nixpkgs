@@ -20,11 +20,11 @@ buildGoModule rec {
   # Many tests require a running Kafka instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Modern CLI for Apache Kafka, written in Go";
     mainProgram = "kaf";
     homepage = "https://github.com/birdayz/kaf";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zarelit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zarelit ];
   };
 }

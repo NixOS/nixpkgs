@@ -37,11 +37,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/magico13/PyEmVue/releases/tag/v${version}";
     description = "Python library for reading data from the Emporia Vue energy monitoring system";
     homepage = "https://github.com/magico13/PyEmVue";
-    license = licenses.mit;
-    maintainers = with maintainers; [ presto8 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ presto8 ];
   };
 }

@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     odd-unstable = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard management library for MATE";
     homepage = "https://github.com/mate-desktop/libmatekbd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

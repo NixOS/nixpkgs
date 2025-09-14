@@ -47,12 +47,12 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = "https://erratique.ch/software/uutf";
     changelog = "https://raw.githubusercontent.com/dbuenzli/uutf/refs/tags/v${version}/CHANGES.md";
-    license = licenses.isc;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "utftrip";
     inherit (ocaml.meta) platforms;
   };

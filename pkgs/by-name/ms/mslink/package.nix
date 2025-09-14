@@ -24,12 +24,12 @@ gccStdenv.mkDerivation rec {
     install -D mslink $out/bin/mslink
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create Windows Shortcut Files (.LNK) without using Windows";
     homepage = "http://www.mamachine.org/mslink/index.en.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.unix;
     mainProgram = "mslink";
   };
 }

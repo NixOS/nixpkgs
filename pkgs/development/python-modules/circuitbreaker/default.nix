@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "circuitbreaker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Circuit Breaker implementation";
     homepage = "https://github.com/fabfuel/circuitbreaker";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

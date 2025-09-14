@@ -36,12 +36,12 @@ let
 
       installPhase = "install -Dt $out/bin ${makeTarget}";
 
-      meta = with lib; {
+      meta = {
         inherit description homepage mainProgram;
         downloadPage = "http://sqlite.org/download.html";
-        license = licenses.publicDomain;
-        maintainers = with maintainers; [ johnazoidberg ];
-        platforms = platforms.unix;
+        license = lib.licenses.publicDomain;
+        maintainers = with lib.maintainers; [ johnazoidberg ];
+        platforms = lib.platforms.unix;
       };
     };
 in

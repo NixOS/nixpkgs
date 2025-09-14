@@ -27,10 +27,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightning Loop Client";
     homepage = "https://github.com/lightninglabs/loop";
-    license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ proofofkeags ];
   };
 }

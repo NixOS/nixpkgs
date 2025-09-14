@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) fcitx5;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Hangul wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-hangul";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ xrelkd ];
+    platforms = lib.platforms.linux;
   };
 }

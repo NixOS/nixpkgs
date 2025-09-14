@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     make install PREFIX=$out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/seenaburns/stag";
     description = "Terminal streaming bar graph passed through stdin";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
     mainProgram = "stag";
   };
 })

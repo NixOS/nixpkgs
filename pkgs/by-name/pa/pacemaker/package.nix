@@ -97,12 +97,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pacemaker;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clusterlabs.org/pacemaker/";
     description = "Open source, high availability resource manager suitable for both small and large clusters";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       ryantm
       astro
     ];

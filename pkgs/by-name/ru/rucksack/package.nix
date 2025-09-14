@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     freeimage
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Texture packer and resource bundler";
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ]; # fails on Darwin and AArch64
     homepage = "https://github.com/andrewrk/rucksack";
-    license = licenses.mit;
-    maintainers = [ maintainers.andrewrk ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.andrewrk ];
   };
 }

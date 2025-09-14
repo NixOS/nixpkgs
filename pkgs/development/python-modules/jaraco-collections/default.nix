@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.collections" ];
 
-  meta = with lib; {
+  meta = {
     description = "Models and classes to supplement the stdlib 'collections' module";
     homepage = "https://github.com/jaraco/jaraco.collections";
     changelog = "https://github.com/jaraco/jaraco.collections/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

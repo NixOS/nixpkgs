@@ -130,14 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm communication collectives library";
     homepage = "https://github.com/ROCm/rccl";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       bsd3
     ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

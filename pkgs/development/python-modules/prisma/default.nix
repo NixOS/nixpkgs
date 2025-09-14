@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prisma" ];
 
-  meta = with lib; {
+  meta = {
     description = "Auto-generated and fully type-safe database client for prisma";
     homepage = "https://github.com/RobertCraigie/prisma-client-py";
     changelog = "https://github.com/RobertCraigie/prisma-client-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

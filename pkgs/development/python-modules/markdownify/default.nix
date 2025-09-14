@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markdownify" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML to Markdown converter";
     homepage = "https://github.com/matthewwithanm/python-markdownify";
     changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ McSinyx ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ McSinyx ];
     mainProgram = "markdownify";
   };
 }

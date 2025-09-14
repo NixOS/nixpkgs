@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "systembridge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for connecting to System Bridge";
     homepage = "https://github.com/timmo001/system-bridge-connector-py";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

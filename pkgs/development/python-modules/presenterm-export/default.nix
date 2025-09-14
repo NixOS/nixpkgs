@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "presenterm_export" ];
 
-  meta = with lib; {
+  meta = {
     description = "PDF exporter for presenterm";
     homepage = "https://github.com/mfontanini/presenterm-export";
     changelog = "https://github.com/mfontanini/presenterm-export/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
 }

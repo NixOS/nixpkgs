@@ -21,10 +21,10 @@ else
 
     minimalOCamlVersion = "4.12";
 
-    meta = with lib; {
+    meta = {
       homepage = "https://ocaml.org/p/memprof-limits/latest";
       description = "Memory limits, allocation limits, and thread cancellation for OCaml";
-      license = licenses.lgpl3;
-      maintainers = with maintainers; [ alizter ];
+      license = lib.licenses.lgpl3;
+      maintainers = with lib.maintainers; [ alizter ];
     };
   }

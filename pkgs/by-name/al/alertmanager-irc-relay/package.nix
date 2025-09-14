@@ -22,7 +22,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Alertmanager IRC Relay is a bot relaying Prometheus alerts to IRC";
     mainProgram = "alertmanager-irc-relay";
     longDescription = ''
@@ -31,7 +31,7 @@ buildGoModule rec {
       IRC channel
     '';
     homepage = "https://github.com/google/alertmanager-irc-relay";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ymatsiuk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ymatsiuk ];
   };
 }

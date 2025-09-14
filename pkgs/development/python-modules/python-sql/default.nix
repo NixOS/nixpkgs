@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to write SQL queries in a pythonic way";
     homepage = "https://foss.heptapod.net/tryton/python-sql";
     changelog = "https://foss.heptapod.net/tryton/python-sql/-/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

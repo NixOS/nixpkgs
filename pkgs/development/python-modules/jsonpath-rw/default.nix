@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # ImportError: No module named tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kennknowles/python-jsonpath-rw";
     description = "Robust and significantly extended implementation of JSONPath for Python, with a clear AST for metaprogramming";
     mainProgram = "jsonpath.py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docstring_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse Python docstrings in various flavors";
     homepage = "https://github.com/rr-/docstring_parser";
     changelog = "https://github.com/rr-/docstring_parser/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -42,12 +42,12 @@ buildGoModule rec {
       --zsh $src/misc/completions/zsh/_pet
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple command-line snippet manager, written in Go";
     mainProgram = "pet";
     homepage = "https://github.com/knqyf263/pet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

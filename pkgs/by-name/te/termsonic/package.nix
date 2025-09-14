@@ -22,12 +22,12 @@ buildGoModule {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sixfoisneuf.fr/termsonic";
     description = "Subsonic client running in your terminal";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "termsonic";
-    maintainers = with maintainers; [ mksafavi ];
+    maintainers = with lib.maintainers; [ mksafavi ];
   };
 }

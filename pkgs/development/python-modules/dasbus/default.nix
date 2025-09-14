@@ -36,10 +36,10 @@ buildPythonPackage {
     "tests/test_unix.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rhinstaller/dasbus";
     description = "DBus library in Python3";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

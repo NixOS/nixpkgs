@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbval" ];
 
-  meta = with lib; {
+  meta = {
     description = "Py.test plugin to validate Jupyter notebooks";
     homepage = "https://github.com/computationalmodelling/nbval";
     changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

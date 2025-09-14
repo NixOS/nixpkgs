@@ -96,7 +96,7 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/grep/";
     description = "GNU implementation of the Unix grep command";
 
@@ -106,13 +106,13 @@ stdenv.mkDerivation {
       prints the matching lines.
     '';
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [
-      maintainers.das_j
-      maintainers.m00wl
+      lib.maintainers.das_j
+      lib.maintainers.m00wl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "grep";
   };
 

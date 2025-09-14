@@ -17,12 +17,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp gpu-switch $out/bin/
   '';
-  meta = with lib; {
+  meta = {
     description = "Application that allows to switch between the graphic cards of dual-GPU MacBook Pro models";
     mainProgram = "gpu-switch";
     homepage = "https://github.com/0xbb/gpu-switch";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msiedlarek ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msiedlarek ];
   };
 }

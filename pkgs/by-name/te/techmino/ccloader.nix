@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Luajit wrapper for Cold Clear, a Tetris AI";
     homepage = "https://github.com/26F-Studio/cold_clear_ai_love2d_wrapper";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ chayleaf ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

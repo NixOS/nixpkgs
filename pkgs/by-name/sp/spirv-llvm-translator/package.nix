@@ -126,13 +126,13 @@ stdenv.mkDerivation {
     version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvm_${version}"; }
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "Tool and a library for bi-directional translation between SPIR-V and LLVM IR";
     mainProgram = "llvm-spirv";
-    license = licenses.ncsa;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gloaming ];
+    license = lib.licenses.ncsa;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gloaming ];
 
     # For the LLVM 21 build some commits to spirv-headers
     # are required that didn't make it into the final release of 1.4.321

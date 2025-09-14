@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylsp_jsonrpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python server implementation of the JSON RPC 2.0 protocol";
     homepage = "https://github.com/python-lsp/python-lsp-jsonrpc";
     changelog = "https://github.com/python-lsp/python-lsp-jsonrpc/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-kpathsea" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for manipulating OpenType, PostScript Type 1, and Multiple Master fonts";
     homepage = "https://www.lcdf.org/type";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dtzWill ];
   };
 }

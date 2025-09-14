@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ lwt ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/mirage-time";
     description = "Time operations for MirageOS";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

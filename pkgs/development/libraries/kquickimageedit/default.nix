@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of QtQuick components providing basic image editing capabilities";
     homepage = "https://invent.kde.org/libraries/kquickimageeditor";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
 }

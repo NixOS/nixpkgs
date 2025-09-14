@@ -51,11 +51,11 @@ fetchFromGitHub {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Packaged sources for the first bootstrapping stage";
     homepage = "https://github.com/oriansj/stage0-posix";
-    license = licenses.gpl3Plus;
-    teams = [ teams.minimal-bootstrap ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.minimal-bootstrap ];
+    platforms = lib.platforms.all;
   };
 }

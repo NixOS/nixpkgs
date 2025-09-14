@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/cog generate-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of cli tools for the conventional commit and semver specifications";
     mainProgram = "cog";
     homepage = "https://github.com/oknozor/cocogitto";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

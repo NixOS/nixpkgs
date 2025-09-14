@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/dmidecode/";
     description = "Tool that reads information about your system's hardware from the BIOS according to the SMBIOS/DMI standard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

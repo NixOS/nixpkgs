@@ -48,12 +48,12 @@ rustPlatform.buildRustPackage rec {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application automation framework";
     homepage = "https://www.habitat.sh";
     changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rushmorem
       qjoly
     ];

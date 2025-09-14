@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Shell tool for executing jobs in parallel";
     longDescription = ''
       GNU Parallel is a shell tool for executing jobs in parallel.  A job
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
       programs.
     '';
     homepage = "https://www.gnu.org/software/parallel/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       pSub
       tomberek
     ];

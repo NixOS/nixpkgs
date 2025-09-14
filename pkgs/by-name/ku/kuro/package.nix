@@ -80,13 +80,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/davidsmorais/kuro/releases/tag/${src.rev}";
     description = "Unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
     homepage = "https://github.com/davidsmorais/kuro";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "kuro";
-    maintainers = with maintainers; [ ChaosAttractor ];
+    maintainers = with lib.maintainers; [ ChaosAttractor ];
     inherit (electron.meta) platforms;
   };
 }

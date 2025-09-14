@@ -26,7 +26,7 @@ stdenv.mkDerivation {
                $out/${python.sitePackages}/hgext3rd/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic signing of changeset hashes";
     longDescription = ''
       This packages provides a Mercurial extension that lets you sign
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
       commits.  Either GnuPG or OpenSSL can be used to sign the hashes.
     '';
     homepage = "https://foss.heptapod.net/mercurial/commitsigs";
-    maintainers = with maintainers; [ yoctocell ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix; # same as Mercurial
+    maintainers = with lib.maintainers; [ yoctocell ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix; # same as Mercurial
   };
 }

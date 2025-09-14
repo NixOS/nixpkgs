@@ -63,10 +63,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_youtube" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mopidy extension for playing music from YouTube";
     homepage = "https://github.com/natumbri/mopidy-youtube";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

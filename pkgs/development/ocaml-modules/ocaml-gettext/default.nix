@@ -39,10 +39,10 @@ buildDunePackage rec {
 
   checkInputs = [ ounit2 ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml Bindings to gettext";
     homepage = "https://github.com/gildor478/ocaml-gettext";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
     mainProgram = "ocaml-gettext";
   };

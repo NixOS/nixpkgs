@@ -25,10 +25,10 @@ buildPythonPackage rec {
     "test_python_exception_matches"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Parser";
     homepage = "https://parso.readthedocs.io/en/latest/";
     changelog = "https://github.com/davidhalter/parso/blob/master/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

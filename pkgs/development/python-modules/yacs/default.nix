@@ -25,10 +25,10 @@ buildPythonPackage rec {
     ${python.interpreter} yacs/tests.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet Another Configuration System";
     homepage = "https://github.com/rbgirshick/yacs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

@@ -115,7 +115,7 @@ else
       done
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Best of Erlang and of Lisp; at the same time";
       longDescription = ''
         LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
@@ -126,8 +126,8 @@ else
       homepage = "https://lfe.io";
       downloadPage = "https://github.com/rvirding/lfe/releases";
 
-      license = licenses.asl20;
-      teams = [ teams.beam ];
-      platforms = platforms.unix;
+      license = lib.licenses.asl20;
+      teams = [ lib.teams.beam ];
+      platforms = lib.platforms.unix;
     };
   }

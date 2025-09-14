@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bless" ];
 
-  meta = with lib; {
+  meta = {
     broken = true; # not compatible with bleak>=1.0 and no maintenance since 2024-03
     description = "Library for creating a BLE Generic Attribute Profile (GATT) server";
     homepage = "https://github.com/kevincar/bless";
     changelog = "https://github.com/kevincar/bless/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

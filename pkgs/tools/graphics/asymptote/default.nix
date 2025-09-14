@@ -199,11 +199,11 @@ stdenv.mkDerivation (finalAttrs: {
   #   make: *** [Makefile:272: install-asy] Error 1
   enableParallelInstalling = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for programming graphics intended to replace Metapost";
     homepage = "https://asymptote.sourceforge.io/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

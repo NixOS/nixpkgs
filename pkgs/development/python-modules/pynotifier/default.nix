@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynotifier" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for sending notifications";
     homepage = "https://github.com/YuriyLisovskiy/pynotifier";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

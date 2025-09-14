@@ -117,19 +117,19 @@ stdenv.mkDerivation (finalAttrs: {
     inherit calamares-nixos;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distribution-independent installer framework";
     homepage = "https://calamares.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       bsd2
       cc0
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       vlinkz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "calamares";
   };
 })

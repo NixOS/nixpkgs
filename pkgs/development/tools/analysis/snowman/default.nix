@@ -29,13 +29,13 @@ mkDerivation rec {
     export sourceRoot=$sourceRoot/src
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native code to C/C++ decompiler";
     homepage = "http://derevenets.com/";
 
     # https://github.com/yegord/snowman/blob/master/doc/licenses.asciidoc
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

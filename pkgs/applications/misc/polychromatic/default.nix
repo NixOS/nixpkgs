@@ -82,16 +82,16 @@ python3Packages.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://polychromatic.app/";
     description = "Graphical front-end and tray applet for configuring Razer peripherals on GNU/Linux";
     longDescription = ''
       Polychromatic is a frontend for OpenRazer that enables Razer devices
       to control lighting effects and more on GNU/Linux.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ evanjs ];
     mainProgram = "polychromatic-controller";
   };
 }

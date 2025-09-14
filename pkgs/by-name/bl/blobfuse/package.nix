@@ -34,11 +34,11 @@ buildGoModule {
     tests.version = testers.testVersion { package = blobfuse; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbgi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jbgi ];
+    platforms = lib.platforms.linux;
     mainProgram = "azure-storage-fuse";
   };
 }

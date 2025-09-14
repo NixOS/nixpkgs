@@ -67,11 +67,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "TestSerialization" ];
 
-  meta = with lib; {
+  meta = {
     broken = true;
     homepage = "https://github.com/mindwerks/worldengine";
     description = "World generator using simulation of plates, rain shadow, erosion, etc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rardiol ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rardiol ];
   };
 }

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tlsh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = "https://tlsh.org/";
     changelog = "https://github.com/trendmicro/tlsh/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

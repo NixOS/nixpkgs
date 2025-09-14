@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OpenSC/pam_p11";
     description = "Authentication with PKCS#11 modules";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sb0 ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sb0 ];
   };
 }

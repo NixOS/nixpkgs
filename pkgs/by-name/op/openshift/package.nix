@@ -60,11 +60,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     homepage = "http://www.openshift.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       offline
       moretea
       stehessel

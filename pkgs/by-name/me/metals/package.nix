@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scalameta.org/metals/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Language server for Scala";
     mainProgram = "metals";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fabianhjr
       jpaju
       tomahna

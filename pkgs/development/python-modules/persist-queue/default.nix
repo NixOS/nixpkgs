@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "persistqueue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thread-safe disk based persistent queue in Python";
     homepage = "https://github.com/peter-wangxu/persist-queue";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ huantian ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ huantian ];
   };
 }

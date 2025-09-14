@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tenacity" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jd/tenacity";
     changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
     description = "Retrying library for Python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

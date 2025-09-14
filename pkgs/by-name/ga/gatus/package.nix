@@ -24,11 +24,11 @@ buildGoModule rec {
     inherit (nixosTests) gatus;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automated developer-oriented status page";
     homepage = "https://gatus.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ undefined-moe ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ undefined-moe ];
     mainProgram = "gatus";
   };
 }
