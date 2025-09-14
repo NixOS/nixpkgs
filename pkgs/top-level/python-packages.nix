@@ -2572,8 +2572,6 @@ self: super: with self; {
 
   cirq-pasqal = callPackage ../development/python-modules/cirq-pasqal { };
 
-  cirq-rigetti = callPackage ../development/python-modules/cirq-rigetti { };
-
   cirq-web = callPackage ../development/python-modules/cirq-web { };
 
   ciscoconfparse2 = callPackage ../development/python-modules/ciscoconfparse2 { };
