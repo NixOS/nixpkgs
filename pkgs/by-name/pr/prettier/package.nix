@@ -13,6 +13,7 @@
   ```
 */
 {
+  config,
   fetchFromGitHub,
   lib,
   makeBinaryWrapper,
@@ -20,6 +21,7 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+  pkgs,
   plugins ? [ ],
 }:
 let
@@ -171,7 +173,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    plugins = import ./plugins {
+      inherit
+        config
+        pkgs
+        lib
+        nodejs
+        stdenv
+        ;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/prettier/prettier/blob/${finalAttrs.version}/CHANGELOG.md";
