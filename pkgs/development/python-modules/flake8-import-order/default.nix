@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flake8,
   pycodestyle,
   pylama,
@@ -14,10 +14,11 @@ buildPythonPackage rec {
   version = "0.19.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "flake8_import_order";
-    hash = "sha256-Ezs8VUl2MeQjUHT8mKlQeLuoF4MjefIqMfCtJFW8sLI=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "flake8-import-order";
+    tag = version;
+    hash = "sha256-mXw3+pQMr2Ut1prj9sCZc4jyErDOyWJgq6OBPU1nZxs=";
   };
 
   build-system = [ setuptools ];
