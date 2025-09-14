@@ -31,7 +31,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A content addressable archive utility";
+    description = "Content addressable archive utility";
     homepage = "https://github.com/ipld/go-car/cmd";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ malik ];
