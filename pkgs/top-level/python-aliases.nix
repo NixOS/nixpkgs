@@ -82,6 +82,7 @@ mapAliases ({
   ansible-navigator = throw "ansible-navigator has been promoted to a top-level attribute name: pkgs.ansible-navigator"; # Added 2024-08-07
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   apache-airflow = throw "apache-airflow has been moved out of pythonPackages and is available as a standalone package"; # added 2023-06-05
+  apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   argon2_cffi = argon2-cffi; # added 2022-05-09
   arnparse = throw "arnparse has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   APScheduler = apscheduler; # added 2023-02-19
