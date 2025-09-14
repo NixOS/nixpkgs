@@ -818,9 +818,12 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
 
 // Converts a path to the name of a systemd mount unit that would be responsible for mounting this
 // path.
-fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
+fn path_to_unit_name(bin_path: &Path, path: &str, is_automount: bool) -> String {
     let Ok(output) = std::process::Command::new(bin_path.join("systemd-escape"))
-        .arg("--suffix=mount")
+        .arg(format!(
+            "--suffix={}",
+            if is_automount { "automount" } else { "mount" }
+        ))
         .arg("-p")
         .arg(path)
         .output()
@@ -1337,8 +1340,10 @@ won't take effect until you reboot the system.
         .unwrap_or_default();
 
     for (mountpoint, current_filesystem) in current_filesystems {
+        let is_automount = current_filesystem.options.contains("x-systemd.automount");
+
         // Use current version of systemctl binary before daemon is reexeced.
-        let unit = path_to_unit_name(&current_system_bin, &mountpoint);
+        let unit = path_to_unit_name(&current_system_bin, &mountpoint, is_automount);
         if let Some(new_filesystem) = new_filesystems.get(&mountpoint) {
             if current_filesystem.fs_type != new_filesystem.fs_type
                 || current_filesystem.device != new_filesystem.device
