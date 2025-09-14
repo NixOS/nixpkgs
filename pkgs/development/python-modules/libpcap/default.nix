@@ -32,7 +32,7 @@ buildPythonPackage rec {
     sed -i "/requires/s/, 'tox>=[^']*'//" pyproject.toml
     cat <<EOF >src/libpcap/libpcap.cfg
     [libpcap]
-    LIBPCAP = ${pkgsLibpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}
+    LIBPCAP = ${lib.getLib pkgsLibpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}
     EOF
   '';
 
