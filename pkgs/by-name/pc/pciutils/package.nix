@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makeFlags = [
-    "SHARED=${if static then "no" else "yes"}"
+    "SHARED=${lib.boolToYesNo (!static)}"
     "PREFIX=\${out}"
     "STRIP="
     "HOST=${stdenv.hostPlatform.system}"

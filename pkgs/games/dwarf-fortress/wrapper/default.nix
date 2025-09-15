@@ -89,7 +89,7 @@ let
   toTxt =
     v:
     if lib.isBool v then
-      if v then "YES" else "NO"
+      lib.toUpper (lib.boolToYesNo v)
     else if lib.isInt v then
       toString v
     else if lib.isString v then
