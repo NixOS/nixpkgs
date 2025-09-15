@@ -2,7 +2,6 @@
   lib,
   stdenv,
   bzip2,
-  callPackage,
   fetchFromGitHub,
   fontconfig,
   freetype,
@@ -58,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YHoyW+OFKxzKq4Ta/XUA9Xu0ieTfCcJo3khKpBGSnD4=";
   };
 
-  deps = callPackage ./deps.nix {
-    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-    zig = zig_0_13;
+  zigDeps = zig_0_13.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-6t9uO0l5r20VilfOiUIr5ksyAarDzH0fYW2xJDwTZlE=";
   };
 
   strictDeps = true;
@@ -92,8 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
 
     "-Dapp-runtime=${appRuntime}"
@@ -146,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $vim $out/share/vim-plugins
 
 
-    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+    remove-references-to -t ${finalAttrs.zigDeps} $out/bin/.ghostty-wrapped
   '';
 
   nativeInstallCheckInputs = [

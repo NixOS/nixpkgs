@@ -30,5 +30,5 @@
 
   stdenv = overrideCC stdenv zig.cc;
 
-  fetchDeps = callPackage ./fetcher.nix { inherit zig; };
+  fetchDeps = callPackage ./fetcher.nix { inherit zig stdenv; };
 }
