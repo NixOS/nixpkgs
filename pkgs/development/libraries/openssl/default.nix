@@ -246,6 +246,11 @@ let
 
       enableParallelBuilding = true;
 
+      doCheck = true;
+      preCheck = ''
+        patchShebangs util
+      '';
+
       postInstall =
         (
           if static then
