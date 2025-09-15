@@ -92,6 +92,11 @@ buildGoModule rec {
       url = "https://github.com/containers/podman/commit/726b506acc8a00d99f1a3a1357ecf619a1f798c3.patch?full_index=1";
       hash = "sha256-QtlQJHDaoyh7ER7tLSUuuxgh6nV4xxivuC+Lh2RswAU=";
     })
+    (fetchpatch2 {
+      name = "CVE-2025-9566.patch";
+      url = "https://github.com/containers/podman/commit/43fbde4e665fe6cee6921868f04b7ccd3de5ad89.patch?full_index=1";
+      hash = "sha256-lusclGjfK5BxPuLMR3yzpFOIOji2DzOsiRar0DvDt5M=";
+    })
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
