@@ -3,6 +3,7 @@
   stdenv,
   replaceVars,
   fetchurl,
+  autoconf,
   zlibSupport ? true,
   zlib,
   bzip2,
@@ -154,7 +155,7 @@ stdenv.mkDerivation rec {
     # 3. ld -t (where it attaches the values in $LD_LIBRARY_PATH as -L arguments)
     # The first is disabled in Nix (and wouldn't work in the build sandbox or on NixOS anyway), and
     # the third was only introduced in Python 3.6 (see bugs.python.org/issue9998), so is not
-    # available when buliding PyPy (which is built using Python/PyPy 2.7).
+    # available when building PyPy (which is built using Python/PyPy 2.7).
     # The second requires SONAME to be set for the dynamic library for the second part not to fail.
     # As libsqlite3 stopped shipping with SONAME after the switch to autosetup (>= 3.50 in Nixpkgs;
     # see https://www.sqlite.org/src/forumpost/5a3b44f510df8ded). This makes the Python CFFI module
@@ -214,6 +215,18 @@ stdenv.mkDerivation rec {
   preFixup =
     lib.optionalString (stdenv.hostPlatform.isDarwin) ''
       install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
+    ''
+    # Create platform specific _sysconfigdata__*.py (eg: _sysconfigdata__linux_x86_64-linux-gnu.py)
+    # Can be tested by building: pypy3Packages.bcrypt
+    # Based on the upstream build code found here:
+    # https://github.com/pypy/pypy/blob/release-pypy3.11-v7.3.20/pypy/tool/release/package.py#L176-L189
+    # Upstream is not shipping config.guess, just take one from autoconf
+    + lib.optionalString isPy3k ''
+      $out/bin/pypy3 -m sysconfig --generate-posix-vars HOST_GNU_TYPE "$(${autoconf}/share/autoconf/build-aux/config.guess)"
+      buildir="$(cat pybuilddir.txt)"
+      quadruplet=$(ls $buildir | sed -E 's/_sysconfigdata__(.*).py/\1/')
+      cp "$buildir/_sysconfigdata__$quadruplet.py" $out/lib_pypy/
+      ln -rs "$out/lib_pypy/_sysconfigdata__$quadruplet.py" $out/lib/pypy*/
     ''
     # _testcapi is compiled dynamically, into the store.
     # This would fail if we don't do it here.
