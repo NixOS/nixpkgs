@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   bzip2,
   callPackage,
   fetchFromGitHub,
@@ -8,9 +9,11 @@
   freetype,
   glib,
   glslang,
+  gtk4-layer-shell,
   harfbuzz,
   libGL,
   libX11,
+  libxml2,
   libadwaita,
   ncurses,
   nixosTests,
@@ -20,16 +23,14 @@
   removeReferencesTo,
   versionCheckHook,
   wrapGAppsHook4,
-  zig_0_13,
+  zig_0_14,
   # Usually you would override `zig.hook` with this, but we do that internally
   # since upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
-  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/build.zig#L106
-  withAdwaita ? true,
 }:
 let
-  zig_hook = zig_0_13.hook.overrideAttrs {
+  zig_hook = zig_0_14.hook.overrideAttrs {
     zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
   };
 
@@ -42,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.1.3";
+  version = "1.2.0";
   outputs = [
     "out"
     "man"
@@ -55,17 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YHoyW+OFKxzKq4Ta/XUA9Xu0ieTfCcJo3khKpBGSnD4=";
+    hash = "sha256-Z6lndpkEqBwgsjIeZhmVIQ5D7YdQSH/fG6NCY+YWEAo=";
   };
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-    zig = zig_0_13;
+    zig = zig_0_14;
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    blueprint-compiler
+    libxml2
     ncurses
     pandoc
     pkg-config
@@ -81,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     oniguruma
   ]
-  ++ lib.optional (appRuntime == "gtk" && withAdwaita) libadwaita
+  ++ lib.optional (appRuntime == "gtk") gtk4-layer-shell
+  ++ lib.optional (appRuntime == "gtk") libadwaita
   ++ lib.optional (appRuntime == "gtk") libX11
   ++ lib.optional (renderer == "opengl") libGL
   ++ lib.optionals (fontBackend == "fontconfig_freetype") [
@@ -98,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     "-Dapp-runtime=${appRuntime}"
     "-Dfont-backend=${fontBackend}"
-    "-Dgtk-adwaita=${lib.boolToString withAdwaita}"
     "-Drenderer=${renderer}"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
