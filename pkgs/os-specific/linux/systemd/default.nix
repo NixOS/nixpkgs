@@ -254,16 +254,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isPower64) [
-    # Auto-detect ELF ABI instead of hardcoding ELFv2 for BPF build
-    # Fixes targeting ELFv1
-    # https://github.com/systemd/systemd/pull/38307#issuecomment-3120543119
-    (fetchpatch {
-      name = "0101-systemd-meson.build-Detect-ELF-ABI-version-for-bpf-build-on-ppc64.patch";
-      url = "https://github.com/systemd/systemd/commit/f9509192512a4c4b9e3915a096333d4b6b297956.patch";
-      hash = "sha256-OGUw+hRCKZm+1EcR64M67QJ9c/PbS2Lk/A+1B3q4Jzs=";
-    })
-  ]
   ++ lib.optionals stdenv.hostPlatform.isMusl (
     let
       # NOTE: the master-next branch does not have stable URLs.
