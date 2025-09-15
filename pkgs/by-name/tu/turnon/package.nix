@@ -59,6 +59,7 @@ rustPlatform.buildRustPackage {
     substituteInPlace justfile \
         --replace-fail "version := \`git describe\`" "version := \"${version}\"" \
         --replace-fail "DESTPREFIX := '/app'" "DESTPREFIX := '$out'" \
+        --replace-fail "APPID := 'de.swsnr.turnon.Devel'" "APPID := 'de.swsnr.turnon'" \
         --replace-fail "just --list" "just compile" # Replacing the default recipe with the compile command as just-hook-buildPhase runs the default recipe to compile the package.
   '';
 
