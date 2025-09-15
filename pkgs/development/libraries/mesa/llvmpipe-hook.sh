@@ -3,7 +3,6 @@
 # Mesa: force software rendering
 # https://docs.mesa3d.org/envvars.html
 export LIBGL_ALWAYS_SOFTWARE=true
-export LIBGL_DRIVERS_PATH=@mesa@/lib/dri
 
 # GLX
 # glvnd just does dlopen("libGLX_%s.so"), so we have to resort to
