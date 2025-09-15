@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs build-aux/gen-version.py
+    patchShebangs --build build-aux/gen-version.py
   '';
 
   meta = {
