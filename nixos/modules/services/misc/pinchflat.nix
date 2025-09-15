@@ -78,6 +78,17 @@ in
         '';
       };
 
+      timeZone = lib.mkOption {
+        default = null;
+        type = lib.types.str;
+        example = "America/New_York";
+        description = ''
+          The time zone used in pinchflat.
+
+          By default, it is the global time zone set in `time.timeZone`.
+        '';
+      };
+
       extraConfig = mkOption {
         type =
           with types;
@@ -147,7 +158,7 @@ in
         StateDirectory = baseNameOf stateDir;
         Environment = [
           "PORT=${builtins.toString cfg.port}"
-          "TZ=${config.time.timeZone}"
+          "TZ=${cfg.timeZone or config.time.timeZone}"
           "MEDIA_PATH=${cfg.mediaDir}"
           "CONFIG_PATH=${stateDir}"
           "DATABASE_PATH=${stateDir}/db/pinchflat.db"
