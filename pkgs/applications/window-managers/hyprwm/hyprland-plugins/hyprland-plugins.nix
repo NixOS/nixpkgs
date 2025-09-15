@@ -10,7 +10,6 @@ let
             lib,
             cmake,
             fetchFromGitHub,
-            hyprland,
             mkHyprlandPlugin,
           }:
           let
@@ -23,7 +22,7 @@ let
               hash = "sha256-XJJ+frO4NOxVkoSGc1Mag8ESumzx2FmVRspOgFlMqF8=";
             };
           in
-          mkHyprlandPlugin hyprland {
+          mkHyprlandPlugin {
             pluginName = name;
             inherit version;
 
@@ -34,7 +33,6 @@ let
               description = "Hyprland ${description} plugin";
               license = lib.licenses.bsd3;
               teams = [ lib.teams.hyprland ];
-              inherit (hyprland.meta) platforms;
             };
           }
         )
