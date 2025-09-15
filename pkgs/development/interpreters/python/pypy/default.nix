@@ -120,16 +120,18 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
 
-  env = {
-    # fix compiler error in curses cffi module, where char* != const char*
-    NIX_CFLAGS_COMPILE =
-      if stdenv.cc.isClang then "-Wno-error=incompatible-function-pointer-types" else null;
-    C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
-    LIBRARY_PATH = lib.makeLibraryPath buildInputs;
-    LD_LIBRARY_PATH = lib.makeLibraryPath (
-      builtins.filter (x: x.outPath != stdenv.cc.libc.outPath or "") buildInputs
-    );
-  };
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      # fix compiler error in curses cffi module, where char* != const char*
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+    }
+    // {
+      C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
+      LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+      LD_LIBRARY_PATH = lib.makeLibraryPath (
+        builtins.filter (x: x.outPath != stdenv.cc.libc.outPath or "") buildInputs
+      );
+    };
 
   patches = [
     ./dont_fetch_vendored_deps.patch
