@@ -4,8 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  testers,
-  mago,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,13 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = mago;
-      command = "mago --version";
-      version = "mago ${version}";
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/carthage-software/mago/releases/tag/${finalAttrs.version}";
