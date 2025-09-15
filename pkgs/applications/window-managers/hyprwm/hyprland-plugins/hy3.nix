@@ -21,7 +21,12 @@ mkHyprlandPlugin (finalAttrs: {
 
   dontStrip = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "hl(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/outfoxxed/hy3";
