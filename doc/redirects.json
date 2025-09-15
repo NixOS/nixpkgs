@@ -4303,6 +4303,9 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+  "sec-packaging-out-of-tree-kernel-modules": [
+    "index.html#sec-packaging-out-of-tree-kernel-modules"
+  ],
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
   ],
