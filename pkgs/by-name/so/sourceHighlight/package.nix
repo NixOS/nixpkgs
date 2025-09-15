@@ -62,11 +62,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
   ]
-  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-    llvmPackages.compiler-rt.override {
-      doFakeLibgcc = true;
-    }
-  );
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) llvmPackages.llvm-libgcc;
 
   configureFlags = [
     "--with-boost=${boost.out}"
