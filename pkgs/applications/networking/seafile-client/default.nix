@@ -11,7 +11,7 @@
   seafile-shared,
   jansson,
   libsearpc,
-  withShibboleth ? true,
+  withShibboleth ? false, # qtwebengine vulnerable, so disabled by default
   qtwebengine,
   wrapQtAppsHook,
 }:
