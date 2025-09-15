@@ -68,9 +68,13 @@ $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
+$pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
+$pcMap{"xpresent"} = "libXpresent";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
+$pcMap{"xres"} = "libXres";
+$pcMap{"xscrnsaver"} = "libXScrnSaver";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
@@ -358,9 +362,13 @@ print OUT <<EOF;
   libxext,
   libxfixes,
   libxmu,
+  libxp,
   libxpm,
+  libxpresent,
   libxrandr,
   libxrender,
+  libxres,
+  libxscrnsaver,
   libxt,
   libxv,
   libxvmc,
@@ -502,9 +510,13 @@ self: with self; {
   libXext = libxext;
   libXfixes = libxfixes;
   libXmu = libxmu;
+  libXp = libxp;
   libXpm = libxpm;
+  libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
   libXt = libxt;
   libXv = libxv;
   libXvMC = libxvmc;
