@@ -1964,6 +1964,7 @@ mapAliases {
   phlare = throw "'phlare' has been removed as the upstream project was archived."; # Added 2025-03-27
   picom-next = picom; # Added 2024-02-13
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
+  pidgin-skypeweb = throw "'pidgin-skypeweb' has been removed since Skype was shut down in May 2025"; # Added 2025-09-15
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
@@ -2261,6 +2262,7 @@ mapAliases {
   sheesy-cli = throw "'sheesy-cli' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   sky = throw "'sky' has been removed because its upstream website disappeared"; # Added 2024-07-21
+  skypeexport = throw "'skypeexport' was removed since Skype has been shut down in May 2025"; # Added 2025-09-15
   SkypeExport = skypeexport; # Added 2024-06-12
   skypeforlinux = throw "Skype has been shut down in May 2025"; # Added 2025-05-05
   slack-dark = throw "'slack-dark' has been renamed to/replaced by 'slack'"; # Converted to throw 2024-10-17
@@ -2743,7 +2745,6 @@ mapAliases {
     pidgin-latex
     pidgin-msn-pecan
     pidgin-mra
-    pidgin-skypeweb
     pidgin-carbons
     pidgin-xmpp-receipts
     pidgin-otr
