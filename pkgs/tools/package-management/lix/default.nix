@@ -11,6 +11,7 @@
   fetchFromGitHub,
   fetchFromGitea,
   fetchpatch2,
+  fetchpatch,
   rustPlatform,
   editline,
   ncurses,
@@ -166,6 +167,38 @@ lib.makeExtensible (
             name = "lix-lowdown-1.4.0.patch";
             url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
             hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+          })
+
+          # Support for toml11 >= 4.0, https://gerrit.lix.systems/c/lix/+/3953
+          (fetchpatch {
+            name = "lix-2.93-toml11-4-1.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/96a39dc464165a3e503a6dc7bd44518a116fe846.patch";
+            hash = "sha256-j1DOScY2IFvcouhoap9CQwIZf99MZ92HtY7CjInF/s4=";
+          })
+          (fetchpatch {
+            name = "lix-2.93-toml11-4-2.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/699d3a63a6351edfdbc8c05f814cc93d6c3637ca.patch";
+            hash = "sha256-2iUynAdimxhe5ZSDB7DlzFG3tu1yWhq+lTvjf6+M0pM=";
+          })
+          (fetchpatch {
+            name = "lix-2.93-toml11-4-3.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/ad52cbde2faa677b711ec950dae74e4aede965a4.patch";
+            hash = "sha256-ajQwafL3yZDJMVrR+D9eTGh7L0xbDbqhAUagRur4HDE=";
+          })
+          (fetchpatch {
+            name = "lix-2.93-toml11-4-4.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/e29a1ccf0af2e2890ec7b7fde82f0e53a1d0aad9.patch";
+            hash = "sha256-sXqZxCUtZsO7uEVk2AZx3IkP8b8EPVghYboetcQTp2A=";
+          })
+          (fetchpatch {
+            name = "lix-2.93-toml11-4-5.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/176b834464b7285b74a72d35df7470a46362ce60.patch";
+            hash = "sha256-/KIszfHf2XoB+GeVvXad2AV8pazffYdQRDtIXb9tbj8=";
+          })
+          (fetchpatch {
+            name = "lix-2.93-toml11-4-6.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/b6d5670bcffebdd43352ea79b36135e35a8148d9.patch";
+            hash = "sha256-f4s0TR5MhNMNM5TYLOR7K2/1rtZ389KDjTCKFVK0OcE=";
           })
         ];
       };
