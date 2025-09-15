@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     #[Comgr] Extend ISA compatibility for CCOB
     (fetchpatch {
-      sha256 = "sha256-6Rwz12Lk4R2JK3olii3cr2Zd0ZLYe7VSpK1YRCOsJWY=";
-      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2d8c459a4d4c0567a7a275b4b54560d88e5c6919.patch";
+      sha256 = "sha256-PCi0QHLiEQCTIYRtSSbhOjXANJ3zC3VLdMED1BEfQeg=";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/fa80abb77d5ae6f8d89ab956e7ebda9c802a804f.patch";
       relative = "amd/comgr";
     })
   ];
