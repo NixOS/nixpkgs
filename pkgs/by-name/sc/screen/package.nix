@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
 
   nativeBuildInputs = [
     autoreconfHook

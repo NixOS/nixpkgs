@@ -8,9 +8,9 @@ Rather than calling ukify and mkosi with sys.executable, which doesn't use the P
 Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
 ---
  mkosi/__init__.py   | 17 +++++++----------
- mkosi/bootloader.py |  5 +----
+ mkosi/bootloader.py |  3 +--
  mkosi/run.py        |  8 ++++----
- 3 files changed, 12 insertions(+), 18 deletions(-)
+ 3 files changed, 12 insertions(+), 16 deletions(-)
 
 diff --git a/mkosi/__init__.py b/mkosi/__init__.py
 index 65cac772bf1fc9feabec5740ed89a958ba406125..c0debc09a76f36ae878bd172294eee6637b95bcb 100644
@@ -98,18 +98,16 @@ index 65cac772bf1fc9feabec5740ed89a958ba406125..c0debc09a76f36ae878bd172294eee66
          die(
              f"Found '{ukify}' with version {v} but version {version} or newer is required to {reason}.",
 diff --git a/mkosi/bootloader.py b/mkosi/bootloader.py
-index 6f112b854f72a8863dc5e7348f0154851d3dda96..8fdf2c5df7950c032bfcd36d89f7824e86ec9173 100644
+index 6f112b854f72a8863dc5e7348f0154851d3dda96..28b32b9c8fcaa7c49a7d69e7e303ccf332d47d58 100644
 --- a/mkosi/bootloader.py
 +++ b/mkosi/bootloader.py
-@@ -268,10 +268,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
- 
- 
+@@ -270,8 +270,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
  def python_binary(config: Config) -> PathString:
--    # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
--    # tree, just use the default python3 interpreter.
+     # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
+     # tree, just use the default python3 interpreter.
 -    exe = Path(sys.executable)
 -    return "python3" if config.tools_tree or not exe.is_relative_to("/usr") else exe
-+    return "@PYTHON_PEFILE@"
++    return "python3" if config.tools_tree else "@PYTHON_PEFILE@"
  
  
  def extract_pe_section(context: Context, binary: Path, section: str, output: Path) -> Path:

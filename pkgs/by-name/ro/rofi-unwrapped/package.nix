@@ -18,6 +18,7 @@
   pandoc,
   pango,
   pkg-config,
+  versionCheckHook,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -32,22 +33,24 @@
   x11Support ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-unwrapped";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-akKwIYH9OoCh4ZE/bxKPCppxXsUhplvfRjSGsdthFk4=";
   };
 
   preConfigure = ''
     patchShebangs "script"
+
     # root not present in build /etc/passwd
-    sed -i 's/~root/~nobody/g' test/helper-expand.c
+    substituteInPlace test/helper-expand.c \
+      --replace-fail "~root" "~nobody"
   '';
 
   depsBuildBuild = [
@@ -91,22 +94,30 @@ stdenv.mkDerivation rec {
     xcbutilxrm
   ];
 
-  mesonFlags =
-    lib.optionals x11Support [ "-Dimdkit=true" ]
-    ++ lib.optionals (!waylandSupport) [ "-Dwayland=disabled" ]
-    ++ lib.optionals (!x11Support) [ "-Dxcb=disabled" ];
+  mesonFlags = [
+    (lib.mesonBool "imdkit" x11Support)
+    (lib.mesonEnable "wayland" waylandSupport)
+    (lib.mesonEnable "xcb" x11Support)
+  ];
 
   doCheck = false;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-version";
+  doInstallCheck = true;
+
+  meta = {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/davatorium/rofi/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bew
       SchweGELBin
     ];
-    platforms = with platforms; linux;
+    platforms = lib.platforms.linux;
     mainProgram = "rofi";
   };
-}
+})
