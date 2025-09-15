@@ -2198,6 +2198,67 @@ with haskellLib;
   );
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
+  # stack-3.7.1 requires Cabal < 3.12
+  stack =
+    if lib.versionOlder self.ghc.version "9.10" then
+      super.stack
+    else
+      lib.pipe
+        # to reduce rebuilds, don't override Cabal in the entire scope
+        ((super.stack.override { Cabal = self.Cabal_3_10_3_0; }).overrideScope (
+          self: super:
+          let
+            downgradeCabal =
+              drv:
+              lib.pipe drv [
+                # Since Cabal and Cabal-syntax are in the global package db, we can't
+                # remove them from the available packages. Instead, we pass a constraint.
+                (appendConfigureFlags [
+                  "--constraint=Cabal<3.12"
+                  "--constraint=Cabal-syntax<3.12"
+                ])
+                (addBuildDepends [
+                  self.Cabal-syntax_3_10_3_0
+                  self.Cabal_3_10_3_0
+                ])
+              ];
+          in
+          lib.mapAttrs (_: downgradeCabal) {
+            inherit (super)
+              hpack
+              hackage-security
+              pantry
+              rio-prettyprint
+              ;
+          }
+        ))
+        [
+          # In order to apply a patch to a file with DOS line endings with GNU patch(1),
+          # we need to use --binary with a patch that has DOS line endings.
+          (overrideCabal (drv: {
+            prePatch = ''
+              ${drv.prePatch or ""}
+               patchFlags="--binary -p1"
+            '';
+          }))
+          (appendPatch (
+            pkgs.fetchpatch {
+              postFetch = ''
+                sed -e 's/$/\r/' -i "$out"
+              '';
+              # Type equality operator warning and failure with text >= 2.1.2
+              # We filter out all Cabal related changes from this patch as Cabal bumps may change the behavior of stack.
+              name = "stack-ghc-9.10.patch";
+              url = "https://github.com/commercialhaskell/stack/commit/6a672dd12f25151707cf45e9823447334728d245.patch";
+              hash = "sha256-MVwYIvFwiuBx9r6QUR0dHejmsQxVI6KFoZlujSXYJPM=";
+              includes = [
+                "src/Stack/Prelude.hs"
+                "src/Stack/Types/CompilerBuild.hs"
+              ];
+            }
+          ))
+        ];
+
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
   # 2025-03-10: jailbreak, https://github.com/haskell-CI/haskell-ci/issues/771
