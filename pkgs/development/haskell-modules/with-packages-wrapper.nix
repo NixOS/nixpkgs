@@ -182,7 +182,7 @@ else
     + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version meta targetPrefix;
+      inherit (ghc) version targetPrefix;
 
       hoogle = hoogleWithPackages';
 
@@ -202,5 +202,10 @@ else
 
           Also note that withLLVM has been renamed to useLLVM for consistency with
           the GHC Nix expressions.'';
+    };
+    pos = __curPos;
+    meta = ghc.meta // {
+      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
+      broken = useLLVM;
     };
   }

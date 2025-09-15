@@ -525,7 +525,7 @@ rec {
       { ... }:
       {
         services.xserver.enable = true;
-        services.xserver.desktopManager.pantheon.enable = true;
+        services.desktopManager.pantheon.enable = true;
       }
     );
 

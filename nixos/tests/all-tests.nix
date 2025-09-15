@@ -1143,7 +1143,6 @@ in
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
-  pantheon-wayland = runTest ./pantheon-wayland.nix;
   paperless = runTest ./paperless.nix;
   paretosecurity = runTest ./paretosecurity.nix;
   parsedmarc = handleTest ./parsedmarc { };

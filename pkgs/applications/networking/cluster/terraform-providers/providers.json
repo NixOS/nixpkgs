@@ -54,11 +54,11 @@
     "vendorHash": "sha256-WT4sjem80445Qwlr3i/OuQMujrxEKqhws1GLpvbqKaU="
   },
   "alicloud": {
-    "hash": "sha256-pCGmH70Ro4QSpcHBhUpoQtQBTos3QluJxfPJkJP3+ng=",
+    "hash": "sha256-zh90t+oPTiQ7S3F3H00Y3/cGj1Dx3Jd8wZZ4CpuNVYQ=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.258.0",
+    "rev": "v1.259.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-+Hc2NCCnJ0fB86fvgE4Kak8fwlsXIiv8avIhE/RoWeM="
   },
@@ -840,22 +840,22 @@
     "vendorHash": "sha256-33hZ+MB96pFkHCG3UkKcnPp8wpE8POEHLz12OSF8ujI="
   },
   "minio": {
-    "hash": "sha256-XYo+nn9rgK9OtwdowqcTyuMir+7KPPjVeMLwFeWvdEQ=",
+    "hash": "sha256-+I1nTNxLVny0pgdMF7vXPC3WxkInSXnbeHcqgrWG55s=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v3.6.4",
+    "rev": "v3.6.5",
     "spdx": "AGPL-3.0",
     "vendorHash": "sha256-QWBzQXx/dzWZr9dn3LHy8RIvZL1EA9xYqi7Ppzvju7g="
   },
   "mongodbatlas": {
-    "hash": "sha256-IWawVQ+m1NeGqMTrtSE4bH/220tdP2Figqb6yviVEUo=",
+    "hash": "sha256-DaGJHlprTlOfbYmXL0rqbxjbs0azi3aUzdutNv62Kc0=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.40.0",
+    "rev": "v1.41.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XhsoMZc/7zh5AoJtpETVHVvmxSkfMYtJGho+Cy06VMs="
+    "vendorHash": "sha256-bSLbYA6phEi3jvsiSrcWfH1f2/ZdW+9JIA25pDRaDnQ="
   },
   "namecheap": {
     "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
@@ -1030,11 +1030,11 @@
     "vendorHash": null
   },
   "pagerduty": {
-    "hash": "sha256-iRSd0olC82nr/Uzogg5DsiPAQIVLJRzM2wI9yubs/cw=",
+    "hash": "sha256-PkDugN/y3WmsNdl8+3/3l2tEWilJSEnJPdfkTzCm5mE=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.28.2",
+    "rev": "v3.29.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1111,11 +1111,11 @@
     "vendorHash": "sha256-j+3qtGlueKZgf0LuNps4Wc9G3EmpSgl8ZNSLqslyizI="
   },
   "rancher2": {
-    "hash": "sha256-DIYIfBjNBt+GKflmgHeAEC3uqD/JZ7FhT77lV4J9w+0=",
+    "hash": "sha256-durRRgJmbGK0GBvlzzeq7stic8fzxBMmswYhMYnEL6E=",
     "homepage": "https://registry.terraform.io/providers/rancher/rancher2",
     "owner": "rancher",
     "repo": "terraform-provider-rancher2",
-    "rev": "v8.0.0",
+    "rev": "v8.1.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-M2lJKmIR66lQKFkInjizn68ax2Gq4sim5Y3vZKyDhZ8="
   },
@@ -1345,20 +1345,20 @@
     "vendorHash": "sha256-J2fLyYvlnefFIaJ6UwRfJ5nas86JCuOHAdWalr9T9fw="
   },
   "temporalcloud": {
-    "hash": "sha256-tXNnDoUskOcmOKPpgBIcLcup0jMqRVWkhwSU3GKjAFI=",
+    "hash": "sha256-MnfGps/PeTjhLXXcy37JHy38R3zDqjdLv99SY/F+jGM=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v1.0.0",
+    "rev": "v1.1.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-M3wnvRxMyU0Yo733E9e8Q++xVTuSXD0W3fB2C14RDNU="
   },
   "tencentcloud": {
-    "hash": "sha256-5Ue8PCe4RPA9ImzAuWj2LlxBbRCc0VQBb1AhX4vFB3g=",
+    "hash": "sha256-Tw7fMcUZMn41nbiPoxJNyYkLte9T8AgU9Qy6HiqTDzY=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.82.20",
+    "rev": "v1.82.22",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1535,12 +1535,12 @@
     "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
   },
   "yandex": {
-    "hash": "sha256-JTQnnJUr6qX1KilrwE1VQi74krq1ci4+iz/8jHaHmXY=",
+    "hash": "sha256-ANr3qJO3LMjqJa6RNjEaEOF7iV0DyqkihAir1FfJWzs=",
     "homepage": "https://registry.terraform.io/providers/yandex-cloud/yandex",
     "owner": "yandex-cloud",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.156.0",
+    "rev": "v0.158.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LovDyADJeMQpIW3YqrdoNChmRf4XDBZK3DG/oOmtxOI="
+    "vendorHash": "sha256-bmjr1pKK7rVWNa9VF5R/FRxvVJI2Riua9Vdh5pR2p1I="
   }
 }
