@@ -6674,6 +6674,8 @@ self: super: with self; {
 
   holidays = callPackage ../development/python-modules/holidays { };
 
+  holistic-trace-analysis = callPackage ../development/python-modules/holistic-trace-analysis { };
+
   hologram = callPackage ../development/python-modules/hologram { };
 
   holoviews = callPackage ../development/python-modules/holoviews { };
@@ -15237,6 +15239,8 @@ self: super: with self; {
 
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
 
+  pytorchviz = callPackage ../development/python-modules/pytorchviz { };
+
   pytouchline-extended = callPackage ../development/python-modules/pytouchline-extended { };
 
   pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
@@ -19301,6 +19305,8 @@ self: super: with self; {
   types-s3transfer = callPackage ../development/python-modules/types-s3transfer { };
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
+
+  types-six = callPackage ../development/python-modules/types-six { };
 
   types-tabulate = callPackage ../development/python-modules/types-tabulate { };
 

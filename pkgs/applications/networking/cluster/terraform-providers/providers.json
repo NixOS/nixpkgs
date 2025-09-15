@@ -849,13 +849,13 @@
     "vendorHash": "sha256-QWBzQXx/dzWZr9dn3LHy8RIvZL1EA9xYqi7Ppzvju7g="
   },
   "mongodbatlas": {
-    "hash": "sha256-IWawVQ+m1NeGqMTrtSE4bH/220tdP2Figqb6yviVEUo=",
+    "hash": "sha256-DaGJHlprTlOfbYmXL0rqbxjbs0azi3aUzdutNv62Kc0=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.40.0",
+    "rev": "v1.41.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XhsoMZc/7zh5AoJtpETVHVvmxSkfMYtJGho+Cy06VMs="
+    "vendorHash": "sha256-bSLbYA6phEi3jvsiSrcWfH1f2/ZdW+9JIA25pDRaDnQ="
   },
   "namecheap": {
     "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
@@ -1030,11 +1030,11 @@
     "vendorHash": null
   },
   "pagerduty": {
-    "hash": "sha256-iRSd0olC82nr/Uzogg5DsiPAQIVLJRzM2wI9yubs/cw=",
+    "hash": "sha256-PkDugN/y3WmsNdl8+3/3l2tEWilJSEnJPdfkTzCm5mE=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.28.2",
+    "rev": "v3.29.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1535,12 +1535,12 @@
     "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
   },
   "yandex": {
-    "hash": "sha256-JTQnnJUr6qX1KilrwE1VQi74krq1ci4+iz/8jHaHmXY=",
+    "hash": "sha256-ANr3qJO3LMjqJa6RNjEaEOF7iV0DyqkihAir1FfJWzs=",
     "homepage": "https://registry.terraform.io/providers/yandex-cloud/yandex",
     "owner": "yandex-cloud",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.156.0",
+    "rev": "v0.158.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LovDyADJeMQpIW3YqrdoNChmRf4XDBZK3DG/oOmtxOI="
+    "vendorHash": "sha256-bmjr1pKK7rVWNa9VF5R/FRxvVJI2Riua9Vdh5pR2p1I="
   }
 }
