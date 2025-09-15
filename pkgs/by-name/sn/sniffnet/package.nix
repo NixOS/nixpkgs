@@ -100,6 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [ figsoda ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "sniffnet";
   };
 })
