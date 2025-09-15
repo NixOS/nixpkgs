@@ -24,7 +24,9 @@ let
     needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
 
     [host_machine]
-    system = '${stdenv.targetPlatform.parsed.kernel.name}'
+    system = '${
+      if stdenv.targetPlatform.isCygwin then "cygwin" else stdenv.targetPlatform.parsed.kernel.name
+    }'
     cpu_family = '${cpuFamily stdenv.targetPlatform}'
     cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
     endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
