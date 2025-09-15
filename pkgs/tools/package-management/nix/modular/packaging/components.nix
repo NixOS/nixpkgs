@@ -177,6 +177,16 @@ let
       mesonFlags = [ (lib.mesonBool "b_asneeded" false) ] ++ prevAttrs.mesonFlags or [ ];
     };
 
+  # -std=gnu on cygwin defines 'unix', which conflicts with the namespace
+  cygwinLibcFlags = finalAttrs: prevAttrs: {
+    env =
+      prevAttrs.env or { }
+      // lib.optionalAttrs stdenv.hostPlatform.isCygwin {
+        NIX_CFLAGS_COMPILE =
+          prevAttrs.env.NIX_CFLAGS_COMPILE or "" + " -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE";
+      };
+  };
+
   nixDefaultsLayer = finalAttrs: prevAttrs: {
     strictDeps = prevAttrs.strictDeps or true;
     enableParallelBuilding = true;
@@ -319,6 +329,7 @@ in
   mkMesonExecutable = mkPackageBuilder [
     nixDefaultsLayer
     bsdNoLinkAsNeeded
+    cygwinLibcFlags
     scope.sourceLayer
     setVersionLayer
     mesonLayer
@@ -328,6 +339,7 @@ in
   mkMesonLibrary = mkPackageBuilder [
     nixDefaultsLayer
     bsdNoLinkAsNeeded
+    cygwinLibcFlags
     scope.sourceLayer
     mesonLayer
     setVersionLayer

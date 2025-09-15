@@ -135,6 +135,7 @@ lib.makeExtensible (
         version = "2.28.5";
         hash = "sha256-oIfAHxO+BCtHXJXLHBnsKkGl1Pw+Uuq1PwNxl+lZ+Oc=";
         self_attribute_name = "nix_2_28";
+        patches = lib.optional stdenv.hostPlatform.isCygwin ./patches/fix-cygwin-build.patch;
       };
 
       nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {

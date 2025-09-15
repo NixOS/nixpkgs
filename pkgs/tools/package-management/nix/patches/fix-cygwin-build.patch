@@ -1,0 +1,35 @@
+diff --git a/src/libutil/unix/signals.cc b/src/libutil/unix/signals.cc
+index 8a94cc2..a73715e 100644
+--- a/src/libutil/unix/signals.cc
++++ b/src/libutil/unix/signals.cc
+@@ -103,8 +103,8 @@ void unix::setChildSignalMask(sigset_t * sigs)
+ {
+     assert(sigs); // C style function, but think of sigs as a reference
+ 
+-#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 1) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE) \
+-    || (defined(_POSIX_SOURCE) && _POSIX_SOURCE)
++#if ((defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 1) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE) \
++    || (defined(_POSIX_SOURCE) && _POSIX_SOURCE)) && !defined(__CYGWIN__)
+     sigemptyset(&savedSignalMask);
+     // There's no "assign" or "copy" function, so we rely on (math) idempotence
+     // of the or operator: a or a = a.
+diff --git a/src/libstore/posix-fs-canonicalise.cc b/src/libstore/posix-fs-canonicalise.cc
+index 2484d51a6..6b759a406 100644
+--- a/src/libstore/posix-fs-canonicalise.cc
++++ b/src/libstore/posix-fs-canonicalise.cc
+@@ -72,8 +72,13 @@ static void canonicalisePathMetaData_(
+     ssize_t eaSize = llistxattr(path.c_str(), nullptr, 0);
+ 
+     if (eaSize < 0) {
+-        if (errno != ENOTSUP && errno != ENODATA)
+-            throw SysError("querying extended attributes of '%s'", path);
++        if (errno != ENOTSUP && errno != ENODATA
++// Cygwin llistxattr currently returns EPERM for symbolic links
++#ifdef __CYGWIN__
++            && !(errno == EACCES && S_ISLNK(st.st_mode))
++#endif
++            )
++            throw SysError("querying extended attributes of '%s', %i, %i", path, (int)errno, (int)S_ISLNK(st.st_mode));
+     } else if (eaSize > 0) {
+         std::vector<char> eaBuf(eaSize);
+ 
