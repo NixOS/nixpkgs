@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpar";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "kspalaiologos";
     repo = "xpar";
     rev = finalAttrs.version;
-    hash = "sha256-DMUDWQqYSQjGxYOpcfwNaaM21avcZ1w3IqEhuOaabrw=";
+    hash = "sha256-cvt5fXg3mKzh0GlL1qkA7G17p2ZA0PpFnE2cLYwlmUM=";
   };
 
   nativeBuildInputs = [
