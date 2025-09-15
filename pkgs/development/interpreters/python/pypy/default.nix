@@ -181,7 +181,9 @@ stdenv.mkDerivation rec {
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
       -O${optimizationLevel} \
-      --batch pypy/goal/targetpypystandalone.py
+      --batch \
+      pypy/goal/targetpypystandalone.py \
+      ${lib.optionalString ((toString optimizationLevel) == "1") "--withoutmod-cpyext"}
 
     runHook postBuild
   '';
