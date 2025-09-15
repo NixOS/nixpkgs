@@ -137,12 +137,8 @@ in
 
       cleanupSettings = lib.mkOption {
         inherit (settingsFormat) type;
-        default = {
-          # required by json schema
-          interfaces = { };
-          # https://codeberg.org/liske/ifstate/issues/118
-          namespaces = { };
-        };
+        # required by json schema
+        default.interfaces = { };
         description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goas is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
       };
     };
