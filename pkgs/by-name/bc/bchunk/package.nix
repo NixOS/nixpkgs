@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $out/bin bchunk
     install -Dt $out/share/man/man1 bchunk.1
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "http://he.fi/bchunk/";
