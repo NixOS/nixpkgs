@@ -28,7 +28,7 @@ let
     isOdd patch;
 in
 stdenv.mkDerivation rec {
-  name = "foundationdb";
+  pname = "foundationdb";
   version = "7.3.42";
 
   src = fetchFromGitHub {
