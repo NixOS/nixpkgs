@@ -252,6 +252,8 @@ in
   ppc64le = mapTestOnCross systems.examples.powernv linuxCommon;
   ppc64le-musl = mapTestOnCross systems.examples.musl-power linuxCommon;
 
+  ppc32 = mapTestOnCross systems.examples.ppc32 linuxCommon;
+
   android64 = mapTestOnCross systems.examples.aarch64-android-prebuilt linuxCommon;
   android32 = mapTestOnCross systems.examples.armv7a-android-prebuilt linuxCommon;
 
