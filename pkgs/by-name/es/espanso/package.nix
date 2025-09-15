@@ -20,6 +20,7 @@
   wl-clipboard,
   wxGTK32,
   makeWrapper,
+  nix-update-script,
   stdenv,
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
@@ -31,16 +32,16 @@ assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
-  version = "2.2-unstable-2024-05-14";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
-    rev = "8daadcc949c35a7b7aa20b7f544fdcff83e2c5f7";
-    hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WvFV+WZxwaGCfMVEbfHrQZS0LtgJElmOtSXK9jEeaDk=";
   };
 
-  cargoHash = "sha256-2Hf492/xZ/QGqDYbjiZep/FX8bPyEuoxkMJ4qnMqu+c=";
+  cargoHash = "sha256-E3z8NfKZiQsaYqDKXSIltETa4cSL0ShHnUMymjH5pas=";
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -90,14 +91,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace scripts/create_bundle.sh \
       --replace-fail target/mac/ $out/Applications/ \
       --replace-fail /bin/echo ${coreutils}/bin/echo
-    patchShebangs scripts/create_bundle.sh
-    substituteInPlace espanso/src/res/macos/Info.plist \
-      --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
       --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
-
-    substituteInPlace espanso-modulo/build.rs \
-      --replace-fail '"--with-libpng=builtin"' '"--with-libpng=sys"'
   '';
 
   # Some tests require networking
@@ -106,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall =
     if stdenv.hostPlatform.isDarwin then
       ''
-        EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+        ${stdenv.shell} ./scripts/create_bundle.sh $out/bin/espanso
       ''
     else
       ''
@@ -127,10 +122,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
           }
       '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # remove when updating to a release version
-    version = "2.2.1";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      inherit (finalAttrs) version;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -144,7 +141,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       n8henrie
     ];
     platforms = platforms.unix;
-
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';
