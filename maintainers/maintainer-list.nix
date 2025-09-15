@@ -14519,6 +14519,12 @@
     github = "kulczwoj";
     githubId = 58049191;
   };
+  kumpelinus = {
+    name = "Kumpelinus";
+    email = "linus@kump.dev";
+    github = "kumpelinus";
+    githubId = 174106140;
+  };
   KunyaKud = {
     name = "KunyaKud";
     email = "wafuu@posteo.net";
