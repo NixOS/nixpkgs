@@ -346,12 +346,8 @@ in
 
                 if [ "$oldHash" != "$newHash" ]; then
                   echo "TPM udev rules changed, triggering udev"
-                  for i in $(seq 0 9); do
-                    if [ -e /dev/tpm$i ]; then
-                      ${config.systemd.package}/bin/udevadm trigger --name-match=tpm$i --action=change
-                      ${config.systemd.package}/bin/udevadm trigger --name-match=tpmrm$i --action=change
-                    fi
-                  done
+                  ${config.systemd.package}/bin/udevadm trigger --subsystem-match=tpm --action=change
+                  ${config.systemd.package}/bin/udevadm trigger --subsystem-match=tpmrm --action=change
                   echo "$newHash" > $hashFile
                 else
                   echo "TPM udev rules unchanged, not triggering udev"
