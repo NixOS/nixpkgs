@@ -74,11 +74,8 @@ buildPythonPackage {
 
   dependencies = [
     coloredlogs
-    # flatbuffers
     numpy
     packaging
-    # protobuf
-    # sympy
   ];
 
   meta = onnxruntime.meta;
