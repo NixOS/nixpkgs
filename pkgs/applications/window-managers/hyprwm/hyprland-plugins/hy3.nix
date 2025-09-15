@@ -8,13 +8,13 @@
 }:
 mkHyprlandPlugin (finalAttrs: {
   pluginName = "hy3";
-  version = "hl0.50.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "outfoxxed";
     repo = "hy3";
-    tag = finalAttrs.version;
-    hash = "sha256-1BTJSqkj+lkIry27HuqA5UB7uRqAUvGT7LAUDQhKjU0=";
+    tag = "hl${finalAttrs.version}";
+    hash = "sha256-HjbofK4rSLkkUvOZHdoAY6kn7Ok2bXo14eOKr8hKRHE=";
   };
 
   nativeBuildInputs = [ cmake ];
