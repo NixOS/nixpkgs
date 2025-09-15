@@ -306,6 +306,15 @@ in
       }
 
       {
+        # This script has the hash of the udev rules in it,
+        # and also writes that hash to
+        # /var/lib/tpm2-udev-trigger/hash.txt at the end.
+        # On each run, it checks to see if the hash embedded in the script
+        # matches the hash on disk. If they are different, that
+        # indicates that the udev rules created by this module
+        # have changed. In that case, a udev change is triggered
+        # for tpm and tpmrm devices so that the new rules are
+        # applied at the end of a nixos-rebuild switch or activate
         systemd.services."tpm2-udev-trigger" =
           let
             udevHash =
