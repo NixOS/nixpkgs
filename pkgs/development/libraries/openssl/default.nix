@@ -372,12 +372,15 @@ in
     hash = "sha256-39135OobV/86bb3msL3D8x21rJnn/dTq+eH7tuwtuM4=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation unclear:
+      # https://github.com/NixOS/nixpkgs/issues/385955
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
@@ -395,12 +398,15 @@ in
     hash = "sha256-UpBDsVz/pfNgd6TQr4Pz3jmYBxgdYHRB1zQZbYibZB8=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation unclear:
+      # https://github.com/NixOS/nixpkgs/issues/385955
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then
           ./3.5/use-etc-ssl-certs-darwin.patch
