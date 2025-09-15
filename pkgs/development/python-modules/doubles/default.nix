@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "doubles" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test doubles for Python";
     homepage = "https://github.com/uber/doubles";
-    license = licenses.mit;
-    maintainers = with maintainers; [ b-rodrigues ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ b-rodrigues ];
   };
 }
