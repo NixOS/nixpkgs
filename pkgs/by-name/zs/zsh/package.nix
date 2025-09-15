@@ -16,13 +16,10 @@
   nixosTests,
 }:
 
-let
-  version = "5.9";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh";
-  inherit version;
+  version = "5.9";
+
   outputs = [
     "out"
     "doc"
@@ -31,8 +28,8 @@ stdenv.mkDerivation {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "sha256-m40ezt1bXoH78ZGOh2dSp92UjgXBoNuhCrhjhC1FrNU=";
+    url = "mirror://sourceforge/zsh/zsh-${finalAttrs.version}.tar.xz";
+    hash = "sha256-m40ezt1bXoH78ZGOh2dSp92UjgXBoNuhCrhjhC1FrNU=";
   };
 
   patches = [
@@ -162,9 +159,9 @@ stdenv.mkDerivation {
         }
         mv $out/etc/zshenv $out/etc/zshenv_zwc_is_used
 
-        rm $out/bin/zsh-${version}
+        rm $out/bin/zsh-${finalAttrs.version}
         mkdir -p $out/share/doc/
-        mv $out/share/zsh/htmldoc $out/share/doc/zsh-$version
+        mv $out/share/zsh/htmldoc $out/share/doc/zsh-${finalAttrs.version}
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
@@ -198,4 +195,4 @@ stdenv.mkDerivation {
       inherit (nixosTests) oh-my-zsh;
     };
   };
-}
+})
