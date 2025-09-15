@@ -131,10 +131,6 @@ with haskellLib;
           overrideCabal (
             old:
             {
-              # Prevent DOS line endings from Hackage from breaking a patch
-              prePatch = old.prePatch or "" + ''
-                ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-              '';
               # Ignore unix bound intended to prevent an unix bug on 32bit systems.
               # We apply a patch for this issue to the GHC core packages directly.
               # See unix-fix-ctimeval-size-32-bit.patch in ../compilers/ghc/common-*.nix
@@ -458,24 +454,14 @@ with haskellLib;
   lvar = doJailbreak super.lvar;
 
   # Don't call setEnv in parallel in the test suite (which leads to flaky failures)
-  env-extra =
-    appendPatches
-      [
-        (pkgs.fetchpatch {
-          name = "env-extra-no-parallel-setenv.patch";
-          url = "https://github.com/d12frosted/env-extra/commit/4fcbc031b210e71e4243fcfe7c48d381e2f51d78.patch";
-          sha256 = "sha256-EbXk+VOmxMJAMCMTXpTiW8fkbNI9za7f1alzCeaJaV4=";
-          excludes = [ "package.yaml" ];
-        })
-      ]
-      (
-        overrideCabal (drv: {
-          prePatch = ''
-            ${drv.prePatch or ""}
-            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
-          '';
-        }) super.env-extra
-      );
+  env-extra = appendPatches [
+    (pkgs.fetchpatch {
+      name = "env-extra-no-parallel-setenv.patch";
+      url = "https://github.com/d12frosted/env-extra/commit/4fcbc031b210e71e4243fcfe7c48d381e2f51d78.patch";
+      sha256 = "sha256-EbXk+VOmxMJAMCMTXpTiW8fkbNI9za7f1alzCeaJaV4=";
+      excludes = [ "package.yaml" ];
+    })
+  ] super.env-extra;
 
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
@@ -698,21 +684,11 @@ with haskellLib;
   nix-graph = doJailbreak super.nix-graph;
 
   # Allow inspection-testing >= 0.6 in test suite
-  algebraic-graphs =
-    appendPatch
-      (pkgs.fetchpatch2 {
-        name = "algebraic-graphs-0.7-allow-inspection-testing-0.6.patch";
-        url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
-        hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
-      })
-      (
-        overrideCabal (drv: {
-          prePatch = ''
-            ${drv.prePatch or ""}
-            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
-          '';
-        }) super.algebraic-graphs
-      );
+  algebraic-graphs = appendPatch (pkgs.fetchpatch2 {
+    name = "algebraic-graphs-0.7-allow-inspection-testing-0.6.patch";
+    url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
+    hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
+  }) super.algebraic-graphs;
 
   # Too strict bounds on hspec
   # https://github.com/illia-shkroba/pfile/issues/2
@@ -1521,14 +1497,6 @@ with haskellLib;
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
 
-  # Workaround for https://github.com/sol/hpack/issues/528
-  # The hpack test suite can't deal with the CRLF line endings hackage revisions insert
-  hpack = overrideCabal (drv: {
-    postPatch = drv.postPatch or "" + ''
-      "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-    '';
-  }) super.hpack;
-
   # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
   hslua-core =
@@ -1880,23 +1848,13 @@ with haskellLib;
   prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
 
   # Released version prohibits QuickCheck >= 2.15 at the moment
-  optparse-applicative =
-    appendPatches
-      [
-        (pkgs.fetchpatch2 {
-          name = "optparse-applicative-0.18.1-allow-QuickCheck-2.15.patch";
-          url = "https://github.com/pcapriotti/optparse-applicative/commit/2c2a39ed53e6339d8dc717efeb7d44f4c2b69cab.patch";
-          hash = "sha256-198TfBUR3ygPpvKPvtH69UmbMmoRagmzr9UURPr6Kj4=";
-        })
-      ]
-      (
-        overrideCabal (drv: {
-          prePatch = ''
-            ${drv.prePatch or ""}
-            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
-          '';
-        }) super.optparse-applicative
-      );
+  optparse-applicative = appendPatches [
+    (pkgs.fetchpatch2 {
+      name = "optparse-applicative-0.18.1-allow-QuickCheck-2.15.patch";
+      url = "https://github.com/pcapriotti/optparse-applicative/commit/2c2a39ed53e6339d8dc717efeb7d44f4c2b69cab.patch";
+      hash = "sha256-198TfBUR3ygPpvKPvtH69UmbMmoRagmzr9UURPr6Kj4=";
+    })
+  ] super.optparse-applicative;
 
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
@@ -2613,10 +2571,6 @@ with haskellLib;
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
   hexstring = overrideCabal (old: {
-    # Prevent DOS line endings from Hackage from breaking a patch
-    prePatch = old.prePatch or "" + ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix src/Data/HexString.hs
-    '';
     patches = old.patches or [ ] ++ [
       (pkgs.fetchpatch {
         name = "fix-base16-bytestring-compat";
@@ -2715,36 +2669,27 @@ with haskellLib;
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
 
-  cborg = lib.pipe super.cborg [
-    (appendPatches [
-      # This patch changes CPP macros form gating on the version of ghc-prim to base
-      # since that's where the definitions are imported from. The source commit
-      # also changes the cabal file metadata which we filter out since we are
-      # only interested in this change as a dependency of cborg-i686-support-upstream.patch.
-      (pkgs.fetchpatch {
-        name = "cborg-no-gate-on-ghc-prim-version.patch";
-        url = "https://github.com/well-typed/cborg/commit/a33f94f616f5047e45608a34ca16bfb1304ceaa1.patch";
-        hash = "sha256-30j4Dksh2nnLKAcUF5XJw3Z/UjfV3F+JFnHeXSUs9Rk=";
-        includes = [ "**/Codec/CBOR/**" ];
-        stripLen = 1;
-      })
-      # Fixes compilation on 32-bit platforms. Unreleased patch committed to the
-      # upstream master branch: https://github.com/well-typed/cborg/pull/351
-      (pkgs.fetchpatch {
-        name = "cborg-i686-support-upstream.patch";
-        url = "https://github.com/well-typed/cborg/commit/ecc1360dcf9e9ee27d08de5206b844e075c88ca4.patch";
-        hash = "sha256-9m2FlG6ziRxA1Dy22mErBaIjiZHa1dqtkbmFnMMFrTI=";
-        stripLen = 1;
-      })
-    ])
-    # Make sure patches to cborg.cabal apply
-    (overrideCabal (drv: {
-      prePatch = ''
-        ${drv.prePatch or ""}
-        ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
-      '';
-    }))
-  ];
+  cborg = appendPatches [
+    # This patch changes CPP macros form gating on the version of ghc-prim to base
+    # since that's where the definitions are imported from. The source commit
+    # also changes the cabal file metadata which we filter out since we are
+    # only interested in this change as a dependency of cborg-i686-support-upstream.patch.
+    (pkgs.fetchpatch {
+      name = "cborg-no-gate-on-ghc-prim-version.patch";
+      url = "https://github.com/well-typed/cborg/commit/a33f94f616f5047e45608a34ca16bfb1304ceaa1.patch";
+      hash = "sha256-30j4Dksh2nnLKAcUF5XJw3Z/UjfV3F+JFnHeXSUs9Rk=";
+      includes = [ "**/Codec/CBOR/**" ];
+      stripLen = 1;
+    })
+    # Fixes compilation on 32-bit platforms. Unreleased patch committed to the
+    # upstream master branch: https://github.com/well-typed/cborg/pull/351
+    (pkgs.fetchpatch {
+      name = "cborg-i686-support-upstream.patch";
+      url = "https://github.com/well-typed/cborg/commit/ecc1360dcf9e9ee27d08de5206b844e075c88ca4.patch";
+      hash = "sha256-9m2FlG6ziRxA1Dy22mErBaIjiZHa1dqtkbmFnMMFrTI=";
+      stripLen = 1;
+    })
+  ] super.cborg;
 
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
