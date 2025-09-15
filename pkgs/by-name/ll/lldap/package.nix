@@ -44,12 +44,20 @@ let
       ];
 
       buildPhase = ''
+        runHook preBuild
+
         HOME=`pwd` ./app/build.sh
+
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         cp -R app/{index.html,pkg,static} $out/
+
+        runHook postInstall
       '';
 
       doCheck = false;
