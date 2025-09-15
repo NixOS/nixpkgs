@@ -101,6 +101,7 @@ let
 
 in
 rustPlatform.buildRustPackage (
+  finalAttrs:
   commonDerivationAttrs
   // {
     cargoBuildFlags = [
@@ -115,7 +116,7 @@ rustPlatform.buildRustPackage (
     nativeBuildInputs = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/lldap \
-        --set LLDAP_ASSETS_PATH ${frontend}
+        --set LLDAP_ASSETS_PATH ${finalAttrs.finalPackage.frontend}
     '';
 
     passthru = {
@@ -138,4 +139,5 @@ rustPlatform.buildRustPackage (
       mainProgram = "lldap";
     };
   }
+
 )
