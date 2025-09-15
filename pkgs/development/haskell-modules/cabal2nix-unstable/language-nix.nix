@@ -4,6 +4,7 @@
   base,
   deepseq,
   fetchzip,
+  hspec,
   lens,
   lib,
   parsec-class,
@@ -12,15 +13,23 @@
 }:
 mkDerivation {
   pname = "language-nix";
-  version = "2.2.0-unstable-2025-09-09";
+  version = "2.3.0-unstable-2025-09-17";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/987474e0b0ed1c6b0e3fd0d07313f6996ec98b7e.tar.gz";
-    sha256 = "0nixn8incqypsfyfclj40p8bdx2yn4783kzwpqfp19ql2sbc57dc";
+    url = "https://github.com/NixOS/cabal2nix/archive/3cc36a5df16a10bac9a858208845e3d05b79845d.tar.gz";
+    sha256 = "1z1knv2ggm9ddyl0v120nhcnjmq50z7q1m88qj7rfz51gx1ifnim";
   };
   postUnpack = "sourceRoot+=/language-nix; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
     base
     deepseq
+    lens
+    parsec-class
+    pretty
+    QuickCheck
+  ];
+  testHaskellDepends = [
+    base
+    hspec
     lens
     parsec-class
     pretty
