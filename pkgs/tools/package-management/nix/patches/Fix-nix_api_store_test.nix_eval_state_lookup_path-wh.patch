@@ -1,0 +1,34 @@
+From c5f0d294e5c21ef333b4cd1e5d0135acd8398c24 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sat, 15 Nov 2025 14:02:35 -0400
+Subject: [PATCH 1/2] Fix nix_api_store_test.nix_eval_state_lookup_path when
+ run on its own
+
+Currently, --gtest_filter=nix_api_store_test.nix_eval_state_lookup_path
+will result in:
+
+ terminating due to unexpected unrecoverable internal error: Assertion
+ 'gcInitialised' failed in void nix::assertGCInitialized() at
+ ../src/libexpr/eval-gc.cc:138
+
+Changing the test fixture to _exr_test causes GC to be initialised.
+---
+ src/libexpr-tests/nix_api_expr.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libexpr-tests/nix_api_expr.cc b/src/libexpr-tests/nix_api_expr.cc
+index de508b4e4..02f99675e 100644
+--- a/src/libexpr-tests/nix_api_expr.cc
++++ b/src/libexpr-tests/nix_api_expr.cc
+@@ -14,7 +14,7 @@
+ 
+ namespace nixC {
+ 
+-TEST_F(nix_api_store_test, nix_eval_state_lookup_path)
++TEST_F(nix_api_expr_test, nix_eval_state_lookup_path)
+ {
+     auto tmpDir = nix::createTempDir();
+     auto delTmpDir = std::make_unique<nix::AutoDelete>(tmpDir, true);
+-- 
+2.51.0
+

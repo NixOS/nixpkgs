@@ -1,0 +1,203 @@
+From 1b5af49fd0e3bc9c047054bd95c1c749d10b8d7c Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 12 Nov 2025 19:52:29 -0400
+Subject: [PATCH] Remove static data from headers
+
+We don't want to duplicate any of these across libraries, which is what
+happens when the platform doesn't support unique symbols.
+---
+ src/libcmd/command.cc                         | 13 +++++++++++++
+ src/libcmd/include/nix/cmd/command.hh         |  6 +-----
+ src/libcmd/include/nix/cmd/legacy.hh          |  6 +-----
+ src/libexpr/include/nix/expr/primops.hh       |  6 +-----
+ src/libexpr/include/nix/expr/print-options.hh |  2 +-
+ src/libexpr/primops.cc                        |  6 ++++++
+ src/libstore/builtins/buildenv.cc             |  6 ++++++
+ src/libstore/include/nix/store/builtins.hh    |  6 +-----
+ src/libutil/config-global.cc                  |  6 ++++++
+ src/libutil/include/nix/util/config-global.hh |  6 +-----
+ 10 files changed, 37 insertions(+), 26 deletions(-)
+
+diff --git a/src/libcmd/command.cc b/src/libcmd/command.cc
+index 6b6bbe345..b06d40902 100644
+--- a/src/libcmd/command.cc
++++ b/src/libcmd/command.cc
+@@ -2,6 +2,7 @@
+ #include <nlohmann/json.hpp>
+ 
+ #include "nix/cmd/command.hh"
++#include "nix/cmd/legacy.hh"
+ #include "nix/cmd/markdown.hh"
+ #include "nix/store/store-open.hh"
+ #include "nix/store/local-fs-store.hh"
+@@ -14,6 +15,18 @@
+ 
+ namespace nix {
+ 
++RegisterCommand::Commands & RegisterCommand::commands()
++{
++    static RegisterCommand::Commands commands;
++    return commands;
++}
++
++RegisterLegacyCommand::Commands & RegisterLegacyCommand::commands()
++{
++    static RegisterLegacyCommand::Commands commands;
++    return commands;
++}
++
+ nix::Commands RegisterCommand::getCommandsFor(const std::vector<std::string> & prefix)
+ {
+     nix::Commands res;
+diff --git a/src/libcmd/include/nix/cmd/command.hh b/src/libcmd/include/nix/cmd/command.hh
+index 2bff11dc1..2f97b30da 100644
+--- a/src/libcmd/include/nix/cmd/command.hh
++++ b/src/libcmd/include/nix/cmd/command.hh
+@@ -286,11 +286,7 @@ struct RegisterCommand
+ {
+     typedef std::map<std::vector<std::string>, std::function<ref<Command>()>> Commands;
+ 
+-    static Commands & commands()
+-    {
+-        static Commands commands;
+-        return commands;
+-    }
++    static Commands & commands();
+ 
+     RegisterCommand(std::vector<std::string> && name, std::function<ref<Command>()> command)
+     {
+diff --git a/src/libcmd/include/nix/cmd/legacy.hh b/src/libcmd/include/nix/cmd/legacy.hh
+index 546057184..d408cde7a 100644
+--- a/src/libcmd/include/nix/cmd/legacy.hh
++++ b/src/libcmd/include/nix/cmd/legacy.hh
+@@ -13,11 +13,7 @@ struct RegisterLegacyCommand
+ {
+     typedef std::map<std::string, MainFunction> Commands;
+ 
+-    static Commands & commands()
+-    {
+-        static Commands commands;
+-        return commands;
+-    }
++    static Commands & commands();
+ 
+     RegisterLegacyCommand(const std::string & name, MainFunction fun)
+     {
+diff --git a/src/libexpr/include/nix/expr/primops.hh b/src/libexpr/include/nix/expr/primops.hh
+index 6407ba84e..8854f6b03 100644
+--- a/src/libexpr/include/nix/expr/primops.hh
++++ b/src/libexpr/include/nix/expr/primops.hh
+@@ -12,11 +12,7 @@ struct RegisterPrimOp
+ {
+     typedef std::vector<PrimOp> PrimOps;
+ 
+-    static PrimOps & primOps()
+-    {
+-        static PrimOps primOps;
+-        return primOps;
+-    }
++    static PrimOps & primOps();
+ 
+     /**
+      * You can register a constant by passing an arity of 0. fun
+diff --git a/src/libexpr/include/nix/expr/print-options.hh b/src/libexpr/include/nix/expr/print-options.hh
+index ffb80abc3..600b96ba2 100644
+--- a/src/libexpr/include/nix/expr/print-options.hh
++++ b/src/libexpr/include/nix/expr/print-options.hh
+@@ -110,7 +110,7 @@ struct PrintOptions
+  * `PrintOptions` for unknown and therefore potentially large values in error messages,
+  * to avoid printing "too much" output.
+  */
+-static PrintOptions errorPrintOptions = PrintOptions{
++static constexpr PrintOptions errorPrintOptions = PrintOptions{
+     .ansiColors = true,
+     .maxDepth = 10,
+     .maxAttrs = 10,
+diff --git a/src/libexpr/primops.cc b/src/libexpr/primops.cc
+index 98ed1b450..35f16a68d 100644
+--- a/src/libexpr/primops.cc
++++ b/src/libexpr/primops.cc
+@@ -40,6 +40,12 @@
+ 
+ namespace nix {
+ 
++RegisterPrimOp::PrimOps & RegisterPrimOp::primOps()
++{
++    static RegisterPrimOp::PrimOps primOps;
++    return primOps;
++}
++
+ /*************************************************************
+  * Miscellaneous
+  *************************************************************/
+diff --git a/src/libstore/builtins/buildenv.cc b/src/libstore/builtins/buildenv.cc
+index 22ed8d807..4db37d43a 100644
+--- a/src/libstore/builtins/buildenv.cc
++++ b/src/libstore/builtins/buildenv.cc
+@@ -10,6 +10,12 @@
+ 
+ namespace nix {
+ 
++RegisterBuiltinBuilder::BuiltinBuilders & RegisterBuiltinBuilder::builtinBuilders()
++{
++    static RegisterBuiltinBuilder::BuiltinBuilders builders;
++    return builders;
++}
++
+ namespace {
+ 
+ struct State
+diff --git a/src/libstore/include/nix/store/builtins.hh b/src/libstore/include/nix/store/builtins.hh
+index 6925e61c1..7cc9c0911 100644
+--- a/src/libstore/include/nix/store/builtins.hh
++++ b/src/libstore/include/nix/store/builtins.hh
+@@ -33,11 +33,7 @@ struct RegisterBuiltinBuilder
+ {
+     typedef std::map<std::string, BuiltinBuilder> BuiltinBuilders;
+ 
+-    static BuiltinBuilders & builtinBuilders()
+-    {
+-        static BuiltinBuilders builders;
+-        return builders;
+-    }
++    static BuiltinBuilders & builtinBuilders();
+ 
+     RegisterBuiltinBuilder(const std::string & name, BuiltinBuilder && fun)
+     {
+diff --git a/src/libutil/config-global.cc b/src/libutil/config-global.cc
+index cd461ea48..b63b4aaa1 100644
+--- a/src/libutil/config-global.cc
++++ b/src/libutil/config-global.cc
+@@ -4,6 +4,12 @@
+ 
+ namespace nix {
+ 
++GlobalConfig::ConfigRegistrations & GlobalConfig::configRegistrations()
++{
++    static GlobalConfig::ConfigRegistrations configRegistrations;
++    return configRegistrations;
++}
++
+ bool GlobalConfig::set(const std::string & name, const std::string & value)
+ {
+     for (auto & config : configRegistrations())
+diff --git a/src/libutil/include/nix/util/config-global.hh b/src/libutil/include/nix/util/config-global.hh
+index 0e6f43ec4..5074351e0 100644
+--- a/src/libutil/include/nix/util/config-global.hh
++++ b/src/libutil/include/nix/util/config-global.hh
+@@ -9,11 +9,7 @@ struct GlobalConfig : public AbstractConfig
+ {
+     typedef std::vector<Config *> ConfigRegistrations;
+ 
+-    static ConfigRegistrations & configRegistrations()
+-    {
+-        static ConfigRegistrations configRegistrations;
+-        return configRegistrations;
+-    }
++    static ConfigRegistrations & configRegistrations();
+ 
+     bool set(const std::string & name, const std::string & value) override;
+ 
+-- 
+2.51.0
+

@@ -1,0 +1,32 @@
+From ac7a7e37992c5fc37cca35abe8d3c17ada2fb810 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 3 Dec 2025 14:10:05 -0400
+Subject: [PATCH] Suppress xattr errors on Cygwin
+
+---
+ src/libstore/posix-fs-canonicalise.cc | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/libstore/posix-fs-canonicalise.cc b/src/libstore/posix-fs-canonicalise.cc
+index a274468c3..7c7a60e87 100644
+--- a/src/libstore/posix-fs-canonicalise.cc
++++ b/src/libstore/posix-fs-canonicalise.cc
+@@ -72,8 +72,13 @@ static void canonicalisePathMetaData_(
+     ssize_t eaSize = llistxattr(path.c_str(), nullptr, 0);
+ 
+     if (eaSize < 0) {
+-        if (errno != ENOTSUP && errno != ENODATA)
+-            throw SysError("querying extended attributes of '%s'", path);
++        if (errno != ENOTSUP && errno != ENODATA
++// Cygwin llistxattr currently returns EPERM for symbolic links
++#ifdef __CYGWIN__
++            && !(errno == EACCES && S_ISLNK(st.st_mode))
++#endif
++            )
++            throw SysError("querying extended attributes of '%s', %i, %i", path, (int)errno, (int)S_ISLNK(st.st_mode));
+     } else if (eaSize > 0) {
+         std::vector<char> eaBuf(eaSize);
+ 
+-- 
+2.51.2
+

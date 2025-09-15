@@ -46,6 +46,8 @@
   testers,
 
   patchedSrc ? null,
+
+  enableDocumentation ? !stdenv.buildPlatform.isCygwin,
 }:
 
 let
@@ -106,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals enableDocumentation [
     "doc"
     "man"
   ];
@@ -173,6 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
       for lib in ${lib.escapeShellArgs devPaths}; do
         lndir $lib $dev
       done
+    ''
+    + lib.optionalString enableDocumentation ''
 
       # Forwarded outputs
       ln -sT ${nix-manual} $doc
@@ -231,8 +237,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = nix-cli.meta.platforms;
     outputsToInstall = [
       "out"
-      "man"
-    ];
+    ]
+    ++ lib.optional enableDocumentation "man";
     pkgConfigModules = [
       "nix-cmd"
       "nix-expr"

@@ -1,0 +1,79 @@
+From 501ecb34ff06f4fedd900e661a46c294c2a90e02 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Fri, 26 Dec 2025 15:04:26 -0400
+Subject: [PATCH] Recreate symlinks on cygwin
+
+---
+ src/libstore/posix-fs-canonicalise.cc | 28 +++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/src/libstore/posix-fs-canonicalise.cc b/src/libstore/posix-fs-canonicalise.cc
+index 7c7a60e87..1a00999a3 100644
+--- a/src/libstore/posix-fs-canonicalise.cc
++++ b/src/libstore/posix-fs-canonicalise.cc
+@@ -15,6 +15,18 @@ namespace nix {
+ 
+ const time_t mtimeStore = 1; /* 1 second into the epoch */
+ 
++static void makeDirectoryWritable(const Path & path, const struct stat & st)
++{
++    if (!S_ISDIR(st.st_mode))
++        return;
++
++    mode_t mode = st.st_mode | 0220;
++    if (mode != st.st_mode) {
++        if (chmod(path.c_str(), mode) == -1)
++            throw SysError("changing mode of '%1%' to %2$o", path, mode);
++    }
++}
++
+ static void canonicaliseTimestampAndPermissions(const Path & path, const struct stat & st)
+ {
+     if (!S_ISLNK(st.st_mode)) {
+@@ -63,6 +75,14 @@ static void canonicalisePathMetaData_(
+ 
+     auto st = lstat(path);
+ 
++#if __CYGWIN__
++    // replace all symlinks to ensure native symlinks can be created
++    if (S_ISLNK(st.st_mode)) {
++        auto target = readLink(path);
++        replaceSymlink(target, path);
++    }
++#endif
++
+     /* Really make sure that the path is of a supported type. */
+     if (!(S_ISREG(st.st_mode) || S_ISDIR(st.st_mode) || S_ISLNK(st.st_mode)))
+         throw Error("file '%1%' has an unsupported type", path);
+@@ -114,8 +134,6 @@ static void canonicalisePathMetaData_(
+ 
+     inodesSeen.insert(Inode(st.st_dev, st.st_ino));
+ 
+-    canonicaliseTimestampAndPermissions(path, st);
+-
+ #ifndef _WIN32
+     /* Change ownership to the current uid.  If it's a symlink, use
+        lchown if available, otherwise don't bother.  Wrong ownership
+@@ -134,6 +152,10 @@ static void canonicalisePathMetaData_(
+     }
+ #endif
+ 
++#if __CYGWIN__
++    makeDirectoryWritable(path, st);
++#endif
++
+     if (S_ISDIR(st.st_mode)) {
+         for (auto & i : DirectoryIterator{path}) {
+             checkInterrupt();
+@@ -145,6 +167,8 @@ static void canonicalisePathMetaData_(
+                 inodesSeen);
+         }
+     }
++
++    canonicaliseTimestampAndPermissions(path, st);
+ }
+ 
+ void canonicalisePathMetaData(
+-- 
+2.51.2
+

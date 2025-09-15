@@ -1,0 +1,30 @@
+From a91a74b3dbbb5cd9e9372b99694e5bdc83c648bd Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sat, 15 Nov 2025 17:10:21 -0400
+Subject: [PATCH] Fix toString/ToStringPrimOpTest.toString/10 on cygwin
+
+---
+ src/libexpr-tests/primops.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/libexpr-tests/primops.cc b/src/libexpr-tests/primops.cc
+index f00b4f475..48f9aee72 100644
+--- a/src/libexpr-tests/primops.cc
++++ b/src/libexpr-tests/primops.cc
+@@ -662,7 +662,12 @@ INSTANTIATE_TEST_SUITE_P(
+         CASE(R"({ v = "bar"; __toString = self: self.v; })", "bar"),
+         CASE(R"({ v = "bar"; __toString = self: self.v; outPath = "foo"; })", "bar"),
+         CASE(R"({ outPath = "foo"; })", "foo"),
+-        CASE(R"(./test)", "/test")));
++        CASE(R"(./test)",
++// canonPath("//./test", false) on cygwin returns //./test
++#ifdef __CYGWIN__
++            "//."
++#endif
++            "/test")));
+ #undef CASE
+ 
+ TEST_F(PrimOpTest, substring)
+-- 
+2.51.0
+

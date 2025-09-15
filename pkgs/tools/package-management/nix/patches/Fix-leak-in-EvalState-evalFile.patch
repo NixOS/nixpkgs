@@ -1,0 +1,56 @@
+From 868b29c39a7c2e2dd8722a9e7208f193779a9e05 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Fri, 9 Jan 2026 15:53:46 -0400
+Subject: [PATCH] Fix leak in EvalState::evalFile
+
+---
+ src/libexpr/eval.cc                  | 4 ++--
+ src/libexpr/include/nix/expr/eval.hh | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/libexpr/eval.cc b/src/libexpr/eval.cc
+index 84f14198f..40f0b4b7b 100644
+--- a/src/libexpr/eval.cc
++++ b/src/libexpr/eval.cc
+@@ -1129,14 +1129,14 @@ void EvalState::evalFile(const SourcePath & path, Value & v, bool mustBeTrivial)
+     // https://github.com/NixOS/nix/pull/13930 is merged. That will ensure
+     // the post-condition that `expr` is unreachable after
+     // `forceValue()` returns.
+-    auto expr = new ExprParseFile{*resolvedPath, mustBeTrivial};
++    auto expr = parseFileExprs.emplace_back(std::make_shared<ExprParseFile>(*resolvedPath, mustBeTrivial));
+ 
+     fileEvalCache->try_emplace_and_cvisit(
+         *resolvedPath,
+         nullptr,
+         [&](auto & i) {
+             vExpr = allocValue();
+-            vExpr->mkThunk(&baseEnv, expr);
++            vExpr->mkThunk(&baseEnv, expr.get());
+             i.second = vExpr;
+         },
+         [&](auto & i) { vExpr = i.second; });
+diff --git a/src/libexpr/include/nix/expr/eval.hh b/src/libexpr/include/nix/expr/eval.hh
+index b70c9db78..ae6e32505 100644
+--- a/src/libexpr/include/nix/expr/eval.hh
++++ b/src/libexpr/include/nix/expr/eval.hh
+@@ -366,6 +366,8 @@ private:
+     Statistics stats;
+ };
+ 
++struct ExprParseFile;
++
+ class EvalState : public std::enable_shared_from_this<EvalState>
+ {
+ public:
+@@ -508,6 +510,8 @@ private:
+      */
+     const ref<RegexCache> regexCache;
+ 
++    std::vector<std::shared_ptr<ExprParseFile> > parseFileExprs;
++
+ public:
+ 
+     /**
+-- 
+2.52.0
+

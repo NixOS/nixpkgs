@@ -277,7 +277,14 @@ in
         /**
           Patches for the whole Nix source. Changes to packaging expressions will be ignored.
         */
-        patches = [ ];
+        patches = lib.optionals stdenv.hostPlatform.isCygwin [
+          ../../patches/Include-bin-in-builder-PATH-on-cygwin.patch
+          ../../patches/Suppress-xattr-errors-on-Cygwin.patch
+          ../../patches/Recreate-symlinks-on-cygwin.patch
+          ../../patches/libutil-tests-fix-openFileEnsureBeneathNoSymlinks.wo.patch
+          ../../patches/Fix-leak-in-EvalState-evalFile.patch
+          ../../patches/libflake-tests-fix-leak-in-nix_api_store_test.nix_ap.patch
+        ];
         /**
           Fetched and patched source to be used in component derivations.
         */

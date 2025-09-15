@@ -1,0 +1,33 @@
+From eaadc7eb7cf0efb16b388592d598bb5569214b47 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sat, 15 Nov 2025 15:35:02 -0400
+Subject: [PATCH] Fix leaks in nix_api_store_test.nix_eval_state_lookup_path
+
+---
+ src/libexpr-tests/nix_api_expr.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/libexpr-tests/nix_api_expr.cc b/src/libexpr-tests/nix_api_expr.cc
+index 02f99675e..3e5cd0d43 100644
+--- a/src/libexpr-tests/nix_api_expr.cc
++++ b/src/libexpr-tests/nix_api_expr.cc
+@@ -42,12 +42,16 @@ TEST_F(nix_api_expr_test, nix_eval_state_lookup_path)
+     nix_expr_eval_from_string(ctx, state, "builtins.seq <nixos-config> <nixpkgs>", ".", value);
+     assert_ctx_ok();
+ 
++    nix_state_free(state);
++
+     ASSERT_EQ(nix_get_type(ctx, value), NIX_TYPE_PATH);
+     assert_ctx_ok();
+ 
+     auto pathStr = nix_get_path_string(ctx, value);
+     assert_ctx_ok();
+     ASSERT_EQ(0, strcmp(pathStr, nixpkgs.c_str()));
++
++    nix_gc_decref(nullptr, value);
+ }
+ 
+ TEST_F(nix_api_expr_test, nix_expr_eval_from_string)
+-- 
+2.51.0
+
