@@ -27,8 +27,8 @@ buildGoModule rec {
 
   ldflags = [
     "-extldflags -static"
-    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=${version}"
-    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=${version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=v${version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=v${version}"
   ];
 
   # Tests need docker.
@@ -47,11 +47,9 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = ddev;
+    version = "ddev version v${version}";
     command = ''
-      # DDEV will try to create $HOME/.ddev, so we set $HOME to a temporary
-      # directory.
-      export HOME=$(mktemp -d)
-      ddev --version
+      HOME=$(mktemp -d) ddev --version
     '';
   };
 
