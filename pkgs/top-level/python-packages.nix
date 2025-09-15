@@ -20463,6 +20463,8 @@ self: super: with self; {
 
   zeitgeist = (toPythonModule (pkgs.zeitgeist.override { python3 = python; })).py;
 
+  zenlog = callPackage ../development/python-modules/zenlog { };
+
   zenoh = callPackage ../development/python-modules/zenoh { };
 
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
