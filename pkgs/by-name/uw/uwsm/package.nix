@@ -7,6 +7,7 @@
   ninja,
   scdoc,
   pkg-config,
+  fetchpatch,
   nix-update-script,
   bash,
   dmenu,
@@ -37,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UP9Ztps5oWl0bdXhSlE4SCxHFprUf74DWygJy6GvO4k=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Vladimir-csp/uwsm/commit/bd4db0fd1880b9b798e8f67e2d4c5e4ca2a28aca.patch?full_index=1";
+      hash = "sha256-GxGwy9BkpBKZGkG00+bVIh6iDNBgRG1f1f9GUKm3ERw=";
+    })
+  ];
+
   nativeBuildInputs = [
     makeBinaryWrapper
     meson
@@ -48,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     util-linux # waitpid
     newt # whiptail
-    libnotify # notify
+    libnotify # notify-send
     bash # sh
     systemd
     python
@@ -57,23 +65,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
-    (lib.mapAttrsToList lib.mesonEnable {
-      "uwsm-app" = uwsmAppSupport;
-      "fumon" = fumonSupport;
-      "uuctl" = uuctlSupport;
-      "man-pages" = true;
-    })
-    (lib.mesonOption "python-bin" python.interpreter)
-  ];
+  ]
+  ++ (lib.mapAttrsToList lib.mesonEnable {
+    "uwsm-app" = uwsmAppSupport;
+    "fumon" = fumonSupport;
+    "uuctl" = uuctlSupport;
+    "man-pages" = true;
+    "canonicalize-bins" = true;
+  })
+  ++ (lib.mapAttrsToList lib.mesonOption {
+    "python-bin" = python.interpreter;
+  });
 
   postInstall =
     let
       wrapperArgs = "--suffix PATH : ${lib.makeBinPath finalAttrs.buildInputs}";
     in
-    ''
-      wrapProgram $out/bin/uwsm ${wrapperArgs}
-    ''
-    + lib.optionalString uuctlSupport ''
+    lib.optionalString uuctlSupport ''
       wrapProgram $out/bin/uuctl ${wrapperArgs}
     ''
     + lib.optionalString uwsmAppSupport ''
