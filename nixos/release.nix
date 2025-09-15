@@ -12,6 +12,16 @@ with import ../lib;
     "aarch64-linux"
   ],
   configuration ? { },
+
+  # This flag, if set to true, causes the resulting tree of attributes
+  # to *not* have a ".${system}" suffixed upon every job name like Hydra
+  # expects. So far, this is only implemented for `tests`.
+  #
+  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
+  # that file for full details.  The exact behavior of this flag
+  # may change; it should be considered an internal implementation
+  # detail of ci/eval.
+  attrNamesOnly ? false,
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
@@ -31,9 +41,14 @@ let
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = config: {
-        ${system} = hydraJob config.test;
-      };
+      callTest =
+        config:
+        if attrNamesOnly then
+          hydraJob config.test
+        else
+          {
+            ${system} = hydraJob config.test;
+          };
     }
     // {
       # for typechecking of the scripts and evaluation of
@@ -41,13 +56,20 @@ let
       allDrivers = import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
-        callTest = config: {
-          ${system} = hydraJob config.driver;
-        };
+        callTest =
+          config:
+          if attrNamesOnly then
+            hydraJob config.test
+          else
+            {
+              ${system} = hydraJob config.driver;
+            };
       };
     };
 
-  allTests = foldAttrs recursiveUpdate { } (map allTestsForSystem supportedSystems);
+  allTests = foldAttrs recursiveUpdate { } (
+    map allTestsForSystem (if attrNamesOnly then [ (head supportedSystems) ] else supportedSystems)
+  );
 
   pkgs = import ./.. { system = "x86_64-linux"; };
 
