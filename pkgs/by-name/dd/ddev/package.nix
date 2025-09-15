@@ -4,8 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  ddev,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
@@ -45,13 +45,13 @@ buildGoModule rec {
       --zsh .gotmp/bin/completions/ddev_zsh_completion.sh
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = ddev;
-    version = "ddev version v${version}";
-    command = ''
-      HOME=$(mktemp -d) ddev --version
-    '';
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = with lib; {
     description = "Docker-based local PHP+Node.js web development environments";
