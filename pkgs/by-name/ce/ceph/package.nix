@@ -1,12 +1,9 @@
 {
   lib,
   stdenv,
-  runCommand,
-  fetchurl,
-  fetchFromGitHub,
-  fetchPypi,
-  fetchpatch2,
   callPackage,
+  fetchurl,
+  fetchpatch2,
 
   # Build time
   autoconf,
@@ -14,28 +11,19 @@
   cmake,
   ensureNewerSourcesHook,
   # To see which `fmt` version Ceph upstream recommends, check its `src/fmt` submodule.
-  #
-  # Ceph does not currently build with `fmt_10`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
-  # If we want to switch for that before upstream fixes it, use this patch:
-  # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
-  fmt_9,
+  fmt,
   git,
   libtool,
   makeWrapper,
   nasm,
   pkg-config,
   which,
-  openssl,
 
   # Tests
   nixosTests,
 
   # Runtime dependencies
-
-  # Remove once Ceph supports arrow-cpp >= 20, see:
-  # * https://tracker.ceph.com/issues/71269
-  # * https://github.com/NixOS/nixpkgs/issues/406306
-  ceph-arrow-cpp ? callPackage ./arrow-cpp-19.nix { },
+  arrow-cpp,
   babeltrace,
   # Note when trying to upgrade boost:
   # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
@@ -66,16 +54,14 @@
   libxml2,
   lmdb,
   lttng-ust,
-  # Ceph currently requires >= 5.3
   lua5_4,
   lvm2,
   lz4,
   oath-toolkit,
   openldap,
   parted,
-  python311, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
+  python312, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
   rdkafka,
-  rocksdb,
   snappy,
   openssh,
   sqlite,
@@ -83,9 +69,6 @@
   xfsprogs,
   zlib,
   zstd,
-
-  # Dependencies of overridden Python dependencies, hopefully we can remove these soon.
-  rustPlatform,
 
   # Optional Dependencies
   curl ? null,
@@ -148,15 +131,7 @@ let
   optZfs = shouldUsePkg zfs;
 
   # Downgrade rocksdb, 7.10 breaks ceph
-  rocksdb' = rocksdb.overrideAttrs {
-    version = "7.9.2";
-    src = fetchFromGitHub {
-      owner = "facebook";
-      repo = "rocksdb";
-      rev = "refs/tags/v7.9.2";
-      hash = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
-    };
-  };
+  rocksdb = callPackage ./rocksdb_7_9 { };
 
   hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
 
@@ -194,6 +169,7 @@ let
     maintainers = with lib.maintainers; [
       adev
       ak
+      djds
       johanot
       krav
       nh2
@@ -205,12 +181,31 @@ let
     ];
   };
 
+  python = python312;
+
+  version = "19.2.3";
+
+  src = fetchurl {
+    url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    hash = "sha256-zlgp28C81SZbaFJ4yvQk4ZgYz4K/aZqtcISTO8LscSU=";
+  };
+
   ceph-common =
-    with python.pkgs;
+    let
+      inherit (python.pkgs)
+        buildPythonPackage
+        pytestCheckHook
+        pyyaml
+        ;
+    in
     buildPythonPackage {
       pname = "ceph-common";
       format = "setuptools";
-      inherit src version;
+
+      inherit
+        src
+        version
+        ;
 
       sourceRoot = "ceph-${version}/src/python-common";
 
@@ -229,100 +224,6 @@ let
 
       meta = getMeta "Ceph common module for code shared by manager modules";
     };
-
-  # Watch out for python <> boost compatibility
-  python = python311.override {
-    self = python;
-    packageOverrides =
-      self: super:
-      let
-        bcryptOverrideVersion = "4.0.1";
-      in
-      {
-        # Ceph does not support the following yet:
-        # * `bcrypt` > 4.0
-        # * `cryptography` > 40
-        # See:
-        # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-        # * Upstream issue: https://tracker.ceph.com/issues/63529
-        #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-        # * Moved to issue: https://tracker.ceph.com/issues/64213
-        #   > MGR modules incompatible with later PyO3 versions - PyO3 modules may only be initialized once per interpreter process
-
-        bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
-          pname = "bcrypt";
-          version = bcryptOverrideVersion;
-          src = fetchPypi {
-            inherit pname version;
-            hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
-          };
-          cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoVendor {
-            inherit
-              pname
-              version
-              src
-              cargoRoot
-              ;
-            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
-          };
-        });
-
-        # We pin the older `cryptography` 40 here;
-        # this also forces us to pin other packages, see below
-        cryptography = self.callPackage ./old-python-packages/cryptography.nix { };
-
-        # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
-        # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-        # and https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
-        pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
-          version = "23.1.1";
-          src = fetchPypi {
-            pname = "pyOpenSSL";
-            inherit version;
-            hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
-          };
-          disabledTests = old.disabledTests or [ ] ++ [
-            "test_export_md5_digest"
-          ];
-          disabledTestPaths = old.disabledTestPaths or [ ] ++ [
-            "tests/test_ssl.py"
-          ];
-          propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
-            self.flaky
-          ];
-          # hack: avoid building docs due to incompatibility with current sphinx
-          nativeBuildInputs = [ openssl ]; # old.nativeBuildInputs but without sphinx*
-          outputs = lib.filter (o: o != "doc") old.outputs;
-        });
-
-        # This is the most recent version of `trustme` that's still compatible with `cryptography` 40.
-        # See https://github.com/NixOS/nixpkgs/issues/359723
-        # and https://github.com/python-trio/trustme/commit/586f7759d5c27beb44da60615a71848eb2a5a490
-        trustme = self.callPackage ./old-python-packages/trustme.nix { };
-
-        fastapi = super.fastapi.overridePythonAttrs (old: {
-          # Flaky test:
-          #     ResourceWarning: Unclosed <MemoryObjectSendStream>
-          # Unclear whether it's flaky in general or only in this overridden package set.
-          doCheck = false;
-        });
-
-        # Ceph does not support `kubernetes` >= 19, see:
-        #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
-        kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
-          version = "18.20.0";
-          src = fetchFromGitHub {
-            owner = "kubernetes-client";
-            repo = "python";
-            rev = "v${version}";
-            sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
-            fetchSubmodules = true;
-          };
-        });
-
-      };
-  };
 
   boost' = boost183.override {
     enablePython = true;
@@ -373,16 +274,14 @@ let
     ]
   );
   inherit (ceph-python-env.python) sitePackages;
-
-  version = "19.2.3";
-  src = fetchurl {
-    url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-zlgp28C81SZbaFJ4yvQk4ZgYz4K/aZqtcISTO8LscSU=";
-  };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ceph";
-  inherit src version;
+
+  inherit
+    src
+    version
+    ;
 
   patches = [
     ./patches/boost-1.85.patch
@@ -418,13 +317,25 @@ stdenv.mkDerivation {
       url = "https://github.com/ceph/ceph/commit/9b38df488d7101b02afa834ea518fd52076d582a.patch?full_index=1";
       hash = "sha256-VcbJhCGTUdNISBd6P96Mm5M3fFVmZ8r7pMl+srQmnIQ=";
     })
+
+    # Remove once Ceph supports arrow-cpp >= 20, see:
+    # * https://tracker.ceph.com/issues/71269
+    # * https://github.com/NixOS/nixpkgs/issues/406306
+    # Patch from: https://github.com/ceph/s3select/pull/169
+    (fetchpatch2 {
+      name = "ceph-s3select-arrow-20-compat.patch";
+      url = "https://github.com/ceph/s3select/commit/58fe02f8c93cd7f4102b435ee7233aa555c7c305.patch";
+      hash = "sha256-RBNBZW8esbauDXM92y/pZOjDJCcvUkAeE+G8OJj84G0=";
+      stripLen = 1;
+      extraPrefix = "src/s3select/";
+    })
   ];
 
   nativeBuildInputs = [
     autoconf # `autoreconf` is called, e.g. for `qatlib_ext`
     automake # `aclocal` is called, e.g. for `qatlib_ext`
     cmake
-    fmt_9
+    fmt
     git
     makeWrapper
     libtool # used e.g. for `qatlib_ext`
@@ -443,7 +354,7 @@ stdenv.mkDerivation {
   buildInputs =
     cryptoLibsMap.${cryptoStr}
     ++ [
-      ceph-arrow-cpp
+      arrow-cpp
       babeltrace
       boost'
       bzip2
@@ -474,7 +385,7 @@ stdenv.mkDerivation {
       optYasm
       parted # according to `debian/control` file, used by `src/ceph-volume/ceph_volume/util/disk.py`
       rdkafka
-      rocksdb'
+      rocksdb
       snappy
       openssh # according to `debian/control` file, `ssh` command used by `cephadm`
       sqlite
@@ -525,10 +436,10 @@ stdenv.mkDerivation {
     unset AS
 
     substituteInPlace src/common/module.c \
-      --replace "char command[128];" "char command[256];" \
-      --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
-      --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
-      --replace "/bin/grep" "${gnugrep}/bin/grep"
+      --replace-fail "char command[128];" "char command[256];" \
+      --replace-fail "/sbin/modinfo"  "${kmod}/bin/modinfo" \
+      --replace-fail "/sbin/modprobe" "${kmod}/bin/modprobe" \
+      --replace-fail "/bin/grep" "${gnugrep}/bin/grep"
 
     # Patch remount to use full path to mount(8), otherwise ceph-fuse fails when run
     # from a systemd unit for example.
@@ -548,6 +459,7 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
+    "-DWITH_PYTHON3=${python.pythonVersion}"
     "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
     "-DWITH_CEPHFS_SHELL:BOOL=ON"
@@ -644,9 +556,9 @@ stdenv.mkDerivation {
   meta = getMeta "Distributed storage system";
 
   passthru = {
-    inherit version;
-    inherit python; # to be able to test our overridden packages above individually with `nix-build -A`
-    arrow-cpp = ceph-arrow-cpp;
+    version = finalAttrs.version;
+    inherit python;
+
     tests = {
       inherit (nixosTests)
         ceph-multi-node
@@ -656,4 +568,4 @@ stdenv.mkDerivation {
         ;
     };
   };
-}
+})
