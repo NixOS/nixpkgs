@@ -190,10 +190,18 @@ in
 
       tcti = lib.mkOption {
         description = ''
-          The TCTI interface which will be used.
+          The TCTI which will be used.
+
+          An empty string indicates no TCTI is specified by the FAPI config.
+
+          If not specified in the FAPI config it can be specified by environment
+          variable (TPM2TOOLS_TCTI, TPM2_PKCS11_TCTI, etc) or a TCTI will be chosen
+          by the FAPI library by searching for tabrmd, device, and mssim TCTIs in
+          that order.
         '';
         type = lib.types.str;
         default = "";
+        example = "device:/dev/tpmrm0";
       };
 
       systemPcrs = lib.mkOption {
@@ -214,7 +222,17 @@ in
 
       ekCertLess = lib.mkOption {
         description = ''
-          A switch to disable certificate verification.
+          A switch to disable Endorsement Key (EK) certificate verification.
+
+          A value of null indicates that the generated fapi config file does not
+          contain a ek_cert_less key. The effect of not having that key at all is
+          the same as setting its value to false.
+
+          A value of false means that the tss2 cli will not work if there is no
+          EK Cert installed, or if the installed EK Cert can't be validated.
+
+          A value of true means that the tss2 cli will work even if there's no EK
+          cert installed.
         '';
         type = lib.types.nullOr lib.types.bool;
         default = null;
@@ -223,6 +241,11 @@ in
       ekFingerprint = lib.mkOption {
         description = ''
           The fingerprint of the endorsement key.
+
+          A value of null means that you have chosen not to specify the expected
+          fingerprint of the EK. You can still have an endorsement key, it just
+          won't get checked to see if it's fingerprint matches a particular value
+          before being used.
         '';
         type = lib.types.nullOr lib.types.str;
         default = null;
