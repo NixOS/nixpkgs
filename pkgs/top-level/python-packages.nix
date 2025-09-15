@@ -13138,8 +13138,6 @@ self: super: with self; {
 
   pyheck = callPackage ../development/python-modules/pyheck { };
 
-  pyheif = callPackage ../development/python-modules/pyheif { };
-
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
