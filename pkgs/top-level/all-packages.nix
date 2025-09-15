@@ -2613,10 +2613,6 @@ with pkgs;
 
   compass = callPackage ../development/tools/compass { };
 
-  cone = callPackage ../development/compilers/cone {
-    llvmPackages = llvmPackages_13;
-  };
-
   coreutils = callPackage ../tools/misc/coreutils { };
 
   # The coreutils above are built with dependencies from
@@ -4637,12 +4633,6 @@ with pkgs;
   clang-manpages = llvmPackages.clang-manpages;
 
   clang = llvmPackages.clang;
-  clang_12 = llvmPackages_12.clang;
-  clang_13 = llvmPackages_13.clang;
-  clang_14 = llvmPackages_14.clang;
-  clang_15 = llvmPackages_15.clang;
-  clang_16 = llvmPackages_16.clang;
-  clang_17 = llvmPackages_17.clang;
 
   clang-tools = llvmPackages.clang-tools;
 
@@ -4732,13 +4722,7 @@ with pkgs;
   flutter327 = flutterPackages.v3_27;
   flutter324 = flutterPackages.v3_24;
 
-  fpc = callPackage ../development/compilers/fpc {
-    # https://github.com/NixOS/nixpkgs/issues/416485
-    # TODO: remove when upstream issue is fixed:
-    # https://gitlab.com/freepascal.org/fpc/source/-/issues/41045
-    stdenv =
-      if stdenv.cc.isClang && stdenv.hostPlatform.isx86_64 then llvmPackages_17.stdenv else stdenv;
-  };
+  fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { };
   gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
@@ -5375,31 +5359,10 @@ with pkgs;
   };
 
   lld = llvmPackages.lld;
-  lld_12 = llvmPackages_12.lld;
-  lld_13 = llvmPackages_13.lld;
-  lld_14 = llvmPackages_14.lld;
-  lld_15 = llvmPackages_15.lld;
-  lld_16 = llvmPackages_16.lld;
-  lld_17 = llvmPackages_17.lld;
 
   lldb = llvmPackages.lldb;
-  lldb_12 = llvmPackages_12.lldb;
-  lldb_13 = llvmPackages_13.lldb;
-  lldb_14 = llvmPackages_14.lldb;
-  lldb_15 = llvmPackages_15.lldb;
-  lldb_16 = llvmPackages_16.lldb;
-  lldb_17 = llvmPackages_17.lldb;
 
   llvm = llvmPackages.llvm;
-  llvm_12 = llvmPackages_12.llvm;
-  llvm_13 = llvmPackages_13.llvm;
-  llvm_14 = llvmPackages_14.llvm;
-  llvm_15 = llvmPackages_15.llvm;
-  llvm_16 = llvmPackages_16.llvm;
-  llvm_17 = llvmPackages_17.llvm;
-
-  mlir_16 = llvmPackages_16.mlir;
-  mlir_17 = llvmPackages_17.mlir;
   flang = llvmPackages_20.flang;
 
   libclc = llvmPackages.libclc;
@@ -5411,13 +5374,6 @@ with pkgs;
   inherit
     (rec {
       llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
-
-      llvmPackages_12 = llvmPackagesSet."12";
-      llvmPackages_13 = llvmPackagesSet."13";
-      llvmPackages_14 = llvmPackagesSet."14";
-      llvmPackages_15 = llvmPackagesSet."15";
-      llvmPackages_16 = llvmPackagesSet."16";
-      llvmPackages_17 = llvmPackagesSet."17";
 
       llvmPackages_18 = llvmPackagesSet."18";
       clang_18 = llvmPackages_18.clang;
@@ -5450,12 +5406,6 @@ with pkgs;
 
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
-    llvmPackages_12
-    llvmPackages_13
-    llvmPackages_14
-    llvmPackages_15
-    llvmPackages_16
-    llvmPackages_17
     llvmPackages_18
     clang_18
     lld_18
@@ -6868,11 +6818,6 @@ with pkgs;
   iaca_2_1 = callPackage ../development/tools/iaca/2.1.nix { };
   iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
   iaca = iaca_3_0;
-
-  ikos = callPackage ../development/tools/analysis/ikos {
-    inherit (llvmPackages_14) stdenv clang llvm;
-    tbb = tbb_2022;
-  };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
     llvmPackages = llvmPackages_20;
