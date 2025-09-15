@@ -4356,6 +4356,8 @@ self: super: with self; {
 
   doubleratchet = callPackage ../development/python-modules/doubleratchet { };
 
+  doubles = callPackage ../development/python-modules/doubles { };
+
   dowhen = callPackage ../development/python-modules/dowhen { };
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
@@ -6853,6 +6855,8 @@ self: super: with self; {
   hy = callPackage ../development/python-modules/hy { };
 
   hydra-core = callPackage ../development/python-modules/hydra-core { };
+
+  hydra-joblib-launcher = callPackage ../development/python-modules/hydra-joblib-launcher { };
 
   hydrawiser = callPackage ../development/python-modules/hydrawiser { };
 
@@ -19304,6 +19308,8 @@ self: super: with self; {
 
   types-redis = callPackage ../development/python-modules/types-redis { };
 
+  types-regex = callPackage ../development/python-modules/types-regex { };
+
   types-requests = callPackage ../development/python-modules/types-requests { };
 
   types-retry = callPackage ../development/python-modules/types-retry { };
@@ -20468,6 +20474,8 @@ self: super: with self; {
   zeep = callPackage ../development/python-modules/zeep { };
 
   zeitgeist = (toPythonModule (pkgs.zeitgeist.override { python3 = python; })).py;
+
+  zenlog = callPackage ../development/python-modules/zenlog { };
 
   zenoh = callPackage ../development/python-modules/zenoh { };
 
