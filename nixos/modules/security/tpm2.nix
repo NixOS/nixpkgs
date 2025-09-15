@@ -387,5 +387,6 @@ in
     ]
   );
 
+  meta.doc = ./tpm2.md;
   meta.maintainers = with lib.maintainers; [ lschuermann ];
 }
