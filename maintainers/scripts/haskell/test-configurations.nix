@@ -6,7 +6,7 @@
   and builds all derivations (or at least a reasonable subset) affected by
   these overrides.
 
-  By default, it checks `configuration-{common,nix,ghc-8.10.x}.nix`. You can
+  By default, it checks `configuration-{common,nix,ghc-9.8.x}.nix`. You can
   invoke it like this:
 
     nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
@@ -50,7 +50,7 @@
   files ? [
     "configuration-common.nix"
     "configuration-nix.nix"
-    "configuration-ghc-8.10.x.nix"
+    "configuration-ghc-9.8.x.nix"
   ],
   nixpkgsPath ? ../../..,
   config ? {

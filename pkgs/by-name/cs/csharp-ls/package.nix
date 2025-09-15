@@ -11,9 +11,9 @@ in
 
 buildDotnetGlobalTool rec {
   pname = "csharp-ls";
-  version = "0.18.0";
+  version = "0.19.0";
 
-  nugetHash = "sha256-VSlyAt5c03Oiha21ZyQ4Xm/2iIse0h1eVrVpu+nWW3s=";
+  nugetHash = "sha256-Xd4DTSvhOyz+pqk4bpUCAz69WG5hby5yJsd/lO6Cs/Y=";
 
   inherit dotnet-sdk;
   dotnet-runtime = dotnet-sdk;

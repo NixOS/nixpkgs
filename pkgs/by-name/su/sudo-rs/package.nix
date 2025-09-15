@@ -38,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -vs $(basename "$man_fn") "$man_fn_fixed"
       installManPage "$man_fn_fixed"
     done
+
+    ln -s $out/share/man/man8/{sudo,sudoedit}.8.gz
+    ln -s $out/bin/{sudo,sudoedit}
   '';
 
   checkFlags = map (t: "--skip=${t}") [

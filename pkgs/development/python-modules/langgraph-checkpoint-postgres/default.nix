@@ -58,10 +58,7 @@ buildPythonPackage rec {
     "psycopg-pool"
   ];
 
-  # Temporarily disabled until the following is solved:
-  # https://github.com/NixOS/nixpkgs/pull/425384
-  doCheck = false;
-  # doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
+  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -93,8 +90,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "checkpointpostgres==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpointpostgres==";
+    };
   };
 
   meta = {
@@ -103,7 +104,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

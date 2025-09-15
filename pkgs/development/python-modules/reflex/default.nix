@@ -10,7 +10,6 @@
   granian,
   hatchling,
   httpx,
-  jinja2,
   numpy,
   packaging,
   pandas,
@@ -43,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.8.6";
+  version = "0.8.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-Tas67x9UEFSR7yyENvixzCWbbKgP+OBMw6prnxWgCQo=";
+    hash = "sha256-foyMNW1ffBowEyCSD4SKPLGxWifQGQqKDRfqVFFX8Yw=";
   };
 
   # 'rich' is also somehow checked when building the wheel,
@@ -73,7 +72,6 @@ buildPythonPackage rec {
     granian
     granian.optional-dependencies.reload
     httpx
-    jinja2
     packaging # used in utils/prerequisites.py
     platformdirs
     psutil

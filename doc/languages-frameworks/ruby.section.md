@@ -263,7 +263,7 @@ $ bundle config set --local force_ruby_platform true
 
 Now that you know how to get a working Ruby environment with Nix, it's time to go forward and start actually developing with Ruby. We will first have a look at how Ruby gems are packaged on Nix. Then, we will look at how you can use development mode with your code.
 
-All gems in the standard set are automatically generated from a single `Gemfile`. The dependency resolution is done with `bundler` and makes it more likely that all gems are compatible to each other.
+All gems in the standard set are automatically generated from a single `Gemfile`. The dependency resolution is done with `bundler` and makes it more likely that all gems are compatible with each other.
 
 In order to add a new gem to nixpkgs, you can put it into the `/pkgs/development/ruby-modules/with-packages/Gemfile` and run `./maintainers/scripts/update-ruby-packages`.
 
@@ -275,7 +275,7 @@ NIX_PATH=nixpkgs=$PWD nix-shell -p "ruby.withPackages (ps: with ps; [ name-of-yo
 
 ### Packaging applications {#packaging-applications}
 
-A common task is to add a ruby executable to nixpkgs, popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables, otherwise the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
+A common task is to add a Ruby executable to Nixpkgs; popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables. Otherwise, the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
 
 The absolute easiest way to do that is to write a `Gemfile` along these lines:
 
@@ -303,7 +303,7 @@ All that's left to do is to generate the corresponding `Gemfile.lock` and `gemse
 
 #### Packaging executables that require wrapping {#packaging-executables-that-require-wrapping}
 
-Sometimes your app will depend on other executables at runtime, and tries to find it through the `PATH` environment variable.
+Sometimes your app will depend on other executables at runtime and try to find them through the `PATH` environment variable.
 
 In this case, you can provide a `postBuild` hook to `bundlerApp` that wraps the gem in another script that prefixes the `PATH`.
 

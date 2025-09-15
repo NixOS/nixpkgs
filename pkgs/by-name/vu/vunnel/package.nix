@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.37.0";
+  version = "0.39.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
-    hash = "sha256-x6J0MbwPQvqG1WXrnwMf0uzAu7MDDVxmDRzbDMb+RSk=";
+    hash = "sha256-7dguSGEDnshjBw6ImtteE39oLbbvsMdX9hz+wmOCcYU=";
     leaveDotGit = true;
   };
 
@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       lxml
       mashumaro
       mergedeep
+      oras
       orjson
       packageurl-python
       pytest-snapshot
@@ -77,6 +78,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_status"
     # TypeError
     "test_parser"
+    # Test require network access
+    "test_rhel_provider_supports_ignore_hydra_errors"
   ];
 
   meta = {

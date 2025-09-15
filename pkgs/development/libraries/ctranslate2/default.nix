@@ -24,8 +24,9 @@
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
+  stdenv' = if withCUDA then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "ctranslate2";
   version = "4.6.0";
 
@@ -98,6 +99,6 @@ stdenv.mkDerivation rec {
       hexa
       misuzu
     ];
-    broken = (cudaPackages.cudaOlder "11.4") || !(withCuDNN -> withCUDA);
+    broken = !(withCuDNN -> withCUDA);
   };
 }

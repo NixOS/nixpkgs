@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.3.0";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "csparpa";
     repo = "pyowm";
     tag = version;
-    hash = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
+    hash = "sha256-D1Cl3uWoEIUqA0R+bjRL2YgsVKj5inuBAVLJYluADg0=";
   };
 
   pythonRelaxDeps = [ "geojson" ];

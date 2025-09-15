@@ -9,7 +9,6 @@
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd",
   plugins ? [ ],
-  ...
 }:
 
 let

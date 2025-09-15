@@ -1,23 +1,21 @@
 {
   stdenvNoLibc,
-  buildPackages,
+  fetchFromGitHub,
   lib,
   firefox-unwrapped,
   firefox-esr-unwrapped,
+  enablePosixThreads ? false,
 }:
 
-let
+stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "wasilibc";
-  version = "22-unstable-2024-10-16";
-in
-stdenvNoLibc.mkDerivation {
-  inherit pname version;
+  version = "27";
 
-  src = buildPackages.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "98897e29fcfc81e2b12e487e4154ac99188330c4";
-    hash = "sha256-NFKhMJj/quvN3mR7lmxzA9w46KhX92iG0rQA9qDeS8I=";
+    tag = "wasi-sdk-${finalAttrs.version}";
+    hash = "sha256-RIjph1XdYc1aGywKks5JApcLajbNFEuWm+Wy/GMHddg=";
     fetchSubmodules = true;
   };
 
@@ -31,6 +29,7 @@ stdenvNoLibc.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-Werror" ""
+    patchShebangs scripts/
   '';
 
   preBuild = ''
@@ -42,10 +41,8 @@ stdenvNoLibc.mkDerivation {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773200
-      "BULK_MEMORY_SOURCES:="
+      ${lib.strings.optionalString enablePosixThreads "THREAD_MODEL:=posix"}
     )
-
   '';
 
   enableParallelBuilding = true;
@@ -62,13 +59,14 @@ stdenvNoLibc.mkDerivation {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${version}";
+    changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${finalAttrs.version}";
     description = "WASI libc implementation for WebAssembly";
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
     maintainers = with maintainers; [
       matthewbauer
       rvolosatovs
+      wucke13
     ];
     license = with licenses; [
       asl20
@@ -76,4 +74,4 @@ stdenvNoLibc.mkDerivation {
       mit
     ];
   };
-}
+})

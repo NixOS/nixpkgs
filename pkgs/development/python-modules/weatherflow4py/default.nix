@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with the WeatherFlow REST API";
     homepage = "https://github.com/jeeftor/weatherflow4py";
-    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/v${version}";
+    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

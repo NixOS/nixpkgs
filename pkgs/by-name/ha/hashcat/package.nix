@@ -3,7 +3,7 @@
   stdenv,
   addDriverRunpath,
   config,
-  cudaPackages_12_4 ? { },
+  cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchurl,
   makeWrapper,
@@ -12,6 +12,8 @@
   ocl-icd,
   perl,
   python3,
+  rocmPackages ? { },
+  rocmSupport ? config.rocmSupport,
   xxHash,
   zlib,
   libiconv,
@@ -19,31 +21,27 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat";
-  version = "7.0.0";
+  version = "7.1.2";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "sha256-hCtx0NNLAgAFiCR6rp/smg/BMnfyzTpqSSWw8Jszv3U=";
+    sha256 = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
   };
-
-  patches = [
-    ./0001-python-shebangs.patch
-  ];
 
   postPatch = ''
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
-      --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
-      --replace "/usr/bin/ar" "ar" \
-      --replace "/usr/bin/sed" "sed" \
-      --replace '-i ""' '-i'
+      --replace-fail "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
+      --replace-fail "/usr/bin/ar" "ar" \
+      --replace-fail "/usr/bin/sed" "sed" \
+      --replace-fail '-i ""' '-i'
   '';
 
   nativeBuildInputs = [
     makeWrapper
   ]
-  ++ lib.optionals cudaSupport [
+  ++ lib.optionals (cudaSupport || rocmSupport) [
     addDriverRunpath
   ];
 
@@ -100,7 +98,10 @@ stdenv.mkDerivation rec {
           "${ocl-icd}/lib"
         ]
         ++ lib.optionals cudaSupport [
-          "${cudaPackages_12_4.cudatoolkit}/lib"
+          "${cudaPackages.cudatoolkit}/lib"
+        ]
+        ++ lib.optionals rocmSupport [
+          "${rocmPackages.clr}/lib"
         ]
       );
     in
@@ -108,7 +109,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/hashcat \
         --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg LD_LIBRARY_PATH}
     ''
-    + lib.optionalString cudaSupport ''
+    + lib.optionalString (cudaSupport || rocmSupport) ''
       for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
         isELF "$program" || continue
         addDriverRunpath "$program"

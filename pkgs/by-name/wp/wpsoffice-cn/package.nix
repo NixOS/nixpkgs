@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
     libmysqlclient
     llvmPackages.openmp
     dbus
-    libsForQt5.fcitx5-qt
   ];
 
   dontWrapQtApps = true;
@@ -173,7 +172,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       mlatus
       th0rgal
-      rewine
+      wineee
       pokon548
     ];
   };

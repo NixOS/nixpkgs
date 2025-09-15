@@ -74,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Boilerplate-less updater library for Nixpkgs ecosystems";
     homepage = "https://github.com/PerchunPak/nixpkgs-updaters-library";
-    changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ perchun ];
   };

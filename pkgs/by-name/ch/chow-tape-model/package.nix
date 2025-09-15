@@ -33,7 +33,6 @@
   python3,
   sqlite,
   stdenv,
-  webkitgtk_4_0,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "chow-tape-model";
@@ -87,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     python3
     sqlite
-    webkitgtk_4_0
   ];
 
   # Link-time-optimization fails without these

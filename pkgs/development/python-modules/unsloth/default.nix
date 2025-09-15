@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "unsloth";
-  version = "2025.6.5";
+  version = "2025.8.9";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit version;
-    hash = "sha256-o4c4gANnjM+z4Dp/0BZ48SMLMbCyIgjF3C5Q/AXV49A=";
+    hash = "sha256-XKYKEJCiOucuGfout8+FiTfO3KXvkucaduwWnZR5OwA=";
   };
 
   build-system = [
@@ -72,6 +72,7 @@ buildPythonPackage rec {
   # but it is not used.
   # Upstream issue: https://github.com/unslothai/unsloth-zoo/pull/68
   pythonRelaxDeps = [
+    "datasets"
     "protobuf"
     "transformers"
     "torch"

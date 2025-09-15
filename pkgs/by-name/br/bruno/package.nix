@@ -19,20 +19,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.9.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-xJJHgpckyli7cXM761THtdNVHfmeVBCVCqywoISiI60=";
+    hash = "sha256-U6q82T/xqwREGsUcCdeAzvk9DWu9579MtF/JE0OIBW4=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-R8bqm2/TU425h7pRQQYrOmteu/UotMfHMz/pe2xkTfU=";
+  npmDepsHash = "sha256-i7bT6ZvdkHwqw+LkMqCdSMCNUsz1LPOHuF+u//lUYJ8=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -189,6 +189,7 @@ buildNpmPackage rec {
       mattpolzin
       redyf
       water-sucks
+      starsep
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

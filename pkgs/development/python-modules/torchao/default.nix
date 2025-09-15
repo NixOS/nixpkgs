@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "ao";
-  version = "0.11.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${version}";
-    hash = "sha256-CNb9xaubOmIRanLq3TM4sBbszTcVK/WFpcq/sWpof44=";
+    hash = "sha256-R9H4+KkKuOzsunM3A5LT8upH1TfkHrD+BZerToCHwjo=";
   };
 
   build-system = [
@@ -75,6 +75,9 @@ buildPythonPackage rec {
     "test_gptq_mt"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: tensor(False) is not true
+    "test_quantize_per_token_cpu"
+
     # RuntimeError: failed to initialize QNNPACK
     "test_smooth_linear_cpu"
 

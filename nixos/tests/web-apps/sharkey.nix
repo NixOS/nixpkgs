@@ -49,5 +49,8 @@ in
           machine.succeed("curl --fail http://localhost:3000")
     '';
 
-  meta.maintainers = with lib.maintainers; [ srxl ];
+  meta.maintainers = with lib.maintainers; [
+    srxl
+    tmarkus
+  ];
 }

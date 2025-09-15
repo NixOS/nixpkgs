@@ -29,11 +29,11 @@
 }:
 mkDerivation {
   pname = "gren";
-  version = "0.6.2";
+  version = "0.6.3";
   src = fetchgit {
     url = "https://github.com/gren-lang/compiler.git";
-    sha256 = "1c0fcdc87nmm26hk6c1k4djdk7ld9488fldx8mhwayqfsx0v2d3x";
-    rev = "0343e77040f97864e5eb9790dd9ba0bb5fe1d6ee";
+    sha256 = "0p93wamff539pb242lib2wyfr6alqz96rpyh9xb0a61ix0j3miiz";
+    rev = "54277a25d47b5c20816550ff6deab89026797526";
     fetchSubmodules = true;
   };
   isLibrary = false;

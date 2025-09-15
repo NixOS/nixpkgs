@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "3.4.0";
+  version = "3.4.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
     tag = version;
-    hash = "sha256-3kTgYlsVumTVH5X6h3YvS0tdex/OGQyn5MzevQ+GuH4=";
+    hash = "sha256-IC3ueAplQc5McGoJkHjjCAGvnLCH9+DUrB3cuKfwMno=";
   };
 
   postPatch =

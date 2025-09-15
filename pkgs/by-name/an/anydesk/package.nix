@@ -98,13 +98,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace systemd/anydesk.service --replace-fail "/usr/bin/anydesk" "$out/bin/anydesk"
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor}
+    mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor} $out/lib/systemd/system
     install -m755 anydesk $out/bin/anydesk
     cp copyright README $out/share/doc/anydesk
     cp -r icons/hicolor/* $out/share/icons/hicolor/
+    cp systemd/anydesk.service $out/lib/systemd/system/anydesk.service
 
     runHook postInstall
   '';
@@ -143,8 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
-      shyim
-    ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

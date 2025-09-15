@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python language bindings for preCICE";
     homepage = "https://github.com/precice/python-bindings";
-    changelog = "https://github.com/precice/python-bindings/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/precice/python-bindings/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };

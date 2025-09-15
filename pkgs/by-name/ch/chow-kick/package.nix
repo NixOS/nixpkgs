@@ -33,7 +33,6 @@
   sqlite,
   stdenv,
   util-linuxMinimal,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -82,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sqlite
     util-linuxMinimal
-    webkitgtk_4_0
   ];
 
   cmakeFlags = [

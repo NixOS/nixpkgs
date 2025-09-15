@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   mpi,
-  cgal,
+  cgal_5,
   boost,
   gmp,
   mpfr,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     mpi
-    cgal
+    cgal_5
     sparsehash
     imagemagick
     # should be propagated by cgal

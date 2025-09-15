@@ -7,14 +7,14 @@
   vulkan-loader,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hayabusa";
-  version = "unstable-2023-11-29";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "notarin";
     repo = "hayabusa";
-    rev = "1d6b8cfd301d60ff9f6946970b51818c036083b0";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w9vXC7L7IP4QLPFS1IgPOKSm7fT7W0R+NsHTdAfIupg=";
   };
 
@@ -43,9 +43,9 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Swift rust fetch program";
     homepage = "https://github.com/notarin/hayabusa";
-    license = lib.licenses.cc-by-nc-nd-40;
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Notarin ];
     mainProgram = "hayabusa";
     platforms = lib.platforms.linux;
   };
-}
+})

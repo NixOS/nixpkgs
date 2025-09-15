@@ -106,7 +106,7 @@ buildPythonPackage rec {
       the public domain, which means you can modify it, redistribute it or use
       it however you like.
     '';
-    license = licenses.publicDomain;
+    license = licenses.unlicense;
     maintainers = with maintainers; [
       fpletz
     ];

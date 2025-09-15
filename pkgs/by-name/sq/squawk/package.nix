@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "2.21.1";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
     tag = "v${version}";
-    hash = "sha256-Ox6UPy4EFN3WEpXYXx0SGVRcAY0zl0x7eCxKP/kS3qo=";
+    hash = "sha256-r5ypzFMmrk09lukGdKQK8BMX8xkA5Qiz1D6AunkUbmk=";
   };
 
-  cargoHash = "sha256-WRGz70lb1HwVOwi+un8h7PoDMlFrJbuFmw3q+JKkfZw=";
+  cargoHash = "sha256-19dBVJPUka5ul+M5hFU+e85WjRq0So1iSaIw5STfq/Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +38,10 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # depends on the PostgreSQL version
     "--skip=parse::tests::test_parse_sql_query_json"
+  ];
+
+  cargoBuildFlags = [
+    "-p squawk"
   ];
 
   meta = {

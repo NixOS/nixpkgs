@@ -10,15 +10,15 @@
 
 buildGoModule rec {
   pname = "kubernetes-kcp";
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "kcp-dev";
     repo = "kcp";
     tag = "v${version}";
-    hash = "sha256-1oxX6jouJ71XkflzZj1vWRJvuUtaz4bh61pNBlb/Ub0=";
+    hash = "sha256-GwfrFaGLrfUTxLoacGCHHzJ41+tA7flb4wvjWJntj+g=";
   };
-  vendorHash = "sha256-jsrJwBF8knq7z25bChR15zWIAZww9e9gQ3Ki+Xhi5Mo=";
+  vendorHash = "sha256-mJaWEZhuMiIy8NYlRJDc39nKfWxP4xlFuM9jiqmkJ0c=";
 
   subPackages = [ "cmd/kcp" ];
 

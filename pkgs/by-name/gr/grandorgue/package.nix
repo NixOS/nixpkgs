@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.16.0-1";
+  version = "3.16.1-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-O+gtyf85E/2hV3E4nc489j2EukRRQ49pPaCSB0j68C8=";
+    hash = "sha256-GaO05zFurxnOOUjUpeR5j0lP4EYR/EgxFpdgwfYHG9M=";
   };
 
   patches = [ ./darwin-fixes.patch ];

@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.71";
+  version = "0.9.78";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pk2R4t0le+F8Q1km/eTFcwyyMxMVgcAI+19cT53xGFs=";
+    hash = "sha256-sKk/NwnD9asIqDW75FI7xZf3zNavlorbK08ff+v4O3g=";
     fetchSubmodules = true;
   };
 
@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-EF7HCSxgL/6a45yaKboe812LxCtnvTF2XGVD1AfmoUc=";
+    hash = "sha256-3H+HEQcXUbmTp+Gu7xz/NpxJgrnw1ubWH79yYKhFTeM=";
   };
 
   pnpmRoot = "../..";
 
-  cargoHash = "sha256-rt5QeKK7SChvz3Wi+Y2YY1fWak5xs2p3muJgPxcYUrs=";
+  cargoHash = "sha256-7q75xX3aDDvcNkEZEM62icFuiMY4mzv+k3C+fGBLwIg=";
 
   cargoRoot = "../..";
 

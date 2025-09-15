@@ -105,6 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  preFixup = ''
+    # fixupPhase spends a lot of time trying to strip text files, which is especially slow on Darwin
+    stripExclude+=("*.js" "*.ts" "*.map" "*.json" "*.md")
+  '';
+
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";

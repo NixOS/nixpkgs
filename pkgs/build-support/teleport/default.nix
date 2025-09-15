@@ -60,7 +60,7 @@ let
 
     postInstall = ''
       mkdir -p $out/include
-      cp ${finalAttrs.buildAndTestSubdir}/librdprs.h $out/include/
+      cp ${finalAttrs.buildAndTestSubdir}/librdpclient.h $out/include/
     '';
   });
 

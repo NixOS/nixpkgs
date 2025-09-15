@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.3.6";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-tBMdFOHSRjw0PtE19XytLU4MmjR3NBLJxUqWoG4L2F8=";
+    hash = "sha256-me9Qn7wwDsls419LOoRnYgIgmCblqLEFwNdH3I/tv0U=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -80,14 +80,18 @@ buildPythonPackage rec {
     "test_build_command_shows_wolfi_warning"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "cli==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "cli==";
+    };
   };
 
   meta = {
     description = "Official CLI for LangGraph API";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];

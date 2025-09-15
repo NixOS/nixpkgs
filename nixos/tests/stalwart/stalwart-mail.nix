@@ -68,6 +68,7 @@ in
       main.succeed("systemctl restart stalwart-mail.service")
       main.wait_for_open_port(587)
       main.wait_for_open_port(143)
+      main.wait_for_open_port(80)
 
       main.succeed("test-imap-read")
 

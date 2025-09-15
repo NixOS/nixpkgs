@@ -894,14 +894,19 @@ in
                   install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart = ''
-            ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
-              ${escapeShellArgs cfg.extraFlags}
-          '';
+          ExecStart =
+            let
+              args = lib.escapeShellArgs (
+                (lib.cli.toGNUCommandLine { } {
+                  "no-browser" = true;
+                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "config" = cfg.configDir;
+                  "data" = cfg.databaseDir;
+                })
+                ++ cfg.extraFlags
+              );
+            in
+            "${lib.getExe cfg.package} ${args}";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "keep-sorted";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lGAB+Hb5lPcH+QOZpz98FdP0Qjj4O1iUhuC6lA81xpc=";
+    hash = "sha256-1WkxZRxXafz8xTmdy0aP+jqWsuwQlvkZSmEjnlmHBaA=";
   };
 
   vendorHash = "sha256-HTE9vfjRmi5GpMue7lUfd0jmssPgSOljbfPbya4uGsc=";

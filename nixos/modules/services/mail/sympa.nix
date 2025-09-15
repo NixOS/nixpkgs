@@ -400,7 +400,7 @@ in
       })
       // (lib.optionalAttrs (cfg.mta.type == "postfix") {
         sendmail_aliases = "${dataDir}/sympa_transport";
-        aliases_program = "${pkgs.postfix}/bin/postmap";
+        aliases_program = lib.getExe' config.services.postfix.package "postmap";
         aliases_db_type = "hash";
       })
       // (lib.optionalAttrs cfg.web.enable {
@@ -502,8 +502,8 @@ in
         ''}
 
         ${lib.optionalString (cfg.mta.type == "postfix") ''
-          ${pkgs.postfix}/bin/postmap hash:${dataDir}/virtual.sympa
-          ${pkgs.postfix}/bin/postmap hash:${dataDir}/transport.sympa
+          ${lib.getExe' config.services.postfix.package "postmap"} hash:${dataDir}/virtual.sympa
+          ${lib.getExe' config.services.postfix.package "postmap"} hash:${dataDir}/transport.sympa
         ''}
         ${pkg}/bin/sympa_newaliases.pl
         ${pkg}/bin/sympa.pl --health_check

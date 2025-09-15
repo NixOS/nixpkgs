@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "segments";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
   disabled = isPy27;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cldf";
     repo = "segments";
     rev = "v${version}";
-    sha256 = "sha256-Z9AQnsK/0HUCZDzdpQKNfSBWxfAOjWNBytcfI6yBY84=";
+    sha256 = "sha256-5VgjaWeinXimpoCBhKBvVOmvcCIWrOqYMQegVDGJAKo=";
   };
 
   nativeBuildInputs = [ setuptools ];

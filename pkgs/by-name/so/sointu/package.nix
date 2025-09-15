@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   pkg-config,
@@ -12,7 +12,7 @@
   xorg,
 }:
 
-buildGo123Module {
+buildGoModule {
   pname = "sointu";
   version = "0.4.1-unstable-2025-08-13";
 

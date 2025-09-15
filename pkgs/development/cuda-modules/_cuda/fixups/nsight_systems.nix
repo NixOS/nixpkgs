@@ -114,7 +114,7 @@ in
       xorg.libXtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       gst_all_1.gst-plugins-bad
     ];
 

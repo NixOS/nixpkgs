@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyfakefs";
-  version = "5.8.0";
+  version = "5.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-flRX7jzGcGnTzvbieCJ+z8gL+2HpJbwKTTsK8y0cmc4=";
+    hash = "sha256-ZsXGzNQJe0hPh4L5pQeP7gUz1GXg2cr1lMkVfVQ4JVM=";
   };
 
   build-system = [ setuptools ];

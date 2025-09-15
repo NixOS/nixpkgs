@@ -9,36 +9,36 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  cudaPackages,
+
+  # nativeBuildInputs
   cmake,
   ninja,
+  cudaPackages,
+
+  # dependencies
+  click,
+  einops,
   numpy,
+  pynvml,
+  tabulate,
   torch,
+  tqdm,
 }:
 
-let
+buildPythonPackage rec {
   pname = "flashinfer";
-  version = "0.2.5";
-
-  src_cutlass = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "cutlass";
-    # Using the revision obtained in submodule inside flashinfer's `3rdparty`.
-    rev = "df8a550d3917b0e97f416b2ed8c2d786f7f686a3";
-    hash = "sha256-d4czDoEv0Focf1bJHOVGX4BDS/h5O7RPoM/RrujhgFQ=";
-  };
-
-in
-buildPythonPackage {
-  format = "setuptools";
-  inherit pname version;
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${version}";
-    hash = "sha256-YrYfatkI9DQkFEEGiF8CK/bTafaNga4Ufyt+882C0bQ=";
+    fetchSubmodules = true;
+    hash = "sha256-e9PfLfU0DdoLKlXiHylCbGd125c7Iw9y4NDIOAP0xHs=";
   };
 
   build-system = [ setuptools ];
@@ -48,19 +48,15 @@ buildPythonPackage {
     ninja
     (lib.getBin cudaPackages.cuda_nvcc)
   ];
+
   dontUseCmakeConfigure = true;
 
-  buildInputs = [
-    cudaPackages.cuda_cudart
-    cudaPackages.libcublas
-    cudaPackages.cuda_cccl
-    cudaPackages.libcurand
+  buildInputs = with cudaPackages; [
+    cuda_cccl
+    cuda_cudart
+    libcublas
+    libcurand
   ];
-
-  postPatch = ''
-    rmdir 3rdparty/cutlass
-    ln -s ${src_cutlass} 3rdparty/cutlass
-  '';
 
   # FlashInfer offers two installation modes:
   #
@@ -81,14 +77,22 @@ buildPythonPackage {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
+  pythonRemoveDeps = [
+    "nvidia-cudnn-frontend"
+  ];
   dependencies = [
+    click
+    einops
     numpy
+    pynvml
+    tabulate
     torch
+    tqdm
   ];
 
-  meta = with lib; {
+  meta = {
     broken = !torch.cudaSupport || !config.cudaSupport;
     homepage = "https://flashinfer.ai/";
     description = "Library and kernel generator for Large Language Models";
@@ -99,7 +103,7 @@ buildPythonPackage {
       and inference, and delivers state-of-the-art performance across diverse
       scenarios.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ breakds ];
   };
 }

@@ -44,7 +44,7 @@ in
         type = with lib.types; nullOr path;
         default = null;
         description = ''
-          Path to a file containing sensitive environment variables for Newt. See https://docs.fossorial.io/Newt/overview#cli-args
+          Path to a file containing sensitive environment variables for Newt. See <https://docs.fossorial.io/Newt/overview#cli-args>
           These will overwrite anything defined in the config.
           The file should contain environment-variable assignments like:
           NEWT_ID=2ix2t8xk22ubpfy

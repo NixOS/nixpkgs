@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.6.16";
+  version = "9.6.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
     tag = version;
-    hash = "sha256-wGzrlDf6bJFIfJXlCMlOQvRlpOcDXeMVY2/GRjOG1H4=";
+    hash = "sha256-yl5bc037gr3oAUH01uNvNj7fIe8ca2jH+yfWlgMImZE=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,8 @@ buildPythonPackage rec {
     regex
     requests
   ];
+
+  pythonRelaxDeps = [ "backrefs" ];
 
   optional-dependencies = {
     recommended = [

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "onvif-zeep-async";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "openvideolibs";
     repo = "python-onvif-zeep-async";
     tag = "v${version}";
-    hash = "sha256-xffbMz8NZpazLw3uRPMNv5i23yk6RmOBCgE1gSj9d7A=";
+    hash = "sha256-IZ48CB4+C+XS/Qt51hohurdQoJ1uANus/PodtZ9ZpCY=";
   };
 
   build-system = [ setuptools ];

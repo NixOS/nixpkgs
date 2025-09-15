@@ -31,6 +31,8 @@ buildPythonPackage rec {
       --replace-fail 'build-backend = "poetry.masonry.api"' 'build-backend = "poetry.core.masonry.api"'
   '';
 
+  pythonRelaxDeps = [ "pscript" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [ pscript ];

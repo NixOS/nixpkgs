@@ -13,6 +13,7 @@
   opencv-python,
   pandas,
   pillow,
+  polars,
   psutil,
   py-cpuinfo,
   pyyaml,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "ultralytics";
-  version = "8.3.143";
+  version = "8.3.193";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${version}";
-    hash = "sha256-qpFQcGLTEQS7Bt9CvdXgv2JyNfOONS0Cf71dckCrlPw=";
+    hash = "sha256-5+QSRQcfzxy/m197wUgMc6C1EwcNLpfZLN5V3cSrY8c=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     opencv-python
     pandas
     pillow
+    polars
     psutil
     py-cpuinfo
     pyyaml
@@ -102,6 +104,7 @@ buildPythonPackage rec {
     "test_yolov10"
     "test_yoloe"
     "test_multichannel"
+    "test_grayscale"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Aborted

@@ -308,8 +308,6 @@ let
           substituteInPlace authentik/lib/default.yml \
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
-          substituteInPlace pyproject.toml \
-            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
@@ -346,7 +344,7 @@ let
             django-storages
             django-tenants
             djangorestframework
-            djangorestframework-guardian2
+            djangorestframework-guardian
             docker
             drf-orjson-renderer
             drf-spectacular

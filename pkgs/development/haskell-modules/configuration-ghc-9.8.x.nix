@@ -18,8 +18,6 @@ in
 
 {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
-
   # Disable GHC core libraries.
   array = null;
   base = null;

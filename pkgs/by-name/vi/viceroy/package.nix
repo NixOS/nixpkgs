@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       ereslibre
-      shyim
     ];
     platforms = platforms.unix;
   };

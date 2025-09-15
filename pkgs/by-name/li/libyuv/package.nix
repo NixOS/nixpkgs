@@ -17,6 +17,11 @@ stdenv.mkDerivation {
     hash = "sha256-4Irs+hlAvr6v5UKXmKHhg4IK3cTWdsFWxt1QTS0rizU=";
   };
 
+  patches = [
+    # Fixes wrong byte order in ARGBToRGB565DitherRow_C on big-endian
+    ./dither-honour-byte-order.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];

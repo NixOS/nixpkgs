@@ -18,6 +18,8 @@
   xvfb-run,
   librsvg,
   libX11,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,6 +37,7 @@ python3Packages.buildPythonApplication rec {
     intltool
     wrapGAppsHook3
     gdk-pixbuf
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -122,6 +125,16 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ulauncher";
+      desktopName = "Ulauncher";
+      exec = "ulauncher";
+      categories = [ "Utility" ];
+      icon = "ulauncher";
+    })
+  ];
 
   meta = with lib; {
     description = "Fast application launcher for Linux, written in Python, using GTK";

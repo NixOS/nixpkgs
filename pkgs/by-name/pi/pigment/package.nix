@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication {
     description = "Extract color palettes from your images";
     homepage = "https://jeffser.com/pigment/";
     downloadPage = "https://github.com/Jeffser/Pigment";
-    changelog = "https://github.com/Jeffser/Pigment/releases/tag/v${version}";
+    changelog = "https://github.com/Jeffser/Pigment/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pigment";
     platforms = lib.platforms.linux;

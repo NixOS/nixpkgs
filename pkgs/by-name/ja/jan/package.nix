@@ -6,10 +6,10 @@
 
 let
   pname = "Jan";
-  version = "0.6.6";
+  version = "0.6.9";
   src = fetchurl {
-    url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
-    hash = "sha256-KTU7jSouFCv4ER6cOzNYQJxRpgGTV5AnLs4i0Ne4GYQ=";
+    url = "https://github.com/menloresearch/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
+    hash = "sha256-633tZXjKWwXW7VZoHz8GpGX5GWsEoZM3FbfjUJdntOs=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -23,11 +23,11 @@ appimageTools.wrapType2 {
   '';
 
   meta = {
-    changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
-    description = "Open source alternative to ChatGPT that runs 100% offline on your computer";
-    homepage = "https://github.com/janhq/jan";
+    changelog = "https://github.com/menloresearch/jan/releases/tag/v${version}";
+    description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
+    homepage = "https://github.com/menloresearch/jan";
     license = lib.licenses.agpl3Plus;
-    mainProgram = "jan";
+    mainProgram = "Jan";
     maintainers = [ ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64;
   };

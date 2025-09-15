@@ -5,7 +5,6 @@
   erlang,
   icu,
   openssl,
-  spidermonkey_91,
   python3,
   nixosTests,
 }:
@@ -20,8 +19,6 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
-    substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
     patchShebangs bin/rebar
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -37,14 +34,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     icu
     openssl
-    spidermonkey_91
     (python3.withPackages (ps: with ps; [ requests ]))
   ];
 
   dontAddPrefix = "True";
 
   configureFlags = [
-    "--spidermonkey-version=91"
+    "--js-engine=quickjs"
+    "--disable-spidermonkey"
   ];
 
   buildFlags = [

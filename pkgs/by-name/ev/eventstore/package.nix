@@ -8,6 +8,7 @@
   bintools,
   stdenv,
   mono,
+  nix-update-script,
 }:
 let
   mainProgram = "EventStore.ClusterNode";
@@ -15,21 +16,21 @@ in
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "23.6.0";
+  version = "24.10.6";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
-    rev = "oss-v${version}";
-    hash = "sha256-+Wxm6yusaCoqXIbsi0ZoALAviKUyNMQwbzsQtBK/PCo=";
+    tag = "v${version}";
+    hash = "sha256-8/sagvMyJ1/onGMuJ28QLWI5M8dBDWyGOcZKUv3PJsQ=";
     leaveDotGit = true;
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
   MINVERVERSIONOVERRIDE = version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   nativeBuildInputs = [
     git
@@ -69,7 +70,7 @@ buildDotnetModule rec {
     kill "$PID";
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://geteventstore.com/";

@@ -15,7 +15,7 @@
   alsa-lib,
   cups,
   libgbm,
-  systemd,
+  systemdLibs,
   openssl,
   libglvnd,
 }:
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   runtimeDependencies = [
-    (lib.getLib systemd)
+    systemdLibs
   ];
 
   meta = {

@@ -9,7 +9,7 @@
   httpx,
   ms-cv,
   pydantic,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   respx,
 }:
@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "OpenXbox";
     repo = "xbox-webapi-python";
@@ -28,9 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-9A3gdSlRjBCx5fBW+jkaSWsFuGieXQKvbEbZzGzLf94=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     ecdsa
     httpx
@@ -39,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
     respx
   ];

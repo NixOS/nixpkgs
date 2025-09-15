@@ -66,6 +66,7 @@ buildPythonPackage rec {
     '';
     inherit (pkgs.scs.meta) homepage;
     downloadPage = "https://github.com/bodono/scs-python";
+    changelog = "https://github.com/bodono/scs-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drewrisinger ];
   };

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.13.0";
+  version = "0.13.1";
 
   outputs = [
     "bin"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = "malcontent";
     rev = version;
-    hash = "sha256-DVoTJrpXk5AoRMz+TxEP3NIAA/OOGRzZurLyGp0UBUo=";
+    hash = "sha256-ekRi4yXu8u8t1AjyS3bD6tdqqnqtKyI6yZs+28LnfRY=";
   };
 
   patches = [

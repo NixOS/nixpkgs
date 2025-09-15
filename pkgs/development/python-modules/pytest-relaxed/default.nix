@@ -21,6 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-lW6gKOww27+2gN2Oe0p/uPgKI5WV6Ius4Bi/LA1xgkg=";
   };
 
+  patches = [
+    # https://github.com/bitprophet/pytest-relaxed/issues/28
+    # https://github.com/bitprophet/pytest-relaxed/pull/29
+    ./fix-oldstyle-hookimpl-setup.patch
+  ];
+
   buildInputs = [ pytest ];
 
   propagatedBuildInputs = [ decorator ];
@@ -31,6 +37,10 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests" ];
+
+  disabledTests = [
+    "test_skips_pytest_fixtures"
+  ];
 
   pythonImportsCheck = [ "pytest_relaxed" ];
 

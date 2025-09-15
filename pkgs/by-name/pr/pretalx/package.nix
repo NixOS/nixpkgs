@@ -4,6 +4,7 @@
   gettext,
   python3,
   fetchFromGitHub,
+  fetchPypi,
   plugins ? [ ],
   nixosTests,
 }:
@@ -14,10 +15,29 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5_1;
 
+      django-csp = prev.django-csp.overridePythonAttrs rec {
+        version = "3.8";
+        src = fetchPypi {
+          inherit version;
+          pname = "django_csp";
+          hash = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
+        };
+      };
+
       django-extensions = prev.django-extensions.overridePythonAttrs {
         # Compat issues with Django 5.1
         # https://github.com/django-extensions/django-extensions/issues/1885
         doCheck = false;
+      };
+
+      django-hierarkey = prev.django-hierarkey.overridePythonAttrs rec {
+        version = "1.2.1";
+        src = fetchFromGitHub {
+          owner = "raphaelm";
+          repo = "django-hierarkey";
+          tag = version;
+          hash = "sha256-GkCNVovo2bDCp6m2GBvusXsaBhcmJkPNu97OdtsYROY=";
+        };
       };
     };
   };
@@ -85,11 +105,11 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css_inline"
     "cssutils"
+    "defusedcsv"
     "defusedxml"
     "django-compressor"
     "django-csp"
     "django-filter"
-    "django-hierarkey"
     "django-i18nfield"
     "djangorestframework"
     "markdown"

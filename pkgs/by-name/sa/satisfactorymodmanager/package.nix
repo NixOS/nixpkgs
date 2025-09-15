@@ -3,7 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  nodejs,
+  nodejs_20,
   pnpm_8,
   wails,
   wrapGAppsHook3,
@@ -12,6 +12,10 @@
   copyDesktopItems,
 }:
 
+let
+  # NodeJS 22.18.0 broke our build, not sure why
+  wails' = wails.override { nodejs = nodejs_20; };
+in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
   version = "3.0.3";
@@ -38,9 +42,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    nodejs
     pnpm_8.configHook
-    wails
+    wails'
     wrapGAppsHook3
     copyDesktopItems
   ];

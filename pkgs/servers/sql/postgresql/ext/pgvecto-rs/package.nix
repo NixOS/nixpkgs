@@ -27,6 +27,9 @@ buildPgrxExtension (finalAttrs: {
     (replaceVars ./0001-read-clang-flags-from-environment.diff {
       clang = lib.getExe clang;
     })
+    # Rust 1.89 denies implicit autorefs by default, making the compilation fail.
+    # This restores the behaviour of previous rust versions by making the lint throw a warning instead.
+    ./0002-allow-dangerous-implicit-autorefs.diff
   ];
 
   src = fetchFromGitHub {

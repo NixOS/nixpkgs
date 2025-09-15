@@ -50,6 +50,6 @@ or type into the Firefox URL bar: `about:policies#documentation`.
 Nix installed add-ons do not have a valid signature, which is why signature verification is disabled. This does not compromise security because downloaded add-ons are checksummed and manual add-ons can't be installed. Also, make sure that the `name` field of `fetchFirefoxAddon` is unique. If you remove an add-on from the `nixExtensions` array, rebuild and start Firefox: the removed add-on will be completely removed with all of its settings.
 
 ## Troubleshooting {#sec-firefox-troubleshooting}
-If add-ons are marked as broken or the signature is invalid, make sure you have Firefox ESR installed. Normal Firefox does not provide the ability anymore to disable signature verification for add-ons thus nix add-ons get disabled by the normal Firefox binary.
+If add-ons are marked as broken or the signature is invalid, make sure you have Firefox ESR installed. Normal Firefox does not provide the ability anymore to disable signature verification for add-ons; thus, Nix add-ons get disabled by the normal Firefox binary.
 
 If add-ons do not appear installed despite being defined in your nix configuration file, reset the local add-on state of your Firefox profile by clicking `Help -> More Troubleshooting Information -> Refresh Firefox`. This can happen if you switch from manual add-on mode to nix add-on mode and then back to manual mode and then again to nix add-on mode.

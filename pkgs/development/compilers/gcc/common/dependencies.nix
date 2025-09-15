@@ -12,7 +12,6 @@
   gmp,
   mpfr,
   libmpc,
-  sanitiseHeaderPathsHook,
   libucontext ? null,
   libxcrypt ? null,
   isSnapshot ? false,
@@ -42,10 +41,6 @@ in
     texinfo
     which
     gettext
-
-    # Prevent GCC leaking into the runtime closure of C++ packages
-    # through headers using `__FILE__`.
-    sanitiseHeaderPathsHook
   ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox || isSnapshot && flex != null) [ flex ]
@@ -76,8 +71,8 @@ in
     gmp
     mpfr
     libmpc
+    libxcrypt
   ]
-  ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
   ++ [
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ]

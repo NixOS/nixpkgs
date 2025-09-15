@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromSourcehut,
   fetchpatch,
   ncurses,
   boehmgc,
@@ -38,23 +38,29 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "w3m";
-  version = "0.5.3+git20230121";
+  version = "0.5.5";
 
-  src = fetchFromGitHub {
-    owner = "tats";
+  src = fetchFromSourcehut {
+    owner = "~rkta";
     repo = "w3m";
-    rev = "v${version}";
-    hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rz9tNkMg5xUqMpMdK2AQlKjCJlCjgLQOkj4A/eyPm0M=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
+  env = {
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
 
-  # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
-  # the correct paths.
-  PERL = "${perl}/bin/perl";
-  MAN = "${man}/bin/man";
+    # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
+    # the correct paths.
+    PERL = "${perl}/bin/perl";
+    MAN = "${man}/bin/man";
+
+    # for w3mimgdisplay
+    # see: https://bbs.archlinux.org/viewtopic.php?id=196093
+    LIBS = lib.optionalString x11Support "-lX11";
+  };
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
@@ -113,23 +119,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  # for w3mimgdisplay
-  # see: https://bbs.archlinux.org/viewtopic.php?id=196093
-  LIBS = lib.optionalString x11Support "-lX11";
-
   passthru.tests.version = testers.testVersion {
-    inherit version;
+    inherit (finalAttrs) version;
     package = w3m;
     command = "w3m -version";
   };
 
   meta = {
-    homepage = "https://w3m.sourceforge.net/";
-    changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
+    homepage = "https://git.sr.ht/~rkta/w3m";
+    changelog = "https://git.sr.ht/~rkta/w3m/tree/v${finalAttrs.version}/item/NEWS";
     description = "Text-mode web browser";
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      toastal
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     mainProgram = "w3m";
   };
-}
+})

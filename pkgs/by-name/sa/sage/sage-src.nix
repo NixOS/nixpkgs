@@ -82,6 +82,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/d0cbe9d353722580f98a327694f1a361c9b83ccd.patch?full_index=1";
       hash = "sha256-uV2nttxCKDsNqMf1O+lUmuoiDrx7/CfiS00JBb9kiM8=";
     })
+
+    # https://github.com/sagemath/sage/pull/40156, landed in 10.7.beta5
+    (fetchpatch2 {
+      name = "cython-3.1-update.patch";
+      url = "https://github.com/sagemath/sage/commit/5ea8db28977ec113aec3c4c4b208d1783e3937a7.patch?full_index=1";
+      hash = "sha256-5DPPxMuidPpVHrjK8j0UVZzuwiVy9vQzFd6hBYwNAok=";
+    })
+
+    # https://github.com/sagemath/sage/pull/40175, landed in 10.7.beta8
+    (fetchpatch2 {
+      name = "rpy2-3.6-update.patch";
+      url = "https://github.com/sagemath/sage/commit/db2d8db99d9a7dfa1972d534ecd89e3d2ba5c55b.patch?full_index=1";
+      hash = "sha256-6Bk0uGlKFsiDsgv+ljMC1YnmAT+g+he6aFNkpvw2on0=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

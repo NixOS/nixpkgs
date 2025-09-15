@@ -24,7 +24,7 @@ let
     d.stopwords
   ]);
 
-  version = "0.0.21";
+  version = "0.0.23";
   tag = "v${version}";
 in
 buildPythonPackage {
@@ -38,7 +38,7 @@ buildPythonPackage {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-Q5f4WihaT88R+x4jMUuRNBvWglkGdS5oi+o9jOk+tSE=";
+    hash = "sha256-tqT/MTcSHcKGoPUUzjPLFpOTchannFsCd2VMC+8kVZ8=";
   };
 
   pythonRelaxDeps = [

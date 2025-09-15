@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "unicrypto";
-  version = "0.0.10";
+  version = "0.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "skelsec";
     repo = "unicrypto";
     tag = version;
-    hash = "sha256-mZEnYVM5r4utiGwM7bp2SwaDjYsH8AR/Qm5UdPNke0w=";
+    hash = "sha256-quMh4yQSqbwZwWTJYxW/4F0k2c2nh82FEiNCSeQzhvo=";
   };
 
   propagatedBuildInputs = [

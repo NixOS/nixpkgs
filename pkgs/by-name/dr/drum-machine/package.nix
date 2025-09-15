@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "drum-machine";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
     tag = "v${version}";
-    hash = "sha256-/ziI2rRuhGG/7VZbZi6lr+Lmbo2kt9VxH9bqtCdreQs=";
+    hash = "sha256-5NzbjPzmrsF/xKLBwQ4MDPxz6OjBHioO7vcLMzMhidA=";
   };
 
   strictDeps = true;

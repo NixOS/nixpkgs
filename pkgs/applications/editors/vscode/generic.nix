@@ -15,7 +15,7 @@
   nss,
   nspr,
   xorg,
-  systemd,
+  systemdLibs,
   fontconfig,
   libdbusmenu,
   glib,
@@ -230,12 +230,12 @@ stdenv.mkDerivation (
       libgbm
       nss
       nspr
-      systemd
+      systemdLibs
       xorg.libxkbfile
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.getLib systemd)
+      systemdLibs
       fontconfig.lib
       libdbusmenu
       wayland

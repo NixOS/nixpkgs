@@ -13,6 +13,8 @@
   colorlog,
   dependency-groups,
   jinja2,
+  packaging,
+  tomli,
 
   # tests
   pytestCheckHook,
@@ -41,11 +43,15 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    attrs
     argcomplete
+    attrs
     colorlog
     dependency-groups
+    packaging
     virtualenv
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   optional-dependencies = {

@@ -141,7 +141,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin
-      abbradar
       hlad
     ];
     downloadPage = "http://gajim.org/download/";

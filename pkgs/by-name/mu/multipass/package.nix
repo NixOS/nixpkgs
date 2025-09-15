@@ -9,20 +9,20 @@
 
 let
   name = "multipass";
-  version = "1.16.0";
+  version = "1.16.1";
 
   multipass_src = fetchFromGitHub {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7P7LZEvZ+ygM0G8C/gMIwq5BOSs4wSVEBNgsaZzBbOk=";
+    hash = "sha256-DryVXuyAdjk+KhJZYqGh/r1H50rwM16vJ9igLtftgDY=";
     fetchSubmodules = true;
   };
 
   commonMeta = {
     homepage = "https://multipass.run";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 

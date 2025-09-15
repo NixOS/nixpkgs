@@ -191,6 +191,6 @@ clangStdenv.mkDerivation {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
 }

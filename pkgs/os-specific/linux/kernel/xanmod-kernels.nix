@@ -15,13 +15,14 @@ let
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.42";
-      hash = "sha256-q/a6ik5kKRKOcbmGxGBdCDW3dsgIDf/7tvEpcGjDrHI=";
+      version = "6.12.47";
+      hash = "sha256-jR1VqFE1jF5mTRAp+Xxswmh9bMIolJtCk4QgMHzIhao=";
+      isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
-      version = "6.15.10";
-      hash = "sha256-6ed820JXJr7QqOX3IiF50SFrYeVrx0xCh73zrlmMy5I=";
+      version = "6.16.7";
+      hash = "sha256-/CFSGaDbK0pZgGGOOxixwOQgeD1OsbUhtRss4VbXHxE=";
     };
   };
 
@@ -30,6 +31,7 @@ let
       version,
       suffix ? "xanmod1",
       hash,
+      isLTS ? false,
     }:
     buildLinux (
       args
@@ -76,6 +78,7 @@ let
           ./update-xanmod.sh
           variant
         ];
+        inherit isLTS;
 
         extraMeta = {
           branch = lib.versions.majorMinor version;

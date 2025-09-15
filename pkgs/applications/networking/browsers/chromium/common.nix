@@ -477,9 +477,16 @@ let
       # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
       ./patches/chromium-126-llvm-17.patch
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "140") [
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-129-rust.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "140") [
+      # Rebased variant of the patch above due to
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6665907
+      ./patches/chromium-140-rust.patch
     ]
     ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
       # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
@@ -526,24 +533,38 @@ let
       # preventing compilations of chromium with versions below their intended version, not about running the very
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "138") [
+      (fetchpatch {
+        # Unbreak building with Rust 1.89+ which introduced
+        # a new mismatched_lifetime_syntaxes lint.
+        # https://issues.chromium.org/issues/424424323
+        name = "chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6658267
+        url = "https://chromium.googlesource.com/chromium/src/+/94a87ff38c51fd1a71980a5051d3553978391608^!?format=TEXT";
+        decode = "base64 -d";
+        includes = [ "build/rust/cargo_crate.gni" ];
+        hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
+      })
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "138") [
+      # Rebased variant of the patch above for
+      # electron 35 (M134) and 36 (M136)
+      ./patches/chromium-134-rust-1.86-mismatched_lifetime_syntaxes.patch
     ];
 
     postPatch =
-      lib.optionalString (!isElectron)
-        # TODO: reuse mkGnFlags for this
-        (
-          if (chromiumVersionAtLeast "136") then
-            ''
-              cp ${./files/gclient_args.gni} build/config/gclient_args.gni
-              chmod u+w build/config/gclient_args.gni
-              echo 'checkout_mutter = false' >> build/config/gclient_args.gni
-              echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
-            ''
-          else
-            ''
-              ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
-            ''
-        )
+      # TODO: reuse mkGnFlags for this
+      # TODO: reflow
+      lib.optionalString (!isElectron) ''
+        cp ${./files/gclient_args.gni} build/config/gclient_args.gni
+        chmod u+w build/config/gclient_args.gni
+        echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+        echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+      ''
+      + lib.optionalString (!isElectron && chromiumVersionAtLeast "140") ''
+        echo 'checkout_clusterfuzz_data = false' >> build/config/gclient_args.gni
+      ''
       + lib.optionalString (!isElectron) ''
 
         echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE

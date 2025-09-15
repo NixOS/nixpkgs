@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.2.0";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${version}";
-    hash = "sha256-uhVdtB/fLy0hfZKfzNV2eoO83bvKppGVl4Lm8IEscL0=";
+    hash = "sha256-UEVhzKDu2nMkhaCLD162xCBR+2e3ipSVakmlZAzhN3Q=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -43,8 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "sdk==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "sdk==";
+    };
   };
 
   meta = {

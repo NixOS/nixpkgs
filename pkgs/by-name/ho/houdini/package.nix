@@ -33,6 +33,7 @@ buildFHSEnv {
       nspr
       expat
       pciutils
+      libdrm
       libxkbcommon
       libudev0-shim
       tbb
@@ -63,6 +64,8 @@ buildFHSEnv {
       libXScrnSaver
       libXrandr
       libxcb
+      libxkbfile
+      libxshmfence
       xcbutil
       xcbutilimage
       xcbutilrenderutil

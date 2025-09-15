@@ -31,11 +31,6 @@ let
   pname = "libcutensor";
 
   cutensorVersions = [
-    "1.3.3"
-    "1.4.0"
-    "1.5.0"
-    "1.6.2"
-    "1.7.0"
     "2.0.2"
     "2.1.0"
   ];
@@ -74,17 +69,11 @@ let
   # The subdirectories in lib/ tell us which versions of CUDA are supported.
   # Typically the names will look like this:
   #
-  # - 10.2
   # - 11
-  # - 11.0
   # - 12
 
   # libPath :: String
-  libPath =
-    let
-      cudaMajorVersion = versions.major cudaMajorMinorVersion;
-    in
-    if cudaMajorMinorVersion == "10.2" then cudaMajorMinorVersion else cudaMajorVersion;
+  libPath = versions.major cudaMajorMinorVersion;
 
   # A release is supported if it has a libPath that matches our CUDA version for our platform.
   # LibPath are not constant across the same release -- one platform may support fewer

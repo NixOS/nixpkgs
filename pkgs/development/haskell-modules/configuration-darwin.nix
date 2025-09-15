@@ -328,6 +328,19 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
+    # 2025-08-04: Some RNG tests fail only on Darwin
+    botan-low = overrideCabal (drv: {
+      testFlags =
+        drv.testFlags or [ ]
+        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+          # botan-low-rng-tests
+          "/rdrand/rngInit/"
+          "/rdrand/rngGet/"
+          "/rdrand/rngReseed/"
+          "/rdrand/rngReseedFromRNGCtx/"
+          "/rdrand/rngAddEntropy/"
+        ]);
+    }) super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -383,8 +396,12 @@ self: super:
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
     }) (disableCabalFlag "fixity-th" super.fourmolu);
 
-    # https://github.com/NixOS/nixpkgs/issues/149692
-    Agda = disableCabalFlag "optimise-heavily" super.Agda;
+    Agda = lib.pipe super.Agda [
+      # https://github.com/NixOS/nixpkgs/issues/149692
+      (disableCabalFlag "optimise-heavily")
+      # https://github.com/agda/agda/issues/8016
+      (appendConfigureFlag "--ghc-option=-Wwarn=deprecations")
+    ];
 
     # https://github.com/NixOS/nixpkgs/issues/198495
     eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;

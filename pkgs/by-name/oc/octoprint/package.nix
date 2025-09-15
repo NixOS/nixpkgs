@@ -231,7 +231,6 @@ let
             mainProgram = "octoprint";
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
-              abbradar
               WhittlesJr
               gador
             ];

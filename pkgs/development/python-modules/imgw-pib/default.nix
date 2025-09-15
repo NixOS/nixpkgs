@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "imgw-pib";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
     tag = version;
-    hash = "sha256-rsR1ZlbNCAlJmiTefgJ4gurGaC17z/kKgDHpuMkyxz8=";
+    hash = "sha256-IRT0tEVKQ1ebvRtBsdf30DII1U6vjV2/MTk7PoC9zd4=";
   };
 
   build-system = [ setuptools ];

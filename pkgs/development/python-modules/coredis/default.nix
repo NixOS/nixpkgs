@@ -1,6 +1,7 @@
 {
   lib,
   async-timeout,
+  beartype,
   buildPythonPackage,
   setuptools,
   versioneer,
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.24.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "coredis";
     tag = version;
-    hash = "sha256-vqgxj366x+TphGxUBXUHJpEM0zAdr6Ia4pDPKGWUx14=";
+    hash = "sha256-LDK/tVGBsuhf0WzGjdCJznUVh9vrtRrjtU0wKpsr/Ag=";
   };
 
   postPatch = ''
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   dependencies = [
     async-timeout
+    beartype
     deprecated
     packaging
     pympler

@@ -35,7 +35,7 @@
   rsync,
   icu,
   pnpm_9,
-  nodePackages,
+  svgo,
   nodejs,
   jq,
   moreutils,
@@ -82,7 +82,7 @@ let
     libjpeg
     jpegoptim
     gifsicle
-    nodePackages.svgo
+    svgo
     jhead
   ];
 

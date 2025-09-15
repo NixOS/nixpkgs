@@ -12,18 +12,44 @@
   nodes = {
     server =
       { pkgs, ... }:
+      let
+        # Normally the package services.default attribute combines this, but we
+        # don't have that, because this is not a production service. Should it be?
+        python-http-server = {
+          imports = [ ./python-http-server.nix ];
+          python-http-server.package = pkgs.python3;
+        };
+      in
       {
         system.services.webserver = {
           # The python web server is simple enough that it doesn't need a reload signal.
           # Other services may need to receive a signal in order to re-read what's in `configData`.
-          imports = [ ./python-http-server.nix ];
+          imports = [ python-http-server ];
           python-http-server = {
             port = 8080;
           };
 
+          configData = {
+            "webroot" = {
+              source = pkgs.runCommand "webroot" { } ''
+                mkdir -p $out
+                cat > $out/index.html << 'EOF'
+                <!DOCTYPE html>
+                <html>
+                <head><title>Python Web Server</title></head>
+                <body>
+                  <h1>Welcome to the Python Web Server</h1>
+                  <p>Serving from port 8080</p>
+                </body>
+                </html>
+                EOF
+              '';
+            };
+          };
+
           # Add a sub-service
           services.api = {
-            imports = [ ./python-http-server.nix ];
+            imports = [ python-http-server ];
             python-http-server = {
               port = 8081;
             };
@@ -147,8 +173,9 @@
     print(f"Before switch - webserver PID: {webserver_pid}, api PID: {api_pid}")
 
     # Switch to the specialisation with updated content
-    switch_output = server.succeed("/run/current-system/specialisation/updated/bin/switch-to-configuration test")
-    print(f"Switch output: {switch_output}")
+    # Capture both stdout and stderr, and show stderr in real-time for debugging
+    switch_output = server.succeed("/run/current-system/specialisation/updated/bin/switch-to-configuration test 2>&1 | tee /dev/stderr")
+    print(f"Switch output (stdout+stderr): {switch_output}")
 
     # Verify services are not mentioned in the switch output (indicating they weren't touched)
     assert "webserver.service" not in switch_output, f"webserver.service was mentioned in switch output: {switch_output}"

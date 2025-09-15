@@ -15,14 +15,14 @@ let
     "cli"
     "desktop"
   ];
-  version = "0.50.1";
+  version = "0.51.0";
   cli = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-cli-v${version}-linux-x86_64.tar.gz";
-    hash = "sha256-mHB0nyU0nQg7duPcQf3NNz5vcnIfZcPLkAc+LoWdH58=";
+    hash = "sha256-xMA7Q2VS73xG8/b3jAVz/HMmh8024nOxjcoh6bo/Cws=";
   };
   desktop = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-    hash = "sha256-mVK/valleYH3qZdxRBCbmC7MTEE/Cn6MJwZviMgHL08=";
+    hash = "sha256-kkwwaVqk2DGmnEM8ZQrCvhTSreT4HoiZ1rhheyqZfec=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version;
@@ -42,7 +42,8 @@ let
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       wrapProgram $out/bin/caido \
-        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+        --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     '';
   };
 

@@ -3,6 +3,7 @@
 
   buildPythonPackage,
   fetchFromGitHub,
+  fetchPypi,
   pythonOlder,
 
   nix-update-script,
@@ -46,7 +47,16 @@ buildPythonPackage {
     pydantic-settings
     pyparsing
     pyyaml
-    tree-sitter
+    # keymap-drawer currently requires tree-sitter 0.24.0
+    # See https://github.com/caksoylar/keymap-drawer/issues/183
+    (tree-sitter.overrideAttrs rec {
+      version = "0.24.0";
+      src = fetchPypi {
+        inherit version;
+        inherit (tree-sitter) pname;
+        hash = "sha256-q9la9lyi9Pfso1Y0M5HtZp52Tzd0i1NSlG8A9/x45zQ=";
+      };
+    })
     tree-sitter-grammars.tree-sitter-devicetree
   ];
 

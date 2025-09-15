@@ -99,6 +99,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

@@ -125,6 +125,18 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
+  # Allow granular checks to allow only some broken packages
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowBroken = false;
+  #   allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+  # }
+  allowBrokenPredicate = config.allowBrokenPredicate or (x: false);
+
+  hasDeniedBroken =
+    attrs: (attrs.meta.broken or false) && !allowBroken && !allowBrokenPredicate attrs;
+
   hasUnsupportedPlatform = pkg: !(availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
@@ -174,7 +186,8 @@ let
   hasDeniedNonSourceProvenance =
     attrs: hasNonSourceProvenance attrs && !allowNonSource && !allowNonSourcePredicate attrs;
 
-  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (toList value));
+  showLicenseOrSourceType =
+    value: toString (map (v: v.shortName or v.fullName or "unknown") (toList value));
   showLicense = showLicenseOrSourceType;
   showSourceType = showLicenseOrSourceType;
 
@@ -516,7 +529,7 @@ let
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
       }
-    else if !allowBroken && attrs.meta.broken or false then
+    else if hasDeniedBroken attrs then
       {
         valid = "no";
         reason = "broken";
@@ -534,7 +547,7 @@ let
         reason = "unsupported";
         errormsg = ''
           is not available on the requested hostPlatform:
-            hostPlatform.config = "${hostPlatform.config}"
+            hostPlatform.system = "${hostPlatform.system}"
             package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
             package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
         '';

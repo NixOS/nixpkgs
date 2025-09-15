@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   zlib,
   lz4,
@@ -22,6 +23,8 @@
   libpng,
   file,
   runCommand,
+  curl,
+  capnproto,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
@@ -45,7 +48,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-Cs3Lr8I/Mu02x78d7IySG0XX4u/VAjBs4p4b00XDT5k=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
+  patches = [
+    # capnproto was updated to 1.2 in Nixpkgs, bring TileDB codebase up to speed
+    # patch only affects serialization related code, extracted from https://github.com/TileDB-Inc/TileDB/pull/5616
+    (fetchpatch {
+      url = "https://github.com/TileDB-Inc/TileDB/pull/5616.patch";
+      relative = "tiledb/sm/serialization";
+      extraPrefix = "tiledb/sm/serialization/";
+      hash = "sha256-5z/eJEHl+cnWRf1sMULodJyhmNh5KinDLlL1paMNiy4=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
 
   # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
   # without the -fexperimental-library flag. Tiledb adds its own
@@ -62,6 +75,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTILEDB_WEBP=OFF"
     "-DTILEDB_WERROR=OFF"
+    "-DTILEDB_SERIALIZATION=ON"
     # https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -74,6 +88,9 @@ stdenv.mkDerivation rec {
     cmake
     python3
     doxygen
+    # Required for serialization
+    curl
+    capnproto
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 

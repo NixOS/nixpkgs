@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "3.0.2";
+  version = "3.1.2";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-0GlHfyoVEqmfTDSN9BGXrLRkStRjWjv2qzZac2oYu7Q=";
+    hash = "sha256-8ZLXXA4NKR7GaCdgk8XDMjAssQsKP1wZpEZPYWpglwk=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -102,7 +102,10 @@ pythonpkgs.buildPythonApplication rec {
         --set OUT "$out"
     '';
 
-  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonpkgs; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   # Needed for tests
   preCheck = ''

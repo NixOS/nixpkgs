@@ -217,7 +217,7 @@ buildPythonPackage rec {
     description = "Design circuit boards with code";
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
-    changelog = "https://github.com/atopile/atopile/releases/tag/${src.rev}";
+    changelog = "https://github.com/atopile/atopile/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";

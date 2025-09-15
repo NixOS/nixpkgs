@@ -19,6 +19,7 @@
   py,
   httpx,
   pyramid,
+  pytest-asyncio,
   pytestCheckHook,
   repoze-lru,
   setuptools,
@@ -80,6 +81,7 @@ buildPythonApplication rec {
     beautifulsoup4
     nginx
     py
+    pytest-asyncio
     pytestCheckHook
     webtest
   ];

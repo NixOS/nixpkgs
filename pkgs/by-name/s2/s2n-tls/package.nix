@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.5.22";
+  version = "1.5.24";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
     rev = "v${version}";
-    hash = "sha256-NIHtyoGjhAIiq9AsoKs3RtmMHePA4HIecPJTfkIin2Q=";
+    hash = "sha256-a5TJlxDj5B+fq8EUrlXtqGKtMC3S8PoIG2w12DTYVsc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # Glob for 'shared' or 'static' subdir
     for f in $out/lib/s2n/cmake/*/s2n-targets.cmake; do
       substituteInPlace "$f" \
-        --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
 

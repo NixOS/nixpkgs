@@ -132,6 +132,6 @@ stdenv.mkDerivation rec {
       licenses.zlib
       cc0
     ];
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
 }

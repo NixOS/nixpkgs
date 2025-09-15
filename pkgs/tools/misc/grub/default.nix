@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromSavannah,
+  fetchgit,
   flex,
   bison,
   python3,
@@ -28,6 +28,7 @@
   efiSupport ? false,
   zfsSupport ? false,
   xenSupport ? false,
+  xenPvhSupport ? false,
   kbdcompSupport ? false,
   ckbcomp,
 }:
@@ -65,19 +66,18 @@ let
     x86_64-linux.target = "x86_64";
   };
 
+  xenPvhSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
+  };
+
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
-  gnulib = fetchFromSavannah {
-    repo = "gnulib";
+  gnulib = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/gnulib.git";
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
-  };
-
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "grub-2.12";
-    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
   # The locales are fetched from translationproject.org at build time,
@@ -90,12 +90,18 @@ let
 in
 
 assert zfsSupport -> zfs != null;
-assert !(efiSupport && xenSupport);
+assert !(efiSupport && (xenSupport || xenPvhSupport));
+assert !(xenSupport && xenPvhSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
-  inherit src;
+
+  src = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/grub.git";
+    tag = "grub-${version}";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
+  };
 
   patches = [
     ./fix-bash-completion.patch
@@ -610,6 +616,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
     "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ]
+  ++ lib.optionals xenPvhSupport [
+    "--with-platform=xen_pvh"
+    "--target=${xenPvhSystemsBuild.${stdenv.hostPlatform.system}.target}"
   ];
 
   # save target that grub is compiled for
@@ -661,6 +671,8 @@ stdenv.mkDerivation rec {
         lib.attrNames efiSystemsBuild
       else if xenSupport then
         lib.attrNames xenSystemsBuild
+      else if xenPvhSupport then
+        lib.attrNames xenPvhSystemsBuild
       else
         platforms.gnu ++ platforms.linux;
 

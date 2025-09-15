@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "5.6.3";
+  version = "5.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-jsDh9LhZ0uZuAe7VwHFZ5rgu1zHDxW7yVanCiYXXExs=";
+    hash = "sha256-1TQolHJDyuUxUBv7ATI0Gqedi9y2q/sU1JAS2eYYcqc=";
   };
 
   postPatch = ''
@@ -154,7 +154,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-application";
     changelog = "https://github.com/canonical/craft-application/blob/${src.tag}/docs/reference/changelog.rst";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

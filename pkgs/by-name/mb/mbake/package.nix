@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mbake";
-  version = "1.3.1";
+  version = "1.4.1.pre";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EbodShojaei";
     repo = "bake";
     tag = "v${version}";
-    hash = "sha256-gQsie4/iUIe4g6ZH8bL33xW6CNxSg/sh429P4Xv0GjQ=";
+    hash = "sha256-HbBibwrd73GA0Z3xiYJAu1te7BADqsSkk0d99bMrwPw=";
   };
 
   build-system = [

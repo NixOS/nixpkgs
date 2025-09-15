@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.0";
+  version = "0.9.2";
   pname = "numbagg";
   pyproject = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "numbagg";
     repo = "numbagg";
     tag = "v${version}";
-    hash = "sha256-BuD5hjAd++pW4pEQyl0UP9gd3J8SjJirtpxVE53BLpM=";
+    hash = "sha256-W5c0tZUggNyP9O+t9+S14nz9acR53cLIWaBwXJo1dcg=";
   };
 
   build-system = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast N-dimensional aggregation functions with Numba";
     homepage = "https://github.com/numbagg/numbagg";
-    changelog = "https://github.com/numbagg/numbagg/releases/tag/${version}";
+    changelog = "https://github.com/numbagg/numbagg/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
   };

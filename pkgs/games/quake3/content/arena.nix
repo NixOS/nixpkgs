@@ -60,6 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.idsoftware.com/";
     license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 })

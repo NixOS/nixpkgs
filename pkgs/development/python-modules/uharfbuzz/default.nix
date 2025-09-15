@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.45.0";
+  version = "0.51.1";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     repo = "uharfbuzz";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-dfEyeejJdLHGHH+YI0mWdjF2rvFpM6/KVm2tLo9ssUs=";
+    hash = "sha256-mVxG0unTjMjb0/6w58Py+TARw8YmOWljTlQQwUEdMpg=";
   };
 
   postPatch = ''

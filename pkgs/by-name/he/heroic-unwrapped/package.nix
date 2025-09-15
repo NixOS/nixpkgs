@@ -1,8 +1,8 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
   pnpm_10,
   nodejs,
@@ -12,13 +12,15 @@
   electron_36,
   vulkan-helper,
   gogdl,
-  legendary-heroic,
   nile,
-  comet-gog,
+  comet-gog_heroic,
   umu-launcher,
 }:
 
 let
+  legendary = callPackage ./legendary.nix { };
+  epic-integration = callPackage ./epic-integration.nix { };
+  comet-gog = comet-gog_heroic;
   electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    # Fixes incorrect path to GalaxyCommunication.exe
+    ./pr-4885.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -79,14 +83,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
     rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
-    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    mkdir -p \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary-heroic}" \
+      "${lib.getExe legendary}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
+    cp \
+      "${comet-gog.dummy-service}/GalaxyCommunication.exe" \
+      "${epic-integration}/EpicGamesLauncher.exe" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
@@ -105,14 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
-    updateScript = nix-update-script { };
+    inherit epic-integration legendary;
   };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
-    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.

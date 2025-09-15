@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
-  version = "0.9.10";
+  version = "0.9.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_katex";
     inherit version;
-    hash = "sha256-MJqS2uJF28WE/36l+2VJcnuuleTlIAi3TSWdL9GtDew=";
+    hash = "sha256-LTKyENILvuRRpR0ZZF9v719VaLmlTigTr/uW76ZhI4o=";
   };
 
   build-system = [ setuptools ];

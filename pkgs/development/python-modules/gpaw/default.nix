@@ -36,7 +36,7 @@ let
 
       # BLAS
       libraries += ['blas']
-      library_dirs += ['${blas}/lib']
+      library_dirs += ['${lib.getLib blas}/lib']
 
       # FFTW
       fftw = True
@@ -51,9 +51,8 @@ let
       libxc = True
       if libxc:
         xc = '${libxc}/'
-        include_dirs += [xc + 'include']
-        library_dirs += [xc + 'lib/']
-        extra_link_args += ['-Wl,-rpath={xc}/lib'.format(xc=xc)]
+        include_dirs += ['${lib.getDev libxc}/include']
+        library_dirs += ['${lib.getLib libxc}/lib']
         if 'xc' not in libraries:
           libraries.append('xc')
 
@@ -61,9 +60,8 @@ let
       libvdwxc = True
       if libvdwxc:
         vdwxc = '${libvdwxc}/'
-        extra_link_args += ['-Wl,-rpath=%s/lib' % vdwxc]
-        library_dirs += ['%s/lib' % vdwxc]
-        include_dirs += ['%s/include' % vdwxc]
+        library_dirs += ['${lib.getLib libvdwxc}/lib']
+        include_dirs += ['${lib.getDev libvdwxc}/include']
         libraries += ['vdwxc']
     '';
   };

@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  pythonAtLeast,
   pythonOlder,
   replaceVars,
 
@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.4";
+  version = "5.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-0AtH3vyEeQUKep17j5koiUi/ACgLc9JLMxkwWovCkvE=";
+    hash = "sha256-Bzm4FTzYeXEEFenkT2gN1IzYnUIo7tlD2GI/sX2THkw=";
   };
 
   patches = [

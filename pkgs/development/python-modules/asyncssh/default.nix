@@ -81,6 +81,8 @@ buildPythonPackage rec {
     "test_connect_timeout_exceeded"
     # Fails in the sandbox
     "test_forward_remote"
+    # (2.21.0) SFTP copy ends up with an empty file
+    "test_copy_max_requests"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "nclib";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40Bdkhmd3LiZAR1v36puV9l4tgtDb6T8k9j02JTR4Jo=";
+    hash = "sha256-IVnWqHpoYF5bzek0aWWiKtlWiUaX1jcZq+DfLK0FGoI=";
   };
 
   build-system = [ setuptools ];

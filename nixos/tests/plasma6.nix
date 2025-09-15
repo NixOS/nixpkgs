@@ -32,8 +32,10 @@
     ''
       with subtest("Wait for login"):
           start_all()
-          machine.wait_for_file("/tmp/xauth_*")
-          machine.succeed("xauth merge /tmp/xauth_*")
+          machine.wait_for_file("/run/user/1000/xauth_*")
+          machine.wait_until_succeeds("test -s /run/user/1000/xauth_*")
+          machine.succeed("xauth merge /run/user/1000/xauth_*")
+          machine.succeed("su - ${user.name} -c 'xauth merge /run/user/1000/xauth_*'")
 
       with subtest("Check plasmashell started"):
           machine.wait_until_succeeds("pgrep plasmashell")
@@ -44,8 +46,6 @@
 
       with subtest("Ensure Elisa is not installed"):
           machine.fail("which elisa")
-
-      machine.succeed("su - ${user.name} -c 'xauth merge /tmp/xauth_*'")
 
       with subtest("Run Dolphin"):
           machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin >&2 &'")

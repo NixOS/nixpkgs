@@ -15,7 +15,6 @@
   gitUpdater,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
-  llvmPackagesCuda ? llvmPackages,
   pythonSupport ? false,
 }:
 let
@@ -45,10 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
       sed -i "s/OpenSSL::OpenSSL/OpenSSL::SSL/g" $cmakelists
-      ${lib.optionalString (cudaPackages.cudaOlder "11.8") ''
-        sed -i 's/-gencode=arch=compute_89,code=sm_89//g' $cmakelists
-        sed -i 's/-gencode=arch=compute_90,code=sm_90//g' $cmakelists
-      ''}
     done
   '';
 
@@ -91,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     # catboost requires clang 14+ for build, but does clang 12 for cuda build.
     # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
     # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
-    CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackagesCuda.stdenv.cc}/bin/cc";
+    CUDAHOSTCXX = lib.optionalString cudaSupport "${stdenv.cc}/bin/cc";
     NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-fuse-ld=lld";
     NIX_LDFLAGS = "-lc -lm";
     NIX_CFLAGS_COMPILE = toString (
@@ -139,7 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
       natsukium
     ];
     mainProgram = "catboost";
-    # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    broken =
+      # See: <https://github.com/catboost/catboost/issues/2755>
+      cudaSupport
+      # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
+      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 })

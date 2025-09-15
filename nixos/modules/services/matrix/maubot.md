@@ -33,7 +33,7 @@ framework for Matrix.
 4. Optionally, set `services.maubot.pythonPackages` to a list of python3
    packages to make available for Maubot plugins.
 5. Optionally, set `services.maubot.plugins` to a list of Maubot
-   plugins (full list available at https://plugins.maubot.xyz/):
+   plugins (full list available at <https://plugins.maubot.xyz/>):
    ```nix
    {
      services.maubot.plugins = with config.services.maubot.package.plugins; [

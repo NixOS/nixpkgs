@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   makeWrapper,
   xz,
@@ -22,28 +21,17 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chameleon-cli";
-  version = "2.0.0-unstable-2025-08-04";
+  version = "2.1.0-unstable-2025-09-02";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "ChameleonUltra";
-    rev = "098e0a914b206900f7ea7ae7265486c4349ab644";
+    rev = "964904fbfad182d6d97b72eef1ad6ec7d2fdfb79";
     sparseCheckout = [ "software" ];
-    hash = "sha256-WKxP4jLHkTqBO+nwxhr8DRb3TzDIMlwjA4v+6txQbDo=";
+    hash = "sha256-SYtDmfheXZvjI0bttfXZPtjRV9jIL+9OSitA11rR2Ng=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/software";
-
-  patches = [
-    # Use execute_tool to simplify running hardnested tool,
-    # also fix when the dir conatains hardnested is read only
-    # https://github.com/RfidResearchGroup/ChameleonUltra/pull/266
-    (fetchpatch {
-      url = "https://github.com/RfidResearchGroup/ChameleonUltra/commit/39270fd09ee61ef0659bf3b79ffa4d2b27f3ba63.patch";
-      hash = "sha256-OlHQ2cL+NFdTsSPFI9geg3dabATRjyKxGp5gGG+eDl8=";
-      stripLen = 1;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

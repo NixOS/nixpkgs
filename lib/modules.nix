@@ -1121,6 +1121,7 @@ let
       files = map (def: def.file) res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
+      inherit (res.checkedAndMerged) valueMeta;
       # This allows options to be correctly displayed using `${options.path.to.it}`
       __toString = _: showOption loc;
     };
@@ -1164,7 +1165,14 @@ let
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then
+        if type.merge ? v2 then
+          # check and merge share the same closure
+          # .headError is either not-present, null, or a string describing the error
+          if checkedAndMerged.headError or null != null then
+            throw "A definition for option `${showOption loc}' is not of type `${type.description}'. TypeError: ${checkedAndMerged.headError.message}"
+          else
+            checkedAndMerged.value
+        else if all (def: type.check def.value) defsFinal then
           type.merge loc defsFinal
         else
           let
@@ -1176,6 +1184,43 @@ let
         # handling.  If changed here, please change it there too.)
         throw
           "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
+
+    checkedAndMerged =
+      (
+        # This function (which is immediately applied) checks that type.merge
+        # returns the proper attrset.
+        # Once use of the merge.v2 feature has propagated, consider removing this
+        # for an estimated one thousandth performance improvement (NixOS by nr.thunks).
+        {
+          headError,
+          value,
+          valueMeta,
+        }@args:
+        args
+      )
+        (
+          if type.merge ? v2 then
+            let
+              r = type.merge.v2 {
+                inherit loc;
+                defs = defsFinal;
+              };
+            in
+            r
+            // {
+              valueMeta = r.valueMeta // {
+                _internal = {
+                  inherit type;
+                };
+              };
+            }
+          else
+            {
+              headError = null;
+              value = mergedValue;
+              valueMeta = { };
+            }
+        );
 
     isDefined = defsFinal != [ ];
 
@@ -1586,13 +1631,11 @@ let
         New option path as list of strings.
       */
       to,
-
       /**
         Release number of the first release that contains the rename, ignoring backports.
         Set it to the upcoming release, matching the nixpkgs/.version file.
       */
       sinceRelease,
-
     }:
     doRename {
       inherit from to;

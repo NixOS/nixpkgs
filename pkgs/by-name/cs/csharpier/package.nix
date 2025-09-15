@@ -2,10 +2,10 @@
 
 buildDotnetGlobalTool {
   pname = "csharpier";
-  version = "1.1.1";
+  version = "1.1.2";
   executables = "csharpier";
 
-  nugetHash = "sha256-B0ijqWm3eZ31T+C5zRr4TkmfPsOfseaHpGPYZf5Yiw4=";
+  nugetHash = "sha256-dlWIqlErXT0l8WaLwtgKb7xpYVunkZihaJ3EzKqaqFE=";
 
   meta = with lib; {
     description = "Opinionated code formatter for C#";

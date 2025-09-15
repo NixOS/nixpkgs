@@ -21,7 +21,7 @@ buildDotnetModule rec {
   env.XDG_CONFIG_HOME = "$HOME/.config";
 
   projectFile = "DiscordChatExporter.Gui/DiscordChatExporter.Gui.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 

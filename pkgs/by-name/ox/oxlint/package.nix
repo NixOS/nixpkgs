@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cmake,
   nix-update-script,
   rust-jemalloc-sys,
   versionCheckHook,
@@ -9,17 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "1.6.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-URgz9k89WgYfCu9OlNCZk5wRt8upt58rIxFWa90L+OQ=";
+    hash = "sha256-HH98Q4mvCrylnRmvmfqKksF3ECT3rkoT93bSTqV4xOY=";
   };
 
-  cargoHash = "sha256-s1UXL+y/BISOnPJmdpQFztYRd5je9C8jcc+e+iWtRuU=";
+  cargoHash = "sha256-lAEAOB6JkIkwckhwXU2/fRMkGOkEZnNtiyx/Xm+0JKc=";
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     rust-jemalloc-sys
   ];

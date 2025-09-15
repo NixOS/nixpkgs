@@ -4,6 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   versionCheckHook,
+  nixosTests,
   nix-update-script,
   go_1_25,
 }:
@@ -52,7 +53,10 @@ buildGo125Module (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) sshwifty; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "WebSSH & WebTelnet client";
