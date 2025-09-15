@@ -21,13 +21,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "8.0.1";
+  # Allow disabling x11 session
+  # nixpkgs-update: no auto update
+  version = "8.0.1-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = version;
-    sha256 = "sha256-4B7lUjHEa4LdKrmsFCB3iFIsdVd/rgwmtQUAgAj3rXs=";
+    rev = "e708fd49356f145acd926d30683012d9488f0f9d";
+    hash = "sha256-wb9UUrEtwtmqtfNS2YPli99ZeY17UdJFQijTKs8mHn4=";
   };
 
   /*
@@ -59,7 +61,6 @@ stdenv.mkDerivation rec {
     "-Dfallback-session=GNOME"
     "-Ddetect-program-prefixes=true"
     "--sysconfdir=${placeholder "out"}/etc"
-    "-Dwayland=true"
   ];
 
   postInstall = ''
