@@ -35,13 +35,6 @@ let
         --zsh gendir/completion/_asciinema
     '';
 
-    checkFlags = [
-      # ---- pty::tests::exec_quick stdout ----
-      # thread 'pty::tests::exec_quick' panicked at src/pty.rs:494:10:
-      # called `Result::unwrap()` on an `Err` value: EBADF: Bad file number
-      "--skip=pty::tests::exec_quick"
-    ];
-
     strictDeps = true;
 
     passthru = {
