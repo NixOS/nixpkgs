@@ -14,6 +14,22 @@
   pyxdg,
   pyzmq,
   wurlitzer,
+
+  # tests
+  anyio,
+  django,
+  flaky,
+  h5py,
+  numpy,
+  pandas,
+  pillow,
+  polars,
+  pyarrow,
+  pydicom,
+  pytestCheckHook,
+  scipy,
+  writableTmpDirAsHomeHook,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -44,8 +60,36 @@ buildPythonPackage rec {
     wurlitzer
   ];
 
-  # No tests
-  doCheck = false;
+  nativeCheckInputs = [
+    anyio
+    django
+    flaky
+    h5py
+    numpy
+    pandas
+    pillow
+    polars
+    pyarrow
+    pydicom
+    pytestCheckHook
+    scipy
+    writableTmpDirAsHomeHook
+    xarray
+  ];
+
+  disabledTests = [
+    "test_umr_reload_modules"
+    # OSError: Kernel failed to start
+    "test_debug_namespace"
+    "test_enter_debug_after_interruption"
+    "test_global_message"
+    "test_interrupt_long_sleep"
+    "test_interrupt_short_loop"
+    "test_matplotlib_inline"
+    "test_multiprocessing"
+    "test_np_threshold"
+    "test_runfile"
+  ];
 
   pythonImportsCheck = [ "spyder_kernels" ];
 
