@@ -34,11 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
   ]
-  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-    llvmPackages.compiler-rt.override {
-      doFakeLibgcc = true;
-    }
-  );
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) llvmPackages.llvm-libgcc;
 
   patches = [
     # Fix build with gcc15
