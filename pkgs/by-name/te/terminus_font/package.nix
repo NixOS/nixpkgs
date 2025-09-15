@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
       EGA/VGA-bold for 8x14 and 8x16.
     '';
     homepage = "https://terminus-font.sourceforge.net/";
-    license = licenses.gpl2Plus;
+    license = licenses.ofl;
   };
 }
