@@ -260,6 +260,14 @@ the same package with the `previousIntermediates` argument to support
 incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
 more information. Defaults to `false`.
 
+`dontConvertCabalFileToUnix`
+: By default, `haskellPackages.mkDerivation` converts the `.cabal` file of a
+given package to Unix line endings.
+This is intended to work around
+[Hackage converting revised `.cabal` files to DOS line endings](https://github.com/haskell/hackage-server/issues/316)
+which frequently causes patches to stop applying.
+You can pass `true` to disable this behavior.
+
 `enableLibraryProfiling`
 : Whether to enable [profiling][profiling] for libraries contained in the
 package. Enabled by default if supported.

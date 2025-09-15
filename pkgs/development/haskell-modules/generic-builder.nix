@@ -184,6 +184,11 @@ in
   # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
   # or its source doc/languages-frameworks/haskell.section.md
   disallowGhcReference ? false,
+  # By default we convert the `.cabal` file to Unix line endings to work around
+  # Hackage converting them to DOS line endings when revised, see
+  # <https://github.com/haskell/hackage-server/issues/316>.
+  # Pass `true` to disable this behavior.
+  dontConvertCabalFileToUnix ? false,
   # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
@@ -600,6 +605,9 @@ lib.fix (
         optionalString (editedCabalFile != null) ''
           echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
           cp ${newCabalFile} ${pname}.cabal
+        ''
+        + lib.optionalString (!dontConvertCabalFileToUnix) ''
+          sed -i '${pname}.cabal' -e 's/\r$//'
         ''
         + prePatch;
 
