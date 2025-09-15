@@ -1545,6 +1545,7 @@ in
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = runTest ./uptermd.nix;
   uptime-kuma = runTest ./uptime-kuma.nix;
+  uradvd = runTest ./uradvd.nix;
   urn-timer = runTest ./urn-timer.nix;
   usbguard = runTest ./usbguard.nix;
   user-activation-scripts = runTest ./user-activation-scripts.nix;

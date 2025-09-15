@@ -2,6 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
+
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -30,5 +32,11 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ aiyion ];
     mainProgram = "uradvd";
+  };
+
+  passthru = {
+    tests = {
+      nixosTest = nixosTests.uradvd;
+    };
   };
 }
