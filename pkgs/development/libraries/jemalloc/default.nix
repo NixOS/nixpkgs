@@ -15,29 +15,18 @@
   disableInitExecTls ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
-  version = "5.3.0";
+  version = "5.3.0-unstable-2025-09-12";
 
   src = fetchFromGitHub {
-    owner = "jemalloc";
+    owner = "facebook";
     repo = "jemalloc";
-    tag = version;
-    hash = "sha256-bb0OhZVXyvN+hf9BpPSykn5cGm87a0C+Y/iXKt9wTSs=";
+    rev = "c0889acb6c286c837530fdbeb96007b0dee8b776";
+    hash = "sha256-lBNgvUhuiRPgzr8JC4zSSCT2KpDBktBVX72zfvAEHvo=";
   };
 
   patches = [
-    # fix tests under --with-jemalloc-prefix=, see https://github.com/jemalloc/jemalloc/pull/2340
-    (fetchpatch {
-      url = "https://github.com/jemalloc/jemalloc/commit/d00ecee6a8dfa90afcb1bbc0858985c17bef6559.patch";
-      hash = "sha256-N5i4IxGJ4SSAgFiq5oGRnrNeegdk2flw9Sh2mP0yl4c=";
-    })
-    # fix linking with libc++, can be removed in the next update (after 5.3.0).
-    # https://github.com/jemalloc/jemalloc/pull/2348
-    (fetchpatch {
-      url = "https://github.com/jemalloc/jemalloc/commit/4422f88d17404944a312825a1aec96cd9dc6c165.patch";
-      hash = "sha256-dunkE7XHzltn5bOb/rSHqzpRniAFuGubBStJeCxh0xo=";
-    })
     # -O3 appears to introduce an unreproducibility where
     # `rtree_read.constprop.0` shows up in some builds but
     # not others, so we fall back to O2:
@@ -55,19 +44,12 @@ stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
 
   configureFlags = [
-    "--with-version=${version}-0-g0000000000000000000000000000000000000000"
+    "--with-version=${lib.versions.majorMinor finalAttrs.version}.0-0-g${finalAttrs.src.rev}"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
   ]
   # see the comment on stripPrefix
   ++ lib.optional stripPrefix "--with-jemalloc-prefix="
   ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
-  # jemalloc is unable to correctly detect transparent hugepage support on
-  # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
-  # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
-  ++ lib.optionals (stdenv.hostPlatform.isAarch32 && lib.versionOlder version "5") [
-    "--disable-thp"
-    "je_cv_thp=no"
-  ]
   # The upstream default is dependent on the builders' page size
   # https://github.com/jemalloc/jemalloc/issues/467
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
@@ -106,4 +88,4 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.all;
   };
-}
+})
