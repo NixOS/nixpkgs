@@ -244,6 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs doc/*.py
     patchShebangs doc/input-filter-h.sh
+
+    # Remove installed-test that runs forever
+    sed -i -e "/test-pipewire-alsa-stress/d" pipewire-alsa/tests/meson.build
   '';
 
   postInstall = ''
