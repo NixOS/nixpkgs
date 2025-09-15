@@ -18,9 +18,7 @@ stdenv.mkDerivation rec {
 
   patches =
     # Apply patches from debian package
-    map fetchurl (import ./debian-patches.nix)
-    # Fix compilation error with incompatible pointer type to strtoul
-    ++ [ ./stroul-incompatible-pointer-type-fix.patch ];
+    map fetchurl (import ./debian-patches.nix);
 
   buildInputs = [
     ncurses
@@ -31,7 +29,10 @@ stdenv.mkDerivation rec {
     cd build.unix
   '';
   configureScript = "../dist/configure";
-  configureFlags = [ "vi_cv_path_preserve=/tmp" ];
+  configureFlags = [
+    "vi_cv_path_preserve=/tmp"
+    "--enable-widechar"
+  ];
 
   meta = with lib; {
     description = "Berkeley Vi Editor";
