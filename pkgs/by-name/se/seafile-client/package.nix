@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "9.0.14";
+  version = "9.0.15";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    rev = "v${version}";
-    hash = "sha256-ZMhU0uXAC3tH1e3ktiHhC5YCDwFOnILretPgjYYa9DQ=";
+    tag = "v${version}";
+    hash = "sha256-BV1+9/+ryZB1BQyRJ5JaIU6bbOi4h8vt+V+FQIfUJp8=";
   };
 
   patches = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/haiwen/seafile-client";
+    changelog = "https://github.com/haiwen/seafile-client/releases/tag/${src.tag}";
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
