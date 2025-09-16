@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   ctestCheckHook,
@@ -36,6 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # <https://github.com/uxlfoundation/oneTBB/pull/1849>
     ./fix-libtbbmalloc-dlopen.patch
+
+    # Only enable fcf-protection on x86 based processors
+    # <https://github.com/uxlfoundation/oneTBB/pull/1768>
+    (fetchpatch {
+      url = "https://github.com/uxlfoundation/oneTBB/commit/65d46656f56200a7e89168824c4dbe4943421ff9.patch?full_index=1";
+      hash = "sha256-hhHDuvUsWSqs7AJ5smDYUP1yYZmjV2VISBeKHcFAfG4=";
+    })
   ];
 
   nativeBuildInputs = [
