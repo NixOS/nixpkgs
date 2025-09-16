@@ -8325,10 +8325,6 @@ with pkgs;
 
   libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
 
-  yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
-
-  yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
-
   liquid-dsp = callPackage ../development/libraries/liquid-dsp {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -8638,10 +8634,6 @@ with pkgs;
     suffix = "utils";
     utils = true;
   };
-
-  proj = callPackage ../development/libraries/proj { };
-
-  proj_7 = callPackage ../development/libraries/proj/7.nix { };
 
   prospector = callPackage ../development/tools/prospector { };
 
