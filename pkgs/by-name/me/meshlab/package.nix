@@ -6,6 +6,7 @@
   libsForQt5,
   libGLU,
   lib3ds,
+  lib3mf,
   bzip2,
   muparser,
   eigen,
@@ -25,16 +26,10 @@
   corto,
   openctm,
   structuresynth,
+  vclab-nexus,
 }:
 
 let
-  tinygltf-src = fetchFromGitHub {
-    owner = "syoyo";
-    repo = "tinygltf";
-    tag = "v2.6.3";
-    hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
-  };
-
   downloads = [
     "DLL_EMBREE"
     "SOURCE_BOOST"
@@ -57,19 +52,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "meshlab";
-  version = "2023.12";
+  version = "2025.07";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
     tag = "MeshLab-${finalAttrs.version}";
-    hash = "sha256-AdUAWS741RQclYaSE3Tz1/I0YSinNAnfSaqef+Tib8Y=";
+    hash = "sha256-6BozYzPCbBZ+btL4FCdzKlwKqTsvFWDfOXizzJSYo9s=";
   };
 
   nativeBuildInputs = [
     cmake
     libsForQt5.wrapQtAppsHook
-    vcg # templated library
   ];
 
   buildInputs = [
@@ -78,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtscript
     libsForQt5.qtxmlpatterns
     lib3ds
+    lib3mf
     bzip2
     muparser
     eigen
@@ -91,46 +86,37 @@ stdenv.mkDerivation (finalAttrs: {
     xercesc
     onetbb
     embree
+    vcg
     libigl
     corto
     openctm
     structuresynth
+    vclab-nexus
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
   ];
 
-  postPatch = ''
-    substituteInPlace src/external/tinygltf.cmake \
-      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/tinygltf-2.6.3 ${tinygltf-src}
-    substituteInPlace src/external/libigl.cmake \
-      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-2.4.0 ${libigl}
-    substituteInPlace src/external/nexus.cmake \
-      --replace-fail '$'{NEXUS_DIR}/src/corto ${corto.src}
-    substituteInPlace src/external/levmar.cmake \
-      --replace-fail '$'{LEVMAR_LINK} ${levmar.src} \
-      --replace-warn "MD5 ''${LEVMAR_MD5}" ""
-    substituteInPlace src/external/ssynth.cmake \
-      --replace-fail '$'{SSYNTH_LINK} ${structuresynth.src} \
-      --replace-warn "MD5 ''${SSYNTH_MD5}" ""
-    substituteInPlace src/common_gui/CMakeLists.txt \
-      --replace-warn "MESHLAB_LIB_INSTALL_DIR" "CMAKE_INSTALL_LIBDIR"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/meshlab/CMakeLists.txt \
-      --replace-fail "set_additional_settings_info_plist(" "# set_additional_settings_info_plist(" \
-      --replace-fail "	TARGET meshlab" "#	TARGET meshlab" \
-      --replace-fail "	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)" \
-                     "#	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)"
-  '';
+  patches = [
+    # CMake: use system dependencies, install exports
+    # ref. https://github.com/cnr-isti-vclab/meshlab/pull/1617
+    # merged upstream
+    ./1617_cmake-use-system-dependencies-install-exports.patch
+  ];
 
-  cmakeFlags = [
-    "-DVCGDIR=${vcg.src}"
-  ]
-  ++ cmakeFlagsDisallowDownload;
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/meshlab/CMakeLists.txt \
+        --replace-fail "set_additional_settings_info_plist(" "# set_additional_settings_info_plist(" \
+        --replace-fail "	TARGET meshlab" "#	TARGET meshlab" \
+        --replace-fail "	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)" \
+                       "#	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)"
+    '';
+
+  cmakeFlags = cmakeFlagsDisallowDownload;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}
@@ -150,7 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+      patchelf \
+        --add-needed $out/lib/meshlab/libmeshlab-common.so \
+        --add-needed $out/lib/meshlab/libmeshlab-common-gui.so \
+        $out/bin/.meshlab-wrapped
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       wrapQtApp "$out/Applications/meshlab.app/Contents/MacOS/meshlab"
