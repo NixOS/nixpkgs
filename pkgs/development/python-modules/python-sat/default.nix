@@ -1,21 +1,20 @@
 {
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   lib,
   six,
   pypblib,
   pytestCheckHook,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "python-sat";
-  version = "0.1.8.dev20";
+  version = "1.8.dev20";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "pysathq";
-    repo = "pysat";
-    rev = "d94f51e5eff2feef35abbc25480659eafa615cc0"; # upstream does not tag releases
-    hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
+  src = fetchPypi {
+    inherit version;
+    pname = "python_sat";
+    hash = "sha256-8uUi6DtPVh/87EWSgTtGq7UhAs+Glw8KARPkK3ukeMg=";
   };
 
   # Build SAT solver backends in parallel and fix hard-coded g++ reference for
