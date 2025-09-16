@@ -8641,8 +8641,6 @@ with pkgs;
 
   proj = callPackage ../development/libraries/proj { };
 
-  proj_7 = callPackage ../development/libraries/proj/7.nix { };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf_32;
