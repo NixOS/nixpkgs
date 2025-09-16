@@ -11,9 +11,8 @@
   wl-clipboard,
   passAlias ? false,
   apple-sdk_14,
-  testers,
   nix-update-script,
-  gopass,
+  versionCheckHook,
 }:
 
 let
@@ -76,12 +75,13 @@ buildGoModule (finalAttrs: {
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
     inherit wrapperPath;
-
-    tests.version = testers.testVersion {
-      package = gopass;
-    };
 
     updateScript = nix-update-script { };
   };
