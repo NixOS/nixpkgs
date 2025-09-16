@@ -8032,12 +8032,6 @@ with pkgs;
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
 
-  libdevil = callPackage ../development/libraries/libdevil { };
-
-  libdevil-nox = callPackage ../development/libraries/libdevil {
-    withXorg = false;
-  };
-
   libdvdnav = callPackage ../development/libraries/libdvdnav { };
   libdvdnav_4_2_1 = callPackage ../development/libraries/libdvdnav/4.2.1.nix {
     libdvdread = libdvdread_4_9_9;
