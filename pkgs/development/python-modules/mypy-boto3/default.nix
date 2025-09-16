@@ -182,8 +182,8 @@ rec {
       "sha256-6kCRDur13G+GTZK8R7gknc1J3L/E3YA4/xi+9qQhVp0=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.40.0"
-      "sha256-O42YFgtlQoivQquLiQqHoHiT5NtQH8I4z6H+A41rrSE=";
+    buildMypyBoto3Package "ce" "1.40.31"
+      "sha256-7tuIhj+Kz01F4sPhL8N6g+e0CcdWwtAl7jF0Xii3c0Q=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.40.19"
@@ -893,8 +893,8 @@ rec {
       "sha256-1uTPx4K0dGJfRPupXqkRKTOifmVzNhDgvaBYPpd0A4c=";
 
   mypy-boto3-medical-imaging =
-    buildMypyBoto3Package "medical-imaging" "1.40.0"
-      "sha256-FT2lYxXXUxPssxPqinwIbEj1YEhRTyDZz44LyKr6jCc=";
+    buildMypyBoto3Package "medical-imaging" "1.40.31"
+      "sha256-loONT/aOVY0IFNGgP7doBtHPp+U9TEzI4SAmdXvrc2Q=";
 
   mypy-boto3-memorydb =
     buildMypyBoto3Package "memorydb" "1.40.16"
@@ -1001,8 +1001,8 @@ rec {
       "sha256-PgXa3veO1qGxxUBwZe2bxauFNT3nc0j8vEVk0Q4NtVU=";
 
   mypy-boto3-payment-cryptography =
-    buildMypyBoto3Package "payment-cryptography" "1.40.28"
-      "sha256-kVtSgmoVmZ2QJ1qSBlXLrFxob3ZbO3qvoJoM/1zlSYk=";
+    buildMypyBoto3Package "payment-cryptography" "1.40.30"
+      "sha256-JSLXvrURvUhb83Oeb5b+hlDpOoiFMayDtDXGJsx8Hsw=";
 
   mypy-boto3-payment-cryptography-data =
     buildMypyBoto3Package "payment-cryptography-data" "1.40.0"
@@ -1165,8 +1165,8 @@ rec {
       "sha256-jSv9EFKJTQ6EyfuTWNg4ug7tAmUHbH3X9FYix3AnXJk=";
 
   mypy-boto3-s3control =
-    buildMypyBoto3Package "s3control" "1.40.12"
-      "sha256-lC5XVPtSUMab52QRqv6o9+2grzETdFjpscjDwvqGNvE=";
+    buildMypyBoto3Package "s3control" "1.40.31"
+      "sha256-4D9yv4nmCrc75l/QEqeP5FFNU4JPq5tAPtZi9dikcUY=";
 
   mypy-boto3-s3outposts =
     buildMypyBoto3Package "s3outposts" "1.40.15"
