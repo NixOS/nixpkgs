@@ -9,8 +9,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.0";
   pname = "makeself";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "megastep";
