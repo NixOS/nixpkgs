@@ -9,17 +9,12 @@
   v2ray-geoip,
   v2ray-domain-list-community,
   libsoup,
+  undmg,
+  fetchurl,
 }:
 let
   pname = "clash-verge-rev";
   version = "2.4.2";
-
-  src = fetchFromGitHub {
-    owner = "clash-verge-rev";
-    repo = "clash-verge-rev";
-    tag = "v${version}";
-    hash = "sha256-HBWvk6bX0GjU/yvUejYgTQM8/IP5dYVrf30wNzgWv0s=";
-  };
 
   src-service = fetchFromGitHub {
     owner = "clash-verge-rev";
@@ -54,6 +49,31 @@ let
       ;
   };
 
+  src-linux = {
+    src = fetchFromGitHub {
+      owner = "clash-verge-rev";
+      repo = "clash-verge-rev";
+      tag = "v${version}";
+      hash = "sha256-HBWvk6bX0GjU/yvUejYgTQM8/IP5dYVrf30wNzgWv0s=";
+    };
+  };
+  src-darwin = {
+    aarch64-darwin = {
+      src = fetchurl {
+        url = "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v${version}/Clash.Verge_${version}_aarch64.dmg";
+        sha256 = "sha256-V7COnyVLsaNcHHr8iK9X2a3ZapUrFavQx9ycYrEojmY=";
+      };
+    };
+    x86_64-darwin = {
+      src = fetchurl {
+        url = "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v${version}/Clash.Verge_${version}_x64.dmg";
+        sha256 = "sha256-Gk6l7yuja9/6wI1KODHyYP2VG7YoUEz9wVKNry/kPJE";
+      };
+    };
+  };
+  source = if stdenv.isDarwin then src-darwin.${stdenv.hostPlatform.system} else src-linux;
+  inherit (source) src;
+
   meta = {
     description = "Clash GUI based on tauri";
     homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
@@ -66,35 +86,53 @@ let
     maintainers = with lib.maintainers; [
       hhr2020
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in
-stdenv.mkDerivation {
-  inherit
-    pname
-    src
-    version
-    meta
-    ;
+if stdenv.isLinux then
+  stdenv.mkDerivation {
+    inherit
+      pname
+      src
+      version
+      meta
+      ;
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ];
+    nativeBuildInputs = [
+      wrapGAppsHook3
+    ];
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
-    cp -r ${unwrapped}/share/* $out/share
-    cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
-    # This can't be symbol linked. It will find mihomo in its runtime path
-    cp ${service}/bin/clash-verge-service $out/bin/clash-verge-service
-    ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
-    # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
-    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
-    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
-    ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
+      mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
+      cp -r ${unwrapped}/share/* $out/share
+      cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
+      # This can't be symbol linked. It will find mihomo in its runtime path
+      cp ${service}/bin/clash-verge-service $out/bin/clash-verge-service
+      ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
+      # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
+      ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
+      ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
+      ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
 
-    runHook postInstall
-  '';
-}
+      runHook postInstall
+    '';
+  }
+else
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+    nativeBuildInputs = [ undmg ];
+    sourceRoot = ".";
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/Applications
+      cp -R "Clash Verge.app" "$out/Applications/Clash Verge.app"
+      runHook postInstall
+    '';
+  }
