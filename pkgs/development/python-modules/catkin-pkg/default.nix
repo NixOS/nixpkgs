@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "catkin-pkg";
-  version = "1.0.0";
+  version = "1.1.0";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ros-infrastructure";
     repo = "catkin_pkg";
     rev = version;
-    hash = "sha256-lHUKhE9dQLO1MbkstUEiGrHc9Rm+bY/AmgLyh7AbvFQ=";
+    hash = "sha256-V4iurFt1WmY2jXy0A4Qa2eKMCWmR+Hs3d9pru0/zUSM=";
   };
 
   build-system = [ setuptools ];
