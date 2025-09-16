@@ -8183,9 +8183,7 @@ with pkgs;
 
   libmicrohttpd = libmicrohttpd_1_0;
 
-  libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
-
-  libmusicbrainz = libmusicbrainz5;
+  libmusicbrainz = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
 
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
