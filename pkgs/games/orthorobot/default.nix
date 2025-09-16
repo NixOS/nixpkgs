@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Stabyourself";
-    repo = pname;
+    repo = "orthorobot";
     rev = "v${version}";
     sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "orthorobot";
-      exec = pname;
+      exec = "orthorobot";
       icon = icon;
       comment = "Robot game";
       desktopName = "Orthorobot";

@@ -19,7 +19,7 @@ mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "scarpetta";
-    repo = pname;
+    repo = "pdfmixtool";
     rev = "v${version}";
     hash = "sha256-fgtRKUG6J/CM6cXUTHWAPemqL8loWZT3wZmGdRHldq8=";
   };
