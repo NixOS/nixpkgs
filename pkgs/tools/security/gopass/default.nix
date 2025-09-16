@@ -16,7 +16,19 @@
   gopass,
 }:
 
-buildGoModule rec {
+let
+  wrapperPath = lib.makeBinPath (
+    [
+      git
+      gnupg
+      xclip
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wl-clipboard
+    ]
+  );
+in
+buildGoModule (finalAttrs: {
   pname = "gopass";
   version = "1.15.16";
 
@@ -33,7 +45,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oZeik172VBSxuO3DfD5t8cKPl3AYjlyEw5x4/7g9h6o=";
   };
 
@@ -44,18 +56,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
-
-  wrapperPath = lib.makeBinPath (
-    [
-      git
-      gnupg
-      xclip
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux wl-clipboard
-  );
 
   postInstall = ''
     installManPage gopass.1
@@ -91,7 +94,7 @@ buildGoModule rec {
       rvolosatovs
       sikmir
     ];
-    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass/blob/v${finalAttrs.version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of
@@ -104,4 +107,4 @@ buildGoModule rec {
     '';
     mainProgram = "gopass";
   };
-}
+})
