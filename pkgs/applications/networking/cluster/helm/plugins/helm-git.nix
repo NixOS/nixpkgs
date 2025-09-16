@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "aslafy-z";
-    repo = pname;
+    repo = "helm-git";
     rev = "v${version}";
     sha256 = "sha256-/J/RAFNsxwG9aiCe28daJmC2D6Gz7CrPjucqkhC++y0=";
   };
