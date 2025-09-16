@@ -139,7 +139,7 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
     return df
 
 
-if __name__ == "__main__":
+def main():
     before_dir = os.environ.get("BEFORE_DIR")
     after_dir = os.environ.get("AFTER_DIR")
 
@@ -169,3 +169,7 @@ if __name__ == "__main__":
     df1 = perform_pairwise_tests(before_metrics, after_metrics)
     markdown_table = dataframe_to_markdown(df1)
     print(markdown_table)
+
+
+if __name__ == "__main__":
+    main()
