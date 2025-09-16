@@ -221,7 +221,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://sssd.io/release-notes/sssd-${finalAttrs.version}.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ illustris ];
+    maintainers = with lib.maintainers; [
+      illustris
+      liberodark
+    ];
     pkgConfigModules = [
       "ipa_hbac"
       "sss_certmap"
