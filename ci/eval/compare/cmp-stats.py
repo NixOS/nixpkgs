@@ -116,25 +116,32 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
                 before_vals.append(before_metrics[fname][key])
                 after_vals.append(after_metrics[fname][key])
 
-        if len(before_vals) >= 2:
-            before_arr = np.array(before_vals)
-            after_arr = np.array(after_vals)
+        if len(before_vals) == 0:
+            continue
 
-            diff = after_arr - before_arr
-            pct_change = 100 * diff / before_arr
+        before_arr = np.array(before_vals)
+        after_arr = np.array(after_vals)
+
+        diff = after_arr - before_arr
+        pct_change = 100 * diff / before_arr
+
+        # If there are enough values to perform a t-test, do so, otherwise mark NaN
+        if len(before_vals) == 1:
+            t_stat, p_val = [float("NaN")] * 2
+        else:
             t_stat, p_val = ttest_rel(after_arr, before_arr)
 
-            results.append(
-                {
-                    "metric": key,
-                    "mean_before": np.mean(before_arr),
-                    "mean_after": np.mean(after_arr),
-                    "mean_diff": np.mean(diff),
-                    "mean_%_change": np.mean(pct_change),
-                    "p_value": p_val,
-                    "t_stat": t_stat,
-                }
-            )
+        results.append(
+            {
+                "metric": key,
+                "mean_before": np.mean(before_arr),
+                "mean_after": np.mean(after_arr),
+                "mean_diff": np.mean(diff),
+                "mean_%_change": np.mean(pct_change),
+                "p_value": p_val,
+                "t_stat": t_stat,
+            }
+        )
 
     df = pd.DataFrame(results).sort_values("p_value")
     return df
