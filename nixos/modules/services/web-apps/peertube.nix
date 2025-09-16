@@ -20,6 +20,7 @@ let
     NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
+    XDG_CACHE_HOME = "/var/cache/peertube";
     # Used for auto video transcription
     HF_HOME = "/var/cache/peertube/huggingface";
   };
@@ -443,6 +444,7 @@ in
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
           well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
+          uploads = lib.mkDefault "/var/lib/peertube/storage/uploads/";
         };
         import = {
           videos = {
@@ -591,6 +593,7 @@ in
         # System Call Filtering
         SystemCallFilter = [
           ("~" + lib.concatStringsSep " " systemCallsList)
+          "fchown"
           "pipe"
           "pipe2"
         ];
