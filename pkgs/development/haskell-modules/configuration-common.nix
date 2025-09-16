@@ -2663,8 +2663,23 @@ with haskellLib;
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
-  # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-  hashable = doJailbreak super.hashable;
+  hashable = lib.pipe super.hashable [
+    # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
+    doJailbreak
+
+    # Big-endian POWER:
+    # Test suite xxhash-tests: RUNNING...
+    # xxhash
+    #   oneshot
+    #     w64-ref:      OK (0.03s)
+    #       +++ OK, passed 100 tests.
+    #     w64-examples: FAIL
+    #       tests/xxhash-tests.hs:21:
+    #       expected: 2768807632077661767
+    #        but got: 13521078365639231154
+    # https://github.com/haskell-unordered-containers/hashable/issues/323
+    (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
+  ];
 
   cborg = appendPatches [
     # This patch changes CPP macros form gating on the version of ghc-prim to base
