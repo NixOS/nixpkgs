@@ -62,6 +62,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "goldwarden"
+    ] "'goldwarden' has been removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
