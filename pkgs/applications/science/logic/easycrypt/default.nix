@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "2025.08";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "easycrypt";
+    repo = "easycrypt";
     tag = "r${version}";
     hash = "sha256-WUms6hh7T5/gxRLFvbJQiT1ErLr8KFilFNOMTT/fIyY=";
   };
