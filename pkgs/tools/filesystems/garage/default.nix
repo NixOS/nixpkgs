@@ -134,10 +134,10 @@ rec {
     cargoHash = "sha256-mWLsOTWxzMdDfzEDu+WHJ12SVscEVfBVuOTVFbfnk0g=";
   };
 
-  garage_2_0_0 = generic {
-    version = "2.0.0";
-    hash = "sha256-dn7FoouF+5qmW6fcC20bKQSc6D2G9yrWdBK3uN3bF58=";
-    cargoHash = "sha256-6VM/EesrUIaQOeDGqzb0kOqMz4hW7zBJUnaRQ9C3cqc=";
+  garage_2_1_0 = generic {
+    version = "2.1.0";
+    hash = "sha256-GGwF6kVIJ7MPvO6VRj2ebquJEjJQBwpW18P6L2sGVDs=";
+    cargoHash = "sha256-0pT2fqseN1numJZdC0FFg1JXbDq1YmlmBPQVbOpxtkw=";
   };
 
   garage_0_8 = garage_0_8_7;
@@ -147,7 +147,7 @@ rec {
   garage_1_x = garage_1_3_0;
   garage_1 = garage_1_x;
 
-  garage_2 = garage_2_0_0;
+  garage_2 = garage_2_1_0;
 
   garage = garage_1_x;
 }
