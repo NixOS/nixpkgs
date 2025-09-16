@@ -38,7 +38,12 @@ let
     };
   };
 
-  branch = versions."${llvmMajor}" or (throw "Incompatible LLVM version ${llvmMajor}");
+  branch =
+    versions."${llvmMajor}" or {
+      version = "${llvmMajor}.x.x";
+      rev = "";
+      hash = "";
+    };
 in
 stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
@@ -107,5 +112,6 @@ stdenv.mkDerivation {
     license = licenses.ncsa;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gloaming ];
+    broken = !(versions ? ${llvmMajor});
   };
 }
