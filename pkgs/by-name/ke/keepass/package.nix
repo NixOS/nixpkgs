@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
-  version = "2.57.1";
+  version = "2.59";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-97ZX1EzhMv4B3YZ3HoUqlGTEMsQn3cmNGr+uvS6AKYY=";
+    hash = "sha256-esJxGCGDb8AZi28Z7NeHMYyL8GWFpKOusua9UxlgSns=";
   };
 
   sourceRoot = ".";
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    xbuild /p:Configuration=Release
+    xbuild KeePass.sln /p:Configuration=Release
 
     runHook postBuild
   '';
@@ -165,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
     maintainers = with lib.maintainers; [
-      amorsillo
       obadz
     ];
     platforms = with lib.platforms; all;

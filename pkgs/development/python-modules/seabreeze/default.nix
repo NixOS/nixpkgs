@@ -9,6 +9,7 @@
   pkgconfig,
   setuptools,
   setuptools-scm,
+  udevCheckHook,
 
   # dependneices
   numpy,
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     pkgconfig
     setuptools
     setuptools-scm
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -77,7 +79,8 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [ "TestHardware" ];
 

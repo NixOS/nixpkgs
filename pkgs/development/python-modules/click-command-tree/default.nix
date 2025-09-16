@@ -22,12 +22,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "click_command_tree" ];
 
   meta = with lib; {
-    description = "click plugin to show the command tree of your CLI";
+    description = "Click plugin to show the command tree of your CLI";
     homepage = "https://github.com/whwright/click-command-tree";
     license = licenses.mit;
     maintainers = with maintainers; [ tjni ];

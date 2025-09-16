@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern and lightweight direct connect client with a friendly ncurses interface";
     homepage = "https://dev.yorhel.nl/ncdc";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "ncdc";
   };
 })

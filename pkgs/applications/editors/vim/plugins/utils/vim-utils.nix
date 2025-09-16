@@ -260,17 +260,16 @@ let
 
     let
       # vim-plug is an extremely popular vim plugin manager.
-      plugImpl =
-        ''
-          source ${vimPlugins.vim-plug}/plug.vim
-          silent! call plug#begin('/dev/null')
+      plugImpl = ''
+        source ${vimPlugins.vim-plug}/plug.vim
+        silent! call plug#begin('/dev/null')
 
-        ''
-        + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg}'") plug.plugins)
-        + ''
+      ''
+      + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg}'") plug.plugins)
+      + ''
 
-          call plug#end()
-        '';
+        call plug#end()
+      '';
 
       # vim-addon-manager = VAM (deprecated)
       vamImpl =
@@ -289,19 +288,18 @@ let
         in
         nativeImpl vamPackages;
 
-      entries =
-        [
-          beforePlugins
-        ]
-        ++ lib.optional (vam != null) (
-          lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl
-        )
-        ++ lib.optional (packages != null && packages != [ ]) (nativeImpl packages)
-        ++ lib.optional (pathogen != null) (
-          throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`"
-        )
-        ++ lib.optional (plug != null) plugImpl
-        ++ [ customRC ];
+      entries = [
+        beforePlugins
+      ]
+      ++ lib.optional (vam != null) (
+        lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl
+      )
+      ++ lib.optional (packages != null && packages != [ ]) (nativeImpl packages)
+      ++ lib.optional (pathogen != null) (
+        throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`"
+      )
+      ++ lib.optional (plug != null) plugImpl
+      ++ [ customRC ];
 
     in
     lib.concatStringsSep "\n" (lib.filter (x: x != null && x != "") entries);

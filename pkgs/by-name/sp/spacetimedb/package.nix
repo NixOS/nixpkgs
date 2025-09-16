@@ -1,25 +1,28 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   perl,
   git,
   versionCheckHook,
+  librusty_v8 ? callPackage ./librusty_v8.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+  },
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
-  version = "1.1.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eBbRdkJafkMXOEsnh1yoht8WJAwZToPobWnhjTWhnA4=";
+    hash = "sha256-kJHHEKCPfYgRNaKBxDYMbWiJr1ajB81YmDDrNAJEQjg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gs1A/gtjA941TWZw+wxMR+9TCayRa1k49/G8XnzW2ek=";
+  cargoHash = "sha256-b2nF0qAfQ/FpsD/R7r8FAUK6t9QxfS+xrkKYAHITcjg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
+
+  env.RUSTY_V8_ARCHIVE = librusty_v8;
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/spacetime";
   versionCheckProgramArg = "--version";

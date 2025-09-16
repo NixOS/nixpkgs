@@ -52,6 +52,9 @@ buildGoModule rec {
     homepage = "https://github.com/wagoodman/dive";
     changelog = "https://github.com/wagoodman/dive/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      ryan4yin
+    ];
   };
 }

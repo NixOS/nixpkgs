@@ -40,14 +40,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8Qp8ceafAkw7Tush/dvBl27q5oNDzbOqyvSLXhjf4fo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-yaRaB3U8Wxhp7SK5E44CF8AudhG7ar7L5ey+CRVfYqc=";
 
   # tests run in CI on the source repo
   doCheck = false;
 
   # provide the list of solc versions to the `svm-rs-builds` dependency
-  SVM_RELEASES_LIST_JSON = solc-versions.${stdenv.hostPlatform.system};
+  SVM_RELEASES_LIST_JSON =
+    solc-versions.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
     description = "Solidity test generator based on the Branching Tree Technique";

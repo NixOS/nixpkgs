@@ -36,15 +36,14 @@ buildPythonPackage rec {
     "pyannotate_tools"
   ];
 
-  disabledTestPaths =
-    [
-      "pyannotate_runtime/tests/test_collect_types.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # Tests are using lib2to3
-      "pyannotate_tools/fixes/tests/test_annotate*.py"
-      "pyannotate_tools/annotations/tests/dundermain_test.py"
-    ];
+  disabledTestPaths = [
+    "pyannotate_runtime/tests/test_collect_types.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [
+    # Tests are using lib2to3
+    "pyannotate_tools/fixes/tests/test_annotate*.py"
+    "pyannotate_tools/annotations/tests/dundermain_test.py"
+  ];
 
   meta = with lib; {
     description = "Auto-generate PEP-484 annotations";

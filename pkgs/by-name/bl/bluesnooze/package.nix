@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Bluesnooze prevents your sleeping Mac from connecting to Bluetooth accessories";
+    description = "Prevents your sleeping Mac from connecting to Bluetooth accessories";
     homepage = "https://github.com/odlp/bluesnooze";
     changelog = "https://github.com/odlp/bluesnooze/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

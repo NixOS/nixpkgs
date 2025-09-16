@@ -47,7 +47,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://driftctl.com/";
     changelog = "https://github.com/snyk/driftctl/releases/tag/v${version}";
     description = "Detect, track and alert on infrastructure drift";
@@ -56,8 +56,8 @@ buildGoModule rec {
       driftctl is a free and open-source CLI that warns of infrastructure drift
       and fills in the missing piece in your DevSecOps toolbox.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kaction
       jk
       qjoly

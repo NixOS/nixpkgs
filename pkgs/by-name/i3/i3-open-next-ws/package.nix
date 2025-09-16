@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     inherit pname version;
     hash = "sha256-eYHCm8jEv6Ll6/h1kcYHNxWGnVWI41ZB96Jec9oZFsY=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-ND80SweURwVbqxcYwgvnk186BjhISr8Pz0B8BVf0DMY=";
 
   meta = {

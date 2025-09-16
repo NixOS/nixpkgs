@@ -122,28 +122,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ libtool ];
-  buildInputs =
-    [
-      (lib.getOutput "lib" libtool)
-      zlib
-      bzip2
-      extpkgs
-    ]
-    ++ lib.optionals enableRexx [
-      regina
-    ];
+  buildInputs = [
+    (lib.getOutput "lib" libtool)
+    zlib
+    bzip2
+    extpkgs
+  ]
+  ++ lib.optionals enableRexx [
+    regina
+  ];
 
-  configureFlags =
-    [
-      "--enable-extpkgs=${extpkgs}"
-      "--without-included-ltdl"
-      "--enable-ipv6"
-      "--enable-cckd-bzip2"
-      "--enable-het-bzip2"
-    ]
-    ++ lib.optionals enableRexx [
-      "--enable-regina-rexx"
-    ];
+  configureFlags = [
+    "--enable-extpkgs=${extpkgs}"
+    "--without-included-ltdl"
+    "--enable-ipv6"
+    "--enable-cckd-bzip2"
+    "--enable-het-bzip2"
+  ]
+  ++ lib.optionals enableRexx [
+    "--enable-regina-rexx"
+  ];
 
   meta = with lib; {
     homepage = "https://sdl-hercules-390.github.io/html/";

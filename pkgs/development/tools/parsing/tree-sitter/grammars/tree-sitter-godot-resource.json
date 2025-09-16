@@ -1,12 +1,13 @@
 {
   "url": "https://github.com/prestonknopp/tree-sitter-godot-resource",
-  "rev": "479bfc12579ba54ac5b4dcb320fd0cb81eaabe7d",
-  "date": "2025-01-02T02:55:15-08:00",
-  "path": "/nix/store/3mvxmgjpkr02vxr6iwhqivqkajzzywkb-tree-sitter-godot-resource",
-  "sha256": "18fjf4fj3fyfsq6nvmi5qy1ddwlfcz8sxiq8wq8qrvc7fvfwni1q",
-  "hash": "sha256-OETL3XaH7YwR5gjHrtFnjvLWgscl1m0N1s67IR1x0qE=",
+  "rev": "a1a7295b376fbd2531601f4ffff191b031ffc795",
+  "date": "2025-05-14T13:16:54-07:00",
+  "path": "/nix/store/aiffb583jhinm3ph5l0pz70igyskdc4f-tree-sitter-godot-resource",
+  "sha256": "1jhl7fwrjd07y3bcmwc6v3lyq04yma49q575cgld94ssmcp0rmgs",
+  "hash": "sha256-+tUMLqtak9ToY+UUnIiqngDs6diG8crW8Ac0mbk7FMo=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
+  "fetchTags": false,
   "leaveDotGit": false
 }

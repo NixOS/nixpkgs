@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "nominal";
-  version = "1.59.0";
+  version = "1.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nominal-io";
     repo = "nominal-client";
     tag = "v${version}";
-    hash = "sha256-wWy7i9lWZzDCx3cPyViLp7r7hSSDQbqdSUABX7L0LSE=";
+    hash = "sha256-C0afrzWlq2Z3a21MIJ/3XgvjkEZONwBgCZ+06XIYFGE=";
   };
 
   build-system = [ hatchling ];

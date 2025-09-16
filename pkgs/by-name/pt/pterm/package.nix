@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "terminal emulator for the Cyber1 mainframe-based CYBIS system";
+    description = "Terminal emulator for the Cyber1 mainframe-based CYBIS system";
     homepage = "https://www.cyber1.org/";
     license = licenses.zlib;
     maintainers = with maintainers; [ sarcasticadmin ];

@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
-  version = "1.44";
+  version = "1.45";
 
   doCheck =
     stdenv.hostPlatform == stdenv.buildPlatform
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PfEQfs+L/W7oeK7KXTt6/YEkikgDHhTK9q4B8U7rtQ4=";
+    hash = "sha256-TSsqnj4JnQF9yBB78cM00nu4fZ5K/xmgyNhW0XzUHvA=";
   };
 
   postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ wineee ];
     pkgConfigModules = [ "wayland-protocols" ];
   };
 

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin; # tests hang
+  doCheck = true;
 
   # Failing test
   postPatch = ''
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "build2 package dependency manager";
+    description = "Build2 package dependency manager";
     mainProgram = "bpkg";
     # https://build2.org/bpkg/doc/bpkg.xhtml
     longDescription = ''

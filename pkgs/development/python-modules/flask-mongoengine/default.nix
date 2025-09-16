@@ -40,13 +40,15 @@ buildPythonPackage rec {
     flask
     flask-wtf
     mongoengine
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   optional-dependencies = {
     wtf = [
       flask-wtf
       wtforms
-    ] ++ wtforms.optional-dependencies.email;
+    ]
+    ++ wtforms.optional-dependencies.email;
     # toolbar = [
     #   flask-debugtoolbar
     # ];

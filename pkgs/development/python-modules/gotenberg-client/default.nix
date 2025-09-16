@@ -9,26 +9,26 @@
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "gotenberg-client";
     tag = version;
-    hash = "sha256-eDYgKbNeNCIdENo6DVmcABRwP5JUMCJW7NtbPOA5aqg=";
+    hash = "sha256-a/GXVhZtxGgmx5mb8hozbXAI9ecrl0c6BIz3BNekA8Q=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs =
-    [
-      httpx
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ httpx.optional-dependencies.http2;
+  dependencies = [
+    httpx
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+  ++ httpx.optional-dependencies.http2;
+
+  # requires running gotenberg service
+  doCheck = false;
 
   pythonImportsCheck = [ "gotenberg_client" ];
 

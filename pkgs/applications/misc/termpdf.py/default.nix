@@ -16,6 +16,7 @@
 buildPythonApplication {
   pname = "termpdf.py";
   version = "2022-03-28";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dsanson";

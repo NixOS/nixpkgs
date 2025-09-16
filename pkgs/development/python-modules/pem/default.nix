@@ -41,7 +41,8 @@ buildPythonPackage rec {
     pyopenssl
     pytestCheckHook
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "pem" ];
 

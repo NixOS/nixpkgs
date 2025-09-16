@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   removeReferencesTo,
   tzdata,
   wire,
@@ -14,34 +15,34 @@
   nixosTests,
   xcbuild,
   faketty,
+  nodejs,
 }:
 
 let
   # Grafana seems to just set it to the latest version available
   # nowadays.
-  # NOTE: sometimes, this is a no-op (i.e. `--replace-fail "X" "X"`).
-  # This is because Grafana raises the Go version above the patch-level we have
-  # on master if a security fix landed in Go (and our go may go through staging first).
+  # NOTE: I(Ma27) leave this in, even if it's technically dead code because
+  # it doesn't make sense to pull this out of the history on every other release.
   #
-  # I(Ma27) decided to leave the code a no-op if this is not the case because
-  # pulling it out of the Git history every few months and checking which files
-  # we need to update now is slightly annoying.
+  # Please make sure to always set a Go version to `.0`: it may happen that
+  # stable is on an older patch-release of Go and then the build would fail
+  # after a backport.
   patchGoVersion = ''
-    find . -name go.mod -not -path "./.bingo/*" -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
+    find . -name go.mod -not -path "./.bingo/*" -and -not -path "./hack/*" -and -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.2" "go 1.24.2"
+        --replace-fail "go 1.24.6" "go 1.24.0"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.2" "go 1.24.2"
+        --replace-fail "go 1.24.6" "go 1.24.0"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.2" "GO_VERSION = 1.24.2"
+      --replace-fail "GO_VERSION = 1.24.6" "GO_VERSION = 1.24.0"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.0+security-01";
+  version = "12.1.1";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -53,12 +54,22 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-4i9YHhoneptF72F4zvV+KVUJiP8xfiowPJExQ9iteK4=";
+    hash = "sha256-41OqvOTHlP66UtAecrpeArKldj0DNxK1oxTtQEihbo8=";
   };
+
+  # Fix build
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/grafana/grafana/commit/21f305c6a0e242463f5219cc6944fb880ea809f0.patch";
+      hash = "sha256-sXooRlnKY5ax0+1CPhy4zxDQtDGspbSdOoHHciqLTD8=";
+    })
+  ];
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
+    PUPPETEER_SKIP_DOWNLOAD = 1;
 
     # The build OOMs on memory constrained aarch64 without this
     NODE_OPTIONS = "--max_old_space_size=4096";
@@ -67,14 +78,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-yLrGllct+AGG/u/E2iX2gog1d/iKNfkYu6GV6Pw6nuc=";
+    hash = "sha256-51jCwnfWJoBICesM3SKiEvRC/Q1qUD310q59DucPdMs=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-dpLcU4ru/wIsxwYAI1qROtYwHJ2WOJSZpIhd9/qMwZo=";
+  vendorHash = "sha256-9z3HqheXLNh3zfmp1A620vzzf5yZBUJsbj/cc6J+xTg=";
 
   proxyVendor = true;
 
@@ -86,9 +97,11 @@ buildGoModule rec {
     # required to run old node-gyp
     (python3.withPackages (ps: [ ps.distutils ]))
     faketty
+    nodejs
     yarn-berry_4
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   # We have to remove this setupHook, otherwise it also runs in the `goModules`
   # derivation and fails because `offlineCache` is missing there.
@@ -158,10 +171,10 @@ buildGoModule rec {
     maintainers = with maintainers; [
       offline
       fpletz
-      willibutz
       globin
       ma27
       Frostman
+      ryan4yin
     ];
     platforms = [
       "x86_64-linux"

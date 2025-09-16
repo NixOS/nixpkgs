@@ -4,20 +4,21 @@
   nixosTests,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage {
   pname = "redlib";
-  version = "0.36.0";
+  version = "0.36.0-unstable-2025-09-09";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    tag = "v${version}";
-    hash = "sha256-a+FFQqKXYws8b/iGr49eZMVmKBqacQGvW8P51ybtBSc=";
+    rev = "a989d19ca92713878e9a20dead4252f266dc4936";
+    hash = "sha256-YJZVkCi8JQ1U47s52iOSyyf32S3b35pEqw4YTW8FHVY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1zPLnkNZvuZS5z9AEJvhyIv+8/y+YhqFcj5Mu7RSqnE=";
+  cargoHash = "sha256-L35VSQdIbKGGsBPU2Sj/MoYohy1ZibgZ+7NVa3yNjH8=";
 
   postInstall = ''
     install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
@@ -61,12 +62,12 @@ rustPlatform.buildRustPackage rec {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  passthru.tests = {
-    inherit (nixosTests) redlib;
+  passthru = {
+    tests = nixosTests.redlib;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
-    changelog = "https://github.com/redlib-org/redlib/releases/tag/v${version}";
     description = "Private front-end for Reddit (Continued fork of Libreddit)";
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;

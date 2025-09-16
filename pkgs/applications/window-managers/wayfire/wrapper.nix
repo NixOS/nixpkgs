@@ -13,7 +13,8 @@ symlinkJoin {
 
   paths = [
     wayfire
-  ] ++ plugins;
+  ]
+  ++ plugins;
 
   postBuild = ''
     for binary in $out/bin/*; do

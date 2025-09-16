@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio}/include/asio'
+    substituteInPlace libhidx/libhidx/src/Connector.cc --replace-fail '/usr/local/libexec' "$out/libexec"
   '';
 
   nativeBuildInputs = [

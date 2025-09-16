@@ -86,22 +86,22 @@ stdenv.mkDerivation (finalAttrs: {
     bashInteractive
     ctestCheckHook
     writableTmpDirAsHomeHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
   ];
 
-  disabledTests =
-    [
-      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-      "test.fileclone" # flaky on hydra, also seems to fail on zfs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test.basedir"
-      "test.multi_arch"
-      "test.nocpp2"
-    ];
+  disabledTests = [
+    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+    "test.fileclone" # flaky on hydra, also seems to fail on zfs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test.basedir"
+    "test.multi_arch"
+    "test.nocpp2"
+  ];
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
@@ -158,6 +158,10 @@ stdenv.mkDerivation (finalAttrs: {
               ln -s ${unwrappedCC}/$file $out/$file
             done
           '';
+
+        meta = {
+          inherit (unwrappedCC.meta) mainProgram;
+        };
       };
 
     updateScript = nix-update-script { };

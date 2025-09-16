@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter329,
+  flutter332,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -9,16 +9,16 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.16-beta";
+  version = "0.9.19-beta";
 in
-flutter329.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-AmxQyDV0AiS2qzAsrgBm0SqH0CaLi3W1A3gcsk65dj0=";
+    hash = "sha256-gvVKiaQ6qqMcE90B8T2FJKoViRxmIGsABmcXq+fO5hs=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -31,13 +31,15 @@ flutter329.buildFlutterApplication {
   gitHashes = {
     balanced_text = "sha256-lSDR5dDjZ4garRbBPI+wSxC5iScg8wVSD5kymmLbYbk=";
     isar_generator = "sha256-EthUFM+YI3bnM0U0sECoNOCRXpo4qjP71VXYBuO/u+I=";
+    isar_flutter_libs = "sha256-Z5IdfiaZ7348XwYSQb81z0YZEoIHWmsSZr6mYqqz4Oo=";
     media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
     palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
     split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
+    flutter_user_certificates_android = "sha256-HL1Qd0D3CLYJysWLX2jqWt1FJRGm/BE8EjVFPztOIPo=";
   };
 
   postFixup = ''
-    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-needed libflutter_discord_rpc.so --add-rpath ${
       lib.makeLibraryPath [ mpv-unwrapped ]
     }
   '';

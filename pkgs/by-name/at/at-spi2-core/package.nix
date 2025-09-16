@@ -21,8 +21,8 @@
   libXi,
   libXext,
   gnome,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,32 +40,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-4bHJg2qJR4UvdEDDLiMXkjTHa9mM2cxAAfN2QF+LeDs=";
   };
 
-  nativeBuildInputs =
-    [
-      glib
-      meson
-      ninja
-      pkg-config
-      makeWrapper
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
-  buildInputs =
-    [
-      libX11
-      libxml2
-      # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
-      libXtst
-      libXi
-      # libXext is a transitive dependency of libXi
-      libXext
-    ]
-    ++ lib.optionals systemdSupport [
-      # libsystemd is a needed for dbus-broker support
-      systemd
-    ];
+  buildInputs = [
+    libX11
+    libxml2
+    # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+    libXtst
+    libXi
+    # libXext is a transitive dependency of libXi
+    libXext
+  ]
+  ++ lib.optionals systemdSupport [
+    # libsystemd is a needed for dbus-broker support
+    systemdLibs
+  ];
 
   # In atspi-2.pc dbus-1 glib-2.0
   # In atk.pc gobject-2.0
@@ -77,21 +75,20 @@ stdenv.mkDerivation rec {
   # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
   doCheck = false;
 
-  mesonFlags =
-    [
-      # Provide dbus-daemon fallback when it is not already running when
-      # at-spi2-bus-launcher is executed. This allows us to avoid
-      # including the entire dbus closure in libraries linked with
-      # the at-spi2-core libraries.
-      "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
-    ]
-    ++ lib.optionals systemdSupport [
-      # Same as the above, but for dbus-broker
-      "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
-    ]
-    ++ lib.optionals (!systemdSupport) [
-      "-Duse_systemd=false"
-    ];
+  mesonFlags = [
+    # Provide dbus-daemon fallback when it is not already running when
+    # at-spi2-bus-launcher is executed. This allows us to avoid
+    # including the entire dbus closure in libraries linked with
+    # the at-spi2-core libraries.
+    "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+  ]
+  ++ lib.optionals systemdSupport [
+    # Same as the above, but for dbus-broker
+    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
+  ]
+  ++ lib.optionals (!systemdSupport) [
+    "-Duse_systemd=false"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

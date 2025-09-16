@@ -55,21 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      libinput
-      libxcb
-      libxkbcommon
-      pixman
-      wayland
-      wayland-protocols
-      wlroots
-    ]
-    ++ lib.optionals enableXWayland [
-      libX11
-      xcbutilwm
-      xwayland
-    ];
+  buildInputs = [
+    libinput
+    libxcb
+    libxkbcommon
+    pixman
+    wayland
+    wayland-protocols
+    wlroots
+  ]
+  ++ lib.optionals enableXWayland [
+    libX11
+    xcbutilwm
+    xwayland
+  ];
 
   outputs = [
     "out"
@@ -86,17 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString withCustomConfigH "cp ${configFile} config.h";
 
-  makeFlags =
-    [
-      "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-      "WAYLAND_SCANNER=wayland-scanner"
-      "PREFIX=$(out)"
-      "MANDIR=$(man)/share/man"
-    ]
-    ++ lib.optionals enableXWayland [
-      ''XWAYLAND="-DXWAYLAND"''
-      ''XLIBS="xcb xcb-icccm"''
-    ];
+  makeFlags = [
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+    "WAYLAND_SCANNER=wayland-scanner"
+    "PREFIX=$(out)"
+    "MANDIR=$(man)/share/man"
+  ]
+  ++ lib.optionals enableXWayland [
+    ''XWAYLAND="-DXWAYLAND"''
+    ''XLIBS="xcb xcb-icccm"''
+  ];
 
   strictDeps = true;
 

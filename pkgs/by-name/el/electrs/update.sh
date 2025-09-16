@@ -2,6 +2,8 @@
 #!nix-shell -i bash -p coreutils curl jq git gnupg common-updater-scripts
 set -euo pipefail
 
+trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
+
 # Fetch latest release, GPG-verify the tag, update derivation
 
 scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
@@ -32,8 +34,8 @@ echo "Verifying commit"
 git -C $repo verify-tag v${version}
 
 rm -rf $repo/.git
-hash=$(nix hash path $repo)
+hash=$(nix --extra-experimental-features nix-command hash path $repo)
 
-(cd "$nixpkgs" && update-source-version electrs "$version" "$hash" && update-source-version electrs --ignore-same-version --source-key=cargoDeps)
+(cd "$nixpkgs" && update-source-version electrs "$version" "$hash" && update-source-version electrs --ignore-same-version --source-key=cargoDeps.vendorStaging)
 echo
 echo "electrs: $oldVersion -> $version"

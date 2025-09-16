@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
     tag = finalAttrs.version;
-    hash = "sha256-L7SaWNSS5tn8OyKTPixTtlMB+OmVd9I0VXtasQMI5GI=";
+    hash = "sha256-OGzYxFGHSH1X8Q8dcB35on/2D+sc0e+chtgObOWUGGM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-u3Di/vTKbyehmNbTlMZPNRejgK9jYROQv8qdz2XT4Bs=";
+  cargoHash = "sha256-JfX2JWQVrVvq/P/rFumO9QAeJSTxXIKXJxjXmvl1y+g=";
 
   checkFlags = [
     # assertion failed: result.is_ok()

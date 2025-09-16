@@ -2,10 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  testers,
-  tuxedo-rs,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuxedo-rs";
   version = "0.3.1";
 
@@ -14,21 +13,20 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AaronErhardt";
     repo = "tuxedo-rs";
-    rev = "tailor-v${version}";
+    rev = "tailor-v${finalAttrs.version}";
     hash = "sha256-+NzwUs8TZsA0us9hI1UmEKdiOo9IqTRmTOHs4xmC7MY=";
   };
 
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EkTLL7thZ/bBpY7TwfEsPOjJxzQ3vpxDi+sYPNAK6og=";
 
-  passthru.tests.version = testers.testVersion {
-    package = tuxedo-rs;
-    command = "${meta.mainProgram} --version";
-    version = version;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "--version";
 
   postInstall = ''
     install -Dm444 tailord/com.tux.Tailor.conf -t $out/share/dbus-1/system.d
@@ -52,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux;
     mainProgram = "tailor";
   };
-}
+})

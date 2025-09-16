@@ -16,31 +16,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "aerc";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
     rev = finalAttrs.version;
-    hash = "sha256-IBTM3Ersm8yUCgiBLX8ozuvMEbfmY6eW5xvJD20UgRA=";
+    hash = "sha256-UBXMAIuB0F7gG0dkpEF/3V4QK6FEbQw2ZLGGmRF884I=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-O1j0J6vCE6rap5/fOTxlUpXAG5mgZf8CfNOB4VOBxms=";
+  vendorHash = "sha256-E/DnfiHoDDNNoaNGZC/nvs8DiJ8F2+H2FzxpU7nK+bE=";
 
   nativeBuildInputs = [
     scdoc
     python3Packages.wrapPython
   ];
 
-  patches = [
-    ./runtime-libexec.patch
-
-    # TODO remove these with the next release
-    # they resolve a path injection vulnerability when saving attachments (CVE-2025-49466)
-    ./basename-temp-file.patch
-    ./basename-temp-file-fixup.patch
-  ];
+  patches = [ ./runtime-libexec.patch ];
 
   postPatch = ''
     substituteAllInPlace config/aerc.conf
@@ -59,7 +52,8 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     python3Packages.python
     gawk
-  ] ++ lib.optional withNotmuch notmuch;
+  ]
+  ++ lib.optional withNotmuch notmuch;
 
   installPhase = ''
     runHook preInstall

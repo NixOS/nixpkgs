@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "switch user and group id and exec";
+    description = "Switch user and group id and exec";
     mainProgram = "su-exec";
     homepage = "https://github.com/ncopa/su-exec";
     license = licenses.mit;

@@ -28,6 +28,8 @@
   pybind11,
   pooch,
   xsimd,
+  boost188,
+  qhull,
 
   # dependencies
   numpy,
@@ -48,8 +50,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.15.3";
-  srcHash = "sha256-97z5CLRq/2kWjL2+ewHRA71vSfvCLHVJdOUZfDFnyhM=";
+  version = "1.16.1";
+  srcHash = "sha256-/LgYQUMGoQjSWMCWBgnekNGzEc0LVg2qiN2tV399rQU=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -104,26 +106,25 @@ buildPythonPackage {
   # that override globally the `numpy` attribute to point to `numpy_1`.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0,<2.5" numpy
+      --replace-fail "numpy>=2.0.0,<2.6" numpy
   '';
 
-  build-system =
-    [
-      cython
-      gfortran
-      meson-python
-      nukeReferences
-      pythran
-      pkg-config
-      setuptools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Minimal version required according to:
-      # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
-      (xcbuild.override {
-        sdkVer = "13.3";
-      })
-    ];
+  build-system = [
+    cython
+    gfortran
+    meson-python
+    nukeReferences
+    pythran
+    pkg-config
+    setuptools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Minimal version required according to:
+    # https://github.com/scipy/scipy/blob/v1.16.0/scipy/meson.build#L238-L244
+    (xcbuild.override {
+      sdkVer = "13.3";
+    })
+  ];
 
   buildInputs = [
     blas
@@ -131,6 +132,8 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
+    boost188
+    qhull
   ];
 
   dependencies = [ numpy ];
@@ -144,12 +147,7 @@ buildPythonPackage {
   ];
 
   disabledTests =
-    [
-      "test_cumulative_simpson_against_simpson_with_default_dx"
-      # https://github.com/scipy/scipy/issues/22789
-      "test_funcs"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # The following tests are broken on aarch64-darwin with newer compilers and library versions.
       # See https://github.com/scipy/scipy/issues/18308
       "test_a_b_neg_int_after_euler_hypergeometric_transformation"
@@ -159,27 +157,30 @@ buildPythonPackage {
       "hyp2f1_test_case3"
       "test_uint64_max"
       "test_large_m4" # https://github.com/scipy/scipy/issues/22466
+    ]
+    ++ lib.optionals (python.isPy311) [
+      # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
+      "test_funcs"
     ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  preConfigure =
-    ''
-      # Helps parallelization a bit
-      export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
-      # We download manually the datasets and this variable tells the pooch
-      # library where these files are cached. See also:
-      # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
-      # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
-      export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
-    ''
-    + (lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        d: dpath:
-        # Actually copy the datasets
-        "cp ${dpath} scipy-data/${d}.dat"
-      ) datasets
-    ));
+  preConfigure = ''
+    # Helps parallelization a bit
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    # We download manually the datasets and this variable tells the pooch
+    # library where these files are cached. See also:
+    # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
+    # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
+    export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
+  ''
+  + (lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      d: dpath:
+      # Actually copy the datasets
+      "cp ${dpath} scipy-data/${d}.dat"
+    ) datasets
+  ));
 
   mesonFlags = [
     "-Dblas=${blas.pname}"
@@ -188,6 +189,7 @@ buildPythonPackage {
     # meson the proper cross compilation related arguments. See also:
     # https://docs.scipy.org/doc/scipy/building/cross_compilation.html
     "--cross-file=${crossFileScipy}"
+    "-Duse-system-libraries=all"
   ];
 
   # disable stackprotector on aarch64-darwin for now
@@ -217,14 +219,13 @@ buildPythonPackage {
 
   passthru = {
     inherit blas;
-    updateScript =
-      [
-        ./update.sh
-        # Pass it this file name as argument
-        (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
-      ]
-      # Pass it the names of the datasets to update their hashes
-      ++ (builtins.attrNames datasetsHashes);
+    updateScript = [
+      ./update.sh
+      # Pass it this file name as argument
+      (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
+    ]
+    # Pass it the names of the datasets to update their hashes
+    ++ (builtins.attrNames datasetsHashes);
     tests = {
       inherit sage;
     };

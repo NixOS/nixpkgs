@@ -62,16 +62,15 @@ in
       description = "Shiori simple bookmarks manager";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysql.service"
       ];
-      environment =
-        {
-          SHIORI_DIR = "/var/lib/shiori";
-        }
-        // lib.optionalAttrs (cfg.databaseUrl != null) {
-          SHIORI_DATABASE_URL = cfg.databaseUrl;
-        };
+      environment = {
+        SHIORI_DIR = "/var/lib/shiori";
+      }
+      // lib.optionalAttrs (cfg.databaseUrl != null) {
+        SHIORI_DATABASE_URL = cfg.databaseUrl;
+      };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/shiori server --address '${cfg.address}' --port '${toString cfg.port}' --webroot '${cfg.webRoot}'";
@@ -83,23 +82,22 @@ in
 
         # Security options
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        BindReadOnlyPaths =
-          [
-            "/nix/store"
+        BindReadOnlyPaths = [
+          "/nix/store"
 
-            # For SSL certificates, and the resolv.conf
-            "/etc"
-          ]
-          ++ lib.optional (
-            config.services.postgresql.enable
-            && cfg.databaseUrl != null
-            && lib.strings.hasPrefix "postgres://" cfg.databaseUrl
-          ) "/run/postgresql"
-          ++ lib.optional (
-            config.services.mysql.enable
-            && cfg.databaseUrl != null
-            && lib.strings.hasPrefix "mysql://" cfg.databaseUrl
-          ) "/var/run/mysqld";
+          # For SSL certificates, and the resolv.conf
+          "/etc"
+        ]
+        ++ lib.optional (
+          config.services.postgresql.enable
+          && cfg.databaseUrl != null
+          && lib.strings.hasPrefix "postgres://" cfg.databaseUrl
+        ) "/run/postgresql"
+        ++ lib.optional (
+          config.services.mysql.enable
+          && cfg.databaseUrl != null
+          && lib.strings.hasPrefix "mysql://" cfg.databaseUrl
+        ) "/var/run/mysqld";
 
         CapabilityBoundingSet = "";
 

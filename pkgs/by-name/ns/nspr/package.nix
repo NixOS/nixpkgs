@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nspr";
-  version = "4.36";
+  version = "4.37";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    hash = "sha256-Vd7DF/FAHNLl26hE00C5MKt1R/gYF5pAArzmLm8caJU=";
+    hash = "sha256-X5NE7Q4xhVvTj4izPJ2auU9wzlR+8yE+SI0VIPYYQPo=";
   };
 
   patches = [
@@ -25,21 +25,21 @@ stdenv.mkDerivation rec {
   ];
   outputBin = "dev";
 
-  preConfigure =
-    ''
-      cd nspr
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace '@executable_path/' "$out/lib/"
-      substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
-    '';
+  preConfigure = ''
+    cd nspr
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace '@executable_path/' "$out/lib/"
+    substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
+  '';
 
   HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
-  ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
+  ]
+  ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
   postInstall = ''
     find $out -name "*.a" -delete

@@ -14,6 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pychess";
   version = "1.0.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pychess";
@@ -35,12 +36,15 @@ python3Packages.buildPythonApplication rec {
     gtksourceview
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pygobject3
     pycairo
     sqlalchemy
     pexpect
     psutil
+    standard-telnetlib
     websockets
     ptyprocess
   ];
@@ -63,6 +67,8 @@ python3Packages.buildPythonApplication rec {
 
   # No tests available.
   doCheck = false;
+
+  pythonImportsCheck = [ "pychess" ];
 
   meta = {
     description = "Advanced GTK chess client written in Python";

@@ -17,21 +17,25 @@
   pythonOlder,
   tenacity,
   tiktoken,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "fnllm";
-  version = "0.2.8";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FafxygW5aZ3U24mesFZI5cmLd1L1FE8rHOrOgL3R+9g=";
+    hash = "sha256-gKdFBpNpG/CDLhKi1wQgZHv+o1pDy5HEqcteLzkXK1A=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     aiolimiter
@@ -57,7 +61,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "fnllm" ];
 
@@ -79,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A function-based LLM protocol and wrapper";
+    description = "Function-based LLM protocol and wrapper";
     homepage = "https://github.com/microsoft/essex-toolkit/tree/main/python/fnllm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

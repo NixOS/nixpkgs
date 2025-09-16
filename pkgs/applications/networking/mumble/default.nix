@@ -6,6 +6,7 @@
   pkg-config,
   qt5,
   cmake,
+  ninja,
   avahi,
   boost,
   libopus,
@@ -51,30 +52,33 @@ let
 
         nativeBuildInputs = [
           cmake
+          ninja
           pkg-config
           python3
           qt5.wrapQtAppsHook
           qt5.qttools
-        ] ++ (overrides.nativeBuildInputs or [ ]);
+        ]
+        ++ (overrides.nativeBuildInputs or [ ]);
 
-        buildInputs =
-          [
-            boost
-            poco
-            protobuf
-            microsoft-gsl
-            nlohmann_json
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ]
-          ++ (overrides.buildInputs or [ ]);
+        buildInputs = [
+          boost
+          poco
+          protobuf
+          microsoft-gsl
+          nlohmann_json
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ]
+        ++ (overrides.buildInputs or [ ]);
 
         cmakeFlags = [
           "-D g15=OFF"
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
           "-D BUILD_NUMBER=${lib.versions.patch source.version}"
+          "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
-        ] ++ (overrides.cmakeFlags or [ ]);
+        ]
+        ++ (overrides.cmakeFlags or [ ]);
 
         preConfigure = ''
           patchShebangs scripts
@@ -101,31 +105,31 @@ let
       type = "mumble";
 
       platforms = lib.platforms.darwin;
-      nativeBuildInputs =
-        [ qt5.qttools ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          makeWrapper
-        ];
+      nativeBuildInputs = [
+        qt5.qttools
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        makeWrapper
+      ];
 
-      buildInputs =
-        [
-          flac
-          libogg
-          libopus
-          libsndfile
-          libvorbis
-          speexdsp
-          qt5.qtsvg
-          rnnoise
-        ]
-        ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
-        ++ lib.optional jackSupport libjack2
-        ++ lib.optional speechdSupport speechd-minimal
-        ++ lib.optional pulseSupport libpulseaudio
-        ++ lib.optional pipewireSupport pipewire
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          xar
-        ];
+      buildInputs = [
+        flac
+        libogg
+        libopus
+        libsndfile
+        libvorbis
+        speexdsp
+        qt5.qtsvg
+        rnnoise
+      ]
+      ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
+      ++ lib.optional jackSupport libjack2
+      ++ lib.optional speechdSupport speechd-minimal
+      ++ lib.optional pulseSupport libpulseaudio
+      ++ lib.optional pipewireSupport pipewire
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xar
+      ];
 
       cmakeFlags = [
         "-D server=OFF"
@@ -194,15 +198,14 @@ let
     generic {
       type = "murmur";
 
-      cmakeFlags =
-        [
-          "-D client=OFF"
-          (lib.cmakeBool "ice" iceSupport)
-        ]
-        ++ lib.optionals iceSupport [
-          "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-          "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
-        ];
+      cmakeFlags = [
+        "-D client=OFF"
+        (lib.cmakeBool "ice" iceSupport)
+      ]
+      ++ lib.optionals iceSupport [
+        "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
+        "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+      ];
 
       buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
     } source;

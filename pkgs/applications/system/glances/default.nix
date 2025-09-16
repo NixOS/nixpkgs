@@ -66,7 +66,8 @@ buildPythonApplication rec {
     jinja2
     which
     prometheus-client
-  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
   passthru.tests = {
     service = nixosTests.glances;
@@ -91,7 +92,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
-      primeos
       koral
     ];
   };

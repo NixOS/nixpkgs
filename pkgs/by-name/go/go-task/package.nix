@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-task";
-  version = "3.43.3";
+  version = "3.44.1";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZIZdk0yyykjjSdH6YG8K8WpI8e8426odk8RxISsJe80=";
+    hash = "sha256-KqVGVC3jg6UihB8O6g7SpcE5pc11IQ0HcXSRD2E2Tfo=";
   };
 
-  vendorHash = "sha256-3Uu0ozwOgp6vQh+s9nGKojw6xPUI49MjjPqKh9g35lQ=";
+  vendorHash = "sha256-IvuXL3FS/69NYxkZZHsnOl27DXpZnuOIkhivdMsG45Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,16 +33,15 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  postInstall =
-    ''
-      ln -s $out/bin/task $out/bin/go-task
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd task \
-        --bash <($out/bin/task --completion bash) \
-        --fish <($out/bin/task --completion fish) \
-        --zsh <($out/bin/task --completion zsh)
-    '';
+  postInstall = ''
+    ln -s $out/bin/task $out/bin/go-task
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd task \
+      --bash <($out/bin/task --completion bash) \
+      --fish <($out/bin/task --completion fish) \
+      --zsh <($out/bin/task --completion zsh)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

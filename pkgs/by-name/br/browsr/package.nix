@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     "browsr"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--snapshot-update"
   ];
 

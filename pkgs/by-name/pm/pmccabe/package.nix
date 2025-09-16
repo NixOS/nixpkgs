@@ -20,11 +20,15 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -i -r Makefile \
       -e 's,/usr/,/,g' \
       -e "s,^DESTDIR =.*$,DESTDIR = $out," \
       -e "s,^INSTALL = install.*$,INSTALL = install," \
       -e "s,^all:.*$,all: \$(PROGS),"
+
+    runHook postConfigure
   '';
 
   checkPhase = "make test";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
-    repo = pname;
+    repo = "os-prober";
     rev = version;
     sha256 = "sha256-cTufM82YE1L7d3kIOtncICInBPEw4o4NzQXB4uDrMKI=";
   };

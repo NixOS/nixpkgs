@@ -38,7 +38,8 @@ mkMesonLibrary (finalAttrs: {
 
   buildInputs = [
     ({ inherit editline readline; }.${readlineFlavor})
-  ] ++ lib.optional enableMarkdown lowdown;
+  ]
+  ++ lib.optional enableMarkdown lowdown;
 
   propagatedBuildInputs = [
     nix-util

@@ -28,7 +28,7 @@ let
     }).overrideAttrs
       (old: {
         passthru = old.passthru or { } // {
-          inherit (stage0.vmr) fetch-deps;
+          inherit (stage0.vmr) fetch-drv fetch-deps;
         };
       });
 

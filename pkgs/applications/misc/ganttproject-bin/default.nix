@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       };
 
       javaOptions = [
-        "-Dawt.useSystemAAFontSettings=on"
+        "-Dawt.useSystemAAFontSettings=gasp"
       ];
 
     in
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/bin"
       wrapProgram "$out/share/ganttproject/ganttproject" \
         --set JAVA_HOME "${jre}" \
-        --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
+        --prefix _JAVA_OPTIONS " " "${builtins.toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 

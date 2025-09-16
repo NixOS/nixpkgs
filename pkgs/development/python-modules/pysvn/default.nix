@@ -31,7 +31,8 @@ buildPythonPackage rec {
     subversion
     apr
     aprutil
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source

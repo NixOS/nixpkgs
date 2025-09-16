@@ -20,7 +20,7 @@ buildGoModule rec {
   excludedPackages = ".nap";
 
   meta = {
-    description = "Code snippets in your terminal 🛌";
+    description = "Code snippets in your terminal";
     mainProgram = "nap";
     homepage = "https://github.com/maaslalani/nap";
     license = lib.licenses.mit;

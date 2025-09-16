@@ -9,14 +9,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "3.2.2";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
     tag = "v${version}";
-    hash = "sha256-2W3iO4AOuDdDKJDMMY8YKXlI+dQKRI3PQtkdi9J3wZo=";
+    hash = "sha256-MWdih+j7spUVEWXCBzF2J/FVXK0TQ8VhrJNDhNfxpQE=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -46,9 +46,10 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     faker
+    pytest-asyncio
   ];
 
   passthru = {

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "9.0.0";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-JZriBvdeDAZ+NOnWCsjI2m5JlLe/oLlbtFkdFeuL8TI=";
+    hash = "sha256-06PDDzFasY1vmzejxDiTL/O8R6iAhSpWjCkVg9/l46U=";
   };
 
   build-system = [ setuptools ];
@@ -42,6 +42,12 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dotenv
     responses
+  ];
+
+  # FileNotFoundError: [Errno 2] No such file or directory: './auth.json'
+  disabledTestPaths = [
+    "test/integration/test_assistant_v2.py"
+    "test/integration/test_natural_language_understanding_v1.py"
   ];
 
   pythonImportsCheck = [ "ibm_watson" ];

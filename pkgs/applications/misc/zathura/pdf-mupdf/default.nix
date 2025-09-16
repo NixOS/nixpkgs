@@ -51,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     tesseract
     leptonica
     mujs
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 

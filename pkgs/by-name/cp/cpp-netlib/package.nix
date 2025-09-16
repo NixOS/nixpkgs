@@ -18,7 +18,7 @@ stdenvForCppNetlib.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "cpp-netlib";
-    rev = "cpp-netlib-${version}";
+    tag = "cpp-netlib-${version}";
     sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
     fetchSubmodules = true;
   };

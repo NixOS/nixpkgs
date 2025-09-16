@@ -20,7 +20,8 @@ let
 
   environmentFiles = [
     "/var/lib/karakeep/settings.env"
-  ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+  ]
+  ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
 in
 {
   options = {
@@ -33,7 +34,7 @@ in
           Environment variables to pass to Karakaeep. This is how most settings
           can be configured. Changing DATA_DIR is possible but not supported.
 
-          See https://docs.karakeep.app/configuration/
+          See <https://docs.karakeep.app/configuration/>
         '';
         type = lib.types.attrsOf lib.types.str;
         default = { };

@@ -57,24 +57,23 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      beautifulsoup4
-      bleach
-      defusedxml
-      jinja2
-      jupyter-core
-      jupyterlab-pygments
-      markupsafe
-      mistune
-      nbclient
-      packaging
-      pandocfilters
-      pygments
-      traitlets
-    ]
-    ++ bleach.optional-dependencies.css
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    beautifulsoup4
+    bleach
+    defusedxml
+    jinja2
+    jupyter-core
+    jupyterlab-pygments
+    markupsafe
+    mistune
+    nbclient
+    packaging
+    pandocfilters
+    pygments
+    traitlets
+  ]
+  ++ bleach.optional-dependencies.css
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -87,9 +86,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

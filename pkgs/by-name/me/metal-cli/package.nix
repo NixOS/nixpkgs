@@ -50,7 +50,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      nshalman
       teutat3s
     ];
     mainProgram = "metal";

@@ -1,12 +1,11 @@
 diff --git a/GNUmakefile b/GNUmakefile
-index f46126a82..44be8f13b 100644
+index 20dc731d3..400e5b84f 100644
 --- a/GNUmakefile
 +++ b/GNUmakefile
-@@ -57,20 +57,6 @@ TOYBOX_ROOT := $(BASEDIR)/tmp
- TOYBOX_VER  := 0.8.12
- TOYBOX_SRC  := $(TOYBOX_ROOT)/toybox-$(TOYBOX_VER)
+@@ -69,19 +69,6 @@ TOYBOX_SRC  := $(TOYBOX_ROOT)/toybox-$(TOYBOX_VER)
+ #------------------------------------------------------------------------
+ OS ?= $(shell uname -s)
  
--
 -ifdef SELINUX_ENABLED
 -	override SELINUX_ENABLED := 0
 -# Now check if we should enable it (only on non-Windows)
@@ -23,7 +22,7 @@ index f46126a82..44be8f13b 100644
  # Possible programs
  PROGS       := \
  	base32 \
-@@ -181,8 +167,10 @@ SELINUX_PROGS := \
+@@ -200,8 +187,10 @@ endif
  
  ifneq ($(OS),Windows_NT)
  	PROGS := $(PROGS) $(UNIX_PROGS)
@@ -32,6 +31,6 @@ index f46126a82..44be8f13b 100644
 -	PROGS := $(PROGS) $(SELINUX_PROGS)
 +		PROGS := $(PROGS) $(SELINUX_PROGS)
 +	endif
+ # Always use external libstdbuf when building with make (Unix only)
+ 	CARGOFLAGS += --features feat_external_libstdbuf
  endif
- 
- UTILS ?= $(PROGS)

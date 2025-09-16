@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "errbot";
   version = "6.2.0";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "errbotio";
@@ -17,9 +17,13 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-UdqzBrlcb9NkuVo8ChADJmaKevadoGLyZUrckStb5ko=";
   };
 
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     ansi
     colorlog
     daemonize
@@ -45,9 +49,6 @@ python3.pkgs.buildPythonApplication rec {
     mock
     pytestCheckHook
   ];
-
-  # errbot-backend-slackv3 has not been packaged
-  pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
 
   disabledTests = [
     # require networking

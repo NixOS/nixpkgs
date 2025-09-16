@@ -15,14 +15,14 @@ in
       services.opentelemetry-collector = {
         enable = true;
         settings = {
-          exporters.logging.verbosity = "detailed";
+          exporters.debug.verbosity = "detailed";
           receivers.otlp.protocols = {
             http.endpoint = "0.0.0.0:${toString port}";
           };
           service = {
             pipelines.logs = {
               receivers = [ "otlp" ];
-              exporters = [ "logging" ];
+              exporters = [ "debug" ];
             };
           };
         };

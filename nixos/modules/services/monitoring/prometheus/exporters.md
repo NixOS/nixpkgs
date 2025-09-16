@@ -18,9 +18,7 @@ running on. The exporter could be configured as follows:
       "logind"
       "systemd"
     ];
-    disabledCollectors = [
-      "textfile"
-    ];
+    disabledCollectors = [ "textfile" ];
     openFirewall = true;
     firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
   };
@@ -39,20 +37,24 @@ the [available options](https://nixos.org/nixos/options.html#prometheus.exporter
 Prometheus can now be configured to consume the metrics produced by the exporter:
 ```nix
 {
-    services.prometheus = {
-      # ...
+  services.prometheus = {
+    # ...
 
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [{
-            targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-          }];
-        }
-      ];
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        static_configs = [
+          {
+            targets = [
+              "localhost:${toString config.services.prometheus.exporters.node.port}"
+            ];
+          }
+        ];
+      }
+    ];
 
-      # ...
-    };
+    # ...
+  };
 }
 ```
 
@@ -82,7 +84,12 @@ example:
     specific options and configuration:
     ```nix
     # nixpkgs/nixos/modules/services/prometheus/exporters/postfix.nix
-    { config, lib, pkgs, options }:
+    {
+      config,
+      lib,
+      pkgs,
+      options,
+    }:
     let
       # for convenience we define cfg here
       cfg = config.services.prometheus.exporters.postfix;
@@ -151,7 +158,12 @@ Should an exporter option change at some point, it is possible to add
 information about the change to the exporter definition similar to
 `nixpkgs/nixos/modules/rename.nix`:
 ```nix
-{ config, lib, pkgs, options }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
 
 let
   cfg = config.services.prometheus.exporters.nginx;

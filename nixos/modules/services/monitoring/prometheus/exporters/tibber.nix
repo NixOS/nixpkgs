@@ -16,7 +16,7 @@ in
       default = null;
       description = ''
         Add here the path to your personal Tibber API Token ('Bearer Token') File.
-        Get your personal Tibber API Token here: https://developer.tibber.com
+        Get your personal Tibber API Token here: <https://developer.tibber.com>
         Do not share your personal plaintext Tibber API Token via github. (see: ryantm/agenix, mic92/sops)
       '';
     };

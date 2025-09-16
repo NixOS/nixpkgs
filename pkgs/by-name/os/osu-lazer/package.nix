@@ -22,13 +22,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2025.605.3";
+  version = "2025.912.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = version;
-    hash = "sha256-hzD2OX+bnJ4cvq09wXQ1rINZ3DI97BwSrZ/yxyjWKoM=";
+    tag = "${version}-lazer";
+    hash = "sha256-OpFiqGldVK0GpIlNopRhbFzb6tOvKnLr/zQeQvWPgmA=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -95,7 +95,11 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=(.*)-lazer"
+    ];
+  };
 
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";

@@ -5,11 +5,12 @@
 
   # build-system
   incremental,
-  setuptools,
+  hatchling,
 
   # dependencies
   attrs,
   hyperlink,
+  multipart,
   requests,
   twisted,
 
@@ -19,26 +20,28 @@
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "24.9.1";
+  version = "25.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fdp/xATz5O1Z0Kvl+O70lm+rvmGAOaKiO8fBUwXO/qg=";
+    hash = "sha256-Jd3jpVroXsLyxWMyyZrvJVqxT5l9DQBVLr/xNTipgEo=";
   };
 
   nativeBuildInputs = [
     incremental
-    setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = [
     attrs
     hyperlink
     incremental
+    multipart
     requests
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     httpbin

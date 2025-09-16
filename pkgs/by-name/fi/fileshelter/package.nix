@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/epoupon/fileshelter";
-    description = "FileShelter is a 'one-click' file sharing web application";
+    description = "One-click file sharing web application";
     mainProgram = "fileshelter";
-    maintainers = [ lib.maintainers.willibutz ];
+    maintainers = [ ];
     license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
   };

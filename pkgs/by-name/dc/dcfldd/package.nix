@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dcfldd";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "dcfldd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IRyc57UBsUgW8WALRhYSvT1rKIt27PBiT7MWCPJL0mY=";
+    hash = "sha256-xn1+8hLiLQMOv0q0Jkuqha9EZSJWMbCksnq/G6n4vQ8=";
   };
 
   strictDeps = true;

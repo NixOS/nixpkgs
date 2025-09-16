@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "offat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to test APIs for prevalent vulnerabilities";
     homepage = "https://github.com/OWASP/OFFAT/";
     changelog = "https://github.com/OWASP/OFFAT/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "offat";
   };
 }

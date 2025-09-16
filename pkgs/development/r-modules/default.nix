@@ -358,14 +358,13 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self =
-    {
-      inherit buildRPackage;
-    }
-    // mkPackageSet deriveBioc biocPackagesGenerated
-    // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
-    // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
-    // mkPackageSet deriveCran cranPackagesGenerated;
+  _self = {
+    inherit buildRPackage;
+  }
+  // mkPackageSet deriveBioc biocPackagesGenerated
+  // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
+  // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
+  // mkPackageSet deriveCran cranPackagesGenerated;
 
   # Takes in a generated JSON file's imported contents
   # and transforms it by swapping each element of the depends array with the dependency's derivation
@@ -452,7 +451,10 @@ let
       libjpeg
     ];
     bnpmr = [ pkgs.gsl ];
-    caviarpd = [ pkgs.cargo ];
+    caviarpd = with pkgs; [
+      cargo
+      rustc
+    ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [
       libtiff
@@ -570,6 +572,11 @@ let
     ];
     Rigraphlib = [ pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
+    hypergeo2 = with pkgs; [
+      gmp.dev
+      mpfr.dev
+      pkg-config
+    ];
     imager = [ pkgs.xorg.libX11.dev ];
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [
@@ -587,7 +594,10 @@ let
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
-    heck = [ pkgs.cargo ];
+    heck = with pkgs; [
+      cargo
+      rustc
+    ];
     LOMAR = [ pkgs.gmp.dev ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
@@ -679,6 +689,11 @@ let
     gdalcubes = [ pkgs.pkg-config ];
     rgeos = [ pkgs.geos ];
     Rglpk = [ pkgs.glpk ];
+    RcppPlanc = with pkgs; [
+      which
+      cmake
+      pkg-config
+    ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = with pkgs; [ zlib.dev ];
@@ -967,6 +982,7 @@ let
       cargo
       rustc
     ];
+    gglinedensity = [ pkgs.cargo ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     Rsymphony = [ pkgs.pkg-config ];
@@ -1084,6 +1100,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
@@ -1105,7 +1122,10 @@ let
       fftw.dev
     ];
     specklestar = [ pkgs.fftw.dev ];
-    cartogramR = [ pkgs.fftw.dev ];
+    cartogramR = with pkgs; [
+      fftw.dev
+      pkg-config
+    ];
     jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [
@@ -1113,7 +1133,10 @@ let
       libxml2.dev
       glpk
     ];
-    interpolation = [ pkgs.gmp ];
+    interpolation = with pkgs; [
+      gmp
+      mpfr
+    ];
     image_textlinedetector = with pkgs; [
       pkg-config
       opencv
@@ -1363,6 +1386,10 @@ let
     crandep = [ pkgs.gsl ];
     catSurv = [ pkgs.gsl ];
     ccfindR = [ pkgs.gsl ];
+    RcppPlanc = with pkgs; [
+      hwloc
+      hdf5.dev
+    ];
     screenCounter = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
     RKHSMetaMod = [ pkgs.gsl ];
@@ -1423,7 +1450,11 @@ let
     ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
-    ijtiff = [ pkgs.libtiff ];
+    ijtiff = with pkgs; [
+      libtiff
+      libjpeg
+      zlib
+    ];
     ragg =
       with pkgs;
       [
@@ -1567,6 +1598,7 @@ let
     "PCRA"
     "PSCBS"
     "iemisc"
+    "red"
     "repmis"
     "R_cache"
     "R_filesets"
@@ -1577,11 +1609,13 @@ let
     "SpatialDecon"
     "stepR"
     "styler"
+    "tabs"
     "teal_code"
     "TreeTools"
     "TreeSearch"
     "ACNE"
     "APAlyzer"
+    "BAT"
     "EstMix"
     "Patterns"
     "PECA"
@@ -1640,6 +1674,7 @@ let
     "minired" # deprecated on CRAN
 
     # Impure network access during build
+    "BulkSignalR"
     "waddR"
     "tiledb"
     "switchr"
@@ -1749,6 +1784,14 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    cartogramR = old.cartogramR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     rshift = old.rshift.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1760,6 +1803,14 @@ let
     SynExtend = old.SynExtend.overrideAttrs (attrs: {
       # build might fail due to race condition
       enableParallelBuilding = false;
+    });
+
+    orbweaver = old.orbweaver.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
     });
 
     xml2 = old.xml2.overrideAttrs (attrs: {
@@ -1776,6 +1827,10 @@ let
           'python_cmds <- c(python_cmds, file.path("${lib.getBin pkgs.python3}", "bin", "python3"))
            python_cmds[which(python_cmds != "")]'
       '';
+    });
+
+    fcl = old.fcl.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     fio = old.fio.overrideAttrs (attrs: {
@@ -1942,6 +1997,10 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    tergo = old.tergo.overrideAttrs (attrs: {
+      patchPhase = "patchShebangs configure";
+    });
+
     luajr = old.luajr.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
       postPatch = "patchShebangs configure";
@@ -1960,7 +2019,11 @@ let
     });
 
     zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      nativeBuildInputs = [
+        pkgs.cargo
+        pkgs.rustc
+      ]
+      ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
@@ -1981,13 +2044,6 @@ let
         ]
         ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
-    });
-
-    graper = old.graper.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace "src/Makevars" \
-          --replace-fail "CXX_STD=CXX11" "CXX_STD=CXX14"
-      '';
     });
 
     ocf = old.ocf.overrideAttrs (attrs: {
@@ -2182,6 +2238,17 @@ let
     RAppArmor = old.RAppArmor.overrideAttrs (attrs: {
       patches = [ ./patches/RAppArmor.patch ];
       LIBAPPARMOR_HOME = pkgs.libapparmor;
+    });
+
+    # Append cargo path to path variable
+    # This will provide cargo in case it's not set by the user
+    rextendr = old.rextendr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace R/zzz.R --replace-fail \
+          ".onLoad <- function(...) {" \
+          '.onLoad <- function(...) {
+           Sys.setenv(PATH = paste0(Sys.getenv("PATH"), ":${lib.getBin pkgs.cargo}/bin"))'
+      '';
     });
 
     RMySQL = old.RMySQL.overrideAttrs (attrs: {
@@ -2487,7 +2554,8 @@ let
           icu
           which
           zstd.dev
-        ] ++ attrs.buildInputs;
+        ]
+        ++ attrs.buildInputs;
         postInstall = ''
           install -d $out/bin $out/share/man/man1
           ln -s ../library/littler/bin/r $out/bin/r
@@ -2523,7 +2591,7 @@ let
 
     Rhtslib = old.Rhtslib.overrideAttrs (attrs: {
       preConfigure = ''
-        substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
+        substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
     });
 
@@ -2534,7 +2602,7 @@ let
 
         # during runtime the package directory is not writable as it's in the
         # nix store, so store the jar in the user's cache directory instead
-        substituteInPlace R/connection.R --replace \
+        substituteInPlace R/connection.R --replace-fail \
           'dest_file <- file.path(dest_folder, "h2o.jar")' \
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
       '';
@@ -2572,18 +2640,17 @@ let
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
       # Pyspark's spark is full featured and better maintained than pkgs.spark
       preConfigure = ''
-        substituteInPlace R/zzz.R \
-          --replace ".onLoad <- function(...) {" \
-            ".onLoad <- function(...) {
-          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark\"))
-          Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
-      '';
-    });
+        if grep "onLoad" R/zzz.R; then
+          echo "onLoad is already present, patch needs to be updated!"
+          exit 1
+        fi
 
-    proj4 = old.proj4.overrideAttrs (attrs: {
-      preConfigure = ''
-        substituteInPlace configure \
-          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
+        cat >> R/zzz.R <<EOF
+        .onLoad <- function(...) {
+          Sys.setenv("SPARK_HOME" = Sys.getenv("SPARK_HOME", unset = "${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark"))
+          Sys.setenv("JAVA_HOME" = Sys.getenv("JAVA_HOME", unset = "${pkgs.jdk}"))
+        }
+        EOF
       '';
     });
 
@@ -2674,8 +2741,12 @@ let
     rmarkdown = old.rmarkdown.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace R/pandoc.R \
-          --replace '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
+          --replace-fail '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
       '';
+    });
+
+    webfakes = old.webfakes.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
     });
 
     redland = old.redland.overrideAttrs (_: {
@@ -2700,7 +2771,7 @@ let
     tesseract = old.tesseract.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace configure \
-          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
+          --replace-fail 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
       '';
     });
 
@@ -2720,6 +2791,7 @@ let
       preConfigure = ''
         patchShebangs configure
         patchShebangs src/library/curl/configure
+        patchShebangs src/library/keyring/configure
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
       '';

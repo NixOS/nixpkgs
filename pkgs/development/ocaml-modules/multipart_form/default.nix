@@ -16,11 +16,11 @@
 
 buildDunePackage rec {
   pname = "multipart_form";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/multipart_form/releases/download/v${version}/multipart_form-${version}.tbz";
-    hash = "sha256-oOMpwyPP+q1BZ81a+HpooeaglUZgDxdz2MDNLygGIRY=";
+    hash = "sha256-IqGGnDJtE0OKrtt+ah1Cy9zx4wavEl9eXXjZSh/M2JE=";
   };
 
   propagatedBuildInputs = [

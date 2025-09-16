@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
-  version = "0.7.9";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RPjt79kDBgA8hxhDAZUU+xMuDcAMoxDhWt6NpTFHeMI=";
+    hash = "sha256-XMYHzPE5h9gD1fpN8b5YwOpY5zYCsYYQnof2MHDHa3E=";
   };
 
   nativeBuildInputs = [
@@ -46,32 +46,31 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =
+  buildInputs = [
+    boost
+    discord-rpc
+    freetype
+    hidapi
+    libpng
+    libsamplerate
+    minizip
+    SDL2
+    SDL2_net
+    speexdsp
+    vulkan-headers
+    vulkan-loader
+    xdg-user-dirs
+    zlib
+  ]
+  ++ (
+    with qt6Packages;
     [
-      boost
-      discord-rpc
-      freetype
-      hidapi
-      libpng
-      libsamplerate
-      minizip
-      SDL2
-      SDL2_net
-      speexdsp
-      vulkan-headers
-      vulkan-loader
-      xdg-user-dirs
-      zlib
+      qtbase
+      qtsvg
+      qtwebsockets
     ]
-    ++ (
-      with qt6Packages;
-      [
-        qtbase
-        qtsvg
-        qtwebsockets
-      ]
-      ++ lib.optional withWayland qtwayland
-    );
+    ++ lib.optional withWayland qtwayland
+  );
 
   cmakeFlags = [
     (lib.cmakeBool "PORTABLE_INSTALL" false)

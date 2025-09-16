@@ -45,10 +45,9 @@ buildPythonPackage rec {
     "test_explicit_table"
   ];
 
-  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+  pytestFlags = lib.optionals (pythonAtLeast "3.12") [
     # datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "flask_sqlalchemy" ];

@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static Site CMS with GUI to build privacy-focused SEO-friendly website";
     mainProgram = "Publii";
     longDescription = ''
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://getpublii.com";
     changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       urandom
       sebtm

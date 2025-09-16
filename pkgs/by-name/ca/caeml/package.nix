@@ -5,7 +5,7 @@
 }:
 buildGoModule {
   pname = "caeml";
-  version = "unstable-2023-05-24";
+  version = "0-unstable-2023-05-24";
 
   src = fetchFromGitHub {
     owner = "ferdinandyb";

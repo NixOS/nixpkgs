@@ -31,85 +31,29 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion =
     let
+      case = case: out: { inherit case out; };
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      {
-        case = range "8.20" "9.0";
-        out = "2.4.0";
-      }
-      {
-        case = range "8.19" "9.0";
-        out = "2.3.0";
-      }
-      {
-        case = range "8.17" "8.20";
-        out = "2.2.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "2.1.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "2.0.0";
-      }
-      {
-        case = range "8.19" "8.20";
-        out = "1.19.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "1.18.0";
-      }
-      {
-        case = range "8.15" "8.18";
-        out = "1.17.0";
-      }
-      {
-        case = range "8.13" "8.18";
-        out = "1.16.0";
-      }
-      {
-        case = range "8.14" "8.16";
-        out = "1.15.0";
-      }
-      {
-        case = range "8.11" "8.15";
-        out = "1.14.0";
-      }
-      {
-        case = range "8.11" "8.15";
-        out = "1.13.0";
-      }
-      {
-        case = range "8.10" "8.13";
-        out = "1.12.0";
-      }
-      {
-        case = range "8.7" "8.12";
-        out = "1.11.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "1.10.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "1.9.0";
-      }
-      {
-        case = range "8.7" "8.9";
-        out = "1.8.0";
-      }
-      {
-        case = range "8.6" "8.9";
-        out = "1.7.0";
-      }
-      {
-        case = range "8.5" "8.7";
-        out = "1.6.4";
-      }
+      (case (range "8.20" "9.1") "2.4.0")
+      (case (range "8.19" "9.0") "2.3.0")
+      (case (range "8.17" "8.20") "2.2.0")
+      (case (range "8.17" "8.18") "2.1.0")
+      (case (range "8.17" "8.18") "2.0.0")
+      (case (range "8.19" "8.20") "1.19.0")
+      (case (range "8.17" "8.18") "1.18.0")
+      (case (range "8.15" "8.18") "1.17.0")
+      (case (range "8.13" "8.18") "1.16.0")
+      (case (range "8.14" "8.16") "1.15.0")
+      (case (range "8.11" "8.15") "1.14.0")
+      (case (range "8.11" "8.15") "1.13.0")
+      (case (range "8.10" "8.13") "1.12.0")
+      (case (range "8.7" "8.12") "1.11.0")
+      (case (range "8.7" "8.11") "1.10.0")
+      (case (range "8.7" "8.11") "1.9.0")
+      (case (range "8.7" "8.9") "1.8.0")
+      (case (range "8.6" "8.9") "1.7.0")
+      (case (range "8.5" "8.7") "1.6.4")
     ] null;
   release = {
     "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
@@ -187,21 +131,20 @@ let
 
           buildFlags = lib.optional withDoc "doc";
 
-          preBuild =
-            ''
-              if [[ -f etc/utils/ssrcoqdep ]]
-              then patchShebangs etc/utils/ssrcoqdep
-              fi
-              if [[ -f etc/buildlibgraph ]]
-              then patchShebangs etc/buildlibgraph
-              fi
-            ''
-            + ''
-              # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
-              test -d mathcomp && cd mathcomp
-              cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
-            ''
-            + lib.optionalString (package == "all") pkgallMake;
+          preBuild = ''
+            if [[ -f etc/utils/ssrcoqdep ]]
+            then patchShebangs etc/utils/ssrcoqdep
+            fi
+            if [[ -f etc/buildlibgraph ]]
+            then patchShebangs etc/buildlibgraph
+            fi
+          ''
+          + ''
+            # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
+            test -d mathcomp && cd mathcomp
+            cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
+          ''
+          + lib.optionalString (package == "all") pkgallMake;
 
           meta = {
             homepage = "https://math-comp.github.io/";

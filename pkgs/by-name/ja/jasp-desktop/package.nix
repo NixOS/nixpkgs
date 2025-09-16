@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch,
 
   buildEnv,
   linkFarm,
@@ -14,6 +15,7 @@
   boost,
   freexl,
   libarchive,
+  librdata,
   qt6,
   R,
   readstat,
@@ -21,14 +23,14 @@
 }:
 
 let
-  version = "0.19.3";
+  version = "0.95.0";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-p489Q3jMQ7UWOCdAGskRF9KSLoRSatUwGVfj0/g4aPo=";
+    hash = "sha256-RR7rJJb0qKqZs7K3zP6GxlDXpmSNnGQ3WDExUgm9pKQ=";
   };
 
   moduleSet = import ./modules.nix {
@@ -37,7 +39,7 @@ let
     jasp-version = version;
   };
 
-  inherit (moduleSet) engine modules;
+  inherit (moduleSet) jaspBase modules;
 
   # Merges ${R}/lib/R with all used R packages (even propagated ones)
   customREnv = buildEnv {
@@ -45,11 +47,12 @@ let
     paths = [
       "${R}/lib/R"
       rPackages.RInside
-      engine.jaspBase # Should already be propagated from modules, but include it again, just in case
-    ] ++ lib.attrValues modules;
+      jaspBase # Should already be propagated from modules, but include it again, just in case
+    ]
+    ++ lib.attrValues modules;
   };
 
-  modulesDir = linkFarm "jasp-${version}-modules" (
+  moduleLibs = linkFarm "jasp-${version}-module-libs" (
     lib.mapAttrsToList (name: drv: {
       name = name;
       path = "${drv}/library";
@@ -61,11 +64,15 @@ stdenv.mkDerivation {
   inherit version src;
 
   patches = [
-    # - ensure boost is linked dynamically
-    # - fix readstat's find logic
-    # - disable some of the renv logic
-    # - dont't check for dependencies required for building modules
-    ./cmake.patch
+    (fetchpatch {
+      name = "readstat-use-find-library.patch";
+      url = "https://github.com/jasp-stats/jasp-desktop/commit/87c5a1f4724833aed0f7758499b917b3107ee196.patch";
+      hash = "sha256-0CrMKJkZpS97KmQFvZPyV1h3C7eKVr/IT0dARYBoKFo=";
+    })
+    ./link-boost-dynamically.patch
+    ./disable-module-install-logic.patch # don't try to install modules via cmake
+    ./disable-renv-logic.patch
+    ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
   ];
 
   cmakeFlags = [
@@ -88,6 +95,7 @@ stdenv.mkDerivation {
     customREnv
     freexl
     libarchive
+    librdata
     readstat
 
     qt6.qtbase
@@ -97,24 +105,21 @@ stdenv.mkDerivation {
     qt6.qt5compat
   ];
 
-  # needed so that JASPEngine can find libRInside.so
+  # needed so that the linker can find libRInside.so
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
   postInstall = ''
-    # Remove unused cache locations
-    rm -r $out/lib64 $out/Modules
-
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
       --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
-    ln -s ${modulesDir} $out/Modules
+    ln -s ${moduleLibs} $out/Modules/module_libs
   '';
 
   passthru = {
-    inherit modules engine;
+    inherit jaspBase modules;
     env = customREnv;
   };
 

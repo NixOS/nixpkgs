@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     pcre2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://neurobin.org/projects/softwares/unix/rnm/";
     description = "Bulk rename utility";
     changelog = "https://github.com/neurobin/rnm/blob/${version}/ChangeLog";
     platforms = lib.platforms.all;
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "rnm";
   };
 }

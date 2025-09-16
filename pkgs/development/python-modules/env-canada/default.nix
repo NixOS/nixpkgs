@@ -10,6 +10,7 @@
   numpy,
   pandas,
   pillow,
+  pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.10.2";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    tag = version;
-    hash = "sha256-OguS5oRo7wNQUvT33k6+Sg8GE4GipFo84F/13TADUpw=";
+    tag = "v${version}";
+    hash = "sha256-r0a2bMgWY6dH88aOJoNpmcSyQi207XDI3Ehu37kU9hY=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     freezegun
     pytestCheckHook
     syrupy
@@ -64,6 +66,8 @@ buildPythonPackage rec {
     "test_get_ec_sites"
     "test_ecradar"
     "test_historical_number_values"
+    "test_basemap_caching_behavior"
+    "test_layer_image_caching"
   ];
 
   pythonImportsCheck = [ "env_canada" ];

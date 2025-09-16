@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "flask-swagger-ui";
-  version = "4.11.1";
+  version = "5.21.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-o3AZmngNZ4sy448b4Q1Nge+g7mPp/i+3Zv8aS2w32sg=";
+    pname = "flask_swagger_ui";
+    inherit version;
+    hash = "sha256-hy0DjcEaaOrKuI9vBb48UzqjAEU+Jzd12tPgKbMeA9Q=";
   };
 
   doCheck = false; # there are no tests

@@ -19,16 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PLfBFsZqwSpE+3cduDXyRZZDpiL8+zHyIjVopK0oqPo=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace janet.1 \
-        --replace /usr/local/ $out/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # error: Socket is not connected
-      substituteInPlace meson.build \
-        --replace "'test/suite-ev.janet'," ""
-    '';
+  postPatch = ''
+    substituteInPlace janet.1 \
+      --replace /usr/local/ $out/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # error: Socket is not connected
+    substituteInPlace meson.build \
+      --replace "'test/suite-ev.janet'," ""
+  '';
 
   nativeBuildInputs = [
     meson

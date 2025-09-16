@@ -29,15 +29,14 @@ stdenv.mkDerivation rec {
     makeFlags=prefix="$out"
   '';
 
-  postInstall =
-    ''
-      sed -i "s|/usr/bin/env python.*|${libreoffice-unwrapped.python.interpreter}|" "$out/bin/unoconv"
-      wrapProgram "$out/bin/unoconv" \
-          --set-default UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
-    ''
-    + lib.optionalString installSymlinks ''
-      make install-links prefix="$out"
-    '';
+  postInstall = ''
+    sed -i "s|/usr/bin/env python.*|${libreoffice-unwrapped.python.interpreter}|" "$out/bin/unoconv"
+    wrapProgram "$out/bin/unoconv" \
+        --set-default UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
+  ''
+  + lib.optionalString installSymlinks ''
+    make install-links prefix="$out"
+  '';
 
   meta = with lib; {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";

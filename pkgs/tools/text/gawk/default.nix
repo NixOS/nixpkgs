@@ -42,22 +42,22 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "info"
-  ] ++ lib.optional (!interactive) "man";
+  ]
+  ++ lib.optional (!interactive) "man";
 
   strictDeps = true;
 
   # no-pma fix
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      texinfo
-    ]
-    ++ lib.optionals interactive [
-      removeReferencesTo
-    ]
-    ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
-      glibcLocales
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    texinfo
+  ]
+  ++ lib.optionals interactive [
+    removeReferencesTo
+  ]
+  ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
+    glibcLocales
+  ];
 
   buildInputs =
     lib.optionals interactive [

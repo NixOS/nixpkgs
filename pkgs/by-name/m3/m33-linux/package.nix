@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
   pname = "M33-Linux";
-  version = "unstable-2016-06-23";
+  version = "0-unstable-2016-06-23";
 
   src = fetchFromGitHub {
     owner = "donovan6000";
@@ -26,6 +27,12 @@ stdenv.mkDerivation {
     })
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   installPhase = ''
     install -Dm755 m33-linux $out/bin/m33-linux
     install -Dm755 90-micro-3d-local.rules $out/lib/udev/rules.d/90-micro-3d-local.rules
@@ -37,6 +44,6 @@ stdenv.mkDerivation {
     mainProgram = "m33-linux";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

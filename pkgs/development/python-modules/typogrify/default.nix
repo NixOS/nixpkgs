@@ -26,8 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typogrify.filters" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--doctest-modules"
+  ];
+
+  enabledTestPaths = [
     "typogrify/filters.py"
     "typogrify/packages/titlecase/tests.py"
   ];

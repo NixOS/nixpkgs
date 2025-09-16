@@ -1,6 +1,6 @@
 {
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitLab,
   lib,
   python3,
   rdfind,
@@ -22,11 +22,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20250509";
+  version = "20250808";
 
-  src = fetchzip {
-    url = "https://cdn.kernel.org/pub/linux/kernel/firmware/linux-firmware-${version}.tar.xz ";
-    hash = "sha256-0FrhgJQyCeRCa3s0vu8UOoN0ZgVCahTQsSH0o6G6hhY=";
+  src = fetchFromGitLab {
+    owner = "kernel-firmware";
+    repo = "linux-firmware";
+    tag = version;
+    hash = "sha256-bmvhAKAY43WaPr3VLUUYoX6BU2Ret47vDnyCVP7157s=";
   };
 
   postUnpack = ''
@@ -57,5 +59,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     priority = 6; # give precedence to kernel firmware
   };
-  passthru.updateScript = ./update.sh;
 }

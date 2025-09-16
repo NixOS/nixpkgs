@@ -13,45 +13,24 @@
 
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     with lib.versions;
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        {
-          cases = [
-            (range "8.17" "9.0")
-            (range "2.0.0" "2.4.0")
-          ];
-          out = "0.5.0";
-        }
-        {
-          cases = [
-            (range "8.17" "8.20")
-            (range "2.0.0" "2.3.0")
-          ];
-          out = "0.4.0";
-        }
-        {
-          cases = [
-            (range "8.11" "8.20")
-            (range "1.12.0" "1.19.0")
-          ];
-          out = "0.3.1";
-        }
-        {
-          cases = [
-            (range "8.11" "8.14")
-            (isLe "1.12.0")
-          ];
-          out = "0.3.0";
-        }
-        {
-          cases = [
-            (range "8.10" "8.12")
-            (isLe "1.12.0")
-          ];
-          out = "0.2.2";
-        }
+        (case (range "8.17" "9.1") (range "2.0.0" "2.4.0") "0.5.0")
+        (case (range "8.17" "8.20") (range "2.0.0" "2.3.0") "0.4.0")
+        (case (range "8.11" "8.20") (range "1.12.0" "1.19.0") "0.3.1")
+        (case (range "8.11" "8.14") (isLe "1.12.0") "0.3.0")
+        (case (range "8.10" "8.12") (isLe "1.12.0") "0.2.2")
       ]
       null;
 

@@ -67,7 +67,8 @@ stdenv.mkDerivation rec {
     "-DCOINUTILS_INCLUDE_DIR_HINTS=${lib.getDev coin-utils}/include"
     "-DLEMON_INCLUDE_DIR_HINTS=${lib.getDev lemon-graph}/include"
     "-DOSI_INCLUDE_DIR_HINTS=${lib.getDev osi}/include"
-  ] ++ lib.optional enableShared "-DOpenMVG_BUILD_SHARED=ON";
+  ]
+  ++ lib.optional enableShared "-DOpenMVG_BUILD_SHARED=ON";
 
   cmakeDir = "./src";
 

@@ -5,6 +5,7 @@
   setuptools,
   llm,
   llm-echo,
+  pytest-asyncio,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   dependencies = [ llm ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];

@@ -12,8 +12,6 @@ let
     cuda_cudart
     cuda_nvcc
     cudaAtLeast
-    cudaOlder
-    cudatoolkit
     flags
     libcublas
     ;
@@ -28,23 +26,19 @@ backendStdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      autoAddDriverRunpath
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+    autoAddDriverRunpath
+    cuda_nvcc
+  ];
 
-  buildInputs =
-    lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      (getDev libcublas)
-      (getLib libcublas)
-      (getOutput "static" libcublas)
-      cuda_cudart
-    ]
-    ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
+  buildInputs = [
+    (getDev libcublas)
+    (getLib libcublas)
+    (getOutput "static" libcublas)
+    cuda_cudart
+    cuda_cccl
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -59,12 +53,11 @@ backendStdenv.mkDerivation {
     '';
   });
 
-  meta = rec {
+  meta = {
     description = "Simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
     license = lib.licenses.mit;
     teams = [ lib.teams.cuda ];
     mainProgram = "saxpy";
     platforms = lib.platforms.unix;
-    badPlatforms = lib.optionals (flags.isJetsonBuild && cudaOlder "11.4") platforms;
   };
 }

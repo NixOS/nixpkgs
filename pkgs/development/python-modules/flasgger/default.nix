@@ -25,21 +25,8 @@ buildPythonPackage rec {
     owner = "flasgger";
     repo = "flasgger";
     rev = "v${version}";
-    hash = "sha256-cYFMKZxpi69gVWqyZUltCL0ZwcfIABNsJKqAhN2TTSg=";
+    hash = "sha256-ULEf9DJiz/S2wKlb/vjGto8VCI0QDcm0pkU5rlOwtiE=";
   };
-
-  patches = [
-    (fetchpatch {
-      # flask 2.3 compat
-      url = "https://github.com/flasgger/flasgger/commit/ab77be7c6de1d4b361f0eacfa37290239963f890.patch";
-      hash = "sha256-ZbE5pPUP23nZAP/qcdeWkwzrZgqJSRES7oFta8U1uVQ=";
-    })
-    (fetchpatch {
-      # python 3.12 compat
-      url = "https://github.com/flasgger/flasgger/commit/6f5fcf24c1d816cf7ab529b3a8a764f86df4458d.patch";
-      hash = "sha256-37Es1sgBQ9qX3YHQYub4HJkSNTSt3MbtCfV+XdTQZyY=";
-    })
-  ];
 
   propagatedBuildInputs = [
     flask

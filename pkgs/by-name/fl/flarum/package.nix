@@ -21,7 +21,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
-    description = "Flarum is a delightfully simple discussion platform for your website";
+    description = "Delightfully simple discussion platform for your website";
     homepage = "https://github.com/flarum/flarum";
     license = lib.licenses.mit;
     maintainers = with maintainers; [

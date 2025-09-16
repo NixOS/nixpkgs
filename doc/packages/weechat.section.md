@@ -20,7 +20,7 @@ If the `configure` function returns an attrset without the `plugins` attribute, 
 
 The plugins currently available are `python`, `perl`, `ruby`, `guile`, `tcl` and `lua`.
 
-The Python and Perl plugins allows the addition of extra libraries. For instance, the `inotify.py` script in `weechat-scripts` requires D-Bus or libnotify, and the `fish.py` script requires `pycrypto`. To use these scripts, use the plugin's `withPackages` attribute:
+The Python and Perl plugins allow the addition of extra libraries. For instance, the `inotify.py` script in `weechat-scripts` requires D-Bus or libnotify, and the `fish.py` script requires `pycrypto`. To use these scripts, use the plugin's `withPackages` attribute:
 
 ```nix
 weechat.override {

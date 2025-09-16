@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
 }

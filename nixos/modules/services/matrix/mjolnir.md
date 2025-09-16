@@ -52,13 +52,11 @@ will be configured to connect to the new Pantalaimon instance.
     enable = true;
     homeserverUrl = "https://matrix.domain.tld";
     pantalaimon = {
-       enable = true;
-       username = "mjolnir";
-       passwordFile = "/run/secrets/mjolnir-password";
+      enable = true;
+      username = "mjolnir";
+      passwordFile = "/run/secrets/mjolnir-password";
     };
-    protectedRooms = [
-      "https://matrix.to/#/!xxx:domain.tld"
-    ];
+    protectedRooms = [ "https://matrix.to/#/!xxx:domain.tld" ];
     managementRoom = "!yyy:domain.tld";
   };
 }
@@ -81,9 +79,7 @@ to the Synapse plugin list and enable the `mjolnir.Module` module.
 ```nix
 {
   services.matrix-synapse = {
-    plugins = with pkgs; [
-      matrix-synapse-plugins.matrix-synapse-mjolnir-antispam
-    ];
+    plugins = with pkgs; [ matrix-synapse-plugins.matrix-synapse-mjolnir-antispam ];
     extraConfig = ''
       modules:
         - module: mjolnir.Module

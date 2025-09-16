@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sacad";
   version = "2.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

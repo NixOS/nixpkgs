@@ -62,30 +62,29 @@ stdenv.mkDerivation rec {
     docbook_xsl_ns
     asciidoc
   ];
-  buildInputs =
-    [
-      boost
-      curl
-      freetype
-      glew
-      libdevil
-      libGL
-      libGLU
-      libunwind
-      libvorbis
-      minizip
-      openal
-      p7zip
-      SDL2
-      xorg.libX11
-      xorg.libXcursor
-      xz
-      zlib
-    ]
-    ++ lib.optionals withAI [
-      python3
-      jdk
-    ];
+  buildInputs = [
+    boost
+    curl
+    freetype
+    glew
+    libdevil
+    libGL
+    libGLU
+    libunwind
+    libvorbis
+    minizip
+    openal
+    p7zip
+    SDL2
+    xorg.libX11
+    xorg.libXcursor
+    xz
+    zlib
+  ]
+  ++ lib.optionals withAI [
+    python3
+    jdk
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
@@ -98,7 +97,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       qknight
-      domenkozar
       sorki
     ];
     platforms = [ "x86_64-linux" ];

@@ -54,15 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
   ];
 
-  cmakeFlags =
-    [
-      # Breaks on Darwin
-      (lib.cmakeBool "USE_LTO" (!stdenv.hostPlatform.isDarwin))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # This seemingly only gets set properly by CMake when using the XCode generator
-      (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "${stdenv.hostPlatform.darwinMinVersion}")
-    ];
+  cmakeFlags = [
+    # Breaks on Darwin
+    (lib.cmakeBool "USE_LTO" (!stdenv.hostPlatform.isDarwin))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # This seemingly only gets set properly by CMake when using the XCode generator
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "${stdenv.hostPlatform.darwinMinVersion}")
+  ];
 
   # Crashes can happen, we'd like them to be reasonably debuggable
   cmakeBuildType = "RelWithDebInfo";

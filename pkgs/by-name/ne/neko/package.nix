@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     mbedtls
     openssl
     libpthreadstubs
-  ] ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {

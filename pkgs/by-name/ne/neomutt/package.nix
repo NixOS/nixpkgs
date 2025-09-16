@@ -9,6 +9,7 @@
   ncurses,
   perl,
   cyrus_sasl,
+  gitUpdater,
   gss,
   gpgme,
   libkrb5,
@@ -42,32 +43,31 @@ assert lib.warnIf (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20250113";
+  version = "20250510";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-30uagr4Z748U34yaTpw0lqxifuMlQRqccuZHKpbkXVE=";
+    hash = "sha256-62J7qyHC3hSgEgTA2zB+BQtZb+5BUXjQEOB3vGZGSNw=";
   };
 
-  buildInputs =
-    [
-      cyrus_sasl
-      gss
-      gpgme
-      libkrb5
-      libidn2
-      ncurses
-      openssl
-      perl
-      lmdb
-      mailcap
-      sqlite
-    ]
-    ++ lib.optional enableZstd zstd
-    ++ lib.optional enableLua lua
-    ++ lib.optional withNotmuch notmuch;
+  buildInputs = [
+    cyrus_sasl
+    gss
+    gpgme
+    libkrb5
+    libidn2
+    ncurses
+    openssl
+    perl
+    lmdb
+    mailcap
+    sqlite
+  ]
+  ++ lib.optional enableZstd zstd
+  ++ lib.optional enableLua lua
+  ++ lib.optional withNotmuch notmuch;
 
   nativeBuildInputs = [
     docbook_xsl
@@ -103,37 +103,35 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
-  configureFlags =
-    [
-      "--enable-autocrypt"
-      "--gpgme"
-      "--gss"
-      "--lmdb"
-      "--ssl"
-      "--sasl"
-      "--with-homespool=mailbox"
-      "--with-mailpath="
-      # To make it not reference .dev outputs. See:
-      # https://github.com/neomutt/neomutt/pull/2367
-      "--disable-include-path-in-cflags"
-      "--zlib"
-    ]
-    ++ lib.optional enableZstd "--zstd"
-    ++ lib.optional enableLua "--lua"
-    ++ lib.optional withNotmuch "--notmuch";
+  configureFlags = [
+    "--enable-autocrypt"
+    "--gpgme"
+    "--gss"
+    "--lmdb"
+    "--ssl"
+    "--sasl"
+    "--with-homespool=mailbox"
+    "--with-mailpath="
+    # To make it not reference .dev outputs. See:
+    # https://github.com/neomutt/neomutt/pull/2367
+    "--disable-include-path-in-cflags"
+    "--zlib"
+  ]
+  ++ lib.optional enableZstd "--zstd"
+  ++ lib.optional enableLua "--lua"
+  ++ lib.optional withNotmuch "--notmuch";
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
-    ''
-    + lib.optionalString enableSmimeKeys ''
-      install -m 755 $src/contrib/smime_keys $out/bin;
-      substituteInPlace $out/bin/smime_keys \
-        --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl';
-    ''
-    # https://github.com/neomutt/neomutt-contrib
-    # Contains vim-keys, keybindings presets and more.
-    + lib.optionalString withContrib "${lib.getExe lndir} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
+  postInstall = ''
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
+  ''
+  + lib.optionalString enableSmimeKeys ''
+    install -m 755 $src/contrib/smime_keys $out/bin;
+    substituteInPlace $out/bin/smime_keys \
+      --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl';
+  ''
+  # https://github.com/neomutt/neomutt-contrib
+  # Contains vim-keys, keybindings presets and more.
+  + lib.optionalString withContrib "${lib.getExe lndir} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
 
   doCheck = true;
 
@@ -163,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       rev = "8e97688693ca47ea1055f3d15055a4f4ecc5c832";
       hash = "sha256-tx5Y819rNDxOpjg3B/Y2lPcqJDArAxVwjbYarVmJ79k=";
     };
+    updateScript = gitUpdater { };
   };
 
   checkTarget = "test";

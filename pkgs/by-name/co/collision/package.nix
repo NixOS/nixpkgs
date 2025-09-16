@@ -47,15 +47,14 @@ crystal.buildCrystalPackage rec {
   # main_module:(.text+0x6f0): undefined reference to `SSL_library_init'
   # There is an explanation for this https://danilafe.com/blog/crystal_nix_revisited/
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
-  nativeBuildInputs =
-    [
-      wrapGAppsHook4
-      pkg-config
-      gobject-introspection
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    wrapGAppsHook4
+    pkg-config
+    gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     libadwaita

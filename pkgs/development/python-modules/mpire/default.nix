@@ -73,10 +73,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.testing;
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   meta = {
-    description = "A Python package for easy multiprocessing, but faster than multiprocessing";
+    description = "Python package for easy multiprocessing, but faster than multiprocessing";
     homepage = "https://pypi.org/project/mpire/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ booxter ];

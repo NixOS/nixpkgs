@@ -30,16 +30,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      # Drop blanket -Werror as it tends to fail on newer toolchain for
-      # minor warnings. In this case it was gcc-13 build failure.
-      substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
-        --replace math.h cmath
-    '';
+  postPatch = ''
+    # Drop blanket -Werror as it tends to fail on newer toolchain for
+    # minor warnings. In this case it was gcc-13 build failure.
+    substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
+      --replace math.h cmath
+  '';
 
   nativeBuildInputs = [
     cmake

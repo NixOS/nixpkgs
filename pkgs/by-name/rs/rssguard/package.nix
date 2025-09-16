@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
-  version = "4.8.5";
+  version = "4.8.6";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = "rssguard";
     tag = version;
-    sha256 = "sha256-JSw3zuKUPqxWbgzLVjLs41fOihQZcfU6PJGb4m6ua90=";
+    sha256 = "sha256-2gwzk23t9WRHrXlASzba9HQRijHjH0nfWsBjMcqgq68=";
   };
 
   buildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     (cmakeFeature "CMAKE_BUILD_TYPE" "\"Release\"")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple RSS/Atom feed reader with online synchronization";
     mainProgram = "rssguard";
     longDescription = ''
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/martinrotter/rssguard";
     changelog = "https://github.com/martinrotter/rssguard/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       jluttine
       tebriel
     ];

@@ -1,9 +1,9 @@
 { lib, buildDotnetGlobalTool }:
 buildDotnetGlobalTool {
   pname = "upgrade-assistant";
-  version = "0.5.1084";
+  version = "1.0.518";
 
-  nugetHash = "sha256-O+HHLqou6hRAQ8vUzq+VfX0vRM+nZGPnfCg8niYX2gE=";
+  nugetHash = "sha256-VpesxikW1it/j/Wh4xj5Qj7mdfsgLljTuTJd2IzCHTk=";
 
   meta = {
     homepage = "https://github.com/dotnet/upgrade-assistant";

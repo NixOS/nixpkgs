@@ -47,7 +47,7 @@
 }:
 
 let
-  version = "5.19.0";
+  version = "5.20.0";
 
   electronLibPath = lib.makeLibraryPath [
     alsa-lib
@@ -87,7 +87,7 @@ let
     vulkan-loader
   ];
 in
-buildNpmPackage {
+buildNpmPackage (self: {
   pname = "tidal-hifi";
   inherit version;
 
@@ -95,7 +95,7 @@ buildNpmPackage {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = version;
-    hash = "sha256-/pPmfgKwrtOrEu7YVJTuQF/FIMa+W6uSnFbMFuyURFQ=";
+    hash = "sha256-PENNkmCiCFcaHNCBfwVitYfqKN0ZR0QHwE3WQHp0tGI=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ buildNpmPackage {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-TNhD/ZkqJtsidAEIOL/WmJZw09BuFgd4ECnzbieNhVY=";
+  npmDepsHash = "sha256-4J5wGq/zpEK+xKtVg2zf7lIDHo9d4KW5fDY05siaFC4=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -125,24 +125,23 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
-      exec = "tidal-hifi";
-      name = "TIDAL Hi-Fi";
-      desktopName = "tidal-hifi";
-      genericName = "TIDAL Hi-Fi";
-      comment = "The web version of listen.tidal.com running in electron with hifi support thanks to widevine.";
+      name = self.pname;
+      desktopName = "TIDAL Hi-Fi";
+      genericName = "Music Player";
+      comment = self.meta.description;
       icon = "tidal-hifi";
-      startupNotify = true;
+      exec = self.meta.mainProgram;
       terminal = false;
-      type = "Application";
-      categories = [
-        "Network"
-        "Application"
-        "AudioVideo"
-        "Audio"
-        "Video"
-      ];
-      startupWMClass = "tidal-hifi";
       mimeTypes = [ "x-scheme-handler/tidal" ];
+      categories = [
+        "Audio"
+        "Music"
+        "Player"
+        "Network"
+        "AudioVideo"
+      ];
+      startupNotify = true;
+      startupWMClass = "tidal-hifi";
       extraConfig.X-PulseAudio-Properties = "media.role=music";
     })
   ];
@@ -190,7 +189,7 @@ buildNpmPackage {
 
   meta = {
     changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
-    description = "Web version of Tidal running in electron with hifi support thanks to widevine";
+    description = "Web version of Tidal running in Electron with Hi-Fi support thanks to Widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -198,7 +197,9 @@ buildNpmPackage {
       qbit
       spikespaz
     ];
-    platforms = lib.platforms.linux;
+    # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.
+    # See: <https://github.com/castlabs/electron-releases/issues/198>
+    platforms = [ "x86_64-linux" ];
     mainProgram = "tidal-hifi";
   };
-}
+})

@@ -11,7 +11,8 @@ instances, but TCP sockets are also supported.
 A minimal configuration with [nginx](#opt-services.nginx.enable) may look like the following:
 
 ```nix
-{ config, ... }: {
+{ config, ... }:
+{
   services.anubis.instances.default.settings.TARGET = "http://localhost:8000";
 
   # required due to unix socket permissions
@@ -49,7 +50,9 @@ It is possible to configure default settings for all instances of Anubis, via {o
 ```nix
 {
   services.anubis.defaultOptions = {
-    botPolicy = { dnsbl = false; };
+    botPolicy = {
+      dnsbl = false;
+    };
     settings.DIFFICULTY = 3;
   };
 }

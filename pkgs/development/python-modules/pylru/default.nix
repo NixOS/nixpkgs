@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Least recently used (LRU) cache implementation";
     homepage = "https://github.com/jlhutch/pylru";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

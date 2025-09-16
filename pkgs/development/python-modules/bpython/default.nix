@@ -14,6 +14,7 @@
   setuptools,
   urwid,
   watchdog,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bpython";
     repo = "bpython";
-    tag = version;
+    tag = "${version}-release";
     hash = "sha256-p5+IQiHNRRazqr+WRdx3Yw+ImG25tdZGLXvMf7woD9w=";
   };
 
@@ -58,9 +59,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "bpython" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-suffix = "-release";
+  };
 
   meta = with lib; {
     changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";

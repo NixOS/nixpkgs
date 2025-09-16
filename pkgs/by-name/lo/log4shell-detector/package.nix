@@ -6,8 +6,8 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "log4shell-detector";
-  version = "unstable-2021-12-16";
-  format = "setuptools";
+  version = "0-unstable-2021-12-16";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Neo23x0";
@@ -16,7 +16,11 @@ python3.pkgs.buildPythonApplication {
     sha256 = "sha256-N81x9hq473LfM+bQIQLWizCAsVc/pzyB84PV7/N5jk4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     zstandard
   ];
 

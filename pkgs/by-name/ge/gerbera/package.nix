@@ -145,7 +145,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # systemd service will be generated alongside the service
     "-DWITH_SYSTEMD=OFF"
-  ] ++ map (e: "-DWITH_${e.name}=${if e.enable then "ON" else "OFF"}") options;
+  ]
+  ++ map (e: "-DWITH_${e.name}=${if e.enable then "ON" else "OFF"}") options;
 
   nativeBuildInputs = [
     cmake
@@ -161,7 +162,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     fmt_11
-  ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+  ]
+  ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
   passthru.tests = { inherit (nixosTests) mediatomb; };
 

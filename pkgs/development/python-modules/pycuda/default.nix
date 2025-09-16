@@ -23,12 +23,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2025.1";
+  version = "2025.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UnOOmpQcKVwKXfaqDUmsifZtg12szpyci4TnUw/kYi8=";
+    hash = "sha256-DdgpEdctjgPGMSiuROmc+3tGiQlKumzFGT2OlEcXqvo=";
   };
 
   preConfigure = with lib.versions; ''

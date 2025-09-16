@@ -5,6 +5,7 @@
   bison,
   flex,
   pam,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     flex
+    udevCheckHook
   ];
 
   buildInputs = [ pam ];
@@ -46,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/etc/udev/rules.d"
   '';
+
+  doInstallCheck = true;
 
   postInstall = "rmdir $out/dev";
 

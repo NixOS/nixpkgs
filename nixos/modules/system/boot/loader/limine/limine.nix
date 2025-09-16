@@ -14,7 +14,7 @@ let
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
-      luksDevices = config.boot.initrd.luks.devices;
+      luksDevices = builtins.attrNames config.boot.initrd.luks.devices;
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
@@ -45,6 +45,7 @@ in
 
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
+    package = lib.mkPackageOption pkgs "limine" { };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -116,8 +117,6 @@ in
         error at boot time.
       '';
     };
-
-    package = lib.mkPackageOption pkgs "limine" { };
 
     efiSupport = lib.mkEnableOption null // {
       default = pkgs.stdenv.hostPlatform.isEfi;
@@ -449,7 +448,7 @@ in
         script = ''
           cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
           chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe pkgs.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
         '';
       };
 

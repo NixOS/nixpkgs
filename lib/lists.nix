@@ -11,7 +11,7 @@ let
     warn
     pipe
     ;
-  inherit (lib.attrsets) mapAttrs;
+  inherit (lib.attrsets) mapAttrs attrNames;
   inherit (lib) max;
 in
 rec {
@@ -829,7 +829,7 @@ rec {
     toList [ 1 2 ]
     => [ 1 2 ]
     toList "hi"
-    => [ "hi "]
+    => [ "hi" ]
     ```
 
     :::
@@ -1839,6 +1839,10 @@ rec {
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.
 
+    :::{.note}
+    If the list only contains strings and order is not important, the complexity can be reduced to O(n log n) by using [`lib.lists.uniqueStrings`](#function-library-lib.lists.uniqueStrings) instead.
+    :::
+
     # Inputs
 
     `list`
@@ -1863,6 +1867,43 @@ rec {
     :::
   */
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [ ];
+
+  /**
+    Removes duplicate strings from the `list`. O(n log n) complexity.
+
+    :::{.note}
+    Order is not preserved.
+
+    All elements of the list must be strings without context.
+
+    This function fails when the list contains a non-string element or a [string with context](https://nix.dev/manual/nix/latest/language/string-context.html).
+    In that case use [`lib.lists.unique`](#function-library-lib.lists.unique) instead.
+    :::
+
+    # Inputs
+
+    `list`
+
+    : List of strings
+
+    # Type
+
+    ```
+    uniqueStrings :: [ String ] -> [ String ]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.uniqueStrings` usage example
+
+    ```nix
+    uniqueStrings [ "foo" "bar" "foo" ]
+    => [ "bar" "foo" ] # order is not preserved
+    ```
+
+    :::
+  */
+  uniqueStrings = list: attrNames (groupBy id list);
 
   /**
     Check if list contains only unique elements. O(n^2) complexity.

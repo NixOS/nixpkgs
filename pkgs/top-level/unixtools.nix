@@ -42,13 +42,13 @@ let
           priority = 10;
           platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
         };
-        passthru =
-          {
-            inherit provider;
-          }
-          // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
-            binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
-          };
+        passthru = {
+          inherit provider;
+          inherit (provider) version;
+        }
+        // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
+          binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
+        };
         preferLocalBuild = true;
       }
       ''
@@ -79,7 +79,7 @@ let
   bins = mapAttrs singleBinary {
     # singular binaries
     arp = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.arp;
     };
@@ -126,13 +126,13 @@ let
       darwin = pkgs.darwin.shell_cmds;
     };
     hostname = {
-      linux = pkgs.nettools;
+      linux = pkgs.hostname-debian;
       darwin = pkgs.darwin.shell_cmds;
       freebsd = pkgs.freebsd.bin;
       openbsd = pkgs.openbsd.hostname;
     };
     ifconfig = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.ifconfig;
       openbsd = pkgs.openbsd.ifconfig;
@@ -172,7 +172,7 @@ let
       '';
     };
     netstat = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.netstat;
     };
@@ -198,7 +198,7 @@ let
       darwin = pkgs.darwin.diskdev_cmds;
     };
     route = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.route;
       openbsd = pkgs.openbsd.route;
@@ -288,7 +288,7 @@ let
         col
         column
       ];
-      nettools = [
+      net-tools = [
         arp
         hostname
         ifconfig

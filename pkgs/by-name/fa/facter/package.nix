@@ -7,7 +7,7 @@
   iproute2,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   pciutils,
   procps,
   stdenv,
@@ -26,20 +26,19 @@ bundlerApp {
 
   postBuild =
     let
-      runtimeDependencies =
-        [
-          coreutils
-          gnugrep
-          nettools
-          pciutils
-          procps
-          util-linux
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          iproute2
-          virt-what
-          zfs
-        ];
+      runtimeDependencies = [
+        coreutils
+        gnugrep
+        net-tools
+        pciutils
+        procps
+        util-linux
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        iproute2
+        virt-what
+        zfs
+      ];
     in
     ''
       wrapProgram $out/bin/facter --prefix PATH : ${lib.makeBinPath runtimeDependencies}

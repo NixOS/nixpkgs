@@ -280,6 +280,7 @@ in
           "network.hosts"
           "ssh.authorized_keys.root"
         ];
+        RestrictSUIDSGID = false;
       };
     };
 
@@ -288,21 +289,20 @@ in
         (pkgs.symlinkJoin {
           name = "tmpfiles.d";
           paths = map (p: p + "/lib/tmpfiles.d") cfg.packages;
-          postBuild =
+          postBuild = ''
+            for i in $(cat $pathsPath); do
+              (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
+                echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
+                exit 1
+              )
+            done
+          ''
+          + concatMapStrings (
+            name:
+            optionalString (hasPrefix "tmpfiles.d/" name) ''
+              rm -f $out/${removePrefix "tmpfiles.d/" name}
             ''
-              for i in $(cat $pathsPath); do
-                (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
-                  echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
-                  exit 1
-                )
-              done
-            ''
-            + concatMapStrings (
-              name:
-              optionalString (hasPrefix "tmpfiles.d/" name) ''
-                rm -f $out/${removePrefix "tmpfiles.d/" name}
-              ''
-            ) config.system.build.etc.passthru.targets;
+          ) config.system.build.etc.passthru.targets;
         })
         + "/*";
       "mtab" = {
@@ -311,61 +311,59 @@ in
       };
     };
 
-    systemd.tmpfiles.packages =
-      [
-        # Default tmpfiles rules provided by systemd
-        (pkgs.runCommand "systemd-default-tmpfiles" { } ''
-          mkdir -p $out/lib/tmpfiles.d
-          cd $out/lib/tmpfiles.d
+    systemd.tmpfiles.packages = [
+      # Default tmpfiles rules provided by systemd
+      (pkgs.runCommand "systemd-default-tmpfiles" { } ''
+        mkdir -p $out/lib/tmpfiles.d
+        cd $out/lib/tmpfiles.d
 
-          ln -s "${systemd}/example/tmpfiles.d/home.conf"
-          ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
-          ln -s "${systemd}/example/tmpfiles.d/portables.conf"
-          ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
-          ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
-          ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
-          ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"
-          ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"
-          ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
-          ln -s "${systemd}/example/tmpfiles.d/var.conf"
-          ln -s "${systemd}/example/tmpfiles.d/x11.conf"
-        '')
-        # User-specified tmpfiles rules
-        (pkgs.writeTextFile {
-          name = "nixos-tmpfiles.d";
-          destination = "/lib/tmpfiles.d/00-nixos.conf";
-          text = ''
-            # This file is created automatically and should not be modified.
-            # Please change the option ‘systemd.tmpfiles.rules’ instead.
+        ln -s "${systemd}/example/tmpfiles.d/home.conf"
+        ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
+        ln -s "${systemd}/example/tmpfiles.d/portables.conf"
+        ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/var.conf"
+        ln -s "${systemd}/example/tmpfiles.d/x11.conf"
+      '')
+      # User-specified tmpfiles rules
+      (pkgs.writeTextFile {
+        name = "nixos-tmpfiles.d";
+        destination = "/lib/tmpfiles.d/00-nixos.conf";
+        text = ''
+          # This file is created automatically and should not be modified.
+          # Please change the option ‘systemd.tmpfiles.rules’ instead.
 
-            ${concatStringsSep "\n" cfg.rules}
-          '';
-        })
-      ]
-      ++ (mapAttrsToList (
-        name: paths: pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
-      ) cfg.settings);
+          ${concatStringsSep "\n" cfg.rules}
+        '';
+      })
+    ]
+    ++ (mapAttrsToList (
+      name: paths: pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
+    ) cfg.settings);
 
-    systemd.tmpfiles.rules =
-      [
-        "d  /run/lock                          0755 root root - -"
-        "d  /var/db                            0755 root root - -"
-        "L  /var/lock                          -    -    -    - ../run/lock"
-      ]
-      ++ lib.optionals config.nix.enable [
-        "d  /nix/var                           0755 root root - -"
-        "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
-      ]
-      # Boot-time cleanup
-      ++ [
-        "R! /etc/group.lock                    -    -    -    - -"
-        "R! /etc/passwd.lock                   -    -    -    - -"
-        "R! /etc/shadow.lock                   -    -    -    - -"
-      ]
-      ++ lib.optionals config.nix.enable [
-        "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
-        "R! /nix/var/nix/temproots             -    -    -    - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d  /run/lock                          0755 root root - -"
+      "d  /var/db                            0755 root root - -"
+      "L  /var/lock                          -    -    -    - ../run/lock"
+    ]
+    ++ lib.optionals config.nix.enable [
+      "d  /nix/var                           0755 root root - -"
+      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
+    ]
+    # Boot-time cleanup
+    ++ [
+      "R! /etc/group.lock                    -    -    -    - -"
+      "R! /etc/passwd.lock                   -    -    -    - -"
+      "R! /etc/shadow.lock                   -    -    -    - -"
+    ]
+    ++ lib.optionals config.nix.enable [
+      "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
+      "R! /nix/var/nix/temproots             -    -    -    - -"
+    ];
 
     boot.initrd.systemd = {
       additionalUpstreamUnits = [

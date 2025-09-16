@@ -79,23 +79,7 @@ let
         pulseSupport
         ungoogled
         ;
-      gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
-        version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
-        src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          inherit (upstream-info.deps.gn) rev hash;
-        };
-
-        # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
-        # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
-        hardeningDisable = [ "format" ];
-
-        # At the time of writing, gn is at v2024-05-13 and has a backported patch.
-        # This patch appears to be already present in v2024-09-09 (from M130), which
-        # results in the patch not applying and thus failing the build.
-        # As a work around until gn is updated again, we filter specifically that patch out.
-        patches = lib.filter (e: lib.getName e != "LFS64.patch") oldAttrs.patches;
-      });
+      gnChromium = buildPackages.gn.override upstream-info.deps.gn;
     });
 
     browser = callPackage ./browser.nix {

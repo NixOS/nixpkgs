@@ -3,32 +3,34 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  http-sfv,
   pytestCheckHook,
   pythonOlder,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
-  version = "0.5.0";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
-    rev = "v${version}";
-    hash = "sha256-Jsivw4lNA/2oqsOGGx8D4gUPftzuys877A9RXyapnSQ=";
+    tag = "v${version}";
+    hash = "sha256-vPZeAS3hR7Bmj2FtME+V9WU3TViBndrBb9GLkdMVh2Q=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
-    http-sfv
   ];
 
   nativeCheckInputs = [
@@ -36,14 +38,14 @@ buildPythonPackage rec {
     requests
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "http_message_signatures" ];
 
-  meta = with lib; {
+  meta = {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/pyauth/http-message-signatures";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

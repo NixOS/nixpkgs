@@ -24,7 +24,7 @@
 
 buildPythonPackage {
   pname = "cut-cross-entropy";
-  version = "25.3.1";
+  version = "25.7.2";
   pyproject = true;
 
   # The `ml-cross-entropy` Pypi comes from a third-party.
@@ -32,8 +32,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "apple";
     repo = "ml-cross-entropy";
-    rev = "24fbe4b5dab9a6c250a014573613c1890190536c"; # no tags
-    hash = "sha256-BVPon+T7chkpozX/IZU3KZMw1zRzlYVvF/22JWKjT2Y=";
+    rev = "b19a424ed30a05b8261cfa84d83b2601a9454c67"; # no tags
+    hash = "sha256-AwUqKiI7XjEOZ7ofjQCOsqvxHyTFD4RZ70odPyxxntc=";
   };
 
   build-system = [
@@ -64,6 +64,10 @@ buildPythonPackage {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    "test_vocab_parallel" # Requires CUDA but does not use pytest.skip
+  ];
 
   pythonImportsCheck = [
     "cut_cross_entropy"

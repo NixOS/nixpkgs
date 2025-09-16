@@ -4,13 +4,13 @@
   fetchurl,
   mrustc,
   mrustc-minicargo,
-  llvm_12,
+  #llvm_12,
   libffi,
   cmake,
+  perl,
   python3,
   zlib,
   libxml2,
-  openssl,
   pkg-config,
   curl,
   which,
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     cmake
     mrustc
     mrustc-minicargo
+    perl
     pkg-config
     python3
     time
@@ -63,20 +64,19 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # for rustc
-    llvm_12
+    #llvm_12
     libffi
     zlib
     libxml2
     # for cargo
-    openssl
-    (curl.override { inherit openssl; })
+    curl
   ];
 
   makeFlags = [
     # Use shared mrustc/minicargo/llvm instead of rebuilding them
     "MRUSTC=${mrustc}/bin/mrustc"
     #"MINICARGO=${mrustc-minicargo}/bin/minicargo"  # FIXME: we need to rebuild minicargo locally so --manifest-overrides is applied
-    "LLVM_CONFIG=${llvm_12.dev}/bin/llvm-config"
+    #"LLVM_CONFIG=${llvm_12.dev}/bin/llvm-config"
     "RUSTC_TARGET=${stdenv.targetPlatform.rust.rustcTarget}"
   ];
 
@@ -153,5 +153,24 @@ stdenv.mkDerivation rec {
       asl20
     ];
     platforms = [ "x86_64-linux" ];
+    # rustc 1.54 only supports LLVM 12, which was removed from Nixpkgs.
+    # mrustc can bootstrap up to rustc 1.74, which supported LLVM 17,
+    # which has also been removed.
+    #
+    # 1.74 also shipped with the Cranelift backend, so perhaps that
+    # could be used instead? Alternatively, it may be possible to
+    # backport the upstream patches to support LLVM 18 to 1.74.
+    # Assuming LLVM 18 is still in Nixpkgs by the time you read this
+    # comment, anyway. But if not, then maybe mrustc has been updated
+    # to support newer rustc versions? Hope springs eternal.
+    #
+    # (Note that you still have to “draw the rest of the owl” to
+    # bootstrap the chain of rustc versions between this bootstrap
+    # and the version currently used in Nixpkgs, anyway, so this was
+    # already not useful for bootstrapping a Rust compiler for use with
+    # Nixpkgs without a lot of additional work. See Guix’s Rust
+    # bootstrap chain, or the non‐Rust minimal bootstrap in Guix and
+    # Nixpkgs, for inspiration.)
+    broken = true;
   };
 }

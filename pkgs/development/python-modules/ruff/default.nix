@@ -29,7 +29,7 @@ buildPythonPackage {
     # to avoid rebuilding the ruff binary for every active python package set.
     + ''
       substituteInPlace pyproject.toml \
-        --replace-fail 'requires = ["maturin>=1.0,<2.0"]' 'requires = ["hatchling"]' \
+        --replace-fail 'requires = ["maturin>=1.9,<2.0"]' 'requires = ["hatchling"]' \
         --replace-fail 'build-backend = "maturin"' 'build-backend = "hatchling.build"'
 
       cat >> pyproject.toml <<EOF

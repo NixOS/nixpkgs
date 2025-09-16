@@ -60,73 +60,70 @@ stdenv.mkDerivation (finalAttrs: {
     ./tracker-landlock-nix-store-permission.patch
   ];
 
-  nativeBuildInputs =
-    [
-      asciidoc
-      docbook-xsl-nons
-      docbook_xml_dtd_45
-      gettext
-      glib
-      gobject-introspection
-      itstool
-      libxslt
-      meson
-      ninja
-      pkg-config
-      vala
-      wrapGAppsNoGuiHook
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    asciidoc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    gettext
+    glib
+    gobject-introspection
+    itstool
+    libxslt
+    meson
+    ninja
+    pkg-config
+    vala
+    wrapGAppsNoGuiHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   # TODO: add libenca, libosinfo
-  buildInputs =
-    [
-      bzip2
-      dbus
-      exempi
-      ffmpeg
-      giflib
-      gexiv2
-      totem-pl-parser
-      tinysparql
-      icu
-      json-glib
-      libcue
-      libexif
-      libgsf
-      libgudev
-      libgxps
-      libiptcdata
-      libjpeg
-      libosinfo
-      libpng
-      libtiff
-      libuuid
-      libxml2
-      poppler
-      taglib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libseccomp
-      systemd
-      upower
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      e2fsprogs
-    ];
+  buildInputs = [
+    bzip2
+    dbus
+    exempi
+    ffmpeg
+    giflib
+    gexiv2
+    totem-pl-parser
+    tinysparql
+    icu
+    json-glib
+    libcue
+    libexif
+    libgsf
+    libgudev
+    libgxps
+    libiptcdata
+    libjpeg
+    libosinfo
+    libpng
+    libtiff
+    libuuid
+    libxml2
+    poppler
+    taglib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libseccomp
+    systemd
+    upower
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    e2fsprogs
+  ];
 
-  mesonFlags =
-    [
-      # TODO: tests do not like our sandbox
-      "-Dfunctional_tests=false"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dbattery_detection=none"
-      "-Dnetwork_manager=disabled"
-      "-Dsystemd_user_services=false"
-    ];
+  mesonFlags = [
+    # TODO: tests do not like our sandbox
+    "-Dfunctional_tests=false"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Dbattery_detection=none"
+    "-Dnetwork_manager=disabled"
+    "-Dsystemd_user_services=false"
+  ];
 
   postInstall = ''
     glib-compile-schemas "$out/share/glib-2.0/schemas"

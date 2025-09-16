@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
     bash-completion
   ];
 
-  buildInputs =
-    [
-      gsl
-      popt
-      upower
-      clightd
-      systemd
-      geoclue2
-      libconfig
-      libmodule
-    ]
-    ++ lib.optional withGeoclue geoclue2
-    ++ lib.optional withUpower upower;
+  buildInputs = [
+    gsl
+    popt
+    upower
+    clightd
+    systemd
+    geoclue2
+    libconfig
+    libmodule
+  ]
+  ++ lib.optional withGeoclue geoclue2
+  ++ lib.optional withUpower upower;
 
   cmakeFlags = [
     "-DSESSION_BUS_DIR=${placeholder "out"}/share/dbus-1/services"

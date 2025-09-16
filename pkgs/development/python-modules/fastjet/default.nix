@@ -20,11 +20,9 @@ let
       withPython = true;
     }).overrideAttrs
       (prev: {
-        postInstall =
-          (prev.postInstall or "")
-          + ''
-            mv "$out/${python.sitePackages}/"{fastjet.py,_fastjet_swig.py}
-          '';
+        postInstall = (prev.postInstall or "") + ''
+          mv "$out/${python.sitePackages}/"{fastjet.py,_fastjet_swig.py}
+        '';
       });
   fastjet-contrib = pkgs.fastjet-contrib.override {
     inherit fastjet;
@@ -33,13 +31,13 @@ in
 
 buildPythonPackage rec {
   pname = "fastjet";
-  version = "3.4.3.1";
+  version = "3.5.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fastjet";
     inherit version;
-    hash = "sha256-c9LE3axkm3tJt6RfHHIbJZsA/0s2Cl1UqxGKqKvospI=";
+    hash = "sha256-2GG9A+/2rgYpsJo1tu3BprOM7bKwYVV6/qIIMtYSr9o=";
   };
 
   # unvendor fastjet/fastjet-contrib

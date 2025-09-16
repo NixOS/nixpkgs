@@ -5,7 +5,6 @@
   fetchpatch,
   replaceVars,
   cmake,
-  uthash,
   pkg-config,
   python3,
   freetype,
@@ -96,37 +95,36 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs =
-    [
-      readline
-      uthash
-      woff2
-      zeromq
-      py
-      freetype
-      zlib
-      glib
-      giflib
-      libpng
-      libjpeg
-      libtiff
-      libxml2
-    ]
-    ++ lib.optionals withPython [ py ]
-    ++ lib.optionals withSpiro [ libspiro ]
-    ++ lib.optionals withGUI [
-      gtk3
-      cairo
-      pango
-    ];
+  buildInputs = [
+    readline
+    woff2
+    zeromq
+    py
+    freetype
+    zlib
+    glib
+    giflib
+    libpng
+    libjpeg
+    libtiff
+    libxml2
+  ]
+  ++ lib.optionals withPython [ py ]
+  ++ lib.optionals withSpiro [ libspiro ]
+  ++ lib.optionals withGUI [
+    gtk3
+    cairo
+    pango
+  ];
 
-  cmakeFlags =
-    [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
-    ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
-    ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
-    ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
-    ++ lib.optional (!withPython) "-DENABLE_PYTHON_SCRIPTING=OFF"
-    ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
+  cmakeFlags = [
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+  ]
+  ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
+  ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
+  ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
+  ++ lib.optional (!withPython) "-DENABLE_PYTHON_SCRIPTING=OFF"
+  ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)

@@ -46,6 +46,7 @@
         libopus
         xorg.libXrandr
         xorg.libXcursor
+        xorg.libXScrnSaver
       ];
 
       postFixup = ''

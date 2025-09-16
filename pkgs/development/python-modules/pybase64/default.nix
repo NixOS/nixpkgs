@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,14 +20,15 @@ buildPythonPackage rec {
     repo = "pybase64";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-mEwFcnqUKCWYYrcjELshJYNqTxQ//4w4OzaWhrzB5Mg=";
+    hash = "sha256-VSCMBKyDgNjwRUvT29z3KdN/dReqbmaaNeWomnyFJFg=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   pythonImportsCheck = [ "pybase64" ];
 

@@ -47,7 +47,8 @@ buildPythonPackage rec {
     swagger-spec-validator
     pytz
     msgpack
-  ] ++ jsonschema.optional-dependencies.format-nongpl;
+  ]
+  ++ jsonschema.optional-dependencies.format-nongpl;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

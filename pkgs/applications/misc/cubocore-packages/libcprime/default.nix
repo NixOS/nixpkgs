@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for bookmarking, saving recent activites, managing settings of C-Suite";
     homepage = "https://gitlab.com/cubocore/libcprime";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

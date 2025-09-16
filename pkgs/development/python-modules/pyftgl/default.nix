@@ -29,14 +29,13 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  postPatch =
-    ''
-      substituteInPlace setup.py \
-        --replace-fail boost_python boost_python${pythonVersion}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
-    '';
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail boost_python boost_python${pythonVersion}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
+  '';
 
   buildInputs = [
     boost

@@ -6,21 +6,20 @@
   llvmPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldk-node";
-  version = "0-unstable-2025-05-21";
+  version = "0-unstable-2025-08-21";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "ldk-node";
-    rev = "9bb381ad38dbaa71e17816738789d993158fc1a2";
-    hash = "sha256-Ie7FOSOd12mwmkEjD4r0p1ZmeYkXm5eN1LlQhWl0VG4=";
+    rev = "078a26fb3a79f1ef66443b773018a1cf917cb5da";
+    hash = "sha256-ZmeohMnIbJzJbo9U+t0AWKFqLSIzDL/G42cBSBCtj3Q=";
   };
 
   buildFeatures = [ "uniffi" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-hM6VCU0kIg5ZmJM8C4HoybSc/VXNj6GTE/oFLfqGMcY=";
+  cargoHash = "sha256-VLQohnbuEdnu2E+BXe2mDKFUnDVlSY09rIIvHMIQ+Hg=";
 
   # Skip tests because they download bitcoin-core and electrs zip files, and then fail
   doCheck = false;
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Embeds the LDK node implementation compiled as shared library objects";
     homepage = "https://github.com/getAlby/ldk-node";
-    changelog = "https://github.com/getAlby/ldk-node/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/getAlby/ldk-node/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -45,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bleetube ];
   };
-}
+})

@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     wrapQtAppsHook
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     qtbase
@@ -45,27 +46,26 @@ stdenv.mkDerivation rec {
     taglib
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      mv "easyaudiosync.app" "Easy Audio Sync.app"
-      cp -r "Easy Audio Sync.app" $out/Applications
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm755 easyaudiosync $out/bin/easyaudiosync
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv "easyaudiosync.app" "Easy Audio Sync.app"
+    cp -r "Easy Audio Sync.app" $out/Applications
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm755 easyaudiosync $out/bin/easyaudiosync
 
-      for RES in 48 64 128 256; do
-        install -Dm755 "$src/assets/icons/easyaudiosync''${RES}.png" "$out/share/icons/hicolor/''${RES}x''${RES}/apps/easyaudiosync.png"
-      done
+    for RES in 48 64 128 256; do
+      install -Dm755 "$src/assets/icons/easyaudiosync''${RES}.png" "$out/share/icons/hicolor/''${RES}x''${RES}/apps/easyaudiosync.png"
+    done
 
-      install -Dm755 "$src/assets/icons/easyaudiosync.svg" "$out/share/icons/hicolor/scalable/apps/easyaudiosync.svg"
-    ''
-    + ''
-      runHook postInstall
-    '';
+    install -Dm755 "$src/assets/icons/easyaudiosync.svg" "$out/share/icons/hicolor/scalable/apps/easyaudiosync.svg"
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

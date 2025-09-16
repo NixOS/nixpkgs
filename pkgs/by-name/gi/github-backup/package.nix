@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.50.1";
+  version = "0.50.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "josegonzalez";
     repo = "python-github-backup";
     tag = version;
-    hash = "sha256-9fPZ+QWHkIQVEgPKCZMJZk4p5nkXan61Ym+tbF0ZOMM=";
+    hash = "sha256-MBKBY86qIM/rgvGMvE7K9x9n+zDVtoimkVGLBxCWRmI=";
   };
 
   build-system = with python3Packages; [

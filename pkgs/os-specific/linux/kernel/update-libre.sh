@@ -6,7 +6,6 @@ nixpkgs="$(git rev-parse --show-toplevel)"
 path="$nixpkgs/pkgs/os-specific/linux/kernel/linux-libre.nix"
 
 old_rev="$(grep -o 'rev = ".*"' "$path" | awk -F'"' '{print $2}')"
-old_sha256="$(grep -o 'sha256 = ".*"' "$path" | awk -F'"' '{print $2}')"
 
 svn_url=https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/
 rev="$(curl -s "$svn_url" | grep -Em 1 -o 'Revision [0-9]+' | awk '{print $2}')"
@@ -16,15 +15,16 @@ if [ "$old_rev" = "$rev" ]; then
     exit 0
 fi
 
+old_hash="$(grep -o 'hash = ".*"' "$path" | awk -F'"' '{print $2}')"
 sha256="$(QUIET=1 nix-prefetch-svn "$svn_url" "$rev" | tail -1)"
+new_hash="$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$sha256")"
 
-if [ "$old_sha256" = "$sha256" ]; then
+if [ "$old_hash" = "$new_hash" ]; then
     echo "No updates for linux-libre"
     exit 0
 fi
 
-sed -i -e "s/rev = \".*\"/rev = \"$rev\"/" \
-    -e "s/sha256 = \".*\"/sha256 = \"$sha256\"/" "$path"
+sed -i -e "s,rev = \".*\",rev = \"$rev\",; s,hash = \".*\",hash = \"$new_hash\"," "$path"
 
 if [ -n "${COMMIT-}" ]; then
     git commit -qm "linux_latest-libre: $old_rev -> $rev" "$path" \

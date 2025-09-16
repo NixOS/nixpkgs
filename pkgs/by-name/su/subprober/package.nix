@@ -42,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "subprober" ];
 
-  meta = with lib; {
+  meta = {
     description = "Subdomain scanning tool";
     homepage = "https://github.com/RevoltSecurities/SubProber";
     changelog = "https://github.com/RevoltSecurities/SubProber/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "subprober";
   };
 }

@@ -4,7 +4,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   buildNpmPackage,
-  electron_35,
+  electron_37,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,15 +12,16 @@
 }:
 let
   pname = "vrcx";
-  version = "2025.05.09";
+  version = "2025.08.17";
   dotnet = dotnetCorePackages.dotnet_9;
-  electron = electron_35;
+  electron = electron_37;
 
   src = fetchFromGitHub {
     owner = "vrcx-team";
     repo = "VRCX";
-    tag = "v${version}";
-    hash = "sha256-sqdDucjERHC5YykisFDiBOJw40snsldBcuCH1FAahSo=";
+    # v2025.08.17 tag didn't bump the version
+    rev = "fa10af8acaef6ca23866cee6fc80b1b0b0038ca5";
+    hash = "sha256-j/NGym4tGcazDcWtiPqxHbBCbHCkkuysd+cMUPAj6Rc=";
   };
 
   backend = buildDotnetModule {
@@ -45,7 +46,7 @@ in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-sXWKsW9vPyq1oK9ysJod3uAUOICsK/TBLbSekT1SO+k=";
+  npmDepsHash = "sha256-aFbdQhH8lQ/R+o4lCoqVc2nPJnxmNEFjR4MnqWKP32g=";
   npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
 
@@ -57,6 +58,8 @@ buildNpmPackage {
   buildPhase = ''
     runHook preBuild
 
+    # need to run vue-demi postinstall for pinia
+    node ./node_modules/vue-demi/scripts/postinstall.js
     env PLATFORM=linux npm exec webpack -- --config webpack.config.js --mode production
     node src-electron/patch-package-version.js
     npm exec electron-builder -- --dir \

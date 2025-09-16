@@ -357,20 +357,19 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc =
-      {
-        "fail2ban/fail2ban.local".source = fail2banConf;
-        "fail2ban/jail.local".source = jailConf;
-        "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
-        "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
-        "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
-        "fail2ban/paths-nixos.conf".source = pathsConf;
-        "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
-        "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
-      }
-      // (lib.mapAttrs' mkFilter (
-        lib.filterAttrs (_: v: v.filter != null && !builtins.isString v.filter) attrsJails
-      ));
+    environment.etc = {
+      "fail2ban/fail2ban.local".source = fail2banConf;
+      "fail2ban/jail.local".source = jailConf;
+      "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
+      "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
+      "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
+      "fail2ban/paths-nixos.conf".source = pathsConf;
+      "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
+      "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
+    }
+    // (lib.mapAttrs' mkFilter (
+      lib.filterAttrs (_: v: v.filter != null && !builtins.isString v.filter) attrsJails
+    ));
 
     systemd.packages = [ cfg.package ];
     systemd.services.fail2ban = {
@@ -387,7 +386,8 @@ in
         cfg.package
         cfg.packageFirewall
         pkgs.iproute2
-      ] ++ cfg.extraPackages;
+      ]
+      ++ cfg.extraPackages;
 
       serviceConfig = {
         # Capabilities

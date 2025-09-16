@@ -51,15 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      ncurses
-      SDL
-      miniupnpc
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [
-      gpm
-    ];
+  buildInputs = [
+    ncurses
+    SDL
+    miniupnpc
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [
+    gpm
+  ];
 
   configureFlags = lib.optionals (!(lib.meta.availableOn stdenv.hostPlatform gpm)) [
     "--disable-gpm"

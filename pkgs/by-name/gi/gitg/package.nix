@@ -95,7 +95,6 @@ stdenv.mkDerivation rec {
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
     maintainers = with lib.maintainers; [
-      domenkozar
       Luflosi
     ];
     license = lib.licenses.gpl2Plus;

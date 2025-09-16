@@ -19,7 +19,7 @@ makeSetupHook {
     udevadm = if applyHook then lib.getExe' systemdMinimal "udevadm" else "";
   };
   meta = {
-    description = "check validity of udev rules in outputs";
+    description = "Check validity of udev rules in outputs";
     maintainers = with lib.maintainers; [ grimmauld ];
   };
 } ./hook.sh

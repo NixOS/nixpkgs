@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.5";
+  version = "17.6";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_5";
-    hash = "sha256-jWV7hglu7IPMZbqHrZVZHLbZYjVuDeut7nH50aSQIBc=";
+    rev = "refs/tags/REL_17_6";
+    hash = "sha256-/7C+bjmiJ0/CvoAc8vzTC50vP7OsrM6o0w+lmmHvKvU=";
   };
 
   __structuredAttrs = true;
@@ -53,16 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
     disallowedReferences = [ "dev" ];
     disallowedRequisites = [
       stdenv.cc
-    ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+    ]
+    ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
   };
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals gssSupport [ libkrb5 ]
-    ++ lib.optionals nlsSupport [ gettext ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals gssSupport [ libkrb5 ]
+  ++ lib.optionals nlsSupport [ gettext ];
 
   nativeBuildInputs = [
     bison
@@ -100,18 +100,17 @@ stdenv.mkDerivation (finalAttrs: {
   # This doesn't apply to us with Nix.
   env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
 
-  configureFlags =
-    [
-      "--enable-debug"
-      "--sysconfdir=/etc"
-      "--with-openssl"
-      "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      "--without-icu"
-      "--without-perl"
-      "--without-readline"
-    ]
-    ++ lib.optionals gssSupport [ "--with-gssapi" ]
-    ++ lib.optionals nlsSupport [ "--enable-nls" ];
+  configureFlags = [
+    "--enable-debug"
+    "--sysconfdir=/etc"
+    "--with-openssl"
+    "--with-system-tzdata=${tzdata}/share/zoneinfo"
+    "--without-icu"
+    "--without-perl"
+    "--without-readline"
+  ]
+  ++ lib.optionals gssSupport [ "--with-gssapi" ]
+  ++ lib.optionals nlsSupport [ "--enable-nls" ];
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     ./patches/socketdir-in-run-13+.patch
@@ -119,6 +118,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     cat ${./pg_config.env.mk} >> src/common/Makefile
+  ''
+  # Explicitly disable building the shared libs, because that would fail with pkgsStatic.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace src/interfaces/libpq/Makefile \
+      --replace-fail "all: all-lib libpq-refs-stamp" "all: all-lib"
+    substituteInPlace src/Makefile.shlib \
+      --replace-fail "all-lib: all-shared-lib" "all-lib: all-static-lib" \
+      --replace-fail "install-lib: install-lib-shared" "install-lib: install-lib-static"
   '';
 
   installPhase = ''
@@ -128,6 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
     make -C src/include install
     make -C src/interfaces/libpq install
     make -C src/port install
+
+    substituteInPlace src/common/pg_config.env \
+      --replace-fail "$out" "@out@"
 
     install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
     moveToOutput "lib/*.a" "$dev"
@@ -139,19 +149,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # PostgreSQL always builds both shared and static libs, so we delete those we don't want.
-  postInstall =
-    if stdenv.hostPlatform.isStatic then
-      ''
-        rm -rfv $out/lib/*.so*
-        touch $out/empty
-      ''
-    else
-      "rm -rfv $dev/lib/*.a";
+  postInstall = if stdenv.hostPlatform.isStatic then "touch $out/empty" else "rm -rfv $dev/lib/*.a";
 
   doCheck = false;
 
   passthru.pg_config = buildPackages.callPackage ./pg_config.nix {
     inherit (finalAttrs) finalPackage;
+    outputs = {
+      out = lib.getOutput "out" finalAttrs.finalPackage;
+    };
   };
 
   meta = {

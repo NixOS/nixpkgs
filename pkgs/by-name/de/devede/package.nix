@@ -27,6 +27,7 @@ in
 buildPythonApplication rec {
   pname = "devede";
   version = "4.21.0";
+  format = "setuptools";
   namePrefix = "";
 
   src = fetchFromGitLab {

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    hash = "sha256-AiOQq3RkpE+HN/efizHOHTz6S0r3nMqhqsXoNo21h/s=";
+    hash = "sha256-X+xkkI/gQazEs6/CoyxJqrFUDPWBh29VY9aLsSnifFs=";
   };
 
   build-system = [ setuptools ];

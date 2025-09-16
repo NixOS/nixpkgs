@@ -101,7 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-  ] ++ optional optimizationSupport "--optimization";
+  ]
+  ++ optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
@@ -133,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/brummer10/guitarix";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      astsmtl
       lord-valen
     ];
     platforms = platforms.linux;

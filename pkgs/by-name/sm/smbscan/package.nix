@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "smbscan";
-  version = "unstable-2022-05-26";
+  version = "0-unstable-2022-05-26";
   format = "other";
 
   src = fetchFromGitHub {

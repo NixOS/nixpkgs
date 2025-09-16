@@ -59,29 +59,28 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      fcft
-      json_c
-      libmpdclient
-      libyaml
-      pipewire
-      pixman
-      pulseaudio
-      tllist
-      udev
-    ]
-    ++ lib.optionals (waylandSupport) [
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals (x11Support) [
-      xcbutil
-      xcbutilcursor
-      xcbutilerrors
-      xcbutilwm
-    ];
+  buildInputs = [
+    alsa-lib
+    fcft
+    json_c
+    libmpdclient
+    libyaml
+    pipewire
+    pixman
+    pulseaudio
+    tllist
+    udev
+  ]
+  ++ lib.optionals (waylandSupport) [
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals (x11Support) [
+    xcbutil
+    xcbutilcursor
+    xcbutilerrors
+    xcbutilwm
+  ];
 
   strictDeps = true;
 

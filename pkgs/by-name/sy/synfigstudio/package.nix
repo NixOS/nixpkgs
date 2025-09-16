@@ -57,16 +57,15 @@ let
 
     sourceRoot = "${src.name}/synfig-core";
 
-    configureFlags =
-      [
-        "--with-boost=${boost.dev}"
-        "--with-boost-libdir=${boost.out}/lib"
-      ]
-      ++ lib.optionals stdenv.cc.isClang [
-        # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
-        # are removed in C++17. Setting the language version to C++14 allows it to build.
-        "CXXFLAGS=-std=c++14"
-      ];
+    configureFlags = [
+      "--with-boost=${boost.dev}"
+      "--with-boost-libdir=${boost.out}/lib"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
+      # are removed in C++17. Setting the language version to C++14 allows it to build.
+      "CXXFLAGS=-std=c++14"
+    ];
 
     enableParallelBuilding = true;
 

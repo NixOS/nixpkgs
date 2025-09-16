@@ -8,7 +8,7 @@
   glib,
   gst_all_1,
   gtk3,
-  gupnp,
+  gupnp_1_6,
   imagemagick,
   mate-desktop,
   wrapGAppsHook3,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gtk3
-    gupnp
+    gupnp_1_6
     imagemagick
     mate-desktop
   ];

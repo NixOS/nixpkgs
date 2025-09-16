@@ -1,9 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
-  wheel,
+
+  # dependencies
+  colorama,
   onnx,
   packaging,
   sympy,
@@ -11,31 +15,34 @@
 
 buildPythonPackage rec {
   pname = "onnxslim";
-  version = "0.1.51";
+  version = "0.1.68";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RH0UnMRJvs+lT/YblJcSE1TflAosJLB3XwD8XhqSdsw=";
+  src = fetchFromGitHub {
+    owner = "inisis";
+    repo = "OnnxSlim";
+    tag = "v${version}";
+    hash = "sha256-1jYdti/Ug1/PoNKN57lxKrHqRTE9BB35+wn8jTLZVpo=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
+    colorama
     onnx
     packaging
     sympy
   ];
 
-  pythonImportsCheck = [
-    "onnxslim"
-  ];
+  pythonImportsCheck = [ "onnxslim" ];
+
+  # __main__.py: error: the following arguments are required: --model-dir
+  doCheck = false;
 
   meta = {
-    description = "A Toolkit to Help Optimize Onnx Model";
+    description = "Toolkit to Help Optimize Onnx Model";
     homepage = "https://pypi.org/project/onnxslim/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ferrine ];

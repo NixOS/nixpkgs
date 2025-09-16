@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trexio";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "TREX-CoE";
     repo = "trexio";
     rev = "v${version}";
-    hash = "sha256-KP8tpwBr/ymjcXmCssdn+Xti0UKgazJSGTgVpvE+CiM=";
+    hash = "sha256-mTn/46oIvBbv7X0QwDxXQJH3QyH34u487QpLferC2Uc=";
   };
 
   postPatch = ''

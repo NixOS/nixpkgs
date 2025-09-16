@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "craft-platforms";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-platforms";
     tag = version;
-    hash = "sha256-Ec4zncigqampXND0YvDnExrrB9ls3Sf0KfYVbwLGbqY=";
+    hash = "sha256-86dUeMb3yL1ilbHxmknFaRH4Ce9AEl+5rSVW0WGaZV8=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "craft_platforms" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Attempts to get distro information, and expects "ubuntu-ish"
@@ -60,7 +60,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/canonical/craft-platforms";
     changelog = "https://github.com/canonical/craft-platforms/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

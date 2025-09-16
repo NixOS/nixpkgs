@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fslpy";
-  version = "3.21.1";
+  version = "3.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "fsl";
     repo = "fslpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-O0bhzu6zZeuGJqXAwlgM8qHkgtaGCmg7xSkOqbZH2eA=";
+    hash = "sha256-lY/7TNOqGK0pRm5Rne1nrqXVQDZPkHwlZV9ITsOwp9Q=";
   };
 
   build-system = [ setuptools ];
@@ -58,7 +58,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     tomli
-  ] ++ optional-dependencies.extra;
+  ]
+  ++ optional-dependencies.extra;
 
   disabledTestPaths = [
     # tries to download data:

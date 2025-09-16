@@ -24,10 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://www.mowglii.com/itsycal/versionhistory.html";
-    description = "Itsycal is a tiny menu bar calendar";
+    description = "Tiny menu bar calendar";
     homepage = "https://www.mowglii.com/itsycal/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

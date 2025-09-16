@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZdDe0ymPkj0ZGiPLo1Y0qMDk2SsUcPsSStay+Tuf4p0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Bp3t/fjaFeouIoKlRvQPVDlc46Ggitfx6HUXE+RZN0A=";
 
   env.VERGEN_BUILD_DATE = "2024-11-28"; # managed via the update script
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript.command = [ ./update.sh ];
 
   meta = {
-    description = "Modern watch command, time machine and pager etc.";
+    description = "Modern `watch` command";
     changelog = "https://github.com/sachaos/viddy/releases";
     homepage = "https://github.com/sachaos/viddy";
     license = lib.licenses.mit;

@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "48.0";
+  version = "48.1";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zS9lg1X6kHX9+eW0SqCvOn4JKMVWFOsQQrNhds9FESY=";
+    hash = "sha256-fYuab6OgXT9bkEiFkCdojHOniP9ukjvDlFEmiElD+hA=";
   };
 
   depsBuildBuild = [
@@ -73,54 +73,52 @@ stdenv.mkDerivation (finalAttrs: {
     yelp-tools
   ];
 
-  buildInputs =
+  buildInputs = [
+    atk
+    dbus # only needed to find the service directory
+    djvulibre
+    gdk-pixbuf
+    ghostscriptX
+    glib
+    gnome-desktop
+    gsettings-desktop-schemas
+    gspell
+    gtk3
+    libarchive
+    libgxps
+    libhandy
+    librsvg
+    libspectre
+    libxml2
+    pango
+    poppler
+    texlive.bin.core # kpathsea for DVI support
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals supportMultimedia (
+    with gst_all_1;
     [
-      atk
-      dbus # only needed to find the service directory
-      djvulibre
-      gdk-pixbuf
-      ghostscriptX
-      glib
-      gnome-desktop
-      gsettings-desktop-schemas
-      gspell
-      gtk3
-      libarchive
-      libgxps
-      libhandy
-      librsvg
-      libspectre
-      libxml2
-      pango
-      poppler
-      texlive.bin.core # kpathsea for DVI support
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
     ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals supportMultimedia (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-base
-        gst-plugins-good
-        gst-plugins-bad
-        gst-plugins-ugly
-        gst-libav
-      ]
-    );
+  );
 
-  mesonFlags =
-    [
-      "-Dnautilus=false"
-      "-Dps=enabled"
-    ]
-    ++ lib.optionals (!withLibsecret) [
-      "-Dkeyring=disabled"
-    ]
-    ++ lib.optionals (!supportMultimedia) [
-      "-Dmultimedia=disabled"
-    ];
+  mesonFlags = [
+    "-Dnautilus=false"
+    "-Dps=enabled"
+  ]
+  ++ lib.optionals (!withLibsecret) [
+    "-Dkeyring=disabled"
+  ]
+  ++ lib.optionals (!supportMultimedia) [
+    "-Dmultimedia=disabled"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")

@@ -1,4 +1,5 @@
 {
+  config,
   autoPatchelfHook,
   boost,
   bzip2,
@@ -21,6 +22,8 @@
   stdenv,
   tbb,
   xorg,
+  cudaPackages,
+  enableCuda ? config.cudaSupport,
 }:
 stdenv.mkDerivation {
   pname = "basalt-monado";
@@ -54,9 +57,12 @@ stdenv.mkDerivation {
     libGL
     lz4
     magic-enum
-    opencv
+    opencv.cxxdev
     tbb
     xorg.libX11
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [

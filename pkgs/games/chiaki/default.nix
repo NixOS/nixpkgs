@@ -33,23 +33,22 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      ffmpeg
-      libopus
-      qtbase
-      qtmultimedia
-      qtsvg
-      SDL2
-      nanopb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libevdev
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      qtmacextras
-    ];
+  buildInputs = [
+    ffmpeg
+    libopus
+    qtbase
+    qtmultimedia
+    qtsvg
+    SDL2
+    nanopb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libevdev
+    udev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    qtmacextras
+  ];
 
   doCheck = true;
 

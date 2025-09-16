@@ -1,12 +1,14 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
+  exiftool,
 }:
 let
-  version = "1.3.1";
+  version = "1.3.3";
   tag = "v${version}";
 in
 buildGoModule {
@@ -17,20 +19,29 @@ buildGoModule {
     owner = "yorukot";
     repo = "superfile";
     inherit tag;
-    hash = "sha256-GlPePeINZ6KL3RRqfQQFYsEdd+70bRJcMqMVnUmgo/I=";
+    hash = "sha256-A1SWsBcPtGNbSReslp5L3Gg4hy3lDSccqGxFpLfVPrk=";
   };
 
-  vendorHash = "sha256-ArsB0B67ymuzxTXfaUuWiRrgVCrZhmGMbJUl2u+thUw=";
+  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
+  nativeBuildInputs = [ exiftool ];
+
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  # Upstream notes that this could be flakey, and it consistently fails for me.
-  checkFlags = [ "-skip=^TestReturnDirElement/Sort_by_Date$" ];
+  # Upstream notes that this could be flaky, and it consistently fails for me.
+  checkFlags = [
+    "-skip=^TestReturnDirElement/Sort_by_Date$"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # Only failing on nix darwin. I suspect this is due to the way
+    # darwin handles file permissions.
+    "-skip=^TestCompressSelectedFiles"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

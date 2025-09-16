@@ -20,6 +20,7 @@ buildPythonPackage rec {
   # If you need these, you can just add them to your environment.
 
   version = "4.57.1";
+  format = "setuptools";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests

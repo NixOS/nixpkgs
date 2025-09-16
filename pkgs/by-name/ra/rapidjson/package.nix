@@ -6,12 +6,13 @@
   doxygen,
   graphviz,
   gtest,
+  unstableGitUpdater,
   valgrind,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidjson";
-  version = "unstable-2024-04-09";
+  version = "1.1.0-unstable-2025-02-05";
 
   outputs = [
     "out"
@@ -21,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = "rapidjson";
-    rev = "ab1842a2dae061284c0a62dca1cc6d5e7e37e346";
-    hash = "sha256-kAGVJfDHEUV2qNR1LpnWq3XKBJy4hD3Swh6LX5shJpM=";
+    rev = "24b5e7a8b27f42fa16b96fc70aade9106cf7102f";
+    hash = "sha256-oHHLYRDMb7Y/k0CwsdsxPC5lglr2IChQi0AiOMiFn78=";
   };
 
   patches = [
@@ -68,11 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS_RELEASE" "-Wno-error")
   ];
 
-  doCheck = !(stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isDarwin);
+  doCheck =
+    !(stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isDarwin)
+    && lib.meta.availableOn stdenv.hostPlatform valgrind;
 
   nativeCheckInputs = [
     valgrind
   ];
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+  };
 
   meta = {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";

@@ -1,7 +1,6 @@
 {
   radicle-httpd,
   fetchFromGitHub,
-  fetchgit,
   lib,
   buildNpmPackage,
   writeText,
@@ -63,7 +62,7 @@ lib.fix (
   self:
   lib.makeOverridable (
     {
-      npmDepsHash ? "sha256-pPbN/goBsRHGAnDzof50PlQtS0RMux4dq1b8Gn5jEP4=",
+      npmDepsHash ? "sha256-7/DH0p66FTfC0N42FhWTqehg5m/yq929ANhL4jAt7Ss=",
       patches ? [ ],
     }@args:
     buildNpmPackage {
@@ -75,9 +74,9 @@ lib.fix (
       # same repo. For this reason we pin the sources to each other, but due to
       # radicle-httpd using a more limited sparse checkout we need to carry a
       # separate hash.
-      src = fetchgit {
-        inherit (radicle-httpd.src) url rev;
-        hash = "sha256-jxiGL9gEbl4n+GmFeRc8cVljfD8hrFRfSrA9GnOeE40=";
+      src = radicle-httpd.src.override {
+        hash = "sha256-1OhZ0x21NlZIiTPCRpvdUsx5UmeLecTjVzH8DWllPr8=";
+        sparseCheckout = [ ];
       };
 
       postPatch = ''

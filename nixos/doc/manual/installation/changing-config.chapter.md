@@ -87,9 +87,7 @@ set `mutableUsers = false`. Another way is to temporarily add the
 following to your configuration:
 
 ```nix
-{
-  users.users.your-user.initialHashedPassword = "test";
-}
+{ users.users.your-user.initialHashedPassword = "test"; }
 ```
 
 *Important:* delete the \$hostname.qcow2 file if you have started the

@@ -74,7 +74,7 @@ void schema_id_with_path() {
 }
 
 void exists_fn_guard() {
-  if (!true) {
+  if (!TRUE) {
     return;
   }
 
@@ -89,7 +89,7 @@ void exists_fn_guard() {
 }
 
 void exists_fn_nested() {
-  if (true) {
+  if (TRUE) {
     g_autoptr(GSettings) settings = NULL;
     {
       g_autoptr(GSettingsSchemaSource) schema_source;
@@ -102,7 +102,7 @@ void exists_fn_nested() {
 }
 
 void exists_fn_unknown() {
-  if (true) {
+  if (TRUE) {
     g_autoptr(GSettings) settings = NULL;
     {
       g_autoptr(GSettingsSchemaSource) schema_source;

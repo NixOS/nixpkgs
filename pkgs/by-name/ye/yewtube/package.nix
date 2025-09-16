@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "yewtube";
   version = "2.12.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mps-youtube";

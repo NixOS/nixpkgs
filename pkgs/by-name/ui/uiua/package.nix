@@ -33,7 +33,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uiua";
   inherit (versionInfo) version cargoHash;
-  useFetchCargoVendor = true;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
@@ -45,15 +44,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
-  buildInputs =
-    [ libffi ] # we force dynamic linking our own libffi below
-    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
+  buildInputs = [
+    libffi
+  ] # we force dynamic linking our own libffi below
+  ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  buildFeatures =
-    [ "libffi/system" ] # force libffi to be linked dynamically instead of rebuilding it
-    ++ lib.optional audioSupport "audio"
-    ++ lib.optional webcamSupport "webcam"
-    ++ lib.optional windowSupport "window";
+  buildFeatures = [
+    "libffi/system"
+  ] # force libffi to be linked dynamically instead of rebuilding it
+  ++ lib.optional audioSupport "audio"
+  ++ lib.optional webcamSupport "webcam"
+  ++ lib.optional windowSupport "window";
 
   postFixup =
     let
@@ -80,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runCommand "uiua-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
       ''
         uiua init
-        diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+        diff -U3 --color=auto <(uiua run main.ua 2>&1) <(echo '"Hello, World!"')
         touch $out
       '';
 

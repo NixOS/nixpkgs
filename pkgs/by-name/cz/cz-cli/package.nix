@@ -17,14 +17,14 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-zQ0T/1khnn+CXm/3yc9nANL0ROEEE03U5fV57btEmPg=";
 
-  meta = with lib; {
+  meta = {
     description = "Commitizen command line utility";
     homepage = "https://commitizen.github.io/cz-cli";
     changelog = "https://github.com/commitizen/cz-cli/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       freezeboy
       natsukium
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

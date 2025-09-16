@@ -8,7 +8,6 @@
   hacking,
   keystoneauth1,
   makePythonPath,
-  openstackclient,
   openstackdocstheme,
   installer,
   osc-lib,
@@ -18,6 +17,7 @@
   pbr,
   pygments,
   python-neutronclient,
+  python-openstackclient,
   requests,
   requests-mock,
   setuptools,
@@ -30,13 +30,13 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.11.0";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_octaviaclient";
     inherit version;
-    hash = "sha256-IzB40LIn8iW7sO6eB8NgnpFc/vBhfZv4HLMXpgpdP1U=";
+    hash = "sha256-5brfxkpJQousEcXl0YerzYDjrfl0XyWV0RXPTz146Y4=";
   };
 
   # somehow python-neutronclient cannot be found despite it being supplied
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     cliff
     keystoneauth1
     python-neutronclient
-    openstackclient
+    python-openstackclient
     osc-lib
     oslo-serialization
     oslo-utils

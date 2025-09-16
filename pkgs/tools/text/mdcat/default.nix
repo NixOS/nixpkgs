@@ -22,6 +22,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j6BFXx5cyjE3+fo1gGKlqpsxrm3i9HfQ9tJGNNjjLwo=";
   };
 
+  patches = [
+    ./fix-clippy.diff
+  ];
+
   nativeBuildInputs = [
     pkg-config
     asciidoctor
@@ -32,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8A0RLbFkh3fruZAbjJzipQvuFLchqIRovPcc6MSKdOc=";
 
   nativeCheckInputs = [ ansi2html ];
@@ -48,19 +51,18 @@ rustPlatform.buildRustPackage rec {
     "--skip iterm2_tests_render_md_samples_images_md"
   ];
 
-  postInstall =
-    ''
-      installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-      ln -sr $out/bin/{mdcat,mdless}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for bin in mdcat mdless; do
-        installShellCompletion --cmd $bin \
-          --bash <($out/bin/$bin --completions bash) \
-          --fish <($out/bin/$bin --completions fish) \
-          --zsh <($out/bin/$bin --completions zsh)
-      done
-    '';
+  postInstall = ''
+    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+    ln -sr $out/bin/{mdcat,mdless}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for bin in mdcat mdless; do
+      installShellCompletion --cmd $bin \
+        --bash <($out/bin/$bin --completions bash) \
+        --fish <($out/bin/$bin --completions fish) \
+        --zsh <($out/bin/$bin --completions zsh)
+    done
+  '';
 
   meta = with lib; {
     description = "cat for markdown";

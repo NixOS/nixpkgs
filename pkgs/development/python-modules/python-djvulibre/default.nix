@@ -1,14 +1,16 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+  cython,
   djvulibre,
+  setuptools,
   ghostscript_headless,
   pkg-config,
   unittestCheckHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "python-djvulibre";
   version = "0.9.3";
   pyproject = true;
@@ -21,14 +23,14 @@ python3Packages.buildPythonPackage rec {
   };
 
   build-system = [
-    python3Packages.cython
+    cython
     djvulibre
     ghostscript_headless
     pkg-config
-    python3Packages.setuptools
+    setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     djvulibre
     ghostscript_headless
   ];

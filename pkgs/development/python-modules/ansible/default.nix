@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  jmespath,
   jsonschema,
   jxmlease,
   ncclient,
@@ -24,7 +25,7 @@
 
 let
   pname = "ansible";
-  version = "11.5.0";
+  version = "11.9.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -34,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GKP8cxIKSa3pqaZ+uPnU9QCdIQbDT/65ZjrZKLdu1Zs=";
+    hash = "sha256-UoylpAjxHPH+oA2up1cOaNQOFnvji5DBGafLRXKeSSE=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,
@@ -62,6 +63,10 @@ buildPythonPackage {
       ttp
       xmltodict
       # ansible.windows
+
+      # Default ansible collections dependencies
+      # community.general
+      jmespath
 
       # lots of collections with dedicated requirements.txt and pyproject.toml files,
       # add the dependencies for the collections you need conditionally and install
@@ -94,6 +99,9 @@ buildPythonPackage {
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

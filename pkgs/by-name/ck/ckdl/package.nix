@@ -5,7 +5,6 @@
   ninja,
   sphinx,
   python3Packages,
-  ...
 }:
 
 pkgs.stdenv.mkDerivation {
@@ -59,7 +58,7 @@ pkgs.stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "ckdl is a C (C11) library that implements reading and writing the KDL Document Language.";
+    description = "C library that implements reading and writing the KDL Document Language";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

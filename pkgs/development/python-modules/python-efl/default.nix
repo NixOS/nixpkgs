@@ -66,7 +66,7 @@ buildPythonPackage rec {
       --replace-fail ".assert_(" ".assertTrue("
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTestPaths = [
     "tests/dbus/test_01_basics.py" # needs dbus daemon

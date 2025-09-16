@@ -8,6 +8,7 @@
 buildPythonApplication rec {
   pname = "cxxtest";
   version = "4.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CxxTest";

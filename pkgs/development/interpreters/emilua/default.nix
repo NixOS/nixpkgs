@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "emilua";
-  version = "0.11.6";
+  version = "0.11.7";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r/WfRAr8AgnZGHxzcZVLg5MHDwcOTMWqOv/Qu/75Y1c=";
+    hash = "sha256-c+X8HD/G75XD54Fs89DSkebLDd7h12Bk45+w7VBUXPY=";
   };
 
   propagatedBuildInputs = [

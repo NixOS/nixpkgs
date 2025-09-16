@@ -9,6 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -56,7 +57,7 @@ assert lib.assertMsg (
   rustc,
   toml11,
   pegtl,
-  python3,
+  buildPackages,
   pkg-config,
   rapidcheck,
   sqlite,
@@ -86,6 +87,8 @@ assert lib.assertMsg (
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
+  passt,
 
   confDir,
   stateDir,
@@ -97,6 +100,7 @@ let
   isLegacyParser = lib.versionOlder version "2.91";
   hasDtraceSupport = lib.versionAtLeast version "2.93";
   parseToYAML = lib.versionAtLeast version "2.93";
+  usesCapnp = lib.versionAtLeast version "2.94";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -110,16 +114,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit src patches;
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals enableDocumentation [
-      "man"
-      "doc"
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals enableDocumentation [
+    "man"
+    "doc"
+    "devdoc"
+  ];
 
   strictDeps = true;
   disallowedReferences = lib.optionals isLLVMOnly [
@@ -128,78 +131,86 @@ stdenv.mkDerivation (finalAttrs: {
     # We don't want the underlying GCC neither!
     stdenv.cc.cc.stdenv.cc.cc
   ];
+  __structuredAttrs = true;
 
   # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs =
-    [
-      # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
-      (python3.pythonOnBuildForHost.withPackages (p: [
+  nativeBuildInputs = [
+    # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
+    (buildPackages.python3.withPackages (
+      p:
+      [
+        p.python-frontmatter
+        p.toml
+      ]
+      ++ lib.optionals finalAttrs.doInstallCheck [
+        p.aiohttp
         p.pytest
         p.pytest-xdist
-        p.python-frontmatter
-      ]))
-      pkg-config
-      flex
-      jq
-      meson
-      ninja
-      cmake
-      python3
-      # Required for libstd++ assertions that leaks inside of the final binary.
-      removeReferencesTo
+      ]
+      ++ lib.optionals usesCapnp [ p.pycapnp ]
+    ))
+    pkg-config
+    flex
+    jq
+    meson
+    ninja
+    cmake
+    # Required for libstd++ assertions that leaks inside of the final binary.
+    removeReferencesTo
 
-      # Tests
-      git
-      mercurial
-      jq
-      lsof
-    ]
-    ++ lib.optionals isLLVMOnly [
-      rustc
-      cargo
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals isLegacyParser [ bison ]
-    ++ lib.optionals enableDocumentation [
-      (lib.getBin lowdown-unsandboxed)
-      mdbook
-      mdbook-linkcheck
-      doxygen
-    ]
-    ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
-    ++ lib.optionals parseToYAML [ yq ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
+    # Tests
+    git
+    mercurial
+    jq
+    lsof
+  ]
+  ++ lib.optionals isLLVMOnly [
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals isLegacyParser [ bison ]
+  ++ lib.optionals enableDocumentation [
+    (lib.getBin lowdown-unsandboxed)
+    mdbook
+    mdbook-linkcheck
+    doxygen
+  ]
+  ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+  ++ lib.optionals pastaFod [ passt ]
+  ++ lib.optionals parseToYAML [ yq ]
+  ++ lib.optionals usesCapnp [ capnproto ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
-  buildInputs =
-    [
-      boost
-      brotli
-      bzip2
-      curl
-      capnproto
-      editline
-      libsodium
-      openssl
-      sqlite
-      xz
-      gtest
-      libarchive
-      lowdown
-      rapidcheck
-      toml11
-    ]
-    ++ lib.optionals hasExternalLixDoc [ lix-doc ]
-    ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
-    # libunwind library path directly in the wrappers, but it does inject
-    # -lunwind without injecting the library path...
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
-    ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
-    ++ lib.optionals withLibseccomp [ libseccomp ]
-    ++ lib.optionals withAWS [ aws-sdk-cpp ]
-    ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
+  buildInputs = [
+    boost
+    brotli
+    bzip2
+    curl
+    capnproto
+    editline
+    libsodium
+    openssl
+    sqlite
+    xz
+    gtest
+    libarchive
+    lowdown
+    rapidcheck
+    toml11
+  ]
+  ++ lib.optionals hasExternalLixDoc [ lix-doc ]
+  ++ lib.optionals (!isLegacyParser) [ pegtl ]
+  # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
+  # libunwind library path directly in the wrappers, but it does inject
+  # -lunwind without injecting the library path...
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
+  ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
+  ++ lib.optionals withLibseccomp [ libseccomp ]
+  ++ lib.optionals withAWS [ aws-sdk-cpp ]
+  ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
 
   inherit cargoDeps;
 
@@ -226,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462
-    lib.optionalString (!enableStatic) ''
+    lib.optionalString (lib.versionOlder version "2.91" && !enableStatic) ''
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
@@ -249,34 +260,33 @@ stdenv.mkDerivation (finalAttrs: {
   # We use -O2 upstream https://gerrit.lix.systems/c/lix/+/554
   mesonBuildType = "debugoptimized";
 
-  mesonFlags =
-    [
-      # Enable LTO, since it improves eval performance a fair amount
-      # LTO is disabled on:
-      # - static builds (strange linkage errors)
-      # - darwin builds (install test failures. see fj#568 & fj#832)
-      (lib.mesonBool "b_lto" (
-        !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
-      ))
-      (lib.mesonEnable "gc" true)
-      (lib.mesonBool "enable-tests" true)
-      (lib.mesonBool "enable-docs" enableDocumentation)
-      (lib.mesonEnable "internal-api-docs" enableDocumentation)
-      (lib.mesonBool "enable-embedded-sandbox-shell" (
-        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-      ))
-      (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
+  mesonFlags = [
+    # Enable LTO, since it improves eval performance a fair amount
+    # LTO is disabled on:
+    # - static builds (strange linkage errors)
+    # - darwin builds (install test failures. see fj#568 & fj#832)
+    (lib.mesonBool "b_lto" (
+      !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
+    ))
+    (lib.mesonEnable "gc" true)
+    (lib.mesonBool "enable-tests" true)
+    (lib.mesonBool "enable-docs" enableDocumentation)
+    (lib.mesonEnable "internal-api-docs" enableDocumentation)
+    (lib.mesonBool "enable-embedded-sandbox-shell" (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+    ))
+    (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
 
-      (lib.mesonOption "store-dir" storeDir)
-      (lib.mesonOption "state-dir" stateDir)
-      (lib.mesonOption "sysconfdir" confDir)
-    ]
-    ++ lib.optionals hasDtraceSupport [
-      (lib.mesonEnable "dtrace-probes" withDtrace)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-    ];
+    (lib.mesonOption "store-dir" storeDir)
+    (lib.mesonOption "state-dir" stateDir)
+    (lib.mesonOption "sysconfdir" confDir)
+  ]
+  ++ lib.optionals hasDtraceSupport [
+    (lib.mesonEnable "dtrace-probes" withDtrace)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+  ];
 
   ninjaFlags = [ "-v" ];
 
@@ -288,16 +298,15 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $devdoc/nix-support
       echo "devdoc internal-api $devdoc/share/doc/nix/internal-api" >> $devdoc/nix-support/hydra-build-products
     ''
-    + lib.optionalString (!hasExternalLixDoc) ''
+    + lib.optionalString (lib.versionOlder version "2.94" && !hasExternalLixDoc) ''
       # We do not need static archives.
-      # FIXME(Raito): why are they getting installed _at all_ ?
       rm $out/lib/liblix_doc.a
     ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString (lib.versionOlder version "2.91" && stdenv.hostPlatform.isDarwin) ''
       for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \
@@ -346,14 +355,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson test --no-rebuild "''${flagsArray[@]}"
     runHook postInstallCheck
   '';
-  hardeningDisable =
-    [
-      "shadowstack"
-      # strictoverflow is disabled because we trap on signed overflow instead
-      "strictoverflow"
-    ]
-    # fortify breaks the build with lto and musl for some reason
-    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable = [
+    "shadowstack"
+    # strictoverflow is disabled because we trap on signed overflow instead
+    "strictoverflow"
+  ]
+  # fortify breaks the build with lto and musl for some reason
+  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
@@ -388,5 +396,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })

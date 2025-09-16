@@ -5,13 +5,14 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   multidict,
   xmljson,
 }:
 
 buildPythonPackage rec {
   pname = "latex2mathml";
-  version = "3.78.0";
+  version = "3.78.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,21 +21,17 @@ buildPythonPackage rec {
     owner = "roniemartinez";
     repo = "latex2mathml";
     tag = version;
-    hash = "sha256-FB1VM2z9y17q+6/wv4oTrhe/rD2QzdAc0VMbFmcrIAw=";
+    hash = "sha256-VhBq6KSiomFPue9yzYhU68gH+MkHovVi8VEEFi3yUZ8=";
   };
 
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     multidict
     xmljson
   ];
-
-  # Disable code coverage in check phase
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
 
   pythonImportsCheck = [ "latex2mathml" ];
 

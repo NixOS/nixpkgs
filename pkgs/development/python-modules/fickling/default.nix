@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fickling" ];
 
   meta = with lib; {
-    description = "A Python pickling decompiler and static analyzer";
+    description = "Python pickling decompiler and static analyzer";
     homepage = "https://github.com/trailofbits/fickling";
     changelog = "https://github.com/trailofbits/fickling/releases/tag/v${version}";
     license = licenses.lgpl3Plus;

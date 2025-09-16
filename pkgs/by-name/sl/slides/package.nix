@@ -30,12 +30,12 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based presentation tool";
     homepage = "https://github.com/maaslalani/slides";
     changelog = "https://github.com/maaslalani/slides/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       maaslalani
       penguwin
     ];

@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgsl-analyzer";
-  version = "2025-04-04";
+  version = "2025-08-08";
 
   src = fetchFromGitHub {
     owner = "wgsl-analyzer";
     repo = "wgsl-analyzer";
     tag = finalAttrs.version;
-    hash = "sha256-t+Gpm+p2EaobuzUppkhCsaj3q/v+YjMSlau4GVoLgJo=";
+    hash = "sha256-wYUhHbq+W9feA1R7uGrUd607C7yE3HPlc5+22t+oqOs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QjR0O/GFOsYi0+r3rYBdR9rw/4Qa5pNjWSbn6CsshqU=";
+  cargoHash = "sha256-QBeuzLbG/unf+FIXJ8AxSuAKRmx1JezOBlgRKpEHRPo=";
 
   checkFlags = [
     # Imports failures

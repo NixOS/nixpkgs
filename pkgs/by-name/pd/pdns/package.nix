@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.9.5";
+  version = "4.9.8";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Zpu3uZgjsyw5ATN9abOMn4Bz8vwC6HZJM7jFwJdOJyQ=";
+    hash = "sha256-GAtmrjMtMWaWjgE7/3y/bwxyhp1r5pfbdKAt86xuipE=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
         "tinydns"
       ]
     ))
+    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns"
   ];
 

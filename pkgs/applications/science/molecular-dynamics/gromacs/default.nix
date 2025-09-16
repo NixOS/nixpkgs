@@ -53,8 +53,8 @@ let
       }
     else
       {
-        version = "2025.2";
-        hash = "sha256-DfCfnUWpnvAOZrm6qUk6J+kGgTdjo7bHZyIXxmtD6hE=";
+        version = "2025.3";
+        hash = "sha256-i9/KAmjz8Qp8o8BuWbYvc+oCQgxnIRwP85EvMteDPGU=";
       };
 
 in
@@ -79,67 +79,66 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optional enablePlumed plumed
-    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optional enablePlumed plumed
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
-    [
-      fftw
-      perl
-      hwloc
-      blas
-      lapack
-    ]
-    ++ lib.optional enableMpi mpi
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_cccl
-      cudaPackages.cuda_cudart
-      cudaPackages.libcufft
-      cudaPackages.cuda_profiler_api
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs = [
+    fftw
+    perl
+    hwloc
+    blas
+    lapack
+  ]
+  ++ lib.optional enableMpi mpi
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
+    cudaPackages.cuda_cudart
+    cudaPackages.libcufft
+    cudaPackages.cuda_profiler_api
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "GMX_HWLOC" true)
-      "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
-      "-DGMX_OPENMP:BOOL=TRUE"
-      "-DBUILD_SHARED_LIBS=ON"
-    ]
-    ++ (
-      if singlePrec then
-        [
-          "-DGMX_DOUBLE=OFF"
-        ]
-      else
-        [
-          "-DGMX_DOUBLE=ON"
-          "-DGMX_DEFAULT_SUFFIX=OFF"
-        ]
-    )
-    ++ (
-      if enableMpi then
-        [
-          "-DGMX_MPI:BOOL=TRUE"
-          "-DGMX_THREAD_MPI:BOOL=FALSE"
-        ]
-      else
-        [
-          "-DGMX_MPI:BOOL=FALSE"
-        ]
-    )
-    ++ lib.optionals enableCuda [
-      "-DGMX_GPU=CUDA"
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
+  cmakeFlags = [
+    (lib.cmakeBool "GMX_HWLOC" true)
+    "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
+    "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
+  ]
+  ++ (
+    if singlePrec then
+      [
+        "-DGMX_DOUBLE=OFF"
+      ]
+    else
+      [
+        "-DGMX_DOUBLE=ON"
+        "-DGMX_DEFAULT_SUFFIX=OFF"
+      ]
+  )
+  ++ (
+    if enableMpi then
+      [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+    else
+      [
+        "-DGMX_MPI:BOOL=FALSE"
+      ]
+  )
+  ++ lib.optionals enableCuda [
+    "-DGMX_GPU=CUDA"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
-      # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
-      (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
-    ];
+    # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     moveToOutput share/cmake $dev

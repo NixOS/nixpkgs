@@ -18,12 +18,7 @@ lib.makeScope newScope (
       plugins = [ ];
     };
 
-    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
-    pidginPackages = self // {
-      pidginPackages = self.pidginPackages // {
-        __attrsFailEvaluation = true;
-      };
-    };
+    pidginPackages = self;
 
     pidgin-indicator = callPackage ./pidgin-indicator { };
 
@@ -57,8 +52,6 @@ lib.makeScope newScope (
 
     purple-lurch = callPackage ./purple-lurch { };
 
-    purple-matrix = callPackage ./purple-matrix { };
-
     purple-mm-sms = callPackage ./purple-mm-sms { };
 
     purple-plugin-pack = callPackage ./purple-plugin-pack { };
@@ -74,5 +67,9 @@ lib.makeScope newScope (
     pidgin-opensteamworks = callPackage ./pidgin-opensteamworks { };
 
     purple-facebook = callPackage ./purple-facebook { };
+
+  }
+  // lib.optionalAttrs config.allowAliases {
+    purple-matrix = throw "'pidginPackages.purple-matrix' has been unmaintained since April 2022, so it was removed.";
   }
 )

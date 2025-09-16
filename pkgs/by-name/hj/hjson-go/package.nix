@@ -22,12 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to convert JSON to and from HJSON";
     homepage = "https://hjson.github.io/";
     changelog = "https://github.com/hjson/hjson-go/releases/tag/v${version}";
-    maintainers = with maintainers; [ ehmry ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "hjson-cli";
   };
 }

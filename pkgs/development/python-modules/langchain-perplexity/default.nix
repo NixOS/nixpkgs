@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -14,21 +13,24 @@
   # tests
   langchain-tests,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-perplexity";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-perplexity==${version}";
-    hash = "sha256-s20AnDsyLCzpG45QqgZp0WzlbdVrHNfpUQsMPUaF1qs=";
+    hash = "sha256-4KYLyhGbG8Y8cDGffE4/8OM61eAKRFTgxKDKMTQExic=";
   };
 
   sourceRoot = "${src.name}/libs/partners/perplexity";
@@ -49,24 +51,25 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_perplexity" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-perplexity==([0-9.]+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-perplexity==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/langchain-perplexity==${version}";
+    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/${src.tag}";
     description = "Build LangChain applications with Perplexity";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/perplexity";
     license = lib.licenses.mit;

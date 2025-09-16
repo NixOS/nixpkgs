@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pdbfixer";
-  version = "1.10";
+  version = "1.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "pdbfixer";
     tag = "v${version}";
-    hash = "sha256-7bg/i7nhbBw/DCc7Rabt5pwUUPF27Iiy2dMQnV6GTiM=";
+    hash = "sha256-Xk3m2w1p3Wu4g6qKGOH679wkKT0LKZLgGn/ARn219fQ=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,10 @@ buildPythonPackage rec {
     "test_mutate_multiple_copies_of_chain_A"
     "test_pdbid"
     "test_url"
+    "test_charge_and_solvate"
+    "test_download_template"
+    "test_nonstandard"
+    "test_leaving_atoms"
   ];
 
   pythonImportsCheck = [ "pdbfixer" ];

@@ -17,6 +17,7 @@ in
 lib.throwIf
   (
     lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23"
+    || lib.versionAtLeast ocaml.version "5.1" && !lib.versionAtLeast version "0.25"
     || lib.versionAtLeast ocaml.version "5.2" && !lib.versionAtLeast version "0.26.2"
     || lib.versionAtLeast ocaml.version "5.3" && !lib.versionAtLeast version "0.27"
   )
@@ -31,12 +32,13 @@ lib.throwIf
 
     nativeBuildInputs = if lib.versionAtLeast version "0.25.1" then [ ] else [ menhir ];
 
-    buildInputs =
-      [ re ]
-      ++ library_deps
-      ++ lib.optionals (lib.versionAtLeast version "0.25.1") [
-        (ocamlformat-lib.override { inherit version; })
-      ];
+    buildInputs = [
+      re
+    ]
+    ++ library_deps
+    ++ lib.optionals (lib.versionAtLeast version "0.25.1") [
+      (ocamlformat-lib.override { inherit version; })
+    ];
 
     meta = {
       homepage = "https://github.com/ocaml-ppx/ocamlformat";

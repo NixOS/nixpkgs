@@ -26,15 +26,15 @@ let
   isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "5.1.91";
+      version = "5.3.31";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-e1zBpH9F8TI4ET4FvkxJsoOYVKLWJBP2KaNNC2kpaVk=";
+      hash = "sha256-8QNFCIRSaF0y98P1mmx0u+Uf0/Zd7nYlFGXp9SkURTc=";
       stripRoot = false;
     };
 
-  version = "3.5.0";
+  version = "3.5.1";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -44,20 +44,19 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-+hQsjRwoJbBotxs2BKiy1oLi7YShTD5ott54RDMdgLs=";
+    hash = "sha256-gmu6MooINXJI1eWob6qwpzZVSXQ5rVTSaeISBVkms44=";
   };
 
   # Needs tox
   doCheck = false;
 
-  buildInputs =
-    [
-      qt6Packages.qtbase
-      glib-networking
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6Packages.qtwayland
-    ];
+  buildInputs = [
+    qt6Packages.qtbase
+    glib-networking
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6Packages.qtwayland
+  ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -70,7 +69,8 @@ python3.pkgs.buildPythonApplication {
     docbook_xsl
     libxml2
     libxslt
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   dependencies = with python3.pkgs; [
     colorama
@@ -97,15 +97,14 @@ python3.pkgs.buildPythonApplication {
 
   dontWrapQtApps = true;
 
-  postPatch =
-    ''
-      substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+  postPatch = ''
+    substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
-      sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
-    ''
-    + lib.optionalString withPdfReader ''
-      sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
-    '';
+    sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
+  ''
+  + lib.optionalString withPdfReader ''
+    sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -155,14 +154,14 @@ python3.pkgs.buildPythonApplication {
       )
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qutebrowser/qutebrowser";
     changelog = "https://github.com/qutebrowser/qutebrowser/blob/v${version}/doc/changelog.asciidoc";
     description = "Keyboard-focused browser with a minimal GUI";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jagajaga
       rnhmjoj
       ebzzry

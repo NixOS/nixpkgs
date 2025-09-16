@@ -19,7 +19,7 @@
   libuuid,
   curl,
   libhandy,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   gnome,
   adwaita-icon-theme,
   libxml2,
@@ -42,6 +42,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-notes/-/commit/994af76ce5144062d55d141129bf6bf5fab002ee.patch";
       hash = "sha256-z7dPOLZzaqvdqUIDy6+V3dKossRbG0EDjBu2oJCF6b4=";
+    })
+
+    # build: Depend on webkit2gtk-4.1
+    # https://gitlab.gnome.org/GNOME/gnome-notes/-/merge_requests/200
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-notes/-/commit/0791507873c96d0463cd0c83108415541f854edd.patch";
+      hash = "sha256-TwCi9sDudeiOjrH2VevAynxvy/WTmwB2HrWqhviPg8o=";
     })
   ];
 
@@ -71,7 +78,7 @@ stdenv.mkDerivation rec {
     libuuid
     curl
     libhandy
-    webkitgtk_4_0
+    webkitgtk_4_1
     tinysparql
     gnome-online-accounts
     gsettings-desktop-schemas

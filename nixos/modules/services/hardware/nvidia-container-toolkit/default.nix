@@ -39,7 +39,6 @@
       };
     in
     {
-
       hardware.nvidia-container-toolkit = {
         enable = lib.mkOption {
           default = false;
@@ -120,137 +119,200 @@
         };
 
         package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
-      };
 
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = ''
+            Extra arguments to be passed to nvidia-ctk.
+          '';
+        };
+      };
     };
 
-  config = lib.mkIf config.hardware.nvidia-container-toolkit.enable {
-    assertions = [
-      {
-        assertion =
-          config.hardware.nvidia.datacenter.enable
-          || lib.elem "nvidia" config.services.xserver.videoDrivers
-          || config.hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion;
-        message = ''`nvidia-container-toolkit` requires nvidia drivers: set `hardware.nvidia.datacenter.enable`, add "nvidia" to `services.xserver.videoDrivers`, or set `hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion` if the driver is provided by another NixOS module (e.g. from NixOS-WSL)'';
-      }
-      {
-        assertion =
-          ((builtins.length config.hardware.nvidia-container-toolkit.csv-files) > 0)
-          -> config.hardware.nvidia-container-toolkit.discovery-mode == "csv";
-        message = ''When CSV files are provided, `config.hardware.nvidia-container-toolkit.discovery-mode` has to be set to `csv`.'';
-      }
-    ];
+  config = lib.mkMerge [
+    (lib.mkIf config.virtualisation.docker.enableNvidia {
+      environment.etc."nvidia-container-runtime/config.toml".text = ''
+        disable-require = true
+        supported-driver-capabilities = "compat32,compute,display,graphics,ngx,utility,video"
+        [nvidia-container-cli]
+        environment = []
+        ldconfig = "@${lib.getExe' pkgs.glibc "ldconfig"}"
+        load-kmods = true
+        no-cgroups = false
+        path = "${lib.getExe' pkgs.libnvidia-container "nvidia-container-cli"}"
+        [nvidia-container-runtime]
+        mode = "auto"
+        runtimes = ["docker-runc", "runc", "crun"]
+        [nvidia-container-runtime-hook]
+        path = "${lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package}/bin/nvidia-container-runtime-hook"
+        skip-mode-detection = false
+        [nvidia-ctk]
+        path = "${lib.getExe' config.hardware.nvidia-container-toolkit.package "nvidia-ctk"}"
+      '';
 
-    virtualisation.docker = {
-      daemon.settings = lib.mkIf (lib.versionAtLeast config.virtualisation.docker.package.version "25") {
-        features.cdi = true;
-      };
-
-      rootless.daemon.settings =
-        lib.mkIf
-          (
-            config.virtualisation.docker.rootless.enable
-            && (lib.versionAtLeast config.virtualisation.docker.package.version "25")
-          )
-          {
-            features.cdi = true;
+      virtualisation.docker = {
+        daemon.settings = {
+          default-runtime = "nvidia";
+          runtimes.nvidia = {
+            path = "${lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package}/bin/nvidia-container-runtime";
+            args = [ ];
           };
-    };
+        };
 
-    hardware = {
-      graphics.enable = lib.mkIf (!config.hardware.nvidia.datacenter.enable) true;
-
-      nvidia-container-toolkit.mounts =
-        let
-          nvidia-driver = config.hardware.nvidia.package;
-        in
-        (lib.mkMerge [
-          [
-            {
-              hostPath = pkgs.addDriverRunpath.driverLink;
-              containerPath = pkgs.addDriverRunpath.driverLink;
-            }
-            {
-              hostPath = "${lib.getLib nvidia-driver}/etc";
-              containerPath = "${lib.getLib nvidia-driver}/etc";
-            }
-            {
-              hostPath = "${lib.getLib nvidia-driver}/share";
-              containerPath = "${lib.getLib nvidia-driver}/share";
-            }
-            {
-              hostPath = "${lib.getLib pkgs.glibc}/lib";
-              containerPath = "${lib.getLib pkgs.glibc}/lib";
-            }
-            {
-              hostPath = "${lib.getLib pkgs.glibc}/lib64";
-              containerPath = "${lib.getLib pkgs.glibc}/lib64";
-            }
-          ]
-          (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-executables [
-            {
-              hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-control";
-              containerPath = "/usr/bin/nvidia-cuda-mps-control";
-            }
-            {
-              hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-server";
-              containerPath = "/usr/bin/nvidia-cuda-mps-server";
-            }
-            {
-              hostPath = lib.getExe' nvidia-driver "nvidia-debugdump";
-              containerPath = "/usr/bin/nvidia-debugdump";
-            }
-            {
-              hostPath = lib.getExe' nvidia-driver "nvidia-powerd";
-              containerPath = "/usr/bin/nvidia-powerd";
-            }
-            {
-              hostPath = lib.getExe' nvidia-driver "nvidia-smi";
-              containerPath = "/usr/bin/nvidia-smi";
-            }
-          ])
-          # nvidia-docker 1.0 uses /usr/local/nvidia/lib{,64}
-          #   e.g.
-          #     - https://gitlab.com/nvidia/container-images/cuda/-/blob/e3ff10eab3a1424fe394899df0e0f8ca5a410f0f/dist/12.3.1/ubi9/base/Dockerfile#L44
-          #     - https://github.com/NVIDIA/nvidia-docker/blob/01d2c9436620d7dde4672e414698afe6da4a282f/src/nvidia/volumes.go#L104-L173
-          (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-docker-1-directories [
-            {
-              hostPath = "${lib.getLib nvidia-driver}/lib";
-              containerPath = "/usr/local/nvidia/lib";
-            }
-            {
-              hostPath = "${lib.getLib nvidia-driver}/lib";
-              containerPath = "/usr/local/nvidia/lib64";
-            }
-          ])
-        ]);
-    };
-
-    systemd.services.nvidia-container-toolkit-cdi-generator = {
-      description = "Container Device Interface (CDI) for Nvidia generator";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
-      serviceConfig = {
-        RuntimeDirectory = "cdi";
-        RemainAfterExit = true;
-        ExecStart =
-          let
-            script = pkgs.callPackage ./cdi-generate.nix {
-              inherit (config.hardware.nvidia-container-toolkit)
-                csv-files
-                device-name-strategy
-                discovery-mode
-                mounts
-                ;
-              nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
-              nvidia-driver = config.hardware.nvidia.package;
-            };
-          in
-          lib.getExe script;
-        Type = "oneshot";
+        extraPackages = [
+          (lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package)
+        ];
       };
-    };
+    })
+    (lib.mkIf config.hardware.nvidia-container-toolkit.enable {
+      assertions = [
+        {
+          assertion =
+            config.hardware.nvidia.datacenter.enable
+            || lib.elem "nvidia" config.services.xserver.videoDrivers
+            || config.hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion;
+          message = ''`nvidia-container-toolkit` requires nvidia drivers: set `hardware.nvidia.datacenter.enable`, add "nvidia" to `services.xserver.videoDrivers`, or set `hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion` if the driver is provided by another NixOS module (e.g. from NixOS-WSL)'';
+        }
+        {
+          assertion =
+            ((builtins.length config.hardware.nvidia-container-toolkit.csv-files) > 0)
+            -> config.hardware.nvidia-container-toolkit.discovery-mode == "csv";
+          message = ''When CSV files are provided, `config.hardware.nvidia-container-toolkit.discovery-mode` has to be set to `csv`.'';
+        }
+      ];
 
-  };
+      warnings = lib.mkMerge [
+        (lib.mkIf config.virtualisation.podman.enableNvidia [
+          "Setting virtualisation.podman.enableNvidia has no effect and will be removed soon."
+        ])
+      ];
+
+      virtualisation = {
+        containers.containersConf.settings = {
+          engine = {
+            cdi_spec_dirs = [
+              "/etc/cdi"
+              "/var/run/cdi"
+            ];
+          };
+        };
+        docker =
+          let
+            dockerVersion = config.virtualisation.docker.package.version;
+          in
+          {
+            daemon.settings = lib.mkIf (lib.versionAtLeast dockerVersion "25") {
+              features.cdi = true;
+            };
+
+            rootless = {
+              daemon.settings = lib.mkIf (lib.versionAtLeast dockerVersion "25") {
+                features.cdi = true;
+              };
+
+              extraPackages = [
+                (lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package)
+              ];
+            };
+          };
+      };
+
+      hardware = {
+        graphics.enable = lib.mkIf (!config.hardware.nvidia.datacenter.enable) true;
+
+        nvidia-container-toolkit.mounts =
+          let
+            nvidia-driver = config.hardware.nvidia.package;
+          in
+          (lib.mkMerge [
+            [
+              {
+                hostPath = pkgs.addDriverRunpath.driverLink;
+                containerPath = pkgs.addDriverRunpath.driverLink;
+              }
+              {
+                hostPath = "${lib.getLib nvidia-driver}/etc";
+                containerPath = "${lib.getLib nvidia-driver}/etc";
+              }
+              {
+                hostPath = "${lib.getLib nvidia-driver}/share";
+                containerPath = "${lib.getLib nvidia-driver}/share";
+              }
+              {
+                hostPath = "${lib.getLib pkgs.glibc}/lib";
+                containerPath = "${lib.getLib pkgs.glibc}/lib";
+              }
+              {
+                hostPath = "${lib.getLib pkgs.glibc}/lib64";
+                containerPath = "${lib.getLib pkgs.glibc}/lib64";
+              }
+            ]
+            (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-executables [
+              {
+                hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-control";
+                containerPath = "/usr/bin/nvidia-cuda-mps-control";
+              }
+              {
+                hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-server";
+                containerPath = "/usr/bin/nvidia-cuda-mps-server";
+              }
+              {
+                hostPath = lib.getExe' nvidia-driver "nvidia-debugdump";
+                containerPath = "/usr/bin/nvidia-debugdump";
+              }
+              {
+                hostPath = lib.getExe' nvidia-driver "nvidia-powerd";
+                containerPath = "/usr/bin/nvidia-powerd";
+              }
+              {
+                hostPath = lib.getExe' nvidia-driver "nvidia-smi";
+                containerPath = "/usr/bin/nvidia-smi";
+              }
+            ])
+            # nvidia-docker 1.0 uses /usr/local/nvidia/lib{,64}
+            #   e.g.
+            #     - https://gitlab.com/nvidia/container-images/cuda/-/blob/e3ff10eab3a1424fe394899df0e0f8ca5a410f0f/dist/12.3.1/ubi9/base/Dockerfile#L44
+            #     - https://github.com/NVIDIA/nvidia-docker/blob/01d2c9436620d7dde4672e414698afe6da4a282f/src/nvidia/volumes.go#L104-L173
+            (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-docker-1-directories [
+              {
+                hostPath = "${lib.getLib nvidia-driver}/lib";
+                containerPath = "/usr/local/nvidia/lib";
+              }
+              {
+                hostPath = "${lib.getLib nvidia-driver}/lib";
+                containerPath = "/usr/local/nvidia/lib64";
+              }
+            ])
+          ]);
+      };
+
+      systemd.services.nvidia-container-toolkit-cdi-generator = {
+        description = "Container Device Interface (CDI) for Nvidia generator";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "systemd-udev-settle.service" ];
+        serviceConfig = {
+          RuntimeDirectory = "cdi";
+          RemainAfterExit = true;
+          ExecStart =
+            let
+              script = pkgs.callPackage ./cdi-generate.nix {
+                inherit (config.hardware.nvidia-container-toolkit)
+                  csv-files
+                  device-name-strategy
+                  discovery-mode
+                  mounts
+                  extraArgs
+                  ;
+                nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
+                nvidia-driver = config.hardware.nvidia.package;
+              };
+            in
+            lib.getExe script;
+          Type = "oneshot";
+        };
+      };
+    })
+  ];
 
 }

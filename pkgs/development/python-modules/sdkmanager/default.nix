@@ -29,13 +29,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      argcomplete
-      requests
-    ]
-    ++ requests.optional-dependencies.socks
-    ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
+  dependencies = [
+    argcomplete
+    requests
+  ]
+  ++ requests.optional-dependencies.socks
+  ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
 
   postInstall = ''
     wrapProgram $out/bin/sdkmanager \

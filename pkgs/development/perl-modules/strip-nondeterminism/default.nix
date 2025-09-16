@@ -45,15 +45,14 @@ buildPerlPackage rec {
     patchShebangs ./bin
   '';
 
-  postInstall =
-    ''
-      # we don’t need the debhelper script
-      rm $out/bin/dh_strip_nondeterminism
-      rm $out/share/man/man1/dh_strip_nondeterminism.1
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/strip-nondeterminism
-    '';
+  postInstall = ''
+    # we don’t need the debhelper script
+    rm $out/bin/dh_strip_nondeterminism
+    rm $out/share/man/man1/dh_strip_nondeterminism.1
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/strip-nondeterminism
+  '';
 
   installCheckPhase = ''
     runHook preInstallCheck

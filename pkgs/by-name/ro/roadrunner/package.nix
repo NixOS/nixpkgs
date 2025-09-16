@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "roadrunner";
-  version = "2025.1.1";
+  version = "2025.1.3";
 
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
     tag = "v${version}";
-    hash = "sha256-HNljEsrHTbNA5/+tnquh4yO5plAj1kKTAY3P927nAEU=";
+    hash = "sha256-+TA0ClPrmfksMchc4WgX2nMZetDuw8Q0xtbiHm2OMa4=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  vendorHash = "sha256-dnbctKxwQqfxZfKPa3ZlKjF5a/7eC5arK9RrPksSNVg=";
+  vendorHash = "sha256-/u2so1/WXuQvLZhfRSYdG1QZasrA6xoZTE6lYXg9RWs=";
 
   meta = {
     changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";
@@ -56,6 +56,6 @@ buildGoModule rec {
     homepage = "https://roadrunner.dev";
     license = lib.licenses.mit;
     mainProgram = "rr";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

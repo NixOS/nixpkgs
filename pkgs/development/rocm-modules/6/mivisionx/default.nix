@@ -55,17 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-set-__STDC_CONSTANT_MACROS-to-make-rocAL-compile.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      rocm-cmake
-      clr
-      pkg-config
-    ]
-    ++ lib.optionals buildDocs [
-      rocm-docs-core
-      python3Packages.python
-    ];
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
+    clr
+    pkg-config
+  ]
+  ++ lib.optionals buildDocs [
+    rocm-docs-core
+    python3Packages.python
+  ];
 
   buildInputs = [
     miopen
@@ -87,33 +86,32 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.torchWithRocm
   ];
 
-  cmakeFlags =
-    [
-      "-DROCM_PATH=${clr}"
-      "-DAMDRPP_PATH=${rpp}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_PREFIX_PYTHON=lib"
-      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
-      # "-DAMD_FP16_SUPPORT=ON" `error: typedef redefinition with different types ('__half' vs 'half_float::half')`
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals (!useOpenCL && !useCPU) [
-      "-DBACKEND=HIP"
-    ]
-    ++ lib.optionals (useOpenCL && !useCPU) [
-      "-DBACKEND=OCL"
-    ]
-    ++ lib.optionals useCPU [
-      "-DBACKEND=CPU"
-    ];
+  cmakeFlags = [
+    "-DROCM_PATH=${clr}"
+    "-DAMDRPP_PATH=${rpp}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_PREFIX_PYTHON=lib"
+    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
+    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
+    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
+    # "-DAMD_FP16_SUPPORT=ON" `error: typedef redefinition with different types ('__half' vs 'half_float::half')`
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals (!useOpenCL && !useCPU) [
+    "-DBACKEND=HIP"
+  ]
+  ++ lib.optionals (useOpenCL && !useCPU) [
+    "-DBACKEND=OCL"
+  ]
+  ++ lib.optionals useCPU [
+    "-DBACKEND=CPU"
+  ];
 
   postPatch = ''
     # We need to not use hipcc and define the CXXFLAGS manually due to `undefined hidden symbol: tensorflow:: ...`

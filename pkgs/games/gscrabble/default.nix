@@ -14,6 +14,7 @@
 buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2020-04-21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RaaH";

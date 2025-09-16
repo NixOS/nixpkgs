@@ -25,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "man"
-  ] ++ lib.optionals withPDFDoc [ "doc" ];
+  ]
+  ++ lib.optionals withPDFDoc [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config

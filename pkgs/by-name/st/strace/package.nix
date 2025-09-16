@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.15";
+  version = "6.16";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-hVLfqwirwioPIEjJj9lUH9TXG2iCUHlSeA2rfHxRL1E=";
+    hash = "sha256-PXrufk8ESy9n89UainbtoYB26fsndN5UrDUdd31Ov/o=";
   };
 
   separateDebugInfo = true;
@@ -33,14 +33,16 @@ stdenv.mkDerivation rec {
   # libunwind for -k.
   # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
   # The build will silently fall back and -k will not work on RISC-V.
-  buildInputs =
-    [ libunwind ]
-    # -kk
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
+  buildInputs = [
+    libunwind
+  ]
+  # -kk
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   configureFlags = [
     "--enable-mpers=check"
-  ] ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
+  ]
+  ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

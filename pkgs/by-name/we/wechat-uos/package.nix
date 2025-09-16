@@ -210,6 +210,12 @@ buildFHSEnv {
 
     substituteInPlace $out/share/applications/com.tencent.wechat.desktop \
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
+
+    # See https://github.com/NixOS/nixpkgs/issues/413491
+    sed -i \
+      -e '/\[Desktop Entry\]/a\' \
+      -e 'StartupWMClass=wechat' \
+      $out/share/applications/com.tencent.wechat.desktop
   '';
   targetPkgs = pkgs: [ wechat-uos-env ];
 

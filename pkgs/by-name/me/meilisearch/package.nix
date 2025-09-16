@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
-  version ? "1.14.0",
+  version ? "1.20.0",
 }:
 
 let
@@ -15,11 +15,11 @@ let
   # the meilisearch module accordingly and to remove the meilisearch_1_11
   # attribute from all-packages.nix at that point too.
   hashes = {
-    "1.14.0" = "sha256-nPOhiJJbZCr9PBlR6bsZ9trSn/2XCI2O+nXeYbZEQpU=";
+    "1.20.0" = "sha256-Ap/5iOyC9yn0zwZTyUeljmuTCEIcq7pniPEns6fqwYg=";
     "1.11.3" = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
   };
   cargoHashes = {
-    "1.14.0" = "sha256-8fcOXAzheG9xm1v7uD3T+6oc/dD4cjtu3zzBBh2EkcE=";
+    "1.20.0" = "sha256-tQyWpN8lzgLfvXMqz/AExBTp2EoOQVD4hfcJeooUjLQ=";
     "1.11.3" = "sha256-cEJTokDJQuc9Le5+3ObMDNJmEhWEb+Qh0TV9xZkD9D8=";
   };
 in
@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  useFetchCargoVendor = true;
   cargoHash = cargoHashes.${version};
 
   # Default features include mini dashboard which downloads something from the internet.

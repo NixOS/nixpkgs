@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiomisc-pytest";
-  version = "1.2.1";
+  version = "1.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aiomisc_pytest";
     inherit version;
-    hash = "sha256-4mWP77R3CoX+XhoT6BbxQtxpINpdmeozjYUsegNfMyU=";
+    hash = "sha256-9Of1pSUcMiIhkz7OW5erF4oDlf/ABkaamDBPg7+WbBE=";
   };
 
   build-system = [ poetry-core ];

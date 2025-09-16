@@ -2,16 +2,16 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  llama-index-core,
-  qdrant-client,
-  poetry-core,
   grpcio,
+  hatchling,
+  llama-index-core,
   pythonOlder,
+  qdrant-client,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-qdrant";
-  version = "0.6.0";
+  version = "0.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,10 +19,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_qdrant";
     inherit version;
-    hash = "sha256-8vBnEOX6Ob4cXxQofmuxJBZumxdFug88JhGt1UnuAGs=";
+    hash = "sha256-elou2rxBKMJq3XVV42C7bgXn7szz2JmEfSs6SJonOaU=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     grpcio

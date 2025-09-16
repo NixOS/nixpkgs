@@ -1,0 +1,20 @@
+diff --git i/packages/opencode/src/provider/models-macro.ts w/packages/opencode/src/provider/models-macro.ts
+index 91a0348..4f60069 100644
+--- i/packages/opencode/src/provider/models-macro.ts
++++ w/packages/opencode/src/provider/models-macro.ts
+@@ -1,4 +1,15 @@
+ export async function data() {
++  const localApiJsonPath = process.env.MODELS_DEV_API_JSON
++  
++  // Try to read from local file if path is provided
++  if (localApiJsonPath) {
++    const localFile = Bun.file(localApiJsonPath)
++    if (await localFile.exists()) {
++      return await localFile.text()
++    }
++  }
++  
++  // Fallback to fetching from remote URL
+   const json = await fetch("https://models.dev/api.json").then((x) => x.text())
+   return json
+ }

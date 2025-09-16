@@ -4,6 +4,7 @@
   fetchPypi,
   numpy,
   scipy,
+  setuptools,
   protobuf,
   onnx,
   scikit-learn,
@@ -15,13 +16,15 @@
 
 buildPythonPackage rec {
   pname = "skl2onnx";
-  version = "1.18.0";
-  format = "setuptools";
+  version = "1.19.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OepK4wxcGCNVoYJEZwExWCFERODOCxjzMzi9gn1PsA8=";
+    hash = "sha256-DBBfKjuHpiTdIY0fuY/dGc8b9iFxkNJc5+FUhBJ9Dl0=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy

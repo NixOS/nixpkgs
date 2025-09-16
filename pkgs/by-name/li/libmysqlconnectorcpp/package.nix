@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmysqlconnectorcpp";
-  version = "9.3.0";
+  version = "9.4.0";
 
   src = fetchurl {
     url = "mirror://mysql/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
-    hash = "sha256-Jopvf0pstZ9T3eWWI74VWfkTop7B3oG/D/zL94DRtBY=";
+    hash = "sha256-NqfJPUoQ0doqLmY2dVnZF0GqDwNivArpQxcc8XcfZhU=";
   };
 
   nativeBuildInputs = [

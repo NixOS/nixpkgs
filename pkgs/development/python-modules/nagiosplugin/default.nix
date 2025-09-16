@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "nagiosplugin";
-  version = "1.3.3";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vOr67DWfAyOT3dVgrizI0WNhODPsY8k85xifhZBOU9Y=";
+    hash = "sha256-IxabBKI8StRBnvm3Zm1AH0jfMkez38P4dL4sFP0ttAE=";
   };
 
   nativeBuildInputs = [ twine ];

@@ -19,6 +19,11 @@ postgresqlBuildExtension rec {
   buildInputs = postgresql.buildInputs;
 
   meta = {
+    # PostgreSQL 18 support issue upstream: https://github.com/aws/pg_tle/issues/302
+    # Check after next package update.
+    broken = lib.warnIf (version != "1.5.1") "Is postgresql18Packages.pg_tle still broken?" (
+      lib.versionAtLeast postgresql.version "18"
+    );
     description = "Framework for building trusted language extensions for PostgreSQL";
     homepage = "https://github.com/aws/pg_tle";
     changelog = "https://github.com/aws/pg_tle/releases/tag/v${version}";

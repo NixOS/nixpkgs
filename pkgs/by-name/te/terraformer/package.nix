@@ -24,6 +24,6 @@ buildGoModule rec {
     mainProgram = "terraformer";
     homepage = "https://github.com/GoogleCloudPlatform/terraformer";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ryan4yin ];
   };
 }

@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   stdenv,
   testers,
   updateAutotoolsGnuConfigScriptsHook,
@@ -20,9 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./upstream-darwin-clock-nanosleep-fix.patch
     ./upstream-lockwait-test-fixes.patch
     ./upstream-musl-ssize_t-fix.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    ./freebsd-patch-src-lock-c.patch
   ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
 

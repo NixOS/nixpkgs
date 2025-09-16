@@ -4,18 +4,18 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  mbedtls_2,
+  mbedtls,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib60870";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "lib60870";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TjphTBBGjzbevUR0N1GHK/nic1pAdjWeiqxEMLozQOc=";
+    hash = "sha256-9VqLl1pDmi8TauBA8uCyymzsYd3w4b5AKtqH7XW80N4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib60870-C";
@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ mbedtls_2 ];
+  buildInputs = [ mbedtls ];
 
-  cmakeFlags = [ (lib.cmakeBool "WITH_MBEDTLS" true) ];
+  cmakeFlags = [ (lib.cmakeBool "WITH_MBEDTLS3" true) ];
 
   env.NIX_LDFLAGS = "-lmbedcrypto -lmbedx509 -lmbedtls";
 

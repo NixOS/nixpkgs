@@ -72,7 +72,7 @@ in
         '';
         description = ''
           Extra configuration to be appended to the 0bin config file
-          (see https://0bin.readthedocs.org/en/latest/en/options.html)
+          (see <https://0bin.readthedocs.org/en/latest/en/options.html>)
         '';
       };
     };

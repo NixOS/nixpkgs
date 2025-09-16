@@ -26,26 +26,24 @@ rustPlatform.buildRustPackage rec {
     which # used by Documentation/Makefile
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QBZItmKH9b2KwHR88MotyIT2krZl5QQFLvUmPmbxl4U=";
 
   nativeCheckInputs = [
     gitMinimal
   ];
 
-  postInstall =
-    ''
-      cd Documentation/
-      make
-      installManPage git-absorb.1
-      cd -
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd git-absorb \
-        --bash <($out/bin/git-absorb --gen-completions bash) \
-        --fish <($out/bin/git-absorb --gen-completions fish) \
-        --zsh <($out/bin/git-absorb --gen-completions zsh)
-    '';
+  postInstall = ''
+    cd Documentation/
+    make
+    installManPage git-absorb.1
+    cd -
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd git-absorb \
+      --bash <($out/bin/git-absorb --gen-completions bash) \
+      --fish <($out/bin/git-absorb --gen-completions fish) \
+      --zsh <($out/bin/git-absorb --gen-completions zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tummychow/git-absorb";

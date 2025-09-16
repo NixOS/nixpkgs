@@ -12,6 +12,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "opcua-client-gui";
   version = "0.8.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
@@ -23,7 +24,8 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     wrapQtAppsHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   makeWrapperArgs = [
     "\${qtWrapperArgs[@]}"

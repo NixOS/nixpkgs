@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-cinnabar";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     tag = finalAttrs.version;
-    hash = "sha256-phQ7wfSgctfbjFtg1HVNtoVlnC0yIEJy65Mu/hLPjnw=";
+    hash = "sha256-qE9LvOX2n+ylQry79CsmRCUzUEgwYZne3tbNDCoynzk=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-Vhe9sMUTs16+lQ8hpt8E4Vmu6n4kkyzir1IM9etYBno=";
+    hash = "sha256-IVizzc2dKZ83dz3KBMDDiaFNdnS40cS++k8AywyvakQ=";
   };
 
   ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "git remote helper to interact with mercurial repositories";
+    description = "Git remote helper to interact with mercurial repositories";
     homepage = "https://github.com/glandium/git-cinnabar";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ qyliss ];

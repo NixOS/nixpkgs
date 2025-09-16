@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_36,
+  electron_37,
   python3,
   makeWrapper,
   callPackage,
@@ -23,7 +23,7 @@
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_36;
+  electron = electron_37;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.56.0";
+  version = "7.70.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-BrgBlDEgb08oX7Mh/P4nuoM+dkSDpB45zOtDNMYeZr0=";
+    hash = "sha256-y9i9YQPsLt3SLqROyEZsyIkVy/os3hy+1UMUSFMZJTY=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -68,6 +68,7 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
+      fetcherVersion = 1;
       hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
     };
 
@@ -111,6 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
+  postPatch = ''
+    # The spell checker dictionary URL interpolates the electron version,
+    # however, the official website only provides dictionaries for electron
+    # versions which they vendor into the binary releases. Since we unpin
+    # electron to use the one from nixpkgs the URL may point to nonexistent
+    # resource if the nixpkgs version is different. To fix this we hardcode
+    # the electron version to the declared one here instead of interpolating
+    # it at runtime.
+    substituteInPlace app/updateDefaultSession.ts \
+      --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+  '';
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
@@ -118,17 +131,18 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-RP3d1t4bbvehdCDSL3bHrlJEnn65TDViI5jVjSiuJw8="
+        "sha256-uVVUHvYhBCplKPyuS2+PKCxox8uWU2E/2EXLCG1ot54="
       else
-        "sha256-KJvc+kVcwRKsUVW3lK7fPXUSqDQlJFPbYAzQjhFtfoU=";
+        "sha256-tbfk/tIgqpjDtDiULbTVUOJf5i9eLX9xY7vUPrrjmu0=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1748456277;
+    SOURCE_DATE_EPOCH = 1757542492;
   };
 
   preBuild = ''
@@ -185,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm run generate
     pnpm exec electron-builder \
-      --dir \
+      --linux "dir:${stdenv.hostPlatform.node.arch}" \
       --config.extraMetadata.environment=$SIGNAL_ENV \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}

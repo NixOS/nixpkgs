@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
     tag = version;
-    hash = "sha256-R9ZRrJaBp1joT3DtymvS+Ac0MzEUFYFovgxMW0njsT0=";
+    hash = "sha256-yPePxdKrg41kycXl1fDKf1jWx0YD+K26w8z2LmQV0g0=";
   };
 
   build-system = [ hatchling ];
@@ -92,22 +92,21 @@ buildPythonPackage rec {
     "test_api"
   ];
 
-  disabledTestPaths =
-    [
-      # odmantic is not packaged
-      "tests/odmantic"
-      # beanie is not packaged
-      "tests/beanie"
-      # needs mongodb running on port 27017
-      "tests/mongoengine"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # very flaky, sandbox issues?
-      # libcloud.storage.types.ContainerDoesNotExistError
-      # sqlite3.OperationalError: attempt to write a readonly database
-      "tests/sqla/test_sync_engine.py"
-      "tests/sqla/test_async_engine.py"
-    ];
+  disabledTestPaths = [
+    # odmantic is not packaged
+    "tests/odmantic"
+    # beanie is not packaged
+    "tests/beanie"
+    # needs mongodb running on port 27017
+    "tests/mongoengine"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # very flaky, sandbox issues?
+    # libcloud.storage.types.ContainerDoesNotExistError
+    # sqlite3.OperationalError: attempt to write a readonly database
+    "tests/sqla/test_sync_engine.py"
+    "tests/sqla/test_async_engine.py"
+  ];
 
   pythonImportsCheck = [
     "starlette_admin"
@@ -122,7 +121,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
-    changelog = "https://github.com/jowilf/starlette-admin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://jowilf.github.io/starlette-admin/changelog/";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };

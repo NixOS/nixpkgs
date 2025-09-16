@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "6.3";
+  version = "7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "regebro";
     repo = "svg.path";
     tag = version;
-    hash = "sha256-qes6cKw/Ok0WgcPO/NPuREVNUbnlhm82jF90dK7Ay8U=";
+    hash = "sha256-x1u56O3HilA7Zmkrsot6Nh9E1e88qHwYnk1ySs08tbQ=";
   };
 
   build-system = [ setuptools ];

@@ -15,27 +15,33 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oxzFAqPZ+ZHd/+GwofDg0gA4NIFYWi2v8fOjMn8ixSU=";
+    hash = "sha256-Qjl+I09tnBbGc771SVJVb6fzAZ2tVOnBNhGfrIUh824=";
   };
 
-  cargoHash = "sha256-9kk7w85imYIhywBuAgJS8wYAIEM3hXoHymGgMMmrgnI=";
+  cargoHash = "sha256-Ya0glVECB3cb9kgguuH4nY0ClK5NPH1mKAX9INDLzx4=";
 
   nativeBuildInputs = [
-    git
     pkg-config
     erlang_27
+  ];
+
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    # used by several tests
+    git
+
+    # js runtimes used for integration tests
     nodejs
     bun
     deno
   ];
-
-  buildInputs = [ openssl ];
 
   checkFlags = [
     # Makes a network request

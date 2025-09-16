@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pymorphy2-dicts-ru";
   version = "2.4.417127.4579844";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

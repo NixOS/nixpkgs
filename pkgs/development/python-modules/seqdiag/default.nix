@@ -29,7 +29,7 @@ buildPythonPackage rec {
   patches = [ ./fix_test_generate.patch ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "src/seqdiag/tests/" ];
+  enabledTestPaths = [ "src/seqdiag/tests/" ];
 
   pythonImportsCheck = [ "seqdiag" ];
 

@@ -1,4 +1,5 @@
 {
+  "dispatched_ports": "31000-32767",
   "attributes": [
     "core"
   ],

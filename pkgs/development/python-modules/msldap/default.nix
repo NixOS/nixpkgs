@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.5.14";
+  version = "0.5.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZvPLaO/gALIhqIzsP687ERmkkRsQGDiDmhFszRX7YlQ=";
+    hash = "sha256-uAJKLAVZFY7EB8tjFyAezINicki6ruzuXf1EGcp3Pj0=";
   };
 
   build-system = [ setuptools ];

@@ -21,49 +21,48 @@ let
     };
 
     configurePlatforms = [ ];
-    configureFlags =
-      [
-        "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-        # TODO be better with condition
-        "--cpu=arm1176jzf-s"
-      ]
-      ++ [
-        "--disable-muxers"
-        "--enable-muxer=spdif"
-        "--enable-muxer=adts"
-        "--disable-encoders"
-        "--enable-encoder=ac3"
-        "--enable-encoder=aac"
-        "--disable-decoder=mpeg_xvmc"
-        "--disable-devices"
-        "--disable-ffprobe"
-        "--disable-ffplay"
-        "--disable-ffserver"
-        "--disable-ffmpeg"
-        "--enable-shared"
-        "--disable-doc"
-        "--enable-postproc"
-        "--enable-gpl"
-        "--enable-protocol=http"
-        "--enable-pthreads"
-        "--disable-runtime-cpudetect"
-        "--enable-pic"
-        "--disable-armv5te"
-        "--disable-neon"
-        "--enable-armv6t2"
-        "--enable-armv6"
-        "--enable-hardcoded-tables"
-        "--disable-runtime-cpudetect"
-        "--disable-debug"
-        "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-        "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "--cross-prefix=${stdenv.cc.targetPrefix}"
-        "--enable-cross-compile"
-      ];
+    configureFlags = [
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+      # TODO be better with condition
+      "--cpu=arm1176jzf-s"
+    ]
+    ++ [
+      "--disable-muxers"
+      "--enable-muxer=spdif"
+      "--enable-muxer=adts"
+      "--disable-encoders"
+      "--enable-encoder=ac3"
+      "--enable-encoder=aac"
+      "--disable-decoder=mpeg_xvmc"
+      "--disable-devices"
+      "--disable-ffprobe"
+      "--disable-ffplay"
+      "--disable-ffserver"
+      "--disable-ffmpeg"
+      "--enable-shared"
+      "--disable-doc"
+      "--enable-postproc"
+      "--enable-gpl"
+      "--enable-protocol=http"
+      "--enable-pthreads"
+      "--disable-runtime-cpudetect"
+      "--enable-pic"
+      "--disable-armv5te"
+      "--disable-neon"
+      "--enable-armv6t2"
+      "--enable-armv6"
+      "--enable-hardcoded-tables"
+      "--disable-runtime-cpudetect"
+      "--disable-debug"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
+      "--enable-cross-compile"
+    ];
 
     enableParallelBuilding = true;
 
@@ -75,7 +74,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "omxplayer";
-  version = "unstable-2013-03-28";
+  version = "0-unstable-2013-03-28";
 
   src = fetchFromGitHub {
     owner = "huceke";

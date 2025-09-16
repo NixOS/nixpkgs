@@ -19,5 +19,10 @@ buildDunePackage {
 
   meta = landmarks.meta // {
     description = "Preprocessor instrumenting code using the landmarks library";
+    longDescription = ''
+      Automatically or semi-automatically instrument your code using
+      landmarks library.
+    '';
+    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

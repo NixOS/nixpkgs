@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.40";
+  version = "1.4.41";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AfZ9tWoaZTRs7GZOdli74e7/X/OMgbvfez9BipoZ/ng=";
+    hash = "sha256-0KUwZ81CyuLa05Cwe7wJrTbM1Dp9mAzNBI5pR7FKTOU=";
   };
 
   nativeBuildInputs = [
@@ -65,69 +65,68 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
-  buildInputs =
-    [
-      curl
-      gsettings-desktop-schemas
-      glib
-      gtk3
-      gettext
-      libxkbfile
-      libX11
-      freerdp
-      libssh
-      libgcrypt
-      gnutls
-      pcre2
-      libvncserver
-      libpthreadstubs
-      libXdmcp
-      libxkbcommon
-      libsoup_3
-      spice-protocol
-      spice-gtk
-      libepoxy
-      at-spi2-core
-      openssl
-      adwaita-icon-theme
-      json-glib
-      libsodium
-      harfbuzz
-      python3
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fuse3
-      libappindicator-gtk3
-      libdbusmenu-gtk3
-    ]
-    ++ lib.optionals withLibsecret [ libsecret ]
-    ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
-    ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
-    ++ lib.optionals withVte [ vte ];
+  buildInputs = [
+    curl
+    gsettings-desktop-schemas
+    glib
+    gtk3
+    gettext
+    libxkbfile
+    libX11
+    freerdp
+    libssh
+    libgcrypt
+    gnutls
+    pcre2
+    libvncserver
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    libsoup_3
+    spice-protocol
+    spice-gtk
+    libepoxy
+    at-spi2-core
+    openssl
+    adwaita-icon-theme
+    json-glib
+    libsodium
+    harfbuzz
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fuse3
+    libappindicator-gtk3
+    libdbusmenu-gtk3
+    wayland
+  ]
+  ++ lib.optionals withLibsecret [ libsecret ]
+  ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
+  ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
+  ++ lib.optionals withVte [ vte ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
-  cmakeFlags =
-    [
-      "-DWITH_FREERDP3=ON"
-      "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
-      "-DWITH_TELEPATHY=OFF"
-      "-DWITH_AVAHI=OFF"
-      "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
-      "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
-      "-DWITH_WEBKIT2GTK=${if withWebkitGtk then "ON" else "OFF"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DHAVE_LIBAPPINDICATOR=OFF"
-      "-DWITH_CUPS=OFF"
-      "-DWITH_ICON_CACHE=OFF"
-      # Don't use system installed Python like on GitHub Actions runners
-      "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
-      "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
-    ];
+  cmakeFlags = [
+    "-DWITH_FREERDP3=ON"
+    "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
+    "-DWITH_TELEPATHY=OFF"
+    "-DWITH_AVAHI=OFF"
+    "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
+    "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
+    "-DWITH_WEBKIT2GTK=${if withWebkitGtk then "ON" else "OFF"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DHAVE_LIBAPPINDICATOR=OFF"
+    "-DWITH_CUPS=OFF"
+    "-DWITH_ICON_CACHE=OFF"
+    # Don't use system installed Python like on GitHub Actions runners
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+    "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ];
 
   dontWrapQtApps = true;
 

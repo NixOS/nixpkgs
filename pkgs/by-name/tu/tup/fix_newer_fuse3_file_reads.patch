@@ -1,0 +1,13 @@
+diff --git a/src/tup/server/fuse_fs.c b/src/tup/server/fuse_fs.c
+index cd121630..5adf6f5f 100644
+--- a/src/tup/server/fuse_fs.c
++++ b/src/tup/server/fuse_fs.c
+@@ -1480,7 +1480,7 @@ static void *tup_fs_init(struct fuse_conn_info *conn, struct fuse_config *cfg)
+ static void *tup_fs_init(struct fuse_conn_info *conn)
+ #endif
+ {
+-	(void) conn;
++	conn->want = conn->want & ~FUSE_CAP_READDIRPLUS;
+ #ifdef FUSE3
+ 	(void) cfg;
+ #endif

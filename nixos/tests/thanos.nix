@@ -1,3 +1,5 @@
+{ ... }:
+
 let
   grpcPort = 19090;
   queryPort = 9090;
@@ -30,10 +32,9 @@ let
       };
     };
   };
-
 in
-import ./make-test-python.nix {
-  name = "prometheus";
+{
+  name = "thanos";
 
   nodes = {
     prometheus =
@@ -41,7 +42,10 @@ import ./make-test-python.nix {
       {
         virtualisation.diskSize = 2 * 1024;
         virtualisation.memorySize = 2048;
-        environment.systemPackages = [ pkgs.jq ];
+        environment.systemPackages = [
+          pkgs.grpc-health-probe
+          pkgs.jq
+        ];
         networking.firewall.allowedTCPPorts = [ grpcPort ];
         services.prometheus = {
           enable = true;
@@ -177,6 +181,7 @@ import ./make-test-python.nix {
         virtualisation.diskSize = 2 * 1024;
         virtualisation.memorySize = 2048;
         environment.systemPackages = with pkgs; [
+          grpc-health-probe
           jq
           thanos
         ];
@@ -249,6 +254,13 @@ import ./make-test-python.nix {
 
       prometheus.wait_for_open_port(${toString queryPort})
       prometheus.succeed("curl -sf http://127.0.0.1:${toString queryPort}/metrics")
+
+      prometheus.wait_until_succeeds("journalctl -o cat -u thanos-sidecar.service | grep 'listening for serving gRPC'")
+
+      store.wait_until_succeeds("journalctl -o cat -u thanos-store.service | grep 'listening for serving gRPC'")
+
+      for machine in prometheus, store:
+        machine.wait_until_succeeds("grpc-health-probe -addr 127.0.0.1:${toString grpcPort}")
 
       # Let's test if pushing a metric to the pushgateway succeeds:
       prometheus.wait_for_unit("pushgateway.service")

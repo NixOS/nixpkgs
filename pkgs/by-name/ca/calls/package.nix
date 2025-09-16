@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calls";
-  version = "48.1";
+  version = "48.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "calls";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-JK+bG/5p+c37aP7ZTGiPDh8tBHgWsuFkD7AsyZXePaw=";
+    hash = "sha256-S1YWFkwK1tcIUOfyOxlEFtKcLlRDiSKf4iUGnb+VlG8=";
   };
 
   outputs = [
@@ -52,23 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      desktop-file-utils
-      appstream-glib
-      vala
-      wrapGAppsHook4
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      docutils
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    appstream-glib
+    vala
+    wrapGAppsHook4
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    docutils
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     modemmanager

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   passthru.tests = llm.mkPluginTest llm-llama-server;
 
   meta = {
-    description = "LLM plugin providing access to Mistral models using the Mistral API";
+    description = "LLM plugin for interacting with llama-server models";
     homepage = "https://github.com/simonw/llm-llama-server";
     changelog = "https://github.com/simonw/llm-llama-server/releases/tag/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;

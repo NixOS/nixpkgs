@@ -10,7 +10,7 @@
 rustPlatform.buildRustPackage {
   pname = "journaldriver";
   version = "5656.0.0";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-ycnmLHKWRwKbdY1LZJ+BSwGfXfYJCWbbbFcqfBj3y/Y=";
 
   src = fetchgit {

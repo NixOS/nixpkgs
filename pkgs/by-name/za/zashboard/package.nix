@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zashboard";
-  version = "1.93.0";
+  version = "1.103.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0YlFDmn5XAQiGxGpFJtVgtFdPbxApVlsqRLwIun0YtI=";
+    hash = "sha256-7XO4VjAwa6yjW5gxUOEXhkNYH24iP5iVnYtP+CKyfaU=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-LYHBWNMTZQU1sXwwpAmBaypLDR3w/T9i9WdOoI+TcEo=";
+    fetcherVersion = 1;
+    hash = "sha256-coLpiOzG+vVwkyJAd+Q5S847ZE1rTbrT4AO0L1Ds0Iw=";
   };
 
   buildPhase = ''
@@ -52,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Zephyruso/zashboard/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

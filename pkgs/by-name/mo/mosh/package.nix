@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     openssl
     bash-completion
     perl
-  ] ++ lib.optional withUtempter libutempter;
+  ]
+  ++ lib.optional withUtempter libutempter;
 
   strictDeps = true;
 

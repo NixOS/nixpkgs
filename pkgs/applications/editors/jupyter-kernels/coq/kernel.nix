@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "coq-jupyter";
   version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "EugeneLoy";

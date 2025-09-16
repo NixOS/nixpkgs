@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
     ignoredVersions = "beta";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vi-like file manager${lib.optionalString isFullPackage "; Includes support for optional features"}";
     mainProgram = "vifm";
-    maintainers = with maintainers; [ raskin ];
-    platforms = if mediaSupport then platforms.linux else platforms.unix;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = if mediaSupport then lib.platforms.linux else lib.platforms.unix;
+    license = lib.licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = "https://vifm.info/";
     changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";

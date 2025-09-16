@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Don't run tests that spin-up a zmq server
     "rpcq/test/test_base.py"
     "rpcq/test/test_spec.py"

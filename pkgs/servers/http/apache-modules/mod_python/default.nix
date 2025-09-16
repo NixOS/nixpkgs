@@ -31,20 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     ensureNewerSourcesForZipFilesHook
   ];
 
-  buildInputs =
-    [
-      apacheHttpd
-      (python3.withPackages (
-        ps: with ps; [
-          distutils
-          packaging
-          setuptools
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libintl
-    ];
+  buildInputs = [
+    apacheHttpd
+    (python3.withPackages (
+      ps: with ps; [
+        distutils
+        packaging
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libintl
+  ];
 
   passthru = {
     inherit apacheHttpd;
@@ -58,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mod_python";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

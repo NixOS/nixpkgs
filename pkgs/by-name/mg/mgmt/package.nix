@@ -59,7 +59,7 @@ buildGoModule rec {
   vendorHash = "sha256-Dtqy4TILN+7JXiHKHDdjzRTsT8jZYG5sPudxhd8znXY=";
 
   meta = with lib; {
-    description = "Next generation distributed, event-driven, parallel config management!";
+    description = "Next generation distributed, event-driven, parallel config management";
     homepage = "https://mgmtconfig.com";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];

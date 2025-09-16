@@ -25,19 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -69,42 +68,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ hipblas-common ];
 
-  buildInputs =
-    [
-      rocblas
-      rocprim
-      rocsparse
-      rocsolver
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      lapack-reference
-    ];
+  buildInputs = [
+    rocblas
+    rocprim
+    rocsparse
+    rocsolver
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    lapack-reference
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DCMAKE_CXX_COMPILER=${lib.getExe' clr "hipcc"}"
-      # Upstream is migrating to amdclang++, it is likely this will be correct in next version bump
-      #"-DCMAKE_CXX_COMPILER=${lib.getBin clr}/bin/amdclang++"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DAMDGPU_TARGETS=${rocblas.amdgpu_targets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_CLIENTS_TESTS=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_CLIENTS_BENCHMARKS=ON"
-    ]
-    ++ lib.optionals buildSamples [
-      "-DBUILD_CLIENTS_SAMPLES=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' clr "hipcc"}"
+    # Upstream is migrating to amdclang++, it is likely this will be correct in next version bump
+    #"-DCMAKE_CXX_COMPILER=${lib.getBin clr}/bin/amdclang++"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DAMDGPU_TARGETS=${rocblas.amdgpu_targets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_CLIENTS_TESTS=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_CLIENTS_BENCHMARKS=ON"
+  ]
+  ++ lib.optionals buildSamples [
+    "-DBUILD_CLIENTS_SAMPLES=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''

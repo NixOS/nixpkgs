@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "prometheus-aruba-exporter";
-  version = "unstable-2023-01-18";
+  version = "0-unstable-2023-01-18";
 
   src = fetchFromGitHub {
     owner = "slashdoom";

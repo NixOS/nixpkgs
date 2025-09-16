@@ -1,19 +1,39 @@
 {
-  version = "810";
+  version = "824";
   x86_64-linux = {
+    os = "Linux";
     name = "x86_64";
-    hash = "sha256-cnax7D4T5On356mZrd/waH62IXP6BNSJtCM0rw0RnDo=";
+    ext = "tgz";
+    hash = "sha256-TsNlwApXdbkHEI+pG9NVK7pJkKdvFYGIGgn+9xJ9q8A=";
   };
   i686-linux = {
+    os = "Linux";
     name = "i386";
-    hash = "sha256-ERpzSVK7IxriDTH1wkLsiioqV99fRkMIlg0Pd+V+h7g=";
+    ext = "tgz";
+    hash = "sha256-Gs4iifvchFY0d39bhQ61lX/TPGjCKPRidkJQbva91gA=";
   };
   aarch64-linux = {
+    os = "Linux";
     name = "arm64";
-    hash = "sha256-l+mxhK85GnGLKspXeEy2JOJ+fA8DVIr36tLVCBp7MhU=";
+    ext = "tgz";
+    hash = "sha256-YowEzJ//idmZ4eznPNgEW142ApsnvkboGAWfDCHfIS0=";
   };
   armv7l-linux = {
+    os = "Linux";
     name = "arm";
-    hash = "sha256-DFIaIq57HQbpur2vep1pO/VDOo913b17x3eWhq4wL40=";
+    ext = "tgz";
+    hash = "sha256-mLl/qNtxMfFOe/M0fCZnnebei7E2ON4gvE9Q7XIufag=";
+  };
+  aarch64-darwin = {
+    os = "MacOSX";
+    name = "arm64";
+    ext = "pkg";
+    hash = "sha256-GKlWof4XdxEwW7G8YmhdfjjJpXEXICqWapI7fly8Uvg=";
+  };
+  x86_64-darwin = {
+    os = "MacOSX";
+    name = "x86_64";
+    ext = "pkg";
+    hash = "sha256-LWLUdzNVkN60qET7vhvLCoepg7kuHPqs2bZspRzZkGo=";
   };
 }

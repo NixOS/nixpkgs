@@ -28,7 +28,7 @@ let
       testScript = ''
         start_all()
         machine.wait_for_unit("multi-user.target")
-        machine.wait_for_unit("postgresql.service")
+        machine.wait_for_unit("postgresql.target")
 
         with subtest("Setup"):
             machine.succeed("sudo -u postgres psql --command 'create database demo'")

@@ -5,24 +5,24 @@
   git,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   perl,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gitolite";
-  version = "3.6.13";
+  version = "3.6.14";
 
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
     rev = "v${version}";
-    hash = "sha256-/VBu+aepIrxWc2padPa/WoXbIdKfIwqmA/M8d1GE5FI=";
+    hash = "sha256-BwpqvjpHzoypV91W/QReAgiNrmpxZ0IE3W/bpCVO1GE=";
   };
 
   buildInputs = [
-    nettools
+    net-tools
     perl
   ];
   nativeBuildInputs = [ makeWrapper ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/lib/Gitolite/Hooks/Update.pm \
       --replace /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Setup.pm \
-      --replace hostname "${nettools}/bin/hostname"
+      --replace hostname "${net-tools}/bin/hostname"
     substituteInPlace src/commands/sskm \
       --replace /bin/rm "${coreutils}/bin/rm"
   '';

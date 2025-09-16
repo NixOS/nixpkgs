@@ -38,7 +38,8 @@ let
       pytest-jupyter
       pytest-timeout
       pytestCheckHook
-    ] ++ pytest-jupyter.optional-dependencies.server;
+    ]
+    ++ pytest-jupyter.optional-dependencies.server;
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {

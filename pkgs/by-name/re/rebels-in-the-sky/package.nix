@@ -14,29 +14,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.0.30";
+  version = "1.0.31";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eC8n9g2kFErTRWWNo6jwAMGBX3+xGjtzq23+r3w0n0I=";
+    hash = "sha256-0/Vsb6GMl0XH7uxyFSUO18kKoz49MXbOEQChhZZJL24=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-dGD0RpelENEWe9W/3CXUS2GhOXRaWhCoD8AI2n4mUfs=";
+
+  cargoHash = "sha256-DI6BAfbIEGCq3GaBoQz/nn9AZYWUDWBD2osgm1K44+w=";
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   nativeCheckInputs = [

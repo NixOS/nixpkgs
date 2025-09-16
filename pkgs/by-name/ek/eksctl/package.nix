@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.209.0";
+  version = "0.214.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "eksctl";
     rev = version;
-    hash = "sha256-iyxO/KMVxSbf/1WijVg0+56BKdyG7gBsfNouyVNMDIA=";
+    hash = "sha256-JsVW1JC3VdxCJpngPCkrIbH5B/YlAKOc/SOIEo7s8mo=";
   };
 
-  vendorHash = "sha256-vhYexIdkn8Y5U5YZewj/O8sJCt/VimZU4E4kn0/1lU4=";
+  vendorHash = "sha256-0tdhi2uqC1aIK9Nkfr9OuV0mCWiT0sNX1W3hgz1vslU=";
 
   doCheck = false;
 
@@ -51,6 +51,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       xrelkd
       Chili-Man
+      ryan4yin
     ];
     mainProgram = "eksctl";
   };

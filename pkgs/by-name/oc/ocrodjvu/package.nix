@@ -34,12 +34,11 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs =
-    [
-    ]
-    ++ lib.optional withCuneiform cuneiform
-    ++ lib.optional withGocr gocr
-    ++ lib.optional withOcrad ocrad;
+  propagatedBuildInputs = [
+  ]
+  ++ lib.optional withCuneiform cuneiform
+  ++ lib.optional withGocr gocr
+  ++ lib.optional withOcrad ocrad;
 
   dependencies = with python3Packages; [
     lxml
@@ -63,13 +62,13 @@ python3Packages.buildPythonApplication rec {
     "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for OCR systems that allows you to perform OCR on DjVu files";
     homepage = "https://github.com/FriedrichFroebel/ocrodjvu";
     changelog = "https://github.com/FriedrichFroebel/ocrodjvu/blob/${version}/doc/changelog";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dansbandit ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dansbandit ];
     mainProgram = "ocrodjvu";
   };
 }

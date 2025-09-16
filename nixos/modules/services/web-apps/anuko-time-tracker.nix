@@ -322,7 +322,8 @@ in
         settings = {
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
     };
 
@@ -398,5 +399,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ michaelshmitty ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

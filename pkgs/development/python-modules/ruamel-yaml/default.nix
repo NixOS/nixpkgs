@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "ruamel-yaml";
-  version = "0.18.10";
+  version = "0.18.14";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ruamel.yaml";
     inherit version;
-    hash = "sha256-IMhqsprCFT+ApCjhJUqK32htM4PfBEkFFMo7eaNi21g=";
+    hash = "sha256-cie3aq7DZN8Vk2cw7799crMMC3mx1Xi7uOPcstgfUrc=";
   };
 
   nativeBuildInputs = [ setuptools ];

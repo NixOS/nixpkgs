@@ -42,7 +42,8 @@ rec {
   qemu = buildPackages.qemu_kvm;
 
   modulesClosure = pkgs.makeModulesClosure {
-    inherit kernel rootModules;
+    kernel = lib.getOutput "modules" kernel;
+    inherit rootModules;
     firmware = kernel;
   };
 
@@ -211,7 +212,7 @@ rec {
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${kernel}/lib/modules/
+    export MODULE_DIR=${lib.getOutput "modules" kernel}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
@@ -317,7 +318,7 @@ rec {
   # A bash script fragment that produces a disk image at `destination`.
   createEmptyImage =
     {
-      # Disk image size in MiB
+      # Disk image size in MiB (1024*1024 bytes)
       size,
       # Name that will be written to ${destination}/nix-support/full-name
       fullName,
@@ -358,11 +359,11 @@ rec {
     will build the derivation `patchelf' inside a VM.  The attribute
     `preVM' can optionally contain a shell command to be evaluated
     *before* the VM is started (i.e., on the host).  The attribute
-    `memSize' specifies the memory size of the VM in megabytes,
-    defaulting to 512.  The attribute `diskImage' can optionally
-    specify a file system image to be attached to /dev/sda.  (Note
-    that currently we expect the image to contain a filesystem, not a
-    full disk image with a partition table etc.)
+    `memSize' specifies the memory size of the VM in MiB (1024*1024
+    bytes), defaulting to 512.  The attribute `diskImage' can
+    optionally specify a file system image to be attached to /dev/sda.
+    (Note that currently we expect the image to contain a filesystem,
+    not a full disk image with a partition table etc.)
 
     If the build fails and Nix is run with the `-K' option, a script
     `run-vm' will be left behind in the temporary build directory
@@ -909,7 +910,7 @@ rec {
         nativeBuildInputs = [
           buildPackages.perl
           buildPackages.dpkg
-          buildPackages.nixfmt-rfc-style
+          buildPackages.nixfmt
         ];
       }
       ''
@@ -1092,6 +1093,28 @@ rec {
       urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
       packages = commonDebianPackages;
     };
+
+    debian13i386 = {
+      name = "debian-13.0-trixie-i386";
+      fullName = "Debian 13.0 Trixie (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20250819T202603Z/dists/trixie/main/binary-i386/Packages.xz";
+        hash = "sha256-fXjhaG1Y+kn6iMEtqVZLwYN7lZ0cEQKVfMS3hSHJipY=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20250819T202603Z";
+      packages = commonDebianPackages;
+    };
+
+    debian13x86_64 = {
+      name = "debian-13.0-trixie-amd64";
+      fullName = "Debian 13.0 Trixie (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20250819T202603Z/dists/trixie/main/binary-amd64/Packages.xz";
+        hash = "sha256-15cDoCcTv3m5fiZqP1hqWWnSG1BVUZSrm5YszTSKQs4=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20250819T202603Z";
+      packages = commonDebianPackages;
+    };
   };
 
   # Common packages for Fedora images.
@@ -1230,7 +1253,7 @@ rec {
     `extraPackages' specifies the names of additional packages from
     the distribution that should be included in the image; `packages'
     allows the entire set of packages to be overridden; and `size'
-    sets the size of the disk in megabytes.  E.g.,
+    sets the size of the disk in MiB (1024*1024 bytes).  E.g.,
     `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
     size = 8192; }' builds an 8 GiB image containing Firefox in
     addition to the default packages.

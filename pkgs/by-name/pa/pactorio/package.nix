@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-3+irejeDltf7x+gyJxWBgvPgpQx5uU3DewU23Z4Nr/A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1rqYp9OZ7hkZhrU813uBQAOZNdQ3j+OQdM6ia+t5cOc=";
 
   nativeBuildInputs = [
@@ -35,12 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   GEN_ARTIFACTS = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Mod packager for factorio";
     mainProgram = "pactorio";
     homepage = "https://github.com/figsoda/pactorio";
     changelog = "https://github.com/figsoda/pactorio/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

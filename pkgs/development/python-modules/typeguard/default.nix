@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "4.4.2";
+  version = "4.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pvEGWBPjLvNlvDs/UDr4qW+d1OADOgLCjEpJg96MbEk=";
+    hash = "sha256-On/S3/twXU0O+u1DBqcEyJud7oULaI8GCosWFaeeX3Q=";
   };
 
   outputs = [
@@ -43,7 +43,8 @@ buildPythonPackage rec {
 
   dependencies = [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   env.LC_ALL = "en_US.utf-8";
 
@@ -51,6 +52,10 @@ buildPythonPackage rec {
     mypy
     pytestCheckHook
   ];
+
+  # To prevent test from writing out non-reproducible .pyc files
+  # https://github.com/agronholm/typeguard/blob/ca512c28132999da514f31b5e93ed2f294ca8f77/tests/test_typechecked.py#L641
+  preCheck = "export PYTHONDONTWRITEBYTECODE=1";
 
   pythonImportsCheck = [ "typeguard" ];
 

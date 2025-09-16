@@ -10,6 +10,7 @@
   pexpect,
   pygments,
   pytestCheckHook,
+  pythonAtLeast,
   prompt-toolkit,
   setuptools,
   tkinter,
@@ -27,6 +28,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
   };
+
+  disabled = pythonAtLeast "3.13";
 
   nativeBuildInputs = [ setuptools ];
 
@@ -49,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   # Currently most tests have performance issues
-  pytestFlagsArray = [ "coconut/tests/constants_test.py" ];
+  enabledTestPaths = [ "coconut/tests/constants_test.py" ];
 
   pythonImportsCheck = [ "coconut" ];
 

@@ -10,15 +10,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.17.2";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${version}";
-    hash = "sha256-n000m2jIJJFZFTjfECS3gFrO6xHauZW46xe1tDqI6Lg=";
+    hash = "sha256-bShFMuDJlvBA3rQJRwXlsgRk4q+gdFQjOpDzOrp4/8k=";
   };
+
+  # AttributeError: 'Label' object has no attribute 'renderable'.
+  # In textual==0.6.0, the `renderable` property was renamed to `content`
+  # https://github.com/Textualize/textual/pull/6041
+  postPatch = ''
+    substituteInPlace tests/unit/test_tui_reporter.py \
+      --replace-fail ".renderable" ".content"
+  '';
 
   build-system = with python3Packages; [
     distutils
@@ -31,7 +39,8 @@ python3Packages.buildPythonApplication rec {
     elfutils # for `-ldebuginfod`
     libunwind
     lz4
-  ] ++ (with python3Packages; [ cython ]);
+  ]
+  ++ (with python3Packages; [ cython ]);
 
   dependencies = with python3Packages; [
     pkgconfig
@@ -44,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       ipython
-      pytest-cov # fix Unknown pytest.mark.no_cover
+      pytest-cov-stub # fix Unknown pytest.mark.no_cover
       pytest-textual-snapshot
       pytestCheckHook
     ]
@@ -52,12 +61,20 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
+
+    # The following snapshot tests started failing since updating textual to 3.5.0
+    "TestTUILooks"
+    "test_merge_threads"
+    "test_tui_basic"
+    "test_tui_gradient"
+    "test_tui_pause"
+    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [
@@ -68,7 +85,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
-    changelog = "https://github.com/bloomberg/memray/releases/tag/v${src.tag}";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;

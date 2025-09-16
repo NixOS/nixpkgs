@@ -10,23 +10,23 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2025.605.3";
+  version = "2025.912.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-        hash = "sha256-TN0TnwY4lXsKHeCYBKmYSenuBZIt0n0bbEw1BVWwDZc=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
+        hash = "sha256-wGThpn4Yb3t02MYrn1Sg8S48ak6n09T1vPSpF5zEx7E=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-        hash = "sha256-vFqow+G8Ebzgnau9c6TYit7SKDMIeJJOKI0DXAevBXY=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Intel.zip";
+        hash = "sha256-OWqCqAQx1e6TsVdvOezF3gvZ06tXFIEfNMb5LA4mf5s=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-        hash = "sha256-k09fyaSfGZgC7VoDp68+xb5wxiXGQllXKqCpz+7k0So=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
+        hash = "sha256-73UY3RJp0pFfbxRWX8qSnLeoZB/BRGtucmQClJP7Qwg=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
@@ -65,11 +65,16 @@ if stdenvNoCC.hostPlatform.isDarwin then
       passthru
       ;
 
+    nativeBuildInputs = [ makeWrapper ];
+
     installPhase = ''
       runHook preInstall
-      APP_DIR="$out/Applications"
-      mkdir -p "$APP_DIR"
-      cp -r . "$APP_DIR"
+      OSU_WRAPPER="$out/Applications/osu!.app/Contents"
+      OSU_CONTENTS="osu!.app/Contents"
+      mkdir -p "$OSU_WRAPPER/MacOS"
+      cp -r "$OSU_CONTENTS/Info.plist" "$OSU_CONTENTS/Resources" "$OSU_WRAPPER"
+      cp -r "osu!.app" "$OSU_WRAPPER/Resources/osu-wrapped.app"
+      makeWrapper "$OSU_WRAPPER/Resources/osu-wrapped.app/Contents/MacOS/osu!" "$OSU_WRAPPER/MacOS/osu!" --set OSU_EXTERNAL_UPDATE_PROVIDER 1
       runHook postInstall
     '';
   }

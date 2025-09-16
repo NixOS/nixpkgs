@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
   ];
-  buildInputs =
-    [
-      libxcrypt
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ optionals (enableStatic && stdenv.cc.libc ? static) [
-      stdenv.cc.libc
-      stdenv.cc.libc.static
-    ];
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ optionals (enableStatic && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -64,7 +63,18 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    # breaks string.h header in musl
+    "fortify"
+  ];
+
+  makeFlags = [
+    "PREFIX=$(out)/bin"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ]
+  ++ optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
+    "LDFLAGS=--static"
+  ];
 
   installTargets = [ "install_flat" ];
 

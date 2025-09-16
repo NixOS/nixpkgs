@@ -1,31 +1,32 @@
 {
-  buildGoModule,
   lib,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "xurls";
-  version = "2.5.0-unstable-2024-11-03";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "xurls";
-    rev = "7c973a26c7bd6ecd8d86bb435d93ff98df2710fa";
-    sha256 = "sha256-jZmlM9rs+N0ks7msmb3eJ96aTYp0qUo/1bgLAgHnvSo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cfiMrJuzm5wpVKSyhta4ovARbp5B6K30l3+I/KOsZM4=";
   };
 
-  vendorHash = "sha256-W6Z1E6a+qBdOuyHoiT6YA+CAJHBJ0FTYH8AntiKvVBY=";
+  vendorHash = "sha256-Bks47kusGgVsbNiLq3QxP/dhIp72HGYeMhdifFwY340=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract urls from text";
     homepage = "https://github.com/mvdan/xurls";
-    maintainers = with maintainers; [ koral ];
-    license = licenses.bsd3;
+    mainProgram = "xurls";
+    maintainers = with lib.maintainers; [ koral ];
+    license = lib.licenses.bsd3;
   };
-}
+})

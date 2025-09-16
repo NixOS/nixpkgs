@@ -66,41 +66,40 @@ buildPythonPackage rec {
     export CI=true
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
-  disabledTests =
-    [
-      # Keyboard interrupt ends test suite run
-      "KeyboardInterrupt"
-      # daemonize and autoreload tests have issue with sockets within sandbox
-      "daemonize"
-      "Autoreload"
+  disabledTests = [
+    # Keyboard interrupt ends test suite run
+    "KeyboardInterrupt"
+    # daemonize and autoreload tests have issue with sockets within sandbox
+    "daemonize"
+    "Autoreload"
 
-      "test_antistampede"
-      "test_file_stream"
-      "test_basic_request"
-      "test_3_Redirect"
-      "test_4_File_deletion"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      "testErrorHandling"
-      "testHookErrors"
-      "test_HTTP10_KeepAlive"
-      "test_No_Message_Body"
-      "test_HTTP11_Timeout"
-      "testGzip"
-      "test_malformed_header"
-      "test_no_content_length"
-      "test_post_filename_with_special_characters"
-      "test_post_multipart"
-      "test_iterator"
-      "test_1_Ram_Concurrency"
-      "test_2_File_Concurrency"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
+    "test_antistampede"
+    "test_file_stream"
+    "test_basic_request"
+    "test_3_Redirect"
+    "test_4_File_deletion"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [
+    "testErrorHandling"
+    "testHookErrors"
+    "test_HTTP10_KeepAlive"
+    "test_No_Message_Body"
+    "test_HTTP11_Timeout"
+    "testGzip"
+    "test_malformed_header"
+    "test_no_content_length"
+    "test_post_filename_with_special_characters"
+    "test_post_multipart"
+    "test_iterator"
+    "test_1_Ram_Concurrency"
+    "test_2_File_Concurrency"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "cherrypy/test/test_config_server.py"

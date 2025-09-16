@@ -8,16 +8,16 @@
 
 buildGo124Module rec {
   pname = "gowebly";
-  version = "3.0.3";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "gowebly";
     repo = "gowebly";
     tag = "v${version}";
-    hash = "sha256-iCdChT/eAWfeZyl5W1UHIjET3MGUD1YakjTToSS7iGs=";
+    hash = "sha256-r1yyMbnpt0sDgqkm/EqaYysQnm48uIXzQHqJObVpT9g=";
   };
 
-  vendorHash = "sha256-mFCNrcdwSExjVym4BN1Yb/lsfQHxCDrlWoa9vyQ74ko=";
+  vendorHash = "sha256-N48/67fMPsylNGr6ixay4si+9ifUryxkIJxKDYU46+o=";
 
   env.CGO_ENABLED = 0;
 
