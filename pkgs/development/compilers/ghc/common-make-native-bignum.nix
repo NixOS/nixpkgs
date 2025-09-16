@@ -345,6 +345,17 @@ stdenv.mkDerivation (
       })
     ]
 
+    # Fix build with gcc15
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
+    ++ lib.optionals (lib.versions.majorMinor version == "9.4") [
+      (fetchpatch {
+        name = "ghc-hp2ps-c-gnu17.patch";
+        url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
+        hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
+      })
+    ]
+
     ++ [
       # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
       # Can be removed if the Cabal library included with ghc backports the linked fix
