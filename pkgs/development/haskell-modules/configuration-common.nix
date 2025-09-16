@@ -2885,6 +2885,15 @@ with haskellLib;
     dontCheck
   ];
 
+  # 2025-09-16: 0.5 adds support for GHC 9.12 and doesn't actually seem to contain a
+  # breaking change, so we can upgrade beyond Stackage.
+  # https://github.com/clash-lang/ghc-tcplugins-extra/pull/29#issuecomment-3299008674
+  # https://github.com/clash-lang/ghc-tcplugins-extra/compare/702dda2095c66c4f5148a749c8b7dbcc8a09f5c...v0.5.0
+  ghc-tcplugins-extra = doDistribute self.ghc-tcplugins-extra_0_5;
+  # 2025-09-11: Tests have been fixed in 0.7.12, but it requests ghc-tcplugins-extra >= 0.5
+  # which Stackage LTS won't update to, but we can.
+  ghc-typelits-natnormalise = doDistribute self.ghc-typelits-natnormalise_0_7_12;
+
   # Test files missing from sdist
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
