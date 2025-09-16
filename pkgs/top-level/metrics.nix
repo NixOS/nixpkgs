@@ -26,24 +26,24 @@ stdenvNoCC.mkDerivation {
   # see https://github.com/NixOS/nixpkgs/issues/52436
   #requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
 
-  unpackPhase = ''
-    runHook preUnpack
+  # Required because this derivation doesn't have a `src`.
+  dontUnpack = true;
+
+  configurePhase = ''
+    runHook preConfigure
 
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PAGER=
     nix-store --init
 
-    runHook postUnpack
+    runHook postConfigure
   '';
 
-  installPhase = ''
-    runHook preInstall
+  buildPhase = ''
+    runHook preBuild
 
     release="$nixpkgs/nixos/release.nix"
-
-    mkdir -p $out/nix-support
-    touch $out/nix-support/hydra-build-products
 
     run() {
       local name="$1"
@@ -51,10 +51,10 @@ stdenvNoCC.mkDerivation {
 
       echo "running $@"
 
-      mkdir -p "$raw/$name"
-      local output="$raw/$name/output"
-      local nix_stats="$raw/$name/nix-stats.json"
-      local time_stats="$raw/$name/time-stats.json"
+      mkdir -p "metrics/$name"
+      local output="metrics/$name/output"
+      local nix_stats="metrics/$name/nix-stats.json"
+      local time_stats="metrics/$name/time-stats.json"
 
       NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH="$nix_stats" command time -o "$time_stats" -- "$@" > "$output"
 
@@ -68,20 +68,20 @@ stdenvNoCC.mkDerivation {
 
       cpuTime="$(jq '.cpuTime' < "$nix_stats")"
       [[ -n $cpuTime ]] || exit 1
-      echo "$name.time $cpuTime s" >> $out/nix-support/hydra-metrics
+      echo "$name.time $cpuTime s" >> hydra-metrics
 
       maxresident="$(jq '.max_resident_set_kb' < "$time_stats")"
       [[ -n $maxresident ]] || exit 1
-      echo "$name.maxresident $maxresident KiB" >> $out/nix-support/hydra-metrics
+      echo "$name.maxresident $maxresident KiB" >> hydra-metrics
 
       # Nix also outputs `.symbols.bytes` but since that wasn't summed originally, we don't count it here.
       allocations="$(jq '[.envs,.list,.values,.sets] | map(.bytes) | add' < "$nix_stats")"
       [[ -n $allocations ]] || exit 1
-      echo "$name.allocations $allocations B" >> $out/nix-support/hydra-metrics
+      echo "$name.allocations $allocations B" >> hydra-metrics
 
       values="$(jq '.values.number' < "$nix_stats")"
       [[ -n $values ]] || exit 1
-      echo "$name.values $values" >> $out/nix-support/hydra-metrics
+      echo "$name.values $values" >> hydra-metrics
     }
 
     run nixos.smallContainer nix-instantiate --option eval-system "$evalSystem" --dry-run "$release" -A closures.smallContainer.x86_64-linux --show-trace --no-gc-warning
@@ -91,16 +91,27 @@ stdenvNoCC.mkDerivation {
     run nix-env.qaDrv nix-env --option eval-system "$evalSystem" -f "$nixpkgs" -qa --drv-path --meta --json
 
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
-    num="$(wc -l < $raw/nix-env.qa/output)"
-    echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
-    qaCountDrv="$(jq -r 'reduce .[].drvPath as $d (0; .+1)' $raw/nix-env.qaDrv/output)"
+    num="$(wc -l < metrics/nix-env.qa/output)"
+    echo "nix-env.qaCount $num" >> hydra-metrics
+    qaCountDrv="$(jq -r 'reduce .[].drvPath as $d (0; .+1)' metrics/nix-env.qaDrv/output)"
     numBroken="$((num - $qaCountDrv))"
-    echo "nix-env.qaCountBroken $numBroken" >> $out/nix-support/hydra-metrics
+    echo "nix-env.qaCountBroken $numBroken" >> hydra-metrics
 
     lines="$(find "$nixpkgs" -name "*.nix" -type f | xargs cat | wc -l)"
-    echo "loc $lines" >> $out/nix-support/hydra-metrics
+    echo "loc $lines" >> hydra-metrics
 
-    # Compress the raw output
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/nix-support
+    touch $out/nix-support/hydra-build-products
+    mv hydra-metrics $out/nix-support/hydra-metrics
+
+    # Save and compress the raw output
+    mv metrics $raw
     xz -v $raw/*/output
 
     runHook postInstall
