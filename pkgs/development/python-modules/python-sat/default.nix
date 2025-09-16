@@ -18,13 +18,16 @@ buildPythonPackage rec {
     hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
   };
 
-  # Build SAT solver backends in parallel and fix hard-coded g++ reference for
-  # darwin, where stdenv uses clang
+  # Fix hard-coded g++ reference for darwin, where stdenv uses clang
+  # FIXME: remove once https://github.com/pysathq/pysat/pull/204 is merged and
+  # has hit PyPI
   postPatch = ''
-    substituteInPlace solvers/prepare.py \
-      --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
     substituteInPlace solvers/patches/glucose421.patch \
       --replace-fail "+CXX      := g++" "+CXX      := c++"
+  '';
+
+  preBuild = ''
+    export MAKEFLAGS="-j$NIX_BUILD_CORES"
   '';
 
   propagatedBuildInputs = [
