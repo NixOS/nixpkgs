@@ -40,23 +40,36 @@ def flatten_data(json_data: dict) -> dict:
     return flat_metrics
 
 
-def load_all_metrics(directory: Path) -> dict:
+def load_all_metrics(path: Path) -> dict:
     """
-    Loads all stats JSON files in the specified directory and extracts metrics.
+    Loads all stats JSON files in the specified file or directory and extracts metrics.
+    These stats JSON files are created by Nix when the `NIX_SHOW_STATS` environment variable is set.
+
+    If the provided path is a directory, it must have the structure $path/$system/$stats,
+    where $path is the provided path, $system is some system from `lib.systems.doubles.*`,
+    and $stats is a stats JSON file.
+
+    If the provided path is a file, it is a stats JSON file.
 
     Args:
-        directory (Path): Directory containing JSON files.
+        path (Path): Directory containing JSON files or a stats JSON file.
+
     Returns:
         dict: Dictionary with filenames as keys and extracted metrics as values.
     """
     metrics = {}
-    for system_dir in directory.iterdir():
-        assert system_dir.is_dir()
+    if path.is_dir():
+        for system_dir in path.iterdir():
+            assert system_dir.is_dir()
 
-        for chunk_output in system_dir.iterdir():
-            with chunk_output.open() as f:
-                data = json.load(f)
-            metrics[f"{system_dir.name}/${chunk_output.name}"] = flatten_data(data)
+            for chunk_output in system_dir.iterdir():
+                with chunk_output.open() as f:
+                    data = json.load(f)
+
+                metrics[f"{system_dir.name}/${chunk_output.name}"] = flatten_data(data)
+    else:
+        with path.open() as f:
+            metrics[path.name] = flatten_data(json.load(f))
 
     return metrics
 
@@ -105,11 +118,11 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
             for metric_keys in file_metrics.keys()
         }
     )
-
     results = []
 
     for key in all_keys:
-        before_vals, after_vals = [], []
+        before_vals = []
+        after_vals = []
 
         for fname in common_files:
             if key in before_metrics[fname] and key in after_metrics[fname]:
@@ -151,8 +164,12 @@ def main():
     parser = argparse.ArgumentParser(
         description="Performance comparison of Nix evaluation statistics"
     )
-    parser.add_argument("before", help="directory containing baseline (data before)")
-    parser.add_argument("after", help="directory containing comparison (data after)")
+    parser.add_argument(
+        "before", help="File or directory containing baseline (data before)"
+    )
+    parser.add_argument(
+        "after", help="File or directory containing comparison (data after)"
+    )
 
     options = parser.parse_args()
 
