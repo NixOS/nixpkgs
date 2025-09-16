@@ -163,7 +163,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ yzx9 ];
+    maintainers = with lib.maintainers; [
+      nim65s
+      yzx9
+    ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })
