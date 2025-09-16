@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
+      iedame
     ];
     platforms = lib.platforms.all;
   };
