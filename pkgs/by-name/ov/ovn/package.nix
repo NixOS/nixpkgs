@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -31,11 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix test failure with musl libc.
-    # https://patchwork.ozlabs.org/project/ovn/patch/20250912035054.50593-1-ihar.hrachyshka@gmail.com/
-    ./0001-tests-Expect-musl-error-string-for-EIO-errno.patch
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
+      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
+    })
     # Fix sandbox test failure.
-    # https://patchwork.ozlabs.org/project/ovn/patch/20250912035054.50593-2-ihar.hrachyshka@gmail.com/
-    ./0002-tests-Use-localhost-when-setting-wrong-ovn-remote.patch
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
+      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
+    })
   ];
 
   nativeBuildInputs = [
