@@ -32,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  outputs = [
+    "out"
+    "lib"
+    "man"
+    "dev"
+    "tools"
+  ];
+
   patches = [
     # Fix test failure with musl libc.
     (fetchpatch {
@@ -91,6 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    moveToOutput 'share/ovn/bugtool-plugins' "$tools"
+    moveToOutput 'share/ovn/scripts/ovn-bugtool-*' "$tools"
+
+    moveToOutput 'bin/ovn-detrace' "$tools"
+    moveToOutput 'bin/ovn_detrace*' "$tools"
+    moveToOutput 'bin/ovn-trace' "$tools"
+    moveToOutput 'bin/ovn-debug' "$tools"
+    moveToOutput 'bin/ovn-docker*' "$tools"
+
     sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
 
     mkdir -vp $out/share/openvswitch/scripts
