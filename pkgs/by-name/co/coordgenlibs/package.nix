@@ -26,9 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     maeparser
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-unused-but-set-variable";
-  };
+  # Fix the build with CMake 4.
+  #
+  # See: <https://github.com/schrodinger/coordgenlibs/pull/130>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.2)' \
+        'cmake_minimum_required(VERSION 3.5)'
+  '';
 
   doCheck = true;
 
