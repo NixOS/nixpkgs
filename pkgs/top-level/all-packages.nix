@@ -8325,8 +8325,6 @@ with pkgs;
 
   libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
 
-  yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
-
   liquid-dsp = callPackage ../development/libraries/liquid-dsp {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
