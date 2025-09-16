@@ -14,6 +14,7 @@
   range-v3,
   catch2_3,
   nasm,
+  withThunks ? true,
   buildEnv,
   writeText,
   pkgsCross,
@@ -184,12 +185,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     libxml2
     openssl
     range-v3
-    pkgsCross64.buildPackages.clang
-    pkgsCross32.buildPackages.clang
-    libclang
-    libllvm
   ]
-  ++ libForwardingInputs
+  ++ lib.optionals withThunks (
+    [
+      pkgsCross64.buildPackages.clang
+      pkgsCross32.buildPackages.clang
+      libclang
+      libllvm
+    ]
+    ++ libForwardingInputs
+  )
   ++ lib.optionals withQt [
     qt6.qtbase
     qt6.qtdeclarative
@@ -198,8 +203,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
-    (lib.cmakeBool "BUILD_THUNKS" true)
     (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
+  ]
+  ++ lib.optionals withThunks [
+    (lib.cmakeBool "BUILD_THUNKS" true)
     (lib.cmakeFeature "X86_32_TOOLCHAIN_FILE" "${toolchain32}")
     (lib.cmakeFeature "X86_64_TOOLCHAIN_FILE" "${toolchain}")
     (lib.cmakeFeature "X86_DEV_ROOTFS" "${devRootFS}")
