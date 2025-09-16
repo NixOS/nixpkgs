@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    # Install bash completions in correct location
+    rm -f $out/etc/bash_completion.d/ovs-*.bash
     installShellCompletion --bash utilities/ovs-appctl-bashcomp.bash
     installShellCompletion --bash utilities/ovs-vsctl-bashcomp.bash
 
