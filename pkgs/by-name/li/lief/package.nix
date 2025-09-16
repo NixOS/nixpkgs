@@ -5,6 +5,7 @@
   python3,
   cmake,
   ninja,
+  nix-update-script,
 }:
 
 let
@@ -66,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "lief" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library to Instrument Executable Formats";
