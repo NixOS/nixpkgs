@@ -3,6 +3,7 @@ import json
 import numpy as np
 import os
 import pandas as pd
+import warnings
 
 from pathlib import Path
 from scipy.stats import ttest_rel
@@ -148,6 +149,9 @@ def main():
     parser.add_argument("after", help="directory containing comparison (data after)")
 
     options = parser.parse_args()
+
+    # Turn warnings into errors
+    warnings.simplefilter("error")
 
     before_stats = Path(options.before)
     after_stats = Path(options.after)
