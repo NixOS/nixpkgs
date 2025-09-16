@@ -279,8 +279,8 @@ let
         mktplcRef = {
           name = "icons-carbon";
           publisher = "antfu";
-          version = "0.2.7";
-          hash = "sha256-m9iBSHHkDsOtGQD50QDgmqzOu7EXVYZxpZCZQ/q5NWU=";
+          version = "0.2.8";
+          hash = "sha256-9ZU6xZxoT+z/hy+HAbrf52rbSdrA448Ph5/N7A3QB2A=";
         };
         meta = {
           license = lib.licenses.mit;
