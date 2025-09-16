@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -31,6 +32,10 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "yaralyzer"
   ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     description = "Tool to visually inspect and force decode YARA and regex matches";
