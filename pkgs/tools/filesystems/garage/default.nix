@@ -30,12 +30,6 @@ let
         inherit hash;
       };
 
-      postPatch = ''
-        # Starting in 0.9.x series, Garage is using mold in local development
-        # and this leaks in this packaging, we remove it to use the default linker.
-        rm .cargo/config.toml || true
-      '';
-
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [
@@ -53,33 +47,20 @@ let
 
       OPENSSL_NO_VENDOR = true;
 
-      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.8.2/nix/compile.nix#L192-L198
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.1.0/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
       buildFeatures = [
-        "kubernetes-discovery"
         "bundled-libs"
-        "metrics"
-        "k2v"
-        "telemetry-otlp"
-        "lmdb"
-        "sqlite"
         "consul-discovery"
-      ];
-
-      # To make integration tests pass, we include the optional k2v feature here,
-      # but in buildFeatures only for version 0.8+, where it's enabled by default.
-      # See: https://garagehq.deuxfleurs.fr/documentation/reference-manual/k2v/
-      checkFeatures = [
+        "fjall"
+        "journald"
         "k2v"
         "kubernetes-discovery"
-        "bundled-libs"
         "lmdb"
+        "metrics"
         "sqlite"
-      ];
-
-      disabledTests = [
-        # Upstream told us this test is flakey.
-        "k2v::poll::test_poll_item"
+        "syslog"
+        "telemetry-otlp"
       ];
 
       passthru.tests = nixosTests."garage_${lib.versions.major version}";
@@ -108,13 +89,11 @@ rec {
     cargoHash = "sha256-mWLsOTWxzMdDfzEDu+WHJ12SVscEVfBVuOTVFbfnk0g=";
   };
 
-  garage_2_0_0 = generic {
-    version = "2.0.0";
-    hash = "sha256-dn7FoouF+5qmW6fcC20bKQSc6D2G9yrWdBK3uN3bF58=";
-    cargoHash = "sha256-6VM/EesrUIaQOeDGqzb0kOqMz4hW7zBJUnaRQ9C3cqc=";
+  garage_2 = generic {
+    version = "2.1.0";
+    hash = "sha256-GGwF6kVIJ7MPvO6VRj2ebquJEjJQBwpW18P6L2sGVDs=";
+    cargoHash = "sha256-0pT2fqseN1numJZdC0FFg1JXbDq1YmlmBPQVbOpxtkw=";
   };
-
-  garage_2 = garage_2_0_0;
 
   garage = garage_1;
 }
