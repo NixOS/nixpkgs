@@ -79,8 +79,19 @@ def load_all_metrics(path: Path) -> dict:
     return metrics
 
 
+def metric_sort_key(name: str) -> str:
+    if name in ("cpuTime", "time.cpu", "time.gc", "time.gcFraction"):
+        return (1, name)
+    elif name.startswith("gc"):
+        return (2, name)
+    else:
+        return (3, name)
+
+
 def dataframe_to_markdown(df: pd.DataFrame) -> str:
-    df = df.sort_values(by=df.columns[0], ascending=True)
+    df = df.sort_values(
+        by=df.columns[0], ascending=True, key=lambda s: s.map(metric_sort_key)
+    )
 
     # Header (get column names and format them)
     headers = [str(column) for column in df.columns]
