@@ -401,6 +401,19 @@ assertNoAdditions {
     ];
   };
 
+  claude-fzf-nvim = super.claude-fzf-nvim.overrideAttrs {
+    dependencies = with self; [
+      claudecode-nvim
+      fzf-lua
+    ];
+    # Failed to build help tags!
+    # E670: Mix of help file encodings within a language: doc/claude-fzf-zh.txt
+    # E154: Duplicate tag "claude-fzf-keymaps" in file doc/claude-fzf-en.txt
+    preInstall = ''
+      rm -r doc
+    '';
+  };
+
   claude-fzf-history-nvim = super.claude-fzf-history-nvim.overrideAttrs {
     dependencies = with self; [
       fzf-lua
