@@ -102,8 +102,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Install bash completions in correct location
     rm -f $out/etc/bash_completion.d/ovs-*.bash
-    installShellCompletion --bash utilities/ovs-appctl-bashcomp.bash
-    installShellCompletion --bash utilities/ovs-vsctl-bashcomp.bash
+    installShellCompletion utilities/ovs-appctl-bashcomp.bash
+    installShellCompletion utilities/ovs-vsctl-bashcomp.bash
 
     mkdir -p $tools/{bin,share/openvswitch/scripts}
     mv $out/share/openvswitch/bugtool-plugins $tools/share/openvswitch
