@@ -1,5 +1,6 @@
 {
   config,
+  fetchpatch,
   fetchurl,
   stdenv,
   unixODBC,
@@ -110,6 +111,15 @@
       url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
       sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
     };
+
+    patches = [
+      # Fix build with gcc15
+      (fetchpatch {
+        name = "sqlite-connector-odbc-fix-incompatible-pointer-compilation-error.patch";
+        url = "https://src.fedoraproject.org/rpms/sqliteodbc/raw/e3d93f5909c884fd8846b36b71ba67a3ad65da2a/f/sqliteodbc-0.99991-Fix-incompatible-pointer-compilation-error.patch";
+        hash = "sha256-IAZDujEkAyU40sKa4GC+upURNt7vplCDAx91Eeny+bU=";
+      })
+    ];
 
     buildInputs = [
       unixODBC
