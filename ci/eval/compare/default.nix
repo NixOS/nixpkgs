@@ -182,10 +182,6 @@ runCommand "compare"
     ];
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
-    env = {
-      BEFORE_DIR = "${combined}/before";
-      AFTER_DIR = "${combined}/after";
-    };
   }
   ''
     mkdir $out
@@ -212,7 +208,7 @@ runCommand "compare"
         echo
       } >> $out/step-summary.md
 
-      cmp-stats >> $out/step-summary.md
+      cmp-stats ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
 
     else
       # Package chunks are the same in both revisions
