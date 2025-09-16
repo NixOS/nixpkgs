@@ -1883,8 +1883,6 @@ with pkgs;
       '';
     });
 
-  candle = libsForQt5.callPackage ../applications/misc/candle { };
-
   capstone = callPackage ../development/libraries/capstone { };
   capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
@@ -4106,6 +4104,13 @@ with pkgs;
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
 
+  saunafs = callPackage ../by-name/sa/saunafs/package.nix {
+    fmt = fmt_11;
+    spdlog = spdlog.override {
+      fmt = fmt_11;
+    };
+  };
+
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
@@ -5442,9 +5447,7 @@ with pkgs;
     jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  mitscheme = callPackage ../development/compilers/mit-scheme {
-    texinfo = texinfo6;
-  };
+  mitscheme = callPackage ../development/compilers/mit-scheme { };
 
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
@@ -8459,6 +8462,7 @@ with pkgs;
   };
 
   nss_latest = callPackage ../development/libraries/nss/latest.nix { };
+  nss_3_115 = callPackage ../development/libraries/nss/3_115.nix { };
   nss_3_114 = callPackage ../development/libraries/nss/3_114.nix { };
   nss_esr = callPackage ../development/libraries/nss/esr.nix { };
   nss = nss_esr;
