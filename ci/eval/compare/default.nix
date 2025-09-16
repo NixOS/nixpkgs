@@ -13,6 +13,7 @@ let
     ps.numpy
     ps.pandas
     ps.scipy
+    ps.tabulate
   ]);
 
   cmp-stats = stdenvNoCC.mkDerivation {
