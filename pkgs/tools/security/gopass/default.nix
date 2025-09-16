@@ -5,7 +5,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  git,
+  gitMinimal,
   gnupg,
   xclip,
   wl-clipboard,
@@ -19,7 +19,7 @@
 let
   wrapperPath = lib.makeBinPath (
     [
-      git
+      gitMinimal
       gnupg
       xclip
     ]
