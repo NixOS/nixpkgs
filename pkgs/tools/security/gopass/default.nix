@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  makeWrapper,
+  makeBinaryWrapper,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
