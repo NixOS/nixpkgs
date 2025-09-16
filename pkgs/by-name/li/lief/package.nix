@@ -47,7 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     scikit-build-core
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
+  cmakeFlags = [
+    (lib.cmakeBool "LIEF_PYTHON_API" true)
+    (lib.cmakeBool "LIEF_EXAMPLES" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   postBuild = ''
     pushd ../api/python
@@ -60,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${pyEnv.interpreter} -m pip install --prefix $py dist/*.whl
     popd
   '';
+
+  pythonImportsCheck = [ "lief" ];
 
   meta = with lib; {
     description = "Library to Instrument Executable Formats";
