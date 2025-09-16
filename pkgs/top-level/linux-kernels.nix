@@ -694,6 +694,8 @@ in
 
         xpad-noone = callPackage ../os-specific/linux/xpad-noone { };
 
+        aic8800 = callPackage ../os-specific/linux/aic8800 { };
+
       }
       // lib.optionalAttrs config.allowAliases {
         zfs = throw "linuxPackages.zfs has been removed, use zfs_* instead, or linuxPackages.\${pkgs.zfs.kernelModuleAttribute}"; # added 2025-01-23
