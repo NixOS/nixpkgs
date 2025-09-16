@@ -1,3 +1,4 @@
+import argparse
 import json
 import numpy as np
 import os
@@ -140,15 +141,16 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
 
 
 def main():
-    before_dir = os.environ.get("BEFORE_DIR")
-    after_dir = os.environ.get("AFTER_DIR")
+    parser = argparse.ArgumentParser(
+        description="Performance comparison of Nix evaluation statistics"
+    )
+    parser.add_argument("before", help="directory containing baseline (data before)")
+    parser.add_argument("after", help="directory containing comparison (data after)")
 
-    if not before_dir or not after_dir:
-        print("Error: Environment variables 'BEFORE_DIR' and 'AFTER_DIR' must be set.")
-        exit(1)
+    options = parser.parse_args()
 
-    before_stats = Path(before_dir) / "stats"
-    after_stats = Path(after_dir) / "stats"
+    before_stats = Path(options.before)
+    after_stats = Path(options.after)
 
     # This may happen if the pull request target does not include PR#399720 yet.
     if not before_stats.exists():
