@@ -17,13 +17,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "voxinput";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "richiejp";
     repo = "VoxInput";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+W+xaPYwofYdsV8C2G7hOugUekrdmA6Q0o4xUvbbLlg=";
+    hash = "sha256-fNlvCyjg4aOTRypKf/6nQeDyNYN+ojo1WekVPLhdyJQ=";
   };
 
   vendorHash = "sha256-HOXjD4mwvK3jcFmpZyvKB7WOfpCIDlUWJTJSTN7wFXM=";
