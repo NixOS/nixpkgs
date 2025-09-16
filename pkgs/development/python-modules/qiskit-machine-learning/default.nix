@@ -84,6 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = true; # incompatible with qiskit >= 2.0 (see https://github.com/Qiskit/qiskit-machine-learning/issues/934)
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
