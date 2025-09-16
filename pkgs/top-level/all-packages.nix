@@ -5449,9 +5449,7 @@ with pkgs;
     jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  mitscheme = callPackage ../development/compilers/mit-scheme {
-    texinfo = texinfo6;
-  };
+  mitscheme = callPackage ../development/compilers/mit-scheme { };
 
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
