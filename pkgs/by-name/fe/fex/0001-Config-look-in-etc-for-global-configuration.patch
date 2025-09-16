@@ -1,0 +1,25 @@
+From 0e235c724164c19f7a2acd2d1cd1e94ac5ca1a38 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Wed, 27 Aug 2025 13:41:18 +0000
+Subject: [PATCH] Config: look in /etc for global configuration
+
+---
+ Source/Common/Config.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Source/Common/Config.cpp b/Source/Common/Config.cpp
+index 26775b8b2..d6e3a5cce 100644
+--- a/Source/Common/Config.cpp
++++ b/Source/Common/Config.cpp
+@@ -566,7 +566,7 @@ fextl::string GetConfigDirectory(bool Global, const PortableInformation& Portabl
+ 
+   fextl::string ConfigDir;
+   if (Global) {
+-    ConfigDir = GLOBAL_DATA_DIRECTORY;
++    ConfigDir = "/etc/fex-emu/";
+   } else {
+     const char* HomeDir = GetHomeDirectory();
+     const char* ConfigXDG = getenv("XDG_CONFIG_HOME");
+-- 
+2.50.1
+
