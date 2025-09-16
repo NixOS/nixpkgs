@@ -46,7 +46,7 @@
   patchRcPathCsh,
   patchRcPathFish,
   patchRcPathPosix,
-  tbb_2022,
+  onetbb,
   xrootd,
 }:
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     patchRcPathPosix
     pcre2
     python3
-    tbb_2022
+    onetbb
     xrootd
     xxHash
     xz

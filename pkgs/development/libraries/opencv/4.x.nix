@@ -69,7 +69,7 @@
   tesseract,
   leptonica,
   enableTbb ? false,
-  tbb,
+  onetbb,
   enableOvis ? false,
   ogre,
   enableGPhoto2 ? false,
@@ -406,7 +406,7 @@ effectiveStdenv.mkDerivation {
     leptonica
   ]
   ++ optionals enableTbb [
-    tbb
+    onetbb
   ]
   ++ optionals effectiveStdenv.hostPlatform.isDarwin [
     bzip2

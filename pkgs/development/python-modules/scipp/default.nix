@@ -22,7 +22,7 @@
   eigen,
   gtest,
   pybind11,
-  tbb_2022,
+  onetbb,
 
   # tests
   pytestCheckHook,
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     gtest
     pybind11
     units-llnl.passthru.top-level
-    tbb_2022
+    onetbb
   ];
 
   nativeCheckInputs = [

@@ -10,14 +10,11 @@
   boost,
   lua,
   luabind,
-  tbb_2022,
+  onetbb,
   expat,
   nixosTests,
 }:
 
-let
-  tbb = tbb_2022;
-in
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
   version = "6.0.0";
@@ -41,7 +38,7 @@ stdenv.mkDerivation rec {
     boost
     lua
     luabind
-    tbb
+    onetbb
     expat
   ];
 

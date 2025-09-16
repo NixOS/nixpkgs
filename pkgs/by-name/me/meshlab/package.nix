@@ -17,7 +17,7 @@
   boost,
   mpfr,
   xercesc,
-  tbb,
+  onetbb,
   embree,
   vcg,
   libigl,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     boost
     mpfr
     xercesc
-    tbb
+    onetbb
     embree
     vcg
     libigl

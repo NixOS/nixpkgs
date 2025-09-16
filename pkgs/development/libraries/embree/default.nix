@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   ispc,
-  tbb,
+  onetbb,
   glfw,
   openimageio,
   libjpeg,
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DEMBREE_TUTORIALS=OFF"
     "-DEMBREE_RAY_MASK=ON"
-    "-DTBB_ROOT=${tbb}"
-    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+    "-DTBB_ROOT=${onetbb}"
+    "-DTBB_INCLUDE_DIR=${onetbb.dev}/include"
   ];
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
   buildInputs = [
-    tbb
+    onetbb
     glfw
     openimageio
     libjpeg

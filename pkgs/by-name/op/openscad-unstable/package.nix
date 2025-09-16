@@ -34,7 +34,7 @@
   mesa,
   mpfr,
   python3,
-  tbb_2022,
+  onetbb,
   wayland,
   wayland-protocols,
   wrapGAppsHook3,
@@ -79,7 +79,7 @@ clangStdenv.mkDerivation rec {
     [
       clipper2
       glm
-      tbb_2022
+      onetbb
       mimalloc
       boost
       cairo
