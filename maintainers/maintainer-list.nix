@@ -15361,6 +15361,12 @@
     github = "M0NsTeRRR";
     githubId = 37785089;
   };
+  m0streng0 = {
+    name = "Henrique Oliveira";
+    email = "ho.henrique@proton.me";
+    github = "M0streng0";
+    githubId = 85799811;
+  };
   m0ustache3 = {
     name = "M0ustach3";
     github = "M0ustach3";
