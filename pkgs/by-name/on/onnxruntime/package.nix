@@ -3,7 +3,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -20,8 +19,7 @@
   re2,
   zlib,
   microsoft-gsl,
-  libiconv,
-  protobuf_21,
+  protobuf,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
   ncclSupport ? config.cudaSupport,
@@ -29,14 +27,14 @@
 }@inputs:
 
 let
-  version = "1.22.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fcTvMsEgO3tHOvCKCAqkO/bpZX4tcJHq9ZqpZH+uMqs=";
+    hash = "sha256-X8Pdtc0eR0iU+Xi2A1HrNo1xqCnoaxNjj4QFm/E3kSE=";
   };
 
   stdenv = throw "Use effectiveStdenv instead";
@@ -114,7 +112,7 @@ effectiveStdenv.mkDerivation rec {
     cmake
     pkg-config
     python3Packages.python
-    protobuf_21
+    protobuf
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -155,9 +153,6 @@ effectiveStdenv.mkDerivation rec {
       packaging
     ]
   )
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    libiconv
-  ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
@@ -214,7 +209,7 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
-    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" "${protobuf_21}/bin/protoc")
+    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" false)
@@ -283,7 +278,7 @@ effectiveStdenv.mkDerivation rec {
 
   passthru = {
     inherit cudaSupport cudaPackages; # for the python module
-    protobuf = protobuf_21;
+    inherit protobuf;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };

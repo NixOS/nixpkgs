@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
-      lxd = nixosTests.lxd.container;
     };
 
     updateScript = nix-update-script {

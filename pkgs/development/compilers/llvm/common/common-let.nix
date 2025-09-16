@@ -34,6 +34,8 @@ rec {
       ++ lib.platforms.riscv
       ++ lib.platforms.m68k
       ++ lib.platforms.loongarch64;
+
+    identifiers.cpeParts.vendor = "llvm";
   };
 
   releaseInfo =

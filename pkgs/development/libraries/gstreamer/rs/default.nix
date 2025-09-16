@@ -13,6 +13,7 @@
   cargo-c,
   lld,
   nasm,
+  cmake,
   gstreamer,
   gst-plugins-base,
   gst-plugins-bad,
@@ -198,6 +199,12 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cargo-c
     nasm
+  ]
+  # aws-lc-rs has no pregenerated bindings for exotic platforms
+  # https://aws.github.io/aws-lc-rs/platform_support.html
+  ++ lib.optionals (!(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)) [
+    cmake
+    rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld

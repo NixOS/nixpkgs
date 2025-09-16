@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
   ];
 
+  postInstall = ''
+    mkdir -p $out/lib/rofi
+    mv $out/lib/librofi_nerdy.so $out/lib/rofi/nerdy.so
+  '';
+
   meta = {
     description = "Nerd font icon selector plugin for rofi";
     homepage = "https://github.com/Rolv-Apneseth/rofi-nerdy";

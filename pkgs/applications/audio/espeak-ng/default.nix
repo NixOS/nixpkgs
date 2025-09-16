@@ -3,40 +3,78 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  replaceVars,
+
+  # build system
   autoconf,
   automake,
-  which,
+  cmake,
   libtool,
+  makeWrapper,
+  ninja,
   pkg-config,
   ronn,
-  replaceVars,
-  buildPackages,
-  mbrolaSupport ? true,
-  mbrola,
-  pcaudiolibSupport ? true,
-  pcaudiolib,
-  sonicSupport ? true,
-  sonic,
+  which,
+
+  # dependencies
   alsa-plugins,
-  makeWrapper,
+  asyncSupport ? true,
+  klattSupport ? true,
+  mbrola,
+  mbrolaSupport ? true,
+  pcaudiolib,
+  pcaudiolibSupport ? true,
+  sonic,
+  sonicSupport ? true,
+  speechPlayerSupport ? true,
+  ucdSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "espeak-ng";
-  version = "1.51.1";
+let
+  version = "1.52.0";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
-    rev = version;
-    hash = "sha256-aAJ+k+kkOS6k835mEW7BvgAIYGhUHxf7Q4P5cKO8XTk=";
+    tag = version;
+    hash = "sha256-mmh5QPSVD5YQ0j16R+bEL5vcyWLtTNOJ/irBNzWY3ro=";
+  };
+
+  ucd-tools = stdenv.mkDerivation {
+    pname = "ucd-tools";
+    inherit version src;
+
+    sourceRoot = "${src.name}/src/ucd-tools";
+
+    nativeBuildInputs = [ cmake ];
+
+    installPhase = ''
+      runHook preInstall
+      mkdir $out
+      cp -v libucd.a $out/
+      runHook postInstall
+    '';
+  };
+in
+
+stdenv.mkDerivation rec {
+  pname = "espeak-ng";
+  version = "1.52.0";
+
+  src = fetchFromGitHub {
+    owner = "espeak-ng";
+    repo = "espeak-ng";
+    tag = version;
+    hash = "sha256-mmh5QPSVD5YQ0j16R+bEL5vcyWLtTNOJ/irBNzWY3ro=";
   };
 
   patches = [
-    # Fix build with Clang 16.
+    # https://github.com/espeak-ng/espeak-ng/pull/2274
+    ./libsonic.patch
     (fetchpatch {
-      url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
-      hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
+      name = "espeak-ng-text-to-phonemes-with-terminator.patch";
+      url = "https://github.com/espeak-ng/espeak-ng/commit/2108b1e8ae02f49cc909894a1024efdfde6682fd.patch";
+      hash = "sha256-XjEc1r7F88xZOfeUey0R6Xv6vu4Wy8GtWxXFG2NTf9g=";
     })
   ]
   ++ lib.optionals mbrolaSupport [
@@ -46,14 +84,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString ucdSupport ''
+    ln -s ${ucd-tools}/libucd.a src/ucd-tools/libucd.a
+  '';
+
   nativeBuildInputs = [
     autoconf
     automake
-    which
+    cmake
     libtool
+    ninja
     pkg-config
     ronn
     makeWrapper
+    which
   ];
 
   buildInputs =
@@ -61,45 +105,32 @@ stdenv.mkDerivation rec {
     ++ lib.optional pcaudiolibSupport pcaudiolib
     ++ lib.optional sonicSupport sonic;
 
-  # touch ChangeLog to avoid below error on darwin:
-  # Makefile.am: error: required file './ChangeLog.md' not found
-  preConfigure =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      touch ChangeLog
-    ''
-    + ''
-      ./autogen.sh
-    '';
-
-  configureFlags = [
-    "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "USE_ASYNC" asyncSupport)
+    (lib.cmakeBool "USE_KLATT" klattSupport)
+    (lib.cmakeBool "USE_LIBPCAUDIO" pcaudiolibSupport)
+    (lib.cmakeBool "USE_LIBSONIC" sonicSupport)
+    (lib.cmakeBool "USE_MBROLA" mbrolaSupport)
+    (lib.cmakeBool "USE_SPEECHPLAYER" speechPlayerSupport)
   ];
 
-  # ref https://github.com/void-linux/void-packages/blob/3cf863f894b67b3c93e23ac7830ca46b697d308a/srcpkgs/espeak-ng/template#L29-L31
-  postConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    substituteInPlace Makefile \
-      --replace 'ESPEAK_DATA_PATH=$(CURDIR) src/espeak-ng' 'ESPEAK_DATA_PATH=$(CURDIR) ${lib.getExe buildPackages.espeak-ng}' \
-      --replace 'espeak-ng-data/%_dict: src/espeak-ng' 'espeak-ng-data/%_dict: ${lib.getExe buildPackages.espeak-ng}' \
-      --replace '../src/espeak-ng --compile' "${lib.getExe buildPackages.espeak-ng} --compile"
-  '';
-
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
     wrapProgram $out/bin/espeak-ng \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
   passthru = {
-    inherit mbrolaSupport;
+    inherit mbrolaSupport ucd-tools;
   };
 
-  meta = with lib; {
-    description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
+  meta = {
+    description = "Speech synthesizer that supports more than hundred languages and accents";
     homepage = "https://github.com/espeak-ng/espeak-ng";
-    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aske ];
-    platforms = platforms.all;
+    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${src.tag}/ChangeLog.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aske ];
+    platforms = lib.platforms.all;
     mainProgram = "espeak-ng";
   };
 }
