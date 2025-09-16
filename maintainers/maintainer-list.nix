@@ -17748,6 +17748,12 @@
     githubId = 16916972;
     name = "Martin Zacho";
   };
+  mzntori = {
+    email = "mzntori@proton.me";
+    name = "mzntori";
+    github = "mzntori";
+    githubId = 44904735;
+  };
   n-hass = {
     email = "nick@hassan.host";
     github = "n-hass";
