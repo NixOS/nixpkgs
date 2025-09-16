@@ -1314,6 +1314,7 @@ mapAliases {
   libjpeg_drop = throw "'libjpeg_drop' has been renamed to/replaced by 'libjpeg_original'"; # Converted to throw 2024-10-17
   liblastfm = throw "'liblastfm' has been renamed to/replaced by 'libsForQt5.liblastfm'"; # Converted to throw 2024-10-17
   libmp3splt = throw "'libmp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
+  libmusicbrainz3 = throw "libmusicbrainz3 has been removed as it was obsolete and unused"; # Added 2025-09-16
   libmx = throw "'libmx' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   liboop = throw "liboop has been removed as it is unmaintained upstream."; # Added 2024-08-14
   libosmo-sccp = libosmo-sigtran; # Added 2024-12-20
