@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   yasm,
   autoconf,
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "https://downloads.xvid.com/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1xyg3amgg27zf7188kss7y248s0xhh1vv8rrk0j9bcsd5nasxsmf";
   };
+
+  patches = [
+    # Fix build with gcc15
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/xvidcore/raw/95382dbe529e5589a727fffceb620b0a89ff55f2/f/xvidcore-c23.patch";
+      hash = "sha256-bGwWNmXIEIIw4Tc7lrMZ4jnhcQ+uKAsxL6fuAOosMVA=";
+    })
+  ];
 
   preConfigure = ''
     # Configure script is not in the root of the source directory
