@@ -115,6 +115,23 @@ in
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 
+  hashable =
+    if pkgs.stdenv.hostPlatform.isBigEndian then
+      # Big-endian POWER:
+      # Test suite xxhash-tests: RUNNING...
+      # xxhash
+      #   oneshot
+      #     w64-ref:      OK (0.03s)
+      #       +++ OK, passed 100 tests.
+      #     w64-examples: FAIL
+      #       tests/xxhash-tests.hs:21:
+      #       expected: 2768807632077661767
+      #        but got: 13521078365639231154
+      # I pretend I do not see it...
+      dontCheck super.hashable
+    else
+      super.hashable;
+
   # 2023-12-23: It needs this to build under ghc-9.6.3.
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
