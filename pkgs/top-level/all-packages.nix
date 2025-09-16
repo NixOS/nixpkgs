@@ -8183,12 +8183,6 @@ with pkgs;
 
   libmicrohttpd = libmicrohttpd_1_0;
 
-  libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
-
-  libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
-
-  libmusicbrainz = libmusicbrainz3;
-
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
   libpeas = callPackage ../development/libraries/libpeas { };
@@ -8324,10 +8318,6 @@ with pkgs;
   libwpe = callPackage ../development/libraries/libwpe { };
 
   libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
-
-  yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
-
-  yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
   liquid-dsp = callPackage ../development/libraries/liquid-dsp {
     inherit (darwin) autoSignDarwinBinariesHook;
@@ -8638,10 +8628,6 @@ with pkgs;
     suffix = "utils";
     utils = true;
   };
-
-  proj = callPackage ../development/libraries/proj { };
-
-  proj_7 = callPackage ../development/libraries/proj/7.nix { };
 
   prospector = callPackage ../development/tools/prospector { };
 
