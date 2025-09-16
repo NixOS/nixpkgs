@@ -1,0 +1,26 @@
+diff --git a/src/sage_docbuild/builders.py b/src/sage_docbuild/builders.py
+index 24f3d0c7c12..6b5ed3af090 100644
+--- a/src/sage_docbuild/builders.py
++++ b/src/sage_docbuild/builders.py
+@@ -1155,8 +1155,8 @@ def get_all_documents(source: Path) -> list[Path]:
+     EXAMPLES::
+ 
+         sage: from sage_docbuild.builders import get_all_documents
+-        sage: documents = get_all_documents(Path('src/doc'))
+-        sage: Path('en/tutorial') in documents
++        sage: documents = get_all_documents(Path('src/doc'))  # optional - sage_spkg
++        sage: Path('en/tutorial') in documents  # optional - sage_spkg
+         True
+     """
+     documents = []
+@@ -1188,8 +1188,8 @@ def get_all_reference_documents(source: Path) -> list[Path]:
+     EXAMPLES::
+ 
+         sage: from sage_docbuild.builders import get_all_reference_documents
+-        sage: documents = get_all_reference_documents(Path('src/doc/en'))
+-        sage: Path('reference/algebras') in documents
++        sage: documents = get_all_reference_documents(Path('src/doc/en'))  # optional - sage_spkg
++        sage: Path('reference/algebras') in documents  # optional - sage_spkg
+         True
+     """
+     documents: list[tuple[int, Path]] = []
