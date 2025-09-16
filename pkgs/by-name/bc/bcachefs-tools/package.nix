@@ -69,16 +69,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-04YrgYfhZ5NfA2BcF2H6Np1SXRiH6CJpkgc9hzlbMAo=";
   };
 
+  outputs = [
+    "out"
+    "dkms"
+  ];
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+    "DKMSDIR=${placeholder "dkms"}"
 
     # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
     "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ]
   ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+  installFlags = [
+    "install"
+    "install_dkms"
+  ];
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
