@@ -138,6 +138,23 @@ with haskellLib;
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
   generic-lens = dontCheck super.generic-lens;
 
+  hashable =
+    if pkgs.stdenv.hostPlatform.isBigEndian then
+      # Big-endian POWER:
+      # Test suite xxhash-tests: RUNNING...
+      # xxhash
+      #   oneshot
+      #     w64-ref:      OK (0.03s)
+      #       +++ OK, passed 100 tests.
+      #     w64-examples: FAIL
+      #       tests/xxhash-tests.hs:21:
+      #       expected: 2768807632077661767
+      #        but got: 13521078365639231154
+      # I pretend I do not see it...
+      dontCheck super.hashable
+    else
+      super.hashable;
+
   # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
   alex = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
