@@ -1,0 +1,30 @@
+diff --git a/CMakeIncludes/prepare_version_tag.cmake b/CMakeIncludes/prepare_version_tag.cmake
+index 3c1e8bc0..08ddf5f8 100644
+--- a/CMakeIncludes/prepare_version_tag.cmake
++++ b/CMakeIncludes/prepare_version_tag.cmake
+@@ -37,21 +37,11 @@ endif ()
+ # ${CMAKE_SOURCE_DIR}. See https://git-scm.com/docs/git#Documentation/git.txt--Cltpathgt
+ # for more information on `git -C <path>`.
+ set(GIT_CMD git -C "${CMAKE_SOURCE_DIR}")
+-execute_process(COMMAND ${GIT_CMD} describe --tags --abbrev=0
+-        OUTPUT_VARIABLE ASAPO_TAG
+-        WORKING_DIRECTORY ..)
+-string(STRIP ${ASAPO_TAG} ASAPO_TAG)
+ 
+-execute_process(COMMAND ${GIT_CMD} rev-parse --abbrev-ref HEAD
+-        OUTPUT_VARIABLE BRANCH
+-        WORKING_DIRECTORY ..)
+-string(STRIP ${BRANCH} BRANCH)
+-cleanup(BRANCH)
+-
+-execute_process(COMMAND ${GIT_CMD} rev-parse --short=10 HEAD
+-        OUTPUT_VARIABLE ASAPO_VERSION_COMMIT
+-        WORKING_DIRECTORY ..)
+-string(STRIP ${ASAPO_VERSION_COMMIT} ASAPO_VERSION_COMMIT)
++SET(ASAPO_TAG "25.03.0")
++SET(BRANCH "25.03.0")
++SET(ASAPO_VERSION_COMMIT "25.03.0")
++SET(ASAPO_VERSION "25.03.0")
+ 
+ if (${BRANCH} STREQUAL "master")
+     SET(ASAPO_VERSION ${ASAPO_TAG})
