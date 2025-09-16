@@ -128,6 +128,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [
+    ./0001-Config-look-in-etc-for-global-configuration.patch
+  ];
+
   postPatch = ''
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt ThunkLibs/HostLibs/CMakeLists.txt \
       --replace-fail "/usr/include/libdrm" "${devRootFS}/include/libdrm" \
@@ -140,23 +144,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       }"
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt \
       --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) "
-
-    # Patch any references to library wrapper paths
-    substituteInPlace FEXCore/Source/Interface/Config/Config.json.in \
-      --replace-fail "ThunkGuestLibs" "UnusedThunkGuestLibs" \
-      --replace-fail "ThunkHostLibs" "UnusedThunkHostLibs"
-    substituteInPlace FEXCore/Source/Interface/Config/Config.cpp \
-      --replace-fail "FEXCore::Config::CONFIG_THUNKGUESTLIBS" "FEXCore::Config::CONFIG_UNUSEDTHUNKGUESTLIBS" \
-      --replace-fail "FEXCore::Config::CONFIG_THUNKHOSTLIBS" "FEXCore::Config::CONFIG_UNUSEDTHUNKHOSTLIBS"
-    substituteInPlace Source/Tools/LinuxEmulation/VDSO_Emulation.cpp \
-      --replace-fail "FEX_CONFIG_OPT(ThunkGuestLibs, THUNKGUESTLIBS);" "auto ThunkGuestLibs = []() { return \"$out/share/fex-emu/GuestThunks/\"; };"
-    substituteInPlace Source/Tools/LinuxEmulation/LinuxSyscalls/FileManagement.h \
-      --replace-fail "FEX_CONFIG_OPT(ThunkGuestLibs, THUNKGUESTLIBS);" "fextl::string ThunkGuestLibs() { return \"$out/share/fex-emu/GuestThunks/\"; }"
-    substituteInPlace Source/Tools/LinuxEmulation/Thunks.cpp \
-      --replace-fail "FEX_CONFIG_OPT(ThunkHostLibsPath, THUNKHOSTLIBS);" "fextl::string ThunkHostLibsPath() { return \"$out/lib/fex-emu/HostThunks/\"; }"
-    substituteInPlace Source/Tools/FEXConfig/main.qml \
-      --replace-fail "config: \"Thunk" "config: \"UnusedThunk" \
-      --replace-fail "title: qsTr(\"Library forwarding:\")" "visible: false; title: qsTr(\"Library forwarding:\")"
 
     # Temporarily disable failing tests. TODO: investigate the root cause of these failures
     rm \
