@@ -1273,13 +1273,13 @@
     "vendorHash": "sha256-D8VG9CWP4wo+cxb/ewP+b6qAeaBCu6lNwH2leoiBMAc="
   },
   "spotinst": {
-    "hash": "sha256-6FtJhxNj296yjwGJiJLwwWKA7nUaoaV89Zn2lfyuKxU=",
+    "hash": "sha256-bbQ7WDizMnCF95E/iXOSSx0e5K2wMtUW39OxT/45Jn4=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.226.0",
+    "rev": "v1.228.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-yDmZ2uJE31aumQ2lpkeL5LpEaniSElCMYUryYG0dYYQ="
+    "vendorHash": "sha256-huHeWKzq/4cHAU4P7q9bOiJ2cAFqevZ80BsCyPiujxw="
   },
   "ssh": {
     "hash": "sha256-1UN5QJyjCuxs2vQYlSuz2jsu/HgGTxOoWWRcv4qcwow=",
