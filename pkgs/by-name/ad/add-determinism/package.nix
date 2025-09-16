@@ -28,10 +28,6 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  postInstall = ''
-    ln -s add-det $out/bin/add-determinism
-  '';
-
   doCheck = !stdenv.hostPlatform.isDarwin; # it seems to be running forever on darwin
 
   nativeBuildInputs = [
@@ -51,6 +47,6 @@ rustPlatform.buildRustPackage rec {
       sharzy
     ];
     platforms = lib.platforms.all;
-    mainProgram = "add-det";
+    mainProgram = "add-determinism";
   };
 }

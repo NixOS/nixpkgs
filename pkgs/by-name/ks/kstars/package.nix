@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       timput
+      hjones2199
       returntoreality
     ];
   };

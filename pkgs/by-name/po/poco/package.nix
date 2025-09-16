@@ -19,12 +19,12 @@
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.14.2";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    hash = "sha256-koREkrfAHWfpqITN5afiXwZg37Wve2Ftx8sr8t2bSV4=";
+    hash = "sha256-acq2eja61sH/QHwMPmiDNns2jvXRTk0se/tHj9XRSiU=";
     rev = "poco-${version}-release";
   };
 

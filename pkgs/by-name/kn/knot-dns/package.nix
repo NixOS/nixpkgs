@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.5.0";
+  version = "3.4.8";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d52538bf7364c280999dec58c2a02a405dd922ef5794da1473ca7c3cf7f01277";
+    sha256 = "sha256-ZzCnPb/BLXnYAA/+ItNtBot0Z+dL7h6xIqxJNezqSfk=";
   };
 
   outputs = [
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
     changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${version}";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
     mainProgram = "knotd";

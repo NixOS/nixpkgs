@@ -116,6 +116,7 @@ let
             changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
             license = licenses.lgpl2Plus;
             maintainers = with maintainers; [
+              hjones2199
               sheepforce
               returntoreality
             ];

@@ -1,43 +1,46 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromBitbucket,
+  wrapQtAppsHook,
   pkg-config,
-  hamlib_4,
+  hamlib,
   libusb1,
   cmake,
+  gfortran,
   fftw,
   fftwFloat,
-  qt6,
-  boost,
+  qtbase,
+  qtmultimedia,
+  qtserialport,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "js8call";
-  version = "2.3.1";
+  version = "2.2.0";
 
-  src = fetchFromGitHub {
-    owner = "js8call";
-    repo = "js8call";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rYXjcmQRRfizJVriZo9yX8x2yYfWpL94Cprx9eFC3ss=";
+  src = fetchFromBitbucket {
+    owner = "widefido";
+    repo = pname;
+    rev = "v${version}-ga";
+    sha256 = "sha256-mFPhiAAibCiAkLrysAmIQalVCGd9ips2lqbAsowYprY=";
   };
 
   nativeBuildInputs = [
-    qt6.wrapQtAppsHook
+    wrapQtAppsHook
+    gfortran
     pkg-config
     cmake
   ];
 
   buildInputs = [
-    hamlib_4
+    hamlib
     libusb1
     fftw
     fftwFloat
-    qt6.qtbase
-    qt6.qtmultimedia
-    qt6.qtserialport
-    boost
+    qtbase
+    qtmultimedia
+    qtserialport
   ];
 
   prePatch = ''
@@ -46,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "/usr/share/pixmaps" "$out/share/pixmaps" \
         --replace "/usr/bin/" "$out/bin"
   '';
+
+  patches = [ ./cmake.patch ];
 
   meta = with lib; {
     description = "Weak-signal keyboard messaging for amateur radio";
@@ -56,9 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://js8call.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      melling
-      sarcasticadmin
-    ];
+    maintainers = with maintainers; [ melling ];
   };
-})
+}

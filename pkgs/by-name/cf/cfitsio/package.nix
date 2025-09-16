@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       returntoreality
       xbreak
+      hjones2199
     ];
     platforms = lib.platforms.unix;
   };

@@ -53,7 +53,10 @@ rustPlatform.buildRustPackage {
     description = "Self contained toolkit for creating, editing, and previewing TPSE files";
     homepage = "https://gitlab.com/UniQMG/tpsecore";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ huantian ];
+    maintainers = with lib.maintainers; [
+      huantian
+      wackbyte
+    ];
     platforms = lib.platforms.linux;
   };
 }

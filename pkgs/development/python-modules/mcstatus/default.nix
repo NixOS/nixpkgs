@@ -10,25 +10,21 @@
   pytest-rerunfailures,
   pytestCheckHook,
   typing-extensions,
-  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "12.0.5";
+  version = "12.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = "mcstatus";
     tag = "v${version}";
-    hash = "sha256-gtLWUIxG40MsmavA4KrHJ3btCR/zKdstwiUiZGsoNcw=";
+    hash = "sha256-DWIpN7oBbb/F5aER0v0qhcQsDoa/EfizjHgy/BE2P6E=";
   };
 
-  build-system = [
-    hatchling
-    uv-dynamic-versioning
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     asyncio-dgram
@@ -57,13 +53,13 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for checking the status of Minecraft servers";
+    mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
     changelog = "https://github.com/py-mine/mcstatus/releases/tag/${src.tag}";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [
       fab
       perchun
     ];
-    mainProgram = "mcstatus";
   };
 }

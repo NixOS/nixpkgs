@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/CarVac/librtprocess";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
+      hjones2199
       returntoreality
     ];
     platforms = platforms.unix;

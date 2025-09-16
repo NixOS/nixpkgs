@@ -212,10 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postInstall = ''
-    rm $out/LICENSE.txt
-  '';
-
   meta = {
     description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
     homepage = "https://github.com/SoftFever/OrcaSlicer";

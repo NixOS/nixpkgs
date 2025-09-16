@@ -205,7 +205,6 @@ import ../make-test-python.nix (
           rootless.succeed(su_cmd(f"mkdir -p {dir}"))
           rootless.succeed(su_cmd(f"cp -f ${quadletContainerFile} {dir}/quadlet.container"))
           rootless.systemctl("daemon-reload", "alice")
-          rootless.systemctl("start network-online.target")
           rootless.systemctl("start quadlet", "alice")
           rootless.wait_until_succeeds(su_cmd("podman ps | grep quadlet"), timeout=20)
           rootless.systemctl("stop quadlet", "alice")

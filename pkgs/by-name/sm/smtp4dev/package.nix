@@ -11,13 +11,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "smtp4dev";
-  version = "3.10.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
     tag = finalAttrs.version;
-    hash = "sha256-bhS2/YO7jejw6+qx6EdLH98SnxeqMWajSz8i7ocNVX8=";
+    hash = "sha256-LGhx+i4PIExC6GbBwDOLi/g1TxNoMFMZomdnbtc/wNc=";
   };
 
   patches = [ ./smtp4dev-npm-packages.patch ];
@@ -33,7 +33,7 @@ buildDotnetModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-c0/6kbMv5CmLxS0S/p3+oZvZsuHP9gt4X43uvGQFjTw=";
+    hash = "sha256-Xjx3V5FH72D+CXBRZgmlkbp5evnp6F4zaHMWQB5o61w=";
     postPatch = "cd ${finalAttrs.npmRoot}";
   };
 
@@ -51,7 +51,7 @@ buildDotnetModule (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/smtp4dev --help > /dev/null
+    $out/bin/smtp4dev --help | head -1 | grep -F "smtp4dev version ${finalAttrs.version}"
 
     runHook postInstallCheck
   '';

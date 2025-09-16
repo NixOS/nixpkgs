@@ -111,7 +111,6 @@ flutter324.buildFlutterApplication rec {
       schnow265
       zi3m5f
       gepbird
-      iedame
     ];
     mainProgram = "enteauth";
     platforms = [

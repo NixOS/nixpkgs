@@ -13,7 +13,7 @@
   libGLU,
   libjack2,
   juce,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   libsysprof-capture,
   pcre2,
   util-linux,
@@ -23,12 +23,9 @@
   libxkbcommon,
   libdatrie,
   libepoxy,
-  libsoup_3,
+  libsoup_2_4,
   lerc,
   sqlite,
-  libdeflate,
-  xz,
-  libwebp,
   glib,
   gtk3-x11,
   curl,
@@ -56,7 +53,7 @@ let
 
   vcvRackSdk = srcOnly vcv-rack;
   pname = "airwin2rack";
-  version = "2.13.0-unstable-2025-09-14";
+  version = "2.13.0-unstable-2025-04-07";
 in
 stdenv.mkDerivation {
   inherit pname;
@@ -65,8 +62,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "baconpaul";
     repo = "airwin2rack";
-    rev = "fc75563323bd9d8e46b1d58d89830e0bf760f0e8";
-    hash = "sha256-7jCDNbGMfJBo2xvRsDYdlEKSpAiRDNm6N4jTYCu+kKs=";
+    rev = "595eb7c7ccec5f9e662f8d620579a91dab60c1ff";
+    hash = "sha256-gBphJ6WSPw6DOQk64w8GmLrtuYSF7NFEf6xK1oxOF3w=";
     fetchSubmodules = true;
   };
 
@@ -110,7 +107,7 @@ stdenv.mkDerivation {
     libGLU
     libjack2
     freetype
-    webkitgtk_4_1
+    webkitgtk_4_0
     glib
     gtk3-x11
     curl
@@ -123,12 +120,9 @@ stdenv.mkDerivation {
     libxkbcommon
     libdatrie
     libepoxy
-    libsoup_3
+    libsoup_2_4
     lerc
     sqlite
-    libdeflate
-    xz # liblzma
-    libwebp
   ]
   ++ lib.optionals enableVCVRack [
     vcv-rack

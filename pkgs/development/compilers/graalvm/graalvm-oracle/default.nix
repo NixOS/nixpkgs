@@ -4,7 +4,7 @@
   fetchurl,
   graalvmPackages,
   useMusl ? false,
-  version ? "25",
+  version ? "24",
 }:
 
 graalvmPackages.buildGraalvm {

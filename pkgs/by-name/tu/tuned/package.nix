@@ -10,7 +10,6 @@
   gobject-introspection,
   hdparm,
   iproute2,
-  kmod,
   nix-update-script,
   nixosTests,
   pkg-config,
@@ -20,7 +19,6 @@
   util-linux,
   versionCheckHook,
   virt-what,
-  wirelesstools,
   wrapGAppsHook3,
 }:
 
@@ -113,10 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
       gawk
       hdparm
       iproute2
-      kmod
       util-linux
       virt-what
-      wirelesstools
     ])
   ];
 

@@ -2125,10 +2125,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "OOjCoBKKzgmylgDumA2H6+b+633Wox4dE4uHLqcbuA8=";
+      sha256 = "003lwcl00l13c5r1i1zk5q1p8m50nv83w6h3j2mij6hs2aaz1zwb";
       type = "gem";
     };
-    version = "4.1.0";
+    version = "3.3.7";
   };
   jemoji = {
     dependencies = [
