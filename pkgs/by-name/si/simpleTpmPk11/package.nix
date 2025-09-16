@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-tpm-pk11";
-  version = "0.06";
+  version = "0.07";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "simple-tpm-pk11";
     rev = version;
-    sha256 = "0vpbaklr4r1a2am0pqcm6m41ph22mkcrq33y8ab5h8qkhkvhd6a6";
+    sha256 = "sha256-wJ0U4ZNg60+XJTSAMs9gaMTWVePE5dfv5cZWDqwnSlY=";
   };
 
   nativeBuildInputs = [
