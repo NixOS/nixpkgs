@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/include $out/lib
-    cp lm.h $out/include
+    cp levmar.h lm.h $out/include
     cp liblevmar.a $out/lib
   '';
 
