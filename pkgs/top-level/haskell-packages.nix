@@ -16,6 +16,7 @@ let
     "ghc902Binary"
     "ghc924Binary"
     "ghc963Binary"
+    "ghc966DebianBinary"
     "ghc984Binary"
   ];
 
@@ -82,6 +83,8 @@ in
 
       ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix { };
 
+      ghc966DebianBinary = callPackage ../development/compilers/ghc/9.6.6-debian-binary.nix { };
+
       ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix { };
 
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
@@ -98,7 +101,16 @@ in
       };
       ghc94 = compiler.ghc948;
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs = bb.packages.ghc924Binary;
+        bootPkgs =
+          if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else
+            bb.packages.ghc924Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -111,6 +123,13 @@ in
         bootPkgs =
           if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
             bb.packages.ghc984Binary
+          else if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -130,6 +149,13 @@ in
             # With both 9.6.3 and 9.6.4 binary it is impossible to link against
             # the clock package (probably a hsc2hs problem).
             bb.packages.ghc967
+          else if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -148,6 +174,13 @@ in
             # With both 9.6.3 and 9.6.4 binary it is impossible to link against
             # the clock package (probably a hsc2hs problem).
             bb.packages.ghc967
+          else if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -257,6 +290,12 @@ in
       ghc963Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc963Binary;
         ghc = bh.compiler.ghc963Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+      ghc966DebianBinary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc966DebianBinary;
+        ghc = bh.compiler.ghc966DebianBinary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
