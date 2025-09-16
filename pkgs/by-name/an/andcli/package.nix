@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "andcli";
-  version = "2.4.0";
+  version = "2.4.1";
 
   subPackages = [ "cmd/andcli" ];
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "tjblackheart";
     repo = "andcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YGtBLx0Wt9Pn3V0+J9zFX9aBGWFJ8V8ordsSG4CSmxc=";
+    hash = "sha256-T5XapWiQFZlSKBCqE9sv2pY4okXkeZEKuG6UOK/XyaI=";
   };
 
   vendorHash = "sha256-652JLCdxDDvhQIz3EbfoI7h+41Er3TiuJXi1cqbA4nI=";
