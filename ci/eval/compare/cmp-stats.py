@@ -8,6 +8,7 @@ from pathlib import Path
 # Define metrics of interest (can be expanded as needed)
 METRIC_PREFIXES = ("nr", "gc")
 
+
 def flatten_data(json_data: dict) -> dict:
     """
     Extracts and flattens metrics from JSON data.
@@ -37,8 +38,6 @@ def flatten_data(json_data: dict) -> dict:
     return flat_metrics
 
 
-
-
 def load_all_metrics(directory: Path) -> dict:
     """
     Loads all stats JSON files in the specified directory and extracts metrics.
@@ -53,18 +52,19 @@ def load_all_metrics(directory: Path) -> dict:
         assert system_dir.is_dir()
 
         for chunk_output in system_dir.iterdir():
-                with chunk_output.open() as f:
-                    data = json.load(f)
-                metrics[f"{system_dir.name}/${chunk_output.name}"] = flatten_data(data)
+            with chunk_output.open() as f:
+                data = json.load(f)
+            metrics[f"{system_dir.name}/${chunk_output.name}"] = flatten_data(data)
 
     return metrics
+
 
 def dataframe_to_markdown(df: pd.DataFrame) -> str:
     df = df.sort_values(by=df.columns[0], ascending=True)
     markdown_lines = []
 
     # Header (get column names and format them)
-    header = '\n| ' + ' | '.join(df.columns) + ' |'
+    header = "\n| " + " | ".join(df.columns) + " |"
     markdown_lines.append(header)
     markdown_lines.append("| - " * (len(df.columns)) + "|")  # Separator line
 
@@ -78,21 +78,31 @@ def dataframe_to_markdown(df: pd.DataFrame) -> str:
         # Check for no change and NaN in p_value/t_stat
         row_values = []
         for val in row:
-            if isinstance(val, float) and np.isnan(val):  # For NaN values in p-value or t-stat
+            if isinstance(val, float) and np.isnan(
+                val
+            ):  # For NaN values in p-value or t-stat
                 row_values.append("-")  # Custom symbol for NaN
             elif isinstance(val, float) and val == 0:  # For no change (mean_diff == 0)
                 row_values.append("-")  # Custom symbol for no change
             else:
-                row_values.append(fmt(f"{val:.4f}" if isinstance(val, float) else str(val)))
+                row_values.append(
+                    fmt(f"{val:.4f}" if isinstance(val, float) else str(val))
+                )
 
-        markdown_lines.append('| ' + ' | '.join(row_values) + ' |')
+        markdown_lines.append("| " + " | ".join(row_values) + " |")
 
-    return '\n'.join(markdown_lines)
+    return "\n".join(markdown_lines)
 
 
 def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.DataFrame:
     common_files = sorted(set(before_metrics) & set(after_metrics))
-    all_keys = sorted({ metric_keys for file_metrics in before_metrics.values() for metric_keys in file_metrics.keys() })
+    all_keys = sorted(
+        {
+            metric_keys
+            for file_metrics in before_metrics.values()
+            for metric_keys in file_metrics.keys()
+        }
+    )
 
     results = []
 
@@ -112,15 +122,17 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
             pct_change = 100 * diff / before_arr
             t_stat, p_val = ttest_rel(after_arr, before_arr)
 
-            results.append({
-                "metric": key,
-                "mean_before": np.mean(before_arr),
-                "mean_after": np.mean(after_arr),
-                "mean_diff": np.mean(diff),
-                "mean_%_change": np.mean(pct_change),
-                "p_value": p_val,
-                "t_stat": t_stat
-            })
+            results.append(
+                {
+                    "metric": key,
+                    "mean_before": np.mean(before_arr),
+                    "mean_after": np.mean(after_arr),
+                    "mean_diff": np.mean(diff),
+                    "mean_%_change": np.mean(pct_change),
+                    "p_value": p_val,
+                    "t_stat": t_stat,
+                }
+            )
 
     df = pd.DataFrame(results).sort_values("p_value")
     return df
@@ -139,12 +151,16 @@ if __name__ == "__main__":
 
     # This may happen if the pull request target does not include PR#399720 yet.
     if not before_stats.exists():
-        print("⚠️  Skipping comparison: stats directory is missing in the target commit.")
+        print(
+            "⚠️  Skipping comparison: stats directory is missing in the target commit."
+        )
         exit(0)
 
     # This should never happen, but we're exiting gracefully anyways
     if not after_stats.exists():
-        print("⚠️  Skipping comparison: stats directory missing in current PR evaluation.")
+        print(
+            "⚠️  Skipping comparison: stats directory missing in current PR evaluation."
+        )
         exit(0)
 
     before_metrics = load_all_metrics(before_stats)
