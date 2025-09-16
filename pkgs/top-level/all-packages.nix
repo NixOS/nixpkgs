@@ -466,8 +466,6 @@ with pkgs;
     python3Packages = python311Packages;
   };
 
-  fetchbower = callPackage ../build-support/fetchbower { };
-
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
   fetchcvs =
@@ -9268,12 +9266,6 @@ with pkgs;
     saxon_11-he
     saxon_12-he
     ;
-
-  ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
-
-  ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
-
-  buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO
 
