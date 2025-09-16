@@ -6615,7 +6615,7 @@
     githubId = 22124013;
   };
   drakon64 = {
-    name = "Adam Chance";
+    name = "Evelyn Chance";
     email = "nixpkgs@drakon.cloud";
     github = "drakon64";
     githubId = 6444703;
