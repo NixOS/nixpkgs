@@ -7,6 +7,7 @@
   newScope,
   overrideCC,
   stdenvNoLibc,
+  runCommand,
 }:
 
 lib.makeScope newScope (
@@ -18,6 +19,14 @@ lib.makeScope newScope (
     cygwin = callPackage ./cygwin {
       stdenv = stdenvNoLibc;
     };
+
+    cygwin-shim = cygwin // {
+      bin = runCommand "cygwin-shim" { } ''
+        mkdir -p "$out"/bin
+        ln -sr /bin/cygwin1.dll "$out"/bin/
+      '';
+    };
+
     cygwin_headers = callPackage ./cygwin/headers.nix { };
 
     mingw_w64 = callPackage ./mingw-w64 {
