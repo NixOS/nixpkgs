@@ -89,9 +89,7 @@ let
         "k2v::poll::test_poll_item"
       ];
 
-      passthru.tests =
-        lib.optionalAttrs (lib.versionAtLeast version "1")
-          nixosTests."garage_${lib.versions.major version}";
+      passthru.tests = nixosTests."garage_${lib.versions.major version}";
 
       meta = {
         description = "S3-compatible object store for small self-hosted geo-distributed deployments";
@@ -130,10 +128,10 @@ rec {
     cargoPatches = [ ./update-time.patch ];
   };
 
-  garage_1_2_0 = generic {
-    version = "1.2.0";
-    hash = "sha256-JoOwCbChSL7mjegnLHOH2Abfmsnw9BwNsjFj7nqBN6o=";
-    cargoHash = "sha256-vcvD0Fn/etnAuXrM3+rj16cqpEmW2nzRmrjXsftKTFE=";
+  garage_1_3_0 = generic {
+    version = "1.3.0";
+    hash = "sha256-6w+jun0UmQHmoXcokGpPM95BbQyOKefTeAelAFKxNCM=";
+    cargoHash = "sha256-mWLsOTWxzMdDfzEDu+WHJ12SVscEVfBVuOTVFbfnk0g=";
   };
 
   garage_2_0_0 = generic {
@@ -146,7 +144,7 @@ rec {
 
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_2_0;
+  garage_1_x = garage_1_3_0;
   garage_1 = garage_1_x;
 
   garage_2 = garage_2_0_0;
