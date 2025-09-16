@@ -163,6 +163,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       adamcstephens
+      booxter
       kmcopper
       netixx
       xddxdd
