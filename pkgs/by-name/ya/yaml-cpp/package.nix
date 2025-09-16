@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   cmake,
   static ? stdenv.hostPlatform.isStatic,
@@ -17,6 +18,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-J87oS6Az1/vNdyXu3L7KmUGWzU0IAkGrGMUUha+xDXI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "yaml-cpp-fix-cmake-4.patch";
+      url = "https://github.com/jbeder/yaml-cpp/commit/c2680200486572baf8221ba052ef50b58ecd816e.patch";
+      hash = "sha256-1kXRa+xrAbLEhcJxNV1oGHPmayj1RNIe6dDWXZA3mUA=";
+    })
+  ];
 
   strictDeps = true;
 

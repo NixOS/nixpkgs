@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" "$i"
     done
     rm $out/bin/libndi.so.${majorVersion}
-    ln -s $out/lib/libndi.so.${version} $out/bin/libndi.so.${majorVersion}
+    ln -s $out/lib/libndi.so $out/bin/libndi.so.${majorVersion}
     # Fake ndi version 5 for compatibility with DistroAV (obs plugin using NDI)
-    ln -s $out/lib/libndi.so.${version} $out/bin/libndi.so.5
+    ln -s $out/lib/libndi.so $out/bin/libndi.so.5
     mv include examples $out/
     mkdir -p $out/share/doc/ndi-6
     mv licenses $out/share/doc/ndi-6/licenses
