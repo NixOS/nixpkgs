@@ -97,7 +97,7 @@ stdenvNoCC.mkDerivation {
     numBroken="$((num - $qaCountDrv))"
     echo "nix-env.qaCountBroken $numBroken" >> hydra-metrics
 
-    lines="$(find "$nixpkgs" -name "*.nix" -type f | xargs cat | wc -l)"
+    lines="$(find "$nixpkgs" -name "*.nix" -type f -print0 | xargs -0 cat | wc -l)"
     echo "loc $lines" >> hydra-metrics
 
     runHook postBuild
