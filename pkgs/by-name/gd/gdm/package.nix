@@ -106,6 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
 
+    # Fix build with gcc15
+    # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/273
+    (fetchpatch {
+      name = "gdm-rename-bool-variable-fix-gcc15-build.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/a3e0aca75e16aeafc171751028406b54f5ed8397.patch";
+      hash = "sha256-gOURo0WzBqSrVl0hnpdtd60QFKc0CT2A9YjNoPUPtyE=";
+    })
+
     # Change hardcoded paths to nix store paths.
     (replaceVars ./fix-paths.patch {
       inherit
