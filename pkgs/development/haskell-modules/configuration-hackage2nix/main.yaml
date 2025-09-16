@@ -79,6 +79,7 @@ extra-packages:
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
+  - ghc-typelits-natnormalise < 0.8     # 2025-09-15: Stackage is stuck at 0.7.10
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
   - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
