@@ -8187,7 +8187,7 @@ with pkgs;
 
   libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
 
-  libmusicbrainz = libmusicbrainz3;
+  libmusicbrainz = libmusicbrainz5;
 
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
