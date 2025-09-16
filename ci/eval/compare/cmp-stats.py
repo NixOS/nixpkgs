@@ -8,9 +8,6 @@ from pathlib import Path
 from scipy.stats import ttest_rel
 from tabulate import tabulate
 
-# Define metrics of interest (can be expanded as needed)
-METRIC_PREFIXES = ("nr", "gc")
-
 
 def flatten_data(json_data: dict) -> dict:
     """
