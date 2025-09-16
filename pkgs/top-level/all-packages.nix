@@ -7933,6 +7933,15 @@ with pkgs;
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
+  inherit
+    ({
+      jemalloc-java = callPackage ../development/libraries/jemalloc/java.nix { };
+      jemalloc-java-unprefixed = jemalloc-java.override { unprefixed = true; };
+    })
+    jemalloc-java
+    jemalloc-java-unprefixed
+    ;
+
   rust-jemalloc-sys = callPackage ../development/libraries/jemalloc/rust.nix { };
   rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
 
