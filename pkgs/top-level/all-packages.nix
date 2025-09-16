@@ -8639,8 +8639,6 @@ with pkgs;
     utils = true;
   };
 
-  proj = callPackage ../development/libraries/proj { };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf_32;
