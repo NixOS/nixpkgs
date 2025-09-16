@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitea,
   openssl,
@@ -59,9 +58,6 @@ let
       buildFeatures = [
         "kubernetes-discovery"
         "bundled-libs"
-      ]
-      ++ lib.optional (lib.versionOlder version "1.0") "sled"
-      ++ [
         "metrics"
         "k2v"
         "telemetry-otlp"
@@ -77,9 +73,6 @@ let
         "k2v"
         "kubernetes-discovery"
         "bundled-libs"
-      ]
-      ++ lib.optional (lib.versionOlder version "1.0") "sled"
-      ++ [
         "lmdb"
         "sqlite"
       ];
@@ -111,14 +104,6 @@ let
     };
 in
 rec {
-  garage_0_9_4 = generic {
-    version = "0.9.4";
-    hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
-    cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
-    cargoPatches = [ ./update-time.patch ];
-    eol = true;
-  };
-
   garage_1_2_0 = generic {
     version = "1.2.0";
     hash = "sha256-JoOwCbChSL7mjegnLHOH2Abfmsnw9BwNsjFj7nqBN6o=";
@@ -130,8 +115,6 @@ rec {
     hash = "sha256-dn7FoouF+5qmW6fcC20bKQSc6D2G9yrWdBK3uN3bF58=";
     cargoHash = "sha256-6VM/EesrUIaQOeDGqzb0kOqMz4hW7zBJUnaRQ9C3cqc=";
   };
-
-  garage_0_9 = garage_0_9_4;
 
   garage_1 = garage_1_2_0;
 
