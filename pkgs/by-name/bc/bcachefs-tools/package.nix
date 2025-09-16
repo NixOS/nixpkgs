@@ -69,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4l6pds24jxCJGZIYyL0xoB6EIn6mvKqhLA4DyVeJ9zc=";
   };
 
+  outputs = [
+    "out"
+    "dkms"
+  ];
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
@@ -77,8 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
     "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+    "DKMSDIR=${placeholder "dkms"}"
   ]
   ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+  installFlags = [
+    "install"
+    "install_dkms"
+  ];
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
