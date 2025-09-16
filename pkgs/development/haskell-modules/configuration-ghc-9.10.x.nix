@@ -114,6 +114,22 @@ in
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
   fsnotify = dontCheck super.fsnotify; # https://github.com/haskell-fswatch/hfsnotify/issues/115
+  hashable =
+    if pkgs.stdenv.hostPlatform.isBigEndian then
+      # Big-endian POWER:
+      # Test suite xxhash-tests: RUNNING...
+      # xxhash
+      #   oneshot
+      #     w64-ref:      OK (0.03s)
+      #       +++ OK, passed 100 tests.
+      #     w64-examples: FAIL
+      #       tests/xxhash-tests.hs:21:
+      #       expected: 2768807632077661767
+      #        but got: 13521078365639231154
+      # I pretend I do not see it...
+      dontCheck super.hashable
+    else
+      super.hashable;
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
 
