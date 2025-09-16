@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oZeik172VBSxuO3DfD5t8cKPl3AYjlyEw5x4/7g9h6o=";
   };
 
