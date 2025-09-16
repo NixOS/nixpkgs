@@ -7,6 +7,7 @@ import warnings
 
 from pathlib import Path
 from scipy.stats import ttest_rel
+from tabulate import tabulate
 
 # Define metrics of interest (can be expanded as needed)
 METRIC_PREFIXES = ("nr", "gc")
@@ -77,37 +78,28 @@ def load_all_metrics(path: Path) -> dict:
 
 def dataframe_to_markdown(df: pd.DataFrame) -> str:
     df = df.sort_values(by=df.columns[0], ascending=True)
-    markdown_lines = []
 
     # Header (get column names and format them)
-    header = "\n| " + " | ".join(df.columns) + " |"
-    markdown_lines.append(header)
-    markdown_lines.append("| - " * (len(df.columns)) + "|")  # Separator line
+    headers = [str(column) for column in df.columns]
+    table = []
 
     # Iterate over rows to build Markdown rows
     for _, row in df.iterrows():
-        # TODO: define threshold for highlighting
-        highlight = False
-
-        fmt = lambda x: f"**{x}**" if highlight else f"{x}"
-
         # Check for no change and NaN in p_value/t_stat
         row_values = []
         for val in row:
-            if isinstance(val, float) and np.isnan(
-                val
-            ):  # For NaN values in p-value or t-stat
-                row_values.append("-")  # Custom symbol for NaN
-            elif isinstance(val, float) and val == 0:  # For no change (mean_diff == 0)
-                row_values.append("-")  # Custom symbol for no change
+            if isinstance(val, (float, int)):
+                if np.isnan(val):
+                    row_values.append("-")  # Custom symbol for NaN
+                elif val == 0:
+                    row_values.append("-")  # Custom symbol for no change
+                else:
+                    row_values.append(f"{val:.4f}")
             else:
-                row_values.append(
-                    fmt(f"{val:.4f}" if isinstance(val, float) else str(val))
-                )
+                row_values.append(str(val))
+        table.append(row_values)
 
-        markdown_lines.append("| " + " | ".join(row_values) + " |")
-
-    return "\n".join(markdown_lines)
+    return tabulate(table, headers, tablefmt="github")
 
 
 def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.DataFrame:
