@@ -11620,6 +11620,11 @@
     github = "jasonxue1";
     githubId = 103628493;
     name = "jasonxue";
+    keys = [
+      {
+        fingerprint = "067A 9B58 DAC4 1C31 D688  81A9 EC23 DBDD B617 6861";
+      }
+    ];
   };
   jaspersurmont = {
     email = "jasper@surmont.dev";
