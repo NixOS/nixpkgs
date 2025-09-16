@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2025.9.1";
+  version = "2025.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-0Jv+WfLlps60fKfTC3r4/UzIGyEss4bhd3dhUKsdNaY=";
+    hash = "sha256-q4IzFi2ygePikj3XsDmiNKIFk8pzgY6FktHLPeV5XSc=";
   };
 
   postPatch = ''
