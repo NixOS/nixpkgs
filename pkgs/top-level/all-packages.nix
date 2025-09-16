@@ -8327,8 +8327,6 @@ with pkgs;
 
   yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
 
-  yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
-
   liquid-dsp = callPackage ../development/libraries/liquid-dsp {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
