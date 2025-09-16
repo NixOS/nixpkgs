@@ -30,12 +30,18 @@ def flatten_data(json_data: dict) -> dict:
         dict: Flattened metrics with keys as metric names.
     """
     flat_metrics = {}
-    for k, v in json_data.items():
-        if isinstance(v, (int, float)):
-            flat_metrics[k] = v
-        elif isinstance(v, dict):
-            for sub_k, sub_v in v.items():
-                flat_metrics[f"{k}.{sub_k}"] = sub_v
+    for key, value in json_data.items():
+        if isinstance(value, (int, float)):
+            flat_metrics[key] = value
+        elif isinstance(value, dict):
+            for subkey, subvalue in value.items():
+                assert isinstance(subvalue, (int, float)), subvalue
+                flat_metrics[f"{key}.{subkey}"] = subvalue
+        else:
+            assert isinstance(value, (float, int, dict)), (
+                f"Value `{value}` has unexpected type"
+            )
+
     return flat_metrics
 
 
