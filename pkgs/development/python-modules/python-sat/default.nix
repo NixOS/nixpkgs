@@ -8,7 +8,7 @@
 }:
 buildPythonPackage rec {
   pname = "python-sat";
-  version = "0.1.8.dev20";
+  version = "1.8.dev20";
   format = "setuptools";
 
   src = fetchFromGitHub {
