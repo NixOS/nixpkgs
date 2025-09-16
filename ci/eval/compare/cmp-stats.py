@@ -152,20 +152,6 @@ def main():
     before_stats = Path(options.before)
     after_stats = Path(options.after)
 
-    # This may happen if the pull request target does not include PR#399720 yet.
-    if not before_stats.exists():
-        print(
-            "⚠️  Skipping comparison: stats directory is missing in the target commit."
-        )
-        exit(0)
-
-    # This should never happen, but we're exiting gracefully anyways
-    if not after_stats.exists():
-        print(
-            "⚠️  Skipping comparison: stats directory missing in current PR evaluation."
-        )
-        exit(0)
-
     before_metrics = load_all_metrics(before_stats)
     after_metrics = load_all_metrics(after_stats)
     df1 = perform_pairwise_tests(before_metrics, after_metrics)
