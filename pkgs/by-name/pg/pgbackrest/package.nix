@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/pgbackrest/pgbackrest/releases/tag/release%2F${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "pgbackrest";
-    maintainers = with lib.maintainers; [ zaninime ];
+    maintainers = with lib.maintainers; [
+      zaninime
+      iedame
+    ];
   };
 })
