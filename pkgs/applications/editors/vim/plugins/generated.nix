@@ -2103,6 +2103,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  claude-fzf-history-nvim = buildVimPlugin {
+    pname = "claude-fzf-history.nvim";
+    version = "2025-09-06";
+    src = fetchFromGitHub {
+      owner = "pittcat";
+      repo = "claude-fzf-history.nvim";
+      rev = "8257e346039e1a9089af307c04871c587fdb449a";
+      sha256 = "1zy6wj7cajkzdv7giazsmq8hi309khi82bqnd8kj6i6rj6mrzbkc";
+    };
+    meta.homepage = "https://github.com/pittcat/claude-fzf-history.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   claudecode-nvim = buildVimPlugin {
     pname = "claudecode.nvim";
     version = "2025-09-15";
