@@ -41,7 +41,10 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "man"
+    "tools"
   ];
 
   patches = [
@@ -100,10 +103,16 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash utilities/ovs-appctl-bashcomp.bash
     installShellCompletion --bash utilities/ovs-vsctl-bashcomp.bash
 
-    wrapProgram $out/bin/ovs-l3ping \
+    mkdir -p $tools/{bin,share/openvswitch/scripts}
+    mv $out/share/openvswitch/bugtool-plugins $tools/share/openvswitch
+    mv $out/share/openvswitch/scripts/ovs-{bugtool*,check-dead-ifs,monitor-ipsec,vtep} $tools/share/openvswitch/scripts
+    mv $out/share/openvswitch/scripts/usdt $tools/share/openvswitch/scripts
+    mv $out/bin/ovs-{bugtool,dpctl-top,l3ping,parse-backtrace,pcap,tcpdump,tcpundump,test,vlan-test} $tools/bin
+
+    wrapProgram $tools/bin/ovs-l3ping \
       --prefix PYTHONPATH : $out/share/openvswitch/python
 
-    wrapProgram $out/bin/ovs-tcpdump \
+    wrapProgram $tools/bin/ovs-tcpdump \
       --prefix PATH : ${lib.makeBinPath [ tcpdump ]} \
       --prefix PYTHONPATH : $out/share/openvswitch/python
   '';
