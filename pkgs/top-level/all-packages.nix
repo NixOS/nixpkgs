@@ -14023,11 +14023,6 @@ with pkgs;
     lua = lua5_1;
   };
 
-  # You still can override by passing more arguments.
-  spring = callPackage ../games/spring { asciidoc = asciidoc-full; };
-
-  springLobby = callPackage ../games/spring/springlobby.nix { };
-
   steam-run = steam.run;
   steam-run-free = steam.run-free;
 
