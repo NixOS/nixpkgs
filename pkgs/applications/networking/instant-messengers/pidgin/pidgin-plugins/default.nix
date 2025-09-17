@@ -55,8 +55,6 @@ lib.makeScope newScope (
     purple-xmpp-http-upload = callPackage ./purple-xmpp-http-upload { };
 
     tdlib-purple = callPackage ./tdlib-purple { };
-
-    pidgin-opensteamworks = callPackage ./pidgin-opensteamworks { };
   }
   // lib.optionalAttrs config.allowAliases {
     purple-matrix = throw "'pidginPackages.purple-matrix' has been unmaintained since April 2022, so it was removed.";
@@ -65,5 +63,6 @@ lib.makeScope newScope (
     pidgin-msn-pecan = throw "'pidginPackages.pidgin-msn-pecan' has been removed as it's unmaintained upstream and doesn't work with escargot";
     pidgin-mra = throw "'pidginPackages.pidgin-mra' has been removed since mail.ru agent service has stopped functioning in 2024.";
     purple-facebook = throw "'pidginPackages.purple-facebook' has been removed as it is unmaintained and doesn't support e2ee enforced by facebook.";
+    pidgin-opensteamworks = throw "'pidginPackages.pidgin-opensteamworks' has been removed as it is unmaintained and no longer works with Steam.";
   }
 )
