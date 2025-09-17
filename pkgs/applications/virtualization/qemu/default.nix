@@ -90,7 +90,7 @@
   tpmSupport ? !minimal,
   uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
   liburing,
-  canokeySupport ? !minimal,
+  canokeySupport ? false,
   canokey-qemu,
   capstoneSupport ? !minimal,
   capstone,
