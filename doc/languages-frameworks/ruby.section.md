@@ -273,6 +273,8 @@ To test that it works, you can then try using the gem with:
 NIX_PATH=nixpkgs=$PWD nix-shell -p "ruby.withPackages (ps: with ps; [ name-of-your-gem ])"
 ```
 
+To check the gems for any security vulnerabilities, run `./maintainers/scripts/audit-ruby-packages/audit-ruby-packages.bash`.
+
 ### Packaging applications {#packaging-applications}
 
 A common task is to add a Ruby executable to Nixpkgs; popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables. Otherwise, the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
