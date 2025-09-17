@@ -17,8 +17,9 @@
   python3Packages,
   re2,
   zlib,
-  microsoft-gsl,
   protobuf,
+  microsoft-gsl,
+  darwinMinVersionHook,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
   ncclSupport ? config.cudaSupport,
@@ -149,7 +150,10 @@ effectiveStdenv.mkDerivation rec {
         nccl
       ]
     )
-  );
+  )
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ];
 
   nativeCheckInputs = [
     gtest
