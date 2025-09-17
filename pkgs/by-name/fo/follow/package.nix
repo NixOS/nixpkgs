@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
     pnpm --offline electron-vite build
     # Remove dev dependencies.
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     # Clean up broken symlinks left behind by `pnpm prune`
     find node_modules/.bin -xtype l -delete
 
