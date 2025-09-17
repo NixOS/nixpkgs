@@ -363,7 +363,8 @@ lib.makeScope pkgs.newScope (
     # =============== simple script files ====================
 
     lightning = scriptDerivation {
-      name = "Lightning";
+      pname = "Lightning";
+      version = "0-unstable-2017-08-25";
       src = fetchurl {
         url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/Lightning.scm";
         sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";
