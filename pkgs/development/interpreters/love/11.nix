@@ -8,6 +8,7 @@
   libGL,
   openal,
   luajit,
+  lua5_1,
   libdevil,
   freetype,
   physfs,
@@ -38,14 +39,17 @@ stdenv.mkDerivation rec {
     pkg-config
     autoconf
     automake
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    stdenv.cc.bintools.bintools # for install_name_tool
   ];
+
   buildInputs = [
     SDL2
-    xorg.libX11 # SDl2 optional depend, for SDL_syswm.h
-    libGLU
-    libGL
     openal
-    luajit
+    # Upstream builds typically use LuaJIT, but LÖVE can also be built against plain Lua 5.1:
+    # https://love2d.org/wiki/Building_LÖVE#Lua
+    (if stdenv.isDarwin then lua5_1 else luajit)
     libdevil
     freetype
     physfs
@@ -56,22 +60,38 @@ stdenv.mkDerivation rec {
     libtheora
     which
     libtool
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    xorg.libX11 # SDL2 optional depend, for SDL_syswm.h
+    libGLU
+    libGL
   ];
 
   preConfigure = "$shell ./platform/unix/automagic";
 
   configureFlags = [
-    "--with-lua=luajit"
+    (if stdenv.isDarwin then "--with-lua=lua" else "--with-lua=luajit")
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    # Make liblove a dylib instead of a bundle on macOS
+    substituteInPlace libtool \
+      --replace "-bundle" "-dynamiclib" \
+      --replace "-Wl,-bundle" "-Wl,-dynamiclib"
+  '';
+
+  # Fix Darwin dylib paths
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change ".libs/liblove-11.5.so" "$out/lib/liblove-11.5.so" "$out/bin/love"
+  '';
 
   meta = {
     homepage = "https://love2d.org";
     description = "Lua-based 2D game engine/scripting language";
     mainProgram = "love";
     license = lib.licenses.zlib;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.raskin ];
   };
 }
