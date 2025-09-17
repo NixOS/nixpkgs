@@ -654,4 +654,29 @@ in
       '';
     }
   );
+
+  rememberLastChoice = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-remember-last-choice";
+      meta.maintainers = with lib.maintainers; [ noar-t ];
+
+      nodes.machine = {
+        imports = [ common ];
+        boot.loader.systemd-boot.rememberLastChoice = true;
+      };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed(
+            "test -e /boot/loader/loader.conf"
+        )
+        machine.succeed(
+            "grep -q '@saved' /boot/loader/loader.conf"
+        )
+      '';
+    }
+  );
 }
