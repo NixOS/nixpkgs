@@ -3230,6 +3230,8 @@ self: super: with self; {
 
   cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
 
+  cv2-enumerate-cameras = callPackage ../development/python-modules/cv2-enumerate-cameras { };
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };

@@ -175,7 +175,7 @@ in
               ++ lib.optionals options.streaming [
                 "--streaming"
               ]
-              ++ lib.optionals options.cuda [
+              ++ lib.optionals options.useCUDA [
                 "--use-cuda"
               ]
               ++ options.extraArgs
