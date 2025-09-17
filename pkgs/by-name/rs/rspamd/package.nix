@@ -39,13 +39,13 @@ assert (!withHyperscan) || (!withVectorscan);
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.12.1";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-bAkT0msUkgGkjAIlF7lnJbimBKW1NSn2zjkCj3ErJ1I=";
+    hash = "sha256-0qX/rvcEXxzr/PGL2A59T18Mfcalrjz0KJpEWBKJsZg=";
   };
 
   hardeningEnable = [ "pie" ];
