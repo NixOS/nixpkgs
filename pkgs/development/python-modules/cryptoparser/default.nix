@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-bEvhMVcm9sXlfhxUD2K4N10nusgxpGYFJQLtJE1/qok=";
   };
 
+  patches = [
+    # https://gitlab.com/coroner/cryptoparser/-/merge_requests/2
+    ./fix-dirs-exclude.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
