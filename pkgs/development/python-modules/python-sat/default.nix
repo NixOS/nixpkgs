@@ -34,9 +34,22 @@ buildPythonPackage rec {
     pypblib
   ];
 
+  pythonImportsCheck = [
+    "pysat"
+    "pysat.examples"
+    "pysat.allies"
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [ "tests/test_unique_mus.py" ];
+  # Due to `python -m pytest` appending the local directory to `PYTHONPATH`,
+  # importing `pysat.examples` in the tests fails. Removing the `pysat`
+  # directory fixes since then only the installed version in `$out` is
+  # imported, which has `pysat.examples` correctly installed.
+  # See https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
+  '';
 
   meta = with lib; {
     description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
