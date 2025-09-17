@@ -64,7 +64,8 @@ linkDLLs() {
     # Iterate over any DLL that we depend on.
     local target
     for target in {bin,libexec}/**/*.{exe,dll}; do
-      _linkDeps "$target" "$(dirname "$target")" "1"
+      [[ ! -f "$target" || ! -x "$target" ]] ||
+        _linkDeps "$target" "$(dirname "$target")" "1"
     done
   )
 }
