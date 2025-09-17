@@ -90,6 +90,26 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  arcdata = mkAzExtension {
+    pname = "arcdata";
+    version = "1.5.25";
+    url = "https://azurearcdatacli.z13.web.core.windows.net/arcdata-1.5.25-py2.py3-none-any.whl";
+    hash = "sha256-/ejgjd/O37GtS6/+gzsscImoLllaDYCl2LS8m+pulTw=";
+    description = "Tools for managing ArcData";
+    propagatedBuildInputs = with python3Packages; [
+      jinja2
+      jsonpatch
+      jsonpath-ng
+      jsonschema
+      kubernetes
+      ndjson
+      pem
+      pydash
+      regex
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
     version = "1.0.2";
