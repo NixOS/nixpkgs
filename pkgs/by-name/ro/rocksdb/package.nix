@@ -9,7 +9,7 @@
   snappy,
   zlib,
   zstd,
-  windows,
+  windowsPackages,
   enableJemalloc ? false,
   jemalloc,
   enableLiburing ? stdenv.hostPlatform.isLinux,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enableJemalloc jemalloc
     ++ lib.optional enableLiburing liburing
-    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+    ++ lib.optional stdenv.hostPlatform.isMinGW windowsPackages.pthreads;
 
   outputs = [
     "out"
