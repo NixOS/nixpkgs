@@ -30,6 +30,6 @@ cd ../../../..
 
 if [[ "${1-default}" != "--deps-only" ]]; then
     SHA="$(nix-prefetch-url --quiet --unpack --type sha256 $DEB_URL)"
-    SRI=$(nix --experimental-features nix-command hash to-sri "sha256:$SHA")
+    SRI=$(nix-hash --to-sri "sha256:$SHA")
     update-source-version cider-2 "$NEW_VERSION" "$SRI"
 fi

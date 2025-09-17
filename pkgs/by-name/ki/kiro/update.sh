@@ -86,7 +86,7 @@ echo "Updating to version: $max_version"
 echo "Calculating hashes..."
 for platform in "${!platform_urls[@]}"; do
     echo "  Calculating hash for $platform..."
-    platform_hashes["$platform"]=$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url "${platform_urls[$platform]}")")
+    platform_hashes["$platform"]=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "${platform_urls[$platform]}")")
 done
 
 # Update package.nix and generate sources.json
