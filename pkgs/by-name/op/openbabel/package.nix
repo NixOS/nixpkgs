@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  ninja,
   perl,
   zlib,
   libxml2,
@@ -17,20 +18,24 @@
   coordgenlibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openbabel";
-  version = "unstable-06-12-23";
+  version = "3.1.1-unstable-2024-12-21";
 
   src = fetchFromGitHub {
     owner = "openbabel";
-    repo = pname;
-    rev = "32cf131444c1555c749b356dab44fb9fe275271f";
-    hash = "sha256-V0wrZVrojCZ9Knc5H6cPzPoYWVosRZ6Sn4PX+UFEfHY=";
+    repo = "openbabel";
+    rev = "889c350feb179b43aa43985799910149d4eaa2bc";
+    hash = "sha256-pJbvKBjpvXNjTZRxD2AqEarqmq+Pq08uvGvog/k/a7k=";
   };
 
-  postPatch = ''
-    sed '1i#include <ctime>' -i include/openbabel/obutil.h # gcc12
-  '';
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    swig
+    pkg-config
+  ];
 
   buildInputs = [
     perl
@@ -45,40 +50,17 @@ stdenv.mkDerivation rec {
     coordgenlibs
   ];
 
-  nativeBuildInputs = [
-    cmake
-    swig
-    pkg-config
+  cmakeFlags = [
+    (lib.cmakeBool "RUN_SWIG" true)
+    (lib.cmakeBool "PYTHON_BINDINGS" true)
+    (lib.cmakeFeature "PYTHON_INSTDIR" "${placeholder "out"}/${python3.sitePackages}")
   ];
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DRUN_SWIG=ON"
-      "-DPYTHON_BINDINGS=ON"
-      "-DPYTHON_INSTDIR=$out/${python3.sitePackages}"
-    )
-  '';
-
-  # Setuptools only accepts PEP 440 version strings. The "unstable" identifier
-  # can not be used. Instead we pretend to be the 3.2 beta release.
-  postFixup = ''
-    cat << EOF > $out/${python3.sitePackages}/setup.py
-    from setuptools import setup
-
-    setup(
-        name = 'pyopenbabel',
-        version = '3.2b1',
-        packages = ['openbabel'],
-        package_data = {'openbabel' : ['_openbabel.so']}
-    )
-    EOF
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ danielbarter ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ danielbarter ];
   };
 }

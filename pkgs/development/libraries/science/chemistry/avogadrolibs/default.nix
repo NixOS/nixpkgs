@@ -20,7 +20,7 @@
 let
   pythonWP = python3.withPackages (
     p: with p; [
-      openbabel-bindings
+      openbabel
       numpy
     ]
   );
