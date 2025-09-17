@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
     license = lib.licenses.ijg; # and some parts under other BSD-style licenses
+    changelog = "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/${finalAttrs.version}";
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"
