@@ -77,6 +77,19 @@
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
   };
 
+  arcappliance = mkAzExtension {
+    pname = "arcappliance";
+    version = "1.6.0";
+    url = "https://arcplatformcliextprod.z13.web.core.windows.net/arcappliance-1.6.0-py2.py3-none-any.whl";
+    hash = "sha256-1VTKp4R6ohI4C9QsZgAabJJMnkTycEQF7DDshw/7Qkw=";
+    description = "Microsoft Azure Command-Line Tools Arcappliance Extension";
+    propagatedBuildInputs = with python3Packages; [
+      jsonschema
+      kubernetes
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
     version = "1.0.2";
