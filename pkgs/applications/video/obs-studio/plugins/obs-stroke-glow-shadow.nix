@@ -30,9 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FiniteSingularity/obs-stroke-glow-shadow";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Only;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

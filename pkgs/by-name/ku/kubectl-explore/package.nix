@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubectl-explore";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "keisku";
     repo = "kubectl-explore";
     rev = "v${version}";
-    hash = "sha256-D5K1jGLoEHQEacxNhxdxDs9A9ir7qs7y1pNuBU2r//Y=";
+    hash = "sha256-URpoIK+5MgBvCtXyZrqwU7cVubCICkAsmfS9w/8Jgks=";
   };
 
-  vendorHash = "sha256-vCL+gVf0BCqsdRU2xk1Xs3FYcKYB1z2wLpZ3TvYmJdc=";
+  vendorHash = "sha256-TgC8IgB9E83FBP9qrgcqPesnOyOTA5u3AsXn32kaMnU=";
   doCheck = false;
 
   meta = {

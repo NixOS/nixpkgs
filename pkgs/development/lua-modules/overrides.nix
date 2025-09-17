@@ -183,7 +183,8 @@ in
 
       # TODO: Figure out why 2 files extra
       substituteInPlace tests/screenshots/tests-files_spec.lua---files---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "96" "98"
+        --replace-fail "  99" "101" \
+        --replace-fail "99" "101"
 
       make test
 

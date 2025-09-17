@@ -153,8 +153,8 @@ jobs:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
           nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A eval.diff \
-            --arg beforeDir "$(readlink ./target)" \
-            --arg afterDir "$(readlink ./merged)" \
+            --arg beforeDir ./target \
+            --arg afterDir ./merged \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --out-link diff
 
@@ -207,7 +207,7 @@ jobs:
 
           # Use the target branch to get accurate maintainer info
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
-            --arg combinedDir "$(realpath ./combined)" \
+            --arg combinedDir ./combined \
             --arg touchedFilesJson ./touched-files.json \
             --argstr githubAuthorId "$AUTHOR_ID" \
             --out-link comparison

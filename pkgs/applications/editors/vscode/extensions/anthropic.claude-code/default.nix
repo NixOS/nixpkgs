@@ -1,25 +1,15 @@
 {
   lib,
   vscode-utils,
-  claude-code,
 }:
-vscode-utils.buildVscodeExtension (finalAttrs: {
-  pname = "claude-code";
-  inherit (claude-code) version;
 
-  vscodeExtPublisher = "anthropic";
-  vscodeExtName = "claude-code";
-  vscodeExtUniqueId = "${finalAttrs.vscodeExtPublisher}.${finalAttrs.vscodeExtName}";
-
-  src = "${claude-code}/lib/node_modules/@anthropic-ai/claude-code/vendor/claude-code.vsix";
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    unzip $src
-
-    runHook postUnpack
-  '';
+vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef = {
+    name = "claude-code";
+    publisher = "anthropic";
+    version = "1.0.113";
+    hash = "sha256-MmHQ5fVqcwfnXOHVLfJN9AZh/oRCMv+jCfniKesIB9I=";
+  };
 
   meta = {
     description = "Harness the power of Claude Code without leaving your IDE";
@@ -29,4 +19,4 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
-})
+}

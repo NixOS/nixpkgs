@@ -270,6 +270,16 @@ let
 
         colors = callPackage ../development/ocaml-modules/colors { };
 
+        conan = callPackage ../development/ocaml-modules/conan { };
+
+        conan-cli = callPackage ../development/ocaml-modules/conan/cli.nix { };
+
+        conan-database = callPackage ../development/ocaml-modules/conan/database.nix { };
+
+        conan-lwt = callPackage ../development/ocaml-modules/conan/lwt.nix { };
+
+        conan-unix = callPackage ../development/ocaml-modules/conan/unix.nix { };
+
         conduit = callPackage ../development/ocaml-modules/conduit { };
 
         conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
@@ -1579,6 +1589,8 @@ let
         opus = callPackage ../development/ocaml-modules/opus { };
 
         ordering = callPackage ../development/ocaml-modules/ordering { };
+
+        osdp = callPackage ../development/ocaml-modules/osdp { };
 
         oseq = callPackage ../development/ocaml-modules/oseq { };
 

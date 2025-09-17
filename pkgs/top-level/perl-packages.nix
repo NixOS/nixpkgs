@@ -6645,6 +6645,7 @@ with self;
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.37.tar.gz";
       hash = "sha256-wkFhWg4X/3Raqoa79Gam4pzSQFFeZfBqegUBe2GebUs=";
     };
+    patches = [ ../development/perl-modules/Cpanel-JSON-XS-CVE-2025-40929.patch ];
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
       license = with lib.licenses; [
@@ -18308,6 +18309,7 @@ with self;
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz";
       hash = "sha256-UVU29F8voafojIgkUzdY0BIdJnq5y0U6G1iHyKVrkGg=";
     };
+    patches = [ ../development/perl-modules/JSON-XS-CVE-2025-40928.patch ];
     propagatedBuildInputs = [ TypesSerialiser ];
     buildInputs = [ CanaryStability ];
     meta = {
@@ -26768,6 +26770,43 @@ with self;
       license = with lib.licenses; [ asl20 ];
       maintainers = [ maintainers.ztzg ];
       teams = [ teams.deshaw ];
+    };
+  };
+
+  nsdiff = buildPerlPackage {
+    pname = "nsdiff";
+    version = "1.85";
+
+    src = fetchurl {
+      url = "https://dotat.at/prog/nsdiff/DNS-nsdiff-1.85.tar.gz";
+      hash = "sha256-yo4WDa/xZL+5m+i3RnqDBZkGcl+tqR118laRez0xNAA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    preFixup = ''
+      # nsdiff requires dig and named-compilezone
+      wrapProgram $out/bin/nsdiff --prefix PATH : ${
+        with pkgs;
+        lib.makeBinPath [
+          dig
+          dnsutils
+        ]
+      }
+      # nsvi requires dig and nsdiff
+      wrapProgram $out/bin/nsvi --prefix PATH : ${lib.makeBinPath [ pkgs.dig ]}
+      # nspatch only requires nsdiff
+    '';
+
+    meta = {
+      description = "Create a \"nsupdate\" script from DNS zone file differences";
+      homepage = "https://dotat.at/prog/nsdiff/";
+      license = with lib.licenses; [
+        mit0
+        bsd0
+      ];
+      maintainers = [ maintainers.mynacol ];
+      mainProgram = "nsdiff";
     };
   };
 

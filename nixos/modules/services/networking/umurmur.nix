@@ -53,14 +53,14 @@ in
             let
               valueType =
                 with lib.types;
-                oneOf [
+                (attrsOf (oneOf [
                   bool
                   int
                   float
                   str
                   path
-                  (listOf (attrsOf valueType))
-                ]
+                  (listOf valueType)
+                ]))
                 // {
                   description = "uMurmur config value";
                 };

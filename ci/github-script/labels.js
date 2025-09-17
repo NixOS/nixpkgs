@@ -263,6 +263,9 @@ module.exports = async ({ github, context, core, dry }) => {
               'assigned',
               'commented', // uses updated_at, because that could be > created_at
               'committed', // uses committer.date
+              ...(item.labels.some(({ name }) => name === '5.scope: tracking')
+                ? ['cross-referenced']
+                : []),
               'head_ref_force_pushed',
               'milestoned',
               'pinned',

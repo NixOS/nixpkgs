@@ -279,8 +279,8 @@ let
         mktplcRef = {
           name = "icons-carbon";
           publisher = "antfu";
-          version = "0.2.6";
-          hash = "sha256-R8eHLuebfgHaKtHPKBaaYybotluuH9WrUBpgyuIVOxc=";
+          version = "0.2.8";
+          hash = "sha256-9ZU6xZxoT+z/hy+HAbrf52rbSdrA448Ph5/N7A3QB2A=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1182,8 +1182,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.116.0";
-          hash = "sha256-YhcQXncHzpNS7CupRQMPjFLb5ZKwXmCxR3UfHlhlgYE=";
+          version = "3.118.1";
+          hash = "sha256-Ug3rEfM2oh1s9a6BulHmj0++xt+nzT0XcdQ4TuH8xV4=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1193,8 +1193,8 @@ let
         mktplcRef = {
           name = "flutter";
           publisher = "dart-code";
-          version = "3.116.0";
-          hash = "sha256-5T/C9o6fRLnWM7MF8ATYJMEdJgLA4ZdA4Lgjtjxh2ZE=";
+          version = "3.118.0";
+          hash = "sha256-mjGDQslTcWnT0gQ+1l1LXR/eWc335dJljlbvSHvCxNk=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1328,8 +1328,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.26.3";
-          hash = "sha256-0kcRegl+TIjAoK3+AwxO07TJ7h64F1eIPAauav2z4vI=";
+          version = "2.27.0";
+          hash = "sha256-EfdgQxjpsycfxe+X1QfO6WP3W+WS5Ovnb7q/qHGJ1N4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1973,8 +1973,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.116.1";
-          hash = "sha256-qJGCY1NBCv11xzeryELG0OVZy4wQZqdcYPFadZ1tlIU=";
+          version = "0.116.2";
+          hash = "sha256-PDX3Wpmy82MvBzr/fnPP5Y7HMKkfphJLe/Rc284Vxlc=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2372,8 +2372,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.26.6";
-          hash = "sha256-oLzOkb0C93HlUcBKOKMa3u/jsRY6n8fnapRg5Jiyass=";
+          version = "7.27.0";
+          hash = "sha256-NGl5uiR4taamA8lhH/qJT1nCfUhxCQ/XQ/oEZ9N9Q5Y=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2479,8 +2479,8 @@ let
         mktplcRef = {
           name = "gruvbox";
           publisher = "jdinhlife";
-          version = "1.28.0";
-          hash = "sha256-XwQzbbZU6MfYcT50/0YgQp8UaOeQskEvEQPZXG72lLk=";
+          version = "1.29.0";
+          hash = "sha256-LDbeCwuUxvyuacuvikZbV25iEtXWPRJ/ihnqpuM8Ky4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jdinhlife.gruvbox/changelog";
@@ -3004,8 +3004,8 @@ let
         mktplcRef = {
           name = "rainbow-csv";
           publisher = "mechatroner";
-          version = "3.20.0";
-          hash = "sha256-qQ05km8jLLoMFItVbgVWNXmmaBDWd0Bcbq88HPaRdWs=";
+          version = "3.21.0";
+          hash = "sha256-IPgPE5vM9tzHPioRBZeJs4hqut6t++SjZJlHnz/ismA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mechatroner.rainbow-csv/changelog";
@@ -3218,8 +3218,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.25";
-          hash = "sha256-aBo19JYfYa04XUFJT0Z0O4FFI74GoCPLbE06x9VmJS8=";
+          version = "1.3.26";
+          hash = "sha256-wiRV8FQw9TPNYvsgoVy8nAvCA9eosxXTaXs7YjdoBFs=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3784,8 +3784,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "6.13.0";
-          hash = "sha256-qx+2lKRx/4fS2xz9lBIQsTD5tcjTzow7WmYsHYyrfOw=";
+          version = "6.15.0";
+          hash = "sha256-MFHOKQp1mjygjAo5moahAnQFRo01D7r78eFlM1+k998=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -4528,8 +4528,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.298.0";
-          hash = "sha256-zzsoVOiSgA5W88YuWVHILdHN/PuWaQAXjZ0eUL9B9ZI=";
+          version = "3.314.1";
+          hash = "sha256-KWXQY4HyK7s4mNGh6x1eDK6okC5rxWe916RjlsACQxA=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4767,8 +4767,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.89.0";
-          hash = "sha256-dlAgnN8Ku6hapJrWI8DPAFbbOFllr9pu8H6atWdkNYc=";
+          version = "0.90.8";
+          hash = "sha256-0I4jf9Ba8PlNM0eUYHaMyCvuHZ5U3+RvT8aIbHJu9KU=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
@@ -5169,8 +5169,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.0.5";
-          hash = "sha256-Ja0zWCHHxd1XE2f2ZQvchqzCKv0pbcAU3uEh2f6+X3c=";
+          version = "3.0.6";
+          hash = "sha256-hQfS6JTq4hQM5JDCtYFfIaBoV5ORbnao/CL5bqgu+jk=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";

@@ -26,13 +26,13 @@
 }:
 
 let
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "ayasa520";
     repo = "waydroid-helper";
     tag = "v${version}";
-    hash = "sha256-iLBgryNb8NGsfjZmI0xxGFv+lAt0XFT2uXdEabTIRyA=";
+    hash = "sha256-I8DwaPQQz4eSyuTCwkbidhXACfpdOYcmGjP7d03DIU0=";
   };
 in
 python3Packages.buildPythonApplication {

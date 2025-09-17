@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       property shared by most LZ compression algorithms, such as zlib.
     '';
     homepage = "https://facebook.github.io/zstd/";
-    changelog = "https://github.com/facebook/zstd/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/facebook/zstd/blob/v${finalAttrs.version}/CHANGELOG";
     license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
     mainProgram = "zstd";
     platforms = platforms.all;

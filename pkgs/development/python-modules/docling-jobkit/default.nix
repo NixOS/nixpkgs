@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -18,32 +19,26 @@
   httpx,
 
   # optional dependencies
-  tesserocr,
-  rapidocr,
-  onnxruntime,
   ray,
+  rq,
+  msgpack,
 
   # tests
   pytestCheckHook,
   pytest-asyncio,
   writableTmpDirAsHomeHook,
-
-  # options
-  withTesserocr ? false,
-  withRapidocr ? false,
-  withRay ? false,
 }:
 
 buildPythonPackage rec {
   pname = "docling-jobkit";
-  version = "1.2.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${version}";
-    hash = "sha256-bLLcMbN6GNpZ8U5Fhyq/XaHawOFcrFrobY7Jtpdm8Qo=";
+    hash = "sha256-/rFMP5KiWHBsGaA2LVOWP2TkJLVeguIlrmO+JL610hQ=";
   };
 
   build-system = [
@@ -60,18 +55,14 @@ buildPythonPackage rec {
     fastparquet
     pyarrow
     httpx
-  ]
-  ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-  ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-  ++ lib.optionals withRay optional-dependencies.ray;
+  ];
 
   optional-dependencies = {
-    tesserocr = [ tesserocr ];
-    rapidocr = [
-      rapidocr
-      onnxruntime
-    ];
     ray = [ ray ];
+    rq = [
+      rq
+      msgpack
+    ];
   };
 
   pythonRelaxDeps = [
@@ -89,14 +80,18 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ optional-dependencies.rq;
 
   disabledTests = [
     # requires network access
-    "test_convert_url"
+    "test_chunk_file"
     "test_convert_file"
     "test_convert_warmup"
-
+    "test_convert_url"
+    "test_replicated_convert"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky due to comparison with magic object
     # https://github.com/docling-project/docling-jobkit/issues/45
     "test_options_validator"

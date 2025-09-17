@@ -350,7 +350,10 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectSystem = "full";
-        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         RestrictRealtime = true;

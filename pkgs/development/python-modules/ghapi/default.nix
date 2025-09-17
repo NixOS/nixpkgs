@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "ghapi";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fastai";
     repo = "ghapi";
     tag = version;
-    hash = "sha256-ii19wuFAxMiGce37TNXRNSdvMcGWQjCfPukeqxySYnc=";
+    hash = "sha256-hkaXvCzuZKRCuhCga5qcy8TedTJYytJEA6mzlOc72Hk=";
   };
 
   build-system = [ setuptools ];

@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.26";
+  version = "0.6.28";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-ourzYHwVSlM4nqEbkKf6PsNfNkW8quXdcBSW0p16pIg=";
+    hash = "sha256-677M1IxWhdJ3AO8DPlW4eUYnOo/mCNu+11IPdaey9ks=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,13 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.0";
+    pyodideVersion = "0.28.2";
     pyodide = fetchurl {
-      hash = "sha256-4YwDuhcWPYm40VKfOEqPeUSIRQl1DDAdXEUcMuzzU7o=";
+      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-xZtES8qZ7MTt/OviEqGmGO3D3BuOpMGHjnBuSsdFJgM=";
+    npmDepsHash = "sha256-vsgdf7+h16VBF+bTxzdNeHNzsYV65KWNZ6Ga3N7fB5A=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -161,7 +161,6 @@ python3Packages.buildPythonApplication rec {
       pillow
       pinecone-client
       playwright
-      posthog
       psutil
       pyarrow
       pycrdt

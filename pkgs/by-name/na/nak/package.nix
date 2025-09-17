@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nak";
-  version = "0.15.4";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = "nak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9Ap342HKD9byMGjFS8/3Ai14T5QJfsA5eYvUvqM02Gg=";
+    hash = "sha256-h/L2yIMfVR1Erk9nlDyNrepKL89ttOjdpsR6G1Ztu2g=";
   };
 
-  vendorHash = "sha256-CoEwwxKyW2bYwVA6mpIdGjzEyN8m7K+1bODnPLajGJo=";
+  vendorHash = "sha256-w6j4Pd9t8a+xxhi9eYPrMTkg5YRGPaD1IDDSPDgBoaI=";
 
   ldflags = [
     "-s"

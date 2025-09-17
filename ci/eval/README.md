@@ -33,13 +33,13 @@ Note that 16GB memory is the recommended minimum, while with less than 8GB memor
 To compare two commits locally, first run the following on the baseline commit:
 
 ```
-BASELINE=$(nix-build ci -A eval.baseline --no-out-link)
+nix-build ci -A eval.baseline --out-link baseline
 ```
 
 Then, on the commit with your changes:
 
 ```
-nix-build ci -A eval.full --arg baseline $BASELINE
+nix-build ci -A eval.full --arg baseline ./baseline
 ```
 
 Keep in mind to otherwise pass the same set of arguments for both commands (`evalSystems`, `quickTest`, `chunkSize`).

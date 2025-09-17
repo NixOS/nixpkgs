@@ -29,7 +29,6 @@
 
   libiconv ? null,
   ncurses,
-  glibcLocales ? null,
 
   # GHC can be built with system libffi or a bundled one.
   libffi ? null,
@@ -226,7 +225,10 @@ let
         }
         .${name};
     in
-    "${tools}/bin/${tools.targetPrefix}${name}";
+    getToolExe tools name;
+
+  # targetPrefix aware lib.getExe'
+  getToolExe = drv: name: lib.getExe' drv "${drv.targetPrefix or ""}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -409,8 +411,8 @@ stdenv.mkDerivation (
       export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
     ''
     + lib.optionalString useLLVM ''
-      export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
-      export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+      export LLC="${getToolExe buildTargetLlvmPackages.llvm "llc"}"
+      export OPT="${getToolExe buildTargetLlvmPackages.llvm "opt"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
@@ -424,7 +426,7 @@ stdenv.mkDerivation (
         if targetCC.isClang then
           toolPath "clang" targetCC
         else
-          "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+          getToolExe buildTargetLlvmPackages.clang "clang"
       }"
     ''
     + ''
@@ -436,8 +438,8 @@ stdenv.mkDerivation (
       echo -n "${buildMK}" > mk/build.mk
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+    + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+      export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -625,17 +627,14 @@ stdenv.mkDerivation (
     ''
     + lib.optionalString useLLVM ''
       ghc-settings-edit "$settingsFile" \
-        "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
-        "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
+        "LLVM llc command" "${getToolExe llvmPackages.llvm "llc"}" \
+        "LLVM opt command" "${getToolExe llvmPackages.llvm "opt"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       ghc-settings-edit "$settingsFile" \
         "LLVM clang command" "${
           # See comment for CLANG in preConfigure
-          if installCC.isClang then
-            toolPath "clang" installCC
-          else
-            "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+          if installCC.isClang then toolPath "clang" installCC else getToolExe llvmPackages.clang "clang"
         }"
     ''
     + ''
@@ -670,6 +669,8 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
+      broken = useLLVM;
     };
 
   }

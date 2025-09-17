@@ -14,8 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "rtl8852bu-20240418";
-    rev = "42de963695ffc7929a4905aed5c5d7da7c1c2715";
-    hash = "sha256-BvOw9MU4eibeMJEOkifKFatCUNGdujNUZav+4D9bYKY=";
+    rev = "1ef537712a55400aad637f53e45b60ed5ee621d7";
+    hash = "sha256-8bO82ytorBYgIT0dNKRocOhiCrUhya7DkkMlJ1XM3Hk=";
   };
 
   nativeBuildInputs = [

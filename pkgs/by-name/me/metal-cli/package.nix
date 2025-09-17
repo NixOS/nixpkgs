@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "metal-cli";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "equinix";
     repo = "metal-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+hpsGFZHuVhh+fKVcap0vhoUmRs3xPgUwW8SD56m6uI=";
+    hash = "sha256-x4Q1MKgcamGYb3/0ksbHEaL1mjedx0Tu9IZJ5dTgRpQ=";
   };
 
   vendorHash = "sha256-X+GfM73LAWk2pT4ZOPT2pg8YaKyT+SNjQ14LgB+C7Wo=";
@@ -50,7 +50,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      nshalman
       teutat3s
     ];
     mainProgram = "metal";

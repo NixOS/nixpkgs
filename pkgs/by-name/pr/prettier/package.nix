@@ -1,3 +1,17 @@
+/**
+  # Example
+
+  Prettier with plugins and Vim Home Manager configuration
+
+  ```nix
+  pkgs.prettier.override {
+    plugins = with pkgs.nodePackages; [
+      prettier-plugin-toml
+      # ...
+    ];
+  }
+  ```
+*/
 {
   fetchFromGitHub,
   lib,
@@ -6,7 +20,109 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+  plugins ? [ ],
 }:
+let
+  /**
+    # Example
+
+    ```nix
+    exportRelativePathOf (builtins.fromJSON "./package.json")
+    =>
+    lib/node_modules/prettier-plugin-toml/./lib/index.cjs
+    ```
+
+    # Type
+
+    ```
+    exportRelativePathOf :: AttrSet => String
+    ```
+
+    # Arguments
+
+    packageJsonAttrs
+    : Attribute set with shape similar to `package.json` file
+  */
+  ## Blame NodeJS
+  exportRelativePathOf =
+    let
+      nodeExportAttrAddresses = [
+        [ "main" ]
+        [
+          "exports"
+          "."
+          "default"
+        ]
+        [
+          "exports"
+          "."
+        ]
+        [
+          "exports"
+          "default"
+        ]
+        [ "exports" ]
+      ];
+
+      recAttrByPath =
+        addresses: default: attrs:
+        if builtins.length addresses == 0 then
+          default
+        else
+          let
+            addressNext = builtins.head addresses;
+            addressesRemaning = lib.lists.drop 1 addresses;
+          in
+          lib.attrByPath addressNext (recAttrByPath addressesRemaning default attrs) attrs;
+    in
+    packageJsonAttrs:
+    recAttrByPath nodeExportAttrAddresses (builtins.head (
+      lib.attrByPath [ "prettier" "plugins" ] [ "null" ] packageJsonAttrs
+    )) packageJsonAttrs;
+
+  /**
+    # Example
+
+    ```nix
+    nodeEntryPointOf pkgs.nodePackages.prettier-plugin-toml
+    =>
+    /nix/store/<NAR_HASH>-prettier-plugin-toml-<VERSION>/lib/node_modules/prettier-plugin-toml/./lib/index.cjs
+    ```
+
+    # Type
+
+    ```
+    nodeEntryPointOf :: AttrSet => String
+    ```
+
+    # Arguments
+
+    plugin
+    : Attribute set with `.packageName` and `.outPath` defined
+  */
+  nodeEntryPointOf =
+    plugin:
+    let
+      pluginDir = "${plugin.outPath}/lib/node_modules/${plugin.packageName}";
+
+      packageJsonAttrs = builtins.fromJSON (builtins.readFile "${pluginDir}/package.json");
+
+      exportPath = exportRelativePathOf packageJsonAttrs;
+
+      pathAbsoluteNaive = "${pluginDir}/${exportPath}";
+      pathAbsoluteFallback = "${pluginDir}/${exportPath}.js";
+    in
+    if builtins.pathExists pathAbsoluteNaive then
+      pathAbsoluteNaive
+    else if builtins.pathExists pathAbsoluteFallback then
+      pathAbsoluteFallback
+    else
+      lib.warn ''
+        ${plugin.packageName}: error context, tried finding entry point under;
+        pathAbsoluteNaive -> ${pathAbsoluteNaive}
+        pathAbsoluteFallback -> ${pathAbsoluteFallback}
+      '' throw ''${plugin.packageName}: does not provide parse-able entry point'';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
   version = "3.6.2";
@@ -41,7 +157,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
       --add-flags "$out/bin/prettier.cjs"
-
+  ''
+  + lib.optionalString (builtins.length plugins > 0) ''
+    wrapProgram $out/bin/prettier --add-flags "${
+      builtins.concatStringsSep " " (lib.map (plugin: "--plugin=${nodeEntryPointOf plugin}") plugins)
+    }";
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -57,6 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://prettier.io/";
     license = lib.licenses.mit;
     mainProgram = "prettier";
-    maintainers = with lib.maintainers; [ l0b0 ];
+    maintainers = with lib.maintainers; [
+      l0b0
+      S0AndS0
+    ];
   };
 })

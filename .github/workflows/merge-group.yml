@@ -29,7 +29,7 @@ jobs:
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block the Merge Queue.
   unlock:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && always()
     # Modify this list to add or remove jobs from required status checks.
     needs:
       - lint
@@ -38,6 +38,8 @@ jobs:
       statuses: write
     steps:
       - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
         with:
           script: |
             const { serverUrl, repo, runId, payload } = context
@@ -50,6 +52,6 @@ jobs:
               // Do NOT change the name of this, otherwise the rule will not catch it anymore.
               // This would prevent all PRs from merging.
               context: 'no PR failures',
-              state: 'success',
+              state: JSON.parse(process.env.RESULTS).every(result => result == 'success') ? 'success' : 'error',
               target_url,
             })

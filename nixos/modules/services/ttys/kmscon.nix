@@ -33,12 +33,12 @@ in
         kmscon is a kms/dri-based userspace virtual terminal implementation.
         It supports a richer feature set than the standard linux console VT,
         including full unicode support, and when the video card supports drm
-        should be much faster.
+        should be much faster
       '';
 
       package = mkPackageOption pkgs "kmscon" { };
 
-      hwRender = mkEnableOption "3D hardware acceleration to render the console.";
+      hwRender = mkEnableOption "3D hardware acceleration to render the console";
 
       fonts = mkOption {
         description = "Fonts used by kmscon, in order of priority.";
@@ -63,7 +63,9 @@ in
           nullOr (nonEmptyListOf fontType);
       };
 
-      useXkbConfig = mkEnableOption "configure keymap from xserver keyboard settings.";
+      useXkbConfig = mkEnableOption "" // {
+        description = "Whether to configure keymap from xserver keyboard settings.";
+      };
 
       extraConfig = mkOption {
         description = "Extra contents of the kmscon.conf file.";

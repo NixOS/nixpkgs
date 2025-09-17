@@ -29,9 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/andilippi/obs-scene-as-transition";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

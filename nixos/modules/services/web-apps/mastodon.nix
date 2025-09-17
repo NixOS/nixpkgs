@@ -1080,7 +1080,7 @@ in
               proxyWebsockets = true;
             };
 
-            locations."/api/v1/streaming/" = {
+            locations."/api/v1/streaming" = {
               proxyPass = "http://mastodon-streaming";
               proxyWebsockets = true;
             };

@@ -82,7 +82,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       keegancsmith
-      owickstrom
     ];
     mainProgram = "amp";
   };

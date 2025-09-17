@@ -47,7 +47,7 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
   libappindicator-gtk3,
   libdbusmenu,
   writeScript,
@@ -99,7 +99,7 @@ in
 assert lib.assertMsg (
   enabledDiscordModsCount <= 1
 ) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit
     pname
     version
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath (
     [
       libcxx
-      systemd
+      systemdLibs
       libpulseaudio
       libdrm
       libgbm
@@ -170,7 +170,7 @@ stdenv.mkDerivation rec {
       libdbusmenu
       wayland
     ]
-    ++ lib.optional withTTS speechd-minimal
+    ++ lib.optionals withTTS [ speechd-minimal ]
   );
 
   installPhase = ''
@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
         ''} \
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
+        --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -257,4 +257,4 @@ stdenv.mkDerivation rec {
       update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
   };
-}
+})

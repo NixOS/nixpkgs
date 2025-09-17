@@ -78,12 +78,12 @@
 }:
 
 let
-  version = "0.21.3";
+  version = "0.21.4";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-GJk+Q/PY3/jo/yeetYRgqgMdXdYSlGt7Ny1NqdfHF0Q=";
+    hash = "sha256-1l68nU/rmYg/Npg1EVraGr2tu/lkNAo9M7Q0IyckEoc=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {

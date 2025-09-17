@@ -36,7 +36,6 @@
 
   libiconv ? null,
   ncurses,
-  glibcLocales ? null,
 
   # GHC can be built with system libffi or a bundled one.
   libffi ? null,
@@ -434,7 +433,10 @@ let
         }
         .${name};
     in
-    "${tools}/bin/${tools.targetPrefix}${name}";
+    getToolExe tools name;
+
+  # targetPrefix aware lib.getExe'
+  getToolExe = drv: name: lib.getExe' drv "${drv.targetPrefix or ""}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -531,8 +533,15 @@ stdenv.mkDerivation (
       export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
     ''
     + lib.optionalString useLLVM ''
-      export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
-      export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+      export LLC="${getToolExe buildTargetLlvmPackages.llvm "llc"}"
+      export OPT="${getToolExe buildTargetLlvmPackages.llvm "opt"}"
+    ''
+    # LLVMAS should be a "specific LLVM compatible assembler" which needs to understand
+    # assembly produced by LLVM. The easiest way to be sure is to use clang from the same
+    # version as llc and opt. Note that the naming chosen by GHC is misleading, clang can
+    # be used as an assembler, llvm-as converts IR into machine code.
+    + lib.optionalString (useLLVM && lib.versionAtLeast version "9.10") ''
+      export LLVMAS="${getToolExe buildTargetLlvmPackages.clang "clang"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
@@ -542,15 +551,16 @@ stdenv.mkDerivation (
       # the assembly it is given, we need to make sure that it matches the LLVM version of $CC if possible.
       # It is unclear (at the time of writing 2024-09-01)  whether $CC should match the LLVM version we use
       # for llc and opt which would require using a custom darwin stdenv for targetCC.
+      # 2025-09-06: The existence of LLVMAS suggests that matching $CC is fine (correct?) here.
       export CLANG="${
         if targetCC.isClang then
           toolPath "clang" targetCC
         else
-          "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+          getToolExe buildTargetLlvmPackages.clang "clang"
       }"
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+    + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+      export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -827,17 +837,19 @@ stdenv.mkDerivation (
     ''
     + lib.optionalString useLLVM ''
       ghc-settings-edit "$settingsFile" \
-        "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
-        "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
+        "LLVM llc command" "${getToolExe llvmPackages.llvm "llc"}" \
+        "LLVM opt command" "${getToolExe llvmPackages.llvm "opt"}"
+    ''
+    # See comment for LLVMAS in preConfigure
+    + lib.optionalString (useLLVM && lib.versionAtLeast version "9.10") ''
+      ghc-settings-edit "$settingsFile" \
+        "LLVM llvm-as command" "${getToolExe llvmPackages.clang "clang"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       ghc-settings-edit "$settingsFile" \
         "LLVM clang command" "${
           # See comment for CLANG in preConfigure
-          if installCC.isClang then
-            toolPath "clang" installCC
-          else
-            "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+          if installCC.isClang then toolPath "clang" installCC else getToolExe llvmPackages.clang "clang"
         }"
     ''
     + lib.optionalString stdenv.targetPlatform.isWindows ''
@@ -876,6 +888,8 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
+      broken = useLLVM;
     };
 
     dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

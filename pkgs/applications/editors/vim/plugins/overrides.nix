@@ -143,13 +143,13 @@ in
 assertNoAdditions {
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
+      fzf-lua
       snacks-nvim
+      telescope-nvim
     ];
     dependencies = with self; [
-      telescope-nvim
       vim-fugitive
       vim-rhubarb
-      fzf-lua
       plenary-nvim
     ];
   };
@@ -799,6 +799,8 @@ assertNoAdditions {
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
       "conjure-spec.client.fennel.nfnl_spec"
+      # No parser for fennel
+      "conjure.client.fennel.def-str-util"
     ];
   };
 
@@ -1107,11 +1109,11 @@ assertNoAdditions {
   easy-dotnet-nvim = super.easy-dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
-      telescope-nvim
     ];
     checkInputs = with self; [
-      # Pickers, can use telescope or fzf-lua
+      # Pickers, can use telescope, fzf-lua, or snacks
       fzf-lua
+      telescope-nvim
     ];
   };
 
@@ -1628,11 +1630,13 @@ assertNoAdditions {
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
-    checkInputs = [ self.snacks-nvim ];
+    checkInputs = with self; [
+      snacks-nvim
+      telescope-nvim
+    ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
-      telescope-nvim
     ];
 
     doInstallCheck = true;
@@ -2185,11 +2189,14 @@ assertNoAdditions {
   };
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
+    checkInputs = with self; [
+      # Optional picker integration
+      telescope-nvim
+    ];
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
-      telescope-nvim
     ];
     # Unit test assert
     nvimSkipModules = "neotest-playwright-assertions";
@@ -2278,13 +2285,6 @@ assertNoAdditions {
       # FIXME: propagate `neo-tree` dependencies
       nui-nvim
       plenary-nvim
-    ];
-  };
-
-  neuron-nvim = super.neuron-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
     ];
   };
 
@@ -2636,14 +2636,10 @@ assertNoAdditions {
   };
 
   nvim-tinygit = super.nvim-tinygit.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
-
     checkInputs = [
       gitMinimal
-      # transitive dependency (telescope-nvim) not properly propagated to the test environment
-      self.plenary-nvim
+      # interactive staging support
+      self.telescope-nvim
     ];
   };
 
@@ -3602,9 +3598,6 @@ assertNoAdditions {
   };
 
   uv-nvim = super.uv-nvim.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
     runtimeDeps = [ uv ];
   };
 
@@ -4008,9 +4001,12 @@ assertNoAdditions {
   };
 
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
+    checkInputs = [
+      # Optional telescope integration
+      self.telescope-nvim
+    ];
+    dependencies = [
+      self.plenary-nvim
     ];
   };
 

@@ -15,6 +15,7 @@
   p11-kit,
   quickder,
   unbound,
+  openssl,
   gitUpdater,
 }:
 
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
     quickder
     unbound
+    openssl
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

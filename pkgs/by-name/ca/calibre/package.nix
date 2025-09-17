@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseQmakeConfigure = true;
   dontUseCmakeConfigure = true;
+  dontUseNinjaBuild = true;
 
   nativeBuildInputs = [
     cmake

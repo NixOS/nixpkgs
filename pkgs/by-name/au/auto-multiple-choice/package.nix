@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
         Glib
         GlibObjectIntrospection
         Gtk3
+        HashMerge
         LocaleGettext
         OpenOfficeOODoc
         PerlMagick

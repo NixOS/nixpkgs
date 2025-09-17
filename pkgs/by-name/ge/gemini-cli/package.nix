@@ -4,36 +4,55 @@
   fetchFromGitHub,
   nix-update-script,
   ripgrep,
+  jq,
+  pkg-config,
+  libsecret,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.3.4";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nlDXWAfFmhRwfZ46knUeF5ar6huPFLJ5wSxcts4bjfM=";
+    hash = "sha256-SyYergPmEyIcDyU0tF20pvu1qOCRfMRozh0/9nnaefU=";
   };
 
-  patches = [
-    # FIXME: remove once https://github.com/google-gemini/gemini-cli/pull/5336 is merged
-    # FIXME: PR is merged though package is failing without the patch
-    ./restore-missing-dependencies-fields.patch
-    # removes @lvce-editor/ripgrep and make upstream code to use ripgrep from nixpkgs
-    ./replace-npm-s-ripgrep-with-local.patch
-  ];
+  npmDepsHash = "sha256-4S1wMl1agTYOwJ8S/CsXHG+JRx40Nee23TmoJyTYoII=";
 
-  npmDepsHash = "sha256-q7E5YEMjHs9RvfT4ctzltqHr/+cCh3M+G6D2MkLiJFg=";
+  nativeBuildInputs = [
+    jq
+    pkg-config
+  ];
 
   buildInputs = [
     ripgrep
+    libsecret
   ];
 
   preConfigure = ''
     mkdir -p packages/generated
     echo "export const GIT_COMMIT_INFO = { commitHash: '${finalAttrs.src.rev}' };" > packages/generated/git-commit.ts
+  '';
+
+  postPatch = ''
+    # Remove node-pty dependency from package.json
+    jq 'del(.optionalDependencies."node-pty")' package.json > package.json.tmp && mv package.json.tmp package.json
+
+    # Remove node-pty dependency from packages/core/package.json
+    jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+
+    # Remove @lvce-editor/ripgrep dependency from package.json
+    substituteInPlace package.json --replace-fail '"@lvce-editor/ripgrep": "^1.6.0",' ""
+
+    # Remove @lvce-editor/ripgrep dependency from packages/core/package.json
+    substituteInPlace packages/core/package.json --replace-fail '"@lvce-editor/ripgrep": "^1.6.0",' ""
+
+    # Modify ripGrep.ts to use system ripgrep instead of @lvce-editor/ripgrep
+    substituteInPlace packages/core/src/tools/ripGrep.ts \
+      --replace-fail "import { rgPath } from '@lvce-editor/ripgrep';" "const rgPath = 'rg';"
   '';
 
   installPhase = ''
