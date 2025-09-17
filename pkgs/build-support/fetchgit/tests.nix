@@ -1,4 +1,9 @@
-{ testers, fetchgit, ... }:
+{
+  lib,
+  testers,
+  fetchgit,
+  ...
+}:
 {
   simple = testers.invalidateFetcherByDrvHash fetchgit {
     name = "simple-nix-source";
@@ -104,5 +109,15 @@
     rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
     rootDir = "misc/systemd";
     sha256 = "sha256-UhxHk4SrXYq7ZDMtXLig5SigpbITrVgkpFTmryuvpcM=";
+  };
+
+  withGitConfig = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "fetchgit-with-config";
+    url = "https://doesntexist.forsure/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+    gitConfig = lib.generators.toGitINI {
+      url."https://github.com".insteadOf = "https://doesntexist.forsure";
+    };
   };
 }
