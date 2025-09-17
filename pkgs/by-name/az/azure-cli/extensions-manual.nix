@@ -249,6 +249,19 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  k8s-configuration = mkAzExtension rec {
+    pname = "k8s-configuration";
+    version = "2.2.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_configuration-${version}-py3-none-any.whl";
+    hash = "sha256-aRdNy3aH+xfLNK7asYqok9aw6RedEcAQqOUKxtIwRwg=";
+    description = "Microsoft Azure Command-Line Tools K8s-configuration Extension";
+    propagatedBuildInputs = with python3Packages; [
+      pycryptodome
+      pyyaml
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
     version = "1.0.7";
