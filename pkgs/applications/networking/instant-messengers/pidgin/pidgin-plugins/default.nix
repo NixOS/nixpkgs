@@ -30,8 +30,6 @@ lib.makeScope newScope (
 
     pidgin-mra = callPackage ./pidgin-mra { };
 
-    pidgin-skypeweb = callPackage ./pidgin-skypeweb { };
-
     pidgin-carbons = callPackage ./carbons { };
 
     pidgin-xmpp-receipts = callPackage ./pidgin-xmpp-receipts { };
@@ -71,5 +69,6 @@ lib.makeScope newScope (
   }
   // lib.optionalAttrs config.allowAliases {
     purple-matrix = throw "'pidginPackages.purple-matrix' has been unmaintained since April 2022, so it was removed.";
+    pidgin-skypeweb = throw "'pidginPackages.pidgin-skypeweb' has been removed since Skype was shut down in May 2025.";
   }
 )
