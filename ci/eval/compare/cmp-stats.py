@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import warnings
 
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from scipy.stats import ttest_rel
 from tabulate import tabulate
@@ -130,6 +131,88 @@ METRIC_EXPLANATION_FOOTNOTE: Final[str] = """
 """
 
 
+@dataclass(frozen=True)
+class PairwiseTestResults:
+    updated: pd.DataFrame
+    equivalent: pd.DataFrame
+
+    @staticmethod
+    def tabulate(table, headers) -> str:
+        return tabulate(
+            table, headers, tablefmt="github", floatfmt=".4f", missingval="-"
+        )
+
+    def updated_to_markdown(self, explain: bool) -> str:
+        assert not self.updated.empty
+        # Header (get column names and format them)
+        return self.tabulate(
+            headers=[str(column) for column in self.updated.columns],
+            table=[
+                [
+                    # The metric acts as its own footnote name
+                    metric_table_name(row["metric"], explain),
+                    # Check for no change and NaN in p_value/t_stat
+                    *[
+                        None if np.isnan(val) or np.allclose(val, 0) else val
+                        for val in row[1:]
+                    ],
+                ]
+                for _, row in self.updated.iterrows()
+            ],
+        )
+
+    def equivalent_to_markdown(self, explain: bool) -> str:
+        assert not self.equivalent.empty
+        return self.tabulate(
+            headers=[str(column) for column in self.equivalent.columns],
+            table=[
+                [
+                    # The metric acts as its own footnote name
+                    metric_table_name(row["metric"], explain),
+                    row["value"],
+                ]
+                for _, row in self.equivalent.iterrows()
+            ],
+        )
+
+    def to_markdown(self, explain: bool) -> str:
+        result = ""
+
+        if not self.equivalent.empty:
+            result += "## Unchanged values\n\n"
+            result += self.equivalent_to_markdown(explain)
+
+        if not self.updated.empty:
+            result += ("\n\n" if result else "") + "## Updated values\n\n"
+            result += self.updated_to_markdown(explain)
+
+        if explain:
+            result += METRIC_EXPLANATION_FOOTNOTE
+
+        return result
+
+
+@dataclass(frozen=True)
+class Equivalent:
+    metric: str
+    value: float
+
+
+@dataclass(frozen=True)
+class Comparison:
+    metric: str
+    mean_before: float
+    mean_after: float
+    mean_diff: float
+    mean_pct_change: float
+
+
+@dataclass(frozen=True)
+class ComparisonWithPValue(Comparison):
+    p_value: float
+    t_stat: float
+
+
 def metric_sort_key(name: str) -> str:
     if name in ("time.cpu", "time.gc", "time.gcFraction"):
         return (1, name)
@@ -143,39 +226,21 @@ def metric_sort_key(name: str) -> str:
         return (5, name)
 
 
-def dataframe_to_markdown(df: pd.DataFrame, explain: bool) -> str:
-    df = df.sort_values(
-        by=df.columns[0], ascending=True, key=lambda s: s.map(metric_sort_key)
-    )
-
-    # Header (get column names and format them)
-    headers = [str(column) for column in df.columns]
-    table = [
-        [
-            # The metric acts as its own footnote name
-            metric_table_name(row["metric"], explain),
-            # Check for no change and NaN in p_value/t_stat
-            *[None if np.isnan(val) or np.allclose(val, 0) else val for val in row[1:]],
-        ]
-        for _, row in df.iterrows()
-    ]
-
-    result = tabulate(table, headers, tablefmt="github", floatfmt=".4f", missingval="-")
-    if explain:
-        result += METRIC_EXPLANATION_FOOTNOTE
-    return result
-
-
-def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.DataFrame:
+def perform_pairwise_tests(
+    before_metrics: dict, after_metrics: dict
+) -> PairwiseTestResults:
     common_files = sorted(set(before_metrics) & set(after_metrics))
     all_keys = sorted(
         {
             metric_keys
             for file_metrics in before_metrics.values()
             for metric_keys in file_metrics.keys()
-        }
+        },
+        key=metric_sort_key,
     )
-    results = []
+
+    updated = []
+    equivalent = []
 
     for key in all_keys:
         before_vals = []
@@ -193,28 +258,34 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
         after_arr = np.array(after_vals)
 
         diff = after_arr - before_arr
-        pct_change = 100 * diff / before_arr
 
-        # If there are enough values to perform a t-test, do so, otherwise mark NaN
-        if len(before_vals) == 1:
-            t_stat, p_val = [float("NaN")] * 2
+        # If there's no difference, add it all to the equivalent output.
+        if np.allclose(diff, 0):
+            equivalent.append(Equivalent(metric=key, value=before_vals[0]))
         else:
-            t_stat, p_val = ttest_rel(after_arr, before_arr)
+            pct_change = 100 * diff / before_arr
 
-        results.append(
-            {
-                "metric": key,
-                "mean_before": np.mean(before_arr),
-                "mean_after": np.mean(after_arr),
-                "mean_diff": np.mean(diff),
-                "mean_%_change": np.mean(pct_change),
-                "p_value": p_val,
-                "t_stat": t_stat,
-            }
-        )
+            result = Comparison(
+                metric=key,
+                mean_before=np.mean(before_arr),
+                mean_after=np.mean(after_arr),
+                mean_diff=np.mean(diff),
+                mean_pct_change=np.mean(pct_change),
+            )
 
-    df = pd.DataFrame(results).sort_values("p_value")
-    return df
+            # If there are enough values to perform a t-test, do so.
+            if len(before_vals) > 1:
+                t_stat, p_val = ttest_rel(after_arr, before_arr)
+                result = ComparisonWithPValue(
+                    **asdict(result), p_value=p_val, t_stat=t_stat
+                )
+
+            updated.append(result)
+
+    return PairwiseTestResults(
+        updated=pd.DataFrame(map(asdict, updated)),
+        equivalent=pd.DataFrame(map(asdict, equivalent)),
+    )
 
 
 def main():
@@ -241,8 +312,8 @@ def main():
 
     before_metrics = load_all_metrics(before_stats)
     after_metrics = load_all_metrics(after_stats)
-    df1 = perform_pairwise_tests(before_metrics, after_metrics)
-    markdown_table = dataframe_to_markdown(df1, explain=options.explain)
+    pairwise_test_results = perform_pairwise_tests(before_metrics, after_metrics)
+    markdown_table = pairwise_test_results.to_markdown(explain=options.explain)
     print(markdown_table)
 
 
