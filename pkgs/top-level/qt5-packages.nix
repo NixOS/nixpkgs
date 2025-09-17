@@ -171,8 +171,6 @@ makeScopeWithSplicing' {
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
-        qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
-
         qoauth = callPackage ../development/libraries/qoauth { };
 
         qt5ct = callPackage ../tools/misc/qt5ct { };
