@@ -194,6 +194,22 @@
     };
   };
 
+  connectedk8s = mkAzExtension rec {
+    pname = "connectedk8s";
+    version = "1.9.3";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedk8s-${version}-py2.py3-none-any.whl";
+    hash = "sha256-4OuN92PXzIWgOWhWu/S4ofQ4AbITH6XSG1soUOljY+8=";
+    description = "Microsoft Azure Command-Line Tools Connectedk8s Extension";
+    propagatedBuildInputs = with python3Packages; [
+      azure-graphrbac
+      azure-mgmt-hybridcompute
+      kubernetes
+      pycryptodome
+      pyyaml
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   containerapp = mkAzExtension rec {
     pname = "containerapp";
     version = "1.2.0b4";
