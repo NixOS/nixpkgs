@@ -1,0 +1,14 @@
+diff --git a/NAPS2.Lib/EtoForms/Layout/C.cs b/NAPS2.Lib/EtoForms/Layout/C.cs
+--- a/NAPS2.Lib/EtoForms/Layout/C.cs
++++ b/NAPS2.Lib/EtoForms/Layout/C.cs
+@@ -121,8 +121,8 @@ public static class C
+         if (flags.HasFlag(ButtonFlags.LargeText))
+         {
+             var baseFontSize = button.Font.Size;
+-            EtoPlatform.Current.AttachDpiDependency(button,
+-                _ => button.Font = new Font(button.Font.Family, baseFontSize * 4 / 3));
++            EtoPlatform.Current.AttachDpiDependency(button, _ => {
++                try { button.Font = new Font(button.Font.Family, baseFontSize * 4 / 3); } catch {}});
+         }
+         EtoPlatform.Current.ConfigureImageButton(button, flags);
+         return button;

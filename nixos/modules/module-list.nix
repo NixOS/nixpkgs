@@ -228,7 +228,6 @@
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
-  ./programs/goldwarden.nix
   ./programs/gpaste.nix
   ./programs/gphoto2.nix
   ./programs/gpu-screen-recorder.nix
@@ -1693,6 +1692,7 @@
   ./services/web-apps/sftpgo.nix
   ./services/web-apps/sharkey.nix
   ./services/web-apps/shiori.nix
+  ./services/web-apps/sillytavern.nix
   ./services/web-apps/silverbullet.nix
   ./services/web-apps/simplesamlphp.nix
   ./services/web-apps/slskd.nix

@@ -6873,7 +6873,7 @@
     githubId = 22124013;
   };
   drakon64 = {
-    name = "Adam Chance";
+    name = "Evelyn Chance";
     email = "nixpkgs@drakon.cloud";
     github = "drakon64";
     githubId = 6444703;
@@ -11620,6 +11620,11 @@
     github = "jasonxue1";
     githubId = 103628493;
     name = "jasonxue";
+    keys = [
+      {
+        fingerprint = "067A 9B58 DAC4 1C31 D688  81A9 EC23 DBDD B617 6861";
+      }
+    ];
   };
   jaspersurmont = {
     email = "jasper@surmont.dev";
@@ -15355,6 +15360,12 @@
     email = "nix@mail.adminafk.fr";
     github = "M0NsTeRRR";
     githubId = 37785089;
+  };
+  m0streng0 = {
+    name = "Henrique Oliveira";
+    email = "ho.henrique@proton.me";
+    github = "M0streng0";
+    githubId = 85799811;
   };
   m0ustache3 = {
     name = "M0ustach3";
@@ -26994,12 +27005,6 @@
     github = "vanschelven";
     githubId = 223833;
     name = "Klaas van Schelven";
-  };
-  vanzef = {
-    email = "vanzef@gmail.com";
-    github = "vanzef";
-    githubId = 12428837;
-    name = "Ivan Solyankin";
   };
   varunpatro = {
     email = "varun.kumar.patro@gmail.com";
