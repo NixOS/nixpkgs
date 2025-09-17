@@ -17,13 +17,13 @@
 }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";
-  version = "0.5.5-unstable-2024-11-03";
+  version = "0.5.4-unstable-2025-06-29";
 
   src = fetchFromGitHub {
     owner = "catsout";
     repo = "wallpaper-engine-kde-plugin";
-    rev = "ed58dd8b920dbb2bf0859ab64e0b5939b8a32a0e";
-    hash = "sha256-ICQLtw+qaOMf0lkqKegp+Dkl7eUgPqKDn8Fj5Osb7eA=";
+    rev = "9e60b364e268814a1a778549c579ad45a9b9c7bb";
+    hash = "sha256-zEpELmuK+EvQ1HIWxCSAGyJAjmGgp0yqjtNuC2DTES8=";
     fetchSubmodules = true;
   };
 
