@@ -82,12 +82,16 @@ let
 
       # Create backendStdenv variants for different host compilers, since users may want to build a CUDA project with
       # Clang or GCC specifically.
-      backendClangStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
-        stdenv = pkgs'.clangStdenv;
-      };
-      backendGccStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
-        stdenv = pkgs'.gccStdenv;
-      };
+      # TODO(@connorbaker): Because of the way our setup hooks and patching of NVCC works, the user's choice of
+      # backendStdenv is largely disregarded or will cause build failures; fixing this would require the setup hooks
+      # and patching to be made aware of the current environment (perhaps by reading certain environment variables set
+      # by our backendStdenv).
+      # backendClangStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
+      #   stdenv = pkgs'.clangStdenv;
+      # };
+      # backendGccStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
+      #   stdenv = pkgs'.gccStdenv;
+      # };
 
       # Must be constructed without `callPackage` to avoid replacing the `override` attribute with that of
       # `callPackage`'s.
