@@ -40,6 +40,18 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  alias = mkAzExtension rec {
+    pname = "alias";
+    version = "0.5.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/alias-${version}-py2.py3-none-any.whl";
+    hash = "sha256-BfgtdQJueA0nvTShvlf07A9CVQDYq07n6S/uB7lE2jM=";
+    description = "Support for command aliases";
+    propagatedBuildInputs = with python3Packages; [
+      jinja2
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   application-insights = mkAzExtension rec {
     pname = "application-insights";
     version = "2.0.0b1";
