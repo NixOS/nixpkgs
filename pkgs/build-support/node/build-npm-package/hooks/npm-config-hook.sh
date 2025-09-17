@@ -1,5 +1,13 @@
 # shellcheck shell=bash
 
+ifFileExists() {
+  if [ -e "$1" ]; then
+    echo "$1"
+  else
+    echo "$2"
+  fi
+}
+
 npmConfigHook() {
     echo "Executing npmConfigHook"
 
@@ -29,7 +37,7 @@ npmConfigHook() {
     fi
 
     local -r cacheLockfile="$npmDeps/package-lock.json"
-    local -r srcLockfile="$PWD/package-lock.json"
+    local -r srcLockfile="$(ifFileExists "$PWD/npm-shrinkwrap.json" "$PWD/package-lock.json")"
 
     echo "Validating consistency between $srcLockfile and $cacheLockfile"
 
