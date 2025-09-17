@@ -27,6 +27,19 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  aksarc = mkAzExtension {
+    pname = "aksarc";
+    version = "1.5.62";
+    url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.62-py3-none-any.whl";
+    hash = "sha256-PCy4SUbB4Vlj+fIwhufGwMJrrRehQr/W+QxAphTPnEk=";
+    description = "Microsoft Azure Command-Line Tools HybridContainerService Extension";
+    propagatedBuildInputs = with python3Packages; [
+      kubernetes
+      paramiko
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   application-insights = mkAzExtension rec {
     pname = "application-insights";
     version = "2.0.0b1";
