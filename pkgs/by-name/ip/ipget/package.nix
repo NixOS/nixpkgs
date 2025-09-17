@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -28,6 +29,8 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) ipget;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Retrieve files over IPFS and save them locally";
