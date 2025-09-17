@@ -1,0 +1,70 @@
+addLinkDLLPaths() {
+    addToSearchPath "LINK_DLL_FOLDERS" "$1/lib"
+    addToSearchPath "LINK_DLL_FOLDERS" "$1/bin"
+}
+
+addEnvHooks "$targetOffset" addLinkDLLPaths
+
+addOutputDLLPaths() {
+  addToSearchPath "LINK_DLL_FOLDERS" "$prefix/lib"
+  addToSearchPath "LINK_DLL_FOLDERS" "$prefix/bin"
+}
+
+postInstallHooks+=(addOutputDLLPaths)
+
+_dllDeps() {
+    "$OBJDUMP" -p "$1" \
+        | sed -n 's/.*DLL Name: \(.*\)/\1/p' \
+        | sort -u
+}
+
+_linkDeps() {
+    local target="$1" dir="$2"
+    echo 'target:' "$target"
+    local dll
+    _dllDeps "$target" | while read dll; do
+        echo '  dll:' "$dll"
+        if [[ -e "$dir/$dll" ]]; then continue; fi
+        # Locate the DLL - it should be an *executable* file on $LINK_DLL_FOLDERS.
+        local dllPath="$(PATH="$(dirname "$target"):$LINK_DLL_FOLDERS" type -P "$dll")"
+        if [[ -z "$dllPath" ]]; then
+          if [[ -n "${allowedImpureDLLsMap[$dll]}" ]]; then
+             continue
+          fi
+          echo unable to find $dll in $LINK_DLL_FOLDERS >&2
+          exit 1
+        fi
+        echo '    linking to:' "$dllPath"
+        CYGWIN+=\ winsymlinks:nativestrict ln -sr "$dllPath" "$dir"
+        # That DLL might have its own (transitive) dependencies,
+        # so add also all DLLs from its directory to be sure.
+        _linkDeps "$dllPath" "$dir"
+    done
+}
+
+linkDLLs() {
+  if [ ! -e "$prefix" ]; then return; fi
+  (
+    set -e
+    shopt -s globstar nullglob
+
+    local -a allowedImpureDLLsArray
+    concatTo allowedImpureDLLsArray allowedImpureDLLs
+
+    local -A allowedImpureDLLsMap;
+
+    for dll in "${allowedImpureDLLsArray[@]}"; do
+      allowedImpureDLLsMap[$dll]=1
+    done
+
+    cd "$prefix"
+
+    # Iterate over any DLL that we depend on.
+    local target
+    for target in {bin,libexec}/**/*.{exe,dll}; do
+      _linkDeps "$target" "$(dirname "$target")"
+    done
+  )
+}
+
+fixupOutputHooks+=(linkDLLs)

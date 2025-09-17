@@ -126,7 +126,6 @@ let
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
   cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
-  cc_bin = getBin cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -595,18 +594,11 @@ stdenvNoCC.mkDerivation {
     stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
-      installPhase =
-        if targetPlatform.isCygwin then
-          ''
-            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_bin}/lib" >> $out
-            echo addToSearchPath "LINK_DLL_FOLDERS" "${libc_bin}/bin" >> $out
-          ''
-        else
-          ''
-            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
-            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
-            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
-          '';
+      installPhase = ''
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
+      '';
     }
   );
 

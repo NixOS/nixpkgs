@@ -1,0 +1,64 @@
+--- origsrc/libarchive-3.8.1/libarchive/archive_platform.h	2025-03-20 10:48:34.000000000 +0100
++++ src/libarchive-3.8.1/libarchive/archive_platform.h	2025-03-29 08:56:00.759008500 +0100
+@@ -62,7 +62,7 @@
+ #endif
+ 
+ /* For cygwin, to avoid missing LONG, ULONG, PUCHAR, ... definitions */
+-#ifdef __CYGWIN__
++#ifdef __BOGUS_CYGWIN__
+ #include <windef.h>
+ #endif
+ 
+--- origsrc/libarchive-3.8.1/configure.ac
++++ src/libarchive-3.8.1/configure.ac
+@@ -93,13 +93,10 @@
+ 
+ dnl Compilation on mingw and Cygwin needs special Makefile rules
+ inc_windows_files=no
+-inc_cygwin_files=no
+ case "$host_os" in
+   *mingw* ) inc_windows_files=yes ;;
+-  *cygwin* | *msys*) inc_cygwin_files=yes ;;
+ esac
+ AM_CONDITIONAL([INC_WINDOWS_FILES], [test $inc_windows_files = yes])
+-AM_CONDITIONAL([INC_CYGWIN_FILES], [test $inc_cygwin_files = yes])
+ 
+ dnl Defines that are required for specific platforms (e.g. -D_POSIX_SOURCE, etc)
+ PLATFORMCPPFLAGS=
+@@ -256,7 +253,7 @@
+ 
+ # Set up defines needed before including any headers
+ case $host in
+-  *mingw* | *cygwin* | *msys*  )
++  *msys*  )
+   AC_PREPROC_IFELSE([AC_LANG_PROGRAM(
+     [[#include <windows.h>
+      #ifdef _WIN32_WINNT
+@@ -414,7 +411,7 @@
+ if test "x$with_bz2lib" != "xno"; then
+   AC_CHECK_HEADERS([bzlib.h])
+   case "$host_os" in
+-    *mingw* | *cygwin* | *msys*)
++    *mingw* | *msys*)
+       dnl AC_CHECK_LIB cannot be used on the Windows port of libbz2, therefore
+ 	  dnl use AC_LINK_IFELSE.
+ 	  AC_MSG_CHECKING([for BZ2_bzDecompressInit in -lbz2])
+@@ -1293,7 +1290,7 @@
+ ])
+ 
+ case "$host_os" in
+-  *mingw* | *cygwin* | *msys*)
++  *mingw* | *msys*)
+ 	;;
+   *)
+ 	CRYPTO_CHECK(MD5, LIBC, md5)
+@@ -1390,7 +1387,7 @@
+ fi
+ 
+ case "$host_os" in
+-  *mingw* | *cygwin* | *msys*)
++  *mingw* | *msys*)
+ 	CRYPTO_CHECK_WIN(MD5, CALG_MD5)
+ 	CRYPTO_CHECK_WIN(SHA1, CALG_SHA1)
+ 	CRYPTO_CHECK_WIN(SHA256, CALG_SHA_256)
+

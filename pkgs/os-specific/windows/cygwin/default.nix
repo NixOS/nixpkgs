@@ -13,89 +13,79 @@
   symlinkJoin,
 }:
 
-let
-  newlib-cygwin = stdenv.mkDerivation {
-    pname = "cygwin";
+stdenv.mkDerivation {
+  pname = "cygwin";
 
-    inherit (cygwin_headers)
-      version
-      src
-      meta
-      ;
+  inherit (cygwin_headers)
+    version
+    src
+    meta
+    patches
+    ;
 
-    outputs = [
-      "out"
-      "bin"
-      "dev"
-      "man"
-    ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "man"
+  ];
 
-    postPatch = ''
-      patchShebangs --build winsup/cygwin/scripts
-    '';
+  postPatch = ''
+    patchShebangs --build winsup/cygwin/scripts
+  '';
 
-    preConfigure = ''
-      pushd winsup
-      aclocal --force
-      autoconf -f
-      automake -ac
-      rm -rf autom4te.cache
-      popd
-      patch -p0 -i ${./after-autogen.patch}
-      mkdir "../build"
-      cd "../build"
-      configureScript="../$sourceRoot/configure"
-    '';
+  preConfigure = ''
+    pushd winsup
+    aclocal --force
+    autoconf -f
+    automake -ac
+    rm -rf autom4te.cache
+    popd
+    patch -p0 -i ${./after-autogen.patch}
+    mkdir "../build"
+    cd "../build"
+    configureScript="../$sourceRoot/configure"
+  '';
 
-    env.CXXFLAGS_FOR_TARGET = "-Wno-error";
+  env.CXXFLAGS_FOR_TARGET = "-Wno-error";
 
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [
-      autoconf
-      automake
-      bison
-      cocom-tool-set
-      flex
-      perl
-    ];
-    buildInputs = [ mingw_w64 ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    cocom-tool-set
+    flex
+    perl
+  ];
+  buildInputs = [ mingw_w64 ];
 
-    enableParallelBuilding = true;
+  enableParallelBuilding = true;
 
-    makeFlags = [ "tooldir=$(out)" ];
+  makeFlags = [ "tooldir=$(out)" ];
 
-    # this is explicitly -j1 in cygwin.cygport
-    # without it the install order is non-deterministic
-    enableParallelInstalling = false;
+  # this is explicitly -j1 in cygwin.cygport
+  # without it the install order is non-deterministic
+  enableParallelInstalling = false;
 
-    hardeningDisable = [
-      "fortify"
-      "stackprotector"
-    ];
-    configurePlatforms = [
-      "build"
-      "target"
-    ];
-    configureFlags = [
-      "--disable-shared"
-      "--disable-doc"
-      "--enable-static"
-      "--disable-dumper"
-      "--with-cross-bootstrap"
-      "ac_cv_prog_CC=gcc"
-    ];
+  hardeningDisable = [
+    "fortify"
+    "stackprotector"
+  ];
+  configurePlatforms = [
+    "build"
+    "target"
+  ];
+  configureFlags = [
+    "--disable-shared"
+    "--disable-doc"
+    "--enable-static"
+    "--disable-dumper"
+    "--with-cross-bootstrap"
+    "ac_cv_prog_CC=gcc"
+  ];
 
-    passthru.w32api = mingw_w64;
-  };
-in
-newlib-cygwin
-# # TODO: Is there something like nix-support which would achieve this better?
-# symlinkJoin {
-#   pname = "cygwin-and-mingw_w64";
-#   inherit (newlib-cygwin) version;
-#   paths = [
-#     newlib-cygwin
-#     mingw_w64
-#     mingw_w64.dev
-#   ];
-# }
+  allowedImpureDLLs = lib.optional stdenv.hostPlatform.isCygwin "ntdll.dll";
+
+  passthru.w32api = mingw_w64;
+}
