@@ -57,7 +57,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
     tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
-  '';
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
+      ''
+        # LTO crashes with the latest Rust + LLVM combination.
+        # https://github.com/rust-lang/rust/issues/141737
+        # TODO: remove this once LLVM is upgraded to 20.1.7
+        tomlq -ti '.profile.release.lto = false' Cargo.toml
+      '';
 
   buildInputs = [
     libffi

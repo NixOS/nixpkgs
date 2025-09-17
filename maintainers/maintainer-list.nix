@@ -6873,7 +6873,7 @@
     githubId = 22124013;
   };
   drakon64 = {
-    name = "Evelyn Chance";
+    name = "Adam Chance";
     email = "nixpkgs@drakon.cloud";
     github = "drakon64";
     githubId = 6444703;
@@ -15360,12 +15360,6 @@
     email = "nix@mail.adminafk.fr";
     github = "M0NsTeRRR";
     githubId = 37785089;
-  };
-  m0streng0 = {
-    name = "Henrique Oliveira";
-    email = "ho.henrique@proton.me";
-    github = "M0streng0";
-    githubId = 85799811;
   };
   m0ustache3 = {
     name = "M0ustach3";
@@ -27005,6 +26999,12 @@
     github = "vanschelven";
     githubId = 223833;
     name = "Klaas van Schelven";
+  };
+  vanzef = {
+    email = "vanzef@gmail.com";
+    github = "vanzef";
+    githubId = 12428837;
+    name = "Ivan Solyankin";
   };
   varunpatro = {
     email = "varun.kumar.patro@gmail.com";

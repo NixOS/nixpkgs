@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "normality";
-  version = "3.0.2";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
     tag = version;
-    hash = "sha256-X8ssSURC3NiQ1uf2qv1PgCBIYQnmoYVKPn5YPdJG71o=";
+    hash = "sha256-AAxFsdh2pv317hn9vr8Xpz9QPLYEa3KMDcObwR51NWo=";
   };
 
   build-system = [ hatchling ];

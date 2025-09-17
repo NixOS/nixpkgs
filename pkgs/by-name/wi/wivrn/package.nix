@@ -37,7 +37,7 @@
   onnxruntime,
   opencomposite,
   openxr-loader,
-  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
+  ovrCompatSearchPaths ? "${opencomposite}/lib/opencomposite:${xrizer}/lib/xrizer",
   pipewire,
   pkg-config,
   python3,
