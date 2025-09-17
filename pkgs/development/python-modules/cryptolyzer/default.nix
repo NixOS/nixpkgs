@@ -59,6 +59,14 @@ buildPythonPackage rec {
   # Tests require networking
   doCheck = false;
 
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
+
   pythonImportsCheck = [ "cryptolyzer" ];
 
   meta = {
