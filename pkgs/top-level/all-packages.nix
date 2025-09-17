@@ -8489,9 +8489,7 @@ with pkgs;
 
   openal = openalSoft;
 
-  openbabel = openbabel3;
-
-  openbabel3 = callPackage ../development/libraries/openbabel { };
+  openbabel = callPackage ../development/libraries/openbabel { };
 
   opencascade-occt_7_6 = opencascade-occt.overrideAttrs rec {
     pname = "opencascade-occt";
