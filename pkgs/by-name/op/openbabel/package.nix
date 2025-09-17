@@ -16,6 +16,7 @@
   boost,
   maeparser,
   coordgenlibs,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -54,11 +55,24 @@ stdenv.mkDerivation {
     coordgenlibs
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "RUN_SWIG" true)
     (lib.cmakeBool "PYTHON_BINDINGS" true)
     (lib.cmakeFeature "PYTHON_INSTDIR" "${placeholder "out"}/${python3.sitePackages}")
   ];
+
+  disabledTests = [
+    "test_cifspacegroup_11"
+    "pybindtest_obconv_writers"
+  ];
+
+  doCheck = true;
+
+  dontUseNinjaCheck = true;
 
   meta = {
     description = "Toolbox designed to speak the many languages of chemical data";
