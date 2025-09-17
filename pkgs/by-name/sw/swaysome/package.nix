@@ -2,27 +2,37 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swaysome";
-  version = "2.1.2";
+  version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "hyask";
     repo = "swaysome";
-    rev = version;
-    hash = "sha256-2Q88/XgPN+byEo3e1yvwcwSQxPgPTtgy/rNc/Yduo3U=";
+    tag = finalAttrs.version;
+    hash = "sha256-/GJXZFa4HX98qJZw1CNM6PsP06EO8inIWDY6BWzQb8U=";
   };
 
-  cargoHash = "sha256-/TW1rPg/1t3n4XPBOEhgr1hd5PJMLwghLvQGBbZPZ34=";
+  cargoHash = "sha256-+KjT5bako7l7lg2LW7Kxes7fIEnYQKUGGOMC56moO5g=";
 
-  meta = with lib; {
+  # failed to execute sway: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  doCheck = false;
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Helper to make sway behave more like awesomewm";
     homepage = "https://gitlab.com/hyask/swaysome";
-    license = licenses.mit;
-    maintainers = with maintainers; [ esclear ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ esclear ];
+    platforms = lib.platforms.linux;
     mainProgram = "swaysome";
   };
-}
+})
