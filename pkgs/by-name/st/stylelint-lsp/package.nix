@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preInstall = ''
     # remove unnecessary files
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     rm -rf node_modules/.pnpm/typescript*
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645

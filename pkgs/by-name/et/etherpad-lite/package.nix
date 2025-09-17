@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     # remove unnecessary files
     rm node_modules/.modules.yaml
-    pnpm prune --prod --ignore-scripts
+    CI=true pnpm prune --prod --ignore-scripts
     find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # remove non-deterministic files
