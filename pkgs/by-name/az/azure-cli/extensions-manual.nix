@@ -326,6 +326,18 @@
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = [ ];
   };
+
+  webpubsub = mkAzExtension {
+    pname = "webpubsub";
+    version = "1.7.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/webpubsub-1.7.2-py3-none-any.whl";
+    hash = "sha256-axtA9vXM1WmzXTj7rbA6Tlrx7kpx2Z6c3NYtwUiv2UI=";
+    description = "Microsoft Azure Command-Line Tools Webpubsub Extension";
+    propagatedBuildInputs = with python3Packages; [
+      websockets
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions
