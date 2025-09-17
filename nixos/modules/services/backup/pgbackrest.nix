@@ -459,6 +459,9 @@ in
             user = "postgres";
           };
         };
+        # If PostgreSQL runs on the same machine, any restore will have to be done with that user.
+        # Keeping the lock file in a directory writeable by the postgres user prevents errors.
+        services.pgbackrest.commands.restore.lock-path = "/tmp/postgresql";
         services.postgresql.identMap = ''
           postgres pgbackrest postgres
         '';
