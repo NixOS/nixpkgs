@@ -19693,6 +19693,12 @@
     githubId = 821972;
     name = "Parth Mehrotra";
   };
+  parthiv-krishna = {
+    email = "nixpkgs@parthiv.cc";
+    github = "parthiv-krishna";
+    githubId = 20658472;
+    name = "Parthiv Krishna";
+  };
   pascalj = {
     email = "nix@pascalj.de";
     github = "pascalj";
