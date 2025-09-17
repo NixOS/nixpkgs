@@ -279,6 +279,18 @@
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 
+  serial-console = mkAzExtension {
+    pname = "serial-console";
+    version = "1.0.0b2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/serial_console-1.0.0b2-py3-none-any.whl";
+    hash = "sha256-Weu4BEdq/0dvi07682UfYL8FzAd3cKZUGVJLTzJ27JM=";
+    description = "Microsoft Azure Command-Line Tools for Serial Console Extension";
+    propagatedBuildInputs = with python3Packages; [
+      websocket-client
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   ssh = mkAzExtension rec {
     pname = "ssh";
     version = "2.0.6";
