@@ -83,27 +83,27 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCROSS_COMPILE32=0"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DBUILD_SERVER=1"
-    "-DBUILD_CLIENT=1"
-    "-DBUNDLED_ZLIB=0"
-    "-DBUNDLED_CJSON=0"
-    "-DBUNDLED_JPEG=0"
-    "-DBUNDLED_LIBS=0"
-    "-DBUNDLED_FREETYPE=0"
-    "-DBUNDLED_OGG_VORBIS=0"
-    "-DBUNDLED_OPENAL=0"
-    "-DBUNDLED_PNG=0"
-    "-DBUNDLED_THEORA=0"
-    "-DBUNDLED_MINIZIP=0"
-    "-DINSTALL_EXTRA=0"
-    "-DINSTALL_OMNIBOT=0"
-    "-DINSTALL_GEOIP=0"
-    "-DINSTALL_WOLFADMIN=0"
-    "-DFEATURE_AUTOUPDATE=0"
-    "-DINSTALL_DEFAULT_BASEDIR=${placeholder "out"}/lib/etlegacy"
-    "-DINSTALL_DEFAULT_BINDIR=${placeholder "out"}/bin"
+    (lib.cmakeBool "CROSS_COMPILE32" false)
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "BUILD_SERVER" true)
+    (lib.cmakeBool "BUILD_CLIENT" true)
+    (lib.cmakeBool "BUNDLED_ZLIB" false)
+    (lib.cmakeBool "BUNDLED_CJSON" false)
+    (lib.cmakeBool "BUNDLED_JPEG" false)
+    (lib.cmakeBool "BUNDLED_LIBS" false)
+    (lib.cmakeBool "BUNDLED_FREETYPE" false)
+    (lib.cmakeBool "BUNDLED_OGG_VORBIS" false)
+    (lib.cmakeBool "BUNDLED_OPENAL" false)
+    (lib.cmakeBool "BUNDLED_PNG" false)
+    (lib.cmakeBool "BUNDLED_THEORA" false)
+    (lib.cmakeBool "BUNDLED_MINIZIP" false)
+    (lib.cmakeBool "INSTALL_EXTRA" false)
+    (lib.cmakeBool "INSTALL_OMNIBOT" false)
+    (lib.cmakeBool "INSTALL_GEOIP" false)
+    (lib.cmakeBool "INSTALL_WOLFADMIN" false)
+    (lib.cmakeBool "FEATURE_AUTOUPDATE" false)
+    (lib.cmakeFeature "INSTALL_DEFAULT_BASEDIR" "${placeholder "out"}/lib/etlegacy")
+    (lib.cmakeFeature "INSTALL_DEFAULT_BINDIR" "${placeholder "out"}/bin")
   ];
 
   hardeningDisable = [ "fortify" ];
