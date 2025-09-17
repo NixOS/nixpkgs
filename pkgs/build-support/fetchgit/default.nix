@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenvNoCC,
   writeText,
@@ -66,7 +67,7 @@ lib.makeOverridable (
       # make this subdirectory the root of the result
       rootDir ? "",
       # GIT_CONFIG_GLOBAL (as a file)
-      gitConfigFile ? null,
+      gitConfigFile ? config.gitConfigFile,
     }:
 
     /*
