@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-rRiRaXONLMNirKsK+QZWMSvaGeSLrHN9BpM8dhxoaxY=";
   };
 
+  patches = [
+    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
+    ./fix-dirs-exclude.patch
+  ];
+
   pythonRemoveDeps = [ "bs4" ];
 
   build-system = [
