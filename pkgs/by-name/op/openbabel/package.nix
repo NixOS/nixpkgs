@@ -29,6 +29,10 @@ stdenv.mkDerivation {
     hash = "sha256-pJbvKBjpvXNjTZRxD2AqEarqmq+Pq08uvGvog/k/a7k=";
   };
 
+  patches = [
+    # <https://github.com/openbabel/openbabel/pull/2784>
+    ./fix-cmake-4.patch
+  ];
 
   nativeBuildInputs = [
     cmake
