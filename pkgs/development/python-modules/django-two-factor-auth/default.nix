@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "django-two-factor-auth";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-two-factor-auth";
     tag = version;
-    hash = "sha256-gg5QpPQbYnQr7KkCXFZ9Gnz48Cf4Nm67uV6JuyxK18c=";
+    hash = "sha256-oA5XaN6Asvc7Ms81gUA8JGiWFtKUfXrk/HXG0iZt0So=";
   };
 
   build-system = [ setuptools-scm ];
