@@ -12,7 +12,7 @@
   libxml2,
   openssl,
   range-v3,
-  catch2,
+  catch2_3,
   nasm,
   buildEnv,
   writeText,
@@ -95,13 +95,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2509";
+  version = "2509.1";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-Dq87cx7tv+HJvpy57L8dcApE+3E8VEyyTYKhDyoUfVU=";
+    hash = "sha256-eTm1ee8eS+OwzEUoklrrQDRIAJVX0FWBaWi2/TJrx48=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -192,7 +192,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_THUNKS" true)
     (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
     (lib.cmakeFeature "X86_32_TOOLCHAIN_FILE" "${toolchain32}")
@@ -206,7 +206,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [ nasm ];
-  checkInputs = [ catch2 ];
+  checkInputs = [ catch2_3 ];
 
   # List not exhaustive, e.g. because they depend on an x86 compiler or some
   # other difficult-to-build test binaries.
