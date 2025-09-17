@@ -45,7 +45,7 @@ _linkDeps() {
 }
 
 linkDLLs() {
-  if [ ! -e "$prefix" ]; then return; fi
+  if [ ! -d "$prefix" ]; then return; fi
   (
     set -e
     shopt -s globstar nullglob
