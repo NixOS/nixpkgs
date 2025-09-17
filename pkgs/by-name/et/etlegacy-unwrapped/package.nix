@@ -74,14 +74,6 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  preBuild = ''
-    # Required for build time to not be in 1980
-    export SOURCE_DATE_EPOCH=$(date +%s)
-    # This indicates the build was by a CI pipeline and prevents the resource
-    # files from being flagged as 'dirty' due to potentially being custom built.
-    export CI="true"
-  '';
-
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
