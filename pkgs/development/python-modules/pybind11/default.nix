@@ -2,7 +2,6 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -14,7 +13,6 @@
   catch2,
   numpy,
   pytest,
-  libxcrypt,
   makeSetupHook,
 }:
 let
