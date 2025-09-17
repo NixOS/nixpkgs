@@ -364,7 +364,8 @@ lib.makeScope pkgs.newScope (
 
     # also have a look at enblend-enfuse in all-packages.nix
     exposureBlend = scriptDerivation {
-      name = "exposure-blend";
+      pname = "exposure-blend";
+      version = "0-unstable-2009-02-16";
       src = fetchurl {
         url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
         sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
