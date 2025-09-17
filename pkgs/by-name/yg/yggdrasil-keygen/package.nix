@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-PKhKdSX/7Frrh5+6Wpr03fzBN2A2lDCvL63igoTlXYI=";
 
   meta = {
-    description = "A small executable to generate yggdrasil keys";
+    description = "Generate yggdrasil keys";
     homepage = "https://github.com/jcgruenhage/yggdrasil-keygen";
     changelog = "https://github.com/jcgruenhage/yggdrasil-keygen/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
