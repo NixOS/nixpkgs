@@ -6,7 +6,7 @@
   glslang,
   meson,
   ninja,
-  windows,
+  windowsPackages,
   enableMoltenVKCompat ? false,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
   ];
-  buildInputs = [ windows.pthreads ];
+  buildInputs = [ windowsPackages.pthreads ];
 
   mesonBuildType = "release";
 
