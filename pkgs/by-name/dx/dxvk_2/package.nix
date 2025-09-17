@@ -7,7 +7,7 @@
   meson,
   ninja,
   pkg-config,
-  windows,
+  windowsPackages,
   spirv-headers,
   vulkan-headers,
   SDL2,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals sdl2Support [ SDL2 ]
   ++ lib.optionals glfwSupport [ glfw ]
-  ++ lib.optionals hostPlatform.isWindows [ windows.pthreads ];
+  ++ lib.optionals hostPlatform.isWindows [ windowsPackages.pthreads ];
 
   # Build with the Vulkan SDK in nixpkgs.
   preConfigure = ''
