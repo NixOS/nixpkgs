@@ -5,7 +5,7 @@
   ruby,
   opencl-headers,
   autoreconfHook,
-  windows,
+  windowsPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     ruby
   ];
 
-  buildInputs = [ opencl-headers ] ++ lib.optionals stdenv.hostPlatform.isWindows [ windows.dlfcn ];
+  buildInputs = [
+    opencl-headers
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [ windowsPackages.dlfcn ];
 
   configureFlags = [
     "--enable-custom-vendordir=/run/opengl-driver/etc/OpenCL/vendors"
