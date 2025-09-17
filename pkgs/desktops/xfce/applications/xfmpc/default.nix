@@ -55,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "xfmpc-"; };
 
-  meta = with lib; {
+  meta = {
     description = "MPD client written in GTK";
     homepage = "https://docs.xfce.org/apps/xfmpc/start";
-    changelog = "https://gitlab.xfce.org/apps/xfmpc/-/blob/xfmpc-${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    teams = [ teams.xfce ];
+    changelog = "https://gitlab.xfce.org/apps/xfmpc/-/blob/xfmpc-${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    teams = [ lib.teams.xfce ];
     mainProgram = "xfmpc";
   };
 })

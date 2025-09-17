@@ -9,7 +9,7 @@ By default, Nix will prevent installation if any of the following criteria are t
 
 -   The package's `meta.license` is set to a license which is considered to be unfree.
 
--   The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered in to the package's `meta.knownVulnerabilities`.
+-   The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered into the package's `meta.knownVulnerabilities`.
 
 Each of these criteria can be altered in the Nixpkgs configuration.
 
@@ -31,7 +31,7 @@ Most unfree licenses prohibit either executing or distributing the software.
 
 ## Installing broken packages {#sec-allow-broken}
 
-There are two ways to try compiling a package which has been marked as broken.
+There are several ways to try compiling a package which has been marked as broken.
 
 -   For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
 
@@ -39,7 +39,15 @@ There are two ways to try compiling a package which has been marked as broken.
     $ export NIXPKGS_ALLOW_BROKEN=1
     ```
 
--   For permanently allowing broken packages to be built, you may add `allowBroken = true;` to your user's configuration file, like this:
+-   For permanently allowing broken packages that match some condition to be built, you may add `allowBrokenPredicate` to your user's configuration file with the desired condition, for example:
+
+    ```nix
+    {
+      allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+    }
+    ```
+
+-   For permanently allowing all broken packages to be built, you may add `allowBroken = true;` to your user's configuration file, like this:
 
     ```nix
     { allowBroken = true; }
@@ -87,7 +95,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
     { allowUnfreePredicate = (pkg: false); }
     ```
 
-    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and visual studio code:
+    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and Visual Studio Code:
 
     ```nix
     {
@@ -241,7 +249,7 @@ To install it into our environment, you can just run `nix-env -iA nixpkgs.myPack
 }
 ```
 
-`pathsToLink` tells Nixpkgs to only link the paths listed which gets rid of the extra stuff in the profile. `/bin` and `/share` are good defaults for a user environment, getting rid of the clutter. If you are running on Nix on MacOS, you may want to add another path as well, `/Applications`, that makes GUI apps available.
+`pathsToLink` tells Nixpkgs to only link the paths listed which gets rid of the extra stuff in the profile. `/bin` and `/share` are good defaults for a user environment, getting rid of the clutter. If you are running on Nix on macOS, you may want to add another path as well, `/Applications`, that makes GUI apps available.
 
 ### Getting documentation {#sec-getting-documentation}
 

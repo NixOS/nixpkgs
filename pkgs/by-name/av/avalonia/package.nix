@@ -46,14 +46,14 @@ stdenvNoCC.mkDerivation (
     }
     rec {
       pname = "Avalonia";
-      version = "11.3.4";
+      version = "11.3.5";
 
       src = fetchFromGitHub {
         owner = "AvaloniaUI";
         repo = "Avalonia";
         tag = version;
         fetchSubmodules = true;
-        hash = "sha256-zEQKflqdM3ZGm6aMk1zlKHHH3efTX0OZ+xRFwlLAu2M=";
+        hash = "sha256-o3KMfHNFDksz+8WO5TPoHPxVvjwuSZrwmB7kl+rvGDw=";
       };
 
       patches = [

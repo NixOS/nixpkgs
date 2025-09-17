@@ -14,6 +14,13 @@
 
 let
   versionMap = {
+    "4_1" = {
+      kafkaVersion = "4.1.0";
+      scalaVersion = "2.13";
+      sha256 = "sha256-hbRThHDR3LmNAnMoa/q4cXBlUi5Zfs//zU24OjAhdY4=";
+      jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.base.kafka_4_1;
+    };
     "4_0" = {
       kafkaVersion = "4.0.0";
       scalaVersion = "2.13";

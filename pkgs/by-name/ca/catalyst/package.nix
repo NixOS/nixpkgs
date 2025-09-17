@@ -65,10 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CATALYST_BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
-  postInstall = lib.optionalString pythonSupport ''
-    python -m compileall -s $out $out/${python3Packages.python.sitePackages}
-  '';
-
   doCheck = true;
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''

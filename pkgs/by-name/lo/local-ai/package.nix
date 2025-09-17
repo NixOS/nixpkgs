@@ -15,7 +15,7 @@
   ffmpeg,
   cmake,
   pkg-config,
-  buildGo123Module,
+  buildGoModule,
   makeWrapper,
   ncurses,
   which,
@@ -187,7 +187,7 @@ let
     passthru.espeak-ng = espeak-ng';
   };
 
-  piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
+  piper-tts' = piper-tts.overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
     sourceRoot = "${go-piper.src.name}/piper";
@@ -356,7 +356,7 @@ let
       ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
 
-  self = buildGo123Module.override { stdenv = effectiveStdenv; } {
+  self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
     vendorHash = "sha256-1OY/y1AeL0K+vOU4Jk/cj7rToVLC9EkkNhgifB+icDM=";
@@ -538,6 +538,9 @@ let
         ck3d
       ];
       platforms = platforms.linux;
+      # Doesn't build with >buildGo123Module.
+      # 'cp: cannot stat 'bin/rpc-server': No such file or directory'
+      broken = true;
     };
   };
 in

@@ -10,7 +10,6 @@
   libiconv,
   numactl,
   libffi,
-  llvmPackages,
   coreutils,
   targetPackages,
 
@@ -193,8 +192,6 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
-
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
     map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
@@ -206,9 +203,6 @@ let
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
-  ]
-  ++ lib.optionals useLLVM [
-    (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -470,7 +464,7 @@ stdenv.mkDerivation {
     targetPrefix = "";
     enableShared = true;
 
-    inherit llvmPackages;
+    llvmPackages = null;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
@@ -501,5 +495,6 @@ stdenv.mkDerivation {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     teams = [ lib.teams.haskell ];
+    broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
 }

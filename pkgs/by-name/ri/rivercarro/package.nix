@@ -4,7 +4,7 @@
   callPackage,
   fetchFromSourcehut,
   pkg-config,
-  river,
+  river-classic,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    river
+    river-classic
     wayland
     wayland-protocols
     wayland-scanner

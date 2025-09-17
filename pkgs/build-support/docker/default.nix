@@ -1113,24 +1113,32 @@ rec {
         '';
       };
 
-      layersJsonFile = buildPackages.dockerMakeLayers {
-        inherit debug;
-        closureRoots = optionals includeStorePaths [
-          baseJson
-          customisationLayer
-        ];
-        excludePaths = [
-          baseJson
-          customisationLayer
-        ];
-        pipeline =
-          if layeringPipeline != null then
-            layeringPipeline
-          else
-            import ./popularity-contest-layering-pipeline.nix { inherit lib jq runCommand; } {
-              inherit fromImage maxLayers;
-            };
-      };
+      closureRoots = optionals includeStorePaths [
+        baseJson
+        customisationLayer
+      ];
+
+      excludePaths = [
+        baseJson
+        customisationLayer
+      ];
+
+      layersJsonFile =
+        if layeringPipeline == null then
+          buildPackages.dockerAutoLayer {
+            inherit
+              closureRoots
+              debug
+              excludePaths
+              fromImage
+              maxLayers
+              ;
+          }
+        else
+          buildPackages.dockerMakeLayers {
+            inherit closureRoots debug excludePaths;
+            pipeline = layeringPipeline;
+          };
 
       conf =
         runCommand "${baseName}-conf.json"

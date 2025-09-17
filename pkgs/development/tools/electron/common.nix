@@ -218,6 +218,9 @@ in
     echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
     echo 'checkout_mutter = false' >> build/config/gclient_args.gni
   ''
+  + lib.optionalString (lib.versionAtLeast info.version "38") ''
+    echo 'checkout_clusterfuzz_data = false' >> build/config/gclient_args.gni
+  ''
   + base.postPatch;
 
   preConfigure = ''
@@ -261,11 +264,13 @@ in
     enable_dangling_raw_ptr_feature_flag = false;
     clang_unsafe_buffers_paths = "";
     enterprise_cloud_content_analysis = false;
-    content_enable_legacy_ipc = true;
 
     # other
     enable_widevine = false;
     override_electron_version = info.version;
+  }
+  // lib.optionalAttrs (lib.versionOlder info.version "38") {
+    content_enable_legacy_ipc = true;
   };
 
   installPhase = ''

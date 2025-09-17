@@ -15,34 +15,37 @@
   nix-update-script,
 }:
 let
-  mapRev = 250804;
+  mapRev = 250822;
 
   worldMap = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/World.mwm";
-    hash = "sha256-xYMH3y0Y6sSXYUTpy+A5YCyb+n5YChOXhyDvUFqXxZ0=";
+    hash = "sha256-OksUAix8yw0WQiJUwfMrjOCd/OwuRjdCOUjjGpnG2S8=";
   };
 
   worldCoasts = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/WorldCoasts.mwm";
-    hash = "sha256-2vc4kkNX9bRTqXYlALfwVwOlvr122kvUk7pUyM91vjc=";
+    hash = "sha256-1OvKZJ3T/YJu6t/qTYliIVkwsT8toBSqGHUpDEk9i2k=";
   };
 in
 organicmaps.overrideAttrs (oldAttrs: rec {
   pname = "comaps";
-  version = "2025.08.13-8";
+  version = "2025.08.31-15";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "comaps";
     repo = "comaps";
     tag = "v${version}";
-    hash = "sha256-kvE3H+siV/8v4WgsG1Ifd4gMMwGLqz28oXf1hB9gQ2Q=";
+    hash = "sha256-uRShcyMevNb/UE5+l8UabiGSr9TccVWp5xVoqI7+Oh8=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./remove-lto.patch
     ./use-vendored-protobuf.patch
+
+    # Include missing editor_tests_support.
+    ./fix-editor-tests.patch
   ];
 
   postPatch = (oldAttrs.postPatch or "") + ''

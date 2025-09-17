@@ -209,7 +209,6 @@ mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       jcumming
-      ehmry
     ];
 
     # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time

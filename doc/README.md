@@ -1,6 +1,6 @@
 # Contributing to the Nixpkgs reference manual
 
-This directory houses the sources files for the Nixpkgs reference manual.
+This directory houses the source files for the Nixpkgs reference manual.
 
 > [!IMPORTANT]
 > We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
@@ -92,7 +92,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 
 #### Inline Anchors
 
-Allow linking arbitrary place in the text (e.g. individual list items, sentences…).
+Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
 
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
@@ -203,7 +203,7 @@ watermelon
 
 In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
 In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
-When needed, each convention explain why it exists, so you can make a decision whether to follow it or not based on your particular case.
+When needed, each convention explains why it exists, so you can make a decision whether to follow it or not based on your particular case.
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 

@@ -6,13 +6,14 @@
   django-storages,
   django,
   fetchFromGitHub,
+  flit-core,
+  flit-scm,
   gitMinimal,
   mock,
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
   redis,
-  setuptools-scm,
   sphinx,
 }:
 
@@ -28,7 +29,10 @@ buildPythonPackage rec {
     hash = "sha256-qgABCDWKGYZ67sKvCozUQfmYcKWMpEVNLxInTnIaojk=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    flit-core
+    flit-scm
+  ];
 
   buildInputs = [
     sphinx

@@ -174,7 +174,7 @@ It is a curated set of libraries that:
 1. Always work together.
 2. Are as up-to-date as possible.
 
-While the Haskell ecosystem is huge, and Stackage is highly automatised,
+While the Haskell ecosystem is huge, and Stackage is highly automated,
 the Agda package set is small and can (still) be maintained by hand.
 
 ### Adding Agda packages to Nixpkgs {#adding-agda-packages-to-nixpkgs}
@@ -203,7 +203,32 @@ Note that the derivation function is called with `mkDerivation` set to `agdaPack
 could use a similar set as in your `default.nix` from [Writing Agda Packages](#writing-agda-packages) with
 `agdaPackages.mkDerivation` replaced with `mkDerivation`.
 
-When writing an Agda package it is essential to make sure that no `.agda-lib` file gets added to the store as a single file (for example by using `writeText`). This causes Agda to think that the nix store is a Agda library and it will attempt to write to it whenever it typechecks something. See [https://github.com/agda/agda/issues/4613](https://github.com/agda/agda/issues/4613).
+Here is an example skeleton derivation for iowa-stdlib:
+
+```nix
+mkDerivation {
+  version = "1.5.0";
+  pname = "iowa-stdlib";
+
+  src = <...>;
+
+  libraryFile = "";
+  libraryName = "IAL-1.3";
+
+  buildPhase = ''
+    runHook preBuild
+
+    patchShebangs find-deps.sh
+    make
+
+    runHook postBuild
+  '';
+}
+```
+
+This library has a file called `.agda-lib`, and so we give an empty string to `libraryFile` as nothing precedes `.agda-lib` in the filename. This file contains `name: IAL-1.3`, and so we let `libraryName =  "IAL-1.3"`. This library does not use an `Everything.agda` file and instead has a Makefile, so there is no need to set `everythingFile` and we set a custom `buildPhase`.
+
+When writing an Agda package, it is essential to make sure that no `.agda-lib` file gets added to the store as a single file (for example by using `writeText`). This causes Agda to think that the nix store is a Agda library and it will attempt to write to it whenever it typechecks something. See [https://github.com/agda/agda/issues/4613](https://githcub.com/agda/agda/issues/4613).
 
 In the pull request adding this library,
 you can test whether it builds correctly by writing in a comment:

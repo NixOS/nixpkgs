@@ -225,6 +225,12 @@
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
   ],
+  "sec-meta-identifiers": [
+    "index.html#sec-meta-identifiers"
+  ],
+  "sec-meta-identifiers-cpe": [
+    "index.html#sec-meta-identifiers-cpe"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -574,6 +580,9 @@
   "strictflexarrays3": [
     "index.html#strictflexarrays3"
   ],
+  "glibcxxassertions": [
+    "index.html#glibcxxassertions"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -621,6 +630,18 @@
   ],
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
+  ],
+  "var-go-buildTestBinaries": [
+    "index.html#var-go-buildTestBinaries"
+  ],
+  "var-meta-identifiers-cpe": [
+    "index.html#var-meta-identifiers-cpe"
+  ],
+  "var-meta-identifiers-cpeParts": [
+    "index.html#var-meta-identifiers-cpeParts"
+  ],
+  "var-meta-identifiers-possibleCPEs": [
+    "index.html#var-meta-identifiers-possibleCPEs"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -1668,6 +1689,9 @@
   ],
   "fetchfromradicle": [
     "index.html#fetchfromradicle"
+  ],
+  "fetchradiclepatch": [
+    "index.html#fetchradiclepatch"
   ],
   "requirefile": [
     "index.html#requirefile"
@@ -4584,6 +4608,9 @@
   ],
   "sec-interop.cylonedx-fod": [
     "index.html#sec-interop.cylonedx-fod"
+  ],
+  "sec-uv": [
+    "index.html#sec-uv"
   ],
   "module-system-module-argument-_prefix": [
     "index.html#module-system-module-argument-_prefix"

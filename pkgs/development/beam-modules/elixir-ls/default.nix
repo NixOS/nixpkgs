@@ -1,7 +1,6 @@
 {
   lib,
   elixir,
-  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   stdenv,
@@ -10,23 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "elixir-ls";
-  version = "0.28.1";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-r4P+3MPniDNdF3SG2jfBbzHsoxn826eYd2tsv6bJBoI=";
+    hash = "sha256-ikx0adlDrkUpMXPEbPtIsb2/1wcOt1jLwciVdBEKnss=";
   };
 
   patches = [
-    # fix elixir deterministic support https://github.com/elixir-lsp/elixir-ls/pull/1216
-    # remove > 0.28.1
-    (fetchpatch {
-      url = "https://github.com/elixir-lsp/elixir-ls/pull/1216.patch";
-      hash = "sha256-J1Q7XQXWYuCMq48e09deQU71DOElZ2zMTzrceZMky+0=";
-    })
-
     # patch wrapper script to remove elixir detection and inject necessary paths
     ./launch.sh.patch
   ];

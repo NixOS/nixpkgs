@@ -1,5 +1,6 @@
 {
   lib,
+  build,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -27,7 +28,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "ipywidgets" ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    build
+    setuptools
+  ];
 
   dependencies = [
     astunparse

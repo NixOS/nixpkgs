@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [ ];
   };
 })

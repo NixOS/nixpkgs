@@ -27,7 +27,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.13";
+  version = "5.13.1";
 
   pyproject = true;
 
@@ -40,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-fx07SmQodgC4bI/zQT6TNcvGYzVoKT42aXpUx5SlUrk=";
+    hash = "sha256-so+bpjuWgyLiSfTCL8+WqGNZYaqnENKXWqiojD47WwU=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -66,6 +66,10 @@ python.pkgs.buildPythonApplication rec {
       ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
+
+  pythonRelaxDeps = [
+    "rapidfuzz"
+  ];
 
   dependencies =
     with python.pkgs;

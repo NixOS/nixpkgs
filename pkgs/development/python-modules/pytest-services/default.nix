@@ -6,7 +6,6 @@
   pylibmc,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   toml,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   version = "2.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-services";
@@ -28,14 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-kWgqb7+3/hZKUz7B3PnfxHZq6yU3JUeJ+mruqrMD/NE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
     toml
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     psutil
     zc-lockfile

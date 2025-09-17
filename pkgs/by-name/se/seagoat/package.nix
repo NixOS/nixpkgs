@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "1.0.25";
+  version = "1.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-Qg4sYp2glD7TI6MjqTGFFDlwpLdy7apckTUT29NSK6k=";
+    hash = "sha256-XXKLvm3sEYgfLojtYKI3i8o3HERdH4+FRSo28FBqONg=";
   };
 
   build-system = [ python3Packages.poetry-core ];

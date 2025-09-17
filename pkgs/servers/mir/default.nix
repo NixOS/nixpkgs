@@ -5,15 +5,8 @@ let
 in
 {
   mir = common {
-    version = "2.21.1";
-    hash = "sha256-FDZ40LiuvMuyWQQGjgOHTm+J3i7yczKMzL3dZ1jsz/E=";
-    patches = [
-      (fetchpatch {
-        name = "0001-Fix-gtest-nodiscard-error.patch";
-        url = "https://github.com/canonical/mir/commit/60dab2b197deb159087e44865e7314ad2865b79d.patch";
-        hash = "sha256-fB49E+Wjm2zJnie9Ws+tP0d6lxcG3V/C/UDfy/4iuFU=";
-      })
-    ];
+    version = "2.22.0";
+    hash = "sha256-46FxyS4Anm1id63GUUCzn9ubTQIvs1+HrXKgZki6fQw=";
   };
 
   mir_2_15 = common {
@@ -42,6 +35,24 @@ in
         name = "0003-mir-cmake-always-require-epoxy.patch";
         url = "https://github.com/canonical/mir/commit/171c42ac3929f946a70505ee42be0ce8220f245a.patch";
         hash = "sha256-QuVZBcHSn/DK+xbjM36Y89+w22vk7NRV4MkbjgvS28A=";
+      })
+
+      # Exclude known-flaky tests
+      # Remove when version > 2.15.0
+      (fetchpatch {
+        name = "0004-mir-exclude-tests-surfaces_with_exclusive_zone_set_to_negative_one_do_not_respect_other_exclusive_zones-1.patch";
+        url = "https://github.com/canonical/mir/commit/967d872daab50d845adce389c0672edfd18b90c9.patch";
+        hash = "sha256-XfTWQj+fmPpC1hIqt7ELGU6Yq2wJSO+FQ8bsikI5h0I=";
+      })
+      (fetchpatch {
+        name = "0005-mir-exclude-tests-surfaces_with_exclusive_zone_set_to_negative_one_do_not_respect_other_exclusive_zones-2.patch";
+        url = "https://github.com/canonical/mir/commit/932d8744852bca9830668018474890bce0c5f6d6.patch";
+        hash = "sha256-+udEt6pF5VLSBtRgo9r1YdVsinARWLAL4AeEG01DV68=";
+      })
+      (fetchpatch {
+        name = "0006-mir-exclude-tests-surfaces_with_exclusive_zone_set_to_negative_one_do_not_respect_other_exclusive_zones-3.patch";
+        url = "https://github.com/canonical/mir/commit/fbad5e50be02992f6cf1f41f928950532f3f62c5.patch";
+        hash = "sha256-J0YEhXf8sAWEHHxU7QKSJjOoHiXsYqotBfgGm79X6GA=";
       })
 
       # Fix ignored return value of std::lock_guard

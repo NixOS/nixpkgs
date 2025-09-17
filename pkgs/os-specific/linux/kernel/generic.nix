@@ -38,8 +38,8 @@ let
       # Additional make flags passed to kbuild
       extraMakeFlags ? [ ],
 
-      # enables the options in ./common-config.nix; if `false` then only
-      # `structuredExtraConfig` is used
+      # enables the options in ./common-config.nix and lib/systems/platform.nix;
+      # if `false` then only `structuredExtraConfig` is used
       enableCommonConfig ? true
 
       , # kernel intermediate config overrides, as a set
@@ -136,7 +136,8 @@ let
         configfile.moduleStructuredConfig.intermediateNixConfig
         # extra config in legacy string format
         + extraConfig
-        + stdenv.hostPlatform.linux-kernel.extraConfig or "";
+        # need the 'or ""' at the end in case enableCommonConfig = true and extraConfig is not present
+        + lib.optionalString enableCommonConfig stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
       structuredConfigFromPatches = map (
         {

@@ -11,7 +11,7 @@
   libGLU,
   libX11,
   janet,
-  lua5_3,
+  lua5_3_compat,
   quickjs,
   SDL2,
   # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     libGLU
     libX11
     janet
-    (lua5_3.withPackages (ps: [ ps.fennel ]))
+    (lua5_3_compat.withPackages (ps: [ ps.fennel ]))
     quickjs
     SDL2
   ];

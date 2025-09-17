@@ -53,6 +53,11 @@ buildPythonPackage {
     filelock
   ];
 
+  disabledTests = [
+    # AssertionError: assert ''
+    "test_get_html"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

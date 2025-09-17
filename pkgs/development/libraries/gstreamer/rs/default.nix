@@ -13,6 +13,7 @@
   cargo-c,
   lld,
   nasm,
+  cmake,
   gstreamer,
   gst-plugins-base,
   gst-plugins-bad,
@@ -127,17 +128,6 @@ let
       ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
-
-  # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
-  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or [ ]) ++ [
-      (fetchpatch {
-        name = "cargo-c-test-rlib-fix.patch";
-        url = "https://github.com/lu-zero/cargo-c/commit/dd02009d965cbd664785149a90d702251de747b3.diff";
-        hash = "sha256-Az0WFF9fc5+igcV8C/QFhq5GE4PAyGEO84D9ECxx3v0=";
-      })
-    ];
-  });
 in
 assert lib.assertMsg (invalidPlugins == [ ])
   "Invalid gst-plugins-rs plugin${
@@ -189,6 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
     ./ignore-tests.patch
+    (fetchpatch {
+      name = "x264enc-test-fix.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/commit/c0c9888d66e107f9e0b6d96cd3a85961c7e97d9a.diff";
+      hash = "sha256-/ILdPDjI20k5l9Qf/klglSuhawmFUs9mR+VhBnQqsWw=";
+    })
   ];
 
   strictDeps = true;
@@ -202,8 +197,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     cargo
-    cargo-c'
+    cargo-c
     nasm
+  ]
+  # aws-lc-rs has no pregenerated bindings for exotic platforms
+  # https://aws.github.io/aws-lc-rs/platform_support.html
+  ++ lib.optionals (!(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)) [
+    cmake
+    rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld

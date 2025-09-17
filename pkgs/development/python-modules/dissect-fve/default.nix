@@ -27,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-OgagTnt4y6Fzd7jbsCgbkTzcsdnozImfdKI9ew9JaqI=";
   };
 
+  pythonRelaxDeps = [
+    "pycryptodome"
+  ];
+
   build-system = [
     setuptools
     setuptools-scm

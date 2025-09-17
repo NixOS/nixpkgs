@@ -4,98 +4,30 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  R,
-  libdeflate,
-  rWrapper,
-  rPackages,
-  pcre,
-  xz,
-  bzip2,
-  zlib,
-  zstd,
-  icu,
-  ipython,
-  jinja2,
-  pytz,
-  pandas,
-  numpy,
-  cffi,
-  tzlocal,
-  simplegeneric,
+  rpy2-rinterface,
+  rpy2-robjects,
   pytestCheckHook,
-  extraRPackages ? [ ],
 }:
 
 buildPythonPackage rec {
-  version = "3.6.2";
-  format = "setuptools";
+  version = "3.6.3";
+  format = "pyproject";
   pname = "rpy2";
 
   disabled = isPyPy;
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-F06ld2qR0Ds13VYRiJlg4PVFHp0KvqSr/IwL5qhTd9A=";
+    hash = "sha256-lCYYoSUhljAG0i6IqqTUgakjghwDoXQsmb7uci6w/Fo=";
   };
 
-  patches = [
-    # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
-    # This patch sets R_LIBS_SITE when rpy2 is imported.
-    ./rpy2-3.x-r-libs-site.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
-    substituteInPlace 'requirements.txt' --replace 'pytest' ""
-  '';
-
-  buildInputs = [
-    pcre
-    xz
-    bzip2
-    zlib
-    zstd
-    icu
-    libdeflate
-  ]
-  ++ (with rPackages; [
-    # packages expected by the test framework
-    ggplot2
-    dplyr
-    RSQLite
-    broom
-    DBI
-    dbplyr
-    hexbin
-    lazyeval
-    lme4
-    tidyr
-  ])
-  ++ extraRPackages
-  ++ rWrapper.recommendedPackages;
-
-  nativeBuildInputs = [
-    R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
-  ];
-
   propagatedBuildInputs = [
-    ipython
-    jinja2
-    pytz
-    pandas
-    numpy
-    cffi
-    tzlocal
-    simplegeneric
+    rpy2-rinterface
+    rpy2-robjects
   ];
 
-  # https://github.com/rpy2/rpy2/issues/1111
-  disabledTests = [
-    "test_parse_incomplete_error"
-    "test_parse_error"
-    "test_parse_error_when_evaluting"
+  pythonImportsCheck = [
+    "rpy2"
   ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://rpy2.github.io/";

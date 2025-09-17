@@ -43,6 +43,13 @@ stdenv.mkDerivation {
   configurePhase = generated.configure + ''
     swiftpmMakeMutable indexstore-db
     patch -p1 -d .build/checkouts/indexstore-db -i ${./patches/indexstore-db-macos-target.patch}
+    patch -p1 -d .build/checkouts/indexstore-db -i ${
+      # Fix the build with modern Clang.
+      fetchpatch {
+        url = "https://github.com/swiftlang/indexstore-db/commit/6120b53b1e8774ef4e2ad83438d4d94961331e72.patch";
+        hash = "sha256-tMAfTIa3RKiA/jDtP02mHcpPaF2s9a+3q/PLJxqn30M=";
+      }
+    }
 
     swiftpmMakeMutable swift-tools-support-core
     patch -p1 -d .build/checkouts/swift-tools-support-core -i ${

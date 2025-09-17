@@ -264,7 +264,6 @@ in
     doc = ./yggdrasil.md;
     maintainers = with lib.maintainers; [
       gazally
-      ehmry
       nagy
     ];
   };

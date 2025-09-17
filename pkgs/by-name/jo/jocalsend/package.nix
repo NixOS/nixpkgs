@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jocalsend";
-  version = "1.6.18033";
+  version = "1.61803398";
 
   src = fetchFromGitea {
     domain = "git.kittencollective.com";
     owner = "nebkor";
     repo = "joecalsend";
     tag = finalAttrs.version;
-    hash = "sha256-q2fzi0NKfkjCwV7FD0PqXSHtJWQtvdvKx4WmhnZpKvg=";
+    hash = "sha256-7Gl+G4BN3CgF0c/AEhI1OvRhveqGeFNmGRI3XRf6rAo=";
   };
 
-  cargoHash = "sha256-u9Ev/Qr/WN6OOaMXPesA3nmV3efKJA3/2YWm8S60PjU=";
+  cargoHash = "sha256-prT1wO3ctnTfMHfICFcihB739lN/QXPH3AamIR6dM9A=";
 
   nativeBuildInputs = [
     pkg-config

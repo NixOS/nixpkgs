@@ -253,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
       mpv.desktop > umpv.desktop
     printf "NoDisplay=true\n" >> umpv.desktop
+    printf "StartupNotify=false\n" >> umpv.desktop
     popd
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -314,7 +315,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fpletz
       globin
-      ma27
       SchweGELBin
     ];
     platforms = lib.platforms.unix;

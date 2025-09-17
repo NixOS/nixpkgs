@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   perl,
-  ...
 }:
 
 let

@@ -63,7 +63,7 @@ fi
 printf "Done\n"
 popd
 
-sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$YARN_HASH\"#" ${scriptDir}/default.nix
+sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$YARN_HASH\"#" ${scriptDir}/package.nix
 
 update-source-version pgadmin4 "$newest_version" --print-changes
 touch $TMPDIR/.done

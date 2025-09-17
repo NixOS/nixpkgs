@@ -19,7 +19,7 @@ This function will place them into [`outputBin`](#outputbin).
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the file has an undersirable name. It should be renamed before
+  # Sometimes the file has an undesirable name. It should be renamed before
   # being installed via installBin
   postInstall = ''
     mv a.out delmar
@@ -42,12 +42,43 @@ The manpages must have a section suffix, and may optionally be compressed (with
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the manpage file has an undersirable name; e.g. it conflicts with
-  # another software with an equal name. It should be renamed before being
-  # installed via installManPage
+  # Sometimes the manpage file has an undersirable name; e.g., it conflicts with
+  # another software with an equal name. To install it with a different name,
+  # the installed name must be provided before the path to the file.
+  #
+  # Below install a manpage "foobar.1" from the source file "./foobar.1", and
+  # also installs the manpage "fromsea.3" from the source file "./delmar.3".
   postInstall = ''
-    mv fromsea.3 delmar.3
-    installManPage foobar.1 delmar.3
+    installManPage \
+        foobar.1 \
+        --name fromsea.3 delmar.3
+  '';
+}
+```
+
+The manpage may be the result of a piped input (e.g. `<(cmd)`), in which
+case the name must be provided before the pipe with the `--name` flag.
+
+```nix
+{
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage --name foobar.1 <($out/bin/foobar --manpage)
+  '';
+}
+```
+
+If no parsing of arguments is desired, pass `--` to opt-out of all subsequent
+arguments.
+
+```nix
+{
+  nativeBuildInputs = [ installShellFiles ];
+
+  # Installs a manpage from a file called "--name"
+  postInstall = ''
+    installManPage -- --name
   '';
 }
 ```
@@ -58,8 +89,8 @@ The `installShellCompletion` function takes one or more paths to shell
 completion files.
 
 By default it will autodetect the shell type from the completion file extension,
-but you may also specify it by passing one of `--bash`, `--fish`, or
-`--zsh`. These flags apply to all paths listed after them (up until another
+but you may also specify it by passing one of `--bash`, `--fish`, `--zsh`, or
+`--nushell`. These flags apply to all paths listed after them (up until another
 shell flag is given). Each path may also have a custom installation name
 provided by providing a flag `--name NAME` before the path. If this flag is not
 provided, zsh completions will be renamed automatically such that `foobar.zsh`
@@ -77,9 +108,10 @@ zsh).
     # explicit behavior
     installShellCompletion --bash --name foobar.bash share/completions.bash
     installShellCompletion --fish --name foobar.fish share/completions.fish
+    installShellCompletion --nushell --name foobar share/completions.nu
     installShellCompletion --zsh --name _foobar share/completions.zsh
     # implicit behavior
-    installShellCompletion share/completions/foobar.{bash,fish,zsh}
+    installShellCompletion share/completions/foobar.{bash,fish,zsh,nu}
   '';
 }
 ```
@@ -104,6 +136,7 @@ failure. To prevent this, guard the completion generation commands.
     installShellCompletion --cmd foobar \
       --bash <($out/bin/foobar --bash-completion) \
       --fish <($out/bin/foobar --fish-completion) \
+      --nushell <($out/bin/foobar --nushell-completion) \
       --zsh <($out/bin/foobar --zsh-completion)
   '';
 }

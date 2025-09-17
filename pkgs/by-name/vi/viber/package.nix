@@ -38,7 +38,6 @@
   xorg,
   zlib,
   zstd,
-  ...
 }:
 
 stdenv.mkDerivation {

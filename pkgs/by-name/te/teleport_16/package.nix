@@ -1,15 +1,15 @@
 {
   buildTeleport,
-  buildGo123Module,
+  buildGoModule,
   wasm-bindgen-cli_0_2_95,
 }:
 buildTeleport rec {
-  version = "16.5.13";
-  hash = "sha256-X9Ujgvp+2dFCoku0tjGW4W05X8QrnExFE+H1kMhf91A=";
-  vendorHash = "sha256-0+7xbIONnZs7dPpfpHPmep+k4XxQE8TS/eKz4F5a3V0=";
-  pnpmHash = "sha256-waBzmNs20wbuoBDObVFnJjEYs3NJ/bzQksVz7ltMD7M=";
+  version = "16.5.15";
+  hash = "sha256-DqNG6gl+KdjSbkE9Bwum8az8cLCSOmZwo9xpuWafHCA=";
+  vendorHash = "sha256-sZvRKLF2iZ3UpgGNUPuWMT7VTpnDa2uU0d1XjDKSmdo=";
+  pnpmHash = "sha256-8xnH9PkKz77whtq/LVYUjyG1Z1reRtW03Gv8sZ/1vww=";
   cargoHash = "sha256-04zykCcVTptEPGy35MIWG+tROKFzEepLBmn04mSbt7I=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
-  buildGoModule = buildGo123Module;
+  inherit buildGoModule;
 }

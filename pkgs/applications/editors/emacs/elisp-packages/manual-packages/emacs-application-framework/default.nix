@@ -1,5 +1,6 @@
 {
   # Basic
+  stdenv,
   lib,
   melpaBuild,
   fetchFromGitHub,
@@ -42,12 +43,14 @@ let
   pythonEnv = python3.withPackages pythonPkgs;
 
   otherPackageLists = [
-    [
-      git
-      nodejs
-      wmctrl
-      xdotool
-    ]
+    (
+      [
+        git
+        nodejs
+        wmctrl
+      ]
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform xdotool) [ xdotool ]
+    )
   ]
   ++ appOtherDeps;
   otherPkgs = builtins.concatLists (otherPackageLists);

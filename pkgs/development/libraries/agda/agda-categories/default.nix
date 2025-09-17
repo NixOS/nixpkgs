@@ -6,14 +6,14 @@
 }:
 
 mkDerivation rec {
-  version = "0.2.0";
+  version = "0.3.0";
   pname = "agda-categories";
 
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
     rev = "v${version}";
-    sha256 = "sha256-GQuQxzYSQxAIVSJ1vf0blRC0juoxAqD1AHW66H/6NSk=";
+    sha256 = "sha256-zPh6RFnky4KsnQx5Y/3FeYZ/jWK+hqJGNyCjEFPPHWQ=";
   };
 
   postPatch = ''

@@ -244,7 +244,6 @@ import ./make-test-python.nix (
                     if ($request_method = OPTIONS) {
                         return 204;
                     }
-                    add_header X-XSS-Protection "1; mode=block";
                     add_header X-Permitted-Cross-Domain-Policies none;
                     add_header X-Frame-Options DENY;
                     add_header X-Content-Type-Options nosniff;

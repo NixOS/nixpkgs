@@ -6,13 +6,13 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "beluga";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "Beluga-lang";
     repo = "Beluga";
     tag = "v${version}";
-    hash = "sha256-QUZ3mmd0gBQ+hnAeo/TbvFsETnThAdAoQyfpz2F//4g=";
+    hash = "sha256-bMaLjHq/3ZrST5E9lBSIX0T2cAhDin+lv1XwgUF4/7w=";
   };
 
   duneVersion = "3";

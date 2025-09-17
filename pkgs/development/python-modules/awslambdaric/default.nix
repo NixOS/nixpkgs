@@ -4,7 +4,7 @@
   fetchFromGitHub,
   isPy27,
   pytestCheckHook,
-  autoconf271,
+  autoconf,
   automake,
   cmake,
   gcc,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    autoconf271
+    autoconf
     automake
     cmake
     libtool

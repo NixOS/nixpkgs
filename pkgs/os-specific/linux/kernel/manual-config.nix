@@ -340,6 +340,7 @@ lib.makeOverridable (
           "KBUILD_BUILD_VERSION=1-NixOS"
           kernelConf.target
           "vmlinux" # for "perf" and things like that
+          "scripts_gdb"
         ]
         ++ optional isModular "modules"
         ++ optionals buildDTBs [
@@ -447,6 +448,10 @@ lib.makeOverridable (
         postInstall = optionalString isModular ''
           mkdir -p $dev
           cp vmlinux $dev/
+
+          mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
+          cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
+
           if [ -z "''${dontStrip-}" ]; then
             installFlags+=("INSTALL_MOD_STRIP=1")
           fi
@@ -472,6 +477,7 @@ lib.makeOverridable (
           # Keep some extra files on some arches (powerpc, aarch64)
           for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
             if [ -f "$buildRoot/$f" ]; then
+              mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
               cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
             fi
           done
@@ -540,6 +546,13 @@ lib.makeOverridable (
             ]
             ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
           timeout = 14400; # 4 hours
+          identifiers.cpeParts = {
+            part = "o";
+            vendor = "linux";
+            product = "linux_kernel";
+            inherit version;
+            update = "*";
+          };
         }
         // extraMeta;
       };

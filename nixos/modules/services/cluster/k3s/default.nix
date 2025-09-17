@@ -82,6 +82,8 @@ let
         nativeBuildInputs = with pkgs; [
           kubernetes-helm
           cacert
+          # Helm requires HOME to refer to a writable dir
+          writableTmpDirAsHomeHook
         ];
       }
       ''
@@ -630,7 +632,7 @@ in
             finalImageTag = "21.1.2-debian-11-r0";
           })
 
-          config.services.k3s.package.airgapImages
+          config.services.k3s.package.airgap-images
         ]
       '';
       description = ''

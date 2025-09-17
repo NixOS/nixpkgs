@@ -1564,7 +1564,8 @@ let
         settings.scripts = [
           {
             name = "success";
-            script = "sleep 1";
+            command = [ "sleep" ];
+            args = [ "1" ];
           }
         ];
       };
@@ -1572,7 +1573,7 @@ let
         wait_for_unit("prometheus-script-exporter.service")
         wait_for_open_port(9172)
         wait_until_succeeds(
-            "curl -sSf 'localhost:9172/probe?name=success' | grep -q '{}'".format(
+            "curl -sSf 'localhost:9172/probe?script=success' | grep -q '{}'".format(
                 'script_success{script="success"} 1'
             )
         )

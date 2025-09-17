@@ -151,7 +151,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       sjmackenzie
       zimbatm
-      ehmry
       obadz
       danielfullmer
       mic92 # also can test darwin

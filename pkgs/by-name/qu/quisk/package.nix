@@ -9,12 +9,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.42";
+  version = "4.2.43";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Di5B0irH6G8XQtwXVDk4FXwLRo5Nh+cyt9zsG7+dMkc=";
+    hash = "sha256-z5O7Oz6Wa0Orr1RgKVoBzlyfdlpLKi96NHNjffLkJ80=";
   };
 
   buildInputs = [

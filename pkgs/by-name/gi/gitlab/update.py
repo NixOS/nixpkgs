@@ -44,7 +44,7 @@ class GitLabRepo:
         # sort, but ignore v, -ee and -gitlab for sorting comparisons
         versions.sort(
             key=lambda x: Version(
-                x.replace("v", "").replace("-ee", "").replace("-gitlab", "")
+                x.replace("v", "").replace("-ee", "").replace("-gitlab", "").replace("-ahmed-master-test", "")
             ),
             reverse=True,
         )

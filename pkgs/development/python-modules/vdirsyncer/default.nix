@@ -29,37 +29,20 @@
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.19.3";
+  version = "0.20.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5DeFH+uYXew1RGVPj5z23RCbCwP34ZlWCGYDCS/+so8=";
+    hash = "sha256-/rGlM1AKlcFP0VVzOhBW/jWRklU9gsB8a6BPy/xAsS0=";
   };
 
-  patches = [
-    (
-      # Fix event_loop missing
-      # TODO: remove it after vdirsyncer release 0.19.4
-      fetchpatch {
-        # https://github.com/pimutils/vdirsyncer/pull/1185
-        url = "https://github.com/pimutils/vdirsyncer/commit/164559ad7a95ed795ce4ae8d9b287bd27704742d.patch";
-        hash = "sha256-nUGvkBnHr8nVPpBuhQ5GjaRs3QSxokdZUEIsOrQ+lpo=";
-      }
-    )
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  pythonRelaxDeps = [ "aiostream" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     click
     click-log

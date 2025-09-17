@@ -7,23 +7,31 @@
   gperf,
   autoreconfHook,
   libpoly,
+  ncurses5,
 }:
 
 let
   gmp-static = gmp.override { withStatic = true; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yices";
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "SRI-CSL";
     repo = "yices2";
-    rev = "Yices-${version}";
-    hash = "sha256-/sKyHkFW5I5kojNIRPEKojzTvfRZiyVIN5VlBIbAV7k=";
+    tag = "yices-${finalAttrs.version}";
+    hash = "sha256-siyepgxqKWRyO4+SB95lmhJ98iDubk0R0ErEJdSsM8o=";
   };
 
-  postPatch = "patchShebangs tests/regress/check.sh";
+  postPatch = ''
+    patchShebangs tests/regress/check.sh
+  ''
+  # operation not permitted
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace utils/make_source_version \
+      --replace-fail '"/usr/bin/mktemp -t out"' "mktemp"
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
@@ -41,11 +49,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with lib; {
+  nativeCheckInputs = [ ncurses5 ];
+
+  meta = {
     description = "High-performance theorem prover and SMT solver";
     homepage = "https://yices.csl.sri.com";
-    license = licenses.gpl3;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

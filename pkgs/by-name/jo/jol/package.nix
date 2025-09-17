@@ -47,7 +47,10 @@ maven.buildMavenPackage rec {
     '';
     homepage = "https://openjdk.org/projects/code-tools/jol/";
     changelog = "https://github.com/openjdk/jol/releases/tag/${version}";
-    license = lib.licenses.gpl2ClasspathPlus;
+    license = with lib.licenses; [
+      gpl2Plus
+      classpathException20
+    ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode

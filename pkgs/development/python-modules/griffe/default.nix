@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "1.12.1";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
     tag = version;
-    hash = "sha256-AtYAorOCUJmXkSNayLWZmcsUx/oVRS157Z5Pk9RAl5E=";
+    hash = "sha256-0koTrA1b3S1NO6w24S8eghWpYDkGEo61giRveQ7MZhM=";
   };
 
   build-system = [ pdm-backend ];

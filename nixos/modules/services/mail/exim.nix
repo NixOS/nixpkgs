@@ -123,18 +123,11 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
+        ExecStartPre = "+${coreutils}/bin/install --group=${cfg.group} --owner=${cfg.user} --mode=0700 --directory ${cfg.spoolDir}";
         ExecStart = "!${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
         ExecReload = "!${coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
       };
-      preStart = ''
-        if ! test -d ${cfg.spoolDir}; then
-          ${coreutils}/bin/mkdir -p ${cfg.spoolDir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.spoolDir}
-        fi
-      '';
     };
-
   };
-
 }

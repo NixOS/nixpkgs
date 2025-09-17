@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt
+#!nix-shell -I nixpkgs=./. -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt
 
 set -euo pipefail
 
@@ -22,6 +22,9 @@ RELEASES=$(curl --silent https://gitlab.com/api/v4/projects/xanmod%2Flinux/relea
 RELEASE_URLS=$(echo "$RELEASES" | jq '.[].assets.links.[0].name')
 
 while IFS= read -r url; do
+    # Remove trailing slash
+    url="${url%/}"
+
     # Get variant, version and suffix from url fields:
     #                 8         9       NF
     #                 |         |       |

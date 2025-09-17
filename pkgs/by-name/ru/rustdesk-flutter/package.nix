@@ -29,6 +29,7 @@
   cargo-expand,
   yq,
   callPackage,
+  addDriverRunpath,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
@@ -204,6 +205,7 @@ flutter.buildFlutterApplication rec {
   '';
 
   extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
     --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 

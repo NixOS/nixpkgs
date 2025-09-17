@@ -83,22 +83,20 @@ mv chart-versions.nix.update chart-versions.nix
 SHA256_HASHES="\
 $($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-amd64.txt")
 $($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm64.txt")
-$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")
-$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/k3s-images.txt" | sha256sum | cut -d' ' -f1)  k3s-images.txt"
+$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")"
 
 # Get all airgap images files associated with this release
 IMAGES_ARCHIVES=$($CURL "https://api.github.com/repos/k3s-io/k3s/releases/tags/v${K3S_VERSION}" | \
-    # Filter the assets so that only zstd archives and text files that have "images" in their name remain
-    jq -r '.assets[] | select(.name | (contains("images") and (endswith(".tar.zst") or endswith("k3s-images.txt")))) |
-        "\(.name) \(.browser_download_url)"')
+    # Filter the assets for airgap images archives
+    jq -r '.assets[] | select(.name | test("^k3s-airgap-images-.*\\.tar\\.")) | "\(.name) \(.browser_download_url)"')
 
 # Create a JSON object for each airgap images file and prefetch all download URLs in the process
 # Combine all JSON objects and write the result to images-versions.json
 while read -r name url; do
     # Pick the right hash based on the name
     sha256=$(grep "$name" <<< "$SHA256_HASHES" | cut -d ' ' -f 1)
-    # Remove the k3s- prefix and file endings
-    clean_name=$(sed -e 's/^k3s-//' -e 's/\.tar\.zst//' -e 's/\.txt/-list/' <<< "$name")
+    # Remove the k3s prefix and replace all dots with hyphens
+    clean_name=$(sed -e "s/^k3s-//" -e "s/\./-/g" <<< "$name")
     jq --null-input --arg name "$clean_name" \
             --arg url "$url" \
             --arg sha256 "$sha256" \

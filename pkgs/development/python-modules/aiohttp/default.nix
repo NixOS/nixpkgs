@@ -42,7 +42,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  python-on-whales,
   re-assert,
   trustme,
   zlib-ng,
@@ -119,7 +118,6 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    python-on-whales
     re-assert
     trustme
     zlib-ng

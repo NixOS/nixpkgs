@@ -734,6 +734,13 @@ package-set { inherit pkgs lib callPackage; } self
   */
   forceLlvmCodegenBackend = overrideCabal (drv: {
     configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
-    buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    buildTools =
+      drv.buildTools or [ ]
+      ++ [ self.ghc.llvmPackages.llvm ]
+      # GHC >= 9.10 needs LLVM specific assembler, i.e. clang
+      # On Darwin clang is always required
+      ++ lib.optionals (lib.versionAtLeast self.ghc.version "9.10" || stdenv.hostPlatform.isDarwin) [
+        self.ghc.llvmPackages.clang
+      ];
   });
 }

@@ -2,10 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  gcc,
   click,
+  cython,
+  distutils,
+  fetchFromGitHub,
+  gcc,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-GrVYYjS/+LZScZETfk7YcSy2yrWc3SPumXvyQeEpFUg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   nativeBuildInputs = [ cython ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 

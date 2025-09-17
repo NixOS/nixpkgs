@@ -32,7 +32,7 @@ buildDotnetModule rec {
   doCheck = false; # The same.
 
   nugetSource = "https://api.nuget.org/v3/index.json";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   meta = with lib; {
     homepage = "https://github.com/Pryaxis/TShock";

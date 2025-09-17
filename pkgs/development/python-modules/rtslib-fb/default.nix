@@ -16,12 +16,6 @@ buildPythonPackage rec {
   version = "2.2.3";
   pyproject = true;
 
-  # TypeError: 'method' object does not support the context manager protocol
-  postPatch = ''
-    substituteInPlace rtslib/root.py \
-      --replace-fail "Path(restore_file).open" "Path(restore_file).open('r')"
-  '';
-
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "rtslib-fb";
@@ -37,10 +31,6 @@ buildPythonPackage rec {
   dependencies = [
     pyudev
   ];
-
-  postInstall = ''
-    install -Dm555 scripts/targetctl -t $out/bin
-  '';
 
   # No tests
   doCheck = false;

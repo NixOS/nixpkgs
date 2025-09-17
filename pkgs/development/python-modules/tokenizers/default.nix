@@ -21,6 +21,7 @@
   # tests
   datasets,
   numpy,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
   tiktoken,
@@ -75,14 +76,14 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.4";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-HJUycrNDpy2FOYi6aZ76orLewZCuLC1MoJ57peYJqvI=";
+    hash = "sha256-HTJQ5nPkOsVqYzcsm0GLflX+teqDsrpIb5nf5pa7Gpc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -92,7 +93,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-0olujhOOO/BAH4JvnmXd1kE7T/sp5Vr3Z3P2X2jhZKs=";
+    hash = "sha256-X9tsn4gPg7Ih/8NNiCBllgcZgUR/tok+mwCJE53Z/8g=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -117,6 +118,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     datasets
     numpy
+    pytest-asyncio
     pytestCheckHook
     requests
     tiktoken
@@ -137,6 +139,23 @@ buildPythonPackage rec {
     "test_encode_special_tokens"
     "test_splitting"
     "TestTrainFromIterators"
+
+    # Require downloading from huggingface
+    # huggingface_hub.errors.LocalEntryNotFoundError
+    "test_async_methods_existence"
+    "test_basic_encoding"
+    "test_concurrency"
+    "test_decode"
+    "test_decode_skip_special_tokens"
+    "test_decode_stream_fallback"
+    "test_encode"
+    "test_error_handling"
+    "test_large_batch"
+    "test_numpy_inputs"
+    "test_performance_comparison"
+    "test_various_input_formats"
+    "test_with_special_tokens"
+    "test_with_truncation_padding"
 
     # Those tests require more data
     "test_from_pretrained"

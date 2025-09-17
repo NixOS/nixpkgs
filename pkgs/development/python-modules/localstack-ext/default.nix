@@ -9,6 +9,7 @@
   dnspython,
   plux,
   pyaes,
+  pyjwt,
   pyotp,
   python-jose,
   requests,
@@ -47,11 +48,12 @@ buildPythonPackage rec {
     dnspython
     plux
     pyaes
+    pyjwt
     pyotp
+    python-dateutil
     python-jose
     requests
     tabulate
-    python-dateutil
   ]
   ++ python-jose.optional-dependencies.cryptography;
 

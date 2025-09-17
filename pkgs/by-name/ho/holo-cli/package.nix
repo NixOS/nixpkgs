@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "holo-cli";
-  version = "0.5.0-unstable-2025-08-09";
+  version = "0.5.0-unstable-2025-08-29";
 
   src = fetchFromGitHub {
     owner = "holo-routing";
     repo = "holo-cli";
-    rev = "52844aab4831655b1b3efc44206af9a5571b285a";
-    hash = "sha256-5m0k60FXgSmDgLAAmBuzYjnA6V4GXvl8bIt2wAjCpcM=";
+    rev = "31bca792c76e2ecb4d864a96cb20cc770135be74";
+    hash = "sha256-XNVeuAAsSdU9CM/HL/3UkBSgxngPheKuwTMkzm+MQ4Q=";
   };
 
   cargoHash = "sha256-bsoxWjOMzRRtFGEaaqK0/adhGpDcejCIY0Pzw1HjQ5U=";

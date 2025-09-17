@@ -24,7 +24,7 @@ in
 lspLibPkg.library { withSource = true; }
 ```
 
-The above results in a derivation with the installed library results (with sourcecode).
+The above results in a derivation with the installed library results (with source code).
 
 A slightly more involved example of a fully packaged executable would be the [`idris2-lsp`](https://github.com/idris-community/idris2-lsp) which is an Idris2 language server that uses the `LSP-lib` found above.
 ```nix

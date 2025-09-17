@@ -7,6 +7,7 @@
   numpy,
   pillow,
   pydicom,
+  pyjpegls,
   pylibjpeg,
   pylibjpeg-libjpeg,
   pylibjpeg-openjpeg,
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     numpy
     pillow
     pydicom
+    pyjpegls
     typing-extensions
   ];
 
@@ -47,32 +49,12 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonRemoveDeps = [
-    "pyjpegls" # not directly used
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
     ln -s ${pydicom.passthru.pydicom-data}/data_store/data $HOME/.pydicom/data
   '';
-
-  disabledTests = [
-    # require pyjpegls
-    "test_construction_10"
-    "test_jpegls_monochrome"
-    "test_jpegls_rgb"
-    "test_jpeglsnearlossless_monochrome"
-    "test_jpeglsnearlossless_rgb"
-    "test_multi_frame_sm_image_ushort_encapsulated_jpegls"
-    "test_monochrome_jpegls"
-    "test_monochrome_jpegls_near_lossless"
-    "test_rgb_jpegls"
-    "test_construction_autotile"
-    "test_pixel_types_fractional"
-    "test_pixel_types_labelmap"
-  ];
 
   pythonImportsCheck = [
     "highdicom"

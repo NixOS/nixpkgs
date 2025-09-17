@@ -13,6 +13,7 @@
   numpy,
   editdistance,
   munkres,
+  pandas,
   levenshtein,
 }:
 
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     numpy
     editdistance
     munkres
+    pandas
     levenshtein # need for align_wordlists.py script
   ];
 

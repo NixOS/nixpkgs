@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenv,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://src.fedoraproject.org/rpms/psacct/raw/rawhide/f/psacct-6.6.4-sprintf-buffer-overflow.patch";
+      hash = "sha256-l74tLIuhpXj+dIA7uAY9L0qMjQ2SbDdc+vjHMyVouFc=";
+    })
+  ];
 
   meta = {
     description = "GNU Accounting Utilities, login and process accounting utilities";

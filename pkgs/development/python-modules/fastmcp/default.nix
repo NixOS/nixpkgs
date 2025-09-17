@@ -7,6 +7,7 @@
 
   # build-system
   hatchling,
+  uv-dynamic-versioning,
 
   # dependencies
   authlib,
@@ -42,14 +43,9 @@ buildPythonPackage rec {
     hash = "sha256-jIXrMyNnyPE2DUgg+sxT6LD4dTmKQglh4cFuaw179Z0=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "uv-dynamic-versioning>=0.7.0"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
-
   build-system = [
     hatchling
+    uv-dynamic-versioning
   ];
 
   dependencies = [

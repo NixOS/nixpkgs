@@ -16,13 +16,13 @@ let
   nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
-  version = "1.22.0";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
     tag = "v${version}";
-    hash = "sha256-4kvpTqajlBWIYveedmlo2yrnbEdN/V+96/Lf54miMuw=";
+    hash = "sha256-6mvbR9WIjVrulDdFtW0XSfxPwKSaFK1fFIhbglS7Gq4=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -102,7 +102,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-J6QmJsnl5UCxeSKIcekdguM+M5Z2HBYRat5nt18zPYU=";
+  npmDepsHash = "sha256-z9LLZBt7CR3iCNsGhRboHgaaoH6MgmSrzasgwIX+iwk=";
 
   npmFlags = [ "--ignore-scripts" ];
 

@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.5.3735.64";
+  version = "7.5.3735.74";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-qcgbzxJiyIWVTFbhJYd4SrlK6ybjXuTG09LowoDP0LE=";
-        x86_64-linux = "sha256-cIVQiow/m2EMok1COeyo9v/1HCKStTnDt/StldXk/oo=";
+        aarch64-linux = "sha256-sfVCPtup7yPscyWoSwKZka9FwfEZburae/Ss/3YLtV8=";
+        x86_64-linux = "sha256-aCghO64GVZjCqnmzj7GHpEhUk2Pld2VKS44G/+ElogU=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       marcusramberg
       max06
-      rewine
+      wineee
     ];
     platforms = [
       "x86_64-linux"

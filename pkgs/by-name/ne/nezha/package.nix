@@ -14,7 +14,7 @@
 
 let
   pname = "nezha";
-  version = "1.13.1";
+  version = "1.13.2";
 
   frontendName = lib.removePrefix "nezha-theme-";
 
@@ -58,7 +58,7 @@ buildGo124Module {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${version}";
-    hash = "sha256-BVaGlkr7lJTVewLkRoyl7JOZ4mwRaRs5JCSSFWO21Dk=";
+    hash = "sha256-IkB2V4KKSUfX+E9bMEGzCc3urAjgpXYhpO0Lfi4LYdY=";
   };
 
   proxyVendor = true;

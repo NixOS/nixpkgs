@@ -220,7 +220,7 @@ let
         };
 
         Port = lib.mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             If you set http proxy, waagent will use this proxy to access the Internet.

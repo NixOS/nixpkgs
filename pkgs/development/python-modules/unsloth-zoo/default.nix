@@ -27,20 +27,21 @@
 
 buildPythonPackage rec {
   pname = "unsloth-zoo";
-  version = "2025.8.1";
+  version = "2025.9.5";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit version;
-    hash = "sha256-AkAfd+dJb8A9cUYK/VH30Q5xN2BW/x4zyndnIyN9y14=";
+    hash = "sha256-wlKlXTgEdfkz4j//LHw23CmeL7toINg5IUxcpwrPtAw=";
   };
 
   # pyproject.toml requires an obsolete version of protobuf,
   # but it is not used.
   # Upstream issue: https://github.com/unslothai/unsloth-zoo/pull/68
   pythonRelaxDeps = [
+    "datasets"
     "protobuf"
     "transformers"
     "torch"

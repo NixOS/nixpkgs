@@ -1,7 +1,7 @@
-From a86412c57833c24743214c9d3abb76093365769f Mon Sep 17 00:00:00 2001
+From c15715af2cfca6603241f4d414b68d43bd4acb98 Mon Sep 17 00:00:00 2001
 From: tropf <tropf@noreply.codeberg.org>
 Date: Mon, 5 Aug 2024 21:26:13 +0200
-Subject: [PATCH 2/3] plugin invocation: use python script as entrypoint
+Subject: [PATCH 2/4] plugin invocation: use python script as entrypoint
 
 Ink/Stitch is invoked by calling a script with command line parameters.
 Depending on the distribution format, this is bundled into a standalone
@@ -17,7 +17,7 @@ intent of only using the else path.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/inx/utils.py b/lib/inx/utils.py
-index 9168f2a2..00313639 100755
+index c4cbf6f0d..6d4774ec0 100755
 --- a/lib/inx/utils.py
 +++ b/lib/inx/utils.py
 @@ -21,7 +21,7 @@ def build_environment():
@@ -30,5 +30,5 @@ index 9168f2a2..00313639 100755
          # Command tag and icons path
          if sys.platform == "win32":
 -- 
-2.36.0
+2.49.0
 

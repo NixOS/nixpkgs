@@ -34,15 +34,15 @@ In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
 `maintainer-list.nix` in a separate commit titled `maintainers: add <name>`.
 
-### How to lose maintainer status
+### Losing maintainer status
 
-Maintainers who have become inactive on a given package can be removed.
+Maintainers who have become inactive can be removed.
 This helps us keep an accurate view of the state of maintenance in Nixpkgs.
 
 The inactivity measure is currently not strictly enforced.
 We would typically look at it if we notice that the author hasn't reacted to package-related notifications for more than 3 months.
 
-Removing the maintainer happens by making a PR on the package, adding that person as a reviewer, and then waiting a week for a reaction.
+Removing the maintainer happens by making a PR, adding that person as a reviewer, and then waiting a week for a reaction.
 
 The maintainer is welcome to come back at any time.
 
@@ -119,9 +119,8 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 
   Note: GitHub's "Verified" label does not display the user's full key fingerprint, and should not be used for validating the key matches.
 
-- If the user has specified a `github` account name, ensure they have also specified a `githubId` and verify the two match.
+- Ensure that the user has specified a `github` account name and a `githubId` and verify the two match.
 
-  Maintainer entries that include a `github` field must also include their `githubId`.
   People can and do change their GitHub name frequently, and the ID is used as the official and stable identity of the maintainer.
 
   Given a maintainer entry like this:
@@ -139,7 +138,7 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 
   First, make sure that the listed GitHub handle matches the author of the commit.
 
-  Then, visit the URL `https://api.github.com/users/ghost` and validate that the `id` field matches the provided `githubId`.
+  Then, visit the URL `https://api.github.com/user/10137` and validate that the `login` field matches the provided `github` handle.
 
 ### Maintainer teams
 

@@ -26,7 +26,6 @@ It also implements [NixOS](https://nixos.org/nixos/), a purely-functional Linux 
 
 * [Discourse Forum](https://discourse.nixos.org/)
 * [Matrix Chat](https://matrix.to/#/#space:nixos.org)
-* [NixOS Weekly](https://weekly.nixos.org/)
 * [Official wiki](https://wiki.nixos.org/)
 * [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
@@ -41,7 +40,7 @@ Here are some of the main ones:
 * [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
 * [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
 * [hydra](https://github.com/NixOS/hydra) - our continuous integration system
-* [NixOS Artwork](https://github.com/NixOS/nixos-artwork) - NixOS artwork
+* [NixOS Branding](https://github.com/NixOS/branding) - NixOS branding
 
 # Continuous Integration and Distribution
 

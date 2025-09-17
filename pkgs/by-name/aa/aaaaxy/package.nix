@@ -22,13 +22,13 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.6.283";
+  version = "1.6.288";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = "aaaaxy";
     tag = "v${version}";
-    hash = "sha256-OBF5oPWoctosL1uR6/I/uNM3F39d14dmz8TKOxp5FIs=";
+    hash = "sha256-8oWrQCj1B7o2kw0mbg9ynXpu/r85uqa+2UxRH44G8ZQ=";
     fetchSubmodules = true;
   };
 

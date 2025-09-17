@@ -53,7 +53,7 @@ to true. This sets up flannel as CNI and activates automatic PKI bootstrapping.
 ::: {.note}
 It is mandatory to configure:
 [](#opt-services.kubernetes.masterAddress).
-The masterAddress must be resolveable and routeable by all cluster nodes.
+The masterAddress must be resolvable and routable by all cluster nodes.
 In single node clusters, this can be set to `localhost`.
 :::
 

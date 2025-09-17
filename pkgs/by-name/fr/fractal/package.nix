@@ -31,19 +31,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "12";
+  version = "12.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-galaFpHcWrN+jQ6uOS78EB6wjfR8KIBLZvKmH7Rb1Xs=";
+    hash = "sha256-xeB6N4ljXGzysy5RnDRK1wPiIRUSDcl+5BIdp6NO5ZA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-DuEuCvhwulDHVCmUPXcM6PZ34nueRmKYHYffSsFCbLE=";
+    hash = "sha256-CHduzW++BYzasFv/x0Q1T7EaTlo1EqYY2gxQJv+ek0A=";
   };
 
   patches = [

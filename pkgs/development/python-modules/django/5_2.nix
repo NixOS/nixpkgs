@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.5";
+  version = "5.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-1Lw0L+mPynf9CmioiTQhePgqCLniUkv9E0ZIoHhhBTs=";
+    hash = "sha256-Bzm4FTzYeXEEFenkT2gN1IzYnUIo7tlD2GI/sX2THkw=";
   };
 
   patches = [
@@ -63,11 +63,6 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that expects timezone issues
     ./django_5_disable_failing_tests.patch
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://code.djangoproject.com/ticket/36499
-    # https://github.com/django/django/pull/19639
-    ./3.13.6-html-parser.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {
