@@ -46,8 +46,9 @@ stdenv.mkDerivation {
     hash = "sha256-hZwLYaYV0j3YwFi8KRr4DZV73L2yIwFJ3XqCyq6L7hE=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    cjson
     cmake
     fakeGit
     git
@@ -56,6 +57,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    cjson
     curl
     freetype
     glew
