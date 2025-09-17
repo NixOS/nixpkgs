@@ -5997,7 +5997,7 @@ with pkgs;
   lambda-lisp-blc = lambda-lisp;
 
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
-  love_11 = callPackage ../development/interpreters/love/11.nix { };
+  love_11 = callPackage ../development/interpreters/love/11.nix { inherit libdevil; };
   love = love_11;
 
   ### LUA interpreters
