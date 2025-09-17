@@ -57,9 +57,6 @@ lib.makeScope newScope (
     tdlib-purple = callPackage ./tdlib-purple { };
 
     pidgin-opensteamworks = callPackage ./pidgin-opensteamworks { };
-
-    purple-facebook = callPackage ./purple-facebook { };
-
   }
   // lib.optionalAttrs config.allowAliases {
     purple-matrix = throw "'pidginPackages.purple-matrix' has been unmaintained since April 2022, so it was removed.";
@@ -67,5 +64,6 @@ lib.makeScope newScope (
     purple-hangouts = throw "'pidginPackages.purple-hangouts' has been removed as Hangouts Classic is obsolete and migrated to Google Chat.";
     pidgin-msn-pecan = throw "'pidginPackages.pidgin-msn-pecan' has been removed as it's unmaintained upstream and doesn't work with escargot";
     pidgin-mra = throw "'pidginPackages.pidgin-mra' has been removed since mail.ru agent service has stopped functioning in 2024.";
+    purple-facebook = throw "'pidginPackages.purple-facebook' has been removed as it is unmaintained and doesn't support e2ee enforced by facebook.";
   }
 )
