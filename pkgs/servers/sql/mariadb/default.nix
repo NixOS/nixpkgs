@@ -50,7 +50,7 @@ let
       withStorageMroonga ? true,
       kytea,
       libsodium,
-      msgpack,
+      msgpack-cxx,
       zeromq,
       withStorageRocks ? true,
       withEmbedded ? false,
@@ -283,7 +283,7 @@ let
           ++ lib.optionals withStorageMroonga [
             kytea
             libsodium
-            msgpack
+            msgpack-cxx
             zeromq
           ]
           ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
