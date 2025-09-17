@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 2.8.1)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   # Fix 'Version:' setting in .pc file. TODO: remove once upstreamed:
   #     https://github.com/unittest-cpp/unittest-cpp/pull/188
   cmakeFlags = [ "-DPACKAGE_VERSION=${version}" ];

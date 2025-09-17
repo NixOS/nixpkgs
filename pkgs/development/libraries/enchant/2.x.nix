@@ -10,7 +10,6 @@
   hspell,
   nuspell,
   libvoikko,
-  unittest-cpp,
 
   withHspell ? true,
   withAspell ? true,
@@ -58,7 +57,6 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    unittest-cpp
   ];
 
   # libtool puts these to .la files
