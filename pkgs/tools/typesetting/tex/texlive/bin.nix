@@ -176,6 +176,7 @@ let
       "--disable-texlive" # do not build the texlive (TeX Live scripts) package
       "--disable-linked-scripts" # do not install the linked scripts
       "-C" # use configure cache to speed up
+      "CFLAGS=-std=gnu17" # fix build with gcc15
     ]
     ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
