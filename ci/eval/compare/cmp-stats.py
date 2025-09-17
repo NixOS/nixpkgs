@@ -85,8 +85,10 @@ def metric_sort_key(name: str) -> str:
         return (2, name)
     elif name.endswith(("bytes", "Bytes")):
         return (3, name)
-    else:
+    elif name.startswith("nr") or name.endswith("number"):
         return (4, name)
+    else:
+        return (5, name)
 
 
 def dataframe_to_markdown(df: pd.DataFrame) -> str:
