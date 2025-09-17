@@ -10759,7 +10759,7 @@ with pkgs;
 
   v4l-utils = callPackage ../os-specific/linux/v4l-utils { };
 
-  windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
+  windowsPackages = recurseIntoAttrs (callPackages ../os-specific/windows { });
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
