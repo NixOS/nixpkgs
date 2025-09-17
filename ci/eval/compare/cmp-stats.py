@@ -95,25 +95,16 @@ def dataframe_to_markdown(df: pd.DataFrame) -> str:
 
     # Header (get column names and format them)
     headers = [str(column) for column in df.columns]
-    table = []
+    table = [
+        [
+            row["metric"],
+            # Check for no change and NaN in p_value/t_stat
+            *[None if np.isnan(val) or np.allclose(val, 0) else val for val in row[1:]],
+        ]
+        for _, row in df.iterrows()
+    ]
 
-    # Iterate over rows to build Markdown rows
-    for _, row in df.iterrows():
-        # Check for no change and NaN in p_value/t_stat
-        row_values = []
-        for val in row:
-            if isinstance(val, (float, int)):
-                if np.isnan(val):
-                    row_values.append("-")  # Custom symbol for NaN
-                elif val == 0:
-                    row_values.append("-")  # Custom symbol for no change
-                else:
-                    row_values.append(f"{val:.4f}")
-            else:
-                row_values.append(str(val))
-        table.append(row_values)
-
-    return tabulate(table, headers, tablefmt="github")
+    return tabulate(table, headers, tablefmt="github", floatfmt=".4f", missingval="-")
 
 
 def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.DataFrame:
