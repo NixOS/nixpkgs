@@ -12,7 +12,7 @@
   esdm,
   tpm2-tss,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
-  windows,
+  windowsPackages,
 
   # build ESDM RNG plugin
   withEsdm ? false,
@@ -81,7 +81,7 @@ let
         esdm
       ]
       ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
-        windows.pthreads
+        windowsPackages.pthreads
       ];
 
       buildTargets = [
