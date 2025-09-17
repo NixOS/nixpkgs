@@ -209,7 +209,7 @@ runCommand "compare"
         echo
       } >> $out/step-summary.md
 
-      cmp-stats ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
+      cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
 
     else
       # Package chunks are the same in both revisions

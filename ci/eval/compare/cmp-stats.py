@@ -7,6 +7,7 @@ import pandas as pd
 from pathlib import Path
 from scipy.stats import ttest_rel
 from tabulate import tabulate
+from typing import Final
 
 
 def flatten_data(json_data: dict) -> dict:
@@ -85,6 +86,49 @@ def load_all_metrics(path: Path) -> dict:
     return metrics
 
 
+def metric_table_name(name: str, explain: bool) -> str:
+    """
+    Returns the name of the metric, plus a footnote to explain it if needed.
+    """
+    return f"{name}[^{name}]" if explain else name
+
+
+METRIC_EXPLANATION_FOOTNOTE: Final[str] = """
+
+[^time.cpu]: Number of seconds of CPU time accounted by the OS to the Nix evaluator process. On UNIX systems, this comes from [`getrusage(RUSAGE_SELF)`](https://man7.org/linux/man-pages/man2/getrusage.2.html).
+[^time.gc]: Number of seconds of CPU time accounted by the Boehm garbage collector to performing GC.
+[^time.gcFraction]: What fraction of the total CPU time is accounted towards performing GC.
+[^gc.cycles]: Number of times garbage collection has been performed.
+[^gc.heapSize]: Size in bytes of the garbage collector heap.
+[^gc.totalBytes]: Size in bytes of all allocations in the garbage collector.
+[^envs.bytes]: Size in bytes of all `Env` objects allocated by the Nix evaluator. These are almost exclusively created by [`nix-env`](https://nix.dev/manual/nix/stable/command-ref/nix-env.html).
+[^list.bytes]: Size in bytes of all [lists](https://nix.dev/manual/nix/stable/language/syntax.html#list-literal) allocated by the Nix evaluator.
+[^sets.bytes]: Size in bytes of all [attrsets](https://nix.dev/manual/nix/stable/language/syntax.html#list-literal) allocated by the Nix evaluator.
+[^symbols.bytes]: Size in bytes of all items in the Nix evaluator symbol table.
+[^values.bytes]: Size in bytes of all values allocated by the Nix evaluator.
+[^envs.number]: The count of all `Env` objects allocated.
+[^nrAvoided]: The number of thunks avoided being created.
+[^nrExprs]: The number of expression objects ever created.
+[^nrFunctionCalls]: The number of function calls ever made.
+[^nrLookups]: The number of lookups into an attrset ever made.
+[^nrOpUpdateValuesCopied]: The number of attrset values copied in the process of merging attrsets.
+[^nrOpUpdates]: The number of attrsets merge operations (`//`) performed.
+[^nrPrimOpCalls]: The number of function calls to primops (Nix builtins) ever made.
+[^nrThunks]: The number of [thunks](https://nix.dev/manual/nix/latest/language/evaluation.html#laziness) ever made. A thunk is a delayed computation, represented by an expression reference and a closure.
+[^sets.number]: The number of attrsets ever made.
+[^symbols.number]: The number of symbols ever added to the symbol table.
+[^values.number]: The number of values ever made.
+[^envs.elements]: The number of values contained within an `Env` object.
+[^list.concats]: The number of list concatenation operations (`++`) performed.
+[^list.elements]: The number of values contained within a list.
+[^sets.elements]: The number of values contained within an attrset.
+[^sizes.Attr]: Size in bytes of the `Attr` type.
+[^sizes.Bindings]: Size in bytes of the `Bindings` type.
+[^sizes.Env]: Size in bytes of the `Env` type.
+[^sizes.Value]: Size in bytes of the `Value` type.
+"""
+
+
 def metric_sort_key(name: str) -> str:
     if name in ("time.cpu", "time.gc", "time.gcFraction"):
         return (1, name)
@@ -98,7 +142,7 @@ def metric_sort_key(name: str) -> str:
         return (5, name)
 
 
-def dataframe_to_markdown(df: pd.DataFrame) -> str:
+def dataframe_to_markdown(df: pd.DataFrame, explain: bool) -> str:
     df = df.sort_values(
         by=df.columns[0], ascending=True, key=lambda s: s.map(metric_sort_key)
     )
@@ -107,14 +151,18 @@ def dataframe_to_markdown(df: pd.DataFrame) -> str:
     headers = [str(column) for column in df.columns]
     table = [
         [
-            row["metric"],
+            # The metric acts as its own footnote name
+            metric_table_name(row["metric"], explain),
             # Check for no change and NaN in p_value/t_stat
             *[None if np.isnan(val) or np.allclose(val, 0) else val for val in row[1:]],
         ]
         for _, row in df.iterrows()
     ]
 
-    return tabulate(table, headers, tablefmt="github", floatfmt=".4f", missingval="-")
+    result = tabulate(table, headers, tablefmt="github", floatfmt=".4f", missingval="-")
+    if explain:
+        result += METRIC_EXPLANATION_FOOTNOTE
+    return result
 
 
 def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.DataFrame:
@@ -173,6 +221,9 @@ def main():
         description="Performance comparison of Nix evaluation statistics"
     )
     parser.add_argument(
+        "--explain", action="store_true", help="Explain the evaluation statistics"
+    )
+    parser.add_argument(
         "before", help="File or directory containing baseline (data before)"
     )
     parser.add_argument(
@@ -187,7 +238,7 @@ def main():
     before_metrics = load_all_metrics(before_stats)
     after_metrics = load_all_metrics(after_stats)
     df1 = perform_pairwise_tests(before_metrics, after_metrics)
-    markdown_table = dataframe_to_markdown(df1)
+    markdown_table = dataframe_to_markdown(df1, explain=options.explain)
     print(markdown_table)
 
 
