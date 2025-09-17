@@ -188,7 +188,10 @@
     postInstall = ''
       chmod +x $out/${python3.sitePackages}/azext_confcom/bin/genpolicy-linux
     '';
-    meta.maintainers = with lib.maintainers; [ miampf ];
+    meta = {
+      maintainers = with lib.maintainers; [ miampf ];
+      platforms = lib.platforms.linux; # confcom is linux only
+    };
   };
 
   containerapp = mkAzExtension rec {
