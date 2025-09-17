@@ -159,6 +159,18 @@
     meta.maintainers = with lib.maintainers; [ mikut ];
   };
 
+  cloud-service = mkAzExtension {
+    pname = "cloud-service";
+    version = "1.0.1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/cloud_service-1.0.1-py3-none-any.whl";
+    hash = "sha256-9rLYCn6rO6vTGFdBtGfgHQwceKbtf/t48DG4dQBzc+Q=";
+    description = "Microsoft Azure Command-Line Tools ComputeManagementClient Extension";
+    propagatedBuildInputs = with python3Packages; [
+      azure-mgmt-compute
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   confcom = mkAzExtension rec {
     pname = "confcom";
     version = "1.2.6";
