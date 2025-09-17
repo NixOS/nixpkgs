@@ -35,10 +35,6 @@ buildNpmPackage rec {
     hash = "sha256-S7XYDxKODK6R/O9kNVq04pponYfcwTwsyVQO8yh598w=";
   };
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
-
   # Don't try to download the browser drivers
   CHROMEDRIVER_SKIP_DOWNLOAD = true;
   GECKODRIVER_SKIP_DOWNLOAD = true;
