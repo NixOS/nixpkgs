@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     "ac_cv_prog_CC=gcc"
   ];
 
-  allowedImpureDLLs = lib.optional stdenv.hostPlatform.isCygwin "ntdll.dll";
+  allowedImpureDLLs = [ "ntdll.dll" ];
 
   passthru.w32api = mingw_w64;
 }
