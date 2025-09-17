@@ -26,8 +26,6 @@ lib.makeScope newScope (
       texLive = texliveBasic;
     };
 
-    pidgin-mra = callPackage ./pidgin-mra { };
-
     pidgin-carbons = callPackage ./carbons { };
 
     pidgin-xmpp-receipts = callPackage ./pidgin-xmpp-receipts { };
@@ -68,5 +66,6 @@ lib.makeScope newScope (
     pidgin-skypeweb = throw "'pidginPackages.pidgin-skypeweb' has been removed since Skype was shut down in May 2025.";
     purple-hangouts = throw "'pidginPackages.purple-hangouts' has been removed as Hangouts Classic is obsolete and migrated to Google Chat.";
     pidgin-msn-pecan = throw "'pidginPackages.pidgin-msn-pecan' has been removed as it's unmaintained upstream and doesn't work with escargot";
+    pidgin-mra = throw "'pidginPackages.pidgin-mra' has been removed since mail.ru agent service has stopped functioning in 2024.";
   }
 )
