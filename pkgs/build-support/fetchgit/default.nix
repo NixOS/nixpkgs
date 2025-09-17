@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  writeText,
   git,
   git-lfs,
   cacert,
@@ -64,6 +65,8 @@ lib.makeOverridable (
       fetchTags ? false,
       # make this subdirectory the root of the result
       rootDir ? "",
+      # GIT_CONFIG_GLOBAL (as a file)
+      gitConfigFile ? null,
     }:
 
     /*
@@ -148,6 +151,7 @@ lib.makeOverridable (
           postFetch
           fetchTags
           rootDir
+          gitConfigFile
           ;
         rev = revWithTag;
 
