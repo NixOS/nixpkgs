@@ -23,6 +23,9 @@ def flatten_data(json_data: dict) -> dict:
     "gc.heapSize": 5404549120
     ...
 
+    See https://github.com/NixOS/nix/blob/187520ce88c47e2859064704f9320a2d6c97e56e/src/libexpr/eval.cc#L2846
+    for the ultimate source of this data.
+
     Args:
         json_data (dict): JSON data containing metrics.
     Returns:
@@ -30,6 +33,10 @@ def flatten_data(json_data: dict) -> dict:
     """
     flat_metrics = {}
     for key, value in json_data.items():
+        # This key is duplicated as `time.cpu`; we keep that copy.
+        if key == "cpuTime":
+            continue
+
         if isinstance(value, (int, float)):
             flat_metrics[key] = value
         elif isinstance(value, dict):
@@ -79,7 +86,7 @@ def load_all_metrics(path: Path) -> dict:
 
 
 def metric_sort_key(name: str) -> str:
-    if name in ("cpuTime", "time.cpu", "time.gc", "time.gcFraction"):
+    if name in ("time.cpu", "time.gc", "time.gcFraction"):
         return (1, name)
     elif name.startswith("gc"):
         return (2, name)
