@@ -72,8 +72,8 @@ let
   dlpack = fetchFromGitHub {
     owner = "dmlc";
     repo = "dlpack";
-    tag = "v0.6";
-    hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
+    rev = "5c210da409e7f1e51ddf445134a4376fdbd70d7d";
+    hash = "sha256-YqgzCyNywixebpHGx16tUuczmFS5pjCz5WjR89mv9eI=";
   };
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
