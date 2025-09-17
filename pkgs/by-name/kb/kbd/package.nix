@@ -23,16 +23,16 @@
   withVlock ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kbd";
-  version = "2.8.0-unstable-2025-08-12";
+  version = "2.9.0";
 
   __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git";
-    rev = "46295167a55643e941c8cdcfd2cb76bd138c851c";
-    hash = "sha256-m1aVfsEme/BnyJogOPvGcOrSJfli8B/TrGxOm4POt0w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uUECxFdm/UhoHKLHLFe6/ygCQ+4mrQOZExKl+ReaTNw=";
   };
 
   # vlock is moved into its own output, since it depends on pam. This
@@ -146,4 +146,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ davidak ];
   };
-}
+})
