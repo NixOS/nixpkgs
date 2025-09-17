@@ -115,7 +115,7 @@ gem 'pry-doc'
 gem 'public_suffix'
 gem 'puma'
 gem 'pwntools'
-gem 'rails'
+gem 'rails', '~> 8'
 gem 'rainbow'
 # gem 'rbczmq' deprecated
 gem 'rbnacl'
