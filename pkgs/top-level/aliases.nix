@@ -1074,6 +1074,7 @@ mapAliases {
   gmock = throw "'gmock' has been renamed to/replaced by 'gtest'"; # Converted to throw 2024-10-17
 
   gnome3 = throw "'gnome3' has been renamed to/replaced by 'gnome'"; # Converted to throw 2024-10-17
+  gnubik = throw "'gnubik' has been removed due to lack of maintainance upstream and its dependency on GTK 2"; # Added 2025-09-16
   gnufdisk = throw "'gnufdisk' has been removed due to lack of maintenance upstream"; # Added 2024-12-31
   gnuradio3_9 = throw "gnuradio3_9 has been removed because it is not compatible with the latest volk and it had no dependent packages which justified its distribution"; # Added 2024-07-28
   gnuradio3_9Minimal = throw "gnuradio3_9Minimal has been removed because it is not compatible with the latest volk and it had no dependent packages which justified its distribution"; # Added 2024-07-28
@@ -1296,6 +1297,8 @@ mapAliases {
   libbitcoin-network = throw "libbitcoin-network has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
   libbitcoin-protocol = throw "libbitcoin-protocol has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
   libchop = throw "libchop has been removed due to failing to build and being unmaintained upstream"; # Added 2025-05-02
+  libdevil = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
+  libdevil-nox = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
   libdwarf-lite = throw "`libdwarf-lite` has been replaced by `libdwarf` as it's mostly a mirror"; # Added 2025-06-16
   libdwg = throw "libdwg has been removed as upstream is unmaintained, the code doesn't build without significant patches, and the package had no reverse dependencies"; # Added 2024-12-28
   libfpx = throw "libfpx has been removed as it was unmaintained in Nixpkgs and had known vulnerabilities"; # Added 2025-05-20
@@ -1967,6 +1970,7 @@ mapAliases {
   phlare = throw "'phlare' has been removed as the upstream project was archived."; # Added 2025-03-27
   picom-next = picom; # Added 2024-02-13
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
+  pidgin-skypeweb = throw "'pidgin-skypeweb' has been removed since Skype was shut down in May 2025"; # Added 2025-09-15
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
@@ -2096,6 +2100,7 @@ mapAliases {
   ptask = throw "'ptask' has been removed because its upstream is unavailable"; # Added 2025-05-10
   purple-signald = throw "'purple-signald' has been removed due to lack of upstream maintenance"; # Added 2025-05-17
   purple-matrix = throw "'purple-matrix' has been unmaintained since April 2022, so it was removed."; # Added 2025-09-01
+  purple-hangouts = throw "'purple-hangouts' has been removed as Hangouts Classic is obsolete and migrated to Google Chat."; # Added 2025-09-17
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxlib = throw "pxlib has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
   pxview = throw "pxview has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
@@ -2165,6 +2170,7 @@ mapAliases {
   redpanda = redpanda-client; # Added 2023-10-14
   redpanda-server = throw "'redpanda-server' has been removed because it was broken for a long time"; # Added 2024-06-10
   relibc = throw "relibc has been removed due to lack of maintenance"; # Added 2024-09-02
+  remotebox = throw "remotebox has been removed because it was unmaintained and broken for a long time"; # Added 2025-09-11
   replay-sorcery = throw "replay-sorcery has been removed as it is unmaintained upstream. Consider using gpu-screen-recorder or obs-studio instead."; # Added 2024-07-13
   restinio_0_6 = throw "restinio_0_6 has been removed from nixpkgs as it's not needed by downstream packages"; # Added 2024-07-04
   retroarchBare = retroarch-bare; # Added 2024-11-23
@@ -2266,6 +2272,7 @@ mapAliases {
   sheesy-cli = throw "'sheesy-cli' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   sky = throw "'sky' has been removed because its upstream website disappeared"; # Added 2024-07-21
+  skypeexport = throw "'skypeexport' was removed since Skype has been shut down in May 2025"; # Added 2025-09-15
   SkypeExport = skypeexport; # Added 2024-06-12
   skypeforlinux = throw "Skype has been shut down in May 2025"; # Added 2025-05-05
   slack-dark = throw "'slack-dark' has been renamed to/replaced by 'slack'"; # Converted to throw 2024-10-17
@@ -2321,6 +2328,8 @@ mapAliases {
   spidermonkey_91 = throw "'spidermonkey_91 is EOL since 2022/09"; # Added 2025-08-26
   spidermonkey_102 = throw "'spidermonkey_102' is EOL since 2023/03"; # Added 2024-08-07
   spotify-unwrapped = spotify; # added 2022-11-06
+  spring = throw "spring has been removed, as it had been broken since 2023 (it was a game; maybe you’re thinking of spring-boot-cli?)"; # Added 2025-09-16
+  springLobby = throw "springLobby has been removed, as it had been broken since 2023"; # Added 2025-09-16
   spring-boot = throw "'spring-boot' has been renamed to/replaced by 'spring-boot-cli'"; # Converted to throw 2024-10-17
   sqldeveloper = throw "sqldeveloper was dropped due to being severely out-of-date and having a dependency on JavaFX for Java 8, which we do not support"; # Added 2024-11-02
   srvc = throw "'srvc' has been removed, as it was broken and unmaintained"; # Added 2024-09-09
@@ -2749,7 +2758,6 @@ mapAliases {
     pidgin-latex
     pidgin-msn-pecan
     pidgin-mra
-    pidgin-skypeweb
     pidgin-carbons
     pidgin-xmpp-receipts
     pidgin-otr
@@ -2758,7 +2766,6 @@ mapAliases {
     pidgin-window-merge
     purple-discord
     purple-googlechat
-    purple-hangouts
     purple-lurch
     purple-mm-sms
     purple-plugin-pack

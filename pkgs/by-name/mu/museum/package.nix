@@ -61,6 +61,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       oddlama
+      iedame
     ];
     mainProgram = "museum";
     platforms = lib.platforms.linux;
