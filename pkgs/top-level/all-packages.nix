@@ -8491,8 +8491,6 @@ with pkgs;
 
   openbabel = openbabel3;
 
-  openbabel2 = callPackage ../development/libraries/openbabel/2.nix { };
-
   openbabel3 = callPackage ../development/libraries/openbabel { };
 
   opencascade-occt_7_6 = opencascade-occt.overrideAttrs rec {
