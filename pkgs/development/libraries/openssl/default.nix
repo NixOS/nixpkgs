@@ -15,6 +15,7 @@
   enableSSL3 ? false,
   enableMD2 ? false,
   enableKTLS ? stdenv.hostPlatform.isLinux,
+  useBinaryWrapper ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin),
   # change this to a value between 0 and 5 (as of OpenSSL 3.5)
   # if null, default is used, changes the permitted algorithms
   # and key lengths in the default config
@@ -63,7 +64,9 @@ let
         inherit hash;
       };
 
-      inherit patches;
+      patches =
+        # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+        patches ++ lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
       postPatch = ''
         patchShebangs Configure
@@ -98,7 +101,10 @@ let
           (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
           ''
             rm test/recipes/02-test_errstr.t
-          '';
+          ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        rm test/recipes/01-test_symbol_presence.t
+      '';
 
       outputs = [
         "bin"
@@ -121,7 +127,7 @@ let
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
-        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+        lib.optional useBinaryWrapper makeBinaryWrapper
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -175,6 +181,8 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -290,7 +298,7 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
+          lib.optionalString useBinaryWrapper
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
