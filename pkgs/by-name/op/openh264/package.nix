@@ -8,7 +8,7 @@
   ninja,
   pkg-config,
   stdenv,
-  windows,
+  windowsPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [
-    windows.pthreads
+    windowsPackages.pthreads
   ];
 
   strictDeps = true;
