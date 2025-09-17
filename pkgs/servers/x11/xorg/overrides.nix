@@ -49,7 +49,6 @@
   libxcrypt,
   hwdata,
   xorg,
-  windows,
   libgbm,
   mesa-gl-headers,
   dri-pkgconfig-stub,
