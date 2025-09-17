@@ -1,5 +1,6 @@
 {
   autoAddDriverRunpath,
+  backendStdenv,
   catch2_3,
   cmake,
   cuda_cccl,
@@ -14,7 +15,6 @@
   libcublas,
   ninja,
   nlohmann_json,
-  stdenv,
 }:
 let
   inherit (lib) licenses maintainers teams;
@@ -27,7 +27,7 @@ let
 in
 
 # TODO(@connorbaker): This should be a hybrid C++/Python package.
-stdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 

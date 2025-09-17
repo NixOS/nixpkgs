@@ -149,6 +149,23 @@ buildRedist (finalAttrs: {
       ''
     );
 
+  brokenAssertions = [
+    # TODO(@connorbaker): Build fails on x86 when using pkgsLLVM.
+    #  .../include/crt/host_defines.h:67:2:
+    #  error: "libc++ is not supported on x86 system"
+    #
+    #     67 | #error "libc++ is not supported on x86 system"
+    #        |  ^
+    #
+    #  1 error generated.
+    #
+    #  # --error 0x1 --
+    {
+      message = "cannot use libc++ on x86_64-linux";
+      assertion = backendStdenv.hostNixSystem == "x86_64-linux" -> backendStdenv.cc.libcxx == null;
+    }
+  ];
+
   meta = {
     description = "CUDA compiler driver";
     homepage = "https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc";

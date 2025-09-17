@@ -1,4 +1,5 @@
 {
+  backendStdenv,
   buildRedist,
   cudaAtLeast,
   cudaOlder,
@@ -8,7 +9,6 @@
   lib,
   qt6,
   rdma-core,
-  stdenv,
   ucx,
 }:
 let
@@ -19,7 +19,7 @@ let
       aarch64-linux = "linux-" + (if flags.isJetsonBuild then "v4l_l4t" else "desktop") + "-t210-a64";
       x86_64-linux = "linux-desktop-glibc_2_11_3-x64";
     }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    .${backendStdenv.hostPlatform.system} or (throw "Unsupported system: ${backendStdenv.hostPlatform.system}");
 in
 buildRedist {
   redistName = "cuda";

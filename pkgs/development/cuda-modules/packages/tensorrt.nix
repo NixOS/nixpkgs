@@ -8,7 +8,6 @@
   lib,
   libcudla, # only for Jetson
   patchelf,
-  stdenv,
 }:
 let
   inherit (_cuda.lib) majorMinorPatch;
@@ -51,7 +50,7 @@ buildRedist (
 
     preInstall =
       let
-        inherit (stdenv.hostPlatform) parsed;
+        inherit (backendStdenv.hostPlatform) parsed;
         # x86_64-linux-gnu
         targetString = concatStringsSep "-" [
           parsed.cpu.name

@@ -8,8 +8,6 @@
   flags,
   lib,
   srcOnly,
-  stdenv,
-  stdenvNoCC,
 }:
 let
   inherit (backendStdenv) cc;
@@ -50,12 +48,12 @@ let
   cmakeSrc = srcOnly {
     name = "cmake-unpacked";
     inherit (cmake) src version;
-    stdenv = stdenvNoCC;
+    stdenv = backendStdenv;
   };
 
   mkTest =
     let
-      generic = stdenv.mkDerivation (finalAttrs: {
+      generic = backendStdenv.mkDerivation (finalAttrs: {
         __structuredAttrs = true;
         strictDeps = true;
 

@@ -80,6 +80,15 @@ let
       # depend on them recursively as they are used to add top-level attributes.
       inherit manifests;
 
+      # Create backendStdenv variants for different host compilers, since users may want to build a CUDA project with
+      # Clang or GCC specifically.
+      backendClangStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
+        stdenv = pkgs'.clangStdenv;
+      };
+      backendGccStdenv = finalCudaPackages.callPackage ./packages/backendStdenv.nix {
+        stdenv = pkgs'.gccStdenv;
+      };
+
       # Must be constructed without `callPackage` to avoid replacing the `override` attribute with that of
       # `callPackage`'s.
       buildRedist = import ./buildRedist {
@@ -92,7 +101,6 @@ let
           lib
           srcOnly
           stdenv
-          stdenvNoCC
           ;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath

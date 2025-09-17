@@ -1,6 +1,7 @@
 {
   _cuda,
   addDriverRunpath,
+  backendStdenv,
   cmake,
   cuda_cudart,
   cuda_nvcc,
@@ -14,7 +15,6 @@
   libcublas,
   libcurand,
   ninja,
-  stdenv,
   python3Packages,
   # Options
   pythonSupport ? true,
@@ -39,7 +39,7 @@ let
 in
 # TODO: Tests.
 assert assertMsg (!enableTools) "enableTools is not yet implemented";
-stdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 

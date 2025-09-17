@@ -1,4 +1,5 @@
 {
+  backendStdenv,
   boost178,
   buildRedist,
   cuda_cudart,
@@ -10,7 +11,6 @@
   pulseaudio,
   qt6,
   rdma-core,
-  stdenv,
   ucx,
   wayland,
   xorg,
@@ -24,13 +24,13 @@ let
       aarch64-linux = "host-linux-armv8";
       x86_64-linux = "host-linux-x64";
     }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    .${backendStdenv.hostPlatform.system} or (throw "Unsupported system: ${backendStdenv.hostPlatform.system}");
   targetDir =
     {
       aarch64-linux = "target-linux-sbsa-armv8";
       x86_64-linux = "target-linux-x64";
     }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    .${backendStdenv.hostPlatform.system} or (throw "Unsupported system: ${backendStdenv.hostPlatform.system}");
 in
 buildRedist {
   redistName = "cuda";
@@ -112,7 +112,7 @@ buildRedist {
     xorg.libXtst
   ]
   # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+  ++ lib.optionals backendStdenv.hostPlatform.isAarch64 [
     gst_all_1.gst-plugins-bad
   ];
 
