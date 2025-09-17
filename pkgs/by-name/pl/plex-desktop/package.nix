@@ -2,6 +2,7 @@
   alsa-lib,
   autoPatchelfHook,
   buildFHSEnv,
+  copyDesktopItems,
   elfutils,
   extraEnv ? { },
   fetchurl,
@@ -141,9 +142,11 @@ buildFHSEnv {
     xkeyboard_config
   ];
 
+  nativeBuildInputs = [ copyDesktopItems ];
+  desktopItems = [ desktopItem ];
+
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
-    install -m 444 -D ${desktopItem}/share/applications/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
     install -m 444 -D ${plex-desktop}/meta/gui/icon.png $out/share/icons/hicolor/scalable/apps/plex-desktop.png
   '';
 
