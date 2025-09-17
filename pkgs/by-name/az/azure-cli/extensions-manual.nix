@@ -52,6 +52,21 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  aosm = mkAzExtension rec {
+    pname = "aosm";
+    version = "2.0.0b2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/aosm-${version}-py2.py3-none-any.whl";
+    hash = "sha256-nK752/alBu0JYax8B+sp6oByPISqYGIgL6KFX5AIJmk=";
+    description = "Microsoft Azure Command-Line Tools Aosm Extension";
+    propagatedBuildInputs = with python3Packages; [
+      genson
+      jinja2
+      oras
+      ruamel-yaml
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   application-insights = mkAzExtension rec {
     pname = "application-insights";
     version = "2.0.0b1";
