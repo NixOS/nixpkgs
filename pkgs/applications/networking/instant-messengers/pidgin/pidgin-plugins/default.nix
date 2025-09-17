@@ -46,8 +46,6 @@ lib.makeScope newScope (
 
     purple-googlechat = callPackage ./purple-googlechat { };
 
-    purple-hangouts = callPackage ./purple-hangouts { };
-
     purple-lurch = callPackage ./purple-lurch { };
 
     purple-mm-sms = callPackage ./purple-mm-sms { };
@@ -70,5 +68,6 @@ lib.makeScope newScope (
   // lib.optionalAttrs config.allowAliases {
     purple-matrix = throw "'pidginPackages.purple-matrix' has been unmaintained since April 2022, so it was removed.";
     pidgin-skypeweb = throw "'pidginPackages.pidgin-skypeweb' has been removed since Skype was shut down in May 2025.";
+    purple-hangouts = throw "'pidginPackages.purple-hangouts' has been removed as Hangouts Classic is obsolete and migrated to Google Chat.";
   }
 )
