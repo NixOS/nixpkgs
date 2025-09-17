@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "CRYPTO_cleanup_all_ex_data();" ""
 
     # Fix CMake export
+    # ref https://github.com/3MFConsortium/lib3mf/pull/434
     substituteInPlace cmake/lib3mfConfig.cmake \
       --replace-fail "$""{LIB3MF_ROOT_DIR}/include" "$""{LIB3MF_ROOT_DIR}/include/lib3mf" \
       --replace-fail "$""{LIB3MF_ROOT_DIR}/lib" "$out/lib"
