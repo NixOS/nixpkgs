@@ -108,8 +108,6 @@ makeScopeWithSplicing' {
 
         libcommuni = callPackage ../development/libraries/libcommuni { };
 
-        libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
-
         libiodata = callPackage ../development/libraries/libiodata { };
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
