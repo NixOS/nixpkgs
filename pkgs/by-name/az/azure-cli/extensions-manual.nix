@@ -14,6 +14,19 @@
 }:
 
 {
+  acrcssc = mkAzExtension {
+    pname = "acrcssc";
+    version = "1.0.0b5";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/acrcssc-1.0.0b5-py3-none-any.whl";
+    hash = "sha256-Z3wi+/3UK+TUKHE7MCSP/Es8ViGVTrlcafojw2YFRBs=";
+    description = "Microsoft Azure Container Registry Container Secure Supply Chain (CSSC) Extension";
+    propagatedBuildInputs = with python3Packages; [
+      croniter
+      oras
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   application-insights = mkAzExtension rec {
     pname = "application-insights";
     version = "2.0.0b1";
