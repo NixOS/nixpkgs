@@ -6,8 +6,10 @@ addLinkDLLPaths() {
 addEnvHooks "$targetOffset" addLinkDLLPaths
 
 addOutputDLLPaths() {
-  addToSearchPath "LINK_DLL_FOLDERS" "$prefix/lib"
-  addToSearchPath "LINK_DLL_FOLDERS" "$prefix/bin"
+  for output in $(getAllOutputNames); do
+    addToSearchPath "LINK_DLL_FOLDERS" "${!output}/lib"
+    addToSearchPath "LINK_DLL_FOLDERS" "${!output}/bin"
+  done
 }
 
 postInstallHooks+=(addOutputDLLPaths)
