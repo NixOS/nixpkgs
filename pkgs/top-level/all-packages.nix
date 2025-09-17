@@ -1695,8 +1695,6 @@ with pkgs;
 
   glances = python3Packages.callPackage ../applications/system/glances { };
 
-  glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
-
   go2tv-lite = go2tv.override { withGui = false; };
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
