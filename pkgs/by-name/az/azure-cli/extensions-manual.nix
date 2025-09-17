@@ -110,6 +110,18 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  attestation = mkAzExtension {
+    pname = "attestation";
+    version = "1.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/attestation-1.0.0-py3-none-any.whl";
+    hash = "sha256-5YJ3wpIhTjsKHmbeXFI0De3yX1x8NWRgsgJZ1frO70Y=";
+    description = "Microsoft Azure Command-Line Tools AttestationManagementClient Extension";
+    propagatedBuildInputs = with python3Packages; [
+      pyjwt
+    ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
     version = "1.0.2";
