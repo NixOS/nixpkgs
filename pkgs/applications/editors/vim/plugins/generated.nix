@@ -4641,6 +4641,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  direnv-nvim = buildVimPlugin {
+    pname = "direnv.nvim";
+    version = "2025-08-26";
+    src = fetchFromGitHub {
+      owner = "actionshrimp";
+      repo = "direnv.nvim";
+      rev = "8a6d69b3a21928d54228f921bdee92b6839f25a1";
+      sha256 = "1kcwhl9a6fnk7fgz5qysjfza6fqs3qz60i5s2wy31dznkinsc7xb";
+    };
+    meta.homepage = "https://github.com/actionshrimp/direnv.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   direnv-vim = buildVimPlugin {
     pname = "direnv.vim";
     version = "2023-12-02";
