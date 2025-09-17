@@ -61,6 +61,7 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/coroner/cryptolyzer";
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
+    mainProgram = "cryptolyze";
     maintainers = with lib.maintainers; [ kranzes ];
     teams = with lib.teams; [ ngi ];
   };
