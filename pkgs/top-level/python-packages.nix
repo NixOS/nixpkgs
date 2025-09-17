@@ -1407,6 +1407,8 @@ self: super: with self; {
 
   azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
 
+  azure-mgmt-dashboard = callPackage ../development/python-modules/azure-mgmt-dashboard { };
+
   azure-mgmt-databoxedge = callPackage ../development/python-modules/azure-mgmt-databoxedge { };
 
   azure-mgmt-databricks = callPackage ../development/python-modules/azure-mgmt-databricks { };
