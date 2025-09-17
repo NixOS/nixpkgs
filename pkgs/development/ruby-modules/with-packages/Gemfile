@@ -9,7 +9,7 @@ gem 'bacon'
 gem 'byebug'
 gem 'cairo'
 gem 'cairo-gobject'
-gem 'camping'
+gem 'camping', '~> 3'
 # gem 'capybara-webkit' takes too long to build right now since webkit depends on ruby
 gem 'charlock_holmes'
 gem 'cf-uaac'
