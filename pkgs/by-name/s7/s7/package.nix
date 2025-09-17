@@ -8,7 +8,7 @@
   libmpc,
   mpfr,
   notcurses,
-  windows,
+  windowsPackages,
 
   gsl,
   man,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmpc
     ]
     ++ lib.optional withNrepl notcurses
-    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+    ++ lib.optional stdenv.hostPlatform.isMinGW windowsPackages.pthreads;
 
   # The following scripts are modified from [Guix's](https://packages.guix.gnu.org/packages/s7/).
 
