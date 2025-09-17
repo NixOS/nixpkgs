@@ -10,6 +10,7 @@
   cjs,
   evolution-data-server,
   fetchFromGitHub,
+  fetchpatch,
   gcr,
   gdk-pixbuf,
   gettext,
@@ -87,6 +88,17 @@ stdenv.mkDerivation rec {
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    # js: Use DesktopAppInfo form GioUnix, not Gio
+    # https://github.com/linuxmint/cinnamon/pull/13091
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/fa3aef20533af4499fb1161011e62e048bbdc396.patch";
+      hash = "sha256-qhgBniaUE/8q9BQ+EXcY7BF6eMJg+wC7EYgktwAMbwM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/330b9ff19f33ec1e94e36048ca46011404f796b4.patch";
+      hash = "sha256-YEQG6C4tx2T3wMfCLZXPFynAzEeIE1eVoadWVENZDFc=";
+    })
   ];
 
   buildInputs = [
