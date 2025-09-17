@@ -91,6 +91,5 @@ buildPythonPackage rec {
     description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
     license = licenses.asl20;
-    teams = [ teams.c3d2 ];
   };
 }

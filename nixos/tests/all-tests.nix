@@ -489,6 +489,7 @@ in
   endlessh-go = runTest ./endlessh-go.nix;
   engelsystem = runTest ./engelsystem.nix;
   enlightenment = runTest ./enlightenment.nix;
+  ente = runTest ./ente;
   env = runTest ./env.nix;
   envfs = runTest ./envfs.nix;
   envoy = runTest {
@@ -1142,7 +1143,6 @@ in
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
-  pantheon-wayland = runTest ./pantheon-wayland.nix;
   paperless = runTest ./paperless.nix;
   paretosecurity = runTest ./paretosecurity.nix;
   parsedmarc = handleTest ./parsedmarc { };

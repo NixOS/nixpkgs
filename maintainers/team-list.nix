@@ -88,6 +88,7 @@ with lib.maintainers;
       groodt
       aherrmann
       ylecornec
+      boltzmannrain
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";
     shortName = "Bazel";
@@ -168,6 +169,16 @@ with lib.maintainers;
     ];
     scope = "Maintain packages used in the C3D2 hackspace";
     shortName = "c3d2";
+  };
+
+  cachix = {
+    # Verify additions to this team with at least one existing member of the team.
+    members = [
+      domenkozar
+      sandydoo
+    ];
+    scope = "Group registration for packages maintained by Cachix.";
+    shortName = "Cachix employees";
   };
 
   categorization = {
@@ -271,6 +282,7 @@ with lib.maintainers;
   cuda = {
     members = [
       connorbaker
+      GaetanLepage
       prusnak
       samuela
       SomeoneSerge

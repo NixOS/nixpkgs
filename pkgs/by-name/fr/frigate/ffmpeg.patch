@@ -41,7 +41,7 @@ index 0d3f96da..463bcff4 100644
              seconds = int(diff % 60)
              ffmpeg_cmd = [
 -                "/usr/lib/ffmpeg/7.0/bin/ffmpeg",  # hardcode path for exports thumbnail due to missing libwebp support
-+                FfmpegConfig.ffmpeg_path,  # hardcode path for exports thumbnail due to missing libwebp support
++                self.config.ffmpeg.ffmpeg_path,  # hardcode path for exports thumbnail due to missing libwebp support
                  "-hide_banner",
                  "-loglevel",
                  "warning",

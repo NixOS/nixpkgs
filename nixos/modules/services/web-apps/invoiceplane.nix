@@ -16,6 +16,8 @@ let
   invoiceplane-config =
     hostName: cfg:
     pkgs.writeText "ipconfig.php" ''
+      # <?php exit('No direct script access allowed'); ?>
+
       IP_URL=http://${hostName}
       ENABLE_DEBUG=false
       DISABLE_SETUP=false
@@ -352,6 +354,9 @@ in
                      ${cfg.stateDir}/uploads
             if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
               cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
+            fi
+            if ! grep -q 'php exit' "${cfg.stateDir}/ipconfig.php"; then
+              sed -i "1i # <?php exit('No direct script access allowed'); ?>" "${cfg.stateDir}/ipconfig.php"
             fi
           '') eachSite
         );

@@ -3,10 +3,12 @@
   stdenv,
   replaceVars,
   fetchurl,
+  autoconf,
   zlibSupport ? true,
   zlib,
   bzip2,
   pkg-config,
+  lndir,
   libffi,
   sqlite,
   openssl,
@@ -80,7 +82,10 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    lndir
+  ];
   buildInputs = [
     bzip2
     openssl
@@ -120,14 +125,18 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
 
-  # fix compiler error in curses cffi module, where char* != const char*
-  NIX_CFLAGS_COMPILE =
-    if stdenv.cc.isClang then "-Wno-error=incompatible-function-pointer-types" else null;
-  C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
-  LIBRARY_PATH = lib.makeLibraryPath buildInputs;
-  LD_LIBRARY_PATH = lib.makeLibraryPath (
-    builtins.filter (x: x.outPath != stdenv.cc.libc.outPath or "") buildInputs
-  );
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      # fix compiler error in curses cffi module, where char* != const char*
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+    }
+    // {
+      C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
+      LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+      LD_LIBRARY_PATH = lib.makeLibraryPath (
+        builtins.filter (x: x.outPath != stdenv.cc.libc.outPath or "") buildInputs
+      );
+    };
 
   patches = [
     ./dont_fetch_vendored_deps.patch
@@ -146,7 +155,7 @@ stdenv.mkDerivation rec {
     # 3. ld -t (where it attaches the values in $LD_LIBRARY_PATH as -L arguments)
     # The first is disabled in Nix (and wouldn't work in the build sandbox or on NixOS anyway), and
     # the third was only introduced in Python 3.6 (see bugs.python.org/issue9998), so is not
-    # available when buliding PyPy (which is built using Python/PyPy 2.7).
+    # available when building PyPy (which is built using Python/PyPy 2.7).
     # The second requires SONAME to be set for the dynamic library for the second part not to fail.
     # As libsqlite3 stopped shipping with SONAME after the switch to autosetup (>= 3.50 in Nixpkgs;
     # see https://www.sqlite.org/src/forumpost/5a3b44f510df8ded). This makes the Python CFFI module
@@ -173,7 +182,9 @@ stdenv.mkDerivation rec {
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
       -O${optimizationLevel} \
-      --batch pypy/goal/targetpypystandalone.py
+      --batch \
+      pypy/goal/targetpypystandalone.py \
+      ${lib.optionalString ((toString optimizationLevel) == "1") "--withoutmod-cpyext"}
 
     runHook postBuild
   '';
@@ -181,16 +192,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,include,lib,${executable}-c}
+    mkdir -p $out/{bin,lib/${libPrefix}}
 
-    cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
-    cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
-    ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
+    cp -R {include,lib_pypy,lib-python} $out
+    install -Dm755 lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+    install -Dm755 ${executable}-c $out/bin/${executable}
     ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable} $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
-    ln -s $out/${executable}-c/include $out/include/${libPrefix}
-    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+    ln -s $out/include $out/include/${libPrefix}
+    lndir $out/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+    lndir $out/lib_pypy $out/lib/${libPrefix}
 
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${
@@ -204,10 +216,17 @@ stdenv.mkDerivation rec {
     lib.optionalString (stdenv.hostPlatform.isDarwin) ''
       install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      mkdir -p $out/${executable}-c/pypy/bin
-      mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
-      ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
+    # Create platform specific _sysconfigdata__*.py (eg: _sysconfigdata__linux_x86_64-linux-gnu.py)
+    # Can be tested by building: pypy3Packages.bcrypt
+    # Based on the upstream build code found here:
+    # https://github.com/pypy/pypy/blob/release-pypy3.11-v7.3.20/pypy/tool/release/package.py#L176-L189
+    # Upstream is not shipping config.guess, just take one from autoconf
+    + lib.optionalString isPy3k ''
+      $out/bin/pypy3 -m sysconfig --generate-posix-vars HOST_GNU_TYPE "$(${autoconf}/share/autoconf/build-aux/config.guess)"
+      buildir="$(cat pybuilddir.txt)"
+      quadruplet=$(ls $buildir | sed -E 's/_sysconfigdata__(.*).py/\1/')
+      cp "$buildir/_sysconfigdata__$quadruplet.py" $out/lib_pypy/
+      ln -rs "$out/lib_pypy/_sysconfigdata__$quadruplet.py" $out/lib/pypy*/
     ''
     # _testcapi is compiled dynamically, into the store.
     # This would fail if we don't do it here.

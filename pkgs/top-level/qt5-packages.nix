@@ -108,8 +108,6 @@ makeScopeWithSplicing' {
 
         libcommuni = callPackage ../development/libraries/libcommuni { };
 
-        libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
-
         libiodata = callPackage ../development/libraries/libiodata { };
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
@@ -170,8 +168,6 @@ makeScopeWithSplicing' {
         qjson = callPackage ../development/libraries/qjson { };
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-
-        qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
         qoauth = callPackage ../development/libraries/qoauth { };
 

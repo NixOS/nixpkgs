@@ -14,13 +14,13 @@ let
     }:
     buildGoModule rec {
       inherit pname;
-      version = "1.4.1";
+      version = "1.4.2";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        hash = "sha256-qn65d2bG8flSlMXG5TiMrNAVX8emv4ymsGs516TKFWU=";
+        hash = "sha256-ILHFITlcT/2szSOuPoQZkont8GRMYXCAmMwEqvMT/tE=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -33,7 +33,7 @@ let
         '';
       };
 
-      vendorHash = "sha256-lHzBpCisojRk6adWq+vZsvGqXQ22IzqO3bJa3foaWIA=";
+      vendorHash = "sha256-JOpqNwIR2SCuOAVQnSqX1PLaQW+Eh7YR1wK56byj94w=";
 
       nativeBuildInputs = [ installShellFiles ];
 

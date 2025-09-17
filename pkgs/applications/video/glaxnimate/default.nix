@@ -39,14 +39,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glaxnimate";
   version = "0.5.4";
 
   src = fetchFromGitLab {
-    owner = "mattbas";
-    repo = "${pname}";
-    rev = version;
+    domain = "invent.kde.org";
+    owner = "graphics";
+    repo = "glaxnimate";
+    tag = finalAttrs.version;
     hash = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
     fetchSubmodules = true;
   };
@@ -92,11 +93,11 @@ stdenv.mkDerivation rec {
     }
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mattbas/glaxnimate";
     description = "Simple vector animation program";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tobiasBora ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ tobiasBora ];
     mainProgram = "glaxnimate";
   };
-}
+})

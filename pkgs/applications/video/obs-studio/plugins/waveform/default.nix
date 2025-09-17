@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phandasm/waveform";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.gpl3;
+    # Hard coded x86_64 support
     platforms = [ "x86_64-linux" ];
   };
 }
