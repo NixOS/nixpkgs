@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  writeText,
   git,
   git-lfs,
   cacert,
@@ -64,6 +65,8 @@ lib.makeOverridable (
       fetchTags ? false,
       # make this subdirectory the root of the result
       rootDir ? "",
+      # GIT_CONFIG_GLOBAL (as a string)
+      gitConfig ? "",
     }:
 
     /*
@@ -108,6 +111,8 @@ lib.makeOverridable (
         else
           # FIXME fetching HEAD if no rev or tag is provided is problematic at best
           "HEAD";
+
+      gitConfigFile = if gitConfig != "" then writeText "gitconfig" gitConfig else null;
     in
 
     if builtins.isString sparseCheckout then
@@ -148,6 +153,7 @@ lib.makeOverridable (
           postFetch
           fetchTags
           rootDir
+          gitConfigFile
           ;
         rev = revWithTag;
 
