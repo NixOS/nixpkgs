@@ -27326,6 +27326,12 @@
     githubId = 209139160;
     name = "VnPower";
   };
+  vo1dsh4d0w = {
+    email = "filipmyslinski2006@gmail.com";
+    github = "Vo1dSh4d0w";
+    githubId = 97691234;
+    name = "Filip Myslinski";
+  };
   vog = {
     email = "v@njh.eu";
     github = "vog";
