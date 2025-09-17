@@ -8,6 +8,7 @@
   yarn,
   fixup-yarn-lock,
   prefetch-yarn-deps,
+  nixosTests,
   nodejs_20,
   nodejs-slim_20,
   remarshal_0_17,
@@ -26,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-r36w3Cz/V7E/xPYYpvfQsdk2QXfCVDYE9OxiFNyKP2s=";
   };
+
+  passthru.tests = {
+    dashy = nixosTests.dashy;
+  };
+
   # - If no settings are passed, use the default config provided by upstream
   # - Despite JSON being valid YAML (and the JSON passing the config validator),
   # there seem to be some issues with JSON in the final build - potentially due to
