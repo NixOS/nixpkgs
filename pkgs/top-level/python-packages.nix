@@ -1449,6 +1449,8 @@ self: super: with self; {
 
   azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
 
+  azure-mgmt-hybridcompute = callPackage ../development/python-modules/azure-mgmt-hybridcompute { };
+
   azure-mgmt-imagebuilder = callPackage ../development/python-modules/azure-mgmt-imagebuilder { };
 
   azure-mgmt-iotcentral = callPackage ../development/python-modules/azure-mgmt-iotcentral { };
