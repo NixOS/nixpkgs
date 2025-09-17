@@ -39,6 +39,7 @@
   systemd,
   udevCheckHook,
   z3,
+  nix-update-script,
   wxGTK-override ? null,
   opencascade-override ? null,
 }:
@@ -223,20 +224,26 @@ stdenv.mkDerivation (finalAttrs: {
     "libslic3r_tests|sla_print_tests"
   ];
 
-  meta =
-    with lib;
-    {
-      description = "G-code generator for 3D printer";
-      homepage = "https://github.com/prusa3d/PrusaSlicer";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [
-        tweber
-        tmarkus
-        fliegendewurst
-      ];
-      platforms = platforms.unix;
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
-      mainProgram = "PrusaSlicer";
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^version_(.+)$"
+    ];
+  };
+
+  meta = {
+    description = "G-code generator for 3D printer";
+    homepage = "https://github.com/prusa3d/PrusaSlicer";
+    changelog = "https://github.com/prusa3d/PrusaSlicer/releases/tag/version_${finalAttrs.version}";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      tweber
+      tmarkus
+      fliegendewurst
+    ];
+    platforms = lib.platforms.unix;
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    mainProgram = "PrusaSlicer";
+  };
 })
