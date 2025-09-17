@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hamlib";
-  version = "4.6.2";
+  version = "4.6.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hamlib/hamlib-${version}.tar.gz";
-    hash = "sha256-sqxz9E3RFh6V/e5slSdhRHV2R7+S1/2zae4v5B7Ueug=";
+    hash = "sha256-kNbx26WUF8APj0VFExx+/TGTDNDheFmJgKghBCXjhS4=";
   };
 
   strictDeps = true;
