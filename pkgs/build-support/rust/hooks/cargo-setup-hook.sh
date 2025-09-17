@@ -27,14 +27,12 @@ cargoSetupPostUnpackHook() {
       config=@defaultConfig@
     fi;
 
-    tmp_config=$(mktemp)
-    substitute $config $tmp_config \
-      --subst-var-by vendor "$cargoDepsCopy"
-    cat ${tmp_config} >> .cargo/config.toml
-
-    cat >> .cargo/config.toml <<'EOF'
+    cat "$config" - >> .cargo/config.toml <<'EOF'
     @cargoConfig@
 EOF
+
+    substituteInPlace .cargo/config.toml \
+      --subst-var-by vendor "$cargoDepsCopy"
 
     echo "Finished cargoSetupPostUnpackHook"
 }
