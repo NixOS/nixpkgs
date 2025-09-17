@@ -40,6 +40,17 @@ import ../make-test-python.nix (
           users.users.alice = {
             isNormalUser = true;
           };
+
+          # Needed as per https://github.com/containers/podman/issues/24796
+          # Else, the system will wait for a timeout.
+          systemd.services.podman-network-online-dummy = {
+            enable = true;
+            description = "This service simply activates network-online.target";
+            after = [ "network-online.target" ];
+            wants = [ "network-online.target" ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig.ExecStart = "${pkgs.coreutils}/bin/true";
+          };
         };
       dns =
         { pkgs, ... }:
