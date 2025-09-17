@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "movit";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "https://movit.sesse.net/${pname}-${version}.tar.gz";
-    sha256 = "sha256-szBztwXwzLasSULPURUVFUB7QLtOmi3QIowcLLH7wRo=";
+    sha256 = "sha256-AKwfjkbC0+OMdcu3oa8KYVdRwVjGEctwBTCUtl7P6NU=";
   };
 
   outputs = [
