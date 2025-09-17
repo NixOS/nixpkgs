@@ -19,7 +19,7 @@ _dllDeps() {
 }
 
 _linkDeps() {
-    local target="$1" dir="$2"
+    local target="$1" dir="$2" check="$3"
     echo 'target:' "$target"
     local dll
     _dllDeps "$target" | while read dll; do
@@ -28,7 +28,7 @@ _linkDeps() {
         # Locate the DLL - it should be an *executable* file on $LINK_DLL_FOLDERS.
         local dllPath="$(PATH="$(dirname "$target"):$LINK_DLL_FOLDERS" type -P "$dll")"
         if [[ -z "$dllPath" ]]; then
-          if [[ -n "${allowedImpureDLLsMap[$dll]}" ]]; then
+          if [[ -z "$check" || -n "${allowedImpureDLLsMap[$dll]}" ]]; then
              continue
           fi
           echo unable to find $dll in $LINK_DLL_FOLDERS >&2
@@ -38,7 +38,7 @@ _linkDeps() {
         CYGWIN+=\ winsymlinks:nativestrict ln -sr "$dllPath" "$dir"
         # That DLL might have its own (transitive) dependencies,
         # so add also all DLLs from its directory to be sure.
-        _linkDeps "$dllPath" "$dir"
+        _linkDeps "$dllPath" "$dir" ""
     done
 }
 
@@ -62,7 +62,7 @@ linkDLLs() {
     # Iterate over any DLL that we depend on.
     local target
     for target in {bin,libexec}/**/*.{exe,dll}; do
-      _linkDeps "$target" "$(dirname "$target")"
+      _linkDeps "$target" "$(dirname "$target")" "1"
     done
   )
 }
