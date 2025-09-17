@@ -8,7 +8,6 @@
   cpuinfo,
   eigen,
   flatbuffers_23,
-  gbenchmark,
   glibcLocales,
   gtest,
   howard-hinnant-date,
@@ -54,25 +53,6 @@ let
     repo = "safeint";
     tag = "3.0.28";
     hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
-  };
-
-  pytorch_clog = effectiveStdenv.mkDerivation {
-    pname = "clog";
-    version = "3c8b153";
-    src = "${cpuinfo.src}/deps/clog";
-
-    nativeBuildInputs = [
-      cmake
-      gbenchmark
-      gtest
-    ];
-    cmakeFlags = [
-      (lib.cmakeBool "USE_SYSTEM_GOOGLEBENCHMARK" true)
-      (lib.cmakeBool "USE_SYSTEM_GOOGLETEST" true)
-      (lib.cmakeBool "USE_SYSTEM_LIBS" true)
-      # 'clog' tests set 'CXX_STANDARD 11'; this conflicts with our 'gtest'.
-      (lib.cmakeBool "CLOG_BUILD_TESTS" false)
-    ];
   };
 
   onnx = fetchFromGitHub {
@@ -139,7 +119,6 @@ effectiveStdenv.mkDerivation rec {
     libpng
     nlohmann_json
     microsoft-gsl
-    pytorch_clog
     zlib
   ]
   ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
