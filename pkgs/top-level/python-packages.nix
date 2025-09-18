@@ -3120,6 +3120,8 @@ self: super: with self; {
     }
   );
 
+  cron-converter = callPackage ../development/python-modules/cron-converter { };
+
   cron-descriptor = callPackage ../development/python-modules/cron-descriptor { };
 
   croniter = callPackage ../development/python-modules/croniter { };
