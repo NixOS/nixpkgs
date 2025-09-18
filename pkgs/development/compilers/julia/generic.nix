@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     darwin.DarwinTools
+    darwin.autoSignDarwinBinariesHook
     darwin.sigtool
     unzip
     xcbuild
@@ -83,7 +84,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
-    "USE_BINARYBUILDER=${if stdenv.hostPlatform.isDarwin then "1" else "0"}"
   ];
 
   # remove forbidden reference to $TMPDIR
@@ -103,10 +103,6 @@ stdenv.mkDerivation rec {
     lib.optionalString (lib.versionAtLeast version "1.10" && stdenv.hostPlatform.isDarwin)
       ''
         codesign -s - --force --entitlements ./contrib/mac/app/Entitlements.plist $out/bin/julia
-
-        # We also need to re-sign the dylibs. Julia will be killed by macOS when you try to
-        # start it without this line. This will output errors for some of the dylibs.
-        find $out -name "*.dylib" -exec codesign -s - --force {} \;
       '';
 
   # tests are flaky for aarch64-linux on hydra

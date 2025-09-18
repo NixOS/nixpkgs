@@ -81,6 +81,8 @@ in
       hash = "sha256-u9by+X76fcXs+w159KTSvw43JeYwJ9Wvn0VyoEfniTM=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
+        ./patches/1.10/0003-backport-fixes.patch
+        ./patches/1.10/0004-lbt-suffix-hint.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354
         # [build] Some improvements to the LLVM build system
         # Related: https://github.com/JuliaLang/julia/issues/55617
