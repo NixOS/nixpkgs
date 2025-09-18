@@ -176,7 +176,7 @@ in
 
               port = mkOption {
                 type = types.port;
-                default = 1780;
+                default = 1705;
                 description = ''
                   Port to listen on for snapclient connections.
                 '';

@@ -1411,7 +1411,6 @@ in
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
   systemd-boot = handleTest ./systemd-boot.nix { };
   systemd-bpf = runTest ./systemd-bpf.nix;
-  systemd-capsules = runTest ./systemd-capsules.nix;
   systemd-confinement = handleTest ./systemd-confinement { };
   systemd-coredump = runTest ./systemd-coredump.nix;
   systemd-credentials-tpm2 = runTest ./systemd-credentials-tpm2.nix;

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "github-commenter";
-  version = "0.29.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = "github-commenter";
     rev = version;
-    hash = "sha256-ZQEiDY+gOnUMxolgreDWkm9Uuc72WxcysAkT5DK/XLc=";
+    hash = "sha256-x3/ae22ub9Us3mvSmvq9ohlkujvZCUfSrmZeQNvIWzE=";
   };
 
   vendorHash = "sha256-DS2cTYQasIKmyqHS3kTpNMA4fuLxSv4n7ZQjeRWE0gI=";

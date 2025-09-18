@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
   # FIXME: sphinx is needed for now to get man-pages
   nativeBuildInputs = [
     pkg-config
-    protobufc # dnstap support
     autoreconfHook
     sphinx
   ];
@@ -95,7 +94,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
-  strictDeps = true;
 
   CFLAGS = [
     "-O2"

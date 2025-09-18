@@ -9046,12 +9046,14 @@ with pkgs;
   vtk = vtk_9_5;
 
   vtk-full = vtk.override {
-    withQt6 = true;
+    qtVersion = "6";
     mpiSupport = true;
     pythonSupport = true;
   };
 
-  vtkWithQt6 = vtk.override { withQt6 = true; };
+  vtkWithQt5 = vtk.override { qtVersion = "5"; };
+
+  vtkWithQt6 = vtk.override { qtVersion = "6"; };
 
   vulkan-caps-viewer = libsForQt5.callPackage ../tools/graphics/vulkan-caps-viewer { };
 

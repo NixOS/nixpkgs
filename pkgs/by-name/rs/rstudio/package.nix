@@ -26,7 +26,7 @@
 
   apple-sdk_11,
   boost187,
-  electron_37,
+  electron_36,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -45,28 +45,19 @@
 }:
 
 let
-  electron = electron_37;
+  electron = electron_36;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
     hash = "sha256-J7SZK/9q3HcXTD7WFHxvh++ttuCd89Vc4SEBrUEU0AI=";
   };
 
-  # Note: we could build this from source, but let's just do what upstream does for now
-  gwt = fetchzip {
-    url = "https://rstudio-buildtools.s3.us-east-1.amazonaws.com/gwt/gwt-2.12.2.tar.gz";
-    stripRoot = false;
-    hash = "sha256-DgcCiheYeP7sISduz6E3WhTty2nSs14k2OYIG93KmkY=";
-  };
-
+  # rev should ideally be the last commit of the release/rstudio-[codename] branch
   quartoSrc = fetchFromGitHub {
     owner = "quarto-dev";
     repo = "quarto";
-    # Note: rev should ideally be the last commit of the release/rstudio-[codename] branch
-    # Note: This is the last working revision, because https://github.com/quarto-dev/quarto/pull/757
-    #       started using `file:` in the lockfile, which our fetcher can't handle
-    rev = "faef822a085df65809adf55fb77c273e9cdb87b9";
-    hash = "sha256-DLpVYl0OkaBQtkFinJAS2suZ8gqx9BVS5HBaYrrT1HA=";
+    rev = "8ee12b5d6bd49c7b212eae894bd011ffbeea1c48";
+    hash = "sha256-pTrWedYeG2SWQ4jl2fstKjsweWhj4aAvVDiSfkdU3No=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -88,13 +79,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
-  version = "2025.09.0+387";
+  version = "2025.05.1+513";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${version}";
-    hash = "sha256-je2nfWIToGGizWyH/YbhtD4XhtP39qUIhatzDOUnsSc=";
+    hash = "sha256-KaolU82bxzAlYl+aYwlFljqsmNv0dn8XP1llaLK3LQE=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
@@ -126,7 +117,7 @@ stdenv.mkDerivation rec {
     dontBuild = true;
     dontFixup = true;
 
-    outputHash = "sha256-pXpp42hjjKrV75f2XLDYK7A9lrvWhuQBDJ0oymXE8Fg=";
+    outputHash = "sha256-YW+l0/RZf8ek217pfWTwsR4PTugMGHyW+vaZEwGjMas=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -216,8 +207,8 @@ stdenv.mkDerivation rec {
 
     ./ignore-etc-os-release.patch
     ./dont-yarn-install.patch
-    ./dont-npm-ci.patch
     ./fix-darwin.patch
+    ./bump-node-abi.patch
   ];
 
   postPatch = ''
@@ -232,7 +223,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     src = quartoSrc;
-    hash = "sha256-9ObJ3fzxPyGVfIgBj4BhCWqkrG1A2JqZsCreJA+1fWQ=";
+    hash = "sha256-F+gqVNNhLmyrC+tJuElw7cpx5z/WLHOiYow/y86KR5c=";
   };
 
   dontYarnInstallDeps = true; # will call manually in preConfigure
@@ -248,7 +239,11 @@ stdenv.mkDerivation rec {
     name = "rstudio-${version}-npm-deps";
     inherit src;
     postPatch = "cd ${npmRoot}";
-    hash = "sha256-HfJsm/UauA5Vdi22WfTJGiI9K979Sw7RYApYdZU0AUs=";
+    patches = [
+      # needed for support for electron versions above electron_34
+      ./bump-node-abi.patch
+    ];
+    hash = "sha256-64PJPUE/xwdQdxVGiKzy8ADnxXH/qGQtFMib0unZpoA=";
   };
 
   preConfigure = ''
@@ -275,8 +270,6 @@ stdenv.mkDerivation rec {
       done
     done
 
-    ln -s ${gwt} dependencies/common/gwtproject
-
     ln -s ${quartoWrapper} dependencies/quarto
 
     # version in dependencies/common/install-mathjax
@@ -290,6 +283,9 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString (!server) ''
     pushd $npmRoot
+
+    substituteInPlace package.json \
+      --replace-fail "npm ci && " ""
 
     # use electron's headers to make node-gyp compile against the electron ABI
     export npm_config_nodedir="${electron.headers}"
