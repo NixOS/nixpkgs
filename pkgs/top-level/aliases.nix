@@ -596,6 +596,7 @@ mapAliases {
   cgal_4 = throw "cgal_4 has been removed as it is obsolete use cgal instead"; # Added 2024-12-30
 
   challenger = taler-challenger; # Added 2024-09-04
+  charmcraft = throw "charmcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # added 2025-09-18
   check_smartmon = nagiosPlugins.check_smartmon; # Added 2024-05-03
   check_systemd = nagiosPlugins.check_systemd; # Added 2024-05-03
   check_zfs = nagiosPlugins.check_zfs; # Added 2024-05-03
