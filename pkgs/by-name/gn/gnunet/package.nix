@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnunet";
-  version = "0.24.3";
+  version = "0.25.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WwaJew6ESJu7Q4J47HPkNiRCsuBaY+QAI+wdDMzGxXY=";
+    hash = "sha256-LepmLuhgWUaFKvAtKAbKZP2t7cxxju72uG4LJoIsNv8=";
   };
 
   enableParallelBuilding = true;
