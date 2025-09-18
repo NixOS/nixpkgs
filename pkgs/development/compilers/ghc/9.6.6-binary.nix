@@ -68,11 +68,6 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  libPath = lib.makeLibraryPath (
-    # Add arch-specific libraries.
-    map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
-  );
-
   runtimeDeps = [
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
@@ -88,12 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl binDistUsed.src;
 
   nativeBuildInputs = [ perl ];
-
-  # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
-  # of the bindist installer can find the libraries they expect.
-  # Cannot patchelf beforehand due to relative RPATHs that anticipate
-  # the final install location.
-  LD_LIBRARY_PATH = libPath;
 
   sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}";
 
@@ -112,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack =
     # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,
     # so that we know when ghc bindists upgrade that and we need to update the
-    # version used in `libPath`.
+    # version used in `archSpecificLibraries`.
     lib.optionalString (binDistUsed.exePathForLibraryCheck != null)
       # Note the `*` glob because some GHCs have a suffix when unpacked, e.g.
       # the musl bindist has dir `ghc-VERSION-x86_64-unknown-linux/`.
@@ -187,9 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out
 
-    cp -t $out/ -a source/usr/*
+    cp -t $out/ -a usr/*
     rm -f $out/lib/ghc/lib/package.conf.d
-    find source/var -name "package.conf.d" -type d -exec cp -a {} $out/lib/ghc/lib/ \;
+    find var -name "package.conf.d" -type d -exec cp -a {} $out/lib/ghc/lib/ \;
 
     runHook postInstall
   '';
@@ -209,26 +198,28 @@ stdenv.mkDerivation (finalAttrs: {
       for i in "$out/bin/"*; do
         test ! -h "$i" || continue
         isScript "$i" || continue
-        sed -i "s|=\"/usr|=\"$out|g" "$i"
+        substituteInPlace "$i" \
+          --replace-fail '="/usr' '="/${placeholder "out"}'
       done
       find "$out/lib/ghc/lib/package.conf.d" -type f -name '*.conf' \
         -exec sed -i "s|/usr/|$out/|g" {} +
     ''
 
     # Patch ghc settings
+    # TODO:
+    # - C++ compiler link flags don't already exist, would need to insert them
     + ''
-      sed -i \
-        -e 's/"powerpc64-linux-gnu-gcc")/"gcc")/g' \
-        -e 's/"powerpc64-linux-gnu-g++")/"g++")/g' \
-        -e 's/"powerpc64-linux-gnu-ld")/"ld")/g' \
-        -e 's/"powerpc64-linux-gnu-ar")/"ar")/g' \
-        -e 's/"powerpc64-linux-gnu-ranlib")/"ranlib")/g' \
-        -e 's/"llc-18")/"llc")/g' \
-        -e 's/"opt-18")/"opt")/g' \
-        -e 's/"Use LibFFI", "YES"/"Use LibFFI", "NO"/g' \
-        -e 's|"C compiler link flags", ""|"C compiler link flags", "-L${libffi.out}/lib -L${numactl.out}/lib"|g' \
-        -e 's|"C++ compiler link flags", ""|"C++ compiler link flags", "-L${libffi.out}/lib -L${numactl.out}/lib"|g' \
-        "$out/lib/ghc/lib/settings"
+      substituteInPlace $out/lib/ghc/lib/settings \
+        --replace-fail powerpc64-linux-gnu-gcc gcc \
+        --replace-fail powerpc64-linux-gnu-g++ g++ \
+        --replace-fail powerpc64-linux-gnu-ld ld \
+        --replace-fail powerpc64-linux-gnu-ar ar \
+        --replace-fail powerpc64-linux-gnu-ranlib ranlib \
+        --replace-fail llc-18 llc \
+        --replace-fail opt-18 opt \
+        --replace-fail '"Use LibFFI", "YES"' '"Use LibFFI", "NO"' \
+        --replace-fail '"C compiler link flags", ""' '"C compiler link flags", "-L${libffi.out}/lib -L${numactl.out}/lib"' \
+        --replace-warn '"C++ compiler link flags", ""' '"C++ compiler link flags", "-L${libffi.out}/lib -L${numactl.out}/lib"'
     '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
