@@ -373,15 +373,6 @@ stdenv.mkDerivation {
      patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
      patch -p1 -d llvm-project/clang -i ${./patches/clang-purity.patch}
 
-    # gcc-13 build fixes
-     patch -p2 -d llvm-project/llvm -i ${
-       fetchpatch {
-         name = "gcc-13.patch";
-         url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
-         hash = "sha256-nkRPWx8gNvYr7mlvEUiOAb1rTrf+skCZjAydJVUHrcI=";
-       }
-     }
-
      ${lib.optionalString stdenv.hostPlatform.isLinux ''
        substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
          --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
