@@ -6,16 +6,17 @@
   qtbase,
   qtdeclarative,
   cups,
-  llvmPackages,
+  llvmPackages_20,
   # clang-based c++ parser for qdoc and lupdate
   withClang ? false,
 }:
 
 qtModule {
   pname = "qttools";
+  # FIXME: update to LLVM 21 with Qt 6.10
   buildInputs = lib.optionals withClang [
-    llvmPackages.libclang
-    llvmPackages.llvm
+    llvmPackages_20.libclang
+    llvmPackages_20.llvm
   ];
   propagatedBuildInputs = [
     qtbase
