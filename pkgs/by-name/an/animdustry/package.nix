@@ -15,11 +15,8 @@
   libGL,
   libXxf86vm,
   libpulseaudio,
-}:
-let
-  fau = callPackage ./fau.nix { };
-in
-buildNimPackage (finalAttrs: {
+  fau ? callPackage ./fau.nix { }
+}: buildNimPackage (finalAttrs: {
   pname = "animdustry";
   version = "1.2";
 
