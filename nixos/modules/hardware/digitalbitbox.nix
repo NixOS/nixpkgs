@@ -13,19 +13,19 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
-        Enables udev rules for Digital Bitbox devices.
-      '';
-    };
-
-    package = lib.mkPackageOption pkgs "digitalbitbox" {
-      extraDescription = ''
-        This can be used to install a package with udev rules that differ from the defaults.
+      description = lib.mdDoc ''
+        **DEPRECATED**: Enable udev rules for DigitalBitBox devices.
+        DigitalBitBox has been EOL since 2019.
+        Use `hardware.bitbox02.enable` for BitBox02 devices instead.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.udev.packages = [ cfg.package ];
+    warnings = [
+      "hardware.digitalbitbox is deprecated. DigitalBitBox is EOL since 2019. Consider using hardware.bitbox02 instead."
+    ];
+
+    services.udev.packages = [ pkgs.bitbox ];
   };
 }
