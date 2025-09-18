@@ -8860,8 +8860,6 @@ self: super: with self; {
 
   macaddress = callPackage ../development/python-modules/macaddress { };
 
-  macaroonbakery = callPackage ../development/python-modules/macaroonbakery { };
-
   macfsevents = callPackage ../development/python-modules/macfsevents { };
 
   macholib = callPackage ../development/python-modules/macholib { };
