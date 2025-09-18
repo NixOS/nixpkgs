@@ -17,6 +17,7 @@
   biom-format,
   statsmodels,
   patsy,
+  array-api-compat,
 
   python,
   pytestCheckHook,
@@ -51,17 +52,13 @@ buildPythonPackage rec {
     biom-format
     statsmodels
     patsy
+    array-api-compat
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   # only the $out dir contains the built cython extensions, so we run the tests inside there
   enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
-
-  disabledTestPaths = [
-    # don't know why, but this segfaults
-    "${placeholder "out"}/${python.sitePackages}/skbio/metadata/tests/test_intersection.py"
-  ];
 
   pythonImportsCheck = [ "skbio" ];
 
