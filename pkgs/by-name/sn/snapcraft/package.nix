@@ -113,6 +113,7 @@ python312Packages.buildPythonApplication rec {
   build-system = with python312Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "catkin-pkg"
     "click"
     "craft-parts"
     "craft-providers"
