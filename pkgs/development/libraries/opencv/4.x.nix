@@ -35,6 +35,7 @@
   eigen,
   enableBlas ? true,
   blas,
+  enableLapack ? !stdenv.hostPlatform.isDarwin,
   enableVA ? !stdenv.hostPlatform.isDarwin,
   libva,
   enableContrib ? true,
@@ -483,6 +484,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "WITH_OPENJPEG" enableJPEG2000)
     (cmakeBool "WITH_JASPER" false) # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled
     (cmakeBool "WITH_TBB" enableTbb)
+    (cmakeBool "WITH_LAPACK" enableLapack)
 
     # CUDA options
     (cmakeBool "WITH_CUDA" enableCuda)
@@ -518,7 +520,6 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals effectiveStdenv.hostPlatform.isDarwin [
     (cmakeBool "WITH_OPENCL" false)
-    (cmakeBool "WITH_LAPACK" false)
 
     # Disable unnecessary vendoring that's enabled by default only for Darwin.
     # Note that the opencvFlag feature flags listed above still take
