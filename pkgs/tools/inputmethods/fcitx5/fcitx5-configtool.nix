@@ -15,6 +15,7 @@
   kitemviews,
   kwidgetsaddons,
   qtquickcontrols2 ? null,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kirigami ? null,
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
       kirigami2
     ]
     ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+      kcmutils
       libplasma
       kirigami
     ]
