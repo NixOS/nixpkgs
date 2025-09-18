@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Serial graph partitioning and fill-reducing matrix ordering";
     homepage = "https://github.com/KarypisLab/METIS";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qbisi ];
     platforms = lib.platforms.all;
   };
 })
