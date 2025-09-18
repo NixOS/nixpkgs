@@ -89,6 +89,7 @@ extra-packages:
   - hasql-pool < 1.1                    # 2025-01-19: Needed for building postgrest
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
+  - hpack == 0.38.1                     # 2025-09-18: to match exact version upstream stack-3.7.1 uses
   - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0
   - language-javascript == 0.7.0.0      # required by purescript
   - lsp < 2.5                           # 2024-07-08: need for koka
