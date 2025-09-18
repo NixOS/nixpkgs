@@ -300,90 +300,197 @@ in
         };
       };
     };
+
+    proxy-dns = lib.mkOption {
+      description = ''
+        Configure named SystemD services for `cloudflared proxy-dns`
+      '';
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { name, ... }:
+          {
+            options = {
+              port = lib.mkOption {
+                type = lib.types.nullOr lib.types.port;
+                description = ''
+                  Local port for daemon to listen on, upstream default is `53`
+                '';
+                default = null;
+                example = 5053;
+              };
+
+              address = lib.mkOption {
+                type = lib.types.nonEmptyStr;
+                description = ''
+                  Local address for daemon to listen on
+                '';
+                example = "127.0.0.1";
+                default = "127.0.0.1";
+              };
+
+              upstream = lib.mkOption {
+                type = lib.types.listOf lib.types.nonEmptyStr;
+                description = ''
+                  List of addresses to send DNS requests to
+                '';
+                example = [
+                  "https://1.1.1.1/dns-query"
+                  "https://1.0.0.1/dns-query"
+                ];
+                default = [
+                  "https://1.1.1.1/dns-query"
+                  "https://1.0.0.1/dns-query"
+                ];
+              };
+            };
+          }
+        )
+      );
+
+      default = { };
+      example = {
+        tor = {
+          port = 5053;
+          upstream = [
+            "https://dns4torpnlfs2ifuz2s2yf3fc7rdmsbhm6rw75euj35pac6ap25zgqad.onion/dns-query"
+          ];
+        };
+        doh = {
+          address = "0.0.0.0";
+        };
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.targets = lib.mapAttrs' (
-      name: tunnel:
-      lib.nameValuePair "cloudflared-tunnel-${name}" {
-        description = "Cloudflare tunnel '${name}' target";
-        requires = [ "cloudflared-tunnel-${name}.service" ];
-        after = [ "cloudflared-tunnel-${name}.service" ];
-        unitConfig.StopWhenUnneeded = true;
-      }
-    ) config.services.cloudflared.tunnels;
+    systemd.targets =
+      lib.mapAttrs' (
+        name: tunnel:
+        lib.nameValuePair "cloudflared-tunnel-${name}" {
+          description = "Cloudflare tunnel '${name}' target";
+          requires = [ "cloudflared-tunnel-${name}.service" ];
+          after = [ "cloudflared-tunnel-${name}.service" ];
+          unitConfig.StopWhenUnneeded = true;
+        }
+      ) config.services.cloudflared.tunnels
+      // lib.mapAttrs' (
+        name: _proxy:
+        lib.nameValuePair "cloudflare-proxy-dns-${name}" {
+          description = "Cloudflare proxy-dns '${name}' target";
+          requires = [ "cloudflared-proxy-dns-${name}.service" ];
+          after = [ "cloudflared-proxy-dns-${name}.service" ];
+          unitConfig.StopWhenUnneeded = true;
+        }
+      ) cfg.proxy-dns;
 
-    systemd.services = lib.mapAttrs' (
-      name: tunnel:
-      let
-        filterConfig = lib.attrsets.filterAttrsRecursive (
-          _: v:
-          !builtins.elem v [
-            null
-            [ ]
-            { }
-          ]
-        );
+    systemd.services =
+      lib.mapAttrs' (
+        name: tunnel:
+        let
+          filterConfig = lib.attrsets.filterAttrsRecursive (
+            _: v:
+            !builtins.elem v [
+              null
+              [ ]
+              { }
+            ]
+          );
 
-        filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
-        filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
+          filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
+          filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
 
-        ingressesSet = filterIngressSet tunnel.ingress;
-        ingressesStr = filterIngressStr tunnel.ingress;
+          ingressesSet = filterIngressSet tunnel.ingress;
+          ingressesStr = filterIngressStr tunnel.ingress;
 
-        fullConfig = filterConfig {
-          tunnel = name;
-          credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
-          warp-routing = filterConfig tunnel.warp-routing;
-          originRequest = filterConfig tunnel.originRequest;
-          ingress =
-            (map (
-              key:
-              {
+          fullConfig = filterConfig {
+            tunnel = name;
+            credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
+            warp-routing = filterConfig tunnel.warp-routing;
+            originRequest = filterConfig tunnel.originRequest;
+            ingress =
+              (map (
+                key:
+                {
+                  hostname = key;
+                }
+                // lib.getAttr key (filterConfig (filterConfig ingressesSet))
+              ) (lib.attrNames ingressesSet))
+              ++ (map (key: {
                 hostname = key;
-              }
-              // lib.getAttr key (filterConfig (filterConfig ingressesSet))
-            ) (lib.attrNames ingressesSet))
-            ++ (map (key: {
-              hostname = key;
-              service = lib.getAttr key ingressesStr;
-            }) (lib.attrNames ingressesStr))
-            ++ [ { service = tunnel.default; } ];
-        };
+                service = lib.getAttr key ingressesStr;
+              }) (lib.attrNames ingressesStr))
+              ++ [ { service = tunnel.default; } ];
+          };
 
-        mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
-        certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
-      in
-      lib.nameValuePair "cloudflared-tunnel-${name}" {
-        after = [
-          "network.target"
-          "network-online.target"
-        ];
-        wants = [
-          "network.target"
-          "network-online.target"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          RuntimeDirectory = "cloudflared-tunnel-${name}";
-          RuntimeDirectoryMode = "0400";
-          LoadCredential = [
-            "credentials.json:${tunnel.credentialsFile}"
-          ]
-          ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
+          mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+          certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
+        in
+        lib.nameValuePair "cloudflared-tunnel-${name}" {
+          after = [
+            "network.target"
+            "network-online.target"
+          ];
+          wants = [
+            "network.target"
+            "network-online.target"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            RuntimeDirectory = "cloudflared-tunnel-${name}";
+            RuntimeDirectoryMode = "0400";
+            LoadCredential = [
+              "credentials.json:${tunnel.credentialsFile}"
+            ]
+            ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
-          Restart = "on-failure";
-          DynamicUser = true;
-        };
+            ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+            Restart = "on-failure";
+            DynamicUser = true;
+          };
 
-        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
-      }
-    ) config.services.cloudflared.tunnels;
+          environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+        }
+      ) config.services.cloudflared.tunnels
+      // lib.mapAttrs' (
+        name: proxy:
+        lib.nameValuePair "cloudflare-proxy-dns-${name}" {
+          after = [
+            "network.target"
+            "network-online.target"
+          ];
+          wants = [
+            "network.target"
+            "network-online.target"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            RuntimeDirectory = "cloudflared-proxy-dns-${name}";
+            RuntimeDirectoryMode = "0400";
+
+            ExecStart =
+              let
+                upstream = builtins.concatStringsSep " " (builtins.map (x: "--upstream ${x}") proxy.upstream);
+                port = lib.optionalString (proxy.port != null) "--port ${builtins.toString proxy.port}";
+                address = lib.optionalString (builtins.stringLength proxy.address > 0) "--address ${proxy.address}";
+              in
+              "${cfg.package}/bin/cloudflared proxy-dns ${upstream} ${port} ${address}";
+
+            Restart = "on-failure";
+            KillMode = "process";
+            Type = "simple";
+
+            DynamicUser = true;
+            AmbientCapabilities = lib.optionals (proxy.port == null || proxy.port < 1025) [
+              "CAP_NET_BIND_SERVICE"
+            ];
+          };
+        }
+      ) cfg.proxy-dns;
   };
 
   meta.maintainers = with lib.maintainers; [
     bbigras
     anpin
+    S0AndS0
   ];
 }
