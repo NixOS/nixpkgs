@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-bEvhMVcm9sXlfhxUD2K4N10nusgxpGYFJQLtJE1/qok=";
   };
 
+  patches = [
+    # https://gitlab.com/coroner/cryptoparser/-/merge_requests/2
+    ./fix-dirs-exclude.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -36,6 +41,14 @@ buildPythonPackage rec {
     python-dateutil
     urllib3
   ];
+
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
 
   pythonImportsCheck = [ "cryptoparser" ];
 

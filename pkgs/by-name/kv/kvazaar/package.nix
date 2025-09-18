@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kvazaar";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "ultravideo";
     repo = "kvazaar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d/OkX18nyHSQXJgNhBtiCLb/Fe8Y/MpddXxLpNMZiXI=";
+    hash = "sha256-Th30XO3m4GVeDvdb/RIwKT6+To9C/YU7y8s8hm7vPi0=";
   };
 
   # https://github.com/ultravideo/kvazaar/pull/426
