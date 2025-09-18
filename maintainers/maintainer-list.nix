@@ -27270,6 +27270,12 @@
     githubId = 6148271;
     name = "Dave Nicponski";
   };
+  vitorpavani = {
+    email = "vipavani@hotmail.com";
+    github = "vitorpavani";
+    githubId = 59029586;
+    name = "Vitor Pavan";
+  };
   vizanto = {
     email = "danny@prime.vc";
     github = "vizanto";
