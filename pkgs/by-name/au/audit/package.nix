@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "audit" ];
 
+  enableParallelChecking = false;
   doCheck = true;
 
   postInstall = ''
