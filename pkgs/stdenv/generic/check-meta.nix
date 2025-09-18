@@ -721,13 +721,12 @@ let
           purl = if hasAllPURLParts purlParts then "pkg:${purlParts.type}/${purlParts.spec}" else null;
 
           v1 = {
-            inherit
-              cpeParts
-              possibleCPEs
-              purlParts
-              ;
+            inherit cpeParts possibleCPEs;
             ${if cpe != null then "cpe" else null} = cpe;
             ${if purl != null then "purl" else null} = purl;
+          }
+          // optionalAttrs (purlParts != { }) {
+            inherit purlParts;
           };
         in
         v1
