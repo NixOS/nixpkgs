@@ -15,6 +15,7 @@
   nix-store,
   nix-expr,
   nix-cli,
+  toml11,
 
   busybox-sandbox-shell ? null,
 
@@ -70,6 +71,13 @@ mkMesonDerivation (
       ''
         cd $(readlink -e $PWD)
         echo $PWD | grep tests/functional
+      '';
+
+    # `toml11` upgrade causes these to fail in 2.32+: https://github.com/NixOS/nixpkgs/pull/442682
+    # Remove when that PR lands in master.
+    ${if lib.versionAtLeast (lib.versions.majorMinor version) "2.32" then "preCheck" else null} =
+      lib.optionalString (lib.versionOlder toml11.version "4.0") ''
+        rm -f ../lang/eval-fail-fromTOML-{over,under}flow*
       '';
 
     mesonCheckFlags = [
