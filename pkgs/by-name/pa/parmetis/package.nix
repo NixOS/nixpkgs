@@ -3,31 +3,35 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  gklib,
   metis,
   mpi,
 }:
 
 stdenv.mkDerivation {
   pname = "parmetis";
-  version = "4.0.3";
+  version = "4.0.3-unstable-2023-03-26";
 
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "ParMETIS";
-    rev = "d90a2a6cf08d1d35422e060daa28718376213659";
-    hash = "sha256-22YQxwC0phdMLX660wokRgmAif/9tRbUmQWwNMZ//7M=";
+    rev = "8ee6a372ca703836f593e3c450ca903f04be14df";
+    hash = "sha256-L9SLyr7XuBUniMH3JtaBrUHIGzVTF5pr014xovQf2cI=";
   };
 
   nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
-  buildInputs = [ mpi ];
+  buildInputs = [
+    gklib
+    metis
+    mpi
+  ];
 
   configurePhase = ''
     runHook preConfigure
 
-    tar xf ${metis.src}
-    mv metis-* metis
-    make config metis_path=metis gklib_path=metis/GKlib prefix=$out
+    make config metis_path=${metis} gklib_path=${gklib} prefix=$out \
+       shared=${if stdenv.hostPlatform.isStatic then "0" else "1"}
 
     runHook postConfigure
   '';
