@@ -1,0 +1,26 @@
+diff --git a/src/common/Main.cpp b/src/common/Main.cpp
+index f63a5b8..8260bcf 100644
+--- a/src/common/Main.cpp
++++ b/src/common/Main.cpp
+@@ -154,7 +154,7 @@ void MainEntryPoints::createSystems(
+ 		PATHS::UserConfigDir()+"/",
+ 		PATHS::CacheDir()+"/",
+ 		PATHS::GameConfigDir()+"/",
+-		String("./") );
++		PATHS::GameConfigDir()+"/" );
+ 
+ 	app->mGraphicsSystem = graphicsSystem;
+ 
+diff --git a/src/vdrift/paths.cpp b/src/vdrift/paths.cpp
+index 9122031..d06bb59 100755
+--- a/src/vdrift/paths.cpp
++++ b/src/vdrift/paths.cpp
+@@ -145,6 +145,8 @@ void PATHS::Init(bool log_paths)
+ 	fs::path exe = execname();  // binary dir
+ 	game_bin = exe.parent_path().string();
+ 
++	game_data = "@GAME_DATA_DIR@";
++	game_config = "@GAME_CONFIG_DIR@";
+ 
+ 	// Find game data dir and defaults config dir
+ 	char *datadir = getenv("STUNTRALLY3_DATA_ROOT");

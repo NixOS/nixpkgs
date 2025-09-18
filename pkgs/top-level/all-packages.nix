@@ -14017,7 +14017,7 @@ with pkgs;
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
-  stuntrally = callPackage ../games/stuntrally { boost = boost183; };
+  stuntrally = callPackage ../games/stuntrally { };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
 
