@@ -723,10 +723,8 @@ let
           v1 = {
             inherit cpeParts possibleCPEs;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purlParts != { } then "purlParts" else null} = purlParts;
             ${if purl != null then "purl" else null} = purl;
-          }
-          // optionalAttrs (purlParts != { }) {
-            inherit purlParts;
           };
         in
         v1
