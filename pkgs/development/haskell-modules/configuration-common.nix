@@ -2228,12 +2228,15 @@ with haskellLib;
 
   # stack-3.7.1 requires Cabal < 3.12
   stack =
+    let
+      stack' = super.stack.overrideScope (self: super: { hpack = self.hpack_0_38_1; });
+    in
     if lib.versionOlder self.ghc.version "9.10" then
-      super.stack
+      stack'
     else
       lib.pipe
         # to reduce rebuilds, don't override Cabal in the entire scope
-        ((super.stack.override { Cabal = self.Cabal_3_10_3_0; }).overrideScope (
+        ((stack'.override { Cabal = self.Cabal_3_10_3_0; }).overrideScope (
           self: super:
           let
             downgradeCabal =
