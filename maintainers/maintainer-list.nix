@@ -11109,6 +11109,12 @@
     githubId = 16307070;
     name = "iosmanthus";
   };
+  ipsavitsky = {
+    email = "ipsavitsky234@gmail.com";
+    github = "ipsavitsky";
+    githubId = 33558632;
+    name = "Ilya Savitsky";
+  };
   iqubic = {
     email = "sophia.b.caspe@gmail.com";
     github = "iqubic";
@@ -14572,6 +14578,12 @@
     github = "nathanielbaxter";
     githubId = 307589;
     name = "Nathaniel Baxter";
+  };
+  liam-w = {
+    email = "liam.weitzel2@gmail.com";
+    github = "Liam-Weitzel";
+    githubId = 22010764;
+    name = "Liam Weitzel";
   };
   liamdiprose = {
     email = "liam@liamdiprose.com";
