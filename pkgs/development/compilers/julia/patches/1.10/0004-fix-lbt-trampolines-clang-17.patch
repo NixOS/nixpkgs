@@ -1,0 +1,138 @@
+From f3b0c8b6562dbec00ad797f0d21d5fcd205883f8 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Sat, 20 Sep 2025 16:41:52 -0500
+Subject: [PATCH] fix build of LBT assembly trampolines on clang 17
+
+---
+ deps/blastrampoline.mk             |   7 ++
+ deps/patches/lbt-trampolines.patch | 100 +++++++++++++++++++++++++++++
+ 2 files changed, 107 insertions(+)
+ create mode 100644 deps/patches/lbt-trampolines.patch
+
+diff --git a/deps/blastrampoline.mk b/deps/blastrampoline.mk
+index bd1cb65c6a..54c00cd526 100644
+--- a/deps/blastrampoline.mk
++++ b/deps/blastrampoline.mk
+@@ -9,6 +9,13 @@ $(eval $(call git-external,blastrampoline,BLASTRAMPOLINE,,,$(BUILDDIR)))
+ BLASTRAMPOLINE_BUILD_OPTS := $(MAKE_COMMON) CC="$(CC) $(SANITIZE_OPTS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
+ BLASTRAMPOLINE_BUILD_OPTS += ARCH="$(ARCH)" OS="$(OS)"
+ 
++$(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/lbt-trampolines.patch-applied: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/source-extracted
++	cd $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR) && \
++		patch -p1 -f < $(SRCDIR)/patches/lbt-trampolines.patch
++	echo 1 > $@
++
++$(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/build-configured: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/lbt-trampolines.patch-applied
++
+ $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/build-configured: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/source-extracted
+ 	mkdir -p $(dir $@)
+ 	echo 1 > $@
+diff --git a/deps/patches/lbt-trampolines.patch b/deps/patches/lbt-trampolines.patch
+new file mode 100644
+index 0000000000..dad5b0662e
+--- /dev/null
++++ b/deps/patches/lbt-trampolines.patch
+@@ -0,0 +1,100 @@
++From c7e71924f47f4d016afe7ef994e30b46080ac918 Mon Sep 17 00:00:00 2001
++From: Gabriel Baraldi <baraldigabriel@gmail.com>
++Date: Fri, 24 Jan 2025 12:32:15 -0300
++Subject: [PATCH] Fix trampoline build on latest clang on macos
++
++---
++ src/trampolines/trampolines_aarch64.S     | 2 +-
++ src/trampolines/trampolines_arm.S         | 2 +-
++ src/trampolines/trampolines_i686.S        | 2 +-
++ src/trampolines/trampolines_powerpc64le.S | 2 +-
++ src/trampolines/trampolines_riscv64.S     | 2 +-
++ src/trampolines/trampolines_x86_64.S      | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/trampolines/trampolines_aarch64.S b/src/trampolines/trampolines_aarch64.S
++index 0c7d3ab..a231bd0 100644
++--- a/src/trampolines/trampolines_aarch64.S
+++++ b/src/trampolines/trampolines_aarch64.S
++@@ -3,9 +3,9 @@
++ 
++ #define XX(name, idx) \
++ .global MANGLE(UNDERSCORE(name)) SEP \
+++MANGLE(UNDERSCORE(name))##: SEP \
++ .cfi_startproc SEP \
++ .p2align    2 SEP \
++-MANGLE(UNDERSCORE(name))##: SEP \
++     mov x17, SYMBOL_IDX(idx) SEP \
++     adrp x16, PAGE(NAMEADDR(name)) SEP \
++     ldr x16, [x16, PAGEOFF(NAMEADDR(name))] SEP \
++diff --git a/src/trampolines/trampolines_arm.S b/src/trampolines/trampolines_arm.S
++index 2b6fa22..75a98d1 100644
++--- a/src/trampolines/trampolines_arm.S
+++++ b/src/trampolines/trampolines_arm.S
++@@ -3,8 +3,8 @@
++ 
++ #define XX(name, idx) \
++ .global MANGLE(UNDERSCORE(name)); \
++-.cfi_startproc; \
++ MANGLE(UNDERSCORE(name))##:; \
+++.cfi_startproc; \
++     ldr ip, CONCAT(.L,NAMEADDR(name)); \
++ CONCAT(.L,MANGLE(UNDERSCORE(name))): ;\
++     add ip, pc, ip; \
++diff --git a/src/trampolines/trampolines_i686.S b/src/trampolines/trampolines_i686.S
++index 1a92d8e..803d1b1 100644
++--- a/src/trampolines/trampolines_i686.S
+++++ b/src/trampolines/trampolines_i686.S
++@@ -4,8 +4,8 @@
++ #define XX(name, idx) \
++ DEBUGINFO(name); \
++ .global MANGLE(UNDERSCORE(name)); \
++-.cfi_startproc; \
++ MANGLE(UNDERSCORE(name))##:; \
+++.cfi_startproc; \
++     CET_START(); \
++     mov $SYMBOL_IDX(idx),%eax; \
++     jmpl *(NAMEADDR(name)); \
++diff --git a/src/trampolines/trampolines_powerpc64le.S b/src/trampolines/trampolines_powerpc64le.S
++index b64c147..da55ddd 100644
++--- a/src/trampolines/trampolines_powerpc64le.S
+++++ b/src/trampolines/trampolines_powerpc64le.S
++@@ -10,8 +10,8 @@
++ #define XX(name, idx) \
++ .global MANGLE(UNDERSCORE(name)); \
++ .type MANGLE(UNDERSCORE(name))##, @function; \
++-.cfi_startproc; \
++ MANGLE(UNDERSCORE(name))##: ; \
+++.cfi_startproc; \
++     addis 2, 12, .TOC.-MANGLE(UNDERSCORE(name))##@ha; \
++     addi 2, 2, .TOC.-MANGLE(UNDERSCORE(name))##@l; \
++     .localentry MANGLE(UNDERSCORE(name))##,.-MANGLE(UNDERSCORE(name))##; \
++diff --git a/src/trampolines/trampolines_riscv64.S b/src/trampolines/trampolines_riscv64.S
++index f9e20d7..c607650 100644
++--- a/src/trampolines/trampolines_riscv64.S
+++++ b/src/trampolines/trampolines_riscv64.S
++@@ -6,8 +6,8 @@
++ #define XX(name, idx) \
++ .global MANGLE(UNDERSCORE(name)) SEP \
++ .cfi_startproc SEP \
+++MANGLE(UNDERSCORE(name))##: SEP \
++ .p2align    2 SEP \
++- MANGLE(UNDERSCORE(name))##: SEP \
++     li t4, SYMBOL_IDX(idx) SEP \
++     la t3, NAMEADDR(name) SEP \
++     ld t3, 0(t3) SEP \
++diff --git a/src/trampolines/trampolines_x86_64.S b/src/trampolines/trampolines_x86_64.S
++index c8ac684..5954456 100644
++--- a/src/trampolines/trampolines_x86_64.S
+++++ b/src/trampolines/trampolines_x86_64.S
++@@ -4,9 +4,9 @@
++ #define XX(name, idx) \
++ DEBUGINFO(name); \
++ .global MANGLE(UNDERSCORE(name)); \
+++MANGLE(UNDERSCORE(name))##:; \
++ .cfi_startproc; \
++ SEH_START1(name); \
++-MANGLE(UNDERSCORE(name))##:; \
++ SEH_START2(); \
++     CET_START(); \
++     mov $SYMBOL_IDX(idx),%r10; \
+-- 
+2.50.1
+
