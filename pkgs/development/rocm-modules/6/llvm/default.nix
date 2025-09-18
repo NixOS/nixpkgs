@@ -244,7 +244,6 @@ let
   );
 in
 rec {
-  inherit (llvmPackagesRocm) libunwind;
   inherit (llvmPackagesRocm) libcxx;
   inherit args;
   # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
@@ -473,8 +472,6 @@ rec {
       lld
       lld.lib
       lld.dev
-      libunwind
-      libunwind.dev
       compiler-rt
       compiler-rt.dev
       rocmcxx
