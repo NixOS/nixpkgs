@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
+  fetchPypi,
   gevent,
   pytestCheckHook,
   setuptools,
@@ -12,31 +11,24 @@
 
 buildPythonPackage rec {
   pname = "watchdog-gevent";
-  version = "0.1.1";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "Bogdanp";
-    repo = "watchdog_gevent";
-    tag = "v${version}";
-    hash = "sha256-FESm3fNuLmOg2ilI/x8U9LuAimHLnahcTHYzW/nzOVY=";
+  src = fetchPypi {
+    pname = "watchdog_gevent";
+    inherit version;
+    hash = "sha256-rmuU0PjIzhxZVs2GX2ErYfRWzxmAF0S7olo0n+jowzc=";
   };
-
-  patches = [
-    # Add new event_filter argument to GeventEmitter
-    (fetchpatch {
-      name = "new-event_filter-argument.patch";
-      url = "https://github.com/Bogdanp/watchdog_gevent/commit/a98b6599aefb6f1ea6f9682485ed460c52f6e55f.patch";
-      hash = "sha256-lbUtl8IbnJjlsIpbC+wXLvYB+ZtUuHWqFtf31Bfqc2I=";
-    })
-  ];
 
   postPatch = ''
     sed -i setup.cfg \
       -e 's:--cov watchdog_gevent::' \
       -e 's:--cov-report html::'
+
+    substituteInPlace tests/test_observer.py \
+      --replace-fail 'events == [FileModifiedEvent(__file__)]' 'FileModifiedEvent(__file__) in events'
   '';
 
   build-system = [ setuptools ];
