@@ -331,6 +331,25 @@ let
     '';
   };
 
+  swift-asn1 = mkBootstrapDerivation {
+    name = "swift-asn1";
+    src = generated.sources.swift-asn1;
+
+    postInstall = cmakeGlue.SwiftASN1;
+  };
+
+  swift-certificates = mkBootstrapDerivation {
+    name = "swift-certificates";
+    src = generated.sources.swift-certificates;
+
+    buildInputs = [
+      swift-asn1
+      swift-crypto
+    ];
+
+    postInstall = cmakeGlue.swift-certificates;
+  };
+
   # Build a bootrapping swiftpm using CMake.
   swiftpm-bootstrap = mkBootstrapDerivation (
     commonAttrs
@@ -341,6 +360,8 @@ let
         llbuild
         sqlite
         swift-argument-parser
+        swift-asn1
+        swift-certificates
         swift-collections
         swift-crypto
         swift-driver
