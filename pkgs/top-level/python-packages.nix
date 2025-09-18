@@ -17001,8 +17001,6 @@ self: super: with self; {
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
-  snap-helpers = callPackage ../development/python-modules/snap-helpers { };
-
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snappy-15-knots = callPackage ../development/python-modules/snappy-15-knots { };
