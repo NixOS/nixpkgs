@@ -491,6 +491,11 @@ with haskellLib;
 
   # 2025-02-10: Too strict bounds on bytestring < 0.12
   ghc-debug-common = doJailbreak super.ghc-debug-common;
+  ghc-debug-client = lib.pipe super.ghc-debug-client [
+    (warnAfterVersion "0.7.0.0")
+    # 2025-09-18: Too strict bounds on containers < 0.7
+    doJailbreak
+  ];
 
   # https://github.com/agrafix/superbuffer/issues/4
   # Too strict bounds on bytestring < 0.12
