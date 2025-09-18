@@ -17155,8 +17155,6 @@ self: super: with self; {
 
   spdx = callPackage ../development/python-modules/spdx { };
 
-  spdx-lookup = callPackage ../development/python-modules/spdx-lookup { };
-
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
   speak2mary = callPackage ../development/python-modules/speak2mary { };
