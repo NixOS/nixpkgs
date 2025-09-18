@@ -3,7 +3,6 @@ import json
 import numpy as np
 import os
 import pandas as pd
-import warnings
 
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -303,9 +302,6 @@ def main():
     )
 
     options = parser.parse_args()
-
-    # Turn warnings into errors
-    warnings.simplefilter("error")
 
     before_stats = Path(options.before)
     after_stats = Path(options.after)
