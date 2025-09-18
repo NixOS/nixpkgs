@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
       revert = true;
     })
     ./unsurprising-ext-password.patch
+    ./multiple-configs.patch
     (fetchpatch {
       name = "suppress-ctrl-event-signal-change.patch";
       url = "https://w1.fi/cgit/hostap/patch/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a";

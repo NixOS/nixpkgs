@@ -3230,6 +3230,8 @@ self: super: with self; {
 
   cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
 
+  cv2-enumerate-cameras = callPackage ../development/python-modules/cv2-enumerate-cameras { };
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
@@ -7649,6 +7651,8 @@ self: super: with self; {
 
   jupyter-telemetry = callPackage ../development/python-modules/jupyter-telemetry { };
 
+  jupyter-themes = callPackage ../development/python-modules/jupyter-themes { };
+
   jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
   jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
@@ -10930,9 +10934,7 @@ self: super: with self; {
 
   openapi3 = callPackage ../development/python-modules/openapi3 { };
 
-  openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
-    openbabel = pkgs.openbabel.override { python3 = python; };
-  };
+  openbabel = toPythonModule (pkgs.openbabel.override { python3 = python; });
 
   opencamlib = callPackage ../development/python-modules/opencamlib { };
 
