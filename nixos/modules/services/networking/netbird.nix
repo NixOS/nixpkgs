@@ -414,6 +414,9 @@ in
               NB_LOG_LEVEL = client.logLevel;
               NB_SERVICE = client.service.name;
               NB_WIREGUARD_PORT = toString client.port;
+              # for gathering journald logs into debug bundles
+              # see https://github.com/netbirdio/netbird/blob/2c87fa623654c5eef76bc0226062290201eef13a/client/internal/debug/debug_linux.go#L50-L51
+              SYSTEMD_UNIT = client.service.name;
             }
             // optionalAttrs (client.dns-resolver.address != null) {
               NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
