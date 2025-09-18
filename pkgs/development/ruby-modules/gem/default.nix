@@ -307,7 +307,7 @@ lib.makeOverridable (
               spec = "${gemName}@${version}?platform=${platform}";
             }
           else if type == "git" then
-            src.meta.identifiers.purlParts or { };
+            src.meta.identifiers.purlParts or { }
           else
             { };
       }
