@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/sofa-framework/sofa/commit/700b6cdd94fe24a51b2a7014fb0fc83e6abe1fbc.patch";
       hash = "sha256-czc1u03USQt18d7cMPmXYguBhSb5JOJLplPvoixp+3w=";
     })
+    (fetchpatch {
+      # Compat with metis > 5.1
+      name = "sofamatrix-allow-newer-metis-versions.patch";
+      url = "https://github.com/sofa-framework/sofa/commit/f1a45da7c77776ea9559b1958576b0187a8b9958.patch";
+      hash = "sha256-YPMBKG1Ju5XON14CmSYNqljpqEbFRvI5SgKwOnxs7+I=";
+    })
   ];
 
   propagatedNativeBuildInputs = [
