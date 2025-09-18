@@ -107,7 +107,7 @@ dontLink=$isFrontend
 
 for p in "${params[@]}"; do
     case "$p" in
-        -enable-cxx-interop | -enable-experimental-cxx-interop)
+        -cxx-interoperability-mode=default | -enable-cxx-interop | -enable-experimental-cxx-interop)
             isCxx=1 ;;
     esac
 done
