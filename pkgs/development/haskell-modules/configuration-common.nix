@@ -506,7 +506,12 @@ with haskellLib;
   attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
 
   # These packages (and their reverse deps) cannot be built with profiling enabled.
-  ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
+  ghc-heap-view = lib.pipe super.ghc-heap-view [
+    disableLibraryProfiling
+    (warnAfterVersion "0.6.4.1")
+    # 2025-09-18: Too strict bounds on base < 4.20
+    doJailbreak
+  ];
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
