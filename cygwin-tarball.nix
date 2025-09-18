@@ -4,13 +4,17 @@ let
   inherit (nixpkgs.pkgsCross.x86_64-cygwin)
     bash
     buildEnv
+    cacert
+    coreutils
     lib
     nix
+    runCommand
+    writeShellScript
     writeText
     windows
     ;
 
-  system = buildEnv {
+  sw = buildEnv {
     name = "cygwin-root";
 
     paths = [
@@ -23,7 +27,8 @@ let
     ];
 
     postBuild = ''
-      while IFS= read -r -d $'\0' f; do
+      find $out -type l -print0 | while read -r -d "" f; do
+          local symlinkTarget
           symlinkTarget=$(readlink "$f")
           if [[ "$symlinkTarget"/ != /nix/store* ]]; then
               # skip this symlink as it doesn't point to /nix/store
@@ -36,25 +41,36 @@ let
 
           echo "rewriting symlink $f to be relative to /nix/store"
           ln -snrf "$symlinkTarget" "$f"
-
-      done < <(find $out -type l -print0)
+      done
     '';
   };
+
+  system = runCommand "cygwin-system" { } ''
+    mkdir "$out"
+    ln -sr "${sw}" "$out"/sw
+    ln -sr "${activate}" "$out"/activate
+  '';
 
   cmd = writeText "cygwin.cmd" (
     lib.replaceString "\n" "\r\n" ''
       @echo off
       set PATH=%~dp0\bin;%PATH%
-      "%~dp0${lib.replaceString "/" "\\" system.outPath}\bin\bash.exe" --login -i
+      set BASH="%~dp0${lib.replaceString "/" "\\" (lib.getBin bash).outPath}\bin\bash.exe"
+      %BASH% nix\var\nix\profiles\system\activate || exit /b
+      %BASH% --login -i || exit /b
     ''
   );
 
-  profile = writeText "profile" ''
-    export PATH="${lib.getBin system}"/bin:$PATH
+  activate = writeShellScript "activate" ''
+    (
+      export PATH=${lib.makeBinPath [ coreutils ]}:/bin
+      ln -sr "${cacert}"/ssl /etc/ssl
+    )
+    exec "${lib.getBin bash}"/bin/bash --login -i
   '';
 
 in
-nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
+(nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
   # HACK: disable compression
   compressCommand = "cat";
   compressionExtension = "";
@@ -68,10 +84,6 @@ nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
       source = cmd;
       target = "cygwin.cmd";
     }
-    {
-      source = profile;
-      target = "/etc/profile";
-    }
   ];
 
   storeContents = [
@@ -82,6 +94,10 @@ nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
   ];
 
   extraCommands = ''
-    mkdir tmp
+    mkdir etc tmp
+    ln -sr "${system}" /nix/var/nix/profiles/system
   '';
+})
+// {
+  inherit system;
 }
