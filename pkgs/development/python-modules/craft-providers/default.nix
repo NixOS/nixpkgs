@@ -43,7 +43,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace craft_providers/lxd/installer.py \
-      --replace-fail "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
+      --replace-fail "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/incus/unix.socket" \
+      --replace-fail "/var/lib/lxd/unix.socket" "/var/lib/incus/unix.socket" \
+      --replace-fail 'which("lxd")' 'which("incus")'
+
+    substituteInPlace craft_providers/lxd/lxd.py \
+      --replace-fail 'Path("lxd")' 'Path("incus")' \
+      --replace-fail 'version_string.split()[0]' 'version_string.split()[2]'
+
+    substituteInPlace craft_providers/lxd/lxc.py \
+      --replace-fail 'Path("lxc")' 'Path("incus")'
 
     substituteInPlace craft_providers/__init__.py \
       --replace-fail "dev" "${version}"
