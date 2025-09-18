@@ -64,7 +64,6 @@ let
   # list of all compilers to test specific packages on
   released = with compilerNames; [
     ghc948
-    ghc963
     ghc967
     ghc984
     ghc9101
