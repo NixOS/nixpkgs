@@ -1219,6 +1219,7 @@ mapAliases {
   jd-cli = throw "jd-cli has been removed due to upstream being unmaintained since 2019. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jd-gui = throw "jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
+  jing = jing-trang; # Added 2025-09-18
   jsawk = throw "'jsawk' has been removed because it is unmaintained upstream"; # Added 2024-08-07
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
 

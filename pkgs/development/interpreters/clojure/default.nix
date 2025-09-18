@@ -4,12 +4,15 @@
   bashNonInteractive,
   fetchurl,
   installShellFiles,
-  jdk,
+  jdk21,
   rlwrap,
   makeWrapper,
   writeScript,
 }:
-
+let
+  # set this to an LTS version of java
+  jdk = jdk21;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
   version = "1.12.2.1565";

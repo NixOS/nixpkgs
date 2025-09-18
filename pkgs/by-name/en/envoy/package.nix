@@ -13,7 +13,7 @@
   cmake,
   gn,
   go,
-  jdk,
+  openjdk11_headless,
   ninja,
   patchelf,
   python312,
@@ -56,6 +56,7 @@ let
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
+  jdk = openjdk11_headless;
 
 in
 buildBazelPackage rec {
