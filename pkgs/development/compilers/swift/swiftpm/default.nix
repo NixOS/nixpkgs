@@ -185,23 +185,9 @@ let
       '';
   };
 
-  # Part of this patch fixes for glibc 2.39: glibc patch 64b1a44183a3094672ed304532bedb9acc707554
-  # marks the `FILE*` argument to a few functions including `ferror` & `fread` as non-null. However
-  # the code passes an `Optional<T>` to these functions.
-  # This patch uses a `guard` which effectively unwraps the type (or throws an exception).
-  swift-tools-support-core-glibc-fix = fetchpatch {
-    url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-    hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-    includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-  };
-
   swift-tools-support-core = mkBootstrapDerivation {
     name = "swift-tools-support-core";
     src = generated.sources.swift-tools-support-core;
-
-    patches = [
-      swift-tools-support-core-glibc-fix
-    ];
 
     buildInputs = [
       swift-system
@@ -397,7 +383,6 @@ stdenv.mkDerivation (
       # swift-corelibs-xctest.
       swiftpmMakeMutable swift-tools-support-core
       substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
-      patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
         --replace-fail 'canImport(Darwin)' 'false'
 
       # Prevent a warning about SDK directories we don't have.
