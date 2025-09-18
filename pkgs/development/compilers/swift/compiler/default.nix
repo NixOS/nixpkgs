@@ -541,7 +541,7 @@ stdenv.mkDerivation {
 
     # Ensure that the built Clang can find the runtime libraries by
     # copying the symlinks from the main wrapper.
-    cp -P ${clang}/resource-root/{lib,share} $SWIFT_BUILD_ROOT/llvm/lib/clang/15.0.0/
+    cp -P ${clang}/resource-root/{lib,share} $SWIFT_BUILD_ROOT/llvm/lib/clang/16.0.0/
 
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -712,7 +712,7 @@ stdenv.mkDerivation {
     # Undo the clang and swift wrapping we did for the build.
     # (This happened via patches to cmake files.)
     cd $SWIFT_BUILD_ROOT
-    mv llvm/bin/clang-15{-unwrapped,}
+    mv llvm/bin/clang-16{-unwrapped,}
     mv swift/bin/swift-frontend{-unwrapped,}
 
     mkdir $lib
@@ -751,7 +751,7 @@ stdenv.mkDerivation {
 
     # Swift has a separate resource root from Clang, but locates the Clang
     # resource root via subdir or symlink.
-    mv $SWIFT_BUILD_ROOT/llvm/lib/clang/15.0.0 $lib/lib/swift/clang
+    mv $SWIFT_BUILD_ROOT/llvm/lib/clang/16.0.0 $lib/lib/swift/clang
   '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
