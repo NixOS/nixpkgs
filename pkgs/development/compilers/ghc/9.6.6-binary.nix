@@ -10,7 +10,6 @@
   libiconv,
   numactl,
   libffi,
-  llvmPackages,
   coreutils,
   targetPackages,
 }:
@@ -78,7 +77,6 @@ let
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
-    (lib.getBin llvmPackages.llvm)
   ];
 
 in
@@ -305,7 +303,7 @@ stdenv.mkDerivation (finalAttrs: {
     targetPrefix = "";
     enableShared = true;
 
-    inherit llvmPackages;
+    llvmPackages = null;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
@@ -331,6 +329,5 @@ stdenv.mkDerivation (finalAttrs: {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     teams = [ lib.teams.haskell ];
-    broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
 })
