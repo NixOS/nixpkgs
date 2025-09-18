@@ -1,0 +1,24 @@
+From c61fd441e57631196d7a486ffb52bf3b73863527 Mon Sep 17 00:00:00 2001
+From: BoyOrigin <ahmadyasinfikri@gmail.com>
+Date: Mon, 18 Sep 2023 01:39:37 +0700
+Subject: [PATCH] Key Modifiers Fix
+
+
+diff --git a/src/wl_window.c b/src/wl_window.c
+index 5b491ffb..31fe9c14 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -1197,7 +1197,9 @@ static void inputText(_GLFWwindow* window, uint32_t scancode)
+         {
+             const int mods = _glfw.wl.xkb.modifiers;
+             const int plain = !(mods & (GLFW_MOD_CONTROL | GLFW_MOD_ALT));
+-            _glfwInputChar(window, codepoint, mods, plain);
++
++            if (plain)
++                _glfwInputChar(window, codepoint, mods, plain);
+         }
+     }
+ }
+-- 
+2.43.0
+
