@@ -55,7 +55,7 @@ let
 
       # Patch the location where swiftpm looks for its API modules.
       substituteInPlace Sources/PackageModel/UserToolchain.swift \
-        --replace \
+        --replace-fail \
           'librariesPath = applicationPath.parentDirectory' \
           "librariesPath = AbsolutePath(\"$out\")"
     '';
@@ -102,7 +102,7 @@ let
             # On Darwin only, Swift uses arm64 as cpu arch.
             if [ -e cmake/modules/SwiftSupport.cmake ]; then
               substituteInPlace cmake/modules/SwiftSupport.cmake \
-                --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
+                --replace-fail '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
             fi
           '';
 
@@ -277,12 +277,12 @@ let
       substituteInPlace \
         products/libllbuild/CMakeLists.txt \
         products/llbuildSwift/CMakeLists.txt \
-        --replace '@rpath' "$out/lib"
+        --replace-fail '@rpath' "$out/lib"
 
       # This subdirectory is enabled for Darwin only, but requires ObjC XCTest
       # (and only Swift XCTest is open source).
       substituteInPlace perftests/CMakeLists.txt \
-        --replace 'add_subdirectory(Xcode/' '#add_subdirectory(Xcode/'
+        --replace-fail 'add_subdirectory(Xcode/' '#add_subdirectory(Xcode/'
     '';
 
     cmakeFlags = [
@@ -314,7 +314,7 @@ let
     postPatch = ''
       # Tries to link against CYaml, but that's private.
       substituteInPlace Sources/SwiftDriver/CMakeLists.txt \
-        --replace CYaml ""
+        --replace-fail CYaml ""
     '';
 
     postInstall = cmakeGlue.SwiftDriver + ''
@@ -331,9 +331,9 @@ let
     postPatch = ''
       # Fix use of hardcoded tool paths on Darwin.
       substituteInPlace CMakeLists.txt \
-        --replace /usr/bin/ar $NIX_CC/bin/ar
+        --replace-fail /usr/bin/ar $NIX_CC/bin/ar
       substituteInPlace CMakeLists.txt \
-        --replace /usr/bin/ranlib $NIX_CC/bin/ranlib
+        --replace-fail /usr/bin/ranlib $NIX_CC/bin/ranlib
     '';
 
     postInstall = cmakeGlue.SwiftCrypto + ''
@@ -397,8 +397,8 @@ stdenv.mkDerivation (
       # swift-corelibs-xctest.
       swiftpmMakeMutable swift-tools-support-core
       substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
-        --replace 'canImport(Darwin)' 'false'
       patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
+        --replace-fail 'canImport(Darwin)' 'false'
 
       # Prevent a warning about SDK directories we don't have.
       swiftpmMakeMutable swift-driver

@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     # This toggles a section specific to Xcode XCTest, which doesn't work on
     # Darwin, where we also use swift-corelibs-xctest.
     substituteInPlace Sources/LSPTestSupport/PerfTestCase.swift \
-      --replace '#if os(macOS)' '#if false'
+      --replace-fail '#if os(macOS)' '#if false'
 
     # Required to link with swift-corelibs-xctest on Darwin.
     export SWIFTTSC_MACOS_DEPLOYMENT_TARGET=10.12
