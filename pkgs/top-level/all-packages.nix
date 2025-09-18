@@ -7109,11 +7109,9 @@ with pkgs;
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
   asio = callPackage ../development/libraries/asio { };
 
-  aspell = callPackage ../development/libraries/aspell { };
+  aspellDicts = recurseIntoAttrs (callPackages ../by-name/as/aspell/dictionaries.nix { });
 
-  aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix { });
-
-  aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
+  aspellWithDicts = callPackage ../by-name/as/aspell/aspell-with-dicts.nix {
     aspell = aspell.override { searchNixProfiles = false; };
   };
 
