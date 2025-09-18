@@ -308,6 +308,8 @@ lib.makeOverridable (
             }
           else if type == "git" then
             src.meta.identifiers.purlParts or { };
+          else
+            { };
       }
       // meta;
     }
