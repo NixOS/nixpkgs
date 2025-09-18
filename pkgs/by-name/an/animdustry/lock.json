@@ -50,11 +50,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/c4mj544lwqrjpr9k81gw6mibc8iydgnn-source",
-      "rev": "286541ebbdf900d6be896ed5fa359893ba89f1d9",
-      "sha256": "1kmzyvwcwjmia1xyw3bhabn81rf62xrk6fhxk0y4l49xy8v8pdsa",
+      "path": "/nix/store/2h7ddrr0bmb5is42frcfvlsfv07b3icc-source",
+      "rev": "73f5fdb8e90cc95073e427c9403b8fa360846620",
+      "sha256": "0rrvr0fbcrk8zxsa2pa0082pcwhf8lvw21zkh07s0121s0w5l4q3",
       "srcDir": "src",
-      "url": "https://github.com/Endermanbugzjfc/fau/archive/286541ebbdf900d6be896ed5fa359893ba89f1d9.tar.gz",
+      "url": "https://github.com/Anuken/fau/archive/73f5fdb8e90cc95073e427c9403b8fa360846620.tar.gz",
       "subDir": "",
       "packages": [
         "fau"
@@ -134,11 +134,11 @@
     },
     {
       "method": "git",
-      "path": "/nix/store/j8prgzpc45i941gjxm9rdr6wzs0s4y8c-nimsoloud-ab16472",
-      "rev": "ab16472cc31344ac8f6806b160521bb2cdcbe2d7",
-      "sha256": "11yqid4kvd8yijhnggxsfa8z21m4svzx63sdz9bpidi4xjp50rg4",
+      "path": "/nix/store/6ndsxzh74l47xcxv4658plingybwywx3-nimsoloud-c74878d",
+      "rev": "c74878dcb60fd2e2af84f894a8a8ffe901aecd51",
+      "sha256": "08lzvggv4sa61kk1r5bhk22gfn20mqfi3yvmi55dyfwx6d7kvhp7",
       "srcDir": "src",
-      "url": "https://github.com/Endermanbugzjfc/nimsoloud",
+      "url": "https://github.com/Anuken/nimsoloud",
       "subDir": "",
       "fetchSubmodules": true,
       "leaveDotGit": false,
@@ -172,11 +172,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/mj9475zbr4h7dkx43zrzmq3biql65vng-source",
-      "rev": "28f27b2c4bff0e21084e820dae368addb6ea5236",
-      "sha256": "0kc5amlcvq3sjb6yk14jc34sv1wcbk7i0yhkfzbk24j7fv2ncyvi",
+      "path": "/nix/store/spba0pmyvfcky028h5jzscpj8awflcdh-source",
+      "rev": "d9636c0a565680044d187bee7b53bb4eaf4385b9",
+      "sha256": "10ignwna5cab04z38p4gfrp9yhb05ma7hf93xgg05cgmnqzb26if",
       "srcDir": "src",
-      "url": "https://github.com/Anuken/staticglfw/archive/28f27b2c4bff0e21084e820dae368addb6ea5236.tar.gz",
+      "url": "https://github.com/Anuken/staticglfw/archive/d9636c0a565680044d187bee7b53bb4eaf4385b9.tar.gz",
       "subDir": "",
       "packages": [
         "staticglfw"
