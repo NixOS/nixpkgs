@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "xinux-org";
-    repo = "e-imzo";
+    repo = "e-imzo-manager";
     tag = finalAttrs.version;
     hash = "sha256-JXALTSgxIULDHdw90RjxlNQiLT+GKrzpkqPlMY0h+8c=";
   };
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/xinux-org/e-imzo";
+    homepage = "https://github.com/xinux-org/e-imzo-manager";
     mainProgram = "E-IMZO-Manager";
     description = "GTK application for managing E-IMZO keys";
     license = with lib.licenses; [ agpl3Plus ];
