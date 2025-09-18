@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kdecoration,
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    kcmutils
     kcoreaddons
     kdeclarative
     kdecoration

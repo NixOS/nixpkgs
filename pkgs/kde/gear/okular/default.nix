@@ -3,6 +3,7 @@
   pkg-config,
   qtspeech,
   qtsvg,
+  plasma-activities,
   poppler,
   libtiff,
   libspectre,
@@ -18,6 +19,8 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtspeech
     qtsvg
+
+    plasma-activities
 
     poppler
     libtiff
