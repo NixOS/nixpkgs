@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "frei";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "alexcoder04";
     repo = "frei";
     rev = "v${version}";
-    sha256 = "sha256-C70c/uADy/D2YARRYROkc6Bs/VtYH3SIXUjSF3+qVjY=";
+    sha256 = "sha256-QVoRiqQt4DJK07YcCPplxigpgIqjDeQVYyDK/KQ7gbo=";
   };
 
   vendorHash = null;

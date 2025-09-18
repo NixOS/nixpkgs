@@ -10,27 +10,34 @@
   httpx,
   langchain-core,
   syrupy,
+  pytest-benchmark,
+  pytest-codspeed,
+  pytest-recording,
+  vcrpy,
 
   # buildInputs
   pytest,
 
   # tests
   numpy,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-socket,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.17";
+  version = "0.3.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-jhdCpZsRvCxDIfaZpdqAdx+rxJTU6QHDgNKc4w7XmR8=";
+    hash = "sha256-RMuxWA/n8d71FReFKO3Y/5P0MYk4aZ5WU2/TRxf9UuE=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
@@ -39,7 +46,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
     "numpy"
   ];
@@ -47,9 +54,13 @@ buildPythonPackage rec {
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio
+    pytest-asyncio_0
+    pytest-benchmark
+    pytest-codspeed
+    pytest-recording
     pytest-socket
     syrupy
+    vcrpy
   ];
 
   buildInputs = [ pytest ];
@@ -62,7 +73,11 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    inherit (langchain-core) updateScript;
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-tests==";
+    };
   };
 
   meta = {

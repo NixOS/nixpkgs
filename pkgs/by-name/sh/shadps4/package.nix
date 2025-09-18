@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-g55Ob74Yhnnrsv9+fNA1+uTJ0H2nyH5UT4ITHnrGKDo=";
+    hash = "sha256-0wvxvKw2XHhnXiM5DiiiY+nWPoze0fvNCJeTsKzoCn0=";
     fetchSubmodules = true;
   };
 
@@ -119,7 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
+    };
   };
 
   meta = {

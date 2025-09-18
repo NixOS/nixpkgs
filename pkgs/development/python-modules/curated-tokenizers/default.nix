@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "curated-tokenizers";
-  version = "0.0.9";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "curated-tokenizers";
     tag = "v${version}";
-    hash = "sha256-P8kpPnaU3el7sc/vUn4waQN+JV7F9b49i6BtC4BFfIg=";
+    hash = "sha256-VkDV/9c5b8TzYlthCZ38ufbrne4rihtkmkZ/gyAQXLE=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   # Explicitly set the path to avoid running vendored
   # sentencepiece tests.
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   preCheck = ''
     # avoid local paths, relative imports wont resolve correctly
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Lightweight piece tokenization library";
     homepage = "https://github.com/explosion/curated-tokenizers";
-    changelog = "https://github.com/explosion/curated-tokenizers/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/curated-tokenizers/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
   };

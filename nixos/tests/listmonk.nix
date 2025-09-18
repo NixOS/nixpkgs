@@ -41,7 +41,7 @@ import ./make-test-python.nix (
          return f'curl -u "{basic_auth}" -X {type} "http://localhost:9000/api/{url}" -H "Content-Type: application/json; charset=utf-8" --data-raw \'{json_data}\'''
 
       machine.wait_for_unit("mailhog.service")
-      machine.wait_for_unit("postgresql.service")
+      machine.wait_for_unit("postgresql.target")
       machine.wait_for_unit("listmonk.service")
       machine.wait_for_open_port(1025)
       machine.wait_for_open_port(8025)

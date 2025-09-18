@@ -26,7 +26,8 @@ buildPythonPackage rec {
   dependencies = [
     google-api-core
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   # No tests in repo
   doCheck = false;

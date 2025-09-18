@@ -64,7 +64,7 @@ in
           default = null;
           description = ''
             The content of /etc/asusd/anime.ron.
-            See <https://asus-linux.org/asusctl/#anime-control>.
+            See <https://asus-linux.org/manual/asusctl-manual/#anime-control>.
           '';
         };
 
@@ -73,7 +73,7 @@ in
           default = null;
           description = ''
             The content of /etc/asusd/asusd.ron.
-            See <https://asus-linux.org/asusctl/>.
+            See <https://asus-linux.org/manual/asusctl-manual/>.
           '';
         };
 
@@ -82,7 +82,7 @@ in
           default = { };
           description = ''
             The content of /etc/asusd/aura_<name>.ron.
-            See <https://asus-linux.org/asusctl/#led-keyboard-control>.
+            See <https://asus-linux.org/manual/asusctl-manual/#led-keyboard-control>.
           '';
         };
 
@@ -91,7 +91,7 @@ in
           default = null;
           description = ''
             The content of /etc/asusd/profile.ron.
-            See <https://asus-linux.org/asusctl/#profiles>.
+            See <https://asus-linux.org/manual/asusctl-manual/#profiles>.
           '';
         };
 
@@ -100,7 +100,7 @@ in
           default = null;
           description = ''
             The content of /etc/asusd/fan_curves.ron.
-            See <https://asus-linux.org/asusctl/#fan-curves>.
+            See <https://asus-linux.org/manual/asusctl-manual/#fan-curves>.
           '';
         };
 
@@ -109,7 +109,7 @@ in
           default = null;
           description = ''
             The content of /etc/asusd/asusd-user-ledmodes.ron.
-            See <https://asus-linux.org/asusctl/#led-keyboard-control>.
+            See <https://asus-linux.org/manual/asusctl-manual/#led-keyboard-control>.
           '';
         };
       };

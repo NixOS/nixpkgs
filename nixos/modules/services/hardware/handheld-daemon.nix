@@ -30,7 +30,8 @@ in
     services.handheld-daemon.ui.enable = mkDefault true;
     environment.systemPackages = [
       cfg.package
-    ] ++ lib.optional cfg.ui.enable cfg.ui.package;
+    ]
+    ++ lib.optional cfg.ui.enable cfg.ui.package;
     services.udev.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 

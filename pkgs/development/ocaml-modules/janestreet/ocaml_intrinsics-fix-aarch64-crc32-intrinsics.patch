@@ -1,0 +1,28 @@
+From fa7d611d326eaec5b34d8686975aaf2238a85996 Mon Sep 17 00:00:00 2001
+From: alyaeanyx <alyaeanyx@mailbox.org>
+Date: Sun, 18 May 2025 15:46:31 +0200
+Subject: [PATCH] Fix aarch64 CRC32 intrinsics configure test program
+
+The test program was checking for the nonexistent __crc32ud and __crc32uw instead of
+__crc32cd __crc32cw (as used in src/crc_stubs.c).
+
+Signed-off-by: alyaeanyx <alyaeanyx@mailbox.org>
+---
+ src/discover/discover.ml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/discover/discover.ml b/src/discover/discover.ml
+index d2b4039..8fe89a4 100644
+--- a/src/discover/discover.ml
++++ b/src/discover/discover.ml
+@@ -12,8 +12,8 @@ let prog_aarch64 =
+ int main() {
+     int64_t i64, d64;
+     int32_t i32, d32;
+-    __crc32ud(i64, d64);
+-    __crc32uw(i32, d32);
++    __crc32cd(i64, d64);
++    __crc32cw(i32, d32);
+     return 0;
+ }|}
+ ;;

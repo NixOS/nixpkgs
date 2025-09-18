@@ -39,40 +39,38 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      shaderc
-      spirv-tools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook4
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    shaderc
+    spirv-tools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
+  ];
 
-  buildInputs =
-    [
-      cairomm
-      glew
-      glfw
-      glslang
-      liblxi
-      libsigcxx
-      vulkan-headers
-      vulkan-loader
-      vulkan-tools
-      yaml-cpp
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      ffts
-      gtkmm3
-      libtirpc
-    ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    cairomm
+    glew
+    glfw
+    glslang
+    liblxi
+    libsigcxx
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    yaml-cpp
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ffts
+    gtkmm3
+    libtirpc
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
   # Targets InitializeSearchPaths
   postPatch = ''

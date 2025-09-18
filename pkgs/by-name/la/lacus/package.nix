@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lacus";
-  version = "1.13.1";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "lacus";
     tag = "v${version}";
-    hash = "sha256-M9ZRlvQvDV5eiWOHh3LgezIN5gUgJ6w24OEo4RArip8=";
+    hash = "sha256-fk6NfBdUGGyOhVOJcGCRNldcw4JRHFr7p+tFuccYp7Y=";
   };
 
   pythonRelaxDeps = [

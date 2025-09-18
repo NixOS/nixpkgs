@@ -7,14 +7,14 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "cmp-async-path";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2025-04-13";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "FelipeLema";
     repo = "cmp-async-path";
-    rev = "d6d1ffa2075039632a2d71e8fa139818e15ac757";
-    hash = "sha256-MZFpNPtSDMZNkfoz+3ZcDxLb8PvDtm9nb1dE0CbYIPQ=";
+    rev = "0ed1492f59e730c366d261a5ad822fa37e44c325";
+    hash = "sha256-J1Iw7yNfvWq7Jul25Eyx4qk9lSiLpZt4TRvTYi1DXtk=";
   };
 
   checkInputs = [ vimPlugins.nvim-cmp ];

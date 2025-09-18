@@ -10,6 +10,7 @@
   withNode ? true,
   version,
   hash,
+  buildPackages,
 }:
 let
   majorVersion = lib.versions.major version;
@@ -70,7 +71,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      fetchDepsAttrs = callPackages ./fetch-deps { pnpm = finalAttrs.finalPackage; };
+      fetchDepsAttrs = callPackages ./fetch-deps {
+        pnpm = buildPackages."pnpm_${lib.versions.major version}";
+      };
     in
     {
       inherit (fetchDepsAttrs) fetchDeps configHook;
@@ -88,7 +91,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
         }
 
-        latestTag=$(curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | jq -r --arg major "v${majorVersion}" '[.[].tag_name | select(startswith($major))][0]')
+        latestTag=$(
+          curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | \
+          jq -r --arg major "v${majorVersion}" \
+            '[.[] | select(.tag_name | startswith($major)) | select(.prerelease == false)][0].tag_name'
+        )
 
         # Exit if there is no tag with this major version
         if [ "$latestTag" = "null" ]; then

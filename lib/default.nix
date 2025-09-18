@@ -127,6 +127,7 @@ let
         bitXor
         bitNot
         boolToString
+        boolToYesNo
         mergeAttrs
         flip
         defaultTo
@@ -206,7 +207,10 @@ let
         concatMapAttrs
         mapAttrsRecursive
         mapAttrsRecursiveCond
+        mapAttrsToListRecursive
+        mapAttrsToListRecursiveCond
         genAttrs
+        genAttrs'
         isDerivation
         toDerivation
         optionalAttrs
@@ -279,6 +283,7 @@ let
         naturalSort
         compareLists
         take
+        takeEnd
         drop
         dropEnd
         sublist
@@ -286,6 +291,7 @@ let
         init
         crossLists
         unique
+        uniqueStrings
         allUnique
         intersectLists
         subtractLists
@@ -308,6 +314,7 @@ let
         stringLength
         substring
         isString
+        replaceString
         replaceStrings
         intersperse
         concatStringsSep
@@ -344,9 +351,11 @@ let
         upperChars
         toLower
         toUpper
+        toCamelCase
         toSentenceCase
         addContextFrom
         splitString
+        splitStringBy
         removePrefix
         removeSuffix
         versionOlder
@@ -429,6 +438,8 @@ let
         pathHasContext
         canCleanSource
         pathIsGitRepo
+        revOrTag
+        repoRevToName
         ;
       inherit (self.modules)
         evalModules
@@ -560,6 +571,9 @@ let
         ;
       inherit (self.versions)
         splitVersion
+        ;
+      inherit (self.network.ipv6)
+        mkEUI64Suffix
         ;
     }
   );

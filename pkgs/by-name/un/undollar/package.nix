@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "eats the dollar sign in the command you just pasted into your terminal";
+    description = "Eat the dollar sign in the command you just pasted into your terminal";
     mainProgram = "$";
     homepage = "https://github.com/xtyrrell/undollar";
     license = lib.licenses.mit;

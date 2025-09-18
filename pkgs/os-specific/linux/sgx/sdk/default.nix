@@ -142,13 +142,12 @@ stdenv.mkDerivation rec {
       popd
     '';
 
-  buildFlags =
-    [
-      "sdk_install_pkg"
-    ]
-    ++ lib.optionals debug [
-      "DEBUG=1"
-    ];
+  buildFlags = [
+    "sdk_install_pkg"
+  ]
+  ++ lib.optionals debug [
+    "DEBUG=1"
+  ];
 
   postBuild = ''
     patchShebangs linux/installer/bin/sgx_linux_x64_sdk_${version}.bin

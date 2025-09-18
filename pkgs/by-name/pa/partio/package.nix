@@ -12,7 +12,6 @@
   doxygen,
   xorg,
   python3,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,22 +38,17 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      zlib
-      swig
-      xorg.libXi
-      xorg.libXmu
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.GLUT
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libglut
-      libGLU
-      libGL
-    ];
+  buildInputs = [
+    zlib
+    swig
+    xorg.libXi
+    xorg.libXmu
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libglut
+    libGLU
+    libGL
+  ];
 
   # TODO:
   # Sexpr support

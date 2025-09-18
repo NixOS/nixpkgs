@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "smbc" ];
 
   meta = with lib; {
-    description = "libsmbclient binding for Python";
+    description = "Libsmbclient binding for Python";
     homepage = "https://github.com/hamano/pysmbc";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];

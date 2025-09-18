@@ -21,28 +21,27 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch =
-    ''
-      # Patch cmake and source files to work with hdf5
-      substituteInPlace config/cmake_files/medMacros.cmake --replace-fail \
-        "IF (NOT HDF_VERSION_MAJOR_REF EQUAL 1 OR NOT HDF_VERSION_MINOR_REF EQUAL 12 OR NOT HDF_VERSION_RELEASE_REF GREATER 0)" \
-        "IF (HDF5_VERSION VERSION_LESS 1.12.0)"
-      substituteInPlace src/*/*.c --replace-warn \
-        "#if H5_VERS_MINOR > 12" \
-        "#if H5_VERS_MINOR > 14"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Some medfile test files #define _a, which
-      # breaks system header files that use _a as a function parameter
-      substituteInPlace tests/c/*.c \
-        --replace-warn "_a" "_A" \
-        --replace-warn "_b" "_B"
-      # Fix compiler errors in test files
-      substituteInPlace tests/c/*.c \
-        --replace-warn "med_Bool" "med_bool" \
-        --replace-warn "med_Axis_type" "med_axis_type" \
-        --replace-warn "med_Access_mode" "med_access_mode"
-    '';
+  postPatch = ''
+    # Patch cmake and source files to work with hdf5
+    substituteInPlace config/cmake_files/medMacros.cmake --replace-fail \
+      "IF (NOT HDF_VERSION_MAJOR_REF EQUAL 1 OR NOT HDF_VERSION_MINOR_REF EQUAL 12 OR NOT HDF_VERSION_RELEASE_REF GREATER 0)" \
+      "IF (HDF5_VERSION VERSION_LESS 1.12.0)"
+    substituteInPlace src/*/*.c --replace-warn \
+      "#if H5_VERS_MINOR > 12" \
+      "#if H5_VERS_MINOR > 14"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Some medfile test files #define _a, which
+    # breaks system header files that use _a as a function parameter
+    substituteInPlace tests/c/*.c \
+      --replace-warn "_a" "_A" \
+      --replace-warn "_b" "_B"
+    # Fix compiler errors in test files
+    substituteInPlace tests/c/*.c \
+      --replace-warn "med_Bool" "med_bool" \
+      --replace-warn "med_Axis_type" "med_axis_type" \
+      --replace-warn "med_Access_mode" "med_access_mode"
+  '';
 
   nativeBuildInputs = [ cmake ];
 

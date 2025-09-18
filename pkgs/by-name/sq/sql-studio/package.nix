@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   rustPlatform,
   buildNpmPackage,
   fetchFromGitHub,
@@ -30,15 +28,11 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-rWG5iPXiG7kCf0yLAqcQi8AM3qv/WTUiY4cVrjpUc/Y=";
 
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist
   '';
-
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   meta = {
     description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, ClickHouse, Microsoft SQL Server]";

@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT NEologd Dictionary is a dictionary converted from mecab-ipadic-NEologd for Mozc.";
+    description = "Dictionary converted from mecab-ipadic-NEologd for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-neologd";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ pineapplehunter ];

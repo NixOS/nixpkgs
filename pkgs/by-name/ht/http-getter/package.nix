@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "http-getter";
-  version = "unstable-2020-12-08";
+  version = "0-unstable-2020-12-08";
 
   src = fetchFromGitHub {
     owner = "tohojo";

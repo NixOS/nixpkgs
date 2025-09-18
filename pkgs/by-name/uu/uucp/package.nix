@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '(void) exit (0)' '(void) (0)'
   '';
 
+  patches = [
+    ./socklen_t.patch
+  ];
+
   # Regenerate `configure`; the checked in version was generated in 2002 and
   # contains snippets like `main(){return(0);}` that modern compilers dislike.
   nativeBuildInputs = [ autoreconfHook ];

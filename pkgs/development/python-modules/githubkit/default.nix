@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.12.10";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-nxJlC3+mHeUApqj1U5Qe3Q937BWD61U9fSXFfg4QNmA=";
+    hash = "sha256-BhTGik8JZ9QxE8zmfgToU7rVkY8T5iykJx4Bg4evyzY=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -58,7 +58,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "githubkit" ];
 

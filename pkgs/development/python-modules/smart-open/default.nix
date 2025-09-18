@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  awscli,
   azure-common,
   azure-core,
   azure-storage-blob,
@@ -10,17 +11,21 @@
   google-cloud-storage,
   requests,
   moto,
+  numpy,
   paramiko,
+  pytest-cov-stub,
   pytestCheckHook,
+  pyopenssl,
   responses,
   setuptools,
+  setuptools-scm,
   wrapt,
   zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.2.0";
+  version = "7.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,10 +34,13 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     tag = "v${version}";
-    hash = "sha256-/16Is90235scTAYUW/65QxcTddD0+aiG5TLzYsBUE1A=";
+    hash = "sha256-yrJmcwCVjPnkP8931xdb5fsOteBd+d/xEkg1/xahio8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ wrapt ];
 
@@ -53,12 +61,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "smart_open" ];
 
   nativeCheckInputs = [
+    awscli
     moto
+    numpy
+    pytest-cov-stub
     pytestCheckHook
+    pyopenssl
     responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "smart_open" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # https://github.com/RaRe-Technologies/smart_open/issues/784
@@ -71,8 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
-    homepage = "https://github.com/RaRe-Technologies/smart_open";
+    homepage = "https://github.com/piskvorky/smart_open";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
   };
 }

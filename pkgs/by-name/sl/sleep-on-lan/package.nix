@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "SR-G";
-    repo = pname;
+    repo = "sleep-on-lan";
     rev = "${version}-RELEASE";
     sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };

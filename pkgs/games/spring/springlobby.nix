@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       qknight
-      domenkozar
     ];
     platforms = [
       "i686-linux"

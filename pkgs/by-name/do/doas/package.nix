@@ -39,13 +39,12 @@ stdenv.mkDerivation rec {
   # ./configure script does not understand `--disable-shared`
   dontAddStaticConfigureFlags = true;
 
-  postPatch =
-    ''
-      sed -i '/\(chown\|chmod\)/d' GNUmakefile
-    ''
-    + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
-      sed -i 's/-lpam/-lpam -laudit/' configure
-    '';
+  postPatch = ''
+    sed -i '/\(chown\|chmod\)/d' GNUmakefile
+  ''
+  + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
+    sed -i 's/-lpam/-lpam -laudit/' configure
+  '';
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ ] ++ lib.optional withPAM pam ++ lib.optional (!withPAM) libxcrypt;

@@ -20,17 +20,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-CygtVtzO8JJQv+G3yx/OCCy8BlPqyNqcmf3Mv1gFuT4=";
+    hash = "sha256-2AnGEUWumE1C4Mi5inN7enbxCdWCKbQdYpUvTK3jGQ4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bfVsfrxGi0Lq/YRddCVhfqXL8kPGL9p4bqSNPsmjx0o=";
+  cargoHash = "sha256-fj6TIBuZ5hrds4WMHRa2krXN5fivKriO2Q/FWdnlGaA=";
 
   separateDebugInfo = true;
 
@@ -46,7 +46,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pixman
     seatd
     udev
-  ] ++ lib.optional useSystemd systemd;
+  ]
+  ++ lib.optional useSystemd systemd;
 
   # Only default feature is systemd
   buildNoDefaultFeatures = !useSystemd;
@@ -82,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

@@ -221,39 +221,39 @@ in
       path = cfg.extraPackages;
       environment = {
         HASHED_PASSWORD = cfg.hashedPassword;
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
       serviceConfig = {
-        ExecStart =
-          ''
-            ${lib.getExe cfg.package} \
-              --auth=${cfg.auth} \
-              --bind-addr=${cfg.host}:${toString cfg.port} \
-          ''
-          + lib.optionalString (cfg.socket != null) ''
-            --socket=${cfg.socket} \
-          ''
-          + lib.optionalString (cfg.userDataDir != null) ''
-            --user-data-dir=${cfg.userDataDir} \
-          ''
-          + lib.optionalString (cfg.extensionsDir != null) ''
-            --extensions-dir=${cfg.extensionsDir} \
-          ''
-          + lib.optionalString (cfg.disableTelemetry == true) ''
-            --disable-telemetry \
-          ''
-          + lib.optionalString (cfg.disableUpdateCheck == true) ''
-            --disable-update-check \
-          ''
-          + lib.optionalString (cfg.disableFileDownloads == true) ''
-            --disable-file-downloads \
-          ''
-          + lib.optionalString (cfg.disableWorkspaceTrust == true) ''
-            --disable-workspace-trust \
-          ''
-          + lib.optionalString (cfg.disableGettingStartedOverride == true) ''
-            --disable-getting-started-override \
-          ''
-          + lib.escapeShellArgs cfg.extraArguments;
+        ExecStart = ''
+          ${lib.getExe cfg.package} \
+            --auth=${cfg.auth} \
+            --bind-addr=${cfg.host}:${toString cfg.port} \
+        ''
+        + lib.optionalString (cfg.socket != null) ''
+          --socket=${cfg.socket} \
+        ''
+        + lib.optionalString (cfg.userDataDir != null) ''
+          --user-data-dir=${cfg.userDataDir} \
+        ''
+        + lib.optionalString (cfg.extensionsDir != null) ''
+          --extensions-dir=${cfg.extensionsDir} \
+        ''
+        + lib.optionalString (cfg.disableTelemetry == true) ''
+          --disable-telemetry \
+        ''
+        + lib.optionalString (cfg.disableUpdateCheck == true) ''
+          --disable-update-check \
+        ''
+        + lib.optionalString (cfg.disableFileDownloads == true) ''
+          --disable-file-downloads \
+        ''
+        + lib.optionalString (cfg.disableWorkspaceTrust == true) ''
+          --disable-workspace-trust \
+        ''
+        + lib.optionalString (cfg.disableGettingStartedOverride == true) ''
+          --disable-getting-started-override \
+        ''
+        + lib.escapeShellArgs cfg.extraArguments;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = cfg.user;
         User = cfg.user;

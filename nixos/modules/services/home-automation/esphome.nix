@@ -93,7 +93,8 @@ in
       environment = {
         # platformio fails to determine the home directory when using DynamicUser
         PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
-      } // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
+      }
+      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";

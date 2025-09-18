@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gammaray";
-  version = "3.1.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mJw9yckbkFVYZlcakai/hH/gAD0xOQir5JqGMNnB/dE=";
+    hash = "sha256-tQZg8i83TGUvl2BgYrv2kMEzZZI9SXKr5DQhqJ2nBrU=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KDAB/GammaRay";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
     mainProgram = "gammaray";
   };
 }

@@ -19,6 +19,6 @@ buildPecl {
     description = "Mailparse is an extension for parsing and working with email messages";
     license = licenses.php301;
     homepage = "https://pecl.php.net/package/mailparse";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

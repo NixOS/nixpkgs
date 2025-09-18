@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "add-determinism";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "keszybz";
     repo = "add-determinism";
     tag = "v${version}";
-    hash = "sha256-QFhed8YTgvfm6bB/cRsrnN0foplJhK1b9IYD9HGdJUc=";
+    hash = "sha256-jUBHIdqPuK95jNNMFeSgj0xd3WSneqRa0kcVDhFC3aw=";
   };
 
   # this project has no Cargo.lock now
@@ -24,17 +24,12 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  patches = [
-    # fix MetadataExt imports for macOS builds, will be removed when the PR is merged:
-    # https://github.com/keszybz/add-determinism/pull/48
-    (fetchpatch {
-      url = "https://github.com/Emin017/add-determinism/commit/0c6c4d1c78c845ab6b6b0666aee0e2dc85492205.patch";
-      sha256 = "sha256-y5blOfQuZ5GMug4cDkDDKc5jaGgQEYtLTuuLl041sZs=";
-    })
-  ];
-
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  postInstall = ''
+    ln -s add-det $out/bin/add-determinism
   '';
 
   doCheck = !stdenv.hostPlatform.isDarwin; # it seems to be running forever on darwin
@@ -56,6 +51,6 @@ rustPlatform.buildRustPackage rec {
       sharzy
     ];
     platforms = lib.platforms.all;
-    mainProgram = "add-determinism";
+    mainProgram = "add-det";
   };
 }

@@ -45,11 +45,19 @@ let
   # The head unit only works on these platforms
   includeAuto = pkgs.stdenv.hostPlatform.isx86_64 || pkgs.stdenv.hostPlatform.isDarwin;
 
+  ndkVersions = [
+    "23.1.7779620"
+    "25.1.8937393"
+    "26.1.10909125"
+    "latest"
+  ];
+
   androidComposition = androidEnv.composeAndroidPackages {
     includeSources = true;
     includeSystemImages = false;
     includeEmulator = "if-supported";
     includeNDK = "if-supported";
+    inherit ndkVersions;
     useGoogleAPIs = true;
     useGoogleTVAddOns = true;
 
@@ -75,13 +83,12 @@ let
       };
     */
 
-    includeExtras =
-      [
-        "extras;google;gcm"
-      ]
-      ++ pkgs.lib.optionals includeAuto [
-        "extras;google;auto"
-      ];
+    includeExtras = [
+      "extras;google;gcm"
+    ]
+    ++ pkgs.lib.optionals includeAuto [
+      "extras;google;auto"
+    ];
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -190,6 +197,12 @@ pkgs.mkShell rec {
               exit 1
             fi
           done
+
+          num_ndk_packages="$(echo "$installed_packages_section" | grep '^ndk;' | wc -l)"
+          if [ $num_ndk_packages -ne ${toString (pkgs.lib.length ndkVersions)} ]; then
+            echo "Invalid NDK package count: $num_ndk_packages"
+            exit 1
+          fi
 
           touch "$out"
         '';

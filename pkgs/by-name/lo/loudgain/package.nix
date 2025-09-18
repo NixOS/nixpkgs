@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Moonbase59";
-    repo = pname;
+    repo = "loudgain";
     rev = "v${version}";
     hash = "sha256-XLj+n0GlY/GAkJlW2JVMd0jxMzgdv/YeSTuF6QUIGwU=";
   };
@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
 
   meta = src.meta // {
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

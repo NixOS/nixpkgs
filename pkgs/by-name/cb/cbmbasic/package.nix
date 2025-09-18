@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmbasic";
-  version = "unstable-2022-12-18";
+  version = "0-unstable-2022-12-18";
 
   src = fetchFromGitHub {
     owner = "mist64";

@@ -243,7 +243,6 @@ stdenv.mkDerivation {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = [ "x86_64-linux" ];
   };
 }

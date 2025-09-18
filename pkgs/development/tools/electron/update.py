@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git prefetch-yarn-deps prefetch-npm-deps gclient2nix
+#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nurl prefetch-yarn-deps prefetch-npm-deps gclient2nix
 """
 electron updater
 
@@ -32,7 +32,7 @@ import urllib.request
 import click
 import click_log
 
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Iterable, Tuple
 from urllib.request import urlopen
 from joblib import Parallel, delayed, Memory
@@ -43,6 +43,9 @@ from update_util import *
 SOURCE_INFO_JSON = "info.json"
 
 os.chdir(os.path.dirname(__file__))
+
+# Absolute path of nixpkgs top-level directory
+NIXPKGS_PATH = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode("utf-8").strip()
 
 memory: Memory = Memory("cache", verbose=0)
 
@@ -60,18 +63,18 @@ def get_gclient_data(rev: str) -> any:
     return json.loads(output)
 
 
-def get_chromium_file(chromium_rev: str, filepath: str) -> str:
+def get_chromium_file(chromium_tag: str, filepath: str) -> str:
     return base64.b64decode(
         urlopen(
-            f"https://chromium.googlesource.com/chromium/src.git/+/{chromium_rev}/{filepath}?format=TEXT"
+            f"https://chromium.googlesource.com/chromium/src.git/+/{chromium_tag}/{filepath}?format=TEXT"
         ).read()
         ).decode("utf-8")
 
 
-def get_electron_file(electron_rev: str, filepath: str) -> str:
+def get_electron_file(electron_tag: str, filepath: str) -> str:
     return (
         urlopen(
-            f"https://raw.githubusercontent.com/electron/electron/{electron_rev}/{filepath}"
+            f"https://raw.githubusercontent.com/electron/electron/{electron_tag}/{filepath}"
         )
         .read()
         .decode("utf-8")
@@ -79,34 +82,42 @@ def get_electron_file(electron_rev: str, filepath: str) -> str:
 
 
 @memory.cache
-def get_chromium_gn_source(chromium_rev: str) -> dict:
+def get_gn_hash(gn_version, gn_commit):
+    print("gn.override", file=sys.stderr)
+    expr = f'(import {NIXPKGS_PATH} {{}}).gn.override {{ version = "{gn_version}"; rev = "{gn_commit}"; hash = ""; }}'
+    out = subprocess.check_output(["nurl", "--hash", "--expr", expr])
+    return out.decode("utf-8").strip()
+
+@memory.cache
+def get_chromium_gn_source(chromium_tag: str) -> dict:
     gn_pattern = r"'gn_version': 'git_revision:([0-9a-f]{40})'"
-    gn_commit = re.search(gn_pattern, get_chromium_file(chromium_rev, "DEPS")).group(1)
-    gn_prefetch: bytes = subprocess.check_output(
-        [
-            "nix-prefetch-git",
-            "--quiet",
-            "https://gn.googlesource.com/gn",
-            "--rev",
-            gn_commit,
-        ]
+    gn_commit = re.search(gn_pattern, get_chromium_file(chromium_tag, "DEPS")).group(1)
+
+    gn_commit_info = json.loads(
+        urlopen(f"https://gn.googlesource.com/gn/+/{gn_commit}?format=json")
+        .read()
+        .decode("utf-8")
+        .split(")]}'\n")[1]
     )
-    gn: dict = json.loads(gn_prefetch)
+
+    gn_commit_date = datetime.strptime(gn_commit_info["committer"]["time"], "%a %b %d %H:%M:%S %Y %z")
+    gn_date = gn_commit_date.astimezone(UTC).date().isoformat()
+    gn_version = f"0-unstable-{gn_date}"
+
     return {
         "gn": {
-            "version": datetime.fromisoformat(gn["date"]).date().isoformat(),
-            "url": gn["url"],
-            "rev": gn["rev"],
-            "hash": gn["hash"],
+            "version": gn_version,
+            "rev": gn_commit,
+            "hash": get_gn_hash(gn_version, gn_commit),
         }
     }
 
 @memory.cache
-def get_electron_yarn_hash(electron_rev: str) -> str:
+def get_electron_yarn_hash(electron_tag: str) -> str:
     print(f"prefetch-yarn-deps", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
         with open(tmp_dir + "/yarn.lock", "w") as f:
-            f.write(get_electron_file(electron_rev, "yarn.lock"))
+            f.write(get_electron_file(electron_tag, "yarn.lock"))
         return (
             subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
             .decode("utf-8")
@@ -114,11 +125,11 @@ def get_electron_yarn_hash(electron_rev: str) -> str:
         )
 
 @memory.cache
-def get_chromium_npm_hash(chromium_rev: str) -> str:
+def get_chromium_npm_hash(chromium_tag: str) -> str:
     print(f"prefetch-npm-deps", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
         with open(tmp_dir + "/package-lock.json", "w") as f:
-            f.write(get_chromium_file(chromium_rev, "third_party/node/package-lock.json"))
+            f.write(get_chromium_file(chromium_tag, "third_party/node/package-lock.json"))
         return (
             subprocess.check_output(
                 ["prefetch-npm-deps", tmp_dir + "/package-lock.json"]
@@ -131,12 +142,12 @@ def get_chromium_npm_hash(chromium_rev: str) -> str:
 def get_update(major_version: str, m: str, gclient_data: any) -> Tuple[str, dict]:
 
     tasks = []
-    a = lambda: (("electron_yarn_hash", get_electron_yarn_hash(gclient_data["src/electron"]["args"]["rev"])))
+    a = lambda: (("electron_yarn_hash", get_electron_yarn_hash(gclient_data["src/electron"]["args"]["tag"])))
     tasks.append(delayed(a)())
     a = lambda: (
         (
             "chromium_npm_hash",
-            get_chromium_npm_hash(gclient_data["src"]["args"]["rev"]),
+            get_chromium_npm_hash(gclient_data["src"]["args"]["tag"]),
         )
     )
     tasks.append(delayed(a)())
@@ -155,7 +166,7 @@ def get_update(major_version: str, m: str, gclient_data: any) -> Tuple[str, dict
             **{key: m[key] for key in ["version", "modules", "chrome", "node"]},
             "chromium": {
                 "version": m["chrome"],
-                "deps": get_chromium_gn_source(gclient_data["src"]["args"]["rev"]),
+                "deps": get_chromium_gn_source(gclient_data["src"]["args"]["tag"]),
             },
             **task_results,
         },

@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   sources,
+  pkg-config,
   rustPlatform,
   cargo,
   rustc,
@@ -16,14 +17,13 @@ mkKdeDerivation rec {
   cargoRoot = "plugins/webengineurlinterceptor/adblock";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+    inherit pname version cargoRoot;
     src = sources.${pname};
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    hash = "sha256-v1TJ8xu4zXXig+ESYT0ZL6l1gOTbqyVA1P/6T/YnW0k=";
+    hash = "sha256-66FqoD3JoPbtg6zc32uaPYaTo4zHxywiN8wPI2jtcjc=";
   };
 
   extraNativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     cargo
     rustc

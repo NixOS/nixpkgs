@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "qmake2cmake";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";

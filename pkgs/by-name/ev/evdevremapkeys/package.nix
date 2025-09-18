@@ -4,18 +4,23 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "evdevremapkeys";
-  version = "unstable-2021-05-04";
+  version = "1.0.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "philipl";
-    repo = pname;
+    repo = "evdevremapkeys";
     rev = "9b6f372a9bdf8b27d39f7e655b74f6b9d1a8467f";
     sha256 = "sha256-FwRbo0RTiiV2AB7z6XOalMnwMbj15jM4Dxs41TsIOQI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pyyaml
     pyxdg
     python-daemon

@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.54.3.0";
+  version = "3.56.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-GscHzyWRqERRJXViGkkwx2GyF028XsscihhSYpRqFPY=";
+    hash = "sha256-Hrfsz5TGuGGNa0XDICNQIJ21Z8SJEIrcICM8TRn48o8=";
   };
 
   patches = [
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
         "org.gnome.evolution.mail" = "evo";
         "org.gnome.evolution.calendar" = "evo";
       };
+      schemaExistsFunction = "e_ews_common_utils_gsettings_schema_exists";
     };
 
     updateScript =

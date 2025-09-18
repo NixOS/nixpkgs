@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "dircolors-solarized";
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2025-08-01";
 
   src = fetchFromGitHub {
     owner = "seebi";
     repo = "dircolors-solarized";
-    rev = "52bfa164e4388ee232f6a9235f62e8482e1f1767";
-    hash = "sha256-+2t9OsyD9QkamsFbgmgehBrfszBQmv1Y0C94T4g16GI=";
+    rev = "13c1af03d398f46957e22cec6b001e5663ed473e";
+    hash = "sha256-abaFq/8+UAQLfbzCuFH2uglN8ugafTp2Evk4+dchylo=";
   };
 
   dontBuild = true;

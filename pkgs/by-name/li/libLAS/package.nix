@@ -8,6 +8,7 @@
   libgeotiff,
   libtiff,
   laszip_2,
+  zlib,
   fixDarwinDylibNames,
 }:
 
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     libgeotiff
     libtiff
     laszip_2
+    zlib
   ];
 
   cmakeFlags = [
@@ -76,6 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://liblas.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lib.maintainers.michelk ];
+    maintainers = with maintainers; [ michelk ];
+    teams = [ teams.geospatial ];
   };
 }

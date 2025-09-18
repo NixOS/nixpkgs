@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.tboox.org";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
   };
 }

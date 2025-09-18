@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "C Library for reading, writing and updating ESRI Shapefiles";
     homepage = "http://shapelib.maptools.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; teams.geospatial.members ++ [ ehmry ];
+    teams = [ teams.geospatial ];
     changelog = "http://shapelib.maptools.org/release.html";
   };
 }

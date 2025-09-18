@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pbpctrl";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "qzed";
     repo = "pbpctrl";
     rev = "v${version}";
-    hash = "sha256-u5I3Hs00JDPRBwThYTEmNiZj/zPVfHyyrt4E68d13do=";
+    hash = "sha256-XSRJytPrRKKWhFTBQd3Kd1R3amdecGNTmJS4PmFL6kg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0kh9bwiTVWuDviDw6IY5EGj+2k2WsyCCeo+r7CdBftE=";
+  cargoHash = "sha256-eDR/Z4v8G7/XPzWjJdZ5Fg2qULdn/SuNmvE/GVqSVJ8=";
 
   nativeBuildInputs = [
     pkg-config

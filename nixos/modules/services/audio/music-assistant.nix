@@ -69,12 +69,27 @@ in
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
 
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+
       wantedBy = [ "multi-user.target" ];
 
       environment = {
         HOME = "/var/lib/music-assistant";
         PYTHONPATH = finalPackage.pythonPath;
       };
+
+      path =
+        with pkgs;
+        [
+          lsof
+        ]
+        ++ lib.optionals (lib.elem "librespot" cfg.providers) [
+          librespot
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          snapcast
+        ];
 
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (

@@ -56,7 +56,8 @@ buildPythonPackage rec {
     all = [
       py7zr
       rarfile
-    ] ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
 
     cbr = [ rarfile ];
 

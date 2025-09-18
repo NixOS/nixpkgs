@@ -19,13 +19,14 @@
   aiosqlite,
   asyncpg,
   ruamel-yaml,
+  fetchpatch,
 
   withOlm ? false,
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.20.7";
+  version = "0.20.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -34,8 +35,15 @@ buildPythonPackage rec {
     owner = "mautrix";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-tOX/KQrECeEV3/0q3tpO4brUdalmw6IincF6pHzsEE8=";
+    hash = "sha256-giK8JZ6nzsA8SV6CzDNEbJmbwDju9t6fLJr/oXNjvKs=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mautrix/python/commit/0349445bd6992ac8f294582e85c3f61ce5c863b3.patch";
+      hash = "sha256-JYuFuzdwnyOdnxWg094uVKcaGza6I6hNUXUp75msRTI=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -43,7 +51,8 @@ buildPythonPackage rec {
     aiohttp
     attrs
     yarl
-  ] ++ lib.optionals withOlm optional-dependencies.encryption;
+  ]
+  ++ lib.optionals withOlm optional-dependencies.encryption;
 
   optional-dependencies = {
     detect_mimetype = [ python-magic ];

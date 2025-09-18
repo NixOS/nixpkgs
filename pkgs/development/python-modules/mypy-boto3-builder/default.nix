@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "8.10.1";
+  version = "8.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     tag = version;
-    hash = "sha256-2XWFmmTkT5LpGqzHK3h8KeqQXP1+nwNEPeGHt/gowRo=";
+    hash = "sha256-7NrN42DcM+NNTjRnOdDzPBTKFRex8Ph4bVjdVgJa4Po=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "8.10.0"' 'version = "${version}"'
+      --replace-fail 'version = "8.10.1"' 'version = "${version}"'
   '';
 
   build-system = [ setuptools ];

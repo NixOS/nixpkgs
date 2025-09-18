@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "amelchio";
-    repo = pname;
+    repo = "eternalegypt";
     tag = "v${version}";
     hash = "sha256-ubKepd3yBaoYrIUe5WCt1zd4CjvU7SeftOR+2cBaEf0=";
   };

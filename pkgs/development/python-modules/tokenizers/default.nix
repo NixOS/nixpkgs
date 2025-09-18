@@ -21,6 +21,7 @@
   # tests
   datasets,
   numpy,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
   tiktoken,
@@ -47,6 +48,10 @@ let
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
       hash = "sha256-B+ztN1zsFE0nyQAkHz4zlHjeyVj5L928VR8pXJkgOKM=";
     };
+    "tokenizer-llama3.json" = fetchurl {
+      url = "https://huggingface.co/Narsil/llama-tokenizer/resolve/main/tokenizer.json";
+      hash = "sha256-eePlImNfMXEwCRO7QhRkqH3mIiGCoFcLmyzLoqlksrQ=";
+    };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
       hash = "sha256-+gZsfUDw8gGsQUTmUqpiQw5YprOAXscGUPZ42lgE6Hs=";
@@ -71,23 +76,15 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-3S7ZCaZnnwyNjoZ4Y/q3ngQE2MIm2iyCCjYAkdMVG2A=";
+    hash = "sha256-HTJQ5nPkOsVqYzcsm0GLflX+teqDsrpIb5nf5pa7Gpc=";
   };
-
-  # TestUnigram.test_continuing_prefix_trainer_mismatch fails with:
-  # Exception: No such file or directory (os error 2)
-  # Fix submitted upstream: https://github.com/huggingface/tokenizers/pull/1747
-  postPatch = ''
-    substituteInPlace tests/bindings/test_trainers.py \
-      --replace-fail '"data/' '"tests/data/'
-  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -96,7 +93,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-I7LlBmeVY2rWI0ta6x311iAurQKuutsClrbUgkt9xWk=";
+    hash = "sha256-X9tsn4gPg7Ih/8NNiCBllgcZgUR/tok+mwCJE53Z/8g=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -121,6 +118,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     datasets
     numpy
+    pytest-asyncio
     pytestCheckHook
     requests
     tiktoken
@@ -141,6 +139,23 @@ buildPythonPackage rec {
     "test_encode_special_tokens"
     "test_splitting"
     "TestTrainFromIterators"
+
+    # Require downloading from huggingface
+    # huggingface_hub.errors.LocalEntryNotFoundError
+    "test_async_methods_existence"
+    "test_basic_encoding"
+    "test_concurrency"
+    "test_decode"
+    "test_decode_skip_special_tokens"
+    "test_decode_stream_fallback"
+    "test_encode"
+    "test_error_handling"
+    "test_large_batch"
+    "test_numpy_inputs"
+    "test_performance_comparison"
+    "test_various_input_formats"
+    "test_with_special_tokens"
+    "test_with_truncation_padding"
 
     # Those tests require more data
     "test_from_pretrained"

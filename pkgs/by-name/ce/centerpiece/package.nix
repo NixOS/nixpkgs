@@ -24,27 +24,25 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tZNwMPL1ITWVvoywojsd5j0GIVQt6pOKFLwi7jwqLKg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qwKn9NN7+F/S8ojObjWBU2y2wG0TNeYbYHiwou8AhnI=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
+  buildInputs = [
+    dbus
+    libGL
+    libxkbcommon
+    vulkan-loader
+    wayland
+  ]
+  ++ lib.optionals enableX11 (
+    with xorg;
     [
-      dbus
-      libGL
-      libxkbcommon
-      vulkan-loader
-      wayland
+      libX11
+      libXcursor
+      libXi
+      libXrandr
     ]
-    ++ lib.optionals enableX11 (
-      with xorg;
-      [
-        libX11
-        libXcursor
-        libXi
-        libXrandr
-      ]
-    );
+  );
 
   postFixup = lib.optional stdenv.hostPlatform.isLinux ''
     rpath=$(patchelf --print-rpath $out/bin/centerpiece)

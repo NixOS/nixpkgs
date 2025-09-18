@@ -58,21 +58,20 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools ];
 
-  propagatedBuildInputs =
-    [
-      pyyaml
-      msgpack
-      pandas
-      joblib
-    ]
-    ++ lib.optionals (!isTensileLite) [
-      rich
-    ]
-    ++ lib.optionals isTensileLite [
-      simplejson
-      ujson
-      orjson
-    ];
+  propagatedBuildInputs = [
+    pyyaml
+    msgpack
+    pandas
+    joblib
+  ]
+  ++ lib.optionals (!isTensileLite) [
+    rich
+  ]
+  ++ lib.optionals isTensileLite [
+    simplejson
+    ujson
+    orjson
+  ];
 
   patches =
     lib.optional (!isTensileLite) ./tensile-solutionstructs-perf-fix.diff
@@ -107,7 +106,7 @@ buildPythonPackage rec {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCm/Tensile";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 }

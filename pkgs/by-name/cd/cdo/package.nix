@@ -15,9 +15,14 @@
   enable_cxx ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdo";
-  version = "2.4.2";
+  version = "2.5.1";
+
+  src = fetchurl {
+    url = "https://code.mpimet.mpg.de/attachments/download/29864/cdo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-QYv5HoZMv+VHw8jhUNMUGc+nFefTRVCMVZGxq9pUV9E=";
+  };
 
   # Dependencies
   buildInputs = [
@@ -27,22 +32,16 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  src = fetchurl {
-    url = "https://code.mpimet.mpg.de/attachments/download/29481/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TfH+K4+S9Uwn6585nt+rQNkyIAWmcyyhUk71wWJ6xOc=";
-  };
+  configureFlags = [
+    "--with-netcdf=${netcdf}"
+    "--with-hdf5=${hdf5}"
+    "--with-eccodes=${eccodes}"
+  ]
+  ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
+  ++ lib.optional enable_all_static "--enable-all-static"
+  ++ lib.optional enable_cxx "--enable-cxx";
 
-  configureFlags =
-    [
-      "--with-netcdf=${netcdf}"
-      "--with-hdf5=${hdf5}"
-      "--with-eccodes=${eccodes}"
-    ]
-    ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
-    ++ lib.optional enable_all_static "--enable-all-static"
-    ++ lib.optional enable_cxx "--enable-cxx";
-
-  meta = with lib; {
+  meta = {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
     mainProgram = "cdo";
     longDescription = ''
@@ -50,8 +49,8 @@ stdenv.mkDerivation rec {
       There are more than 600 operators available.
     '';
     homepage = "https://code.mpimet.mpg.de/projects/cdo/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ltavard ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ltavard ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

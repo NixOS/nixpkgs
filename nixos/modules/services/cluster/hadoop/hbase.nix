@@ -146,65 +146,64 @@ in
       '';
     };
 
-    hbase =
-      {
+    hbase = {
 
-        package = lib.mkPackageOption pkgs "hbase" { };
+      package = lib.mkPackageOption pkgs "hbase" { };
 
-        rootdir = lib.mkOption {
-          description = ''
-            This option will set "hbase.rootdir" in hbase-site.xml and determine
-            the directory shared by region servers and into which HBase persists.
-            The URL should be 'fully-qualified' to include the filesystem scheme.
-            If a core-site.xml is provided, the FS scheme defaults to the value
-            of "fs.defaultFS".
+      rootdir = lib.mkOption {
+        description = ''
+          This option will set "hbase.rootdir" in hbase-site.xml and determine
+          the directory shared by region servers and into which HBase persists.
+          The URL should be 'fully-qualified' to include the filesystem scheme.
+          If a core-site.xml is provided, the FS scheme defaults to the value
+          of "fs.defaultFS".
 
-            Filesystems other than HDFS (like S3, QFS, Swift) are also supported.
-          '';
-          type = lib.types.str;
-          example = "hdfs://nameservice1/hbase";
-          default = "/hbase";
+          Filesystems other than HDFS (like S3, QFS, Swift) are also supported.
+        '';
+        type = lib.types.str;
+        example = "hdfs://nameservice1/hbase";
+        default = "/hbase";
+      };
+      zookeeperQuorum = lib.mkOption {
+        description = ''
+          This option will set "hbase.zookeeper.quorum" in hbase-site.xml.
+          Comma separated list of servers in the ZooKeeper ensemble.
+        '';
+        type = with lib.types; nullOr commas;
+        example = "zk1.internal,zk2.internal,zk3.internal";
+        default = null;
+      };
+    }
+    // (
+      let
+        ports = port: infoPort: {
+          port = lib.mkOption {
+            type = lib.types.port;
+            default = port;
+            description = "RPC port";
+          };
+          infoPort = lib.mkOption {
+            type = lib.types.port;
+            default = infoPort;
+            description = "web UI port";
+          };
         };
-        zookeeperQuorum = lib.mkOption {
+      in
+      lib.mapAttrs hbaseRoleOption {
+        master.initHDFS = lib.mkEnableOption "initialization of the hbase directory on HDFS";
+        regionServer.overrideHosts = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
           description = ''
-            This option will set "hbase.zookeeper.quorum" in hbase-site.xml.
-            Comma separated list of servers in the ZooKeeper ensemble.
+            Remove /etc/hosts entries for "127.0.0.2" and "::1" defined in nixos/modules/config/networking.nix
+            Regionservers must be able to resolve their hostnames to their IP addresses, through PTR records
+            or /etc/hosts entries.
           '';
-          type = with lib.types; nullOr commas;
-          example = "zk1.internal,zk2.internal,zk3.internal";
-          default = null;
         };
+        thrift = ports 9090 9095;
+        rest = ports 8080 8085;
       }
-      // (
-        let
-          ports = port: infoPort: {
-            port = lib.mkOption {
-              type = lib.types.int;
-              default = port;
-              description = "RPC port";
-            };
-            infoPort = lib.mkOption {
-              type = lib.types.int;
-              default = infoPort;
-              description = "web UI port";
-            };
-          };
-        in
-        lib.mapAttrs hbaseRoleOption {
-          master.initHDFS = lib.mkEnableOption "initialization of the hbase directory on HDFS";
-          regionServer.overrideHosts = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = ''
-              Remove /etc/hosts entries for "127.0.0.2" and "::1" defined in nixos/modules/config/networking.nix
-              Regionservers must be able to resolve their hostnames to their IP addresses, through PTR records
-              or /etc/hosts entries.
-            '';
-          };
-          thrift = ports 9090 9095;
-          rest = ports 8080 8085;
-        }
-      );
+    );
   };
 
   config = lib.mkMerge (

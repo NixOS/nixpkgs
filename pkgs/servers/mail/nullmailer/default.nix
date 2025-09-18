@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ lib.optional tls "--enable-tls";
+  ]
+  ++ lib.optional tls "--enable-tls";
 
   installFlags = [ "DESTDIR=$(out)" ];
 

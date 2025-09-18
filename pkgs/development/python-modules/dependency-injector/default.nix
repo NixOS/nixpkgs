@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "4.42.0";
+  version = "4.48.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "ets-labs";
     repo = "python-dependency-injector";
     tag = version;
-    hash = "sha256-ryPNmiIKQzR4WSjt7hi4C+iTsYvfj5TYGy+9PJxX+10=";
+    hash = "sha256-jsV+PmUGtK8QiI2ga963H/gkd31UEq0SouEia+spSpg=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     scipy
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dependency_injector" ];
 
@@ -63,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dependency injection microframework for Python";
     homepage = "https://github.com/ets-labs/python-dependency-injector";
-    changelog = "https://github.com/ets-labs/python-dependency-injector/blob/${version}/docs/main/changelog.rst";
+    changelog = "https://github.com/ets-labs/python-dependency-injector/blob/${src.tag}/docs/main/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
     # https://github.com/ets-labs/python-dependency-injector/issues/726

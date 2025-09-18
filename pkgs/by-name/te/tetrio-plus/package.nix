@@ -13,14 +13,14 @@
 }:
 
 let
-  version = "0.27.5";
+  version = "0.27.7";
   tag = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
     inherit tag;
-    hash = "sha256-hbHofrC2dJOh2kh3VLb/d0dHrcszyqTyID1PAaGApxY=";
+    hash = "sha256-AEn1TrC0hUVRgfL2QZ5TMN8pTOm36zpHr2b/LqQp5RY=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -104,10 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       # is a modified version of tetrio-desktop, which is unfree.
       lib.licenses.unfree
     ];
-    maintainers = with lib.maintainers; [
-      huantian
-      wackbyte
-    ];
+    maintainers = with lib.maintainers; [ huantian ];
     platforms = lib.platforms.linux;
   };
 })

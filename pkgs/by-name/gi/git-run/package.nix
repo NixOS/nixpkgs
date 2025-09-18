@@ -20,6 +20,15 @@ buildNpmPackage rec {
   makeCacheWritable = true;
   dontBuild = true;
 
+  postInstall = ''
+    echo "Removing broken symlinks in node_modules/.bin"
+    rm -f $out/lib/node_modules/${pname}/node_modules/.bin/_mocha
+    rm -f $out/lib/node_modules/${pname}/node_modules/.bin/he
+    rm -f $out/lib/node_modules/${pname}/node_modules/.bin/mkdirp
+    rm -f $out/lib/node_modules/${pname}/node_modules/.bin/mocha
+    rm -f $out/lib/node_modules/${pname}/node_modules/.bin/rimraf
+  '';
+
   meta = {
     description = "Multiple git repository management tool";
     homepage = "https://mixu.net/gr/";

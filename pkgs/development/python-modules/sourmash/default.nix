@@ -4,7 +4,6 @@
   buildPythonPackage,
   stdenv,
   pythonOlder,
-  overrideSDK,
   rustPlatform,
   bitstring,
   cachetools,
@@ -20,27 +19,20 @@
   pyyaml,
   pytestCheckHook,
 }:
-let
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin then overrideSDK stdenv { darwinMinVersion = "10.14"; } else stdenv;
-in
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.14";
+  version = "4.9.4";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
-  stdenv = stdenv';
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-no99VjO1KVE+/JUOJcl0xOz3yZtMr70A8vE1rQVjMH8=";
+    hash = "sha256-KIidEQQeOYgxh1x9F6Nn4+WTewldAGdS5Fx/IwL0Ym0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-DnJ0RFc03+rBg7yNdezgb/YuoQr3RKj+NeMyin/kSRk=";
+    inherit pname version src;
+    hash = "sha256-/tVuR31T38/xx1+jglSGECAT1GmQEddQp9o6zAqlPyY=";
   };
 
   nativeBuildInputs = with rustPlatform; [

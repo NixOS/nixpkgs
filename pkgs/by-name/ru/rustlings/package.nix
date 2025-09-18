@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -24,7 +22,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-VdIIcpyoCuid3MECVc9aKeIOUlxGlxcG7znqbqo9pjc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QWmK+chAUnMGjqLq2xN5y6NJZJBMDTszImB9bXhO4+w=";
 
   # Disabled test that does not work well in an isolated environment
@@ -37,10 +34,6 @@ rustPlatform.buildRustPackage {
     pkg-config
     makeWrapper
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ CoreServices ]
-  );
 
   postFixup = ''
     wrapProgram $out/bin/rustlings --suffix PATH : ${

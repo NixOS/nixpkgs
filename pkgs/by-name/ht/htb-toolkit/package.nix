@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   stdenv,
-  darwin,
   coreutils,
   gnome-keyring,
   libsecret,
@@ -26,7 +25,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-NTZv0BPyIB32CNXbINYTy4n8tNVJ3pRLr1QDhI/tg2Y=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ReEe8pyW66GXIPwAy6IKsFEAUjxHmzw5mj21i/h4quQ=";
 
   # Patch to disable prompt change of the shell when a target machine is run. Needed due to Nix declarative nature
@@ -38,17 +36,12 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gnome-keyring
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gnome-keyring
+  ];
 
   postPatch = ''
     substituteInPlace src/manage.rs \

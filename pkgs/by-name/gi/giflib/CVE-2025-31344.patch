@@ -1,0 +1,15 @@
+diff -up giflib-5.2.2/gif2rgb.c.omv~ giflib-5.2.2/gif2rgb.c
+--- giflib-5.2.2/gif2rgb.c.omv~	2025-04-07 21:44:54.956355983 +0200
++++ giflib-5.2.2/gif2rgb.c	2025-04-07 21:45:29.630769589 +0200
+@@ -329,6 +329,11 @@ static void DumpScreen2RGB(char *FileNam
+ 			GifRow = ScreenBuffer[i];
+ 			GifQprintf("\b\b\b\b%-4d", ScreenHeight - i);
+ 			for (j = 0; j < ScreenWidth; j++) {
++				/* Check if color is within color palete */
++				if (GifRow[j] >= ColorMap->ColorCount) {
++					GIF_EXIT(GifErrorString(
++					    D_GIF_ERR_IMAGE_DEFECT));
++				}
+ 				ColorMapEntry = &ColorMap->Colors[GifRow[j]];
+ 				Buffers[0][j] = ColorMapEntry->Red;
+ 				Buffers[1][j] = ColorMapEntry->Green;

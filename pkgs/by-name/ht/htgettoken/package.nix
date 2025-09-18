@@ -7,13 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "htgettoken";
-  version = "2.2";
+  version = "2.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fermitools";
-    repo = pname;
+    repo = "htgettoken";
     tag = "v${version}";
-    hash = "sha256-O0OHnYaoTkqUqD4s+wEAzN3Paq9qsjBZdZ0QUXdFefE=";
+    hash = "sha256-3xBACXxH5G1MO2dNFFSL1Rssc8RdauvLZ4Tx2djOgyw=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

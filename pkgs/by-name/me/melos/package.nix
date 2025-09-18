@@ -5,12 +5,12 @@
 }:
 let
   pname = "melos";
-  version = "6.2.0";
+  version = "7.1.0";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
     rev = "melos-v${version}";
-    hash = "sha256-00K/LwrwjvO4LnXM2PDooQMJ6sXcJy9FBErtEwoMZlM=";
+    hash = "sha256-caX59w0uxy5VW1p1hgds73m3sIjEutz5ZUuOzjdIr4Q=";
   };
 in
 buildDartApplication {
@@ -36,7 +36,7 @@ buildDartApplication {
 
   meta = {
     homepage = "https://github.com/invertase/melos";
-    description = "A tool for managing Dart projects with multiple packages. With IntelliJ and Vscode IDE support. Supports automated versioning, changelogs & publishing via Conventional Commits. ";
+    description = "Tool for managing Dart projects with multiple packages. With IntelliJ and Vscode IDE support. Supports automated versioning, changelogs & publishing via Conventional Commits. ";
     mainProgram = "melos";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eymeric ];

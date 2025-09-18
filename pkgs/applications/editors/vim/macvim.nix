@@ -150,7 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
       --replace " -L${stdenv.cc.libc}/lib" "" \
-      --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \
       --replace " -L${libiconv}/lib" ""
 

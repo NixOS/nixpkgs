@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = pname;
+    repo = "terraformer";
     rev = version;
     sha256 = "sha256-xbZm0FOa/W6/qXMnJHuGgJhgu2NWtKrMoP0Ttd+hhdw=";
   };
@@ -24,6 +24,6 @@ buildGoModule rec {
     mainProgram = "terraformer";
     homepage = "https://github.com/GoogleCloudPlatform/terraformer";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ryan4yin ];
   };
 }

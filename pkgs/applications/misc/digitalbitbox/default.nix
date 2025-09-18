@@ -17,11 +17,12 @@
   qtwebsockets,
   qtmultimedia,
   udevRule51 ? ''
-    ,   SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
-    , '',
+    SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
+  '',
   udevRule52 ? ''
-    ,   KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
-    , '',
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
+  '',
+  udevCheckHook,
   writeText,
 }:
 
@@ -59,6 +60,11 @@ mkDerivation rec {
     sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
+  # configure.ac:23: error: AC_CONFIG_MACRO_DIR can only be used once
+  postPatch = ''
+    sed -i "23d" src/hidapi/configure.ac
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     curl
@@ -66,6 +72,7 @@ mkDerivation rec {
     makeWrapper
     pkg-config
     qttools
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -120,6 +127,8 @@ mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "QT based application for the Digital Bitbox hardware wallet";

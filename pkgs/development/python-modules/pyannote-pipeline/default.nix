@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyannote-pipeline";
-  version = "3.0.1";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-pipeline";
     tag = version;
-    hash = "sha256-0wSgy6kbKi9Wa5dimOz34IV5/8fSwaHDMUpaBW7tm2Y=";
+    hash = "sha256-MMMwZMxu8viUt2DgCgymbz2vEMM9TT0ySKL2KPzAPLA=";
   };
 
   postPatch = ''

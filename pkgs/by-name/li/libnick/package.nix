@@ -9,6 +9,7 @@
   openssl,
   sqlcipher,
   boost,
+  cpr,
   curl,
   glib,
   libsecret,
@@ -19,39 +20,38 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnick";
-  version = "2025.3.3";
+  version = "2025.8.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "libnick";
     tag = finalAttrs.version;
-    hash = "sha256-5GO39rtSvg96y6VE0Ej4x7j1zDatP6JSktIcyhSrb98=";
+    hash = "sha256-LgvU5a3W5Oii6pRAAKZo28yOyPRUMjxwEXDZ2jXJPGM=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isUnix [
-      pkg-config
-      validatePkgConfig
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isUnix [
+    pkg-config
+    validatePkgConfig
+  ];
 
-  buildInputs =
-    [
-      boost
-      libmaddy-markdown
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isUnix [
-      glib
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isWindows sqlcipher;
+  buildInputs = [
+    boost
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isUnix [
+    glib
+    openssl
+  ];
 
   propagatedBuildInputs = [
     curl
+    cpr
     libsecret
+    libmaddy-markdown
+    sqlcipher
   ];
 
   cmakeFlags = [

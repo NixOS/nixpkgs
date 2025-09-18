@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "glow.yazi";
-  version = "0-unstable-2025-04-14";
+  version = "0-unstable-2025-06-13";
 
   src = fetchFromGitHub {
     owner = "Reledia";
     repo = "glow.yazi";
-    rev = "a1711f10e815f7f7b6e529e0814342b8518d9ee6";
-    hash = "sha256-4krck4U/KWmnl32HWRsblYW/biuqzDPysrEn76buRck=";
+    rev = "bd3eaa58c065eaf216a8d22d64c62d8e0e9277e9";
+    hash = "sha256-mzW/ut/LTEriZiWF8YMRXG9hZ70OOC0irl5xObTNO40=";
   };
 
   meta = {

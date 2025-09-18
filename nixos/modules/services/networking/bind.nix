@@ -73,8 +73,12 @@ let
     acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
     options {
-      listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-      listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+      listen-on port ${toString cfg.listenOnPort} { ${
+        lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn
+      } };
+      listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
+        lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
+      } };
       allow-query-cache { cachenetworks; };
       blackhole { badnetworks; };
       forward ${cfg.forward};
@@ -196,11 +200,27 @@ in
         '';
       };
 
+      listenOnPort = lib.mkOption {
+        default = 53;
+        type = lib.types.port;
+        description = ''
+          Port to listen on.
+        '';
+      };
+
       listenOnIpv6 = lib.mkOption {
         default = [ "any" ];
         type = lib.types.listOf lib.types.str;
         description = ''
           Ipv6 interfaces to listen on.
+        '';
+      };
+
+      listenOnIpv6Port = lib.mkOption {
+        default = 53;
+        type = lib.types.port;
+        description = ''
+          Ipv6 port to listen on.
         '';
       };
 
@@ -244,6 +264,18 @@ in
           Extra lines to be added verbatim to the options section of the
           generated named configuration file.
         '';
+      };
+
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Additional command-line arguments to pass to named.
+        '';
+        example = [
+          "-n"
+          "4"
+        ];
       };
 
       configFile = lib.mkOption {
@@ -295,7 +327,7 @@ in
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
+        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraArgs}";
         ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
         User = bindUser;

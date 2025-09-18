@@ -4,6 +4,8 @@
   fetchurl,
   flex,
   bison,
+  bash,
+  bashNonInteractive,
   bluez,
   libnl,
   libxcrypt,
@@ -26,36 +28,45 @@ stdenv.mkDerivation rec {
   pname = "libpcap";
   version = "1.10.5";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
     hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
   };
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-    ++ lib.optionals withRemote [ libxcrypt ];
+  outputs = [
+    "out"
+    "lib"
+  ];
 
-  nativeBuildInputs =
-    [
-      flex
-      bison
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-    ++ lib.optionals withBluez [ bluez.dev ];
+  strictDeps = true;
+
+  buildInputs = [
+    bash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+  ++ lib.optionals withRemote [ libxcrypt ];
+
+  nativeBuildInputs = [
+    flex
+    bison
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
+  ++ lib.optionals withBluez [ bluez.dev ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
-  configureFlags =
-    [
-      "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--disable-universal"
-    ]
-    ++ lib.optionals withRemote [
-      "--enable-remote"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
+  configureFlags = [
+    "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-universal"
+  ]
+  ++ lib.optionals withRemote [
+    "--enable-remote"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
 
   postInstall = ''
     if [ "$dontDisableStatic" -ne "1" ]; then
@@ -64,6 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  outputChecks.lib.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
 
   passthru.tests = {
     inherit

@@ -47,12 +47,12 @@
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.13.2";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/wyrBoSUVjdKIIlK3HoDeHQ3yhMPT/0G05llWzDoE50=";
+    hash = "sha256-OPOUNKy70sm/kqrxRi61MjfQp74AdqZh6Gt93LdlmU0=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -141,8 +141,17 @@ buildPythonPackage rec {
     "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
+    "test_command_check_googlefonts"
     # AssertionError
     "test_check_shape_languages"
+    "test_command_config_file"
+    "test_config_override"
+  ];
+
+  disabledTestPaths = [
+    # ValueError: Check 'googlefonts/glyphsets/shape_languages' not found
+    "tests/test_checks_filesize.py"
+    "tests/test_checks_googlefonts_overrides.py"
   ];
 
   postInstall = ''

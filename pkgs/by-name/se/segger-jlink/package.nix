@@ -4,6 +4,11 @@
   fetchurl,
   callPackage,
   autoPatchelfHook,
+  cpio,
+  gzip,
+  makeWrapper,
+  rsync,
+  xar,
   udev,
   config,
   acceptLicense ? config.segger-jlink.acceptLicense or false,
@@ -20,7 +25,7 @@ let
 
   inherit (source) version;
 
-  url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
+  url = "https://www.segger.com/downloads/jlink/JLink_${platform.os}_V${version}_${platform.name}.${platform.ext}";
 
   src =
     assert
@@ -55,118 +60,176 @@ let
 
   qt4-bundled = callPackage ./qt4-bundled.nix { inherit src version; };
 
-in
-stdenv.mkDerivation {
-  pname = "segger-jlink";
-  inherit src version;
-
-  nativeBuildInputs =
-    [
+  buildAttrsLinux = {
+    nativeBuildInputs = [
       autoPatchelfHook
     ]
     ++ lib.optionals (!headless) [
       copyDesktopItems
     ];
 
-  buildInputs = lib.optionals (!headless) [
-    qt4-bundled
-  ];
-
-  # Udev is loaded late at runtime
-  appendRunpaths = [
-    "${udev}/lib"
-  ];
-
-  dontConfigure = true;
-  dontBuild = true;
-
-  desktopItems = lib.optionals (!headless) (
-    map
-      (
-        entry:
-        (makeDesktopItem {
-          name = entry;
-          exec = entry;
-          icon = "applications-utilities";
-          desktopName = entry;
-          genericName = "SEGGER ${entry}";
-          categories = [ "Development" ];
-          type = "Application";
-          terminal = false;
-          startupNotify = false;
-        })
-      )
-      [
-        "JFlash"
-        "JFlashLite"
-        "JFlashSPI"
-        "JLinkConfig"
-        "JLinkGDBServer"
-        "JLinkLicenseManager"
-        "JLinkRTTViewer"
-        "JLinkRegistration"
-        "JLinkRemoteServer"
-        "JLinkSWOViewer"
-        "JLinkUSBWebServer"
-        "JMem"
-      ]
-  );
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/opt/SEGGER/JLink
-
-    ${lib.optionalString (!headless) ''
-      # Install binaries and runtime files into /opt/SEGGER/JLink
-      mv J* ETC GDBServer Firmwares $out/opt/SEGGER/JLink
-
-      # Link executables into /bin/
-      mkdir -p $out/bin
-      for binr in $out/opt/SEGGER/JLink/*Exe; do
-        binrlink=''${binr#"$out/opt/SEGGER/JLink/"}
-        ln -s $binr $out/bin/$binrlink
-        # Create additional symlinks without "Exe" suffix
-        binrlink=''${binrlink/%Exe}
-        ln -s $binr $out/bin/$binrlink
-      done
-
-      # Copy special alias symlinks
-      for slink in $(find $out/opt/SEGGER/JLink/. -type l); do
-        cp -P -n $slink $out/bin || true
-        rm $slink
-      done
-    ''}
-
-    # Install libraries
-    install -Dm444 libjlinkarm.so* -t $out/lib
-    for libr in $out/lib/libjlinkarm.*; do
-      ln -s $libr $out/opt/SEGGER/JLink
-    done
-
-    # Install docs and examples
-    mkdir -p $out/share
-    mv Doc $out/share/docs
-    mv Samples $out/share/examples
-
-    # Install udev rules
-    install -Dm444 99-jlink.rules -t $out/lib/udev/rules.d/
-
-    runHook postInstall
-  '';
-
-  passthru.updateScript = ./update.py;
-
-  meta = with lib; {
-    description = "J-Link Software and Documentation pack";
-    homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
-    changelog = "https://www.segger.com/downloads/jlink/ReleaseNotes_JLink.html";
-    license = licenses.unfree;
-    platforms = attrNames supported;
-    maintainers = with maintainers; [
-      FlorianFranzen
-      h7x4
-      stargate01
+    buildInputs = lib.optionals (!headless) [
+      qt4-bundled
     ];
+
+    # Udev is loaded late at runtime
+    appendRunpaths = [
+      "${udev}/lib"
+    ];
+
+    desktopItems = lib.optionals (!headless) (
+      map
+        (
+          entry:
+          (makeDesktopItem {
+            name = entry;
+            exec = entry;
+            icon = "applications-utilities";
+            desktopName = entry;
+            genericName = "SEGGER ${entry}";
+            categories = [ "Development" ];
+            type = "Application";
+            terminal = false;
+            startupNotify = false;
+          })
+        )
+        [
+          "JFlash"
+          "JFlashLite"
+          "JFlashSPI"
+          "JLinkConfig"
+          "JLinkGDBServer"
+          "JLinkLicenseManager"
+          "JLinkRTTViewer"
+          "JLinkRegistration"
+          "JLinkRemoteServer"
+          "JLinkSWOViewer"
+          "JLinkUSBWebServer"
+          "JMem"
+        ]
+    );
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/opt/SEGGER/JLink
+
+      ${lib.optionalString (!headless) ''
+        # Install binaries and runtime files into /opt/SEGGER/JLink
+        mv J* ETC GDBServer Firmwares $out/opt/SEGGER/JLink
+
+        # Link executables into /bin/
+        mkdir -p $out/bin
+        for binr in $out/opt/SEGGER/JLink/*Exe; do
+          binrlink=''${binr#"$out/opt/SEGGER/JLink/"}
+          ln -s $binr $out/bin/$binrlink
+          # Create additional symlinks without "Exe" suffix
+          binrlink=''${binrlink/%Exe}
+          ln -s $binr $out/bin/$binrlink
+        done
+
+        # Copy special alias symlinks
+        for slink in $(find $out/opt/SEGGER/JLink/. -type l); do
+          cp -P -n $slink $out/bin || true
+          rm $slink
+        done
+      ''}
+
+      # Install libraries
+      install -Dm444 libjlinkarm.so* -t $out/lib
+      for libr in $out/lib/libjlinkarm.*; do
+        ln -s $libr $out/opt/SEGGER/JLink
+      done
+
+      # Install docs and examples
+      mkdir -p $out/share
+      mv Doc $out/share/docs
+      mv Samples $out/share/examples
+
+      # Install udev rules
+      install -Dm444 99-jlink.rules -t $out/lib/udev/rules.d/
+
+      runHook postInstall
+    '';
   };
-}
+
+  buildAttrsDarwin = {
+    nativeBuildInputs = [
+      cpio
+      gzip # gunzip
+      makeWrapper
+      rsync
+      xar
+    ];
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      xar -xf $src
+
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      # segger package
+      mkdir JLINK
+      pushd JLINK
+      cat ../JLink.pkg/Payload | gunzip -dc | cpio -i
+      rsync -rtl ./Applications $out/
+      popd
+
+      # By default, the package unpacks a symlink to an absolute path:
+      # JLink -> /Applications/SEGGER/JLink_V824
+      # ... replace with a relative symlink to the package contents themselves.
+      ln -rsf $out/Applications/SEGGER/{JLink_V${version},JLink}
+
+      # autoPatchelfHook is broken, manually wrap binaries before linking them into $out/bin
+      LDPATH=$out/Applications/SEGGER/JLink_V${version}
+      mkdir -p $out/bin
+      find $out -type f -executable ! -name "*.dylib" -print0 | while read -d $'\0' e; do
+        wrapProgram "$e" --set LD_LIBRARY_PATH $LDPATH --set DYLD_LIBRARY_PATH $LDPATH
+        ln -rs "$e" $out/bin/
+      done
+
+      runHook postInstall
+    '';
+
+  };
+
+  buildAttrs =
+    if stdenv.isLinux then
+      buildAttrsLinux
+    else if stdenv.isDarwin then
+      buildAttrsDarwin
+    else
+      throw "platform not supported";
+
+in
+stdenv.mkDerivation (
+  finalAttrs:
+  buildAttrs
+  // {
+    pname = "segger-jlink";
+    inherit src version;
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    passthru.updateScript = ./update.py;
+
+    meta = {
+      description = "J-Link Software and Documentation pack";
+      homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
+      changelog = "https://www.segger.com/downloads/jlink/ReleaseNotes_JLink.html";
+      license = lib.licenses.unfree;
+      platforms = lib.attrNames supported;
+      maintainers = with lib.maintainers; [
+        FlorianFranzen
+        h7x4
+        stargate01
+      ];
+    };
+  }
+)

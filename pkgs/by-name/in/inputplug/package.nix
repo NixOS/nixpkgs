@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libbsd ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+GbbCAdEkxhyQoe8g4me2jlsuHx4R5vibd2PQLmqNM4=";
 
   postInstall = ''

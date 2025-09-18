@@ -1,22 +1,31 @@
 {
   lib,
-  flutter327,
+  stdenv,
+  flutter332,
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
+  alsa-lib,
   mpv-unwrapped,
 }:
-flutter327.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "jellyflix";
-  version = "1.0.0";
+  version = "1.4.886";
 
   src = fetchFromGitHub {
     owner = "jellyflix-app";
     repo = "jellyflix";
     tag = version;
-    hash = "sha256-jqMjKpUOcL4hElEWM1mrQaoraZPj0aUNt2hGLw39inc=";
+    hash = "sha256-1kQIHUHDRKuJbqrYo40vjmcxSTPEi5uVUSi2MCKk6qA=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  postPatch = ''
+    substituteInPlace lib/services/api_service.dart \
+      --replace-fail "} on DioException catch (_) {
+          return _.response!.statusCode ?? 400;" "} on DioException catch (e) {
+          return e.response!.statusCode ?? 400;"
+  '';
 
   postInstall = ''
     install -Dm644 $src/assets/icon/icon.png $out/share/icons/hicolor/scalable/apps/jellyflix.png
@@ -27,20 +36,50 @@ flutter327.buildFlutterApplication rec {
   ];
 
   buildInputs = [
+    alsa-lib
     mpv-unwrapped
   ];
 
-  gitHashes = {
-    filter_list = "sha256-/KgFLeoBTC3yq77esDqXwqP97+BcO3msYKki86OJEj0=";
-    tentacle = "sha256-30a4Vn8wL0TdboSYPm1W+hRqXSsuID0gNOVnNe3KmPE=";
-    media_kit = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
-    media_kit_video = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
-    media_kit_libs_video = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
-    media_kit_libs_android_video = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
-    media_kit_libs_ios_video = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
-    media_kit_libs_macos_video = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
-    media_kit_libs_windows_video = "sha256-7ER60VqnXN1diIg/y8nuJWgX3N0viWBq0g+2FsGEwFM=";
+  customSourceBuilders = {
+    volume_controller =
+      { version, src, ... }:
+      stdenv.mkDerivation {
+        pname = "volume_controller";
+        inherit version src;
+        inherit (src) passthru;
+
+        postPatch = ''
+          substituteInPlace linux/CMakeLists.txt \
+            --replace-fail '# ALSA dependency for volume control' 'find_package(PkgConfig REQUIRED)' \
+            --replace-fail 'find_package(ALSA REQUIRED)' 'pkg_check_modules(ALSA REQUIRED alsa)'
+        '';
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir $out
+          cp -r ./* $out/
+
+          runHook postInstall
+        '';
+      };
   };
+
+  gitHashes =
+    let
+      media_kit-hash = "sha256-8dIiEeeBQOGST9kGHSp15Cdg377AQeBynbvWPAnGbJc=";
+    in
+    {
+      filter_list = "sha256-cYnsujNMC6n9hZNHcbOevXWh54+jPeuHEUbdt1mDgP8=";
+      tentacle = "sha256-30a4Vn8wL0TdboSYPm1W+hRqXSsuID0gNOVnNe3KmPE=";
+      media_kit = media_kit-hash;
+      media_kit_video = media_kit-hash;
+      media_kit_libs_video = media_kit-hash;
+      media_kit_libs_android_video = media_kit-hash;
+      media_kit_libs_ios_video = media_kit-hash;
+      media_kit_libs_macos_video = media_kit-hash;
+      media_kit_libs_windows_video = media_kit-hash;
+    };
 
   desktopItems = [
     (makeDesktopItem {

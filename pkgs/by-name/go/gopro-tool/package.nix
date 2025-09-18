@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A tool to control GoPro webcam mode in Linux (requires v4l2loopback kernel module and a firewall rule)";
+    description = "Tool to control GoPro webcam mode in Linux (requires v4l2loopback kernel module and a firewall rule)";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ZMon3y ];
     platforms = lib.platforms.linux;

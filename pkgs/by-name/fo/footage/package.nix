@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-H8sv7faI/qbmcP7ir++/vIpN+cvRQ254rXmAvGyjdsY=";
   };
 
@@ -60,30 +59,29 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-      a52dec
-      fdk_aac
-      ffmpeg
-      x264
-      x265
-      vo-aacenc
-      svt-av1
-      libmpeg2
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gstreamer
-      gst-editing-services
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    a52dec
+    fdk_aac
+    ffmpeg
+    x264
+    x265
+    vo-aacenc
+    svt-av1
+    libmpeg2
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-rs
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gstreamer
+    gst-editing-services
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(

@@ -40,7 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.GATTTOOL;
+  ]
+  ++ optional-dependencies.GATTTOOL;
 
   pythonImportsCheck = [ "pygatt" ];
 

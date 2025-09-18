@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      "https://web.archive.org/web/20241215075639/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+      "https://web.archive.org/web/20250831231045/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
-    hash = "sha256-RmGqko1OLkQb0Oeydpfy4wxzp6iz2MpS7R22d4qjEaE=";
+    hash = "sha256-4GcSNu6ikAGNcPWz5ghrL78U6xrcIUqjFabs26LACRM=";
   };
 
   nativeBuildInputs =
@@ -61,38 +61,37 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # Delete platform-specific data for all the platforms we're not building for
-      find sunvox -mindepth 1 -maxdepth 1 -type d -not -name "${bindir}" -exec rm -r {} \;
+    # Delete platform-specific data for all the platforms we're not building for
+    find sunvox -mindepth 1 -maxdepth 1 -type d -not -name "${bindir}" -exec rm -r {} \;
 
-      mkdir -p $out/{bin,share/sunvox}
-      mv * $out/share/sunvox/
+    mkdir -p $out/{bin,share/sunvox}
+    mv * $out/share/sunvox/
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
-        mv $binary $out/bin/$(basename $binary)
-      done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
+      mv $binary $out/bin/$(basename $binary)
+    done
 
-      # Cleanup, make sure we didn't miss anything
-      find $out/share/sunvox/sunvox -type f -name readme.txt -delete
-      rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/Applications
-      ln -s $out/share/sunvox/sunvox/${bindir}/SunVox.app $out/Applications/
-      ln -s $out/share/sunvox/sunvox/${bindir}/reset_sunvox $out/bin/
+    # Cleanup, make sure we didn't miss anything
+    find $out/share/sunvox/sunvox -type f -name readme.txt -delete
+    rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    ln -s $out/share/sunvox/sunvox/${bindir}/SunVox.app $out/Applications/
+    ln -s $out/share/sunvox/sunvox/${bindir}/reset_sunvox $out/bin/
 
-      # Need to use a wrapper, binary checks for files relative to the path it was called via
-      makeWrapper $out/Applications/SunVox.app/Contents/MacOS/SunVox $out/bin/sunvox
-    ''
-    + ''
+    # Need to use a wrapper, binary checks for files relative to the path it was called via
+    makeWrapper $out/Applications/SunVox.app/Contents/MacOS/SunVox $out/bin/sunvox
+  ''
+  + ''
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";

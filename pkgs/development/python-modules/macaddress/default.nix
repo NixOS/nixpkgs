@@ -27,7 +27,7 @@ buildPythonPackage rec {
     reprshed
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/mentalisttraceur/python-macaddress";

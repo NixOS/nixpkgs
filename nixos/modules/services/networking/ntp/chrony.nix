@@ -36,16 +36,15 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags =
-    [
-      "-n"
-      "-u"
-      "chrony"
-      "-f"
-      "${configFile}"
-    ]
-    ++ optional cfg.enableMemoryLocking "-m"
-    ++ cfg.extraFlags;
+  chronyFlags = [
+    "-n"
+    "-u"
+    "chrony"
+    "-f"
+    "${configFile}"
+  ]
+  ++ optional cfg.enableMemoryLocking "-m"
+  ++ cfg.extraFlags;
 in
 {
   options = {
@@ -92,7 +91,7 @@ in
         default =
           config.environment.memoryAllocator.provider != "graphene-hardened"
           && config.environment.memoryAllocator.provider != "graphene-hardened-light";
-        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
+        defaultText = lib.literalExpression ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
         description = ''
           Whether to add the `-m` flag to lock memory.
         '';
@@ -180,12 +179,12 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [
-      thoughtpolice
-      vifino
-    ];
+  meta.maintainers = with lib.maintainers; [
+    thoughtpolice
+    vifino
+  ];
 
+  config = mkIf cfg.enable {
     environment.systemPackages = [ chronyPkg ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
@@ -208,15 +207,14 @@ in
       SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service";
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d ${stateDir} 0750 chrony chrony - -"
-        "f ${driftFile} 0640 chrony chrony - -"
-        "f ${keyFile} 0640 chrony chrony - -"
-      ]
-      ++ lib.optionals cfg.enableRTCTrimming [
-        "f ${rtcFile} 0640 chrony chrony - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d ${stateDir} 0750 chrony chrony - -"
+      "f ${driftFile} 0640 chrony chrony - -"
+      "f ${keyFile} 0640 chrony chrony - -"
+    ]
+    ++ lib.optionals cfg.enableRTCTrimming [
+      "f ${rtcFile} 0640 chrony chrony - -"
+    ];
 
     systemd.services.chronyd = {
       description = "chrony NTP daemon";
@@ -237,7 +235,7 @@ in
 
       unitConfig.ConditionCapability = "CAP_SYS_TIME";
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
         # Proc filesystem

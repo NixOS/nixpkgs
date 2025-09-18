@@ -16,19 +16,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gel";
-  version = "7.0.3";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
     tag = "v${version}";
-    hash = "sha256-QP4LtLgF2OWCsPCFzpLR8k/RetfEevSd8Uv/PciHCwk=";
-    fetchSubmodules = true;
+    hash = "sha256-4dFajTGYczolQXnpcRBPWCD68EUiPVDRGIMwGh/K2UY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-s8UKYZs4GorM0qvAvE+HL+Qma2x05IDtuqYebMDrZHk=";
+    hash = "sha256-4LLGg+f8Q7jskQr/wY0eCDkn9bC+zDpMvyF5D0A1oG4=";
   };
 
   nativeBuildInputs = [
@@ -36,16 +35,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xz
-    ];
+  buildInputs = [
+    curl
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xz
+  ];
 
   checkFeatures = [ ];
 
@@ -59,11 +57,6 @@ rustPlatform.buildRustPackage rec {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
-
-  # cli warns when edgedb found but gel doesn't
-  postInstall = ''
-    mv $out/bin/edgedb $out/bin/gel
-  '';
 
   doCheck = false;
 

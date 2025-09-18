@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sailfishos/sailfish-access-control";
     changelog = "https://github.com/sailfishos/sailfish-access-control/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "sailfishaccesscontrol"

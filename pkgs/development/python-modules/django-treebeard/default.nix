@@ -34,6 +34,5 @@ buildPythonPackage rec {
     homepage = "https://tabo.pe/projects/django-treebeard/";
     changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
   };
 }

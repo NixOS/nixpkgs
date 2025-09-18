@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "3.9.2";
+  version = "3.9.5";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-Z52YfS+caNe7N3xMv85eoBes6TwkSsGk5/rGaQd/6ds=";
+    hash = "sha256-548vOJf0mlk1AuuMjEXpsiVjft6UbJrUxh5mSca8Xbw=";
   };
 
   npmPkg = buildNpmPackage {
@@ -55,7 +55,7 @@ maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-pAL+Zhm0qnE1vEvivlXt2cIzIoPFoge5CRrsbfIoGNs=";
+  mvnHash = "sha256-SV5nfyUeyRul/YfZZXor8O37ARdCtKkrHCLzQrmr96s=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -122,7 +122,10 @@ maven.buildMavenPackage {
     description = "Power tool for working with messy data and improving it";
     homepage = "https://openrefine.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [
+      ris
+      arcstur
+    ];
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # maven dependencies

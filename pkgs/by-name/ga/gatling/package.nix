@@ -30,10 +30,14 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     substituteInPlace Makefile --replace-fail "/usr/local" "$out"
     substituteInPlace GNUmakefile --replace-fail "/opt/diet" "$out"
     substituteInPlace tryalloca.c --replace-fail "main() {" "int main() {"
     substituteInPlace trysocket.c --replace-fail "main() {" "int main() {"
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

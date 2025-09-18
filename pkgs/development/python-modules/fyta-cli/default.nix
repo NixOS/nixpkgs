@@ -33,6 +33,8 @@ buildPythonPackage rec {
     mashumaro
   ];
 
+  doCheck = false; # Failed: async def functions are not natively supported.
+
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fyta_cli" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module to access the FYTA API";

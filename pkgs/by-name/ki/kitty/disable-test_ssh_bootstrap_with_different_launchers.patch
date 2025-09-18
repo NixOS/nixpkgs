@@ -8,6 +8,6 @@ index 1f424146..d3cc191b 100644
                      q = shutil.which(launcher)
 -                    if q:
 +                    if q and not 'zsh' in q:
-                         with self.subTest(sh=sh, launcher=q), tempfile.TemporaryDirectory() as tdir:
+                         with tempfile.TemporaryDirectory() as tdir:
                              self.check_bootstrap(sh, tdir, test_script='env; exit 0', SHELL_INTEGRATION_VALUE='', launcher=q)
  

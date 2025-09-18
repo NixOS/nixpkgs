@@ -6,18 +6,26 @@
   pypblib,
   pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-sat";
-  version = "0.1.7.dev1";
+  version = "0.1.8.dev20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pysathq";
     repo = "pysat";
-    rev = version;
-    hash = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
+    rev = "d94f51e5eff2feef35abbc25480659eafa615cc0"; # upstream does not tag releases
+    hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
   };
+
+  # Build SAT solver backends in parallel and fix hard-coded g++ reference for
+  # darwin, where stdenv uses clang
+  postPatch = ''
+    substituteInPlace solvers/prepare.py \
+      --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
+    substituteInPlace solvers/patches/glucose421.patch \
+      --replace-fail "+CXX      := g++" "+CXX      := c++"
+  '';
 
   propagatedBuildInputs = [
     six
@@ -26,23 +34,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://github.com/pysathq/pysat/pull/102
-  postPatch = ''
-        # Fix for case-insensitive filesystem
-        cat >>solvers/patches/cadical.patch <<EOF
-    diff --git solvers/cadical/VERSION solvers/cdc/VERSION
-    deleted file mode 100644
-    --- solvers/cadical/VERSION
-    +++ /dev/null
-    @@ -1 +0,0 @@
-    -1.0.3
-    EOF
-  '';
+  disabledTestPaths = [ "tests/test_unique_mus.py" ];
 
   meta = with lib; {
     description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
     homepage = "https://github.com/pysathq/pysat";
+    changelog = "https://pysathq.github.io/updates/";
     license = licenses.mit;
-    maintainers = [ maintainers.marius851000 ];
+    maintainers = [
+      maintainers.marius851000
+      maintainers.chrjabs
+    ];
+    platforms = lib.platforms.all;
   };
 }

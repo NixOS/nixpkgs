@@ -29,17 +29,16 @@ stdenv.mkDerivation {
     pkg-config
     ninja
   ];
-  buildInputs =
-    [
-      libdrm
-      libX11
-      libGL
-      libgbm
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-    ]);
+  buildInputs = [
+    libdrm
+    libX11
+    libGL
+    libgbm
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
   meta = with lib; {
     description = "Example OpenGL app using KMS/GBM";

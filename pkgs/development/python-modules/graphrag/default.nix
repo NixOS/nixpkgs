@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "1.2.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
-    tag = "v${version}";
-    hash = "sha256-z3gO0wV8YBNi2Z53avujAt/Es9mSzugEFa/qRgq7ItM=";
+    tag = "v.${version}";
+    hash = "sha256-a8t6Nl9W/Cr7eueAvJ3dbz5G0oIhddqFMIm7HeZ8N9A=";
   };
 
   build-system = [
@@ -99,7 +99,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # touch the network

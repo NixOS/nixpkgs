@@ -57,21 +57,20 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    dbus
+    glib
+    gtk4
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   passthru = {
     updateScript = nix-update-script { };
@@ -80,7 +79,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.gnome.org/World/amberol";
     description = "Small and simple sound and music player";
-    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ linsui ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "amberol";

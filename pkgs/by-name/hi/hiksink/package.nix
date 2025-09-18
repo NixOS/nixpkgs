@@ -12,12 +12,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "CornerBit";
-    repo = pname;
+    repo = "hiksink";
     rev = version;
     sha256 = "sha256-k/cBCc7DywyBbAzCRCHdrOVmo+QVCsSgDn8hcyTIUI8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-P5h0jYSSy6i30g93Jor98vOmniJCA4eMyQkI8TLfbN8=";
 
   nativeBuildInputs = [

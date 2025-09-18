@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H8IbzzrzF1c63MXbw5mqoll3H+vgcSVpijrlSDNkc+o=";
     fetchSubmodules = true;
   };
@@ -93,14 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # In debug mode, also copy src directory to store. If you then run `gdb picom`
   # in the bin directory of picom store path, gdb finds the source files.
-  postInstall =
-    ''
-      wrapProgram $out/bin/picom-trans \
-        --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
-    ''
-    + lib.optionalString withDebug ''
-      cp -r ../src $out/
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/picom-trans \
+      --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
+  ''
+  + lib.optionalString withDebug ''
+    cp -r ../src $out/
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -132,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/yshui/picom";
     mainProgram = "picom";
     maintainers = with lib.maintainers; [
-      ertes
       gepbird
       thiagokokada
       twey

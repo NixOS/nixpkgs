@@ -1,13 +1,20 @@
 import os
 import re
 import signal
+import sys
 import tempfile
 import threading
+import traceback
 from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
 from typing import Any
+from unittest import TestCase
 
+from colorama import Style
+
+from test_driver.debug import DebugAbstract, DebugNop
+from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
@@ -16,26 +23,38 @@ from test_driver.vlan import VLan
 SENTINEL = object()
 
 
+class AssertionTester(TestCase):
+    """
+    Subclass of `unittest.TestCase` which is used in the
+    `testScript` to perform assertions.
+
+    It throws a custom exception whose parent class
+    gets special treatment in the logs.
+    """
+
+    failureException = RequestedAssertionFailed
+
+
 def get_tmp_dir() -> Path:
     """Returns a temporary directory that is defined by TMPDIR, TEMP, TMP or CWD
     Raises an exception in case the retrieved temporary directory is not writeable
     See https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir
     """
-    tmp_dir = Path(tempfile.gettempdir())
+    tmp_dir = Path(os.environ.get("XDG_RUNTIME_DIR", tempfile.gettempdir()))
     tmp_dir.mkdir(mode=0o700, exist_ok=True)
     if not tmp_dir.is_dir():
         raise NotADirectoryError(
-            f"The directory defined by TMPDIR, TEMP, TMP or CWD: {tmp_dir} is not a directory"
+            f"The directory defined by XDG_RUNTIME_DIR, TMPDIR, TEMP, TMP or CWD: {tmp_dir} is not a directory"
         )
     if not os.access(tmp_dir, os.W_OK):
         raise PermissionError(
-            f"The directory defined by TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
+            f"The directory defined by XDG_RUNTIME_DIR, TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
         )
     return tmp_dir
 
 
 def pythonize_name(name: str) -> str:
-    return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
+    return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
 class Driver:
@@ -49,6 +68,7 @@ class Driver:
     global_timeout: int
     race_timer: threading.Timer
     logger: AbstractLogger
+    debug: DebugAbstract
 
     def __init__(
         self,
@@ -59,12 +79,14 @@ class Driver:
         logger: AbstractLogger,
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
+        debug: DebugAbstract = DebugNop(),
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
+        self.debug = debug
 
         tmp_dir = get_tmp_dir()
 
@@ -115,7 +137,7 @@ class Driver:
             try:
                 yield
             except Exception as e:
-                self.logger.error(f'Test "{name}" failed with error: "{e}"')
+                self.logger.log_test_error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
     def test_symbols(self) -> dict[str, Any]:
@@ -140,6 +162,8 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
+            t=AssertionTester(),
+            debug=self.debug,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -159,11 +183,59 @@ class Driver:
         )
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
+    def dump_machine_ssh(self, offset: int) -> None:
+        print("SSH backdoor enabled, the machines can be accessed like this:")
+        print(
+            f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
+        )
+        names = [machine.name for machine in self.machines]
+        longest_name = len(max(names, key=len))
+        for num, name in enumerate(names, start=offset + 1):
+            spaces = " " * (longest_name - len(name) + 2)
+            print(
+                f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock/{num}{Style.RESET_ALL}"
+            )
+
     def test_script(self) -> None:
         """Run the test script"""
         with self.logger.nested("run the VM test script"):
             symbols = self.test_symbols()  # call eagerly
-            exec(self.tests, symbols, None)
+            try:
+                exec(self.tests, symbols, None)
+            except MachineError:
+                for line in traceback.format_exc().splitlines():
+                    self.logger.log_test_error(line)
+                sys.exit(1)
+            except RequestedAssertionFailed:
+                exc_type, exc, tb = sys.exc_info()
+                # We manually print the stack frames, keeping only the ones from the test script
+                # (note: because the script is not a real file, the frame filename is `<string>`)
+                filtered = [
+                    frame
+                    for frame in traceback.extract_tb(tb)
+                    if frame.filename == "<string>"
+                ]
+
+                self.logger.log_test_error("Traceback (most recent call last):")
+
+                code = self.tests.splitlines()
+                for frame, line in zip(filtered, traceback.format_list(filtered)):
+                    self.logger.log_test_error(line.rstrip())
+                    if lineno := frame.lineno:
+                        self.logger.log_test_error(f"    {code[lineno - 1].strip()}")
+
+                self.logger.log_test_error("")  # blank line for readability
+                exc_prefix = exc_type.__name__ if exc_type is not None else "Error"
+                for line in f"{exc_prefix}: {exc}".splitlines():
+                    self.logger.log_test_error(line)
+
+                self.debug.breakpoint()
+
+                sys.exit(1)
+
+            except Exception:
+                self.debug.breakpoint()
+                raise
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""

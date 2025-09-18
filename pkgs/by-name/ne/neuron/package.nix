@@ -24,23 +24,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "neuron";
-  version = "8.2.6";
+  version = "8.2.7";
 
   # format is for pythonModule conversion
   format = "other";
 
-  nativeBuildInputs =
-    [
-      cmake
-      bison
-      flex
-      git
-    ]
-    ++ optionals useCore [
-      perl
-      gsl
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+    git
+  ]
+  ++ optionals useCore [
+    perl
+    gsl
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = optionals useIv [
     xorg.libX11.dev
@@ -48,25 +47,24 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext.dev
   ];
 
-  propagatedBuildInputs =
-    [
-      readline
-      python3
-      python3.pkgs.wheel
-      python3.pkgs.setuptools
-      python3.pkgs.scikit-build
-      python3.pkgs.matplotlib
-    ]
-    ++ optionals useMpi [
-      mpi
-    ]
-    ++ optionals useMpi [
-      python3.pkgs.mpi4py
-    ]
-    ++ optionals useRx3d [
-      python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.6
-      python3.pkgs.numpy
-    ];
+  propagatedBuildInputs = [
+    readline
+    python3
+    python3.pkgs.wheel
+    python3.pkgs.setuptools
+    python3.pkgs.scikit-build
+    python3.pkgs.matplotlib
+  ]
+  ++ optionals useMpi [
+    mpi
+  ]
+  ++ optionals useMpi [
+    python3.pkgs.mpi4py
+  ]
+  ++ optionals useRx3d [
+    python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.7
+    python3.pkgs.numpy
+  ];
 
   # Patch build shells for cmake (bin, src, cmake) and submodules (external)
   postPatch = ''
@@ -97,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "neuronsimulator";
     repo = "nrn";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-xASBpsF8rIzrb5G+4Qi6rvWC2wqL7nAGlSeMsBAI6WM=";
+    hash = "sha256-dmpx0Wud0IhdFvvTJuW/w1Uq6vFYaNal9n27LAqV1Qc=";
   };
 
   meta = with lib; {

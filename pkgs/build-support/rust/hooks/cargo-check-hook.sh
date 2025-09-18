@@ -29,7 +29,7 @@ cargoCheckHook() {
     fi
 
     flagsArray+=(
-        "--target" "@rustcTarget@"
+        "--target" "@rustcTargetSpec@"
         "--offline"
     )
 

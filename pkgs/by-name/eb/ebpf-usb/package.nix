@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "ebpf-usb";
-  version = "unstable-2022-04-03";
+  version = "0-unstable-2022-04-03";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -21,11 +21,12 @@ python3Packages.buildPythonApplication {
     "--set PYTHONUNBUFFERED 1"
   ];
 
-  pythonPath =
-    [ bcc ]
-    ++ (with python3Packages; [
-      hexdump
-    ]);
+  pythonPath = [
+    bcc
+  ]
+  ++ (with python3Packages; [
+    hexdump
+  ]);
 
   postPatch = ''
     substituteInPlace ebpf-usb.py \

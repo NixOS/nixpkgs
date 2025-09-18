@@ -4,40 +4,45 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libX11,
   libXrandr,
   glib,
   colord,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xiccd";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "agalakhov";
     repo = "xiccd";
-    rev = "v${version}";
-    sha256 = "159fyz5535lcabi5bzmxgmjdgxlqcjaiqgzr00mi3ax0i5fdldwn";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-inDSW+GYvSw2hNMzjq3cxEvY+Vkqmmm2kXdhskvcygU=";
   };
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "m4_esyscmd_s([git describe --abbrev=7 --dirty --always --tags])" "${finalAttrs.version}" \
+      --replace-fail "AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar])" "AM_INIT_AUTOMAKE([foreign 1.9 no-dist-gzip dist-xz tar-ustar])"
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
-    libX11
     libXrandr
     glib
     colord
   ];
 
-  meta = with lib; {
+  meta = {
     description = "X color profile daemon";
     homepage = "https://github.com/agalakhov/xiccd";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "xiccd";
   };
-}
+})

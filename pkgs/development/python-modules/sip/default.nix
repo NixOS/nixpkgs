@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.10.0";
+  version = "6.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+gUVaX1MmNvgTZ6JjYFt4UJ+W5rl0OFSFpEJ/SH10pw=";
+    hash = "sha256-CDztlPhTFUkyMRGaY5cLK6QrHTizjnMKcOAqmRkaicY=";
   };
 
   build-system = [
@@ -32,7 +32,8 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There aren't tests
   doCheck = false;

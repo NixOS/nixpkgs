@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3GQKBkyxyf4fi5cNwgOZRaKidde37mIoS/QnI4q+Re4=";
+    hash = "sha256-XTJ4iSzh+Sp01r+IjMhSXZ9or4Xb4zbJXRyH+49CMGk=";
   };
 
   patchPhase = ''

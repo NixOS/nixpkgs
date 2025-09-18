@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.5.1";
+  version = "2.8.0";
   format = "wheel";
 
   src =
@@ -33,26 +33,25 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
 
-  buildInputs =
+  buildInputs = [
+    # We need to patch lib/torio/_torio_ffmpeg6
+    ffmpeg_6.dev
+    sox
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
+    with cudaPackages;
     [
-      # We need to patch lib/torio/_torio_ffmpeg6
-      ffmpeg_6.dev
-      sox
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with cudaPackages;
-      [
-        # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
-        # libcudart.$hash.so.11.0
-        cuda_cudart
+      # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
+      # libcudart.$hash.so.11.0
+      cuda_cudart
 
-        # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
-        # libnvToolsExt-$hash.so.1
-        cuda_nvtx
-      ]
-    );
+      # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
+      # libnvToolsExt-$hash.so.1
+      cuda_nvtx
+    ]
+  );
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -90,6 +89,9 @@ buildPythonPackage rec {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

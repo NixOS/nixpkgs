@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "meme-suite";
-  version = "5.5.4";
+  version = "5.5.8";
 
   src = fetchurl {
     url = "https://meme-suite.org/meme-software/${version}/meme-${version}.tar.gz";
-    sha256 = "sha256-zaYBHCuFW/JWPE56LCVeEembW25ec3Nv8AiUJQdYAVM=";
+    sha256 = "sha256-G0oXU3lcCbHUbebEo/BLM8G8w+QbvPTm4UIg6K12dDs=";
   };
 
   buildInputs = [ zlib ];

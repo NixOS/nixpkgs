@@ -9,10 +9,9 @@
 To use it, you will need to enable the agent and the probe on your server. The exact method will depend on the way you use PHP but here is an example of NixOS configuration for PHP-FPM:
 ```nix
 let
-  php = pkgs.php.withExtensions ({ enabled, all }: enabled ++ (with all; [
-    blackfire
-  ]));
-in {
+  php = pkgs.php.withExtensions ({ enabled, all }: enabled ++ (with all; [ blackfire ]));
+in
+{
   # Enable the probe extension for PHP-FPM.
   services.phpfpm = {
     phpPackage = php;

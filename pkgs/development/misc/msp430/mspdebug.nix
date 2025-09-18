@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     lib.optional stdenv.hostPlatform.isDarwin pkg-config
     ++ lib.optional (enableMspds && stdenv.hostPlatform.isLinux) autoPatchelfHook;
-  buildInputs =
-    [ libusb-compat-0_1 ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin hidapi
-    ++ lib.optional enableReadline readline;
+  buildInputs = [
+    libusb-compat-0_1
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin hidapi
+  ++ lib.optional enableReadline readline;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # TODO: remove once a new 0.26+ release is made

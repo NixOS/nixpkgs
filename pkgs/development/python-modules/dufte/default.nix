@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
+    repo = "dufte";
     rev = "v${version}";
     hash = "sha256:0ccsmpj160xj6w503a948aw8icj55mw9414xnmijmmjvlwhm0p48";
   };
@@ -28,7 +28,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     matplotlib
     numpy
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

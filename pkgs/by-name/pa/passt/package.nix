@@ -11,12 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2025_03_20.32f6212";
+  version = "2025_08_05.309eefd";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TRtFwBUUOnRwcLtB3vwU5nG/ufi9D36waXW5Yuboowk=";
+    hash = "sha256-2SLxEK/J2C0EGrb06KD1Vu4d9u2nWht8RKMy8ArXdpE=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail \

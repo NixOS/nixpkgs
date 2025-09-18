@@ -103,21 +103,29 @@ in
 
     services.networkd-dispatcher.extraArgs =
       let
-        scriptDir = pkgs.symlinkJoin {
-          name = "networkd-dispatcher-script-dir";
-          paths = lib.mapAttrsToList (
-            name: cfg:
-            (map (
-              state:
-              pkgs.writeTextFile {
-                inherit name;
-                text = cfg.script;
-                destination = "/${state}.d/${name}";
-                executable = true;
-              }
-            ) cfg.onState)
-          ) cfg.rules;
-        };
+        scriptDir = pkgs.runCommand "networkd-dispatcher-script-dir" { } (
+          ''
+            mkdir $out
+          ''
+          + (lib.concatStrings (
+            lib.mapAttrsToList (
+              name: cfg:
+              (lib.concatStrings (
+                map (state: ''
+                  mkdir -p $out/${state}.d
+                  ln -s ${
+                    lib.getExe (
+                      pkgs.writeShellApplication {
+                        inherit name;
+                        text = cfg.script;
+                      }
+                    )
+                  } $out/${state}.d/${name}
+                '') cfg.onState
+              ))
+            ) cfg.rules
+          ))
+        );
       in
       [
         "--verbose"

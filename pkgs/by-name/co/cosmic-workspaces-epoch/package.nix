@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  cosmic-wallpapers,
   libcosmicAppHook,
   pkg-config,
   libinput,
@@ -15,33 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-workspaces-epoch";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-workspaces-epoch";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-3jivE0EaSddPxMYn9DDaYUMafPf60XeCwVeQegbt++c=";
+    hash = "sha256-d7KYZbq8O/t5V/gU+wwstp06vyfnmt6vRKo+54Dct+o=";
   };
 
-  postPatch = ''
-    # While the `kate-hazen-COSMIC-desktop-wallpaper.png` image is present
-    # in the `pop-wallpapers` package, we're using the Orion Nebula image
-    # from NASA available in the `cosmic-wallpapers` package. Mainly because
-    # the previous image was used in the GNOME shell extension and the
-    # Orion Nebula image is widely used in the Rust-based COSMIC DE's
-    # marketing materials. Another reason to use the Orion Nebula image
-    # is that it's actually the default wallpaper as configured by the
-    # `cosmic-bg` package's configuration in upstream [1] [2].
-    #
-    # [1]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/config/src/lib.rs#L142
-    # [2]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/data/v1/all#L3
-    substituteInPlace src/view/mod.rs \
-      --replace-fail '/usr/share/backgrounds/pop/kate-hazen-COSMIC-desktop-wallpaper.png' "${cosmic-wallpapers}/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg"
-  '';
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-l5y9bOG/h24EfiAFfVKjtzYCzjxU2TI8wh6HBUwoVcE=";
+  cargoHash = "sha256-TjgnPuFUIDtxx9kpvN9hKiir3/ZVtCc0z1CE4UHre1Q=";
 
   separateDebugInfo = true;
 
@@ -87,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Workspaces Epoch for the COSMIC Desktop Environment";
     mainProgram = "cosmic-workspaces";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

@@ -7,47 +7,18 @@
   pkgsBuildBuild,
 }:
 
-let
-  # Argo can package a static server in the CLI using the `staticfiles` go module.
-  # We build the CLI without the static server for simplicity, but the tool is still required for
-  # compilation to succeed.
-  # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = pkgsBuildBuild.buildGoModule {
-    name = "staticfiles";
-
-    src = fetchFromGitHub {
-      owner = "bouk";
-      repo = "staticfiles";
-      rev = "827d7f6389cd410d0aa3f3d472a4838557bf53dd";
-      hash = "sha256-wchj5KjhTmhc4XVW0sRFCcyx5W9am8TNAIhej3WFWXU=";
-    };
-
-    vendorHash = null;
-
-    excludedPackages = [ "./example" ];
-
-    preBuild = ''
-      cp ${./staticfiles.go.mod} go.mod
-    '';
-
-    ldflags = [
-      "-s"
-      "-w"
-    ];
-  };
-in
 buildGoModule rec {
   pname = "argo-workflows";
-  version = "3.6.5";
+  version = "3.6.10";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     tag = "v${version}";
-    hash = "sha256-LvFpYVylVwWhoVtMDldalSHa5KGdbKVB6yFnP5ha4gg=";
+    hash = "sha256-TM/eK8biMxKV4SFJ1Lys+NPPeaHVjbBo83k2RH1Xi40=";
   };
 
-  vendorHash = "sha256-hMegxeUFSBf32dnXmD7QagkvWgWDeB4Fu4nlKNoePWY=";
+  vendorHash = "sha256-Y/2+ykzcJdA5uwP1v9Z1wZtF3hBV2x7XZc7+FhPJP64=";
 
   doCheck = false;
 
@@ -58,13 +29,6 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
   ];
-
-  preBuild = ''
-    mkdir -p ui/dist/app
-    echo "Built without static files" > ui/dist/app/index.html
-
-    ${staticfiles}/bin/staticfiles -o server/static/files.go ui/dist/app
-  '';
 
   ldflags = [
     "-s"
@@ -88,13 +52,13 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Container native workflow engine for Kubernetes";
     mainProgram = "argo";
     homepage = "https://github.com/argoproj/argo";
     changelog = "https://github.com/argoproj/argo-workflows/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ groodt ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ groodt ];
+    platforms = lib.platforms.unix;
   };
 }

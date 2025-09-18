@@ -7,9 +7,10 @@
   gnugrep,
   iproute2,
   makeWrapper,
-  nettools,
+  net-tools,
   openresolv,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation {
@@ -29,33 +30,35 @@ stdenv.mkDerivation {
     cp vpnc-script $out/bin
   '';
 
-  preFixup =
-    ''
-      substituteInPlace $out/bin/vpnc-script \
-        --replace "which" "type -P"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $out/bin/vpnc-script \
-        --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf" \
-        --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
-    ''
-    + ''
-      wrapProgram $out/bin/vpnc-script \
-        --prefix PATH : "${
-          lib.makeBinPath (
-            [
-              nettools
-              gawk
-              coreutils
-              gnugrep
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isLinux [
-              openresolv
-              iproute2
-            ]
-          )
-        }"
-    '';
+  preFixup = ''
+    substituteInPlace $out/bin/vpnc-script \
+      --replace "which" "type -P"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $out/bin/vpnc-script \
+      --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf"
+  ''
+  + lib.optionalString withSystemd ''
+    substituteInPlace $out/bin/vpnc-script \
+      --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
+  ''
+  + ''
+    wrapProgram $out/bin/vpnc-script \
+      --prefix PATH : "${
+        lib.makeBinPath (
+          [
+            net-tools
+            gawk
+            coreutils
+            gnugrep
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            openresolv
+            iproute2
+          ]
+        )
+      }"
+  '';
 
   meta = with lib; {
     homepage = "https://www.infradead.org/openconnect/";

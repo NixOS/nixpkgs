@@ -34,35 +34,34 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     eigen
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
+  buildInputs = [
+    onnxruntime
+    opencv
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      onnxruntime
-      opencv
+      cuda_cccl # cub/cub.cuh
+      libcublas # cublas_v2.h
+      libcurand # curand.h
+      libcusparse # cusparse.h
+      libcufft # cufft.h
+      cudnn # cudnn.h
+      cuda_cudart
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl # cub/cub.cuh
-        libcublas # cublas_v2.h
-        libcurand # curand.h
-        libcusparse # cusparse.h
-        libcufft # cufft.h
-        cudnn # cudnn.h
-        cuda_cudart
-      ]
-    );
+  );
 
   cmakeBuildType = "None";
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     mkdir $cmake

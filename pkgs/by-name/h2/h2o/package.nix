@@ -16,18 +16,20 @@
   withMruby ? true,
   bison,
   ruby,
+  withUring ? stdenv.hostPlatform.isLinux,
+  liburing,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0.20250130";
+  version = "2.3.0-rolling-2025-09-05";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "26b116e9536be8cf07036185e3edf9d721c9bac2";
-    sha256 = "sha256-WjsUUnSs3kXjAmh+V/lzL1QlxxXNCph99UsC29YAirQ=";
+    rev = "3b9b6a53cac8bcc6a25fb28df81ad295fc5f9402";
+    hash = "sha256-GJdZxGHQ6FWznY/PO3YN0yyfQ7RX8ilgEzXA4XciOqk=";
   };
 
   outputs = [
@@ -37,17 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      makeWrapper
-      ninja
-    ]
-    ++ lib.optionals withMruby [
-      bison
-      ruby
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+    ninja
+  ]
+  ++ lib.optionals withMruby [
+    bison
+    ruby
+  ]
+  ++ lib.optional withUring liburing;
 
   buildInputs = [
     brotli

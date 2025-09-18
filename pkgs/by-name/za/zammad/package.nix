@@ -20,7 +20,7 @@
 
 let
   pname = "zammad";
-  version = "6.4.1";
+  version = "6.5.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -81,7 +81,8 @@ stdenvNoCC.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
-    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
+    fetcherVersion = 1;
+    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
   };
 
   buildPhase = ''
@@ -127,7 +128,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyannote-core";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-core";
     tag = version;
-    hash = "sha256-XQVEMy60LkfFr2TKXTeg6cGHRx5BUZ5qDgzIdKy/19Y=";
+    hash = "sha256-28LVgI5bDFv71co/JsSrPrAcdugXiMRe6T1Jp0CO0XY=";
   };
 
   postPatch = ''

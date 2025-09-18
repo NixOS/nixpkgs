@@ -22,34 +22,34 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.4";
+    version = "3.0.5.1";
+    format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-FoaKuB0mo2RFksMHnIUx984+h/U0tdvk+bvsuYt3r5g=";
+      hash = "sha256-fL4rvXcLKfEXuy5LKpFjFu+P3be7/T342+BgeO/dfp8=";
     };
 
     patches = [
       ./keep-pythonpath-in-testing.patch
     ];
 
-    postPatch =
-      ''
-        patchShebangs duplicity/__main__.py
+    postPatch = ''
+      patchShebangs duplicity/__main__.py
 
-        # don't try to use gtar on darwin/bsd
-        substituteInPlace testing/functional/test_restart.py \
-          --replace-fail 'tarcmd = "gtar"' 'tarcmd = "tar"'
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # tests try to access these files in the sandbox, but can't deal with EPERM
-        substituteInPlace testing/unit/test_globmatch.py \
-          --replace-fail /var/log /test/log
-        substituteInPlace testing/unit/test_selection.py \
-          --replace-fail /usr/bin /dev
-      '';
+      # don't try to use gtar on darwin/bsd
+      substituteInPlace testing/functional/test_restart.py \
+        --replace-fail 'tarcmd = "gtar"' 'tarcmd = "tar"'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # tests try to access these files in the sandbox, but can't deal with EPERM
+      substituteInPlace testing/unit/test_globmatch.py \
+        --replace-fail /var/log /test/log
+      substituteInPlace testing/unit/test_selection.py \
+        --replace-fail /usr/bin /dev
+    '';
 
     disabledTests = [
       # fails on some unsupported backends, e.g.
@@ -92,30 +92,28 @@ let
         pycrypto
         # Currently marked as broken.
         # pydrive2
-        future
       ]
       ++ paramiko.optional-dependencies.invoke;
 
-    nativeCheckInputs =
-      [
-        gnupg # Add 'gpg' to PATH.
-        gnutar # Add 'tar' to PATH.
-        librsync # Add 'rdiff' to PATH.
-        par2cmdline # Add 'par2' to PATH.
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        util-linux # Add 'setsid' to PATH.
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        getconf
-      ]
-      ++ (with python3.pkgs; [
-        lockfile
-        mock
-        pexpect
-        pytestCheckHook
-        fasteners
-      ]);
+    nativeCheckInputs = [
+      gnupg # Add 'gpg' to PATH.
+      gnutar # Add 'tar' to PATH.
+      librsync # Add 'rdiff' to PATH.
+      par2cmdline # Add 'par2' to PATH.
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux # Add 'setsid' to PATH.
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      getconf
+    ]
+    ++ (with python3.pkgs; [
+      lockfile
+      mock
+      pexpect
+      pytestCheckHook
+      fasteners
+    ]);
 
     # Prevent double wrapping, let the Python wrapper use the args in preFixup.
     dontWrapGApps = true;

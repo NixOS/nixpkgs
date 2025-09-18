@@ -12,7 +12,7 @@ let
     enable = mkEnableOption "iperf3 network throughput testing server";
     package = mkPackageOption pkgs "iperf3" { };
     port = mkOption {
-      type = types.ints.u16;
+      type = types.port;
       default = 5201;
       description = "Server port to listen on for iperf3 client requests.";
     };

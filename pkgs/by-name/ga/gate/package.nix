@@ -6,7 +6,7 @@
 
 let
   pname = "gate";
-  version = "0.42.0";
+  version = "0.52.0";
 in
 buildGoModule {
   inherit pname version;
@@ -15,15 +15,17 @@ buildGoModule {
     owner = "minekube";
     repo = "gate";
     tag = "v${version}";
-    hash = "sha256-a2rt+V6y8lyBMSG49eWLTPeLZKIjq+a5NBL+agIL1dg=";
+    hash = "sha256-DKnJnhfO3Cs80tAYiodxf1alfO4DXNneiqDILgP+v8w=";
   };
 
-  vendorHash = "sha256-5s96L9KWeiS//21mQMn8ka82Uk4rMbq/8I+l67HTSA8=";
+  vendorHash = "sha256-0NcfuCZHR4QHbMNqc+ilPouie+9k7FqOG/JdNX8uO8c=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  excludedPackages = [ ".web" ];
 
   meta = {
     description = "High-Performance, Low-Memory, Lightweight, Extensible Minecraft Reverse Proxy";

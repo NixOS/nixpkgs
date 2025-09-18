@@ -2,7 +2,7 @@
   lib,
   bootstrapStdenv,
   buildPackages,
-  fixDarwinDylibNames,
+  fetchpatch2,
   mkAppleDerivation,
   python3,
   testers,
@@ -26,6 +26,13 @@ let
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
       ./patches/suppress-icu-check-crash.patch
+
+      # Python 3.13 compatibility
+      (fetchpatch2 {
+        url = "https://github.com/unicode-org/icu/commit/60d6bd71efc0cde8f861b109ff87dbbf9fc96586.patch?full_index=1";
+        hash = "sha256-aJBSVvKidPUjD956jLjyRk8fewUZ9f+Ip4ka6rjevzU=";
+        stripLen = 2;
+      })
     ];
 
     preConfigure = ''
@@ -37,21 +44,20 @@ let
 
     dontDisableStatic = withStatic;
 
-    configureFlags =
-      [
-        (lib.enableFeature false "debug")
-        (lib.enableFeature false "renaming")
-        (lib.enableFeature false "extras")
-        (lib.enableFeature false "layout")
-        (lib.enableFeature false "samples")
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) [
-        (lib.enableFeature true "rpath")
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        (lib.withFeatureAs true "cross-build" nativeBuildRoot)
-      ]
-      ++ lib.optionals withStatic [ (lib.enableFeature true "static") ];
+    configureFlags = [
+      (lib.enableFeature false "debug")
+      (lib.enableFeature false "renaming")
+      (lib.enableFeature false "extras")
+      (lib.enableFeature false "layout")
+      (lib.enableFeature false "samples")
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) [
+      (lib.enableFeature true "rpath")
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      (lib.withFeatureAs true "cross-build" nativeBuildRoot)
+    ]
+    ++ lib.optionals withStatic [ (lib.enableFeature true "static") ];
 
     nativeBuildInputs = [ python3 ];
 
@@ -69,7 +75,7 @@ let
     meta = {
       description = "Unicode and globalization support library with Apple customizations";
       license = [ lib.licenses.icu ];
-      maintainers = lib.teams.darwin.members;
+      teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
       pkgConfigModules = [
         "icu-i18n"
@@ -83,7 +89,8 @@ let
     outputs = [
       "out"
       "dev"
-    ] ++ lib.optional withStatic "static";
+    ]
+    ++ lib.optional withStatic "static";
     outputBin = "dev";
 
     postPatch = lib.optionalString self.finalPackage.doCheck ''
@@ -182,19 +189,17 @@ let
   buildRootOnlyAttrs = self: super: {
     pname = "ICU-build-root";
 
-    preConfigure =
-      super.preConfigure
-      + ''
-        mkdir build
-        cd build
-        configureScript=../configure
+    preConfigure = super.preConfigure + ''
+      mkdir build
+      cd build
+      configureScript=../configure
 
-        # Apple’s customizations require building and linking additional files, which are handled via `Makefile.local`.
-        # These need copied into the build environment to avoid link errors from not building them.
-        mkdir common i18n
-        cp ../common/Makefile.local common/Makefile.local
-        cp ../i18n/Makefile.local i18n/Makefile.local
-      '';
+      # Apple’s customizations require building and linking additional files, which are handled via `Makefile.local`.
+      # These need copied into the build environment to avoid link errors from not building them.
+      mkdir common i18n
+      cp ../common/Makefile.local common/Makefile.local
+      cp ../i18n/Makefile.local i18n/Makefile.local
+    '';
 
     postBuild = ''
       cd ..

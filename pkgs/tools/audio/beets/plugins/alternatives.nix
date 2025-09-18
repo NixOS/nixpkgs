@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "0.13.2";
+  version = "0.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
     tag = "v${version}";
-    hash = "sha256-OoQsP+QVIOnSA4oy1a8JJ3VeCUS+GR8sPPOysvmRMqI=";
+    hash = "sha256-j56AzbpZFACXy5KqafE8PCC+zM6pXrxr/rWy9UjZPQg=";
   };
 
   nativeBuildInputs = [

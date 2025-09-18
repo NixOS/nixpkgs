@@ -7,7 +7,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "kns";
-  version = "unstable-2023-04-25";
+  version = "0-unstable-2023-04-25";
 
   src = fetchFromGitHub {
     owner = "blendle";

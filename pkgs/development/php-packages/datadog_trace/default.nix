@@ -9,7 +9,6 @@
   curl,
   pcre2,
   libiconv,
-  darwin,
   php,
 }:
 
@@ -32,30 +31,20 @@ buildPecl rec {
 
   env.NIX_CFLAGS_COMPILE = "-O2";
 
-  nativeBuildInputs =
-    [
-      cargo
-      rustc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      rustPlatform.bindgenHook
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.rustPlatform.bindgenHook
-      darwin.apple_sdk_11_0.rustPlatform.cargoSetupHook
-    ];
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+  ];
 
-  buildInputs =
-    [
-      curl
-      pcre2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      libiconv
-    ];
+  buildInputs = [
+    curl
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   meta = {
     changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
@@ -65,7 +54,7 @@ buildPecl rec {
       asl20
       bsd3
     ];
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
     broken = lib.versionAtLeast php.version "8.4";
   };
 }

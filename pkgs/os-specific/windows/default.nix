@@ -1,24 +1,19 @@
 {
   lib,
+  config,
   stdenv,
   buildPackages,
+  pkgs,
   newScope,
   overrideCC,
   stdenvNoLibc,
-  libcCross,
 }:
 
 lib.makeScope newScope (
-  self: with self; {
-
-    cygwinSetup = callPackage ./cygwin-setup { };
-
+  self:
+  with self;
+  {
     dlfcn = callPackage ./dlfcn { };
-
-    w32api = callPackage ./w32api { };
-
-    mingwrt = callPackage ./mingwrt { };
-    mingw_runtime = mingwrt;
 
     mingw_w64 = callPackage ./mingw-w64 {
       stdenv = stdenvNoLibc;
@@ -31,22 +26,25 @@ lib.makeScope newScope (
       else
         buildPackages.gccWithoutTargetLibc.override (old: {
           bintools = old.bintools.override {
-            libc = libcCross;
+            libc = pkgs.libc;
           };
-          libc = libcCross;
+          libc = pkgs.libc;
         })
     );
 
     mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
 
-    mingw_w64_pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = crossThreadsStdenv; };
-
     mcfgthreads = callPackage ./mcfgthreads { stdenv = crossThreadsStdenv; };
 
     npiperelay = callPackage ./npiperelay { };
 
-    pthreads = callPackage ./pthread-w32 { };
+    pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = crossThreadsStdenv; };
 
     libgnurx = callPackage ./libgnurx { };
+
+    sdk = callPackage ./msvcSdk { };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    mingw_w64_pthreads = lib.warn "windows.mingw_w64_pthreads is deprecated, windows.pthreads should be preferred" self.pthreads;
   }
 )

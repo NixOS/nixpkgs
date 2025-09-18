@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.313";
+  version = "8.315";
 
   src = fetchurl {
     url = "https://pythia.org/download/pythia83/pythia${
       builtins.replaceStrings [ "." ] [ "" ] version
     }.tgz";
-    sha256 = "sha256-0H6AFQHE3LdtlI3GMoU3X1l0U8HW7GXnEodgPcd2cYw=";
+    sha256 = "sha256-Sy/nNB4z6QtyJv3Koqe/kyeYezNU6EwE8f2SVoY2kK4=";
   };
 
   nativeBuildInputs = [ rsync ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
@@ -31,21 +31,20 @@ stdenv.mkDerivation rec {
     lhapdf
   ];
 
-  configureFlags =
-    [
-      "--enable-shared"
-      "--with-lhapdf6=${lhapdf}"
-    ]
-    ++ (
-      if lib.versions.major hepmc.version == "3" then
-        [
-          "--with-hepmc3=${hepmc}"
-        ]
-      else
-        [
-          "--with-hepmc2=${hepmc}"
-        ]
-    );
+  configureFlags = [
+    "--enable-shared"
+    "--with-lhapdf6=${lhapdf}"
+  ]
+  ++ (
+    if lib.versions.major hepmc.version == "3" then
+      [
+        "--with-hepmc3=${hepmc}"
+      ]
+    else
+      [
+        "--with-hepmc2=${hepmc}"
+      ]
+  );
 
   enableParallelBuilding = true;
 

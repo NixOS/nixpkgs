@@ -9,26 +9,25 @@
 
 stdenv.mkDerivation rec {
   pname = "polyml";
-  version = "5.9.1";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
     rev = "v${version}";
-    sha256 = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
+    sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace configure.ac \
-        --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
-      AH_TEMPLATE([_Static_assert])
-      AC_DEFINE([_Static_assert], [static_assert])
-      "
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure.ac --replace-fail stdc++ c++
-    '';
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
+    AH_TEMPLATE([_Static_assert])
+    AC_DEFINE([_Static_assert], [static_assert])
+    "
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac --replace-fail stdc++ c++
+  '';
 
   buildInputs = [
     libffi

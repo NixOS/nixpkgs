@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "nakama";
-  version = "3.26.0";
+  version = "3.31.0";
 
   src = fetchFromGitHub {
     owner = "heroiclabs";
     repo = "nakama";
     tag = "v${version}";
-    hash = "sha256-so8N2gk4TfeJy30XxiXH7utXs8InvnXm68ZoSvFykQk=";
+    hash = "sha256-e31Mn4Ma+7vjOtwV13w79AshN9LCg2V0V3h9sSaad1U=";
   };
 
   vendorHash = null;

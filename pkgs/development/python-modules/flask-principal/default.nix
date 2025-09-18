@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_principal.py" ];
+  enabledTestPaths = [ "test_principal.py" ];
 
   meta = with lib; {
     homepage = "http://packages.python.org/Flask-Principal/";
     description = "Identity management for flask";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

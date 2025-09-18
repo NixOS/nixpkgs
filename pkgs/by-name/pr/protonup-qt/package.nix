@@ -7,13 +7,13 @@
 
 appimageTools.wrapAppImage rec {
   pname = "protonup-qt";
-  version = "2.12.0";
+  version = "2.13.0";
 
   src = appimageTools.extractType2 {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-      hash = "sha256-8MeHSy3XW1oXAD2xrDSIB0ZLJxtk5UBIMpDRTPF9ksU=";
+      hash = "sha256-cyYuLwQqMAx5vMN9efceMNtDqzapNlJKBqWDSAYL2zI=";
     };
   };
 

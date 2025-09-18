@@ -26,7 +26,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests are not pick-up automatically by the hook
-  pytestFlagsArray = [ "aiosqlite/tests/*.py" ];
+  enabledTestPaths = [ "aiosqlite/tests/*.py" ];
 
   pythonImportsCheck = [ "aiosqlite" ];
 

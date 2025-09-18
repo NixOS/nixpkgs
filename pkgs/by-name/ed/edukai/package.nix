@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Standard Kai Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
+    description = "MOE Standard Kai Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Standard Kai Font is a kai (regular srcipt) font
       provided by

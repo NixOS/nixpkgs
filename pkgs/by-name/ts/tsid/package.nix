@@ -36,25 +36,23 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs =
-    [
-      doxygen
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    doxygen
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  propagatedBuildInputs =
-    [
-      eiquadprog
-      osqp-eigen
-      proxsuite
-    ]
-    ++ lib.optional (!pythonSupport) pinocchio
-    ++ lib.optional pythonSupport python3Packages.pinocchio;
+  propagatedBuildInputs = [
+    eiquadprog
+    osqp-eigen
+    proxsuite
+  ]
+  ++ lib.optional (!pythonSupport) pinocchio
+  ++ lib.optional pythonSupport python3Packages.pinocchio;
 
   doCheck = true;
   pythonImportsCheck = [ "tsid" ];

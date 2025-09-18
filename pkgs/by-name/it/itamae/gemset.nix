@@ -48,10 +48,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0zb2dr2ihb1qiknn5iaj1ha1w9p7lj9yq5waasndlfadz225ajji";
+      sha256 = "01n5rbyws1ijwc5dw7s88xx3zzacxx9k97qn8x11b6k8k18pzs8n";
       type = "gem";
     };
-    version = "1.3.0";
+    version = "1.4.0";
   };
   excon = {
     dependencies = [ "logger" ];
@@ -174,10 +174,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0aswlmhh152c974i8bn8d90kjbwadp0bjgs9kgpxxb3vffsfxc1w";
+      sha256 = "1m7vplx6w0w0mmij6n7zgc68kd1xbkhyb4qg25vmk8p21nbjbw6j";
       type = "gem";
     };
-    version = "2.92.0";
+    version = "2.94.0";
   };
   thor = {
     groups = [ "default" ];

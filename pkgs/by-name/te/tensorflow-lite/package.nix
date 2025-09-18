@@ -42,7 +42,8 @@ buildBazelPackage rec {
     hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
   };
 
-  bazel = buildPackages.bazel_5;
+  #bazel = buildPackages.bazel_5;
+  bazel = buildPackages.bazel;
 
   nativeBuildInputs = [
     pythonEnv
@@ -56,13 +57,12 @@ buildBazelPackage rec {
     "//tensorflow/lite/tools/benchmark:benchmark_model_performance_options"
   ];
 
-  bazelFlags =
-    [
-      "--config=opt"
-    ]
-    ++ lib.optionals (hostPlatform.system != buildPlatform.system) [
-      "--config=${bazelHostConfigName.${hostPlatform.system}}"
-    ];
+  bazelFlags = [
+    "--config=opt"
+  ]
+  ++ lib.optionals (hostPlatform.system != buildPlatform.system) [
+    "--config=${bazelHostConfigName.${hostPlatform.system}}"
+  ];
 
   bazelBuildFlags = [ "--cxxopt=--std=c++17" ];
 
@@ -121,5 +121,7 @@ buildBazelPackage rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    # Bazel 5 was removed.
+    broken = true;
   };
 }

@@ -21,16 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -39,15 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GhnF7rqNLQLLB7nzIp0xNqyqBOwj9ZJ+hzzj1EAaXWU=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      clr
-    ]
-    ++ lib.optionals buildDocs [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    cmake
+    clr
+  ]
+  ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     libxml2
@@ -70,14 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=array-bounds"
   ];
 
-  postPatch =
-    ''
-      export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
-    ''
-    + lib.optionalString (!buildTests) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(test)" ""
-    '';
+  postPatch = ''
+    export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
+  ''
+  + lib.optionalString (!buildTests) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(test)" ""
+  '';
 
   # Tests always fail, probably need GPU
   # doCheck = buildTests;
@@ -114,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tracer callback/activity library";
     homepage = "https://github.com/ROCm/roctracer";
     license = with licenses; [ mit ]; # mitx11
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

@@ -49,7 +49,8 @@ buildPythonPackage rec {
     asgiref
     autobahn
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     django

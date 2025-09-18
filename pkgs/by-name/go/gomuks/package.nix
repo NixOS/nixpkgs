@@ -17,7 +17,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "tulir";
-    repo = pname;
+    repo = "gomuks";
     rev = "v${version}";
     sha256 = "sha256-bDJXo8d9K5UO599HDaABpfwc9/dJJy+9d24KMVZHyvI=";
   };
@@ -60,7 +60,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
-    description = "A terminal based Matrix client written in Go";
+    description = "Terminal based Matrix client written in Go";
     mainProgram = "gomuks";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chvp ];

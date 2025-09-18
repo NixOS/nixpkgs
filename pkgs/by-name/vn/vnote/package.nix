@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vnote";
-  version = "3.19.0";
+  version = "3.19.2";
 
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = "vnote";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HR7ZxLxFMYaBrBuK7pWGxlCS6WoKITWn8s83fF3Cp/U=";
+    hash = "sha256-40k0wSqRdwlUqrbb9mDK0dqsSEqCfbNLt+cUKeky+do=";
   };
 
   nativeBuildInputs = [

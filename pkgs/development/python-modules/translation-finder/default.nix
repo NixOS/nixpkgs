@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "translation-finder";
-  version = "2.19";
+  version = "2.23";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "WeblateOrg";
     repo = "translation-finder";
     tag = version;
-    hash = "sha256-Hc1KxmzlFqCLHSAgFF8cgxH0dTdUnBV/2T2ZkfzVvSw=";
+    hash = "sha256-SmCADimYcSsD3iUt/QqF2SwJPzbFLw5v7SWVSeOyelQ=";
   };
 
   build-system = [ setuptools ];
@@ -37,8 +37,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Translation file finder for Weblate";
     homepage = "https://github.com/WeblateOrg/translation-finder";
-    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${src.tag}/CHANGES.rst";
     license = licenses.gpl3Only;
+    mainProgram = "weblate-discover";
     maintainers = with maintainers; [ erictapen ];
   };
 

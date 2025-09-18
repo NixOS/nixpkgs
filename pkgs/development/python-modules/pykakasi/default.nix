@@ -32,7 +32,8 @@ buildPythonPackage rec {
   dependencies = [
     jaconv
     deprecated
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [
     py-cpuinfo
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     "test_aozora"
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pykakasi" ];
 

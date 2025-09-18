@@ -191,19 +191,17 @@ in
           boot.initrd.systemd.additionalUpstreamUnits = [
             "systemd-vconsole-setup.service"
           ];
-          boot.initrd.systemd.storePaths =
-            [
-              "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
-              "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
-              "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
-              "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
-            ]
-            ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
-              "${cfg.font}"
-            ]
-            ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
-              "${cfg.keyMap}"
-            ];
+          boot.initrd.systemd.storePaths = [
+            "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
+            "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
+            "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
+          ]
+          ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
+            "${cfg.font}"
+          ]
+          ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
+            "${cfg.keyMap}"
+          ];
 
           systemd.additionalUpstreamSystemUnits = [
             "systemd-vconsole-setup.service"

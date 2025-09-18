@@ -330,9 +330,9 @@ rec {
   writeBash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bash}"; }) name
+      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to bash
@@ -1194,7 +1194,12 @@ rec {
       // {
         interpreter =
           if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then python.interpreter else (python.withPackages (ps: libraries)).interpreter
+            if libraries == [ ] then
+              python.interpreter
+            else if (lib.isFunction libraries) then
+              (python.withPackages libraries).interpreter
+            else
+              (python.withPackages (ps: libraries)).interpreter
           else
             python.interpreter;
         check = optionalString (python.isPy3k && doCheck) (

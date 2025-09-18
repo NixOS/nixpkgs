@@ -13,31 +13,31 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2025.1.2";
+  version = "2025.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wA25T92aljmJlzLL+RvLKReGdRzJA4CwfXOBgspQ8rE=";
+    hash = "sha256-iOxR2SM7CisJNe1/FTRX7nDf0xpaCuQA8/xs3K8tQ90=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     platformdirs
+    siphash24
     typing-extensions
   ];
 
   optional-dependencies = {
     numpy = [ numpy ];
-    siphash = [ siphash24 ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.siphash;
+  ];
 
   pythonImportsCheck = [
     "pytools"

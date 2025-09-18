@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
+  fetchFromGitHub,
   autoreconfHook,
   pkg-config,
   util-linux,
@@ -22,91 +22,138 @@
   python3,
   withGui,
   withWallet ? true,
+  gnupg,
+  # Signatures from the following GPG public keys checked during verification of the source code.
+  # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
+  builderKeys ? [
+    "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
+    "32FE1E61B1C711186CA378DEFD8981F1BC41ABB9" # oomahq.gpg
+    "CACC7CBB26B3D2EE8FC2F2BC0E37EBAB8574F005" # leo-haf.gpg
+  ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "26.1.knots20240325";
+  version = "28.1.knots20250305";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
-    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
+    url = "https://bitcoinknots.org/files/28.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
+    # hash retrieved from signed SHA256SUMS
+    hash = "sha256-DKO3+43Tn/BTKQVrLrCkeMtzm8SfbaJD8rPlb6lDA8A=";
   };
 
-  patches = [
-    # upnp: add compatibility for miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/bitcoinknots/bitcoin/commit/643014424359a4783cf9c73bee3346ac2f04e713.patch?full_index=1";
-      hash = "sha256-FdLoNH3+ZZTbqrwRvhbAeJuGz4SgnIvoWUBzRxjfzs8=";
-    })
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    gnupg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals withGui [ wrapQtAppsHook ];
+
+  buildInputs = [
+    boost
+    libevent
+    miniupnpc
+    zeromq
+    zlib
+  ]
+  ++ lib.optionals withWallet [ sqlite ]
+  ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
+  ++ lib.optionals withGui [
+    qrencode
+    qtbase
+    qttools
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals withGui [ wrapQtAppsHook ];
+  preUnpack =
+    let
+      majorVersion = lib.versions.major finalAttrs.version;
 
-  buildInputs =
-    [
-      boost
-      libevent
-      miniupnpc
-      zeromq
-      zlib
-    ]
-    ++ lib.optionals withWallet [ sqlite ]
-    ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
-    ++ lib.optionals withGui [
-      qrencode
-      qtbase
-      qttools
-    ];
+      publicKeys = fetchFromGitHub {
+        owner = "bitcoinknots";
+        repo = "guix.sigs";
+        rev = "b998306d462f39b6077518521700d7156fec76b8";
+        sha256 = "sha256-q4tumAfTr828AZNOa9ia7Y0PYoe6W47V/7SEApTzl3w=";
+      };
 
-  configureFlags =
-    [
-      "--with-boost-libdir=${boost.out}/lib"
-      "--disable-bench"
-    ]
-    ++ lib.optionals (!doCheck) [
-      "--disable-tests"
-      "--disable-gui-tests"
-    ]
-    ++ lib.optionals (!withWallet) [
-      "--disable-wallet"
-    ]
-    ++ lib.optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-    ];
+      checksums = fetchurl {
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
+        hash = "sha256-xWJKaZBLm9H6AuMBSC21FLy/5TRUI0AQVIUF/2PvDhs=";
+      };
+
+      signatures = fetchurl {
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
+        hash = "sha256-SywdBEzZqsf2aDeOs7J9n513RTCm+TJA/QYP5+h7Ifo=";
+      };
+
+      verifyBuilderKeys =
+        let
+          script = publicKey: ''
+            echo "Checking if public key ${publicKey} signed the checksum file..."
+            grep "^\[GNUPG:\] VALIDSIG .* ${publicKey}$" verify.log > /dev/null
+            echo "OK"
+          '';
+        in
+        builtins.concatStringsSep "\n" (builtins.map script builderKeys);
+    in
+    ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      gpg --no-autostart --batch --import ${publicKeys}/builder-keys/*
+      ln -s ${checksums} ./SHA256SUMS
+      ln -s ${signatures} ./SHA256SUMS.asc
+      ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
+      gpg --no-autostart --batch --verify --status-fd 1 SHA256SUMS.asc SHA256SUMS > verify.log
+      ${verifyBuilderKeys}
+      grep bitcoin-${finalAttrs.version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
+      echo "Verifying the checksum of bitcoin-${finalAttrs.version}.tar.gz..."
+      sha256sum -c SHA256SUMS.filtered
+      popd
+    '';
+
+  configureFlags = [
+    "--with-boost-libdir=${boost.out}/lib"
+    "--disable-bench"
+  ]
+  ++ lib.optionals (!finalAttrs.doCheck) [
+    "--disable-tests"
+    "--disable-gui-tests"
+  ]
+  ++ lib.optionals (!withWallet) [
+    "--disable-wallet"
+  ]
+  ++ lib.optionals withGui [
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+  ];
 
   nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 
-  checkFlags =
-    [ "LC_ALL=en_US.UTF-8" ]
-    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
-    # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  checkFlags = [
+    "LC_ALL=en_US.UTF-8"
+  ]
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
-    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${version}/doc/release-notes.md";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${finalAttrs.version}/doc/release-notes.md";
+    maintainers = with lib.maintainers; [
       prusnak
       mmahut
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

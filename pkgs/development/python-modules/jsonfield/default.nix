@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "jsonfield";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yl828cd0m8jsyr4di6hcjdqmi31ijh5vk57mbpfl7p2gmcq8kky";
+    sha256 = "sha256-ylOHG8MwiuT0zdw7T5ntXG/Gq7GDL7+0mbxtpWbHDko=";
   };
 
   nativeCheckInputs = [

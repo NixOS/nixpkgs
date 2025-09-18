@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     description = "MATE panel applet for hardware sensors";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

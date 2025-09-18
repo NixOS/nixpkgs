@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/share/doc/asdf/
     cp -r ./* "$out"/lib/common-lisp/asdf/
     cp -r doc/* "$out"/share/doc/asdf/
-    ln -s  "$out"/lib/common-lisp/{asdf/uiop,uiop}
   '';
 
   meta = with lib; {

@@ -1,5 +1,6 @@
 {
   extraLibs ? [ ],
+  firefoxRuntime ? firefox-unwrapped,
 
   lib,
   fetchFromGitHub,
@@ -28,25 +29,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.13.3";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-u6zKB5+P/f3qM5Sqmhk2ts1AhgRN8Oq877uKQuJ6Uao=";
+    hash = "sha256-UqgPAGDekM9bKx4kNH+IuB31ML/Jn4E6g86suVESRRU=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-23XTb+gAN0D67llZj8Er43cFfhLSdEA6X6V6Ds1rvV8=";
+  cargoHash = "sha256-7v+Ohll8k3YHKYoQZIWvV+YLHT62ygFb0kPEIXh0jP4=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
     sed -zi 's;name = "firefoxpwa"\nversion = "0.0.0";name = "firefoxpwa"\nversion = "${version}";' Cargo.lock
-    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.jsm
+    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.sys.mjs
   '';
 
   nativeBuildInputs = [
@@ -85,8 +85,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     # Runtime
     mkdir -p $out/share/firefoxpwa
-    cp -Lr ${firefox-unwrapped}/lib/firefox $out/share/firefoxpwa/runtime
+    cp -Lr ${firefoxRuntime}/lib/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime
     chmod -R +w $out/share/firefoxpwa
+
+    if [ "${firefoxRuntime.binaryName}" != "firefox" ]; then
+      ln $out/share/firefoxpwa/runtime/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime/firefox
+    fi
 
     # UserChrome
     cp -r userchrome $out/share/firefoxpwa

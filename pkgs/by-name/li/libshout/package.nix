@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "icecast 'c' language bindings";
+    description = "Icecast C language bindings";
 
     longDescription = ''
       Libshout is a library for communicating with and sending data to an icecast

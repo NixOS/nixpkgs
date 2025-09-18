@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  wheel,
   cryptography,
   python-dateutil,
   six,
@@ -15,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyghmi";
-  version = "1.5.77";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RGV3d944MKrbuBM/eX9NIyHiasmLkkHH+zyeEjkIt7U=";
+    hash = "sha256-g7QJFreMmO5NWvFmSQWFrHjPHpP6Gy4o31JDHSF2ob8=";
   };
 
   build-system = [

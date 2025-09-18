@@ -13,21 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "foundry";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${version}";
-    hash = "sha256-YTsneUj5OPw7EyKZMFLJJeAtZoD0je1DdmfMjVju4L8=";
+    hash = "sha256-YMeGTPx3kqQ9CKFiH7rUEYzK0BCPksC1XIGfOj5MVd0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vVRFS7o0zV+ek9ho+URks6peOryMpFCE1sDzN9g7uH0=";
+  cargoHash = "sha256-TZTnaPsnfRjtfFMw5vdz4wV0ddjJ63TKrDHUkKvOfDw=";
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/foundry-rs/foundry";
-    description = "Portable, modular toolkit for Ethereum application development written in Rust.";
+    description = "Portable, modular toolkit for Ethereum application development written in Rust";
     changelog = "https://github.com/foundry-rs/foundry/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.3.6";
+  version = "2.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
     tag = version;
-    hash = "sha256-gn+X0DZnox4mkJwDVgwNXae63iGbiqPIO15UV5pDwuY=";
+    hash = "sha256-k6U13vkeOAip94hcEjssFgvMnhpOXG87E0R2Zu1YyY4=";
   };
 
   nativeBuildInputs = [ setuptools ];

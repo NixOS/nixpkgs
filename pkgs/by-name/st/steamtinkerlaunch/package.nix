@@ -7,24 +7,30 @@
   procps,
   stdenvNoCC,
   unixtools,
+  unstableGitUpdater,
   unzip,
   usbutils,
+  util-linux,
   wget,
+  writeShellApplication,
   xdotool,
   xorg,
   yad,
-  writeShellApplication,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "steamtinkerlaunch";
-  version = "12.12-unstable-2024-05-03";
+  version = "12.12-unstable-2025-07-14";
 
   src = fetchFromGitHub {
     owner = "sonic2kk";
     repo = "steamtinkerlaunch";
-    rev = "59b421b2f3686120a076909a4a158824cd4ef05e";
-    hash = "sha256-CGtSGAm+52t2zFsPJEsm76w+FEHhbOd9NYuerGa31tc=";
+    rev = "8550ab26a712b7f5f6d0947070181446b9de61fd";
+    hash = "sha256-mCcxdm8odHvTt4aP58RHY6NkaUMmMbQesUtY6dvIvOc=";
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
   };
 
   outputs = [
@@ -61,6 +67,7 @@ stdenvNoCC.mkDerivation {
           unixtools.xxd
           unzip
           usbutils
+          util-linux
           wget
           xdotool
           xorg.xprop
@@ -91,7 +98,7 @@ stdenvNoCC.mkDerivation {
 
       cp -a $out/bin/steamtinkerlaunch $TMPDIR/steamtinkerlaunch
       # yad cannot print its version without a graphical session https://github.com/v1cont/yad/issues/277
-      substituteInPlace $TMPDIR/steamtinkerlaunch --replace ${yad} ${fakeYad}
+      substituteInPlace $TMPDIR/steamtinkerlaunch --replace-fail ${yad} ${fakeYad}
       HOME=$TMPDIR $TMPDIR/steamtinkerlaunch compat add
 
       cp -a $steamdir/compatibilitytools.d/SteamTinkerLaunch $steamcompattool

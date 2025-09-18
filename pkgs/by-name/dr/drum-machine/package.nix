@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "drum-machine";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
     tag = "v${version}";
-    hash = "sha256-/ziI2rRuhGG/7VZbZi6lr+Lmbo2kt9VxH9bqtCdreQs=";
+    hash = "sha256-5NzbjPzmrsF/xKLBwQ4MDPxz6OjBHioO7vcLMzMhidA=";
   };
 
   strictDeps = true;
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/DrumMachine";
     changelog = "https://github.com/Revisto/drum-machine/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 }

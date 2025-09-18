@@ -32,30 +32,30 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "12gicnz857iin9lhbrigyqz4v8fan9lq4sd56rfcb2c7a8azvmz9";
+      sha256 = "0c0a4pfvnhkh8dmih1igm7qm2ligzvccppjskpz85v69xizfsj71";
       type = "gem";
     };
-    version = "0.8.8";
+    version = "0.9.6";
   };
   cbor-packed = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1dijyj7rivi39h34f32fx7k4xvngldf569i0372n1z6w01nv761l";
+      sha256 = "0sbbz0p17m77xqmh4fv4rwly1cj799hapdsg4h43kwsw8h0rnk8n";
       type = "gem";
     };
-    version = "0.1.5";
+    version = "0.2.2";
   };
   json_pure = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "13b4dminf6znfwvj8d61w6dar9zrxnndrmiig19adbliv0haxmlr";
+      sha256 = "1kks889ymaq5xqvj18qamar3il8m3dnnaf6cij0a0kwxp8lpk1va";
       type = "gem";
     };
-    version = "2.7.2";
+    version = "2.8.1";
   };
   neatjson = {
     groups = [ "default" ];
@@ -83,9 +83,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0adc8qblz8ii668r3rksjx83p675iryh52rvdvysimx2hkbasj7d";
+      sha256 = "1m5fqy7vq6y7bgxmw7jmk7y6pla83m16p7lb41lbqgg53j8x2cds";
       type = "gem";
     };
-    version = "1.6.12";
+    version = "1.6.14";
   };
 }

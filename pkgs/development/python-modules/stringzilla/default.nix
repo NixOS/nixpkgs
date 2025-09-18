@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "3.12.4";
+  version = "3.12.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-U745bA3GTPyNPpiB7NESsUJYKmUCY8qK4aqbHECQqnE=";
+    hash = "sha256-4Ze6yVNd2NX0E6vAJuiLZTIgicF7mSlGO8wKOF1jYds=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "scripts/test.py" ];
+  enabledTestPaths = [ "scripts/test.py" ];
 
   meta = {
     changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";

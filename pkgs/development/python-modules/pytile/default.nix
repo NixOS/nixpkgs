@@ -52,7 +52,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = " Python API for Tile Bluetooth trackers";
+    description = "Python API for Tile Bluetooth trackers";
     longDescription = ''
       pytile is a simple Python library for retrieving information on Tile
       Bluetooth trackers (including last location and more).

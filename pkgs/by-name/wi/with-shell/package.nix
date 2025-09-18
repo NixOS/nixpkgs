@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "with";
-  version = "unstable-2018-03-20";
+  version = "0-unstable-2018-03-20";
 
   src = fetchFromGitHub {
     owner = "mchav";

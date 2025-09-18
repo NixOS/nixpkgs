@@ -1,6 +1,5 @@
 {
   lib,
-  SDL2,
   alsa-lib,
   apple-sdk_14,
   cmake,
@@ -19,6 +18,8 @@
   moltenvk,
   openal,
   pkg-config,
+  replaceVars,
+  sdl3,
   stdenv,
   udev,
   vulkan-loader,
@@ -28,52 +29,52 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "143";
+  version = "145";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uuFKbS7WvxkTyyQfuQ6iKPvRt+54zUPdjUlQ/ohBAr8=";
+    hash = "sha256-es+K5+qlK7FcJCFEIMcOsXCZSnoXEEmtS0yhpCvaILM";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libao
-      librashader
-      vulkan-loader
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-      moltenvk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      gtksourceview3
-      libGL
-      libGLU
-      libX11
-      libXv
-      libpulseaudio
-      openal
-      udev
-    ];
+  buildInputs = [
+    sdl3
+    libao
+    librashader
+    vulkan-loader
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+    moltenvk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    gtksourceview3
+    libGL
+    libGLU
+    libX11
+    libXv
+    libpulseaudio
+    openal
+    udev
+  ];
 
   patches = [
-    ./darwin-build-fixes.patch
+    (replaceVars ./darwin-build-fixes.patch {
+      sdkVersion = apple-sdk_14.version;
+    })
   ];
 
   cmakeFlags = [

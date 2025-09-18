@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-zunclient";
-  version = "5.1.0";
+  version = "5.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-zunclient";
     tag = version;
-    hash = "sha256-2gC2aMaMI//QKIpbDNT9cii17680g4X1c0rgrgPbAsg=";
+    hash = "sha256-qBpsahkVZEQwsVcNJFtRSJvvxGITauAJ6Zv8p+70hh0=";
   };
 
   env.PBR_VERSION = version;
@@ -87,6 +87,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Zun API";
     license = lib.licenses.asl20;
     mainProgram = "zun";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

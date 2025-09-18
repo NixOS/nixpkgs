@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation {
   pname = "g203-led";
-  version = "unstable-2021-05-08";
+  version = "0-unstable-2021-05-08";
   src = fetchFromGitHub {
     owner = "smasty";
     repo = "g203-led";

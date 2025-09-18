@@ -3,14 +3,14 @@
   buildPythonPackage,
   chromadb,
   fetchPypi,
+  hatchling,
   llama-index-core,
   pythonOlder,
-  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-chroma";
-  version = "0.4.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_chroma";
     inherit version;
-    hash = "sha256-cO50zPMErdoEFx0BTkg3WcaKHJL2eeosoua29Ftv7wg=";
+    hash = "sha256-2NX72ejiuzhjCi15EPa9OJZtTkKb5ySjMRfiDP617lY=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     chromadb

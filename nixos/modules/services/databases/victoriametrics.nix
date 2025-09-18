@@ -9,25 +9,27 @@ let
   cfg = config.services.victoriametrics;
   settingsFormat = pkgs.formats.yaml { };
 
-  startCLIList =
-    [
-      "${cfg.package}/bin/victoria-metrics"
-      "-storageDataPath=/var/lib/${cfg.stateDir}"
-      "-httpListenAddr=${cfg.listenAddress}"
+  startCLIList = [
+    "${cfg.package}/bin/victoria-metrics"
+    "-storageDataPath=/var/lib/${cfg.stateDir}"
+    "-httpListenAddr=${cfg.listenAddress}"
 
-    ]
-    ++ lib.optionals (cfg.retentionPeriod != null) [ "-retentionPeriod=${cfg.retentionPeriod}" ]
-    ++ cfg.extraOptions;
+  ]
+  ++ lib.optionals (cfg.retentionPeriod != null) [ "-retentionPeriod=${cfg.retentionPeriod}" ]
+  ++ cfg.extraOptions;
   prometheusConfigYml = checkedConfig (
     settingsFormat.generate "prometheusConfig.yaml" cfg.prometheusConfig
   );
 
   checkedConfig =
     file:
-    pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
-      ln -s ${file} $out
-      ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
-    '';
+    if cfg.checkConfig then
+      pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
+      ''
+    else
+      file;
 in
 {
   options.services.victoriametrics = {
@@ -68,6 +70,22 @@ in
         The minimum retentionPeriod is 24h or 1d. See also -retentionFilter
         The following optional suffixes are supported: s (second), h (hour), d (day), w (week), y (year).
         If suffix isn't set, then the duration is counted in months (default 1)
+      '';
+    };
+
+    basicAuthUsername = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      description = ''
+        Basic Auth username used to protect VictoriaMetrics instance by authorization
+      '';
+    };
+
+    basicAuthPasswordFile = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.path;
+      description = ''
+        File that contains the Basic Auth password used to protect VictoriaMetrics instance by authorization
       '';
     };
 
@@ -116,8 +134,6 @@ in
       default = [ ];
       example = literalExpression ''
         [
-          "-httpAuth.username=username"
-          "-httpAuth.password=file:///abs/path/to/file"
           "-loggerLevel=WARN"
         ]
       '';
@@ -127,9 +143,30 @@ in
         or {command}`victoriametrics -help` for more information.
       '';
     };
+
+    checkConfig = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Check configuration.
+
+        If you use credentials stored in external files (`environmentFile`, etc),
+        they will not be visible  and it will report errors, despite a correct configuration.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion =
+          (cfg.basicAuthUsername == null && cfg.basicAuthPasswordFile == null)
+          || (cfg.basicAuthUsername != null && cfg.basicAuthPasswordFile != null);
+        message = "Both basicAuthUsername and basicAuthPasswordFile must be set together to enable basicAuth functionality, or neither should be set.";
+      }
+    ];
+
     systemd.services.victoriametrics = {
       description = "VictoriaMetrics time series database";
       wantedBy = [ "multi-user.target" ];
@@ -140,9 +177,17 @@ in
         ExecStart = lib.escapeShellArgs (
           startCLIList
           ++ lib.optionals (cfg.prometheusConfig != { }) [ "-promscrape.config=${prometheusConfigYml}" ]
+          ++ lib.optional (cfg.basicAuthUsername != null) "-httpAuth.username=${cfg.basicAuthUsername}"
+          ++ lib.optional (
+            cfg.basicAuthPasswordFile != null
+          ) "-httpAuth.password=file://%d/basic_auth_password"
         );
 
         DynamicUser = true;
+        LoadCredential = lib.optionals (cfg.basicAuthPasswordFile != null) [
+          "basic_auth_password:${cfg.basicAuthPasswordFile}"
+        ];
+
         RestartSec = 1;
         Restart = "on-failure";
         RuntimeDirectory = "victoriametrics";

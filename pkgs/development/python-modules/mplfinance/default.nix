@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "mplfinance";
-  version = "0.12.7a7";
+  version = "0.12.10b0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pATiprTELt8GrEkeKjILPfpdNDVoex5t+Mc+6Gg7cPY=";
+    hash = "sha256-faFQtYUapRGa1uBrVeSDOLYZu2dz8bhd9d5npf/ZF78=";
   };
 
   propagatedBuildInputs = [

@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   aiohttp,
   buildPythonPackage,
   defusedxml,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "1.7.3";
+  version = "1.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "plugwise";
     repo = "python-plugwise";
     tag = "v${version}";
-    hash = "sha256-VnL8rCSpNEs0NnghhgSO4k1Q+yqP5LCMZirC/hLZRO4=";
+    hash = "sha256-hGXjwEOvcSIvfw3xeIUVF59bSXjVXL7CMUncHqeVZ1Y=";
   };
 
   postPatch = ''
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     aiohttp
     defusedxml
     munch

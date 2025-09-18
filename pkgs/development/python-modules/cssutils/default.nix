@@ -37,7 +37,8 @@ buildPythonPackage rec {
     lxml
     mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   disabledTests = [
     # access network

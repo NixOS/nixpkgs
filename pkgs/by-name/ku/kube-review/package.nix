@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kube-review";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "anderseknert";
     repo = "kube-review";
     tag = "v${version}";
-    hash = "sha256-0wDapaV1e6QNZWeHG86t12iu1yW1LW6mnpdWIrwvBFk=";
+    hash = "sha256-W+JF8MR+x6vova6hRw0omXXhT40qXmdZciAdt2bi6jM=";
   };
 
-  vendorHash = "sha256-lzhjIX+67S+68erlJNHVXMKgRFUUyG+ymZEKVKRRpRc=";
+  vendorHash = "sha256-xHiHeSoiT/5h8pHTBTq1g/zJtnCbcUs+qMJ4vHjWzog=";
   ldflags = [
     "-X github.com/anderseknert/kube-review/cmd.version=v${version}"
   ];

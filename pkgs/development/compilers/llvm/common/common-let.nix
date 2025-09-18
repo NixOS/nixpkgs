@@ -20,7 +20,7 @@ rec {
           asl20
           llvm-exception
         ];
-    maintainers = lib.teams.llvm.members;
+    teams = [ lib.teams.llvm ];
 
     # See llvm/cmake/config-ix.cmake.
     platforms =
@@ -31,9 +31,11 @@ rec {
       ++ lib.platforms.s390x
       ++ lib.platforms.wasi
       ++ lib.platforms.x86
-      ++ lib.optionals (lib.versionAtLeast release_version "7") lib.platforms.riscv
-      ++ lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k
-      ++ lib.optionals (lib.versionAtLeast release_version "16") lib.platforms.loongarch64;
+      ++ lib.platforms.riscv
+      ++ lib.platforms.m68k
+      ++ lib.platforms.loongarch64;
+
+    identifiers.cpeParts.vendor = "llvm";
   };
 
   releaseInfo =

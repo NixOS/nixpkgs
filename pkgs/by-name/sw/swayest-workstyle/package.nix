@@ -17,7 +17,6 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Txyj2o4Ew8VPKV/UCNiLhosgm5kuSl+na2l4H3yl/Yc=";
 
   # No tests

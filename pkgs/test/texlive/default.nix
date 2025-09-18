@@ -441,12 +441,10 @@ rec {
         # do not know how to test without a valid build.lua
         "ppmcheckpdf"
 
-        # *.inc files in source container rather than run
-        "texaccents"
-
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
 
       # (1) binaries requiring -v
       shortVersion = [
@@ -625,7 +623,7 @@ rec {
         "outocp"
         "pmxab"
 
-        # GUI scripts that accept no argument or crash without a graphics server; please test manualy
+        # GUI scripts that accept no argument or crash without a graphics server; please test manually
         "epspdftk"
         "texdoctk"
         "tlshell"
@@ -638,6 +636,9 @@ rec {
       needScheme = [
         # pfarrei: require working kpse to find lua module
         "a5toa4"
+
+        # show-pdf-tags: require working kpse to find lualatex and lua modules
+        "show-pdf-tags"
 
         # bibexport: requires kpsewhich
         "bibexport"

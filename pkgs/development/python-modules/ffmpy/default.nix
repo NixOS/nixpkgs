@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  poetry-core,
+  uv-build,
   pytestCheckHook,
   go,
   ffmpeg-headless,
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -21,25 +21,27 @@ buildPythonPackage rec {
     owner = "Ch00k";
     repo = "ffmpy";
     tag = version;
-    hash = "sha256-spbyz1EyMJRXJTm7TqN9XoqR9ztBKsNZx3NURwV7N2w=";
+    hash = "sha256-u//L2vxucFlWmk1+pdp+iCrpzzMZUonDAn1LELgX86E=";
   };
 
-  postPatch = ''
-    # default to store ffmpeg
-    substituteInPlace ffmpy/ffmpy.py \
-      --replace-fail \
-        'executable: str = "ffmpeg",' \
-        'executable: str = "${ffmpeg-headless}/bin/ffmpeg",'
-
-    #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
-    for fname in tests/*.py; do
-      echo 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])' >>"$fname"
-    done
-  '';
+  postPatch =
+    # Default to store ffmpeg.
+    ''
+      substituteInPlace ffmpy/ffmpy.py \
+        --replace-fail \
+          'executable: str = "ffmpeg",' \
+          'executable: str = "${lib.getExe ffmpeg-headless}",'
+    ''
+    # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+    + ''
+      for fname in tests/*.py; do
+        echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
+      done
+    '';
 
   pythonImportsCheck = [ "ffmpy" ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [
     pytestCheckHook

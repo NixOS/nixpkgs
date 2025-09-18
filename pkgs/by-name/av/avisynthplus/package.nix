@@ -6,19 +6,18 @@
   cmake,
   pkg-config,
   gitUpdater,
-  libdevil,
   soundtouch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avisynthplus";
-  version = "3.7.4";
+  version = "3.7.5";
 
   src = fetchFromGitHub {
     owner = "AviSynth";
     repo = "AviSynthPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M+F7bUSlH6kAyQLCq0RxmaE19RqHPPleTMyRuz5zqPg=";
+    hash = "sha256-RkEZWsAKZABtl+SbRLCjMqyQoi9ainbaI9hWlpO6Fwo=";
   };
 
   patchPhase = ''
@@ -27,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    libdevil
     soundtouch
   ];
 

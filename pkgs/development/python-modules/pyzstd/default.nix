@@ -3,19 +3,22 @@
   fetchFromGitHub,
   lib,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
+  typing-extensions,
   zstd-c,
 }:
+
 buildPythonPackage rec {
   pname = "pyzstd";
-  version = "0.16.2";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rogdham";
     repo = "pyzstd";
     tag = version;
-    hash = "sha256-Az+0m1XUFxExBZK8bcjK54Zt2d5ZlAKRMZRdr7rPcss=";
+    hash = "sha256-PICYdB/xu/q2wjbkF2nziZt8z8PmzJ5eM+Yq0rpLfEU=";
   };
 
   postPatch = ''
@@ -31,6 +34,14 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+  ];
+
+  dependencies = lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
+
+  pythonRelaxDeps = [
+    "typing-extensions"
   ];
 
   buildInputs = [

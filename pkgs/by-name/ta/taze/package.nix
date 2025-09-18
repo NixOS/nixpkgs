@@ -13,18 +13,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taze";
-  version = "19.0.4";
+  version = "19.5.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "taze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WHqocBPIop3sNP55+SL1+yibuMQtUnIdMyHxQdQJN5M=";
+    hash = "sha256-TJ/gyqGTaaRYgx9EMFhFmzWAFrNRnESk6AvBZtQ+24k=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AyQMFqtRW8U0zPl0c9kq8olxqgZ97ln0u/UuXw/+QXI=";
+    fetcherVersion = 1;
+    hash = "sha256-kTXW/KYI1ao7zIyIphMPxjfuo7RrEnmXXEK7yTRWO+U=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "libnitrokey";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4PEZ31QyVOmdhpKqTN8fwcHoLuu+w+OJ3fZeqwlE+io=";
     # On OSX, libnitrokey depends on a custom version of hidapi in a submodule.
     # Monitor https://github.com/Nitrokey/libnitrokey/issues/140 to see if we
@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libusb1 ];
 
   propagatedBuildInputs = [ hidapi ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Communicate with Nitrokey devices in a clean and easy manner";

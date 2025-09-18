@@ -34,10 +34,10 @@ buildPythonPackage {
     fi
   '';
   meta = with lib; {
-    description = "pytorch inductor backend which uses composable_kernel universal GEMM implementations";
+    description = "Pytorch inductor backend which uses composable_kernel universal GEMM implementations";
     homepage = "https://github.com/ROCm/composable_kernel";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
+    repo = "tcolorpy";
     tag = "v${version}";
     hash = "sha256-0AXpwRQgBisO4360J+Xd4+EWzDtDJ64UpSUmDnSYjKE=";
   };

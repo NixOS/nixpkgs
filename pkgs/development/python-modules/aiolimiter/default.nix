@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mjpieters";
-    repo = pname;
+    repo = "aiolimiter";
     tag = "v${version}";
     hash = "sha256-wgHR0GzaPXlhL4ErklFqmWNFO49dvd5X5MgyYHVH4Eo=";
   };

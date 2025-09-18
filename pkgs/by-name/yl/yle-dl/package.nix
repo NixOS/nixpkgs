@@ -1,55 +1,55 @@
 {
   lib,
-  fetchFromGitHub,
-  rtmpdump,
-  php,
-  wget,
   python3Packages,
+  fetchFromGitHub,
   ffmpeg,
-  testers,
-  yle-dl,
+  wget,
+  versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "yle-dl";
-  version = "20240706";
+let
+  version = "20250730";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
-    rev = version;
-    hash = "sha256-X5fkcJgTVGASoVvvshGWUFNzB1V4KMSKgwoxzP62mxc=";
+    tag = "releases/${version}";
+    hash = "sha256-85Dj+r6heusvT3+y3SNYBBa5h/tje0G4XHmfJpCwkMY=";
   };
+in
+python3Packages.buildPythonApplication {
+  pname = "yle-dl";
+  inherit version src;
+  pyproject = true;
 
-  propagatedBuildInputs = with python3Packages; [
-    attrs
+  build-system = with python3Packages; [ flit-core ];
+
+  dependencies = with python3Packages; [
     configargparse
-    ffmpeg
-    future
     lxml
     requests
   ];
+
   pythonPath = [
-    rtmpdump
-    php
     wget
+    ffmpeg
   ];
 
-  doCheck = false; # tests require network access
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    # tests require network access
+    # python3Packages.pytestCheckHook
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = yle-dl;
-    command = "yle-dl -h";
-  };
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
-    changelog = "https://github.com/aajanki/yle-dl/blob/${version}/ChangeLog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/aajanki/yle-dl/blob/${src.tag}/ChangeLog";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "yle-dl";
   };
 }

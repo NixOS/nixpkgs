@@ -79,11 +79,9 @@ stdenv.mkDerivation rec {
   };
 
   # remove all non-essential packages (which take up a lot of space)
-  preConfigure =
-    lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep)
-    + ''
-      patchShebangs .
-    '';
+  preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
+    patchShebangs .
+  '';
 
   buildInputs = [
     readline
@@ -154,7 +152,7 @@ stdenv.mkDerivation rec {
     # We are also grateful to ChrisJefferson for previous work on the package,
     # and to ChrisJefferson and fingolfin for help with GAP-related questions
     # from the upstream point of view.
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.all;
     # keeping all packages increases the package size considerably, which is
     # why a local build is preferable in that situation. The timeframe is

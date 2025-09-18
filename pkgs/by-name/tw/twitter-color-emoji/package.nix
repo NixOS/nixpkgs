@@ -3,15 +3,8 @@
 
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  cairo,
-  imagemagick,
-  pkg-config,
-  pngquant,
-  python3,
-  which,
-  zopfli,
   noto-fonts-color-emoji,
 }:
 
@@ -25,16 +18,8 @@ let
     rev = "v${version}";
     hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
   };
-
-  pythonEnv = python3.withPackages (
-    ps: with ps; [
-      fonttools
-      nototools
-    ]
-  );
-
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "twitter-color-emoji";
   inherit version;
 
@@ -50,15 +35,7 @@ stdenv.mkDerivation rec {
     mv ${twemojiSrc.name} ${noto-fonts-color-emoji.src.name}
   '';
 
-  nativeBuildInputs = [
-    cairo
-    imagemagick
-    pkg-config
-    pngquant
-    pythonEnv
-    which
-    zopfli
-  ];
+  inherit (noto-fonts-color-emoji) strictDeps depsBuildBuild nativeBuildInputs;
 
   postPatch =
     let

@@ -39,18 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      glib
-      gspell
-      gtk3
-      gtksourceview4
-      libxfce4ui # for shortcut plugin
-      xfconf # required by libxfce4kbd-private-3
-    ]
-    ++ lib.optionals enablePolkit [
-      polkit
-    ];
+  buildInputs = [
+    glib
+    gspell
+    gtk3
+    gtksourceview4
+    libxfce4ui # for shortcut plugin
+    xfconf # required by libxfce4kbd-private-3
+  ]
+  ++ lib.optionals enablePolkit [
+    polkit
+  ];
 
   # Use the GSettings keyfile backend rather than the default
   mesonFlags = [ "-Dkeyfile-settings=true" ];
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.xfce.org/apps/mousepad";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mousepad";
-    maintainers = lib.teams.xfce.members;
+    teams = [ lib.teams.xfce ];
     platforms = lib.platforms.linux;
   };
 })

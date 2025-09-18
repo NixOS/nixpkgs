@@ -80,16 +80,13 @@ in
         The package that provides the default driver set.
       '';
       type = lib.types.package;
-      internal = true;
     };
 
     package32 = lib.mkOption {
       description = ''
         The package that provides the 32-bit driver set. Used when {option}`enable32Bit` is enabled.
-        set.
       '';
       type = lib.types.package;
-      internal = true;
     };
 
     extraPackages = lib.mkOption {

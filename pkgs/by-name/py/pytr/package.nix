@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
     tag = "v${version}";
-    hash = "sha256-uWG8q6H6q54v3Iq5LOkr7zi5rds+y13O0ai9R9QySdI=";
+    hash = "sha256-72CxtO9AvjgK0lwcjHZexfedpNbrFEvRSN30hhiv+Zk=";
   };
 
   build-system = with python3Packages; [
@@ -44,7 +44,10 @@ python3Packages.buildPythonApplication rec {
       --zsh <($out/bin/pytr completion zsh)
   '';
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+  ];
 
   versionCheckProgramArg = "--version";
 

@@ -15,7 +15,8 @@ let
   selectedPanelModulePackages = [
     gnome-panel
     gnome-flashback
-  ] ++ panelModulePackages;
+  ]
+  ++ panelModulePackages;
 
   panelModulesEnv = buildEnv {
     name = "gnome-panel-modules-env";
@@ -33,8 +34,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    selectedPanelModulePackages
-    ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
+    selectedPanelModulePackages ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
 
   dontUnpack = true;
   dontConfigure = true;

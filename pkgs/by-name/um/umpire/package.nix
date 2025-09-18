@@ -12,23 +12,22 @@ assert cudaSupport -> cudaPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "umpire";
-  version = "2025.03.0";
+  version = "2025.09.0";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
-    rev = "v${version}";
-    hash = "sha256-IL8jfG0qTDjp80E8bniNYUiH77PTtL4QIwMCEkqdwSE=";
+    tag = "v${version}";
+    hash = "sha256-1lJty4HdjwExBih7Bl3E34LpmDlDlhb0zl9N7MyFj5w=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;

@@ -30,7 +30,8 @@
 let
   shared_meta = lib: {
     homepage = "https://www.picotech.com/downloads/linux";
-    maintainers = with lib.maintainers; [ wirew0rm ] ++ lib.teams.lumiguide.members;
+    maintainers = with lib.maintainers; [ wirew0rm ];
+    teams = [ lib.teams.lumiguide ];
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
   };
@@ -62,7 +63,7 @@ let
       '';
       meta = shared_meta lib // {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        description = "library for picotech oscilloscope software";
+        description = "Library for picotech oscilloscope software";
       };
     }
   ) { };
@@ -95,7 +96,7 @@ let
         with lib;
         shared_meta lib
         // {
-          description = "library for picotech oscilloscope ${name} series";
+          description = "Library for picotech oscilloscope ${name} series";
         };
     };
 

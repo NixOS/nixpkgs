@@ -27,7 +27,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  pythonImpotsCheck = [
+  pythonImportsCheck = [
     "test_results_parser"
   ];
 

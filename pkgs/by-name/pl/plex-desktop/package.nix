@@ -12,6 +12,7 @@
   libpulseaudio,
   libva,
   libxkbcommon,
+  libxml2_13,
   makeShellWrapper,
   minizip,
   nss,
@@ -23,8 +24,8 @@
 }:
 let
   pname = "plex-desktop";
-  version = "1.108.1";
-  rev = "84";
+  version = "1.109.0";
+  rev = "85";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -44,7 +45,7 @@ let
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-ZcP84maap5Dskf9yECd76gn5x+tWxyVcIo+c0P2VJiQ4VwN2KCgWmwH2JkHzafFCcCFm9EqFBrFlNXWEvnUieQ==";
+      hash = "sha512-BSnA84purHv6qIVELp+AJI2m6erTngnupbuoCZTaje6LCd2+5+U+7gqWdahmO1mxJEGvuBwzetdDrp1Ibz5a6A==";
     };
 
     nativeBuildInputs = [
@@ -56,9 +57,11 @@ let
     buildInputs = [
       elfutils
       ffmpeg_6-headless
+      libedit
       libpulseaudio
       libva
       libxkbcommon
+      libxml2_13
       minizip
       nss
       stdenv.cc.cc
@@ -103,8 +106,6 @@ let
       rm $out/lib/libEGL.so*
       rm $out/lib/libdrm.so*
       rm $out/lib/libdrm*
-
-      ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
 
       # Keep dependencies where the version from nixpkgs is higher.
       cp usr/lib/x86_64-linux-gnu/libasound.so.2 $out/lib/libasound.so.2
@@ -152,6 +153,9 @@ buildFHSEnv {
 
     # db files should have write access.
     chmod --recursive 750 "$PLEX_DB"
+
+    # These environment variables sometimes silently cause plex to crash.
+    unset QT_QPA_PLATFORM QT_STYLE_OVERRIDE
 
     set -o allexport
     ${lib.toShellVars extraEnv}

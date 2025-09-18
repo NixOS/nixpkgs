@@ -9,32 +9,33 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nesting";
   version = "0.3.0";
 
   src = fetchFromGitLab {
-    group = "gitlab-org";
-    owner = "fleeting";
+    owner = "gitlab-org/fleeting";
     repo = "nesting";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ejoLld1TmwaqTlSyuzyEVEqLyEehu6g7yc0H0Cvkqp4=";
   };
 
   vendorHash = "sha256-CyXlK/0VWMFlwSfisoaNCRdknasp8faN/K/zdyRhAQQ=";
 
-  subPackages = [ "cmd/nesting" ];
-
-  # See https://gitlab.com/gitlab-org/fleeting/nesting/-/blob/v0.3.0/Makefile?ref_type=tags#L22-24.
-  #
-  # Needed for "nesting version" to not show "dev".
-  ldflags = [
-    "-X gitlab.com/gitlab-org/fleeting/nesting.NAME=nesting"
-    "-X gitlab.com/gitlab-org/fleeting/nesting.VERSION=v${version}"
-    "-X gitlab.com/gitlab-org/fleeting/nesting.REVISION=${src.rev}"
-  ];
-
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+
+  # Needed for "nesting version" to not show "dev".
+  #
+  # https://gitlab.com/gitlab-org/fleeting/nesting/-/blob/v0.3.0/Makefile?ref_type=tags#L22-24
+  ldflags =
+    let
+      ldflagsPackageVariablePrefix = "gitlab.com/gitlab-org/fleeting/nesting";
+    in
+    [
+      "-X ${ldflagsPackageVariablePrefix}.NAME=nesting"
+      "-X ${ldflagsPackageVariablePrefix}.VERSION=${finalAttrs.version}"
+      "-X ${ldflagsPackageVariablePrefix}.REFERENCE=v${finalAttrs.version}"
+    ];
 
   doInstallCheck = true;
 
@@ -57,4 +58,4 @@ buildGoModule rec {
       "x86_64-darwin"
     ];
   };
-}
+})

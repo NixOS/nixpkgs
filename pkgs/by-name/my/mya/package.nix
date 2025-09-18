@@ -26,15 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [
-      curl
-      json_c
-      libbsd
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
-      argp-standalone
-    ];
+  buildInputs = [
+    curl
+    json_c
+    libbsd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
+    argp-standalone
+  ];
 
   patches = [
     ./argp.patch
@@ -44,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     # Based on the upstream PKGBUILD
-    mkdir -p $out/share/doc/${finalAttrs.pname}
+    mkdir -p $out/share/doc/mya
     cp -a bin $out
-    cp $cmakeDir/README.md $out/share/doc/${finalAttrs.pname}
+    cp $cmakeDir/README.md $out/share/doc/mya
 
     runHook postInstall
   '';

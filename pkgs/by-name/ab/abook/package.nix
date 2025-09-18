@@ -1,35 +1,43 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   fetchpatch,
+  autoreconfHook,
   pkg-config,
   ncurses,
   readline,
-  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abook";
-  version = "0.6.1";
+  version = "0.6.2";
 
-  src = fetchurl {
-    url = "http://abook.sourceforge.net/devel/abook-${version}.tar.gz";
-    sha256 = "1yf0ifyjhq2r003pnpn92mn0924bn9yxjifxxj2ldcsgd7w0vagh";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/abook/git";
+    rev = "ver_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-aV57Ob6KN6/eNPrxxmNOy/qfhG687uVy5WY0cd4daCU=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/gcc5.patch?h=packages/abook";
-      name = "gcc5.patch";
-      sha256 = "13n3qd6yy45i5n8ppjn9hj6y63ymjrq96280683xk7f7rjavw5nn";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/abook-gcc15.patch?h=abook";
+      hash = "sha256-+73+USELoby8JvuVOWZe6E+xtdhajnLnDkzD/77QoTo=";
     })
   ];
 
+  # error: implicit declaration of function 'isalnum' [-Wimplicit-function-declaration]
+  # if (isalnum (*str)) *(p++) = *str;
+  postPatch = ''
+    substituteInPlace database.c \
+      --replace-fail '#include "xmalloc.h"' $'#include "xmalloc.h"\n#include <ctype.h>'
+  '';
+
   nativeBuildInputs = [
-    pkg-config
     autoreconfHook
+    pkg-config
   ];
+
   buildInputs = [
     ncurses
     readline
@@ -38,9 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.edwtjo ];
-    platforms = with lib.platforms; unix;
+    platforms = lib.platforms.unix;
     mainProgram = "abook";
   };
-}
+})

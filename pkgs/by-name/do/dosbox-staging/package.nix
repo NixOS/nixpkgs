@@ -1,11 +1,9 @@
 {
   lib,
   SDL2,
-  SDL2_image,
   SDL2_net,
   alsa-lib,
   fetchFromGitHub,
-  fetchpatch,
   fluidsynth,
   gitUpdater,
   glib,
@@ -33,22 +31,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
-  version = "0.81.1";
+  version = "0.82.2";
+  shortRev = "f8c24f8";
 
   src = fetchFromGitHub {
     owner = "dosbox-staging";
     repo = "dosbox-staging";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-XGssEyX+AVv7/ixgGTRtPFjsUSX0FT0fhP+TXsFl2fY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-u9W6TfHF+BNeoExcx98kCVJu1BNwWnvjBEg84evMnBw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "darwin-allow-bypass-wraps.patch";
-      url = "https://github.com/dosbox-staging/dosbox-staging/commit/9f0fc1dc762010e5f7471d01c504d817a066cae3.patch";
-      hash = "sha256-IzxRE1Vr+M8I5hdy80UwebjJ5R1IlH9ymaYgs6VwAO4=";
-    })
-  ];
 
   nativeBuildInputs = [
     gtest
@@ -60,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    SDL2_image
     SDL2_net
     fluidsynth
     glib
@@ -77,15 +67,26 @@ stdenv.mkDerivation (finalAttrs: {
     opusfile
     speexdsp
     zlib-ng
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   outputs = [
     "out"
     "man"
   ];
 
+  # replace instances of the get-version.sh script that uses git in meson.build with manual values
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "meson.project_source_root() + '/scripts/get-version.sh'," "'printf'," \
+      --replace-fail "'version', check: true," "'${finalAttrs.version}', check: true," \
+      --replace-fail "'./scripts/get-version.sh', 'hash'," "'printf', '${
+        builtins.substring 0 5 finalAttrs.shortRev
+      }',"
+  '';
+
   postInstall = ''
-    install -Dm644 $src/contrib/linux/dosbox-staging.desktop $out/share/applications/
+    install -Dm644 $src/contrib/linux/org.dosbox-staging.dosbox-staging.desktop $out/share/applications/
   '';
 
   # Rename binary, add a wrapper, and copy manual to avoid conflict with
@@ -125,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       joshuafern
+      Zaechus
     ];
     platforms = lib.platforms.unix;
     priority = 101;

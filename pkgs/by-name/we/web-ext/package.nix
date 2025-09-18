@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "web-ext";
-  version = "8.5.0";
+  version = "8.9.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
     rev = version;
-    hash = "sha256-RT/K/fYMys1RAvnusAMuHtfZ7gndYf3FPuHBYCklBpw=";
+    hash = "sha256-hy/Jt9P0ROXC+00kFbB1Qh9kOPjSvAREXCPI4kpsDMM=";
   };
 
-  npmDepsHash = "sha256-O8DmeT0wRNpuPU1K6kH97D9+mxOxCchAUrvOVPq4VPc=";
+  npmDepsHash = "sha256-4Raak0Jqahc9l48SUctFKT0M1m27X8VcLyC3eJJCX1I=";
 
   npmBuildFlags = [ "--production" ];
 

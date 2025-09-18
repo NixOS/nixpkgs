@@ -20,7 +20,7 @@
   qt5,
   xorg,
   cudaSupport ? config.cudaSupport,
-  cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities,
+  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
 }:
 
@@ -46,42 +46,40 @@ stdenv'.mkDerivation rec {
   cmakeFlags = lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" true)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-      lib.strings.concatStringsSep ";" (map cudaPackages.cudaFlags.dropDot cudaCapabilities)
+      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDots cudaCapabilities)
     ))
   ];
 
-  buildInputs =
-    [
-      boost_static
-      ceres-solver
-      eigen
-      freeimage
-      glog
-      libGLU
-      glew
-      qtbase
-      flann
-      cgal
-      gmp
-      mpfr
-      xorg.libSM
-    ]
-    ++ lib.optionals cudaSupport [
-      cudatoolkit
-      cudaPackages.cuda_cudart.static
-    ];
+  buildInputs = [
+    boost_static
+    ceres-solver
+    eigen
+    freeimage
+    glog
+    libGLU
+    glew
+    qtbase
+    flann
+    cgal
+    gmp
+    mpfr
+    xorg.libSM
+  ]
+  ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+  ];
 
   meta = with lib; {
-    description = "COLMAP - Structure-From-Motion and Multi-View Stereo pipeline";
+    description = "Structure-From-Motion and Multi-View Stereo pipeline";
     longDescription = ''
       COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
       with a graphical and command-line interface.

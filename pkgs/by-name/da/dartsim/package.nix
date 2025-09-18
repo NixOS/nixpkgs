@@ -2,12 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   pythonSupport ? false,
   python3Packages,
 
   # nativeBuildInputs
   cmake,
+  doxygen,
   pkg-config,
 
   # propagatedBuildInputs
@@ -17,19 +19,22 @@
   bullet,
   eigen,
   fcl,
+  flann,
   fmt,
   libglut,
-  nlopt,
   imgui,
   ipopt,
   lapack,
   libGL,
   libGLU,
+  libccd,
+  nlopt,
   ode,
   openscenegraph,
   pagmo2,
   tinyxml-2,
   urdfdom,
+  urdfdom-headers,
 
   # checkInputs
   gbenchmark,
@@ -47,106 +52,109 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ik6FwrN5Ta1LinrXpZZc7AmzdFPoLjG07/zo1IZdmgI=";
   };
 
-  # disable failing tests. CMAKE_CTEST_ARGUMENTS does not work.
-  patches = [ ./disable-failing-tests.patch ];
+  patches = [
+    # disable failing tests. CMAKE_CTEST_ARGUMENTS does not work.
+    ./disable-failing-tests.patch
+    # Fix use of system gbenchmark, merged upstream
+    # ref. https://github.com/dartsim/dart/pull/1904
+    (fetchpatch {
+      url = "https://github.com/dartsim/dart/commit/c18c48a1b0beff6660b9923e8a6f8f09a86a6039.patch";
+      hash = "sha256-i8Ga0FGVQ3OMprEoGEwVy0j139wjnmR6ABxr/3syhzw=";
+    })
+    # Fix use of system pybind11, merged upstream
+    # ref. https://github.com/dartsim/dart/pull/1907
+    (fetchpatch {
+      url = "https://github.com/dartsim/dart/commit/940c425c19e50a9ded2629422db54785802143af.patch";
+      hash = "sha256-T3992uD0Z36tTxlcFaikVaLt08N9EP4gOHP0Y2AFBzQ=";
+    })
+    # fix use of absolute CMake paths in .pc, merged upstream
+    # ref. https://github.com/dartsim/dart/pull/2006
+    (fetchpatch {
+      url = "https://github.com/dartsim/dart/commit/6f3d6086780a311ef6e1928697f56a4d845ae028.patch";
+      hash = "sha256-sfbTm9C74fl7lVnGPZ1h3cvKXILHhkeNYxd/BpSQvg8=";
+    })
+  ];
 
+  # Install python bindings
   postPatch = ''
-    # https://github.com/dartsim/dart/pull/1904, merged upstream
-    substituteInPlace tests/benchmark/CMakeLists.txt \
-      --replace-fail \
-        "FetchContent_MakeAvailable(benchmark)" \
-        "find_package(benchmark REQUIRED)"
-
-    # https://github.com/dartsim/dart/pull/1907, merged upstream
-    substituteInPlace python/CMakeLists.txt \
-      --replace-fail \
-        "FetchContent_MakeAvailable(pybind11)" \
-        "find_package(pybind11 CONFIG REQUIRED)"
-
-    # fix use of absolute CMake paths in .pc
-    substituteInPlace CMakeLists.txt \
-      --replace-fail \
-        "$""{CMAKE_INSTALL_PREFIX}/$""{CMAKE_INSTALL_LIBDIR}" \
-        "$""{CMAKE_INSTALL_LIBDIR}"
-    substituteInPlace cmake/dart.pc.in \
-      --replace-fail \
-        "libdir=$""{prefix}/" \
-        "libdir=" \
-      --replace-fail \
-        "includedir=$""{prefix}/" \
-        "includedir="
-
-    # install python bindings
-    substituteInPlace python/dartpy/CMakeLists.txt \
-      --replace-fail \
-        "EXCLUDE_FROM_ALL" \
-        ""
     echo "install(TARGETS $""{pybind_module} DESTINATION ${python3Packages.python.sitePackages})" \
       >> python/dartpy/CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pybind11
-    ];
+  buildFlags = [
+    # build unit tests
+    "tests"
+  ]
+  ++ lib.optionals pythonSupport [
+    "dartpy"
+  ];
 
-  propagatedBuildInputs =
-    [
-      blas
-      boost
-      assimp
-      bullet
-      eigen
-      fcl
-      fmt
-      libglut
-      gbenchmark
-      nlopt
-      # requires imgui_impl_opengl2.h
-      (imgui.override { IMGUI_BUILD_OPENGL2_BINDING = true; })
-      ipopt
-      lapack
-      libGL
-      libGLU
-      ode
-      openscenegraph
-      pagmo2
-      tinyxml-2
-      urdfdom
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pybind11
+  ];
+
+  propagatedBuildInputs = [
+    assimp
+    blas
+    boost
+    bullet
+    eigen
+    fcl
+    flann
+    fmt
+    libglut
+    # requires imgui_impl_opengl2.h
+    (imgui.override { IMGUI_BUILD_OPENGL2_BINDING = true; })
+    ipopt
+    lapack
+    libGL
+    libGLU
+    libccd
+    nlopt
+    ode
+    openscenegraph
+    pagmo2
+    tinyxml-2
+    urdfdom
+    urdfdom-headers
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+  ];
 
   checkInputs = [
     gbenchmark
     gtest
   ];
+
   nativeCheckInputs = lib.optionals pythonSupport [
     python3Packages.pytest
     python3Packages.pythonImportsCheckHook
   ];
+
   doCheck = true;
-  # build unit tests
-  preCheck = "make tests";
+
   pythonImportsCheck = [ "dartpy" ];
 
   cmakeFlags = [
+    (lib.cmakeBool "DART_VERBOSE" true)
     (lib.cmakeBool "DART_BUILD_DARTPY" pythonSupport)
-    (lib.cmakeBool "DART_USE_SYSTEM_IMGUI" true)
     (lib.cmakeBool "DART_USE_SYSTEM_GOOGLEBENCHMARK" true)
     (lib.cmakeBool "DART_USE_SYSTEM_GOOGLETEST" true)
+    (lib.cmakeBool "DART_USE_SYSTEM_IMGUI" true)
+    (lib.cmakeBool "DART_USE_SYSTEM_PYBIND11" true)
   ];
 
   meta = {
     description = "DART: Dynamic Animation and Robotics Toolkit";
     homepage = "https://github.com/dartsim/dart";
-    changelog = "https://github.com/dartsim/dart/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/dartsim/dart/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;

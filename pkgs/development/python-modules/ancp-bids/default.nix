@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ancp-bids";
-  version = "0.2.9";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
   # `tests/data` dir missing from PyPI dist
   src = fetchFromGitHub {
     owner = "ANCPLabOldenburg";
-    repo = pname;
+    repo = "ancp-bids";
     tag = version;
-    hash = "sha256-vmw8SAikvbaHnPOthBQxTbyvDwnnZwCOV97aUogIgxw=";
+    hash = "sha256-brkhXz2b1nR/tjkZQZY5S+P0+GbESvJsANQcVWRCa9k=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ancpbids" ];
 
-  pytestFlagsArray = [ "tests/auto" ];
+  enabledTestPaths = [ "tests/auto" ];
 
   disabledTests = [ "test_fetch_dataset" ];
 

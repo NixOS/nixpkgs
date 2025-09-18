@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mysql-connector-java";
-  version = "9.2.0";
+  version = "9.4.0";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${version}.zip";
-    hash = "sha256-4+5QyBvRVSCYbc6a0vYuk9S/dgLkGwb22yttJHx/pkk=";
+    hash = "sha256-Ze/HzVelG3p5tFnu0lvP0gKWvGr3yGWGBjlVEBZorJ4=";
   };
 
   installPhase = ''

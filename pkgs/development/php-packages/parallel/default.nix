@@ -15,6 +15,6 @@ buildPecl {
     broken = !php.ztsSupport;
     homepage = "https://pecl.php.net/package/parallel";
     license = lib.licenses.php301;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

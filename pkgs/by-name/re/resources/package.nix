@@ -78,13 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nokyan/resources";
     license = lib.licenses.gpl3Only;
     mainProgram = "resources";
-    maintainers =
-      with lib.maintainers;
-      [
-        lukas-heiligenbrunner
-        ewuuwe
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      lukas-heiligenbrunner
+      ewuuwe
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

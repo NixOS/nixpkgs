@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
+  pkg-config,
 
   # buildInputs
   flac,
@@ -12,7 +14,7 @@
   glew,
   libjpeg,
   libvorbis,
-  openal,
+  miniaudio,
   udev,
   libXi,
   libX11,
@@ -24,36 +26,50 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
     tag = finalAttrs.version;
-    hash = "sha256-e6x/L2D3eT6F/DBLQDZ+j0XD5NL9RalWZA8kcm9lZ3g=";
+    hash = "sha256-yTNoDHcBRzk270QHjSFVpjFKm2+uVvmVLg6XlAppwYk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      flac
-      freetype
-      glew
-      libjpeg
-      libvorbis
-      openal
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXi
-      libXcursor
-      libXrandr
-      libXrender
-      xcbutilimage
-    ];
+  patches = [
+    (fetchpatch2 {
+      name = "Fix-pkg-config-when-SFML_PKGCONFIG_INSTALL_DIR-is-unset.patch";
+      url = "https://github.com/SFML/SFML/commit/a87763becbc4672b38f1021418ed94caa0f6540a.patch?full_index=1";
+      hash = "sha256-tJmXTdhwtWq6XfUPBzw47yTrc6EzwmSiVj9n6jQwHig=";
+    })
+
+    # Not upstreamble in the near future, see https://github.com/SFML/SFML/pull/3555
+    ./unvendor-miniaudio.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    flac
+    freetype
+    glew
+    libjpeg
+    libvorbis
+    miniaudio
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXi
+    libXcursor
+    libXrandr
+    libXrender
+    xcbutilimage
+  ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
     (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
     (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)

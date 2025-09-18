@@ -10,19 +10,21 @@
 
 buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
-  version = "0.14.0";
+  version = "3.31.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-grpc-google-iam-v1";
-    tag = "v${version}";
-    hash = "sha256-CkzXh7psXQvAbAduRR6+Bihv6RlaOAWdFDX7xaqWO8M=";
+    repo = "google-cloud-python";
+    tag = "google-cloud-build-v${version}";
+    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  sourceRoot = "${src.name}/packages/grpc-google-iam-v1";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     grpcio
     googleapis-common-protos
   ];
@@ -34,15 +36,14 @@ buildPythonPackage rec {
     "google.iam.v1"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = with lib; {
     description = "GRPC library for the google-iam-v1 service";
-    homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";
-    changelog = "https://github.com/googleapis/python-grpc-google-iam-v1/releases/tag/${src.tag}";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/grpc-google-iam-v1";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/grpc-google-iam-v1/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

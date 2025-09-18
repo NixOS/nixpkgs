@@ -1,0 +1,97 @@
+From 0002273e4df7c9448b52ce54ef38a93cf753fbfd Mon Sep 17 00:00:00 2001
+From: Robbert van der Helm <mail@robbertvanderhelm.nl>
+Date: Sun, 1 Jun 2025 22:22:20 +0200
+Subject: [PATCH] Drop the 32-bit libyabridge support for EnergyXT
+
+I don't think anyone is using this, and it's triggering a bug in recent
+Meson versions so just removing it for now should be fine.
+---
+ CHANGELOG.md |  9 +++++++++
+ README.md    | 20 --------------------
+ meson.build  | 12 +-----------
+ 3 files changed, 10 insertions(+), 31 deletions(-)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 687e73b3..262ee298 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -15,6 +15,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
+   consuming too much memory. This only affected the prebuilt binaries from the
+   releases page.
+ 
++### Removed
++
++- Out of the box support for building a 32-bit version of yabridge for use in
++  64-bit machines has been dropped as part of solving a compatibility issue with
++  newer Meson versions
++  ([#431](https://github.com/robbert-vdh/yabridge/issues/431)). This was only
++  relevant for using 64-bit Windows plugins in the old 32-bit Linux version of
++  **EnergyXT**, and should not affect most users.
++
+ ### yabridgectl
+ 
+ - Fixed a regression that caused `yabridgectl set --path-auto` to no longer
+diff --git a/README.md b/README.md
+index 55155705..6019b67a 100644
+--- a/README.md
++++ b/README.md
+@@ -886,26 +886,6 @@ Yabridge will detect whether the plugin you're trying to load is 32-bit or
+ 64-bit, and will run either the regular version or the `*-32.exe` variant
+ accordingly.
+ 
+-### 32-bit libraries
+-
+-It also possible to build 32-bit versions of yabridge's libraries, which would
+-let you use both 32-bit and 64-bit Windows VST2, VST3, and CLAP plugins from a
+-32-bit Linux plugin host. This is mostly untested since 32-bit only Linux
+-applications don't really exist anymore, but it should work! The build system
+-will still assume you're compiling from a 64-bit system, so if you're compiling
+-on an actual 32-bit system you would need to comment out the 64-bit
+-`yabridge-host` and `yabridge-group` binaries in `meson.build`:
+-
+-```shell
+-meson setup build --buildtype=release --cross-file=cross-wine.conf --unity=on --unity-size=1000 -Dbitbridge=true -Dbuild.cpp_args='-m32' -Dbuild.cpp_link_args='-m32'
+-ninja -C build
+-```
+-
+-Like the above commands, you might need to tweak the unity size based on the
+-amount of system memory available. See the CI build definitions for some
+-examples on how to add static linking in the mix if you're going to run this
+-version of yabridge on some other machine.
+-
+ ## Debugging
+ 
+ Wine's error messages and warning are usually very helpful whenever a plugin
+diff --git a/meson.build b/meson.build
+index 9e69128d..98bf607e 100644
+--- a/meson.build
++++ b/meson.build
+@@ -20,19 +17,12 @@ project(
+ # need to pass `-Dbitbridge=true`. We just make sure that we won't build
+ # any 64-bit binaries in that situation.
+ is_64bit_system = build_machine.cpu_family() not in ['x86', 'arm']
+-with_32bit_libraries = (not is_64bit_system) or get_option('build.cpp_args').contains('-m32')
+ with_bitbridge = get_option('bitbridge')
+ with_clap = get_option('clap')
+ with_system_asio = get_option('system-asio')
+ with_winedbg = get_option('winedbg')
+ with_vst3 = get_option('vst3')
+ 
+-# Cookies can't be stored correctly when the native host is 32-bit and the
+-# bridged plugin is 64-bit
+-if with_clap and with_32bit_libraries and is_64bit_system
+-  error('CLAP support will not work correctly when using 32-bit yabridge libraries together with 64-bit host binaries.')
+-endif
+-
+ #
+ # Compiler flags
+ #
+@@ -225,7 +215,7 @@ winegcc = meson.get_compiler('cpp', native : false)
+ if is_64bit_system
+   xcb_64bit_dep = dependency('xcb')
+ endif
+-if with_32bit_libraries or with_bitbridge
++if with_bitbridge
+   xcb_32bit_dep = winegcc.find_library('xcb')
+ endif
+ 

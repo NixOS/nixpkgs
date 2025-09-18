@@ -4,16 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jd-diff-patch";
-  version = "2.1.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "josephburnett";
     repo = "jd";
-    rev = "v${version}";
-    sha256 = "sha256-chCxbbRZEE29KVnTQWID889kJ2H4qJGVL+vsxzr6VtA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eaNP7cSJ0IxfHLmPaNAw5MQzD41AiOIjVbAjQkU8uec=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/v2";
 
   # not including web ui
   excludedPackages = [
@@ -21,15 +23,16 @@ buildGoModule rec {
     "pack"
   ];
 
-  vendorHash = null;
+  vendorHash = "sha256-RerzCZL2soPNtl1hHWjdeNQNQ4VMlGYz3HNn4rTJSmU=";
 
-  meta = with lib; {
+  meta = {
     description = "Commandline utility and Go library for diffing and patching JSON values";
     homepage = "https://github.com/josephburnett/jd";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bryanasdev000
+      juliusfreudenberger
     ];
     mainProgram = "jd";
   };
-}
+})

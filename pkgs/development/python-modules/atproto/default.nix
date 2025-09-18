@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "atproto";
-  version = "0.0.59";
+  version = "0.0.62";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "MarshalX";
     repo = "atproto";
     tag = "v${version}";
-    hash = "sha256-Q+ZJMbchz3u7kXAR9fJpzJd6Zdc44LkntPmEE7IeW6A=";
+    hash = "sha256-T1Jdg62fSV+5qC486Agsuk6qrDhGSNHq75uvOyvOwpA=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;

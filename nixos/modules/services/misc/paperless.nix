@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.services.paperless;
+  opt = options.services.paperless;
 
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
@@ -15,39 +16,36 @@ let
   enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
   redisServer = config.services.redis.servers.paperless;
 
-  env =
-    {
-      PAPERLESS_DATA_DIR = cfg.dataDir;
-      PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
-      PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
-      PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
-      GRANIAN_HOST = cfg.address;
-      GRANIAN_PORT = toString cfg.port;
-    }
-    // lib.optionalAttrs (config.time.timeZone != null) {
-      PAPERLESS_TIME_ZONE = config.time.timeZone;
-    }
-    // lib.optionalAttrs enableRedis {
-      PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
-    }
-    // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
-      PAPERLESS_NLTK_DIR = pkgs.symlinkJoin {
-        name = "paperless_ngx_nltk_data";
-        paths = cfg.package.nltkData;
-      };
-    }
-    // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
-      OMP_NUM_THREADS = "1";
-    }
-    // (lib.mapAttrs (
-      _: s:
-      if (lib.isAttrs s || lib.isList s) then
-        builtins.toJSON s
-      else if lib.isBool s then
-        lib.boolToString s
-      else
-        toString s
-    ) cfg.settings);
+  env = {
+    PAPERLESS_DATA_DIR = cfg.dataDir;
+    PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
+    PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+    PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
+    GRANIAN_HOST = cfg.address;
+    GRANIAN_PORT = toString cfg.port;
+    GRANIAN_WORKERS_KILL_TIMEOUT = "60";
+  }
+  // lib.optionalAttrs (config.time.timeZone != null) {
+    PAPERLESS_TIME_ZONE = config.time.timeZone;
+  }
+  // lib.optionalAttrs enableRedis {
+    PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
+  }
+  // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
+    PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
+  }
+  // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
+    OMP_NUM_THREADS = "1";
+  }
+  // (lib.mapAttrs (
+    _: s:
+    if (lib.isAttrs s || lib.isList s) then
+      builtins.toJSON s
+    else if lib.isBool s then
+      lib.boolToString s
+    else
+      toString s
+  ) cfg.settings);
 
   manage = pkgs.writeShellScriptBin "paperless-manage" ''
     set -o allexport # Export the following env vars
@@ -326,6 +324,17 @@ in
       };
     };
 
+    configureNginx = lib.mkEnableOption "" // {
+      description = "Whether to configure nginx as a reverse proxy.";
+    };
+
+    domain = lib.mkOption {
+      type = with lib.types; nullOr str;
+      default = null;
+      example = "paperless.example.com";
+      description = "Domain under which paperless will be available.";
+    };
+
     exporter = {
       enable = lib.mkEnableOption "regular automatic document exports";
 
@@ -358,12 +367,58 @@ in
         description = "Settings to pass to the document exporter as CLI arguments.";
       };
     };
+
+    configureTika = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to configure Tika and Gotenberg to process Office and e-mail files with OCR.
+      '';
+    };
+
+    manage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      description = ''
+        The package derivation for the `paperless-manage` wrapper script.
+        Useful for other modules that need to add this specific script to a service's PATH.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.configureNginx -> cfg.domain != null;
+            message = "${opt.configureNginx} requires ${opt.domain} to be configured.";
+          }
+        ];
+
+        services.paperless.manage = manage;
         environment.systemPackages = [ manage ];
+
+        services.nginx = lib.mkIf cfg.configureNginx {
+          enable = true;
+          upstreams.paperless.servers."${cfg.address}:${toString cfg.port}" = { };
+          virtualHosts.${cfg.domain} = {
+            forceSSL = lib.mkDefault true;
+            locations = {
+              "/".proxyPass = "http://paperless";
+              "/static/" = {
+                root = config.services.paperless.package;
+                extraConfig = ''
+                  rewrite ^/(.*)$ /lib/paperless-ngx/$1 break;
+                '';
+              };
+              "/ws/status" = {
+                proxyPass = "http://paperless";
+                proxyWebsockets = true;
+              };
+            };
+          };
+        };
 
         services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
 
@@ -378,12 +433,21 @@ in
           ];
         };
 
-        services.paperless.settings = lib.mkIf cfg.database.createLocally {
-          PAPERLESS_DBENGINE = "postgresql";
-          PAPERLESS_DBHOST = "/run/postgresql";
-          PAPERLESS_DBNAME = "paperless";
-          PAPERLESS_DBUSER = "paperless";
-        };
+        services.paperless.settings = lib.mkMerge [
+          (lib.mkIf (cfg.domain != null) {
+            PAPERLESS_URL = "https://${cfg.domain}";
+          })
+          (lib.mkIf cfg.database.createLocally {
+            PAPERLESS_DBENGINE = "postgresql";
+            PAPERLESS_DBHOST = "/run/postgresql";
+            PAPERLESS_DBNAME = "paperless";
+            PAPERLESS_DBUSER = "paperless";
+          })
+          (lib.mkIf cfg.configureTika {
+            PAPERLESS_GOTENBERG_ENABLED = true;
+            PAPERLESS_TIKA_ENABLED = true;
+          })
+        ];
 
         systemd.slices.system-paperless = {
           description = "Paperless Document Management System Slice";
@@ -466,18 +530,19 @@ in
               fi
             fi
           '';
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after =
             lib.optional enableRedis "redis-paperless.service"
-            ++ lib.optional cfg.database.createLocally "postgresql.service";
+            ++ lib.optional cfg.database.createLocally "postgresql.target";
         };
 
         systemd.services.paperless-task-queue = {
           description = "Paperless Celery Workers";
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
@@ -495,10 +560,11 @@ in
           # Bind to `paperless-scheduler` so that the consumer never runs
           # during migrations
           bindsTo = [ "paperless-scheduler.service" ];
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
@@ -516,10 +582,11 @@ in
           # Bind to `paperless-scheduler` so that the web server never runs
           # during migrations
           bindsTo = [ "paperless-scheduler.service" ];
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target";
           # Setup PAPERLESS_SECRET_KEY.
           # If this environment variable is left unset, paperless-ngx defaults
           # to a well-known value, which is insecure.
@@ -570,6 +637,18 @@ in
           groups.${defaultUser} = {
             gid = config.ids.gids.paperless;
           };
+        };
+
+        services.gotenberg = lib.mkIf cfg.configureTika {
+          enable = true;
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
+          chromium.disableJavascript = true;
+          extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
+        };
+
+        services.tika = lib.mkIf cfg.configureTika {
+          enable = true;
+          enableOcr = true;
         };
       }
 

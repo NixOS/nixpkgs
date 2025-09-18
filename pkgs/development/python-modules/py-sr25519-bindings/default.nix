@@ -22,8 +22,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-OSnPGRZwuAzcvu80GgTXdc740SfhDIsXrQZq9a/BCdE=";
   };
 
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     py-bip39-bindings
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "sr25519" ];
 

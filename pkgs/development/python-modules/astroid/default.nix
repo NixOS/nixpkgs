@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "3.3.8"; # Check whether the version is compatible with pylint
+  version = "3.3.11"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "astroid";
     tag = "v${version}";
-    hash = "sha256-KKQuLomCHhVYMX1gE9WuqbXOfsf2izGlLE0Ml62gY3k=";
+    hash = "sha256-lv+BQDYP7N4UGMf7XhB6HVDORPU0kZQPYveQWOcAqfQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -31,6 +31,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pip
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html.
+    "test_identify_old_namespace_package_protocol"
+  ];
+
+  disabledTestPaths = [
+    # requires mypy
+    "tests/test_raw_building.py"
   ];
 
   passthru.tests = {

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "zthrottle";
-  version = "unstable-2017-7-24";
+  version = "0-unstable-2017-07-24";
 
   src = fetchFromGitHub {
     owner = "anko";

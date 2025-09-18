@@ -308,7 +308,8 @@ in
 
     environment.systemPackages = [
       pkgs.zsh
-    ] ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
+    ]
+    ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = lib.optional cfg.enableCompletion "/share/zsh";
 

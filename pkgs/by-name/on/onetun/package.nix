@@ -10,12 +10,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "aramperes";
-    repo = pname;
+    repo = "onetun";
     rev = "v${version}";
     sha256 = "sha256-bggBBl2YQUncfOYIDsPgrHPwznCJQOlIOY3bbiZz7Rw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-VC7q2ZTdbBmvZ9l70uQz59paFIi8HXp5CPxfQC6cVmk=";
 
   meta = {

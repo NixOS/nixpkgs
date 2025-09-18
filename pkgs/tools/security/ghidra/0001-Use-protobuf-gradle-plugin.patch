@@ -1,18 +1,5 @@
-From be4c852769e260e3a9b516bb5626a6a6a68a2cd3 Mon Sep 17 00:00:00 2001
-From: roblabla <unfiltered@roblab.la>
-Date: Wed, 31 Jan 2024 13:19:55 +0100
-Subject: [PATCH] Use com.google.protobuf:protobuf-gradle-plugin
-
----
- Ghidra/Debug/Debugger-isf/build.gradle       |  8 +-
- Ghidra/Debug/Debugger-rmi-trace/build.gradle | 16 ++--
- build.gradle                                 |  6 ++
- gradle/hasProtobuf.gradle                    | 94 --------------------
- 4 files changed, 22 insertions(+), 102 deletions(-)
- delete mode 100644 gradle/hasProtobuf.gradle
-
 diff --git a/Ghidra/Debug/Debugger-isf/build.gradle b/Ghidra/Debug/Debugger-isf/build.gradle
-index f6c8464405..396b52d188 100644
+index 2db94ed67e..925f394cf0 100644
 --- a/Ghidra/Debug/Debugger-isf/build.gradle
 +++ b/Ghidra/Debug/Debugger-isf/build.gradle
 @@ -18,11 +18,17 @@ apply from: "${rootProject.projectDir}/gradle/javaProject.gradle"
@@ -32,10 +19,10 @@ index f6c8464405..396b52d188 100644
 +}
 +
  dependencies {
- 	api project(':Framework-AsyncComm')
  	api project(':ProposedUtils')
+ }
 diff --git a/Ghidra/Debug/Debugger-rmi-trace/build.gradle b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
-index 8b6589f035..05da5a7a7e 100644
+index 4fa3b9a539..2663aeaeb0 100644
 --- a/Ghidra/Debug/Debugger-rmi-trace/build.gradle
 +++ b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
 @@ -19,12 +19,17 @@ apply from: "${rootProject.projectDir}/gradle/helpProject.gradle"
@@ -56,25 +43,27 @@ index 8b6589f035..05da5a7a7e 100644
 +}
 +
  dependencies {
+ 	api project(':ProposedUtils')
  	api project(':Pty')
- 	api project(':Debugger')
-@@ -44,12 +49,9 @@ task generateProtoPy {
- 	ext.outdir = file("build/generated/source/proto/main/py")
- 	outputs.dir(outdir)
- 	inputs.files(src)
+@@ -37,13 +42,10 @@ dependencies {
+ }
+ 
+ task configureGenerateProtoPy {
 -	dependsOn(configurations.protocArtifact)
 +	dependsOn(protobuf.generateProtoTasks.all())
- 	doLast {
+ 
+-	doLast {
 -		def exe = configurations.protocArtifact.first()
 -		if (!isCurrentWindows()) {
 -			exe.setExecutable(true)
 -		}
++ 	doLast {
 +		def exe = protobuf.tools.protoc.path
- 		exec {
- 			commandLine exe, "--python_out=$outdir", "-I$srcdir"
- 			args src
+ 		generateProtoPy.commandLine exe
+ 		generateProtoPy.args "--python_out=${generateProtoPy.outdir}"
+ 		generateProtoPy.args "--pyi_out=${generateProtoPy.stubsOutdir}"
 diff --git a/build.gradle b/build.gradle
-index 2d75307a08..aa8f1d7604 100644
+index 159eb7dd7b..ef4add1ad8 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -80,6 +80,12 @@ if (flatRepo.isDirectory()) {
@@ -92,19 +81,19 @@ index 2d75307a08..aa8f1d7604 100644
  else {	
 diff --git a/gradle/hasProtobuf.gradle b/gradle/hasProtobuf.gradle
 deleted file mode 100644
-index 23b4ce74bb..0000000000
+index a8c176bcbe..0000000000
 --- a/gradle/hasProtobuf.gradle
 +++ /dev/null
-@@ -1,94 +0,0 @@
+@@ -1,98 +0,0 @@
 -/* ###
 - * IP: GHIDRA
 - *
 - * Licensed under the Apache License, Version 2.0 (the "License");
 - * you may not use this file except in compliance with the License.
 - * You may obtain a copy of the License at
-- * 
+- *
 - *      http://www.apache.org/licenses/LICENSE-2.0
-- * 
+- *
 - * Unless required by applicable law or agreed to in writing, software
 - * distributed under the License is distributed on an "AS IS" BASIS,
 - * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -157,7 +146,22 @@ index 23b4ce74bb..0000000000
 -	}
 -}*/
 -
--task generateProto {
+-task configureGenerateProto {
+-	dependsOn(configurations.protocArtifact)
+-
+-	doLast {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
+-		generateProto.commandLine exe, "--java_out=${generateProto.outdir}", "-I${generateProto.srcdir}"
+-		generateProto.args generateProto.src
+-	}
+-}
+-
+-// Can't use providers.exec, or else we see no output
+-task generateProto(type:Exec) {
+-	dependsOn(configureGenerateProto)
 -	ext.srcdir = file("src/main/proto")
 -	ext.src = fileTree(srcdir) {
 -		include "**/*.proto"
@@ -165,17 +169,6 @@ index 23b4ce74bb..0000000000
 -	ext.outdir = file("build/generated/source/proto/main/java")
 -	outputs.dir(outdir)
 -	inputs.files(src)
--	dependsOn(configurations.protocArtifact)
--	doLast {
--		def exe = configurations.protocArtifact.first()
--		if (!isCurrentWindows()) {
--			exe.setExecutable(true)
--		}
--		exec {
--			commandLine exe, "--java_out=$outdir", "-I$srcdir"
--			args src
--		}
--	}
 -}
 -
 -tasks.compileJava.dependsOn(tasks.generateProto)
@@ -190,6 +183,3 @@ index 23b4ce74bb..0000000000
 -	}
 -}
 -zipSourceSubproject.dependsOn generateProto
--- 
-2.47.0
-

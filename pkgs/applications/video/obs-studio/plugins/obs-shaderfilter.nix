@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-shaderfilter";
-  version = "2.4.3";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-shaderfilter";
     rev = version;
-    sha256 = "sha256-RJistQXHu0SQTrLEt7dfo443AJIY2WgjIA5nHOijrOk=";
+    sha256 = "sha256-1RRGXAzP7BIwJJMmXSknPDtHxXZex9SqDDVbWOE43Yk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,9 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-shaderfilter";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

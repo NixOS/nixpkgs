@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "kotlin language server";
+    description = "Kotlin language server";
     longDescription = ''
       About Kotlin code completion, linting and more for any editor/IDE
       using the Language Server Protocol Topics'';
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    mainProgram = "kotlin-language-server";
   };
 }

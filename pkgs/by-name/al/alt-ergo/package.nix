@@ -8,11 +8,11 @@
 
 let
   pname = "alt-ergo";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
-    hash = "sha256-EmkxGvJSeKRmiSuoeMyIi6WfF39T3QPxKixiOwP8834=";
+    hash = "sha256-OeLJEop9HonzMuMaJxbzWfO54akl/oHxH6SnSbXSTYI=";
   };
 in
 
@@ -50,14 +50,16 @@ ocamlPackages.buildDunePackage {
 
   nativeBuildInputs = [
     ocamlPackages.menhir
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
-  propagatedBuildInputs =
-    [ alt-ergo-parsers ]
-    ++ (with ocamlPackages; [
-      cmdliner
-      dune-site
-      ppxlib
-    ]);
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+  propagatedBuildInputs = [
+    alt-ergo-parsers
+  ]
+  ++ (with ocamlPackages; [
+    cmdliner
+    dune-site
+    ppxlib
+  ]);
 
   outputs = [
     "bin"

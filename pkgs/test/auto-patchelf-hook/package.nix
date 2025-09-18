@@ -18,14 +18,13 @@
 }:
 
 let
-  runtimeDependencies =
-    [
-      (lib.getLib curl)
-      "/some/dep"
-      "/some/other/dep"
-    ]
-    # A dependency with space only works with __structuredAttrs set to true.
-    ++ lib.lists.optional __structuredAttrs "/some/dep with space";
+  runtimeDependencies = [
+    (lib.getLib curl)
+    "/some/dep"
+    "/some/other/dep"
+  ]
+  # A dependency with space only works with __structuredAttrs set to true.
+  ++ lib.lists.optional __structuredAttrs "/some/dep with space";
 in
 
 stdenv.mkDerivation {
@@ -101,4 +100,8 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
   inherit __structuredAttrs;
+  meta = {
+    # Downloads an x86_64-linux only binary
+    platforms = [ "x86_64-linux" ];
+  };
 }

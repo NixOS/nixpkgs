@@ -35,6 +35,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace dask_image/ndinterp/__init__.py \
       --replace-fail "out_bounds.ptp(axis=1)" "np.ptp(out_bounds, axis=1)"
+
+    substituteInPlace tests/test_dask_image/test_imread/test_core.py \
+      --replace-fail "fh.save(" "fh.write("
   '';
 
   build-system = [
@@ -64,6 +67,7 @@ buildPythonPackage rec {
     # AttributeError: 'str' object has no attribute 'start'
     "test_find_objects"
     "test_3d_find_objects"
+
     # AssertionError (comparing slices)
     "test_find_objects_with_empty_chunks"
   ];

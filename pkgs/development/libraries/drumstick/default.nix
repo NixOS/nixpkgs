@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
     sonivox
-  ] ++ lib.optionals isQt6 [ qt5compat ];
+  ]
+  ++ lib.optionals isQt6 [ qt5compat ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_DBUS" true)

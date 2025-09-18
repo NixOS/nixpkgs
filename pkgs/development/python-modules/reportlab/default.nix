@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  chardet,
+  charset-normalizer,
   fetchPypi,
   freetype,
   pillow,
@@ -17,7 +17,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.3.1";
+  version = "4.4.3";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Iw94shZnGU2EkKydEpWNXBRoY1Lbf74DuVFA+v31qpc=";
+    hash = "sha256-BzsJddq2lTas0yUYWOawUk7T4IfnHx0NGJWstQrPnHs=";
   };
 
   postPatch = ''
@@ -39,12 +39,12 @@ buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ ft ];
 
-  propagatedBuildInputs = [
-    chardet
+  dependencies = [
+    charset-normalizer
     pillow
   ];
 
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;

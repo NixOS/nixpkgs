@@ -21,9 +21,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-q79JXaBwd/oKtJPvK2+72pY2YvaR3of2CMC8cF6wwQ8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoPatches = [
+    # update Cargo.lock to work with openssl 3
+    ./openssl3-support.patch
+  ];
+
+  cargoHash = "sha256-HthrPtIWvYLAQDpW12r250OWP7CF4SORlqFbxIq/Dzo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,11 +39,6 @@ rustPlatform.buildRustPackage rec {
     gtk3
     openssl
   ];
-
-  # update Cargo.lock to work with openssl
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
 
   meta = with lib; {
     description = "Break timer that forces you to take a break";

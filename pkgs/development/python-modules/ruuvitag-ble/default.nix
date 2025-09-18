@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ruuvitag-ble";
-  version = "0.1.2";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "ruuvitag-ble";
     tag = "v${version}";
-    hash = "sha256-J+807p2mE+VZ0oqldFtjdcNGsRTkAU54s6byQSGrng4=";
+    hash = "sha256-9aaAKb5Av2OMDGaSM9+tT0s++YYE0g1D01Le6RrMoMk=";
   };
 
   build-system = [ hatchling ];

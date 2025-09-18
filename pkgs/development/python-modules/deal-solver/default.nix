@@ -34,7 +34,8 @@ buildPythonPackage rec {
   dependencies = [
     z3-solver
     astroid
-  ] ++ z3-solver.requiredPythonModules;
+  ]
+  ++ z3-solver.requiredPythonModules;
 
   nativeCheckInputs = [
     hypothesis
@@ -44,6 +45,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "deal_solver" ];
+
+  disabledTests = [
+    # Flaky tests, sometimes it works sometimes it doesn't
+    "test_expr_asserts_ok"
+    "test_fuzz_math_floats"
+  ];
 
   meta = with lib; {
     description = "Z3-powered solver (theorem prover) for deal";

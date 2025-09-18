@@ -8,25 +8,31 @@
   cachix,
   nixVersions,
   openssl,
+  dbus,
   pkg-config,
   glibcLocalesUtf8,
   devenv, # required to run version test
 }:
 
 let
-  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
-    version = "2.24-devenv";
-    src = fetchFromGitHub {
-      owner = "domenkozar";
-      repo = "nix";
-      rev = "f3f44b2baaf6c4c6e179de8cbb1cc6db031083cd";
-      hash = "sha256-E3j+3MoY8Y96mG1dUIiLFm2tZmNbRvSiyN7CrSKuAVg=";
-    };
-    doCheck = false;
-    doInstallCheck = false;
-  });
+  version = "1.9";
+  devenvNixVersion = "2.30.4";
 
-  version = "1.5";
+  devenv_nix =
+    (nixVersions.git.overrideSource (fetchFromGitHub {
+      owner = "cachix";
+      repo = "nix";
+      rev = "devenv-${devenvNixVersion}";
+      hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+    })).overrideAttrs
+      (old: {
+        pname = "devenv-nix";
+        version = devenvNixVersion;
+        doCheck = false;
+        doInstallCheck = false;
+        # do override src, but the Nix way so the warning is unaware of it
+        __intentionallyOverridingVersion = true;
+      });
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -35,12 +41,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    rev = "v${version}";
-    hash = "sha256-bJlcIFcEhobOiaJsxub48fR8nIZDU4QK4FIycmDW2mk=";
+    tag = "v${version}";
+    hash = "sha256-MG+c0mo4g9UHSuqibX3OVkiADWmMn/PWDfVhD4U29PM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9veQGMUEJDVXNouhpU8pAx8lJZHLyZbFSnMGMK58VVw=";
+  cargoHash = "sha256-7uB9oC0jHWBFeUtIyVpTjeximU6eSxSCiBzo/whoKxQ=";
 
   buildAndTestSubdir = "devenv";
 
@@ -50,7 +55,10 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    dbus
+  ];
 
   postInstall =
     let
@@ -93,6 +101,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    maintainers = with lib.maintainers; [ domenkozar ];
+    teams = [ lib.teams.cachix ];
   };
 }

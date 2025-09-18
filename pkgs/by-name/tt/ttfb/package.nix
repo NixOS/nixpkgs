@@ -1,9 +1,7 @@
 {
-  darwin,
   fetchCrate,
   lib,
   rustPlatform,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,11 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OOVqCWeF5cHMweEGWYIiWWWsw1QlNDFgnia05Qxo7uo=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4Nsg5/66enMgAfPrUQHuhOTTwG2OWyyvKMHIhPnlHko=";
 
   # The bin feature activates all dependencies of the binary. Otherwise,

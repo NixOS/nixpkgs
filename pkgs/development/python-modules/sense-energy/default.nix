@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.13.7";
+  version = "0.13.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "scottbonline";
     repo = "sense";
     tag = version;
-    hash = "sha256-RCJKx0FvB3hKQC1pwv1LWqwbM23SoY/2qUxBnrXd14k=";
+    hash = "sha256-hIE7wjKP+JcXQZ1lGbKCaKKK2ZlCF5BbJu3H7gqrsKU=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "API for the Sense Energy Monitor";
     homepage = "https://github.com/scottbonline/sense";
-    changelog = "https://github.com/scottbonline/sense/releases/tag/${version}";
+    changelog = "https://github.com/scottbonline/sense/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

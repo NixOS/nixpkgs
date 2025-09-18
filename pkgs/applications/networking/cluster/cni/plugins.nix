@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "cni-plugins";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    hash = "sha256-thtN7po5SToM0ZFYIbycaPJTafLvk9hFV4XFGOpWmpg=";
+    hash = "sha256-/I2fEVVQ89y8l95Ri0V5qxVj/SzXVqP0IT2vSdz8jC8=";
   };
 
   vendorHash = null;
@@ -53,6 +53,6 @@ buildGoModule rec {
     homepage = "https://www.cni.dev/plugins/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
   };
 }

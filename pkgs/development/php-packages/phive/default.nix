@@ -23,6 +23,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/phar-io/phive";
     license = lib.licenses.bsd3;
     mainProgram = "phive";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

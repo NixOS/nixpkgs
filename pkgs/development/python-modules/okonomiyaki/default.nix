@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "okonomiyaki";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,14 +27,8 @@ buildPythonPackage rec {
     owner = "enthought";
     repo = "okonomiyaki";
     tag = version;
-    hash = "sha256-JQZhw0H4iSdxoyS6ODICJz1vAZsOISQitX7wTgSS1xc=";
+    hash = "sha256-xAF9Tdr+IM3lU+mcNcAWATJLZOVvbx0llqznqHLVqDc=";
   };
-
-  postPatch = ''
-    # Fixed for >= 2.0.0
-    substituteInPlace setup.cfg \
-      --replace-fail "long_description_content_type = rst" "long_description_content_type = text/x-rst"
-  '';
 
   build-system = [ setuptools ];
 
@@ -62,24 +56,22 @@ buildPythonPackage rec {
     parameterized
     pytestCheckHook
     testfixtures
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck =
-    ''
-      substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
-        --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-        --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
-    '';
+  preCheck = ''
+    substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
+      --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
+    substituteInPlace okonomiyaki/platforms/_platform.py \
+      --replace-fail 'name.split()[0]' '(name.split() or [""])[0]'
+  '';
 
   pythonImportsCheck = [ "okonomiyaki" ];
 
   meta = with lib; {
     description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
     homepage = "https://github.com/enthought/okonomiyaki";
-    changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${version}";
+    changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${src.tag}";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
   };

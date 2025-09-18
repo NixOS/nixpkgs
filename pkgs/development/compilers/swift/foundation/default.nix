@@ -1,8 +1,3 @@
-# TODO: We already package the CoreFoundation component of Foundation in:
-#   pkgs/os-specific/darwin/swift-corelibs/corefoundation.nix
-# This is separate because the CF build is completely different and part of
-# stdenv. Merging the two was kept outside of the scope of Swift work.
-
 {
   lib,
   stdenv,
@@ -32,6 +27,16 @@ stdenv.mkDerivation {
     (fetchpatch {
       url = "https://github.com/apple/swift-corelibs-foundation/commit/47260803a108c6e0d639adcebeed3ac6a76e8bcd.patch";
       hash = "sha256-1JUSQW86IHKkBZqxvpk0P8zcSKntzOTNlMoGBfgeT4c=";
+    })
+
+    # Fix the build with modern Clang.
+    (fetchpatch {
+      url = "https://github.com/swiftlang/swift-corelibs-foundation/commit/76058114e5f5b47e02dd4441a6389858bb599bd6.patch";
+      hash = "sha256-N/hdTGCWMz092xh3AI28v3b+zjQHRmsb1F/2Q2u/jik=";
+    })
+    (fetchpatch {
+      url = "https://github.com/swiftlang/swift-corelibs-foundation/commit/5f3e896e522ff364780e6330df867e20e26269b4.patch";
+      hash = "sha256-AaBWSysNpZ7NV10RGD4TehZqE0k8Sn+TlhlGw1PiRdI=";
     })
   ];
 
@@ -80,6 +85,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-foundation";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

@@ -53,9 +53,9 @@ buildPythonPackage {
     clr-loader
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Run tests using .NET Core, Mono is unsupported for now due to find_library problem in clr-loader
-    "--runtime coreclr"
+    "--runtime=coreclr"
   ];
 
   nativeCheckInputs = [

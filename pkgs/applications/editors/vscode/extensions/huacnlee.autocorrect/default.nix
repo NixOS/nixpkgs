@@ -11,7 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
 
   meta = {
-    description = "AutoCorrect is a linter and formatter to help you to improve copywriting, correct spaces, words, and punctuations between CJK (Chinese, Japanese, Korean).";
+    description = "AutoCorrect is a linter and formatter to help you to improve copywriting, correct spaces, words, and punctuations between CJK (Chinese, Japanese, Korean)";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=huacnlee.autocorrect";
     homepage = "https://github.com/huacnlee/autocorrect";
     license = lib.licenses.mit;

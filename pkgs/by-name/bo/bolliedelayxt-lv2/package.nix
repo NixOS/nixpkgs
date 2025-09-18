@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "bolliedelayxt.lv2";
-  version = "unstable-2017-11-02";
+  version = "0-unstable-2017-11-02";
 
   src = fetchFromGitHub {
     owner = "MrBollie";

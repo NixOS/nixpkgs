@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "wg-friendly-peer-names";
-  version = "unstable-2021-12-10";
+  version = "0-unstable-2021-12-10";
 
   src = fetchFromGitHub {
     owner = "FlyveHest";

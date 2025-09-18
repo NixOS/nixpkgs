@@ -10,7 +10,7 @@
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.3.7";
+  version = "1.4.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -18,7 +18,7 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    hash = "sha256-FbkVJRbFNSho/E59QMUoGK+TrdnnacmykJWWG2JVDVA=";
+    hash = "sha256-pv6aBJjRkibISpZEnlfyn72smcYEbZoPQoQH2p/JwH0=";
   };
 
   nativeBuildInputs = [ cppo ];

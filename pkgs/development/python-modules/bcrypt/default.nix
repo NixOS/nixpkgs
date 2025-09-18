@@ -33,9 +33,12 @@ buildPythonPackage rec {
 
   cargoRoot = "src/_bcrypt";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
     hash = "sha256-HgHvfMBspPsSYhllnKBg5XZB6zxFIqJj+4//xKG8HwA=";
   };
 
@@ -68,6 +71,6 @@ buildPythonPackage rec {
     description = "Modern password hashing for your software and your servers";
     homepage = "https://github.com/pyca/bcrypt/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

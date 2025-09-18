@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   lxml,
   pytestCheckHook,
   python-dateutil,
@@ -10,19 +11,23 @@
 
 buildPythonPackage rec {
   pname = "tcxparser";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "2.4.0-r1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vkurup";
     repo = "python-tcxparser";
-    rev = version;
-    hash = "sha256-HOACQpPVg/UKopz3Jdsyg0CIBnXYuVyhWUVPA+OXI0k=";
+    tag = version;
+    hash = "sha256-lQczTuxmxu4nCPJsgblrW2RXST7kvhtPnscemwXCx0Y=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     lxml
     python-dateutil
   ];

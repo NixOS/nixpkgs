@@ -6,13 +6,13 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "hare.vim";
-  version = "unstable-2025-01-23";
+  version = "0-unstable-2025-04-24";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare.vim";
-    rev = "1a732aca2931402f3186f52ae626540a770aefe2";
-    hash = "sha256-wBeQvDm7ZTUcw21VIAryyH6tMuBiQCMOJRZX/8ic8B4=";
+    rev = "41b8b615f46a39d807a9a069039aac79c925c389";
+    hash = "sha256-GPFoQI6tipcLzkvjaeufmMrNnQM46lPas9D1SwzjKF4=";
   };
 
   passthru.updateScript = nix-update-script { };

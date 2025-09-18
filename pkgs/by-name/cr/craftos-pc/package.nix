@@ -13,6 +13,7 @@
   libpng,
   pngpp,
   libwebp,
+  libX11,
 }:
 
 let
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     libpng
     pngpp
     libwebp
+    libX11
   ];
   strictDeps = true;
 
@@ -114,6 +116,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       siraben
       tomodachi94
+      viluon
     ];
     mainProgram = "craftos";
   };

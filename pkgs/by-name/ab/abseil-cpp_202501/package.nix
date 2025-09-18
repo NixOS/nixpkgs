@@ -19,15 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QTywqQCkyGFpdbtDBvUwz9bGXxbJs/qoFKF6zYAZUmQ=";
   };
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "ABSL_BUILD_TEST_HELPERS" true)
-      (lib.cmakeBool "ABSL_USE_EXTERNAL_GOOGLETEST" true)
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
-    ]
-    ++ lib.optionals (cxxStandard != null) [
-      (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ABSL_BUILD_TEST_HELPERS" true)
+    (lib.cmakeBool "ABSL_USE_EXTERNAL_GOOGLETEST" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
+  ]
+  ++ lib.optionals (cxxStandard != null) [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
+  ];
 
   strictDeps = true;
 

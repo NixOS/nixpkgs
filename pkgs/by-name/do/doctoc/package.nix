@@ -18,6 +18,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-TbAnFpiN/v6xjQQznL/B180f0W48HPRqW21cO9XZhYA=";
 
+  postInstall = ''
+    find $out/lib/node_modules -xtype l -delete
+  '';
+
   dontNpmBuild = true;
 
   passthru.tests = {

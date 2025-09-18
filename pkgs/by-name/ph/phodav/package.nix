@@ -8,6 +8,7 @@
   meson,
   ninja,
   gnome,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lintl";
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {

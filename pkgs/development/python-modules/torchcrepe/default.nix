@@ -15,7 +15,7 @@
 
 buildPythonPackage {
   pname = "torchcrepe";
-  version = "0.0.23";
+  version = "0.0.24";
   pyproject = true;
   build-system = [ setuptools ];
 
@@ -24,9 +24,9 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "maxrmorrison";
     repo = "torchcrepe";
-    # No releases: https://github.com/maxrmorrison/torchcrepe/commit/e2c305878ec7a89aec85a01f8d223a75a36d30b6
-    rev = "e2c305878ec7a89aec85a01f8d223a75a36d30b6";
-    hash = "sha256-fhBU5KFDNDG4g4KNivE/dRpMPyu1QNa9xKN6HIz3tK4=";
+    # No releases: https://github.com/maxrmorrison/torchcrepe/commit/19e2ec3d494c0797a5ff2a11408ec5838fba6681
+    rev = "19e2ec3d494c0797a5ff2a11408ec5838fba6681";
+    hash = "sha256-w2T8D3ATCHVBCBhMdLSYdV0yb9vUYwZLz+B2X2gteEU=";
   };
 
   dependencies = [

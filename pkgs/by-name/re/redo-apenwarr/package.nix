@@ -22,31 +22,33 @@ stdenv.mkDerivation rec {
     sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
-  postPatch =
-    ''
+  postPatch = ''
 
-      patchShebangs minimal/do
+    patchShebangs minimal/do
 
-    ''
-    + lib.optionalString doCheck ''
-      unset CC CXX
+  ''
+  + lib.optionalString doCheck ''
+    unset CC CXX
 
-      substituteInPlace minimal/do.test \
-        --replace "/bin/pwd" "${coreutils}/bin/pwd"
+    substituteInPlace minimal/do.test \
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
 
-      substituteInPlace t/105-sympath/all.do \
-        --replace "/bin/pwd" "${coreutils}/bin/pwd"
+    substituteInPlace t/105-sympath/all.do \
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
 
-      substituteInPlace t/all.do \
-        --replace "/bin/ls" "ls"
+    substituteInPlace t/all.do \
+      --replace-fail "/bin/ls" "ls"
 
-      substituteInPlace t/110-compile/hello.o.do \
-        --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
+    substituteInPlace t/110-compile/hello.o.do \
+      --replace-fail "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
-      substituteInPlace t/200-shell/nonshelltest.do \
-        --replace "/usr/bin/env perl" "${perl}/bin/perl"
+    substituteInPlace t/200-shell/nonshelltest.do \
+      --replace-fail "/usr/bin/env perl" "${perl}/bin/perl"
 
-    '';
+    # See https://github.com/apenwarr/redo/pull/47
+    substituteInPlace minimal/do \
+      --replace-fail 'cd "$dodir"' 'cd "''${dodir:-.}"'
+  '';
 
   inherit doCheck;
 

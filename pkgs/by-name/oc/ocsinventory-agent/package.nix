@@ -78,22 +78,21 @@ perlPackages.buildPerlPackage rec {
 
   postInstall =
     let
-      runtimeDependencies =
-        [
-          coreutils # uname, cut, df, stat, uptime
-          findutils # find
-          inetutils # ifconfig
-          ipmitool # ipmitool
-          nmap # nmap
-          pciutils # lspci
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          dmidecode # dmidecode
-          iproute2 # ip
-          lvm2 # pvs
-          usbutils # lsusb
-          util-linux # last, lsblk, mount
-        ];
+      runtimeDependencies = [
+        coreutils # uname, cut, df, stat, uptime
+        findutils # find
+        inetutils # ifconfig
+        ipmitool # ipmitool
+        nmap # nmap
+        pciutils # lspci
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        dmidecode # dmidecode
+        iproute2 # ip
+        lvm2 # pvs
+        usbutils # lsusb
+        util-linux # last, lsblk, mount
+      ];
     in
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/ocsinventory-agent
@@ -113,7 +112,7 @@ perlPackages.buildPerlPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OCS Inventory unified agent for Unix operating systems";
     longDescription = ''
       Open Computers and Software Inventory (OCS) is an application designed
@@ -123,12 +122,12 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://ocsinventory-ng.org";
     changelog = "https://github.com/OCSInventory-NG/UnixAgent/releases/tag/v${version}";
     downloadPage = "https://github.com/OCSInventory-NG/UnixAgent/releases";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "ocsinventory-agent";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       totoroot
       anthonyroussel
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

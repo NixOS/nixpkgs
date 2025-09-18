@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "libbs";
-  version = "2.11.3";
+  version = "2.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
     tag = "v${version}";
-    hash = "sha256-Ztn4AYnDlHpUYsr8jMvzmQ4zlRpDVsL+J6F1ipLbwwI=";
+    hash = "sha256-i5y0aPCBcCzR2pYYtdxy9OEFFF47chINMRfhj9zAf7g=";
   };
 
   build-system = [ setuptools ];

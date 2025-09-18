@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrc";
-  version = "2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "Edd12321";
     repo = "zrc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-prUbuXyhIJczCvjqwm9pp2n75LY10+6SzYaOHd+S748=";
+    hash = "sha256-BJlMrafyPmA7vMEf31ao88HLbU86tySTbtuCaN4RxtY=";
   };
 
   nativeBuildInputs = [

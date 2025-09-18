@@ -19,16 +19,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-Fta/IYKWsB4ZuPOWtGO6p6l03eoRXaO0lIGaCU3SRag=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace Makefile \
-        --replace-fail "/usr" "$out"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/main.cc \
-        --replace-fail "!defined(__OpenBSD__)" "!defined(__OpenBSD__) && !defined(__APPLE__)" \
-        --replace-fail " | O_PATH" ""
-    '';
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "/usr" "$out"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/main.cc \
+      --replace-fail "!defined(__OpenBSD__)" "!defined(__OpenBSD__) && !defined(__APPLE__)" \
+      --replace-fail " | O_PATH" ""
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 

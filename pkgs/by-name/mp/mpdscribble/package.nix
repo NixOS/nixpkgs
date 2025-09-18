@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     curl
     boost
     libgcrypt
-  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
   meta = with lib; {
     description = "MPD client which submits info about tracks being played to a scrobbler";

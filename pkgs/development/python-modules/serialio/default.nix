@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
-    repo = pname;
+    repo = "serialio";
     tag = "v${version}";
     hash = "sha256-9TRGT0wpoRRcHqnH1XzlMBh0IcVzdEcOzN7hkeYnoW4=";
   };

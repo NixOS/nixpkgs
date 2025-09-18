@@ -85,21 +85,21 @@ stdenv.mkDerivation rec {
   # the closure size dramatically
   ${if onlyExecutable then "buildInputs" else "propagatedBuildInputs"} = [
     gnatcoll-core
-  ] ++ libsFor."${component}" or [ ];
+  ]
+  ++ libsFor."${component}" or [ ];
 
-  makeFlags =
-    [
-      "-C"
-      component
-      "PROCESSORS=$(NIX_BUILD_CORES)"
-      # confusingly, for gprbuild --target is autoconf --host
-      "TARGET=${stdenv.hostPlatform.config}"
-      "prefix=${placeholder "out"}"
-    ]
-    ++ lib.optionals (component == "sqlite") [
-      # link against packaged, not vendored libsqlite3
-      "GNATCOLL_SQLITE=external"
-    ];
+  makeFlags = [
+    "-C"
+    component
+    "PROCESSORS=$(NIX_BUILD_CORES)"
+    # confusingly, for gprbuild --target is autoconf --host
+    "TARGET=${stdenv.hostPlatform.config}"
+    "prefix=${placeholder "out"}"
+  ]
+  ++ lib.optionals (component == "sqlite") [
+    # link against packaged, not vendored libsqlite3
+    "GNATCOLL_SQLITE=external"
+  ];
 
   meta = with lib; {
     description = "GNAT Components Collection - Database packages";

@@ -7,17 +7,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mycli";
-  version = "1.29.2";
+  version = "1.31.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${version}";
-    hash = "sha256-d90HJszhnYDxFkvLmTkt/LZ6XctcBjgKBoMUD3m+Sdw=";
+    hash = "sha256-s5PzWrxG2z0sOyQIyACLkG7dau+MHYLtLNLig6UfuCs=";
   };
 
-  pythonRelaxDeps = [ "sqlparse" ];
+  pythonRelaxDeps = [
+    "sqlparse"
+    "click"
+  ];
 
   build-system = with python3Packages; [
     setuptools

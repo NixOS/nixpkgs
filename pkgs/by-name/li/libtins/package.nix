@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Required for gtest 1.13+, see also upstream report at:
-    # https://github.com/mfontanini/libtins/issues/529
-    ./0001-force-cpp-14.patch
+    # Required for gtest 1.17+:
+    # https://github.com/NixOS/nixpkgs/issues/425358
+    # See also an upstream report for gtest 1.13+ and C++14:
+    # https://github.com/mfontanini/libtins/issues/
+    ./0001-force-cpp-17.patch
   ];
 
   postPatch = ''
@@ -50,12 +52,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "tests test";
 
-  meta = with lib; {
+  meta = {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
     homepage = "https://libtins.github.io/";
     changelog = "https://raw.githubusercontent.com/mfontanini/libtins/v${version}/CHANGES.md";
     license = lib.licenses.bsd2;
-    maintainers = with maintainers; [ fdns ];
+    maintainers = with lib.maintainers; [ fdns ];
     platforms = lib.platforms.unix;
   };
 }

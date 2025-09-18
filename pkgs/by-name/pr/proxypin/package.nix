@@ -1,26 +1,26 @@
 {
   lib,
-  flutter327,
+  flutter332,
   fetchFromGitHub,
   autoPatchelfHook,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "proxypin";
-  version = "1.1.7";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-A+FgWTzluyTENyr29I57107pYrClMn+L4Th1BluTQIU=";
+    hash = "sha256-PRknUOCaaDE4Ri70EAROx1K3g2bLKI/HKIvo1W1D8ko=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
     desktop_multi_window = "sha256-Tbl0DOxW1F8V2Kj34gcNRbBqr5t9Iq74qCT26deqFdQ=";
-    flutter_code_editor = "sha256-HwgjyIwS0HcXL5JN7T1pTKyALakCC31V3rMFum7dHvE=";
+    flutter_code_editor = "sha256-B9aJh6e6iLBZAcacucsT9szWWBwWVBBPDhbKQfnxc6I=";
   };
 
   postPatch = ''
@@ -38,12 +38,14 @@ flutter327.buildFlutterApplication rec {
     install -Dm0644 assets/icon.png $out/share/pixmaps/proxypin.png
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Capture HTTP(S) traffic software";
     homepage = "https://github.com/wanghongenpin/proxypin";
     mainProgram = "ProxyPin";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

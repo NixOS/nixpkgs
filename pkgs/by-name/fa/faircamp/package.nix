@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitea,
   makeWrapper,
@@ -10,26 +9,23 @@
   vips,
   ffmpeg,
   callPackage,
-  darwin,
   testers,
   faircamp,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;
-    hash = "sha256-zKwKuGN+8HT1rSbweQGvpkvMtF2WAB8EEV9pGeKtdlw=";
+    hash = "sha256-J6OzbZbKT1ZnVG559JKLDh5R9xI3WUYx3pvvb15CAI8=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-5suzKkdGHxPuJWWvu17Dph+zli/1yIDB0GcAemmahtI=";
+  cargoHash = "sha256-I5L+TKMKpUUvkh7tWw7hdCRK6CLj0PBzkfdJqPk3YJE=";
 
   buildFeatures = [ "libvips" ];
 
@@ -38,15 +34,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      libopus
-      vips
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    glib
+    libopus
+    vips
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/faircamp \

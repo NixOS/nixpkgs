@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     homepage = "http://www.hammersound.net/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

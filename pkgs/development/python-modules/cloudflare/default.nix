@@ -15,15 +15,20 @@
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "4.1.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a5++mUhW/pQq3GpIgbe+3tIIA03FxT3Wg3UfYy5Hoaw=";
+    hash = "sha256-seHGvuuNmPY7/gocuodPxOIuAAvMSQVE+VbGibO1slg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'hatchling==1.26.3' 'hatchling>=1.26.3'
+  '';
 
   build-system = [
     hatchling
@@ -47,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Official Python library for the Cloudflare API";
     homepage = "https://github.com/cloudflare/cloudflare-python";
-    changelog = "https://github.com/cloudflare/cloudflare-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/cloudflare/cloudflare-python/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       marie
       jemand771

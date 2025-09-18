@@ -13,6 +13,9 @@
   meson,
   ninja,
   pkg-config,
+
+  # empty means build all available plugins
+  plugins ? [ ],
 }:
 
 let
@@ -49,7 +52,7 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
-  postFixup = ''
+  postFixup = lib.optionalString (lib.any (x: x == "vitalium") plugins || plugins == [ ]) ''
     for file in \
       $out/lib/lv2/vitalium.lv2/vitalium.so \
       $out/lib/vst/vitalium.so \
@@ -59,11 +62,23 @@ stdenv.mkDerivation {
     done
   '';
 
+  mesonFlags = lib.optional (plugins != [ ]) (
+    lib.mesonOption "plugins" "[${lib.concatMapStringsSep "," (x: "\"${x}\"") plugins}]"
+  );
+
   meta = {
     homepage = "http://distrho.sourceforge.net/ports";
     description = "Linux audio plugins and LV2 ports";
     longDescription = ''
-      Includes:
+      You can override this package to only include some plugins like so:
+
+      ```nix
+      distrho-ports.override {
+        plugins = [ "vitalium" "swankyamp" ];
+      }
+      ```
+
+      Available plugins:
       - arctican-function
       - arctican-pilgrim
       - dexed
@@ -107,7 +122,7 @@ stdenv.mkDerivation {
       lgpl3Only
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bandithedoge ];
     platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86;
   };
 }

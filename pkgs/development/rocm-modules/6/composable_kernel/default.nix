@@ -36,6 +36,7 @@ let
         "device_grouped_conv2d_fwd_instance"
         "device_grouped_conv2d_fwd_dynamic_op_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     grouped_conv_bwd_3d = {
       targets = [
@@ -46,6 +47,7 @@ let
         "device_grouped_conv3d_bwd_weight_bilinear_instance"
         "device_grouped_conv3d_bwd_weight_scale_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     grouped_conv_fwd_3d = {
       targets = [
@@ -60,6 +62,7 @@ let
         "device_grouped_conv3d_fwd_scaleadd_ab_instance"
         "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     batched_gemm = {
       targets = [
@@ -77,6 +80,7 @@ let
         "device_grouped_gemm_fixed_nk_multi_abd_instance"
         "device_grouped_gemm_tile_loop_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     gemm_universal = {
       targets = [
@@ -108,6 +112,7 @@ let
         "device_gemm_splitk_instance"
         "device_gemm_streamk_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     conv = {
       targets = [
@@ -118,6 +123,7 @@ let
         "device_conv2d_fwd_bias_relu_add_instance"
         "device_conv3d_bwd_data_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     pool = {
       targets = [
@@ -139,6 +145,7 @@ let
         "device_normalization_bwd_gamma_beta_instance"
         "device_normalization_fwd_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     other2 = {
       targets = [
@@ -150,6 +157,7 @@ let
         "device_softmax_instance"
         "device_transpose_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
   };
   tensorOpBuilder =
@@ -176,20 +184,18 @@ let
       # Nix/nixpkgs doesn't really have any infra to tell it that this build is unusually memory hungry
       # So, bodge. Otherwise you end up having to build all of ROCm with a low core limit when
       # it's only this package that has trouble.
-      preConfigure =
-        old.preConfigure or ""
-        + ''
-          MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
-          MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
-          APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
-          MAX_CORES=$((1 + APPX_GB/3))
-          MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/3 ? NIX_BUILD_CORES/3 : MAX_CORES))
-          export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
-          echo "Picked new core limit NIX_BUILD_CORES=$NIX_BUILD_CORES based on available mem: $APPX_GB GB"
-          cmakeFlagsArray+=(
-            "-DCK_PARALLEL_COMPILE_JOBS=$NIX_BUILD_CORES"
-          )
-        '';
+      preConfigure = old.preConfigure or "" + ''
+        MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
+        MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
+        APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
+        MAX_CORES=$((1 + APPX_GB/3))
+        MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/3 ? NIX_BUILD_CORES/3 : MAX_CORES))
+        export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
+        echo "Picked new core limit NIX_BUILD_CORES=$NIX_BUILD_CORES based on available mem: $APPX_GB GB"
+        cmakeFlagsArray+=(
+          "-DCK_PARALLEL_COMPILE_JOBS=$NIX_BUILD_CORES"
+        )
+      '';
       cmakeFlags = old.cmakeFlags ++ extraCmakeFlags;
       # Early exit after build phase with success, skips fixups etc
       # Will get copied back into /build of the final CK

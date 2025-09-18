@@ -49,7 +49,7 @@ in
       type = lib.types.bool;
       default = true;
       description = ''
-        Adds the hosted peers from https://github.com/threefoldtech/mycelium#hosted-public-nodes.
+        Adds the hosted peers from <https://github.com/threefoldtech/mycelium#hosted-public-nodes>.
       '';
     };
     extraArgs = lib.mkOption {
@@ -73,7 +73,13 @@ in
 
     systemd.services.mycelium = {
       description = "Mycelium network";
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
+      wants = [
+        "network-online.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         cfg.keyFile

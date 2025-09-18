@@ -1,10 +1,10 @@
 { pkgs, runTest, ... }:
 builtins.listToAttrs (
   builtins.map
-    (nginxPackage: {
-      name = pkgs.lib.getName nginxPackage;
+    (packageName: {
+      name = packageName;
       value = runTest {
-        name = "nginx-variant-${pkgs.lib.getName nginxPackage}";
+        name = "nginx-variant-${packageName}";
 
         nodes.machine =
           { pkgs, ... }:
@@ -12,7 +12,7 @@ builtins.listToAttrs (
             services.nginx = {
               enable = true;
               virtualHosts.localhost.locations."/".return = "200 'foo'";
-              package = nginxPackage;
+              package = pkgs.${packageName};
             };
           };
 
@@ -24,13 +24,13 @@ builtins.listToAttrs (
       };
     })
     [
-      pkgs.angie
-      pkgs.angieQuic
-      pkgs.nginxStable
-      pkgs.nginxMainline
-      pkgs.nginxQuic
-      pkgs.nginxShibboleth
-      pkgs.openresty
-      pkgs.tengine
+      "angie"
+      "angieQuic"
+      "nginxStable"
+      "nginxMainline"
+      "nginxQuic"
+      "nginxShibboleth"
+      "openresty"
+      "tengine"
     ]
 )

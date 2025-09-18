@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # tests
   pytestCheckHook,
@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "orderly-set";
-  version = "5.3.2";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "orderly-set";
     tag = version;
-    hash = "sha256-W42p0wJqomJdS47n3MP/BbxZmlYNLLAMnfQ/hvKn+60=";
+    hash = "sha256-xrxH/LB+cyZlVf+sVwOtAf9+DojYPDnudHpqlVuARLg=";
   };
 
   build-system = [
-    setuptools
+    flit-core
   ];
 
   pythonImportsCheck = [

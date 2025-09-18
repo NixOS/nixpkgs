@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     python3 tests/run_tests.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Finite state compiler, processor and helper tools used by apertium";
     homepage = "https://github.com/apertium/lttoolbox";
-    maintainers = with maintainers; [ onthestairs ];
+    maintainers = with lib.maintainers; [ onthestairs ];
     changelog = "https://github.com/apertium/lttoolbox/releases/tag/v${version}";
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

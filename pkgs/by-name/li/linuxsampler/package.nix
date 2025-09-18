@@ -16,14 +16,16 @@
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linuxsampler";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-T7quk5N5JBiPqIziQd0vaCr8tLDbwS6otz6egY01OTE=";
+    url = "https://download.linuxsampler.org/packages/linuxsampler-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-T7quk5N5JBiPqIziQd0vaCr8tLDbwS6otz6egY01OTE=";
   };
+
+  env.HAVE_UNIX98 = "1";
 
   preConfigure = ''
     make -f Makefile.svn
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.linuxsampler.org";
     description = "Sampler backend";
     longDescription = ''
@@ -63,8 +65,8 @@ stdenv.mkDerivation rec {
       have questions on the subject, that are not yet covered by the
       FAQ, please contact us.
     '';
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

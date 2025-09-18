@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "wuwentao";
   domain = "midea_ac_lan";
-  version = "0.6.6";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-GksX+RmQ7lcyuUL3vu9b1q3c56W9yB2Hg20DUNTeOxY=";
+    hash = "sha256-pPPJFs4earRbh6ovR57k9xgZtrYN0L26eupOoFuBVz8=";
   };
 
   dependencies = [ midea-local ];

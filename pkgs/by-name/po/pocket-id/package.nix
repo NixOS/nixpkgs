@@ -1,95 +1,76 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  fetchurl,
-  makeWrapper,
-  nodejs,
+  buildGo125Module,
   stdenvNoCC,
+  nodejs,
+  pnpm_10,
   nixosTests,
   nix-update-script,
 }:
 
-let
-  version = "0.45.0";
+buildGo125Module (finalAttrs: {
+  pname = "pocket-id";
+  version = "1.10.0";
+
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
-    tag = "v${version}";
-    hash = "sha256-x5Y3ArkIPxiE6avk9DNyFdfkc/pY6h3JH3PZCS8U/GM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YAQT7ORRg27ORh57NTE8F89iNfw+3gd1xPM8f4zHKm4=";
   };
 
-  backend = buildGoModule {
-    pname = "pocket-id-backend";
-    inherit version src;
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
-    sourceRoot = "${src.name}/backend";
+  vendorHash = "sha256-eNUhk76YLHtXCFaxiavM6d8CMeE+YQ+vOecDUCiTh5k=";
 
-    vendorHash = "sha256-mqpBP+A2X5ome1Ppg/Kki0C+A77jFtWzUjI/RN+ZCzg=";
+  env.CGO_ENABLED = 0;
+  ldflags = [
+    "-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${finalAttrs.version}"
+    "-buildid=${finalAttrs.version}"
+  ];
 
-    preFixup = ''
-      mv $out/bin/cmd $out/bin/pocket-id-backend
-    '';
-  };
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
+  '';
 
-  frontend = buildNpmPackage (finalAttrs: {
+  preFixup = ''
+    mv $out/bin/cmd $out/bin/pocket-id
+  '';
+
+  frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
-    inherit version src;
-
-    sourceRoot = "${src.name}/frontend";
-
-    npmDepsHash = "sha256-cpmZzlz+wusfRLN4iIGdk+I4SWrX/gk2fbhg+Gg3paw=";
-    npmFlags = [ "--legacy-peer-deps" ];
+    inherit (finalAttrs) version src;
 
     nativeBuildInputs = [
-      makeWrapper
+      nodejs
+      pnpm_10.configHook
     ];
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
+      hash = "sha256-Gjj2iFQ15Tso0gXihFH96nW49GJleOU323shBE7VgJ4=";
+    };
+
+    env.BUILD_OUTPUT_PATH = "dist";
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter pocket-id-frontend build
+
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
 
-      # even though vite build creates most of the minified js files,
-      # it still needs a few packages from node_modules, try to strip that
-      npm prune --omit=dev --omit=optional $npmFlags
-      # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,bits-ui,jiti,@swc,.bin}
-      # unused file types
-      for pattern in '*.map' '*.map.js' '*.ts'; do
-        find . -type f -name "$pattern" -exec rm {} +
-      done
-
-      mkdir -p $out/{bin,lib/pocket-id-frontend}
-      cp -r build $out/lib/pocket-id-frontend/dist
-      cp -r node_modules $out/lib/pocket-id-frontend/node_modules
-      makeWrapper ${lib.getExe nodejs} $out/bin/pocket-id-frontend \
-        --add-flags $out/lib/pocket-id-frontend/dist/index.js
+      mkdir -p $out/lib/pocket-id-frontend
+      cp -r frontend/dist $out/lib/pocket-id-frontend/dist
 
       runHook postInstall
     '';
-  });
-
-in
-stdenvNoCC.mkDerivation rec {
-  pname = "pocket-id";
-  inherit
-    version
-    src
-    backend
-    frontend
-    ;
-
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    ln -s ${backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-    ln -s ${frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
-
-    runHook postInstall
-  '';
+  };
 
   passthru = {
     tests = {
@@ -97,8 +78,6 @@ stdenvNoCC.mkDerivation rec {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "backend"
         "--subpackage"
         "frontend"
       ];
@@ -108,12 +87,14 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "OIDC provider with passkeys support";
     homepage = "https://pocket-id.org";
-    changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${version}";
+    changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
+    mainProgram = "pocket-id";
     maintainers = with lib.maintainers; [
       gepbird
+      marcusramberg
       ymstnt
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

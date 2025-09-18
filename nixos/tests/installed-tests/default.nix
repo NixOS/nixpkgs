@@ -50,7 +50,8 @@ let
             {
               imports = [
                 testConfig
-              ] ++ optional withX11 ../common/x11.nix;
+              ]
+              ++ optional withX11 ../common/x11.nix;
 
               environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
 

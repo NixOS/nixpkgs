@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "mohawk/tests.py" ];
+  enabledTestPaths = [ "mohawk/tests.py" ];
 
   meta = {
     description = "Python library for Hawk HTTP authorization";

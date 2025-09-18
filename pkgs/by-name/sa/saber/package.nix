@@ -1,35 +1,42 @@
 {
   lib,
+  flutter335,
   fetchFromGitHub,
-  flutter329,
   gst_all_1,
   libunwind,
   orc,
   webkitgtk_4_1,
   autoPatchelfHook,
   xorg,
+  jdk,
+  zlib,
   runCommand,
-  yq,
-  saber,
+  yq-go,
   _experimental-update-script-combinators,
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
-  pname = "saber";
-  version = "0.25.4";
+let
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
+  '';
+
+  version = "0.26.4";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-3ZTvGF5Ip6VTmyeuuZoJaGO1dDOee5GuRp6/YxSz27c=";
+    hash = "sha256-3QRcl/EenW3RJUvfpinWWUyG9fq6R6kZFnBGkqN7R7U=";
   };
+in
+flutter335.buildFlutterApplication {
+  pname = "saber";
+  inherit version src;
 
-  gitHashes = {
-    receive_sharing_intent = "sha256-ppKPBL2ZOx2MeuLY6Q8aiVGsektK+Mqtwyxps0aNtwk=";
-    json2yaml = "sha256-Vb0Bt11OHGX5+lDf8KqYZEGoXleGi5iHXVS2k7CEmDw=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -42,15 +49,26 @@ flutter329.buildFlutterApplication rec {
     orc
     webkitgtk_4_1
     xorg.libXmu
+    jdk
   ];
+
+  postPatch = ''
+    patchShebangs patches/remove_proprietary_dependencies.sh
+    patches/remove_proprietary_dependencies.sh
+  '';
+
+  flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
+
+  env.ZLIB_ROOT = zlib-root;
 
   postInstall = ''
     install -Dm0644 flatpak/com.adilhanney.saber.desktop $out/share/applications/saber.desktop
     install -Dm0644 assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/com.adilhanney.saber.svg
+    install -Dm0644 flatpak/com.adilhanney.saber.metainfo.xml -t $out/share/metainfo
   '';
 
+  # Remove libpdfrx.so's reference to the /build/ directory
   preFixup = ''
-    # Remove libpdfrx.so's reference to the /build/ directory
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/saber/lib/lib*.so
   '';
 
@@ -58,15 +76,19 @@ flutter329.buildFlutterApplication rec {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          nativeBuildInputs = [ yq ];
-          inherit (saber) src;
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       (_experimental-update-script-combinators.copyAttrOutputToFile "saber.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [ ./update-gitHashes.py ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
   };
 

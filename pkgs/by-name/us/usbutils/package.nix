@@ -21,18 +21,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-g/aLWbWFR1icACZugmcYZGJ1k6tDYtjIB/UO6pI8rZM=";
   };
 
-  patches =
-    [
-      (replaceVars ./fix-paths.patch {
-        inherit hwdata;
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24a6945778381a62ecdcc1d78bcc16b9f86778c1/usbutils/portable.patch";
-        hash = "sha256-spTkWURij4sPLoWtDaWVMIk81AS5W+qUUOQL1pAZEvs=";
-      })
-    ];
+  patches = [
+    (replaceVars ./fix-paths.patch {
+      inherit hwdata;
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24a6945778381a62ecdcc1d78bcc16b9f86778c1/usbutils/portable.patch";
+      hash = "sha256-spTkWURij4sPLoWtDaWVMIk81AS5W+qUUOQL1pAZEvs=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -44,14 +43,13 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  outputs =
-    [
-      "out"
-      "man"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "python" # uses sysfs
-    ];
+  outputs = [
+    "out"
+    "man"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "python" # uses sysfs
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     moveToOutput "bin/lsusb.py" "$python"

@@ -11,18 +11,17 @@
   withMods ? true,
   withLinuxPatch ? true,
 }:
-let
-  version = "1.0.1n";
-  balatroExe = requireFile {
-    name = "Balatro-${version}.exe";
-    url = "https://store.steampowered.com/app/2379780/Balatro/";
-    # Use `nix hash file --sri --type sha256` to get the correct hash
-    hash = "sha256-mJ5pL+Qj3+ldOLFcQc64dM0edTeQSePIYpp5EuwxKXo=";
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "balatro";
-  inherit version;
+  version = "1.0.1o";
+
+  src = requireFile {
+    name = "Balatro-${finalAttrs.version}.exe";
+    url = "https://store.steampowered.com/app/2379780/Balatro/";
+    # Use `nix --extra-experimental-features nix-command hash file --sri --type sha256` to get the correct hash
+    hash = "sha256-DXX+FkrM8zEnNNSzesmHiN0V8Ljk+buLf5DE5Z3pP0c=";
+  };
+
   nativeBuildInputs = [
     p7zip
     copyDesktopItems
@@ -43,7 +42,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
     tmpdir=$(mktemp -d)
-    7z x ${balatroExe} -o$tmpdir -y
+    7z x ${finalAttrs.src} -o$tmpdir -y
     ${if withLinuxPatch then "patch $tmpdir/globals.lua -i ${./globals.patch}" else ""}
     patchedExe=$(mktemp -u).zip
     7z a $patchedExe $tmpdir/*
@@ -76,4 +75,4 @@ stdenv.mkDerivation {
     platforms = love.meta.platforms;
     mainProgram = "balatro";
   };
-}
+})

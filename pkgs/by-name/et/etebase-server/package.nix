@@ -11,6 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
   version = "0.14.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "etesync";
@@ -59,13 +60,13 @@ python3.pkgs.buildPythonApplication rec {
     nixosTest = nixosTests.etebase-server;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/etesync/server";
     description = "Etebase (EteSync 2.0) server so you can run your own";
     mainProgram = "etebase-server";
     changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       felschr
       phaer
     ];

@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "tianshou";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     owner = "thu-ml";
     repo = "tianshou";
     tag = "v${version}";
-    hash = "sha256-eiwbSX8Q3KF6h7CfjuZ+7HlXwpvLga1NVr3e+FkPaHc=";
+    hash = "sha256-lJAxjE+GMwssov1r4jOCOTf5Aonu+q6FSz5oWvZpuQQ=";
   };
 
   pythonRelaxDeps = [
@@ -165,25 +165,24 @@ buildPythonPackage rec {
     "test/offline"
   ];
 
-  disabledTests =
-    [
-      # AttributeError: 'TimeLimit' object has no attribute 'test_attribute'
-      "test_attr_unwrapped"
-      # Failed: DID NOT RAISE <class 'TypeError'>
-      "test_batch"
-      # Failed: Raised AssertionError
-      "test_vecenv"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # pettingzoo/classic/tictactoe/tictactoe.py", line 254 in reset
-      "test_tic_tac_toe"
-    ];
+  disabledTests = [
+    # AttributeError: 'TimeLimit' object has no attribute 'test_attribute'
+    "test_attr_unwrapped"
+    # Failed: DID NOT RAISE <class 'TypeError'>
+    "test_batch"
+    # Failed: Raised AssertionError
+    "test_vecenv"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # pettingzoo/classic/tictactoe/tictactoe.py", line 254 in reset
+    "test_tic_tac_toe"
+  ];
 
   meta = {
     description = "Elegant PyTorch deep reinforcement learning library";
     homepage = "https://github.com/thu-ml/tianshou";
-    changelog = "https://github.com/thu-ml/tianshou/releases/tag/v${version}";
+    changelog = "https://github.com/thu-ml/tianshou/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

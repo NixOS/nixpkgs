@@ -1,23 +1,23 @@
 diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
-index 001faa3..2d7ae0c 100644
+index 04ea191..72d178d 100644
 --- a/src-tauri/src/lib.rs
 +++ b/src-tauri/src/lib.rs
-@@ -82,7 +82,6 @@ pub fn run() {
-     let _guard = minidump::init(&client);
+@@ -83,7 +83,6 @@ pub fn run() {
  	
      let mut app = tauri::Builder::default()
+         .plugin(tauri_plugin_clipboard_manager::init())
 -        .plugin(tauri_plugin_updater::Builder::new().build())
          .plugin(tauri_plugin_os::init())
          .plugin(tauri_plugin_notification::init())
          .plugin(tauri_plugin_process::init())
 diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
-index 4f9df22..58d6c06 100644
+index 8b1c89f..1705861 100644
 --- a/src-tauri/tauri.conf.json
 +++ b/src-tauri/tauri.conf.json
-@@ -86,14 +86,9 @@
+@@ -86,16 +86,9 @@
                  "installMode": "both"
              },
-             "signCommand": "trusted-signing-cli %1 -e https://eus.codesigning.azure.net -a sign-1 -c Sign1"
+             "signCommand": "trusted-signing-cli -e https://eus.codesigning.azure.net -a sign-1 -c Sign1 -d Rclone %1"
 -        },
 -        "createUpdaterArtifacts": true
 +        }
@@ -25,7 +25,9 @@ index 4f9df22..58d6c06 100644
      "plugins": {
 -        "updater": {
 -            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDIyNDFENEZGNjFDNTBGOEYKUldTUEQ4VmgvOVJCSWhVZmw0enhmcW1kWFk3TS9mMzBDRjVEZWdxKzQ5ZmRhTlYvT2gvdFNMbE8K",
--            "endpoints": ["https://github.com/FTCHD/rclone-ui/releases/latest/download/latest.json"]
+-            "endpoints": [
+-                "https://github.com/rclone-ui/rclone-ui/releases/latest/download/latest.json"
+-            ]
 -        },
          "fs": {
              "requireLiteralLeadingDot": false

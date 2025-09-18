@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A VCR imitation for requests";
+    description = "VCR imitation for requests";
     homepage = "https://betamax.readthedocs.org/";
     changelog = "https://github.com/betamaxpy/betamax/blob/${version}/HISTORY.rst";
     license = licenses.asl20;

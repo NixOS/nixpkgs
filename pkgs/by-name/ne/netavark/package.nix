@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.14.1";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "netavark";
     rev = "v${version}";
-    hash = "sha256-kAJOfZ4Q1EQ+JV1izXoLe/Z/qgxbzz3WbczM4fVhxfU=";
+    hash = "sha256-8Yai0c5AHHx+xTEVH23C5dy4VXRERLeg0iIAbD/Glis=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-MdKTGLNf+7SzdkQNLOWgfmSE9TNLYzPFU0oXh6MnW5w=";
+  cargoHash = "sha256-U8rNA5sAR9+q7cWQBt18iJfnylcCq/tVLXAdxWpAhjw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Rust based network stack for containers";
     homepage = "https://github.com/containers/netavark";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
     platforms = platforms.linux;
   };
 }

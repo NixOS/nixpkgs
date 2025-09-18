@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Ry64sd0OYGqbiVqveU05gsmf1c9kQy2QMN9Z5seMedc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-z+5fVSl9zFdOFNCCf49iVltAm+rZcJtLsz+zLCUlC6o=";
 
   nativeBuildInputs = [
@@ -45,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hlsxx/tuicam";
     changelog = "https://github.com/hlsxx/tuicam/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ linuxmobile ];
+    maintainers = with lib.maintainers; [ FKouhai ];
     platforms = lib.platforms.linux;
     mainProgram = "tuicam";
   };

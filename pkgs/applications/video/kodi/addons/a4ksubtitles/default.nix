@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://a4k-openproject.github.io/a4kSubtitles/";
     description = "Multi-Source Subtitles Addon";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

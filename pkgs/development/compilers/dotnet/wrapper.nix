@@ -6,18 +6,20 @@
   testers,
   runCommand,
   runCommandWith,
+  darwin,
   expect,
   curl,
   installShellFiles,
   callPackage,
   zlib,
   swiftPackages,
-  darwin,
   icu,
   lndir,
   replaceVars,
   nugetPackageHook,
   xmlstarlet,
+  pkgs,
+  recurseIntoAttrs,
 }:
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -38,15 +40,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = unwrapped;
   dontUnpack = true;
 
-  setupHooks =
-    [
-      ./dotnet-setup-hook.sh
-    ]
-    ++ lib.optional (type == "sdk") (
-      replaceVars ./dotnet-sdk-setup-hook.sh {
-        inherit lndir xmlstarlet;
-      }
-    );
+  setupHooks = [
+    ./dotnet-setup-hook.sh
+  ]
+  ++ lib.optional (type == "sdk") (
+    replaceVars ./dotnet-sdk-setup-hook.sh {
+      inherit lndir xmlstarlet;
+    }
+  );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
@@ -111,12 +112,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
               unpackPhase =
                 let
-                  unpackArgs =
-                    [ template ]
-                    ++ lib.optionals (lang != null) [
-                      "-lang"
-                      lang
-                    ];
+                  unpackArgs = [
+                    template
+                  ]
+                  ++ lib.optionals (lang != null) [
+                    "-lang"
+                    lang
+                  ];
                 in
                 ''
                   mkdir test
@@ -218,21 +220,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               name = "aot";
               stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
               usePackageSource = true;
-              buildInputs =
-                [
-                  zlib
-                ]
-                ++ lib.optional stdenv.hostPlatform.isDarwin (
-                  with darwin;
-                  with apple_sdk.frameworks;
-                  [
-                    swiftPackages.swift
-                    Foundation
-                    CryptoKit
-                    GSS
-                    ICU
-                  ]
-                );
+              buildInputs = [
+                zlib
+              ]
+              ++ lib.optional stdenv.hostPlatform.isDarwin [
+                swiftPackages.swift
+                darwin.ICU
+              ];
               build = ''
                 dotnet restore -p:PublishAot=true
                 dotnet publish -p:PublishAot=true -o $out/bin
@@ -288,6 +282,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       }
       // lib.optionalAttrs (type == "sdk") ({
+        buildDotnetModule = recurseIntoAttrs (
+          (pkgs.appendOverlays [
+            (self: super: {
+              dotnet-sdk = finalAttrs.finalPackage;
+              dotnet-runtime = finalAttrs.finalPackage.runtime;
+            })
+          ]).callPackage
+            ../../../test/dotnet/default.nix
+            { }
+        );
+
         console = lib.recurseIntoAttrs {
           # yes, older SDKs omit the comma
           cs = mkConsoleTests "C#" "cs" "Hello,?\\ World!";

@@ -15,16 +15,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.9.0";
+    version = "1.10.6";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-e0ZzbQdex0DD7Bj9WpcVI5roh0cMbJuNr5nsSVaOSu4=";
+      hash = "sha256-IEdnESrhDT2rDha7TNgUnGnPioNPnKrUuOXSGRnUOBI=";
     };
 
-    vendorHash = "sha256-fMTbLSeW+pw6GK8/JLZzG2ER90ss2g1FSDX5+f292do=";
+    vendorHash = "sha256-ZnQDRiLdg12Dx9RdK1xBWUrAm3QQLGhwH1vxh4ieVv0=";
     ldflags = [
       "-s"
       "-w"
@@ -60,12 +60,12 @@ let
 
     subPackages = [ "./cmd/..." ];
 
-    meta = with lib; {
+    meta = {
       description = "Tool for building, changing, and versioning infrastructure";
       homepage = "https://opentofu.org/";
       changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [
         nickcao
         zowoq
       ];

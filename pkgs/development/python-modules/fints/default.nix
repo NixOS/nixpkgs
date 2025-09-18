@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.2.3";
+  version = "4.2.4";
   pname = "fints";
   pyproject = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     tag = "v${version}";
-    hash = "sha256-QR5/mAll6vuP+hJo/oguynLLsGawhTQNaU6TCgww9yM=";
+    hash = "sha256-la5vpWBoZ7hZsAyjjCqHpFfOykDVosI/S9amox1dmzY=";
   };
 
   pythonRemoveDeps = [ "enum-tools" ];
@@ -36,6 +36,8 @@ buildPythonPackage rec {
     requests
     sepaxml
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "fints" ];
 

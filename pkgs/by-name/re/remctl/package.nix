@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs tests
     sed -i '\,server/acl/localgroup,d' tests/TESTS
+    substituteInPlace configure.ac --replace "-Werror" ""
   '';
 
   nativeBuildInputs = [
@@ -57,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.eyrie.org/~eagle/software/remctl";
     mainProgram = "remctl";
     license = licenses.mit;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
   };
 })

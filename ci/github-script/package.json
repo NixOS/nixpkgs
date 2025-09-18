@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "dependencies": {
+    "@actions/artifact": "2.3.2",
+    "@actions/core": "1.11.1",
+    "@actions/github": "6.0.1",
+    "bottleneck": "2.19.5",
+    "commander": "14.0.0"
+  }
+}

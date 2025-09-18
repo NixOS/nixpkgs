@@ -47,8 +47,8 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   This can be seen as an equivalent of `FROM fromImage` in a `Dockerfile`.
   A value of `null` can be seen as an equivalent of `FROM scratch`.
 
-  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
-  Otherwise, the resulting image with contain the single layer created by `buildImage`.
+  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image and the layer created by `buildImage`).
+  Otherwise, the resulting image will contain the single layer created by `buildImage`.
 
   :::{.note}
   Only **Env** configuration is inherited from the base image.
@@ -145,14 +145,14 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 `diskSize` (Number; _optional_)
 
-: Controls the disk size (in megabytes) of the VM used to run the script specified in `runAsRoot`.
+: Controls the disk size in MiB (1024x1024 bytes) of the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 1024.
 
 `buildVMMemorySize` (Number; _optional_)
 
-: Controls the amount of memory (in megabytes) provisioned for the VM used to run the script specified in `runAsRoot`.
+: Controls the amount of memory in MiB (1024x1024 bytes) provisioned for the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 512.
@@ -235,7 +235,11 @@ The following package builds a Docker image that runs the `redis-server` executa
 The Docker image will have name `redis` and tag `latest`.
 
 ```nix
-{ dockerTools, buildEnv, redis }:
+{
+  dockerTools,
+  buildEnv,
+  redis,
+}:
 dockerTools.buildImage {
   name = "redis";
   tag = "latest";
@@ -253,7 +257,9 @@ dockerTools.buildImage {
   config = {
     Cmd = [ "/bin/redis-server" ];
     WorkingDir = "/data";
-    Volumes = { "/data" = { }; };
+    Volumes = {
+      "/data" = { };
+    };
   };
 }
 ```
@@ -286,7 +292,11 @@ It uses `runAsRoot` to create a directory and a file inside the image.
 This works the same as [](#ex-dockerTools-buildImage-extraCommands), but uses `runAsRoot` instead of `extraCommands`.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -320,7 +330,11 @@ This works the same as [](#ex-dockerTools-buildImage-runAsRoot), but uses `extra
 Note that with `extraCommands`, we can't directly reference `/` and must create files and directories as if we were already on `/`.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -350,7 +364,11 @@ dockerTools.buildImage {
 Note that using a value of `"now"` in the `created` attribute will break reproducibility.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -489,7 +507,7 @@ This allows the function to produce reproducible images.
   This can be seen as an equivalent of `ADD contents/ /` in a `Dockerfile`.
 
   All the contents specified by `contents` will be added as a final layer in the generated image.
-  They will be added as links to the actual files (e.g. links to the store paths).
+  They will be added as links to the actual files (e.g., links to the store paths).
   The actual files will be added in previous layers.
 
   _Default value:_ `[]`
@@ -543,7 +561,7 @@ This allows the function to produce reproducible images.
 `gname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-gname}
 
 : Credentials for Nix store ownership.
-  Can be overridden to e.g. `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
+  Can be overridden to, e.g., `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
 
   _Default value:_ `0` / `0` / `"root"` / `"root"`
 
@@ -766,7 +784,11 @@ The closure of `config` is automatically included in the generated image.
 The following package shows a more compact way to create the same output generated in [](#ex-dockerTools-streamLayeredImage-hello).
 
 ```nix
-{ dockerTools, hello, lib }:
+{
+  dockerTools,
+  hello,
+  lib,
+}:
 dockerTools.streamLayeredImage {
   name = "hello";
   tag = "latest";
@@ -1547,13 +1569,15 @@ The Docker image generated will have a name like `hello-<version>-env` and tag `
 This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting point.
 
 ```nix
-{ dockerTools, cowsay, hello }:
+{
+  dockerTools,
+  cowsay,
+  hello,
+}:
 dockerTools.streamNixShellImage {
   tag = "latest";
   drv = hello.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs or [] ++ [
-      cowsay
-    ];
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ cowsay ];
   });
 }
 ```

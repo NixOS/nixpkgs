@@ -5,13 +5,13 @@
   pkg-config,
   rustPlatform,
   sqlite,
-  stdenv,
   zstd,
+  cmake,
 }:
 
 let
   pname = "qsv";
-  version = "2.2.1";
+  version = "7.1.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,11 +20,10 @@ rustPlatform.buildRustPackage {
     owner = "dathere";
     repo = "qsv";
     rev = version;
-    hash = "sha256-LE3iQCZb3FKSsrb8/E5awjh26wGv9FlXw63+rNyzIIk=";
+    hash = "sha256-jo5hlNydHXNqSjYOC270fmIk7GOeFACIZ3aZEca1M28=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Nse3IrhXKdEJ3BMWq8LEdd6EvhSEtzx1RbHQT9AoEb8=";
+  cargoHash = "sha256-jfr5wrOLBhvkikjDAb0vMT/Zwc+aYrSWF5lIC7EGwME=";
 
   buildInputs = [
     file
@@ -35,6 +34,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    cmake
   ];
 
   buildFeatures = [
@@ -71,7 +71,6 @@ rustPlatform.buildRustPackage {
     ];
     maintainers = with lib.maintainers; [
       detroyejr
-      uncenter
     ];
   };
 }

@@ -48,6 +48,15 @@ in
       '';
     };
 
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      example = "/run/secrets/alloy.env";
+      description = ''
+        EnvironmentFile as defined in {manpage}`systemd.exec(5)`.
+      '';
+    };
+
     extraFlags = lib.mkOption {
       type = with lib.types; listOf str;
       default = [ ];
@@ -65,6 +74,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.alloy = {
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       reloadTriggers = lib.mapAttrsToList (_: v: v.source or null) (
         lib.filterAttrs (n: _: lib.hasPrefix "alloy/" n && lib.hasSuffix ".alloy" n) config.environment.etc
@@ -83,6 +93,7 @@ in
         StateDirectory = "alloy";
         WorkingDirectory = "%S/alloy";
         Type = "simple";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       };
     };
   };

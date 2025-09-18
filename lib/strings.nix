@@ -333,6 +333,41 @@ rec {
   concatLines = concatMapStrings (s: s + "\n");
 
   /**
+    Given string `s`, replace every occurrence of the string `from` with the string `to`.
+
+    # Inputs
+
+    `from`
+    : The string to be replaced
+
+    `to`
+    : The string to replace with
+
+    `s`
+    : The original string where replacements will be made
+
+    # Type
+
+    ```
+    replaceString :: string -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.replaceString` usage example
+
+    ```nix
+    replaceString "world" "Nix" "Hello, world!"
+    => "Hello, Nix!"
+    replaceString "." "_" "v1.2.3"
+    => "v1_2_3"
+    ```
+
+    :::
+  */
+  replaceString = from: to: replaceStrings [ from ] [ to ];
+
+  /**
     Repeat a string `n` times,
     and concatenate the parts into a new string.
 
@@ -998,7 +1033,11 @@ rec {
 
     :::
   */
-  escapeC = list: replaceStrings list (map (c: "\\x${toLower (lib.toHexString (charToInt c))}") list);
+  escapeC =
+    list:
+    replaceStrings list (
+      map (c: "\\x${fixedWidthString 2 "0" (toLower (lib.toHexString (charToInt c)))}") list
+    );
 
   /**
     Escape the `string` so it can be safely placed inside a URL
@@ -1134,7 +1173,7 @@ rec {
       string = toString arg;
     in
     if match "[[:alnum:],._+:@%/-]+" string == null then
-      "'${replaceStrings [ "'" ] [ "'\\''" ] string}'"
+      "'${replaceString "'" "'\\''" string}'"
     else
       string;
 
@@ -1497,6 +1536,63 @@ rec {
       );
 
   /**
+    Converts a string to camelCase. Handles snake_case, PascalCase,
+    kebab-case strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to camelCase
+
+    # Type
+
+    ```
+    toCamelCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toCamelCase` usage example
+
+    ```nix
+    toCamelCase "hello-world"
+    => "helloWorld"
+    toCamelCase "hello_world"
+    => "helloWorld"
+    toCamelCase "hello world"
+    => "helloWorld"
+    toCamelCase "HelloWorld"
+    => "helloWorld"
+    ```
+
+    :::
+  */
+  toCamelCase =
+    str:
+    lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
+      let
+        separators = splitStringBy (
+          prev: curr:
+          elem curr [
+            "-"
+            "_"
+            " "
+          ]
+        ) false str;
+
+        parts = lib.flatten (
+          map (splitStringBy (
+            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+          ) true) separators
+        );
+
+        first = if length parts > 0 then toLower (head parts) else "";
+        rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
+      in
+      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
+    );
+
+  /**
     Appends string context from string like object `src` to `target`.
 
     :::{.warning}
@@ -1587,6 +1683,97 @@ rec {
       );
     in
     map (addContextFrom s) splits;
+
+  /**
+    Splits a string into substrings based on a predicate that examines adjacent characters.
+
+    This function provides a flexible way to split strings by checking pairs of characters
+    against a custom predicate function. Unlike simpler splitting functions, this allows
+    for context-aware splitting based on character transitions and patterns.
+
+    # Inputs
+
+    `predicate`
+    : Function that takes two arguments (previous character and current character)
+      and returns true when the string should be split at the current position.
+      For the first character, previous will be "" (empty string).
+
+    `keepSplit`
+    : Boolean that determines whether the splitting character should be kept as
+      part of the result. If true, the character will be included at the beginning
+      of the next substring; if false, it will be discarded.
+
+    `str`
+    : The input string to split.
+
+    # Return
+
+    A list of substrings from the original string, split according to the predicate.
+
+    # Type
+
+    ```
+    splitStringBy :: (string -> string -> bool) -> bool -> string -> [string]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.splitStringBy` usage example
+
+    Split on periods and hyphens, discarding the separators:
+    ```nix
+    splitStringBy (prev: curr: builtins.elem curr [ "." "-" ]) false "foo.bar-baz"
+    => [ "foo" "bar" "baz" ]
+    ```
+
+    Split on transitions from lowercase to uppercase, keeping the uppercase characters:
+    ```nix
+    splitStringBy (prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null) true "fooBarBaz"
+    => [ "foo" "Bar" "Baz" ]
+    ```
+
+    Handle leading separators correctly:
+    ```nix
+    splitStringBy (prev: curr: builtins.elem curr [ "." ]) false ".foo.bar.baz"
+    => [ "" "foo" "bar" "baz" ]
+    ```
+
+    Handle trailing separators correctly:
+    ```nix
+    splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo.bar.baz."
+    => [ "foo" "bar" "baz" "" ]
+    ```
+    :::
+  */
+  splitStringBy =
+    predicate: keepSplit: str:
+    let
+      len = stringLength str;
+
+      # Helper function that processes the string character by character
+      go =
+        pos: currentPart: result:
+        # Base case: reached end of string
+        if pos == len then
+          result ++ [ currentPart ]
+        else
+          let
+            currChar = substring pos 1 str;
+            prevChar = if pos > 0 then substring (pos - 1) 1 str else "";
+            isSplit = predicate prevChar currChar;
+          in
+          if isSplit then
+            # Split here - add current part to results and start a new one
+            let
+              newResult = result ++ [ currentPart ];
+              newCurrentPart = if keepSplit then currChar else "";
+            in
+            go (pos + 1) newCurrentPart newResult
+          else
+            # Keep building current part
+            go (pos + 1) (currentPart + currChar) result;
+    in
+    if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
 
   /**
     Return a string without the specified prefix, if the prefix matches.

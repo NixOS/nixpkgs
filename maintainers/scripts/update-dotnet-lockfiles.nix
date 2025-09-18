@@ -5,7 +5,7 @@
 
   This script finds all the derivations in nixpkgs that have a 'fetch-deps'
   attribute, and runs all of them sequentially. This is useful to test changes
-  to 'fetch-deps', 'nuget-to-nix', 'nuget-to-json', or other changes to the
+  to 'fetch-deps', 'nuget-to-json', or other changes to the
   dotnet build infrastructure. Regular updates should be done through the
   individual packages update scripts.
 */

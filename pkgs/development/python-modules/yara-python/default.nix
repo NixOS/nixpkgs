@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.5.1";
+  version = "4.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "yara-python";
     tag = "v${version}";
-    hash = "sha256-P+OQljzp+ZwVOXAgJqK7GNrqBep40MyVtMKDtT4ZUr8=";
+    hash = "sha256-2ZwLpkT46KNTQ1ymvMGjnrfHQaIy/rXid0kXoCBixXA=";
   };
 
   # undefined symbol: yr_finalize
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [ "--dynamic-linking" ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "yara" ];
 

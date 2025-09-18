@@ -1,20 +1,22 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   dotmap,
   matplotlib,
   pyclipper,
-  unittestCheckHook,
+  pytestCheckHook,
+  pythonImportsCheckHook,
+  setuptools,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "beziers";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
-  # PyPI doesn't have a proper source tarball, fetch from Github instead
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "beziers.py";
@@ -22,25 +24,35 @@ buildPythonPackage rec {
     hash = "sha256-NjmWsRz/NPPwXPbiSaOeKJMrYmSyNTt5ikONyAljgvM=";
   };
 
-  propagatedBuildInputs = [ pyclipper ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyclipper ];
+
+  preCheck = ''
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
+  '';
 
   nativeCheckInputs = [
     dotmap
     matplotlib
-    unittestCheckHook
+    pytestCheckHook
+    pythonImportsCheckHook
   ];
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-v"
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Fails on macOS with Trace/BPT trap: 5 - something to do with recursion depth
+    "test_cubic_cubic"
   ];
+
+  pythonImportsCheckFlags = [ "beziers" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Python library for manipulating Bezier curves and paths in fonts";
     homepage = "https://github.com/simoncozens/beziers.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

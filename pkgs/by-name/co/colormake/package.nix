@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pagekite";
     repo = "Colormake";
-    rev = "66544f40d";
+    rev = "66544f40d4626aace137c6a502b3c70b56c770c1";
     sha256 = "8e714c5540305d169989d9387dbac47b8b9fb2cfb424af7bcd412bfe684dc6d7";
   };
 

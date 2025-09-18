@@ -39,18 +39,17 @@ buildDotnetModule rec {
     ./dotnet-8-upgrade.patch
   ];
 
-  nativeBuildInputs =
-    [
-      copyDesktopItems
-      icoutils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      bintools
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    icoutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    bintools
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ];
 
   buildInputs = [
     # Dependencies of nuget packages w/ native binaries
@@ -71,20 +70,19 @@ buildDotnetModule rec {
     glew
   ];
 
-  postInstall =
-    ''
-      icotool --icon -x ILSpy/ILSpy.ico
-      for i in 16 32 48 256; do
-        size=''${i}x''${i}
-        install -Dm444 *_''${size}x32.png $out/share/icons/hicolor/$size/apps/ILSpy.png
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install -Dm444 ILSpy/Info.plist $out/Applications/ILSpy.app/Contents/Info.plist
-      install -Dm444 ILSpy/ILSpy.icns $out/Applications/ILSpy.app/Contents/Resources/ILSpy.icns
-      mkdir -p $out/Applications/ILSpy.app/Contents/MacOS
-      ln -s $out/bin/ILSpy $out/Applications/ILSpy.app/Contents/MacOS/ILSpy
-    '';
+  postInstall = ''
+    icotool --icon -x ILSpy/ILSpy.ico
+    for i in 16 32 48 256; do
+      size=''${i}x''${i}
+      install -Dm444 *_''${size}x32.png $out/share/icons/hicolor/$size/apps/ILSpy.png
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm444 ILSpy/Info.plist $out/Applications/ILSpy.app/Contents/Info.plist
+    install -Dm444 ILSpy/ILSpy.icns $out/Applications/ILSpy.app/Contents/Resources/ILSpy.icns
+    mkdir -p $out/Applications/ILSpy.app/Contents/MacOS
+    ln -s $out/bin/ILSpy $out/Applications/ILSpy.app/Contents/MacOS/ILSpy
+  '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 

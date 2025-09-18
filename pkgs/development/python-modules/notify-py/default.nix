@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ms7m";
-    repo = pname;
+    repo = "notify-py";
     tag = "v${version}";
     hash = "sha256-4PJ/0dLG3bWDuF1G/qUmvNaIUFXgPP2S/0uhZz86WRA=";
   };

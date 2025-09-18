@@ -1,6 +1,6 @@
-From 3b1bcc92389e8468cd3790dfd223cb653b5f753f Mon Sep 17 00:00:00 2001
+From fae7504042bb5e3efe253476000d1b15523bd2d7 Mon Sep 17 00:00:00 2001
 From: OPNA2608 <opna2608@protonmail.com>
-Date: Sun, 16 Mar 2025 19:56:39 +0100
+Date: Thu, 1 May 2025 15:57:02 +0200
 Subject: [PATCH] Make findPath & its calls behave well with store
 
 - images is a cache of downloaded card images.
@@ -8,14 +8,23 @@ Subject: [PATCH] Make findPath & its calls behave well with store
 - campaigns, cubes & constructed are user-downloaded files that set up possible game styles.
   create & populate them for the game, and tell it to not try to create them on its own.
 ---
- index.js | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ index.js | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/index.js b/index.js
-index 738bfca..3ac32e8 100755
+index 99f0697..492d096 100755
 --- a/index.js
 +++ b/index.js
-@@ -75,16 +75,16 @@ app.on('ready', () => {
+@@ -8,6 +8,8 @@ const path = require('path');
+ const fs   = require('fs');
+ app.commandLine.appendSwitch('disable-gpu-vsync');  //NVIDIA vsync patch //must be before whenready
+ 
++const userCacheDir = path.normalize(process.env.HOME + "/.cache/ddm")
++
+ app.on('ready', () => {
+   const mainWindow = new BrowserWindow({
+     width:    1344,
+@@ -61,16 +63,16 @@ app.on('ready', () => {
          const isDir = fs.statSync(fullPath).isDirectory();
          if (containsDanger(fullPath)) throw new Error ("Dangerous files detected");
          if (isDir) return fullPath;
@@ -24,7 +33,7 @@ index 738bfca..3ac32e8 100755
      
      else try { //dev
 -      const fullPath = path.join(__dirname, folderName);
-+      const fullPath = path.join(allowFolderCreation ? (process.env.HOME + "/.cache/ddm") : __dirname, folderName);
++      const fullPath = path.join(allowFolderCreation ? userCacheDir : __dirname, folderName);
        if (!fs.existsSync(fullPath) && allowFolderCreation) fs.mkdirSync(fullPath, {recursive: true});
        const isDir = fs.statSync(fullPath).isDirectory();
        console.log(fullPath)
@@ -35,7 +44,16 @@ index 738bfca..3ac32e8 100755
  
    }
  
-@@ -108,7 +108,7 @@ app.on('ready', () => {
+@@ -92,7 +94,7 @@ app.on('ready', () => {
+       path.join(basePath, "campaigns"),
+       path.join(basePath, "cubes"),
+       path.join(basePath, "constructed"),
+-      path.join(basePath, "images")
++      path.join(userCacheDir, "images")
+     ];
+     
+     // Check if the directory is within allowed paths
+@@ -117,7 +119,7 @@ app.on('ready', () => {
  
      try {
        if (!["campaigns", "cubes", "constructed"].includes(folderName)) throw new Error(`bad folder name ${folderName}`);
@@ -44,7 +62,7 @@ index 738bfca..3ac32e8 100755
        if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath);
        const files = fs.readdirSync(folderPath);
        if (folderName === "campaigns"   ) return files.filter(file => fs.statSync (path.join(folderPath, file)).isDirectory());
-@@ -127,7 +127,7 @@ app.on('ready', () => {
+@@ -136,7 +138,7 @@ app.on('ready', () => {
  
    ipcMain.handle('open-local-folder', async (event, folderName) => {
      if (!["campaigns", "cubes", "constructed"].includes(folderName)) throw new Error(`bad folder name ${constructed}`);

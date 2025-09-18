@@ -12,9 +12,9 @@ Packages that are installed with your python derivation, are not accessible by `
 
 ### Installation with packages {#installation-with-packages}
 
-Creating `hy` derivation with custom `python` packages is really simple and similar to the way that python does it. Attribute `hy` provides function `withPackages` that creates custom `hy` derivation with specified packages.
+Creating a `hy` derivation with custom `python` packages is really simple and similar to the way that python does it. The attribute `hy` provides the function `withPackages` that creates a custom `hy` derivation with specified packages.
 
-For example if you want to create shell with `matplotlib` and `numpy`, you can do it like so:
+For example, if you want to create a shell with `matplotlib` and `numpy`, you can do it like so:
 
 ```ShellSession
 $ nix-shell -p "hy.withPackages (ps: with ps; [ numpy matplotlib ])"
@@ -22,10 +22,16 @@ $ nix-shell -p "hy.withPackages (ps: with ps; [ numpy matplotlib ])"
 
 Or if you want to extend your `configuration.nix`:
 ```nix
-{ # ...
+{
+  # ...
 
   environment.systemPackages = with pkgs; [
-    (hy.withPackages (py-packages: with py-packages; [ numpy matplotlib ]))
+    (hy.withPackages (
+      py-packages: with py-packages; [
+        numpy
+        matplotlib
+      ]
+    ))
   ];
 }
 ```

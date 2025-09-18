@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ethtool";
-  version = "6.11";
+  version = "6.15";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/ethtool/ethtool-${version}.tar.xz";
-    sha256 = "sha256-jZH1xyrj8lt+iNR4EnncsyD3HjAFiRQ3CxxXTJazEgI=";
+    hash = "sha256-lHfDZRFNkQEgquxTNqHRYZbIM9hIb3xtpnvt71eICt4=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmnl
   ];
+
+  enableParallelBuilding = true;
 
   passthru = {
     updateScript = writeScript "update-ethtool" ''

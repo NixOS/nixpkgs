@@ -2,7 +2,7 @@
   lib,
   buildNimPackage,
   fetchFromSourcehut,
-  gentium,
+  gentium-plus,
   makeDesktopItem,
 }:
 
@@ -19,14 +19,14 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-Regular.ttf";
+  HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   desktopItem = makeDesktopItem {
     categories = [ "Utility" ];
     comment = finalAttrs.meta.description;
-    desktopName = finalAttrs.pname;
-    exec = finalAttrs.pname;
-    name = finalAttrs.pname;
+    desktopName = "hottext";
+    exec = "hottext";
+    name = "hottext";
   };
 
   postInstall = ''
@@ -37,7 +37,6 @@ buildNimPackage (finalAttrs: {
     description = "Simple RSVP speed-reading utility";
     license = lib.licenses.unlicense;
     homepage = "https://git.sr.ht/~ehmry/hottext";
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "hottext";
   };
 })

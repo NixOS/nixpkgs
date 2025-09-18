@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "0-unstable-2025-03-19";
+  version = "0-unstable-2025-07-07";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
-    rev = "30ac3a8abcfb0825157185f11e595d0c7562c0df";
-    hash = "sha256-5ZV39whIm8qJIBLNdAsR2e8+f0jYjwE9dGNgh6ARPUY=";
+    rev = "cd3272350328185b1d4f7de08fdecf38f8fd31be";
+    hash = "sha256-Q4XcnBfr4wk2Kt0iLwF8niYoofg1YuXUehkg3G/gNOo=";
   };
 
   postPatch = ''

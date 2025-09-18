@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
-  version = "25.03";
+  version = "25.07.1";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-NfH9q4EjnKNVxt41ioT73gR3/tjrNQ5d/valmBRcUgc=";
+    hash = "sha256-jm6S8gzyynzoq6U60LWJqJovp9/T55cdOFAQms1JvtU=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +35,12 @@ stdenv.mkDerivation rec {
       --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
   '';
 
-  configureFlags =
-    [
-      "--enable-shared"
-    ]
-    ++ lib.optionals curlSupport [
-      "--with-libcurl"
-    ];
+  configureFlags = [
+    "--enable-shared"
+  ]
+  ++ lib.optionals curlSupport [
+    "--with-libcurl"
+  ];
 
   enableParallelBuilding = true;
 

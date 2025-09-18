@@ -4,13 +4,17 @@
   appstream-glib,
   blueprint-compiler,
   cargo,
+  dbus,
   desktop-file-utils,
   fetchFromGitea,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
+  lcms2,
   libadwaita,
+  libseccomp,
   libxml2,
   meson,
   ninja,
@@ -24,27 +28,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.9.3";
+  version = "0.10.4";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "edestcroix";
     repo = "Recordbox";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-168L5i6mXeEqv7EKPMq4zHP5JRVxC7MNrUE9yj1zI60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9rrVlD+ODl+U9bPzbXGLQBLkbnfAm4SmJHRcVife33A=";
   };
 
-  # Patch in our Cargo.lock and ensure AppStream tests don't use the network
-  # TODO: Switch back to the default `validate` when the upstream file actually
-  # passes it
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-
-    substituteInPlace data/meson.build \
-      --replace-fail "['validate', appstream_file]" "['validate-relax', '--nonet', appstream_file]"
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-W60X69/fEq/X6AK1sbT6rb+SsF/oPzfUvrar0fihr88=";
+  };
 
   strictDeps = true;
 
@@ -65,26 +62,44 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      hicolor-icon-theme
-      libadwaita
-      sqlite
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    dbus
+    gtk4
+    hicolor-icon-theme
+    lcms2
+    libadwaita
+    libseccomp
+    sqlite
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-rs
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   mesonBuildType = "release";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
+
+  # Workaround copied from https://github.com/NixOS/nixpkgs/blob/e39fe935fc7537bee0440935c12f5c847735a291/pkgs/by-name/lo/loupe/package.nix#L60-L74
+  preConfigure = ''
+    # Dirty approach to add patches after cargoSetupPostUnpackHook
+    # We should eventually use a cargo vendor patch hook instead
+    pushd ../$(stripHash $cargoDeps)/glycin-2.*
+      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+    popd
+  '';
+  preFixup = ''
+    # Needed for the glycin crate to find loaders.
+    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
 
   checkPhase = ''
     runHook preCheck
@@ -102,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Relatively simple music player";
     homepage = "https://codeberg.org/edestcroix/Recordbox";
+    changelog = "https://codeberg.org/edestcroix/Recordbox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "recordbox";

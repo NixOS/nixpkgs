@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "videos";
     rev = version;
-    hash = "sha256-3TpPgMd4dABhvnnmHHQCHDvuSdC5rWxGvaXPg20/Mrs=";
+    hash = "sha256-lvIsLjsb4HqwXDsH2krBlxmy7kJdadpjDcw+svaWV+Q=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/videos";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.videos";
   };
 }

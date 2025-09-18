@@ -61,7 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libgit2
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   doCheck = true;
 

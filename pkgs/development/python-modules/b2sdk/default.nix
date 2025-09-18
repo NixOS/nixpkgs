@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.7.0";
+  version = "2.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,27 +30,27 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-QY2/uWCnIlOHo5wTLxu2Pvh2oNPWRcyDL5TpnZHob7I=";
+    hash = "sha256-VXdvRJvmozrDsUu1J5Jz9I2733Cwe8OBbafc1fCEuGw=";
   };
 
   build-system = [ pdm-backend ];
 
-  dependencies =
-    [
-      annotated-types
-      packaging
-      logfury
-      requests
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  dependencies = [
+    annotated-types
+    packaging
+    logfury
+    requests
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-lazy-fixtures
     pytest-mock
     pytestCheckHook
     tqdm
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
-    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ pmw ];
   };

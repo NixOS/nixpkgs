@@ -74,7 +74,7 @@ rebar3Relx {
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
-    #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip nixfmt-rfc-style "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
+    #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
 
     set -ox errexit
     latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)

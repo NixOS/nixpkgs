@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+KARAKEEP_LIB_PATH=
+NODEJS=
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/cli/dist/index.mjs" "$@"

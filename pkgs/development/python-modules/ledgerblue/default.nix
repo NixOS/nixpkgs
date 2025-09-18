@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.54";
+  version = "0.1.55";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hn99ST6RnER6XI6+rqA3O9/aC+whYoTOzeoHGF/fFz4=";
+    hash = "sha256-6s2V8cXik6jEg8z3UK49qVwodPbwXMIkWk7iJ7OY0rM=";
   };
 
   build-system = [
@@ -53,7 +53,8 @@ buildPythonPackage rec {
     python-gnupg
     python-u2flib-host
     websocket-client
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
 
   # No tests
   doCheck = false;

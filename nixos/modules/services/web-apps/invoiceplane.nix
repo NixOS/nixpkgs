@@ -16,6 +16,8 @@ let
   invoiceplane-config =
     hostName: cfg:
     pkgs.writeText "ipconfig.php" ''
+      # <?php exit('No direct script access allowed'); ?>
+
       IP_URL=http://${hostName}
       ENABLE_DEBUG=false
       DISABLE_SETUP=false
@@ -70,7 +72,7 @@ let
       postPatch = ''
         # Patch index.php file to load additional config file
         substituteInPlace index.php \
-          --replace-fail "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
+          --replace-fail "require __DIR__ . '/vendor/autoload.php';" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
       '';
 
       installPhase = ''
@@ -320,7 +322,8 @@ in
             settings = {
               "listen.owner" = webserver.user;
               "listen.group" = webserver.group;
-            } // cfg.poolConfig;
+            }
+            // cfg.poolConfig;
           })
         ) eachSite;
       };
@@ -351,6 +354,9 @@ in
                      ${cfg.stateDir}/uploads
             if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
               cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
+            fi
+            if ! grep -q 'php exit' "${cfg.stateDir}/ipconfig.php"; then
+              sed -i "1i # <?php exit('No direct script access allowed'); ?>" "${cfg.stateDir}/ipconfig.php"
             fi
           '') eachSite
         );

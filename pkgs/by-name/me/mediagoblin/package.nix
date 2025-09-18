@@ -41,6 +41,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
+  format = "setuptools";
   pname = "mediagoblin";
   inherit version src;
 
@@ -157,6 +158,6 @@ python.pkgs.buildPythonApplication rec {
     description = "Free software media publishing platform that anyone can run";
     homepage = "https://mediagoblin.org/";
     license = lib.licenses.agpl3Plus;
-    maintainers = lib.teams.c3d2.members;
+    teams = [ lib.teams.c3d2 ];
   };
 }

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
-    repo = pname;
+    repo = "snowcat";
     rev = "v${version}";
     sha256 = "sha256-EulQYGOMIh952e4Xp13hT/HMW3qP1QXYtt5PEej1VTY=";
   };
@@ -21,7 +21,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/praetorian-inc/snowcat";
     changelog = "https://github.com/praetorian-inc/snowcat/releases/tag/v${version}";
     description = "Tool to audit the istio service mesh";
@@ -35,7 +35,7 @@ buildGoModule rec {
       with Istio, and begin to enumerate the required data. Optionally, you can
       point snowcat at a directory containing Kubernets YAML files.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

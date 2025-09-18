@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "11.0.0";
+  version = "11.6.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
     tag = "v${version}";
-    hash = "sha256-c6viZTQFpLB+k/f45m/AZe+ggDxQbGjQgD51yCuyepc=";
+    hash = "sha256-YitfYz+g3asMmwTBFTFR9pL+HDBDwI50ZThrgoIb+xQ=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://libvirt.org/python.html";
-    description = "libvirt Python bindings";
+    description = "Libvirt Python bindings";
     license = licenses.lgpl2;
     maintainers = [ maintainers.fpletz ];
   };

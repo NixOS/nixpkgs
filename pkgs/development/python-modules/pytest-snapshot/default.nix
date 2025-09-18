@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "joseph-roitman";
-    repo = pname;
+    repo = "pytest-snapshot";
     tag = "v${version}";
     hash = "sha256-0PZu9wL29iEppLxxbl4D0E4WfOHe61KUUld003cRBRU=";
   };

@@ -59,18 +59,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      runtimeLibraries =
-        [
-          libglvnd
-          libpulseaudio
-          udev
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXxf86vm
-        ]
-        ++ lib.optional gamemodeSupport gamemode.lib
-        ++ lib.optional textToSpeechSupport flite
-        ++ additionalLibs;
+      runtimeLibraries = [
+        libglvnd
+        libpulseaudio
+        udev
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXxf86vm
+      ]
+      ++ lib.optional gamemodeSupport gamemode.lib
+      ++ lib.optional textToSpeechSupport flite
+      ++ additionalLibs;
     in
     ''
       runHook preInstall

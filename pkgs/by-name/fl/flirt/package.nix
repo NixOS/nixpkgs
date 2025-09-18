@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flirt";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromSourcehut {
     owner = "~hadronized";
     repo = "flirt";
     rev = "v${version}";
-    hash = "sha256-xhNo85xwcVI4qliHU4/uNEvS7rW5avKOv8fMfRrvqD0=";
+    hash = "sha256-wH6WLLUqUj5YrrudNbGkzZ4i15xRPDBE3UKwyhkQSxg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Nu4sOjwF/MlsoCmgUEGEqMIW+aSD9PuiFBQMnfQRL8Q=";
+  cargoHash = "sha256-m1aLJFa6C5X9HwNweezoUcFnpG09AuYf9ooet8GUGFE=";
 
   passthru.updateScript = nix-update-script { };
 

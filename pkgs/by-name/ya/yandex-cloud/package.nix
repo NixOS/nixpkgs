@@ -36,26 +36,25 @@ stdenv.mkDerivation (finalAttrs: {
     withShellCompletions && !stdenv.buildPlatform.canExecute stdenv.hostPlatform
   ) (stdenv.hostPlatform.emulator buildPackages);
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p -- "$out/bin"
-      cp -- "$src" "$out/bin/yc"
-      chmod +x -- "$out/bin/yc"
-    ''
-    + lib.optionalString withShellCompletions ''
-      for shell in bash zsh; do
-        ''${emulator:+"$emulator"} "$out/bin/yc" completion $shell >yc.$shell
-        installShellCompletion yc.$shell
-      done
-    ''
-    + ''
-      makeWrapper "$out/bin/yc" "$out/bin/docker-credential-yc" \
-        --add-flags --no-user-output \
-        --add-flags container \
-        --add-flags docker-credential
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p -- "$out/bin"
+    cp -- "$src" "$out/bin/yc"
+    chmod +x -- "$out/bin/yc"
+  ''
+  + lib.optionalString withShellCompletions ''
+    for shell in bash zsh; do
+      ''${emulator:+"$emulator"} "$out/bin/yc" completion $shell >yc.$shell
+      installShellCompletion yc.$shell
+    done
+  ''
+  + ''
+    makeWrapper "$out/bin/yc" "$out/bin/docker-credential-yc" \
+      --add-flags --no-user-output \
+      --add-flags container \
+      --add-flags docker-credential
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = writers.writePython3 "${pname}-updater" {

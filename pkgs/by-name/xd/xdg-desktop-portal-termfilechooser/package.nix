@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-termfilechooser";
-  version = "1.0.5";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "hunkyburrito";
     repo = "xdg-desktop-portal-termfilechooser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uwUND1K0UCztDS68APZf578zhvVm0BhL3f7dLrdKTHE=";
+    hash = "sha256-IlPNNuQaGVW5QXcyA8cWiFJxwgXmviQoisDUWX9QP2s=";
   };
 
   nativeBuildInputs = [

@@ -6,6 +6,7 @@
   cbor2,
   fetchPypi,
   git,
+  immutables,
   importlib-metadata,
   packaging,
   pycryptodome,
@@ -29,14 +30,14 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KiGbiVybWtanEjem+30DpuzKqAD6owujJBiEfjUKleM=";
+    hash = "sha256-IqdXNldAHYo7xpDWXWt3QWgABxgJeMOgX5iS2zHV3PU=";
   };
 
   postPatch = ''
@@ -62,6 +63,7 @@ buildPythonPackage rec {
     lark
     asttokens
     cbor2
+    immutables
     importlib-metadata
     packaging
     pycryptodome

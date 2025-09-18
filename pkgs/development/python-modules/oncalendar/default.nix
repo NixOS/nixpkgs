@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "oncalendar";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cuu508";

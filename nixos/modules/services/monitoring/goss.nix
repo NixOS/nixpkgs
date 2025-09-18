@@ -74,7 +74,8 @@ in
 
       environment = {
         GOSS_FILE = configFile;
-      } // cfg.environment;
+      }
+      // cfg.environment;
 
       reloadTriggers = [ configFile ];
 

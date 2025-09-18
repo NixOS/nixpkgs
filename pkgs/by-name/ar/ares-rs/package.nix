@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -16,8 +17,6 @@ rustPlatform.buildRustPackage rec {
     tag = version;
     hash = "sha256-IsIastLIrPknaJcH8sb0plPme+VGvo9DeDIisTD4sRM=";
   };
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-3L1LpmH96rYFB947sEhZcDK5g97zUgr2runjc1EYzZk=";
 
@@ -36,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "ares";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

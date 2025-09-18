@@ -29,21 +29,20 @@ lib.throwIf (buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.versi
       hash = "sha256-9oVJrU2YcXGnKaDf8SoHKGtG7vpH5355/DKIiYrchHI=";
     };
 
-    nativeBuildInputs =
+    nativeBuildInputs = [
+      bash-completion
+      pkg-config
+      perl
+      autoreconfHook
+    ]
+    ++ lib.optionals buildPythonBindings [ python3 ]
+    ++ lib.optionals buildOcamlBindings (
+      with ocamlPackages;
       [
-        bash-completion
-        pkg-config
-        perl
-        autoreconfHook
+        findlib
+        ocaml
       ]
-      ++ lib.optionals buildPythonBindings [ python3 ]
-      ++ lib.optionals buildOcamlBindings (
-        with ocamlPackages;
-        [
-          findlib
-          ocaml
-        ]
-      );
+    );
 
     buildInputs = [
       fuse

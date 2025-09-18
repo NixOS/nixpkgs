@@ -8,20 +8,19 @@
 
 let
   pname = "gfold";
-  version = "2025.4.0";
+  version = "2025.7.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "nickgerace";
-    repo = pname;
+    repo = "gfold";
     rev = version;
-    hash = "sha256-7PnqhS80Ozh5ZQNQ8iYgCiFT0JDLzhA09NV1HgrCOww=";
+    hash = "sha256-EWQ17aEOEZnYEe3WJpyNuC+r4tv8DP1fYFH6fII2p+8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nGHJ96jFqG1pe3WUILPzm52HxrZYde2Z1p8N4DTaxlw=";
+  cargoHash = "sha256-3hzcYPD/w2vbsSuuHNAD2Oyqw0B0PIdERGgCAvAiQpk=";
 
   passthru.tests.version = testers.testVersion {
     package = gfold;

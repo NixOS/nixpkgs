@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -16,6 +17,7 @@
   six,
   trimesh,
   pytestCheckHook,
+  mesa,
 }:
 
 buildPythonPackage rec {
@@ -77,10 +79,15 @@ buildPythonPackage rec {
 
   env.PYOPENGL_PLATFORM = "egl"; # enables headless rendering during check
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    mesa.llvmpipeHook
+  ];
 
-  disabledTestPaths = [
-    # does not work inside sandbox, no GPU
+  disabledTestPaths = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform mesa.llvmpipeHook) [
+    # requires opengl context
     "tests/unit/test_offscreen.py"
   ];
 
@@ -91,5 +98,6 @@ buildPythonPackage rec {
     description = "Easy-to-use glTF 2.0-compliant OpenGL renderer for visualization of 3D scenes";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

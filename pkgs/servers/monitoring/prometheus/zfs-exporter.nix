@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "zfs_exporter";
-  version = "2.3.6";
+  version = "2.3.10";
 
   src = fetchFromGitHub {
     owner = "pdf";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-en30/vKZDlqRvQW3n5yeMwLrukObw0d+NfzmdWvfXZE=";
+    hash = "sha256-8of1FdfofkmlTMSJKbpBxI5KNEu2y1Epkl2L6nNAJ/k=";
   };
 
-  vendorHash = "sha256-fhodh5EcvAX2fruwv0e9VNAti2jKa7kEDQCVSDFl48A=";
+  vendorHash = "sha256-wXPFR1B86oq/RieyYP1KTrpaUu3xOQnX2ismYt9N2Aw=";
 
   ldflags = [
     "-s"

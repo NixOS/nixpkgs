@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "2.8.9";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "https://pallini.di.uniroma1.it/nauty${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.tar.gz";
-    sha256 = "sha256-yXq0K/SHlqhqWYvOPpJpBHyisywU/CPgcgiiRP5SxO4=";
+    sha256 = "sha256-SI+pBtEKNyxy0jZMXe5I4PcwcAT75SwrzlDFLejNhz4=";
   };
 
   outputs = [
@@ -48,12 +48,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Programs for computing automorphism groups of graphs and digraphs";
     license = licenses.asl20;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
-    # I'm not sure if the filename will remain the same for future changelog or
-    # if it will track changes to minor releases. Lets see. Better than nothing
-    # in any case.
-    changelog = "https://pallini.di.uniroma1.it/changes24-28.txt";
+    # The filename may change for future changelogs. Better than nothing in any case.
+    changelog = "https://pallini.di.uniroma1.it/changes24-2${lib.versions.minor version}.txt";
     homepage = "https://pallini.di.uniroma1.it/";
   };
 }

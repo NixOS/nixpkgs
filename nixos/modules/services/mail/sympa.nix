@@ -400,7 +400,7 @@ in
       })
       // (lib.optionalAttrs (cfg.mta.type == "postfix") {
         sendmail_aliases = "${dataDir}/sympa_transport";
-        aliases_program = "${pkgs.postfix}/bin/postmap";
+        aliases_program = lib.getExe' config.services.postfix.package "postmap";
         aliases_db_type = "hash";
       })
       // (lib.optionalAttrs cfg.web.enable {
@@ -411,16 +411,15 @@ in
       })
     );
 
-    services.sympa.settingsFile =
-      {
-        "virtual.sympa" = lib.mkDefault { source = virtual; };
-        "transport.sympa" = lib.mkDefault { source = transport; };
-        "etc/list_aliases.tt2" = lib.mkDefault { source = listAliases; };
-      }
-      // (lib.flip lib.mapAttrs' cfg.domains (
-        fqdn: domain:
-        lib.nameValuePair "etc/${fqdn}/robot.conf" (lib.mkDefault { source = robotConfig fqdn domain; })
-      ));
+    services.sympa.settingsFile = {
+      "virtual.sympa" = lib.mkDefault { source = virtual; };
+      "transport.sympa" = lib.mkDefault { source = transport; };
+      "etc/list_aliases.tt2" = lib.mkDefault { source = listAliases; };
+    }
+    // (lib.flip lib.mapAttrs' cfg.domains (
+      fqdn: domain:
+      lib.nameValuePair "etc/${fqdn}/robot.conf" (lib.mkDefault { source = robotConfig fqdn domain; })
+    ));
 
     environment = {
       systemPackages = [ pkg ];
@@ -448,41 +447,40 @@ in
       }
     ];
 
-    systemd.tmpfiles.rules =
-      [
-        "d  ${dataDir}                   0711 ${user} ${group} - -"
-        "d  ${dataDir}/etc               0700 ${user} ${group} - -"
-        "d  ${dataDir}/spool             0700 ${user} ${group} - -"
-        "d  ${dataDir}/list_data         0700 ${user} ${group} - -"
-        "d  ${dataDir}/arc               0700 ${user} ${group} - -"
-        "d  ${dataDir}/bounce            0700 ${user} ${group} - -"
-        "f  ${dataDir}/sympa_transport   0600 ${user} ${group} - -"
+    systemd.tmpfiles.rules = [
+      "d  ${dataDir}                   0711 ${user} ${group} - -"
+      "d  ${dataDir}/etc               0700 ${user} ${group} - -"
+      "d  ${dataDir}/spool             0700 ${user} ${group} - -"
+      "d  ${dataDir}/list_data         0700 ${user} ${group} - -"
+      "d  ${dataDir}/arc               0700 ${user} ${group} - -"
+      "d  ${dataDir}/bounce            0700 ${user} ${group} - -"
+      "f  ${dataDir}/sympa_transport   0600 ${user} ${group} - -"
 
-        # force-copy static_content so it's up to date with package
-        # set permissions for wwsympa which needs write access (...)
-        "R  ${dataDir}/static_content    -    -       -        - -"
-        "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
-        "e  ${dataDir}/static_content/*  0711 ${user} ${group} - -"
+      # force-copy static_content so it's up to date with package
+      # set permissions for wwsympa which needs write access (...)
+      "R  ${dataDir}/static_content    -    -       -        - -"
+      "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
+      "e  ${dataDir}/static_content/*  0711 ${user} ${group} - -"
 
-        "d  /run/sympa                   0755 ${user} ${group} - -"
-      ]
-      ++ (lib.flip lib.concatMap fqdns (fqdn: [
-        "d  ${dataDir}/etc/${fqdn}       0700 ${user} ${group} - -"
-        "d  ${dataDir}/list_data/${fqdn} 0700 ${user} ${group} - -"
-      ]))
-      #++ (lib.flip lib.mapAttrsToList enabledFiles (k: v:
-      #  "L+ ${dataDir}/${k}              -    -       -        - ${v.source}"
-      #))
-      ++ (lib.concatLists (
-        lib.flip lib.mapAttrsToList enabledFiles (
-          k: v: [
-            # sympa doesn't handle symlinks well (e.g. fails to create locks)
-            # force-copy instead
-            "R ${dataDir}/${k}              -    -       -        - -"
-            "C ${dataDir}/${k}              0700 ${user}  ${group} - ${v.source}"
-          ]
-        )
-      ));
+      "d  /run/sympa                   0755 ${user} ${group} - -"
+    ]
+    ++ (lib.flip lib.concatMap fqdns (fqdn: [
+      "d  ${dataDir}/etc/${fqdn}       0700 ${user} ${group} - -"
+      "d  ${dataDir}/list_data/${fqdn} 0700 ${user} ${group} - -"
+    ]))
+    #++ (lib.flip lib.mapAttrsToList enabledFiles (k: v:
+    #  "L+ ${dataDir}/${k}              -    -       -        - ${v.source}"
+    #))
+    ++ (lib.concatLists (
+      lib.flip lib.mapAttrsToList enabledFiles (
+        k: v: [
+          # sympa doesn't handle symlinks well (e.g. fails to create locks)
+          # force-copy instead
+          "R ${dataDir}/${k}              -    -       -        - -"
+          "C ${dataDir}/${k}              0700 ${user}  ${group} - ${v.source}"
+        ]
+      )
+    ));
 
     systemd.services.sympa = {
       description = "Sympa mailing list manager";
@@ -504,8 +502,8 @@ in
         ''}
 
         ${lib.optionalString (cfg.mta.type == "postfix") ''
-          ${pkgs.postfix}/bin/postmap hash:${dataDir}/virtual.sympa
-          ${pkgs.postfix}/bin/postmap hash:${dataDir}/transport.sympa
+          ${lib.getExe' config.services.postfix.package "postmap"} hash:${dataDir}/virtual.sympa
+          ${lib.getExe' config.services.postfix.package "postmap"} hash:${dataDir}/transport.sympa
         ''}
         ${pkg}/bin/sympa_newaliases.pl
         ${pkg}/bin/sympa.pl --health_check
@@ -551,7 +549,8 @@ in
                     -- ${pkg}/lib/sympa/cgi/wwsympa.fcgi
         '';
 
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     services.nginx.enable = lib.mkIf usingNginx true;
@@ -586,44 +585,46 @@ in
 
     services.postfix = lib.mkIf (cfg.mta.type == "postfix") {
       enable = true;
-      recipientDelimiter = "+";
-      config = {
-        virtual_alias_maps = [ "hash:${dataDir}/virtual.sympa" ];
-        virtual_mailbox_maps = [
-          "hash:${dataDir}/transport.sympa"
-          "hash:${dataDir}/sympa_transport"
-          "hash:${dataDir}/virtual.sympa"
-        ];
-        virtual_mailbox_domains = [ "hash:${dataDir}/transport.sympa" ];
-        transport_maps = [
-          "hash:${dataDir}/transport.sympa"
-          "hash:${dataDir}/sympa_transport"
-        ];
-      };
-      masterConfig = {
-        "sympa" = {
-          type = "unix";
-          privileged = true;
-          chroot = false;
-          command = "pipe";
-          args = [
-            "flags=hqRu"
-            "user=${user}"
-            "argv=${pkg}/libexec/queue"
-            "\${nexthop}"
+      settings = {
+        main = {
+          recipient_delimiter = "+";
+          virtual_alias_maps = [ "hash:${dataDir}/virtual.sympa" ];
+          virtual_mailbox_maps = [
+            "hash:${dataDir}/transport.sympa"
+            "hash:${dataDir}/sympa_transport"
+            "hash:${dataDir}/virtual.sympa"
+          ];
+          virtual_mailbox_domains = [ "hash:${dataDir}/transport.sympa" ];
+          transport_maps = [
+            "hash:${dataDir}/transport.sympa"
+            "hash:${dataDir}/sympa_transport"
           ];
         };
-        "sympabounce" = {
-          type = "unix";
-          privileged = true;
-          chroot = false;
-          command = "pipe";
-          args = [
-            "flags=hqRu"
-            "user=${user}"
-            "argv=${pkg}/libexec/bouncequeue"
-            "\${nexthop}"
-          ];
+        master = {
+          "sympa" = {
+            type = "unix";
+            privileged = true;
+            chroot = false;
+            command = "pipe";
+            args = [
+              "flags=hqRu"
+              "user=${user}"
+              "argv=${pkg}/libexec/queue"
+              "\${nexthop}"
+            ];
+          };
+          "sympabounce" = {
+            type = "unix";
+            privileged = true;
+            chroot = false;
+            command = "pipe";
+            args = [
+              "flags=hqRu"
+              "user=${user}"
+              "argv=${pkg}/libexec/bouncequeue"
+              "\${nexthop}"
+            ];
+          };
         };
       };
     };

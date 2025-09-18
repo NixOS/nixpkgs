@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mjmeli";
-    repo = pname;
+    repo = "pyduke-energy";
     tag = "v${version}";
     hash = "sha256-7KkUpsHg3P2cF0bVl3FzyAQwzeaCmg+vzRHlM/TIcNA=";
   };

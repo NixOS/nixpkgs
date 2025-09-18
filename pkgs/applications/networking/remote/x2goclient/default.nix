@@ -1,57 +1,54 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchurl,
+  libsForQt5,
+  pkg-config,
+  bash,
   cups,
-  libssh,
   libXpm,
+  libssh,
   nx-libs,
   openldap,
   openssh,
-  qt5,
-  qtbase,
-  qtsvg,
-  qtx11extras,
-  qttools,
-  phonon,
-  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x2goclient";
-  version = "4.1.2.2";
+  version = "4.1.2.3";
 
   src = fetchurl {
-    url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "yZUyZ8QPpnEZrZanO6yx8mYZbaIFnwzc0bjVGZQh0So=";
+    url = "https://code.x2go.org/releases/source/x2goclient/x2goclient-${finalAttrs.version}.tar.gz";
+    hash = "sha256-q4uzx40xYlx0nkLxX4EP49JCknoVKYMIwT3qO5Fayjw=";
   };
 
   buildInputs = [
     cups
-    libssh
     libXpm
+    libssh
+    libsForQt5.phonon
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qttools
+    libsForQt5.qtx11extras
     nx-libs
     openldap
     openssh
-    qtbase
-    qtsvg
-    qtx11extras
-    qttools
-    phonon
   ];
 
   nativeBuildInputs = [
     pkg-config
-    qt5.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   postPatch = ''
-    substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
+    substituteInPlace src/onmainwindow.cpp \
+      --replace-fail "/usr/sbin/sshd" "${lib.getExe' openssh "sshd"}"
     substituteInPlace Makefile \
-      --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
-      --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
-      --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
-      --replace "-o root -g root" ""
+      --replace-fail "SHELL=/bin/bash" "SHELL ?= ${lib.getExe bash}" \
+      --replace-fail "lrelease-qt4" "${lib.getExe' libsForQt5.qttools.dev "lrelease"}" \
+      --replace-fail "qmake-qt4" "${lib.getExe' libsForQt5.qtbase.dev "qmake"}" \
+      --replace-fail "-o root -g root" ""
   '';
 
   makeFlags = [
@@ -59,6 +56,10 @@ stdenv.mkDerivation rec {
     "ETCDIR=$(out)/etc"
     "build_client"
     "build_man"
+    # No rule to make target 'SHELL'
+    "MAKEOVERRIDES="
+    ".MAKEOVERRIDES="
+    ".MAKEFLAGS="
   ];
 
   installTargets = [
@@ -71,12 +72,16 @@ stdenv.mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical NoMachine NX3 remote desktop client";
     mainProgram = "x2goclient";
     homepage = "http://x2go.org/";
     maintainers = [ ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      agpl3Plus
+      mit
+      free
+    ]; # Some X2Go components are licensed under some license (MIT X11, BSD, etc.)
+    platforms = lib.platforms.linux;
   };
-}
+})

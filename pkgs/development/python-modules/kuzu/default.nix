@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "kuzu";
-  version = "0.9.0";
+  version = "0.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Llnz1NH8OF6ekNeuCfBy7C9M/v9QhYJSOgA0zrB29us=";
+    hash = "sha256-nyJOwhirFloYrK6pA2lXeXgNcDNbr0Atm39ZujidsL0=";
   };
 
   pyproject = true;

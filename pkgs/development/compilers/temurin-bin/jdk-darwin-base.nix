@@ -74,14 +74,18 @@ let
     };
 
     meta = with lib; {
-      license = licenses.gpl2Classpath;
+      license = with licenses; [
+        gpl2
+        classpathException20
+      ];
       sourceProvenance = with sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
+      maintainers = with maintainers; [ taku0 ];
+      teams = [ teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

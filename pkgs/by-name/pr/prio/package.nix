@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "prio";
-  version = "unstable-2018-09-13";
+  version = "0-unstable-2018-09-13";
 
   src = fetchFromGitHub {
     owner = "letoram";

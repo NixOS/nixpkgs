@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sshs";
-  version = "4.5.1";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = "sshs";
     rev = version;
-    hash = "sha256-8tIIpGEQBXfLQ/Bok4KrpDGwoYhIQz/ylg6fUc6mBdc=";
+    hash = "sha256-Xr1S6KSw3a/+TIrw2hUPpUOd22+49YMuGK2TVxfwPHU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-U1E11NB+MVte31hfSAwhzXsId7U5uGy5C6Ubk6RPNvA=";
+  cargoHash = "sha256-Py85+zv54KHFXjhiThTPXgJQmCImXN42ePOjazjzxIQ=";
 
   passthru.tests.version = testers.testVersion { package = sshs; };
 

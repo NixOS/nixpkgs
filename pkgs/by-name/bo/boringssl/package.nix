@@ -30,13 +30,12 @@ buildGoModule {
 
   # hack to get both go and cmake configure phase
   # (if we use postConfigure then cmake will loop runHook postConfigure)
-  preBuild =
-    ''
-      cmakeConfigurePhase
-    ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      export GOARCH=$(go env GOHOSTARCH)
-    '';
+  preBuild = ''
+    cmakeConfigurePhase
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export GOARCH=$(go env GOHOSTARCH)
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
@@ -52,9 +51,12 @@ buildGoModule {
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
   cmakeFlags = [
     "-GNinja"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $bin/bin $dev $out/lib
 
     mv tool/bssl $bin/bin
@@ -64,6 +66,8 @@ buildGoModule {
     mv decrepit/libdecrepit.a $out/lib
 
     mv ../include $dev
+
+    runHook postInstall
   '';
 
   outputs = [

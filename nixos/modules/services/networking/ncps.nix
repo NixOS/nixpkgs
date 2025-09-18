@@ -27,6 +27,9 @@ let
         cfg.openTelemetry.grpcURL != null
       ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
     ))
+    ++ (lib.optionals cfg.prometheus.enable [
+      "--prometheus-enabled"
+    ])
   );
 
   serveFlags = lib.concatStringsSep " " (
@@ -34,6 +37,7 @@ let
       "--cache-hostname='${cfg.cache.hostName}'"
       "--cache-data-path='${cfg.cache.dataPath}'"
       "--cache-database-url='${cfg.cache.databaseURL}'"
+      "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
     ]
     ++ (lib.optional cfg.cache.allowDeleteVerb "--cache-allow-delete-verb")
@@ -75,6 +79,8 @@ in
           '';
         };
       };
+
+      prometheus.enable = lib.mkEnableOption "Enable Prometheus metrics endpoint at /metrics";
 
       logLevel = lib.mkOption {
         type = lib.types.enum logLevels;
@@ -165,6 +171,14 @@ in
             empty to automatically generate a private/public key.
           '';
         };
+
+        tempPath = lib.mkOption {
+          type = lib.types.str;
+          default = "/tmp";
+          description = ''
+            The path to the temporary directory that is used by the cache to download NAR files
+          '';
+        };
       };
 
       server = {
@@ -206,11 +220,6 @@ in
         assertion = cfg.cache.lru.schedule == null || cfg.cache.maxSize != null;
         message = "You must specify config.ncps.cache.lru.schedule when config.ncps.cache.maxSize is set";
       }
-
-      {
-        assertion = cfg.cache.secretKeyPath == null || (builtins.pathExists cfg.cache.secretKeyPath);
-        message = "config.ncps.cache.secresecretKeyPath=${cfg.cache.secretKeyPath} must exist but does not";
-      }
     ];
 
     users.users.ncps = {
@@ -219,7 +228,7 @@ in
     };
     users.groups.ncps = { };
 
-    systemd.services.ncps-create-datadirs = {
+    systemd.services.ncps-create-directories = {
       description = "Created required directories by ncps";
       serviceConfig = {
         Type = "oneshot";
@@ -237,6 +246,12 @@ in
             mkdir -p ${dbDir}
             chown ncps:ncps ${dbDir}
           fi
+        '')
+        + (lib.optionalString (cfg.cache.tempPath != "/tmp") ''
+          if ! test -d ${cfg.cache.tempPath}; then
+            mkdir -p ${cfg.cache.tempPath}
+            chown ncps:ncps ${cfg.cache.tempPath}
+          fi
         '');
       wantedBy = [ "ncps.service" ];
       before = [ "ncps.service" ];
@@ -245,7 +260,8 @@ in
     systemd.services.ncps = {
       description = "ncps binary cache proxy service";
 
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
@@ -276,6 +292,9 @@ in
         })
         (lib.mkIf (isSqlite && !lib.strings.hasPrefix "/var/lib/ncps" dbDir) {
           ReadWritePaths = [ dbDir ];
+        })
+        (lib.mkIf (cfg.cache.tempPath != "/tmp") {
+          ReadWritePaths = [ cfg.cache.tempPath ];
         })
 
         # Hardening

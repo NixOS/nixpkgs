@@ -11,20 +11,15 @@
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
     tag = "v${version}";
-    hash = "sha256-cEV9gnc9gLpAVmYkzSaQwDbgXsklMTq71edndDJeP9E=";
+    hash = "sha256-QcJUKGhWPUHhVVsEZhhjN411Pz4Wn7OL2fhotPOGVm4=";
   };
-
-  patches = [
-    # https://github.com/jazzband/django-polymorphic/issues/616
-    ./django-5.1-compat.patch
-  ];
 
   build-system = [ setuptools ];
 

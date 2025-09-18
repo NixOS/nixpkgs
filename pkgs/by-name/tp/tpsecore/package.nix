@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-+OynnLMBEiYwdFzxGzgkcBN6xrHoH1Q6O5i+OW7RBLo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EM/THiR0NV4N3mFGjRYe1cpaF82rCYnOPLxv67BronU=";
 
   nativeBuildInputs = [
@@ -54,10 +53,7 @@ rustPlatform.buildRustPackage {
     description = "Self contained toolkit for creating, editing, and previewing TPSE files";
     homepage = "https://gitlab.com/UniQMG/tpsecore";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      huantian
-      wackbyte
-    ];
+    maintainers = with lib.maintainers; [ huantian ];
     platforms = lib.platforms.linux;
   };
 }

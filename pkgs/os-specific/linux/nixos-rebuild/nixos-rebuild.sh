@@ -32,7 +32,7 @@ specialisation=
 imageVariant=
 buildHost=
 targetHost=
-remoteSudo=
+useSudo=
 noSSHTTY=
 verboseScript=
 noFlake=
@@ -170,8 +170,8 @@ while [ "$#" -gt 0 ]; do
         targetHost="$1"
         shift 1
         ;;
-      --use-remote-sudo)
-        remoteSudo=1
+      --sudo | --use-remote-sudo)
+        useSudo=1
         ;;
       --no-ssh-tty)
         noSSHTTY=1
@@ -237,7 +237,7 @@ buildHostCmd() {
 
 targetHostCmd() {
     local c
-    if [[ "${useSudo:-x}" = 1 ]]; then
+    if [[ "${withSudo:-x}" = 1 ]]; then
         c=("sudo")
     else
         c=()
@@ -256,8 +256,8 @@ targetHostSudoCmd() {
         t="-t"
     fi
 
-    if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
+    if [[ -n "$useSudo" ]]; then
+        withSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
@@ -863,18 +863,20 @@ if [ -z "$rollback" ]; then
                 "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
-                in set.${attr:+$attr.}config.system.build.images.$imageVariant.v.passthru.filePath" \
-                "${extraBuildFlags[@]}"
+                in set.${attr:+$attr.}config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}" \
+                | jq -r .
             )"
         elif [[ -z $flake ]]; then
             imageName="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
                 "with import <nixpkgs/nixos> {}; config.system.build.images.$imageVariant.passthru.filePath" \
-                "${extraBuildFlags[@]}"
+                "${extraBuildFlags[@]}" \
+                | jq -r .
             )"
         else
             imageName="$(
-                runCmd nix "${flakeFlags[@]}" eval --json \
+                runCmd nix "${flakeFlags[@]}" eval --raw \
                 "$flake#$flakeAttr.config.system.build.images.$imageVariant.passthru.filePath" \
                 "${evalArgs[@]}" "${extraBuildFlags[@]}"
             )"

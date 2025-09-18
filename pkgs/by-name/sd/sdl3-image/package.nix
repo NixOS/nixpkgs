@@ -1,7 +1,6 @@
 {
   lib,
   sdl3,
-  darwin,
   libavif,
   libtiff,
   libwebp,
@@ -9,8 +8,12 @@
   cmake,
   fetchFromGitHub,
   validatePkgConfig,
+  libpng,
+  libjpeg,
+  nix-update-script,
   # Boolean flags
   enableTests ? true,
+  enableSTB ? true,
   enableImageIO ? stdenv.hostPlatform.isDarwin,
 }:
 
@@ -44,24 +47,38 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     libavif
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation);
+  ]
+  ++ (lib.optionals (!enableSTB) [
+    libpng
+    libjpeg
+  ]);
 
   cmakeFlags = [
     # fail when a dependency could not be found
     (lib.cmakeBool "SDLIMAGE_STRICT" true)
     # disable shared dependencies as they're opened at runtime using SDL_LoadObject otherwise.
     (lib.cmakeBool "SDLIMAGE_DEPS_SHARED" false)
+    # disable stbi
+    (lib.cmakeBool "SDLIMAGE_BACKEND_STB" enableSTB)
     # enable imageio backend
     (lib.cmakeBool "SDLIMAGE_BACKEND_IMAGEIO" enableImageIO)
     # enable tests
     (lib.cmakeBool "SDLIMAGE_TESTS" enableTests)
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(3\\..*)"
+    ];
+  };
+
   meta = {
     description = "SDL image library";
     homepage = "https://github.com/libsdl-org/SDL_image";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ evythedemon ];
+    maintainers = [ lib.maintainers.evythedemon ];
+    teams = [ lib.teams.sdl ];
     inherit (sdl3.meta) platforms;
   };
 })

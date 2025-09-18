@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "acres";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "acres";
     tag = version;
-    hash = "sha256-/OuQgi/17Pz9q2GX7MZftUJzod7M9Le4CPOROudFDfk=";
+    hash = "sha256-D2w/xGlt0ApQ1Il9pzHPcL1s3CmCCOdgRpvUw/LI3gA=";
   };
 
   build-system = [

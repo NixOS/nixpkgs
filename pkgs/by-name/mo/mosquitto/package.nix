@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.21";
+  version = "2.0.22";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
     rev = "v${version}";
-    hash = "sha256-E47NqiaMk67pNgf151DMhQ4DMyLvfzrECEQtk3jASPU=";
+    hash = "sha256-PCiNxRG2AqVlS2t/u7Cqn8NbTrrYGO1OXl8zvPQRrJM=";
   };
 
   postPatch = ''
@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     libwebsockets'
     openssl
     uthash
-  ] ++ lib.optional withSystemd systemd;
+  ]
+  ++ lib.optional withSystemd systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_BUNDLED_DEPS" false)

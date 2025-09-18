@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OyV6GSLnNV3GUqrfs3OBnIaBvicH2PXgeY4acOk5dR4=";
   };
 
+  separateDebugInfo = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -58,7 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://i3wm.org/i3lock/";
     maintainers = with maintainers; [
       malyn
-      domenkozar
     ];
     mainProgram = "i3lock";
     license = licenses.bsd3;

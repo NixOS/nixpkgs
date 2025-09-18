@@ -12,13 +12,13 @@
 let
   pname = "rqbit";
 
-  version = "8.0.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-Meztr/UxLgnbd3YwkSW0vy+D2N4mFg2v+T4nBnYiQBI=";
+    hash = "sha256-5ErcI3hwC2EgxsjgEVlbHP1MzBf/LndpgTfynQGc29s=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -45,8 +45,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FGcws80cX0I74bVaSV6OLntPFPNanGAFm6CVHDAGbOU=";
+  cargoHash = "sha256-gYasOjrG0oeT/6Ben57MKAvBtgpoSmZ93RZQqSXAxIc=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -74,12 +73,12 @@ rustPlatform.buildRustPackage {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cafkafk
       toasteruwu
     ];

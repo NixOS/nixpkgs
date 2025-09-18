@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     perl
     automake

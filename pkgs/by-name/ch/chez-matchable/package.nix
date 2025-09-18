@@ -7,12 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-matchable";
+  # nixpkgs-update: no auto update
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-matchable";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-UYoT8Kp1FTfiL22ntrFXFcAB1HGVrJ6p9JgvhUKi+Yo=";
   };
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "This is a Library for ChezScheme providing the portable hygenic pattern matcher by Alex Shinn";
+    description = "Library for ChezScheme providing the portable hygenic pattern matcher by Alex Shinn";
     homepage = "https://github.com/fedeinthemix/chez-matchable/";
     maintainers = [ maintainers.jitwit ];
     license = licenses.publicDomain;

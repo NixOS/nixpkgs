@@ -50,11 +50,15 @@ rustPlatform.buildRustPackage rec {
     clang
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-hDQWjzkx7YdkgSmNKTzCa2VhBFvn6P9QANV9hJ7UiT8=";
 
   # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.cargoShortTarget;
+  # Future packagers:
+  # This is a fix for https://github.com/NixOS/nixpkgs/issues/390469. Ideally
+  # ZLUDA should configure this automatically. Therefore, on every new update,
+  # please try removing this line and see if ZLUDA builds.
+  env.CMAKE_BUILD_TYPE = "Release";
 
   preConfigure = ''
     # disable test written for windows only: https://github.com/vosen/ZLUDA/blob/774f4bcb37c39f876caf80ae0d39420fa4bc1c8b/zluda_inject/tests/inject.rs#L55
@@ -74,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "ZLUDA - CUDA on non-Nvidia GPUs";
+    description = "CUDA on non-Nvidia GPUs";
     homepage = "https://github.com/vosen/ZLUDA";
     changelog = "https://github.com/vosen/ZLUDA/releases/tag/${src.rev}";
     license = lib.licenses.mit;

@@ -18,6 +18,7 @@
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   quazip,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,12 +41,14 @@ stdenv.mkDerivation rec {
     qtx11extras
     libdbusmenu
     quazip
-  ] ++ lib.optional withPulseaudio libpulseaudio;
+  ]
+  ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     wrapQtAppsHook
     pkg-config
     cmake
+    udevCheckHook
   ];
 
   cmakeFlags = [
@@ -61,6 +64,8 @@ stdenv.mkDerivation rec {
       inherit kmod;
     })
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \

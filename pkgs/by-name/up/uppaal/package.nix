@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation rec {
     makeWrapper $out/lib/uppaal/uppaal $out/bin/uppaal \
       --set JAVA_HOME ${jdk17} \
       --set PATH $out/lib/uppaal:$PATH \
-      --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';

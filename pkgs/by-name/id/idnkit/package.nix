@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3";
 
   src = fetchurl {
-    url = "https://jprs.co.jp/idn/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://jprs.co.jp/idn/idnkit-${finalAttrs.version}.tar.bz2";
     hash = "sha256-JtBxF2UAQqtGk/DgCWAnXVihvnc+bRPFA7o4RxDz6X4=";
   };
 

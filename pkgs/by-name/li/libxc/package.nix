@@ -5,17 +5,25 @@
   cmake,
   gfortran,
   perl,
+  version ? "6.2.2",
 }:
 
+let
+  versionHashes = {
+    "6.2.2" = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
+    "7.0.0" = "sha256-mGyGtKDurOrSS0AYrtwhF62pJGPBLbPPNBgFV7fyyug=";
+  };
+
+in
 stdenv.mkDerivation rec {
   pname = "libxc";
-  version = "6.2.2";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    hash = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
+    hash = versionHashes."${version}";
   };
 
   # Timeout increase has already been included upstream in master.

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PFbHHO3m4mnV5s8DVev/iao9sC3FYht0whTHYzO25Yo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HL/KCC8Y42OFL1LXoewmH1Bxp6FICuDjkTnK5DE94Ms=";
 
   nativeBuildInputs = [
@@ -34,15 +33,15 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh _sic
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Accessible image processing and conversion from the terminal";
     homepage = "https://github.com/foresterre/sic";
     changelog = "https://github.com/foresterre/sic/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "sic";
   };
 }

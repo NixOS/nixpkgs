@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.5.7";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs-ble";
     tag = "v${version}";
-    hash = "sha256-u9NNSaO/xqpmMXwIkgzZREjZEzVFKFIHJJVKLS0EwJs=";
+    hash = "sha256-bmzRvfOwAb2dr2bBfBE/4SuPB15qBpLelmxI15jhgrQ=";
   };
 
   build-system = [ poetry-core ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/bdraco/yalexs-ble";
-    changelog = "https://github.com/bdraco/yalexs-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/yalexs-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };

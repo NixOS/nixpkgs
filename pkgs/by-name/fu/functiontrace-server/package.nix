@@ -2,25 +2,21 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "functiontrace-server";
-  version = "0.5.2";
+  version = "0.8.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-p6ypMfg99ohQCyPB2O0wXbGmPvD2K9V3EnFDd5dC6js=";
+    hash = "sha256-f/DpT5IYhUA/+w+QK3Itk4bBaYRFhGOWQbN51YYrmxA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-sPleuZV7eXlQjKqeHCIlRwu1FzneBh460yAElnxi6Do=";
+  cargoHash = "sha256-rDCIzJUFA+2iEpITg3MuKFfgiyQ6GtMvIigiHkX70M8=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Server for FunctionTrace, a graphical Python profiler";

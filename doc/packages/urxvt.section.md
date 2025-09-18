@@ -8,9 +8,15 @@ In `nixpkgs`, urxvt is provided by the package `rxvt-unicode`. It can be configu
 
 ```nix
 rxvt-unicode.override {
-  configure = { availablePlugins, ... }: {
-    plugins = with availablePlugins; [ perls resize-font vtwheel ];
-  };
+  configure =
+    { availablePlugins, ... }:
+    {
+      plugins = with availablePlugins; [
+        perls
+        resize-font
+        vtwheel
+      ];
+    };
 }
 ```
 
@@ -20,9 +26,11 @@ In order to add plugins but also keep all default plugins installed, it is possi
 
 ```nix
 rxvt-unicode.override {
-  configure = { availablePlugins, ... }: {
-    plugins = (builtins.attrValues availablePlugins) ++ [ custom-plugin ];
-  };
+  configure =
+    { availablePlugins, ... }:
+    {
+      plugins = (builtins.attrValues availablePlugins) ++ [ custom-plugin ];
+    };
 }
 ```
 
@@ -40,9 +48,11 @@ In addition to `plugins` the options `extraDeps` and `perlDeps` can be used to i
 
 ```nix
 rxvt-unicode.override {
-  configure = { availablePlugins, ... }: {
-    pluginsDeps = [ xsel ];
-  };
+  configure =
+    { availablePlugins, ... }:
+    {
+      pluginsDeps = [ xsel ];
+    };
 }
 ```
 
@@ -50,24 +60,24 @@ rxvt-unicode.override {
 
 ```nix
 rxvt-unicode.override {
-  configure = { availablePlugins, ... }: {
-    perlDeps = with perlPackages; [ AnyEvent ];
-  };
+  configure =
+    { availablePlugins, ... }:
+    {
+      perlDeps = with perlPackages; [ AnyEvent ];
+    };
 }
 ```
 
 ## Packaging urxvt plugins {#sec-urxvt-pkg}
 
-Urxvt plugins resides in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin, create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
+Urxvt plugins reside in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin, create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
 
-A plugin can be any kind of derivation, the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`. Look for existing plugins for examples.
+A plugin can be any kind of derivation; the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`. Look for existing plugins for examples.
 
 If the plugin is itself a Perl package that needs to be imported from other plugins or scripts, add the following passthrough:
 
 ```nix
-{
-  passthru.perlPackages = [ "self" ];
-}
+{ passthru.perlPackages = [ "self" ]; }
 ```
 
 This will make the urxvt wrapper pick up the dependency and set up the Perl path accordingly.

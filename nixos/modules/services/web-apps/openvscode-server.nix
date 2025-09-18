@@ -178,38 +178,37 @@ in
       path = cfg.extraPackages;
       environment = cfg.extraEnvironment;
       serviceConfig = {
-        ExecStart =
-          ''
-            ${lib.getExe cfg.package} \
-              --accept-server-license-terms \
-              --host=${cfg.host} \
-              --port=${toString cfg.port} \
-          ''
-          + lib.optionalString (cfg.telemetryLevel != null) ''
-            --telemetry-level=${cfg.telemetryLevel} \
-          ''
-          + lib.optionalString (cfg.withoutConnectionToken) ''
-            --without-connection-token \
-          ''
-          + lib.optionalString (cfg.socketPath != null) ''
-            --socket-path=${cfg.socketPath} \
-          ''
-          + lib.optionalString (cfg.userDataDir != null) ''
-            --user-data-dir=${cfg.userDataDir} \
-          ''
-          + lib.optionalString (cfg.serverDataDir != null) ''
-            --server-data-dir=${cfg.serverDataDir} \
-          ''
-          + lib.optionalString (cfg.extensionsDir != null) ''
-            --extensions-dir=${cfg.extensionsDir} \
-          ''
-          + lib.optionalString (cfg.connectionToken != null) ''
-            --connection-token=${cfg.connectionToken} \
-          ''
-          + lib.optionalString (cfg.connectionTokenFile != null) ''
-            --connection-token-file=${cfg.connectionTokenFile} \
-          ''
-          + lib.escapeShellArgs cfg.extraArguments;
+        ExecStart = ''
+          ${lib.getExe cfg.package} \
+            --accept-server-license-terms \
+            --host=${cfg.host} \
+            --port=${toString cfg.port} \
+        ''
+        + lib.optionalString (cfg.telemetryLevel != null) ''
+          --telemetry-level=${cfg.telemetryLevel} \
+        ''
+        + lib.optionalString (cfg.withoutConnectionToken) ''
+          --without-connection-token \
+        ''
+        + lib.optionalString (cfg.socketPath != null) ''
+          --socket-path=${cfg.socketPath} \
+        ''
+        + lib.optionalString (cfg.userDataDir != null) ''
+          --user-data-dir=${cfg.userDataDir} \
+        ''
+        + lib.optionalString (cfg.serverDataDir != null) ''
+          --server-data-dir=${cfg.serverDataDir} \
+        ''
+        + lib.optionalString (cfg.extensionsDir != null) ''
+          --extensions-dir=${cfg.extensionsDir} \
+        ''
+        + lib.optionalString (cfg.connectionToken != null) ''
+          --connection-token=${cfg.connectionToken} \
+        ''
+        + lib.optionalString (cfg.connectionTokenFile != null) ''
+          --connection-token-file=${cfg.connectionTokenFile} \
+        ''
+        + lib.escapeShellArgs cfg.extraArguments;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = cfg.user;
         User = cfg.user;
@@ -233,5 +232,5 @@ in
     users.groups."${defaultGroup}" = lib.mkIf (cfg.group == defaultGroup) { };
   };
 
-  meta.maintainers = [ lib.maintainers.drupol ];
+  meta.maintainers = [ ];
 }

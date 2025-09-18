@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xoxrNNlpDFXuQwltZ52SkGe0z6+B4h1Jy4XRtvQDiAg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-FO69bmUhP6S3MRbVZllxmpn1GuM8fplciAka46Dz2Yg=";
 
   meta = with lib; {
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/matiaskorhonen/paper-age";
     changelog = "https://github.com/matiaskorhonen/paper-age/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = [ ];
     mainProgram = "paper-age";
   };
 }

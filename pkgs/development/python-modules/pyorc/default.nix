@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     pkgs.lz4
-    pkgs.protobuf
+    pkgs.protobuf_31
     pkgs.snappy
     pkgs.zlib
     pkgs.zstd
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     description = "Python module for Apache ORC file format";
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

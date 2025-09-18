@@ -9,7 +9,7 @@
   python-magic,
   pyyaml,
   requests,
-  sentry-sdk_2,
+  sentry-sdk,
   tenacity,
   setuptools,
   setuptools-scm,
@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "swh-core";
-  version = "4.0.0";
+  version = "4.5.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-core";
     tag = "v${version}";
-    hash = "sha256-kO4B25+oQrQ9sxmKJ5NMKTCCGztRaArFtD7QA8Bytts=";
+    hash = "sha256-yNWij9GclQCysQe9Bukr4cHlZgSQqLAuX1KwGWzAK+0=";
   };
 
   build-system = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     python-magic
     pyyaml
     requests
-    sentry-sdk_2
+    sentry-sdk
     tenacity
   ];
 
@@ -115,6 +115,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-core";
     license = lib.licenses.gpl3Only;
     mainProgram = "swh";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.10.4";
+  version = "0.10.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     tag = "v${version}";
-    hash = "sha256-OlPoCFTeLTrYEUONu5PMZyfkQiHoqF/2Bj4OkUOCei8=";
+    hash = "sha256-tYs+aZp/QbM166KNj4MjIjqS6LcuDCyXwghSoF5rj4M=";
   };
 
   build-system = [
@@ -57,7 +57,8 @@ buildPythonPackage rec {
     dask
     pytestCheckHook
     scipy
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cf_xarray" ];
 

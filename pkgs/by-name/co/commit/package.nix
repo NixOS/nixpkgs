@@ -75,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Commit message editor";
+    description = "Git commit message editor";
     homepage = "https://github.com/sonnyp/Commit";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "re.sonny.Commit";
     platforms = lib.platforms.linux;
   };

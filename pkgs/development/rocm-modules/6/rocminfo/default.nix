@@ -30,13 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-fQPtO5TNbCbaZZ7VtGkkqng5QZ+FcScdh1opWr5YkLU=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     rocm-cmake
+    python3
   ];
 
   buildInputs = [ rocm-runtime ];
-  propagatedBuildInputs = [ python3 ];
   cmakeFlags = [ "-DROCRTST_BLD_TYPE=Release" ];
 
   prePatch = ''
@@ -58,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/ROCm/rocminfo";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    mainProgram = "rocminfo";
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

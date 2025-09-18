@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "buffrs";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "helsing-ai";
     repo = "buffrs";
     tag = "v${version}";
-    hash = "sha256-c9GjSqVp2wEFgoy8j+Gy5FA3SG4JYEfeSwPWjW81w3Y=";
+    hash = "sha256-VHzPOFOkwz3QlDt25gBbishM4ujtEPFjA21WuiNVw00=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-E7kskULt2eOY+mZjh6jAftj8ciExUF7d1z1pePTBzvQ=";
+  cargoHash = "sha256-/cdBt23VSmwN/C2XdHeeRjUSqLWiEheqVl+hfEDKIP0=";
 
   # Disabling tests meant to work over the network, as they will fail
   # inside the builder.

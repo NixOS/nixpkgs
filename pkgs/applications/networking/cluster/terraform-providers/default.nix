@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -109,6 +110,8 @@ let
       propagatedBuildInputs = [ cdrtools ];
     });
     minio = automated-providers.minio.override { spdx = "AGPL-3.0-only"; };
+    # requires go >= 1.25.0
+    talos = automated-providers.talos.override { mkProviderGoModule = buildGo125Module; };
   };
 
   # Put all the providers we not longer support in this list.

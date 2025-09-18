@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "crontab";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "doctormo";
     repo = "python-crontab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OZalqh/A4pBM1Hat4t76Odk2cTmKLwaHGY7pndgIgss=";
+    hash = "sha256-eJXtvTRwokbewWrTArHJ2FXGDLvlkGA/5ZZR01koMW8=";
   };
 
   build-system = [ setuptools ];

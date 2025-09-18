@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "git-who";
-  version = "0.7";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "sinclairtarget";
     repo = "git-who";
     rev = "v${version}";
-    hash = "sha256-64Hb2+ZCXJis19V0WDyZ0SHZX99Dqxr3UGQTQZSCAp8=";
+    hash = "sha256-xpY5XIqlCscwJZhtqdYa1yhR9VWgD8FofDXdZ9+afA8=";
   };
 
   vendorHash = "sha256-e2P7szjtAn4EFTy+eGi/9cYf/Raw/7O+PbYEOD8i3Hs=";

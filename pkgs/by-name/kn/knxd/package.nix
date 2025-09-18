@@ -39,14 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs =
-    [
-      fmt_9
-      libev
-    ]
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional withUsb libusb1
-    ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
+  buildInputs = [
+    fmt_9
+    libev
+  ]
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withUsb libusb1
+  ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
 
   configureFlags = [
     (lib.enableFeature withSystemd "systemd")

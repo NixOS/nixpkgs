@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "4.0";
+  version = "4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "django-extensions";
+    repo = "django-extensions";
     tag = version;
-    hash = "sha256-VosMPkwzqmEieB85k7qX5yfefHNn+RwAsoR1ezYJHC4=";
+    hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
 
   build-system = [ setuptools ];
