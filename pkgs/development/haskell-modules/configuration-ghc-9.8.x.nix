@@ -101,6 +101,9 @@ in
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
+
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_3_20250912;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }
