@@ -324,7 +324,6 @@ stdenv.mkDerivation {
        -e 's|/bin/cp|${coreutils}/bin/cp|g' \
        -e 's|/usr/bin/file|${file}/bin/file|g'
 
-     patch -p1 -d swift -i ${./patches/swift-cmake-3.25-compat.patch}
      patch -p1 -d swift -i ${./patches/swift-wrap.patch}
      patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
      patch -p1 -d swift -i ${
