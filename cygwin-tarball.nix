@@ -44,9 +44,14 @@ let
   cmd = writeText "cygwin.cmd" (
     lib.replaceString "\n" "\r\n" ''
       @echo off
+      set PATH=%~dp0\bin;%PATH%
       "%~dp0${lib.replaceString "/" "\\" system.outPath}\bin\bash.exe" --login -i
     ''
   );
+
+  profile = writeText "profile" ''
+    export PATH="${lib.getBin system}"/bin:$PATH
+  '';
 
 in
 nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
@@ -56,12 +61,16 @@ nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
 
   contents = [
     {
-      source = windows.cygwin + "/bin/cygwin1.dll";
+      source = lib.getBin windows.cygwin + "/bin/cygwin1.dll";
       target = "/bin/cygwin1.dll";
     }
     {
       source = cmd;
       target = "cygwin.cmd";
+    }
+    {
+      source = profile;
+      target = "/etc/profile";
     }
   ];
 
@@ -71,4 +80,8 @@ nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
       symlink = "none";
     }
   ];
+
+  extraCommands = ''
+    mkdir tmp
+  '';
 }
