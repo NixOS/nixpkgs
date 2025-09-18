@@ -22,6 +22,7 @@
   unzip,
   which,
   zlib,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,6 +73,11 @@ stdenv.mkDerivation rec {
                      'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
   '';
 
+  preBuild = lib.optionalString (lib.versionAtLeast version "1.11") ''
+    # terminfo dirs normally inaccessible in build sandbox
+    export TERMINFO="${ncurses.out}/share/terminfo/";
+  '';
+
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
@@ -82,7 +88,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
-    "USE_BINARYBUILDER=${if stdenv.hostPlatform.isDarwin then "1" else "0"}"
   ];
 
   # remove forbidden reference to $TMPDIR

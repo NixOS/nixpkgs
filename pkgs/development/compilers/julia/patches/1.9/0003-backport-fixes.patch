@@ -1,0 +1,256 @@
+From 743e00b41e167b01594a19a8c29b6ce0f76eebac Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Thu, 18 Sep 2025 10:11:40 -0500
+Subject: [PATCH] backport patches for julia v1.10.9
+
+---
+ deps/blastrampoline.mk  |   7 +++
+ deps/curl.mk            |   2 +-
+ deps/libgit2.mk         |   7 ++-
+ deps/patches/blt.patch  | 105 ++++++++++++++++++++++++++++++++++++++++
+ deps/patches/zlib.patch |  52 ++++++++++++++++++++
+ deps/zlib.mk            |   7 +++
+ 6 files changed, 178 insertions(+), 2 deletions(-)
+ create mode 100644 deps/patches/blt.patch
+ create mode 100644 deps/patches/zlib.patch
+
+diff --git a/deps/blastrampoline.mk b/deps/blastrampoline.mk
+index bd1cb65c6a..0d78da2bc6 100644
+--- a/deps/blastrampoline.mk
++++ b/deps/blastrampoline.mk
+@@ -9,6 +9,13 @@ $(eval $(call git-external,blastrampoline,BLASTRAMPOLINE,,,$(BUILDDIR)))
+ BLASTRAMPOLINE_BUILD_OPTS := $(MAKE_COMMON) CC="$(CC) $(SANITIZE_OPTS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
+ BLASTRAMPOLINE_BUILD_OPTS += ARCH="$(ARCH)" OS="$(OS)"
+ 
++$(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/blt.patch-applied: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/source-extracted
++	cd $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR) && \
++		patch -p1 -f < $(SRCDIR)/patches/blt.patch
++	echo 1 > $@
++
++$(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/build-configured: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/blt.patch-applied
++
+ $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/build-configured: $(BUILDDIR)/$(BLASTRAMPOLINE_SRC_DIR)/source-extracted
+ 	mkdir -p $(dir $@)
+ 	echo 1 > $@
+diff --git a/deps/curl.mk b/deps/curl.mk
+index a063dfe07f..444334b581 100644
+--- a/deps/curl.mk
++++ b/deps/curl.mk
+@@ -14,7 +14,7 @@ $(BUILDDIR)/curl-$(CURL_VER)/build-configured: | $(build_prefix)/manifest/nghttp
+ endif
+ 
+ ifneq ($(USE_BINARYBUILDER_CURL),1)
+-CURL_LDFLAGS := $(RPATH_ESCAPED_ORIGIN)
++CURL_LDFLAGS := $(RPATH_ESCAPED_ORIGIN) -Wl,-rpath,$(build_shlibdir)
+ 
+ # On older Linuces (those that use OpenSSL < 1.1) we include `libpthread` explicitly.
+ # It doesn't hurt to include it explicitly elsewhere, so we do so.
+diff --git a/deps/libgit2.mk b/deps/libgit2.mk
+index 30d94aeca7..818dda99ad 100644
+--- a/deps/libgit2.mk
++++ b/deps/libgit2.mk
+@@ -50,7 +50,12 @@ $(LIBGIT2_SRC_PATH)/libgit2-lowercase-windows-h.patch-applied: $(LIBGIT2_SRC_PAT
+ 		patch -p1 -f < $(SRCDIR)/patches/libgit2-lowercase-windows-h.patch
+ 	echo 1 > $@
+ 
+-$(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured: $(LIBGIT2_SRC_PATH)/libgit2-lowercase-windows-h.patch-applied
++$(BUILDDIR)/$(LIBGIT2_SRC_DIR)/zlib.patch-applied: $(LIBGIT2_SRC_PATH)/libgit2-lowercase-windows-h.patch-applied
++	cd $(LIBGIT2_SRC_PATH)/deps/zlib && \
++		patch -p1 -f < $(SRCDIR)/patches/zlib.patch
++	mkdir -p $(dir $@) && echo 1 > $@
++
++$(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured: $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/zlib.patch-applied
+ 
+ $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured: $(LIBGIT2_SRC_PATH)/source-extracted
+ 	mkdir -p $(dir $@)
+diff --git a/deps/patches/blt.patch b/deps/patches/blt.patch
+new file mode 100644
+index 0000000000..ba478c4541
+--- /dev/null
++++ b/deps/patches/blt.patch
+@@ -0,0 +1,105 @@
++From c4efde54adcf9c6eca7ae6682a6b94d20300d33a Mon Sep 17 00:00:00 2001
++From: Gabriel Baraldi <baraldigabriel@gmail.com>
++Date: Fri, 19 Sep 2025 17:31:34 -0500
++Subject: [PATCH] Fix trampoline build on latest clang on macos
++
++---
++ src/trampolines/trampolines_aarch64.S     | 2 +-
++ src/trampolines/trampolines_arm.S         | 2 +-
++ src/trampolines/trampolines_i686.S        | 2 +-
++ src/trampolines/trampolines_powerpc64le.S | 2 +-
++ src/trampolines/trampolines_riscv64.S     | 2 +-
++ src/trampolines/trampolines_x86_64.S      | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/trampolines/trampolines_aarch64.S b/src/trampolines/trampolines_aarch64.S
++index 4684e5a..83c6f05 100644
++--- a/src/trampolines/trampolines_aarch64.S
+++++ b/src/trampolines/trampolines_aarch64.S
++@@ -3,9 +3,9 @@
++ 
++ #define XX(name) \
++ .global MANGLE(UNDERSCORE(name)) SEP \
+++MANGLE(UNDERSCORE(name))##: SEP \
++ .cfi_startproc SEP \
++ .p2align    2 SEP \
++-MANGLE(UNDERSCORE(name))##: SEP \
++     adrp x16, PAGE(NAMEADDR(name)) SEP \
++     ldr x16, [x16, PAGEOFF(NAMEADDR(name))] SEP \
++     br x16 SEP \
++diff --git a/src/trampolines/trampolines_arm.S b/src/trampolines/trampolines_arm.S
++index abe0997..0dcfcc9 100644
++--- a/src/trampolines/trampolines_arm.S
+++++ b/src/trampolines/trampolines_arm.S
++@@ -3,8 +3,8 @@
++ 
++ #define XX(name) \
++ .global MANGLE(UNDERSCORE(name)); \
++-.cfi_startproc; \
++ MANGLE(UNDERSCORE(name))##:; \
+++.cfi_startproc; \
++     ldr ip, CONCAT(.L,NAMEADDR(name)); \
++ CONCAT(.L,MANGLE(UNDERSCORE(name))): ;\
++     add ip, pc, ip; \
++diff --git a/src/trampolines/trampolines_i686.S b/src/trampolines/trampolines_i686.S
++index c7bcfeb..1f74c65 100644
++--- a/src/trampolines/trampolines_i686.S
+++++ b/src/trampolines/trampolines_i686.S
++@@ -4,8 +4,8 @@
++ #define XX(name) \
++ DEBUGINFO(name); \
++ .global MANGLE(UNDERSCORE(name)); \
++-.cfi_startproc; \
++ MANGLE(UNDERSCORE(name))##:; \
+++.cfi_startproc; \
++     CET_START(); \
++     jmpl *(NAMEADDR(name)); \
++     ud2; \
++diff --git a/src/trampolines/trampolines_powerpc64le.S b/src/trampolines/trampolines_powerpc64le.S
++index b6aff72..597f405 100644
++--- a/src/trampolines/trampolines_powerpc64le.S
+++++ b/src/trampolines/trampolines_powerpc64le.S
++@@ -9,9 +9,9 @@
++ 
++ #define XX(name) \
++ .global MANGLE(UNDERSCORE(name)); \
+++MANGLE(UNDERSCORE(name))##: ; \
++ .type MANGLE(UNDERSCORE(name))##, @function; \
++ .cfi_startproc; \
++-MANGLE(UNDERSCORE(name))##: ; \
++     addis 2, 12, .TOC.-MANGLE(UNDERSCORE(name))##@ha; \
++     addi 2, 2, .TOC.-MANGLE(UNDERSCORE(name))##@l; \
++     .localentry MANGLE(UNDERSCORE(name))##,.-MANGLE(UNDERSCORE(name))##; \
++diff --git a/src/trampolines/trampolines_riscv64.S b/src/trampolines/trampolines_riscv64.S
++index 7e4295b..4e3d504 100644
++--- a/src/trampolines/trampolines_riscv64.S
+++++ b/src/trampolines/trampolines_riscv64.S
++@@ -5,9 +5,9 @@
++ 
++ #define XX(name) \
++ .global MANGLE(UNDERSCORE(name)) SEP \
+++MANGLE(UNDERSCORE(name))##: SEP \
++ .cfi_startproc SEP \
++ .p2align    2 SEP \
++- MANGLE(UNDERSCORE(name))##: SEP \
++     auipc t3, %pcrel_hi(NAMEADDR(name)) SEP \
++     ld t3, %pcrel_lo(MANGLE(UNDERSCORE(name)))(t3) SEP \
++     jr t3 SEP \
++diff --git a/src/trampolines/trampolines_x86_64.S b/src/trampolines/trampolines_x86_64.S
++index 237d11b..e0d2396 100644
++--- a/src/trampolines/trampolines_x86_64.S
+++++ b/src/trampolines/trampolines_x86_64.S
++@@ -4,9 +4,9 @@
++ #define XX(name) \
++ DEBUGINFO(name); \
++ .global MANGLE(UNDERSCORE(name)); \
+++MANGLE(UNDERSCORE(name))##:; \
++ .cfi_startproc; \
++ SEH_START1(name); \
++-MANGLE(UNDERSCORE(name))##:; \
++ SEH_START2(); \
++     CET_START(); \
++     mov NAMEADDR(name)(%rip),%r11; \
++-- 
++2.50.1
++
+diff --git a/deps/patches/zlib.patch b/deps/patches/zlib.patch
+new file mode 100644
+index 0000000000..8bfbbadfba
+--- /dev/null
++++ b/deps/patches/zlib.patch
+@@ -0,0 +1,52 @@
++From 4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9 Mon Sep 17 00:00:00 2001
++From: Mark Adler <madler@alumni.caltech.edu>
++Date: Tue, 12 Dec 2023 22:19:05 -0600
++Subject: [PATCH] Remove fdopen #defines in zutil.h.
++
++fdopen() is not used by zlib anymore. The #defines are vestigial.
++---
++ zutil.h | 23 +----------------------
++ 1 file changed, 1 insertion(+), 22 deletions(-)
++
++diff --git a/zutil.h b/zutil.h
++index 0bd2dbcba..bb513cb4b 100644
++--- a/zutil.h
+++++ b/zutil.h
++@@ -137,17 +137,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++ #  endif
++ #endif
++ 
++-#if defined(MACOS) || defined(TARGET_OS_MAC)
+++#if defined(MACOS)
++ #  define OS_CODE  7
++-#  ifndef Z_SOLO
++-#    if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
++-#      include <unix.h> /* for fdopen */
++-#    else
++-#      ifndef fdopen
++-#        define fdopen(fd,mode) NULL /* No fdopen() */
++-#      endif
++-#    endif
++-#  endif
++ #endif
++ 
++ #ifdef __acorn
++@@ -170,18 +161,6 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++ #  define OS_CODE 19
++ #endif
++ 
++-#if defined(_BEOS_) || defined(RISCOS)
++-#  define fdopen(fd,mode) NULL /* No fdopen() */
++-#endif
++-
++-#if (defined(_MSC_VER) && (_MSC_VER > 600)) && !defined __INTERIX
++-#  if defined(_WIN32_WCE)
++-#    define fdopen(fd,mode) NULL /* No fdopen() */
++-#  else
++-#    define fdopen(fd,type)  _fdopen(fd,type)
++-#  endif
++-#endif
++-
++ #if defined(__BORLANDC__) && !defined(MSDOS)
++   #pragma warn -8004
++   #pragma warn -8008
+\ No newline at end of file
+diff --git a/deps/zlib.mk b/deps/zlib.mk
+index 5548a0791f..50f548ea82 100644
+--- a/deps/zlib.mk
++++ b/deps/zlib.mk
+@@ -8,6 +8,13 @@ $(eval $(call git-external,zlib,ZLIB,,,$(SRCCACHE)))
+ ZLIB_BUILD_OPTS := $(CMAKE_COMMON) -DCMAKE_BUILD_TYPE=Release -DUNIX=true
+ ZLIB_BUILD_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ 
++$(BUILDDIR)/$(ZLIB_SRC_DIR)/zlib.patch-applied: $(SRCCACHE)/$(ZLIB_SRC_DIR)/source-extracted
++	cd $(SRCCACHE)/$(ZLIB_SRC_DIR) && \
++		patch -p1 -f < $(SRCDIR)/patches/zlib.patch
++	mkdir -p $(dir $@) && echo 1 > $@
++
++$(BUILDDIR)/$(ZLIB_SRC_DIR)/build-configured: $(BUILDDIR)/$(ZLIB_SRC_DIR)/zlib.patch-applied
++
+ $(BUILDDIR)/$(ZLIB_SRC_DIR)/build-configured: $(SRCCACHE)/$(ZLIB_SRC_DIR)/source-extracted
+ 	mkdir -p $(dir $@)
+ 	cd $(dir $@) && $(CMAKE) $(ZLIB_BUILD_OPTS) $(dir $<)
+-- 
+2.50.1
+
