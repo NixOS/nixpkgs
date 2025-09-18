@@ -7,7 +7,7 @@ index 5fa4f898b..41264ebb0 100644
          )
          # This endpoint is hardcoded everywhere lxc/lxd-pkg-snap#33
 -        lxd_socket_path = "/var/snap/lxd/common/lxd/unix.socket"
-+        lxd_socket_path = "/var/lib/lxd/unix.socket"
++        lxd_socket_path = "/var/lib/incus/unix.socket"
          endpoint = "http+unix://{}".format(urllib.parse.quote(lxd_socket_path, safe=""))
          try:
              self._lxd_client: pylxd.Client = pylxd.Client(endpoint=endpoint)
