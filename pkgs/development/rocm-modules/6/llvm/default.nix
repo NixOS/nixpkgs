@@ -1,10 +1,8 @@
 {
   lib,
   stdenv,
-  # default LLVM version is used as stdenv to build our toolchain
-  llvmPackages,
   # LLVM version closest to ROCm fork to override
-  llvmPackages_20,
+  llvmPackages_19,
   overrideCC,
   rocm-device-libs,
   fetchFromGitHub,
@@ -39,11 +37,10 @@ let
   version = "6.4.3";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "19.0.0-rocm";
-  # llvmPackages_base version should be close to rocmLlvmVersion,
-  # may be one off because AMD backports a lot and the +1 patches
-  # may be easier to get to build
-  llvmPackages_base = llvmPackages_20;
-  llvmPackagesNoBintools = llvmPackages.override {
+  # llvmPackages_base version should match rocmLlvmVersion
+  # so libllvm's bitcode is compatible with the built toolchain
+  llvmPackages_base = llvmPackages_19;
+  llvmPackagesNoBintools = llvmPackages_base.override {
     bootBintools = null;
     bootBintoolsNoLibc = null;
   };
@@ -55,7 +52,7 @@ let
       # oddly fuse-ld=lld fails without this override
       overrideCC llvmPackagesNoBintools.stdenv (
         llvmPackagesNoBintools.libstdcxxClang.override {
-          inherit (llvmPackages) bintools;
+          inherit (llvmPackages_base) bintools;
         }
       );
 
@@ -131,7 +128,6 @@ let
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
-  # optionally using LLVM libcxx
   llvmPackagesRocm = llvmPackages_base.override (_old: {
     stdenv = stdenvToBuildRocmLlvm;
 
@@ -139,6 +135,7 @@ let
     # ROCm LLVM is closer to 20 official
     # gitRelease = {}; officialRelease = null;
     officialRelease = { }; # Set but empty because we're overriding everything from it.
+    # this version determines which patches are applied
     version = rocmLlvmVersion;
     src = llvmSrc;
     monorepoSrc = llvmSrc;
@@ -247,7 +244,6 @@ let
   );
 in
 rec {
-  inherit (llvmPackagesRocm) libunwind;
   inherit (llvmPackagesRocm) libcxx;
   inherit args;
   # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
@@ -476,8 +472,6 @@ rec {
       lld
       lld.lib
       lld.dev
-      libunwind
-      libunwind.dev
       compiler-rt
       compiler-rt.dev
       rocmcxx
