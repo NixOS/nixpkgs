@@ -45,13 +45,13 @@ buildPythonPackage rec {
     platform =
       {
         x86_64-linux = "manylinux_2_27_x86_64";
-        aarch64-linux = "manylinux2014_aarch64";
+        aarch64-linux = "manylinux_2_27_aarch64";
       }
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-quPn80WASloSKaxxSMvRNEUMgWGYu7/4WnYiGC7H9ko=";
-        aarch64-linux = "sha256-f8QFBJYN5W4jL5MmMKJ1fs8/hzZlsTmDF9Jfa3RF1WA=";
+        x86_64-linux = "sha256-OXdyaiozKwvTSDG96ytWUzY0QvMBLCmW/IgICq9rO60=";
+        aarch64-linux = "sha256-2H1mbQxSP62q23GU58J03MWg5/j40dfig1NT7zK+8Bw=";
       }
       .${stdenv.hostPlatform.system};
   };
