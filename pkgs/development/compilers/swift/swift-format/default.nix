@@ -6,6 +6,7 @@
   swift,
   swiftpm,
   swiftpm2nix,
+  Dispatch,
   Foundation,
 }:
 let
@@ -23,6 +24,10 @@ stdenv.mkDerivation {
     swiftpm
   ];
   buildInputs = [ Foundation ];
+
+  env.LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux (
+    lib.makeLibraryPath [ Dispatch ]
+  );
 
   configurePhase = generated.configure;
 
