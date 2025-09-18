@@ -41,6 +41,12 @@
       # declared. Backport of https://cygwin.com/cgit/newlib-cygwin/commit/?id=73600d68227e125af24b7de7c3fccbd4eb66ee03
       ./fix-winsize.patch
     ]
+    ++ lib.optional (!headersOnly) [
+      # https://cygwin.com/pipermail/cygwin-developers/2020-September/011970.html
+      # This is required for boost coroutines to work. After we get to the point
+      # where nix runs on cygwin, we can attempt to upstream this again.
+      ./store-tls-pointer-in-win32-tls.patch
+    ]
     # After cygwin hosted builds are working, we should upstream this
     ++ lib.optional (
       !headersOnly && stdenvNoLibc.hostPlatform != stdenvNoLibc.buildPlatform
