@@ -94,7 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      versionCheck = true;
+      # Not bumped for 5.0.5: https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/9
+      # Try again on next bump.
+      versionCheck = finalAttrs.version != "5.0.5";
     };
     updateScript = gitUpdater { };
   };
