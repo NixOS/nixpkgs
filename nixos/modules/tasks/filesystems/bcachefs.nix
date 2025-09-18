@@ -230,12 +230,24 @@ in
           }
         ];
 
+        warnings = lib.mkIf config.boot.kernelPackages.bcachefs.meta.broken [
+          ''
+            Using unmaintained in-tree bcachefs kernel module. This
+            will be removed in 26.05. Please use a kernel supported
+            by the out-of-tree module package.
+          ''
+        ];
+
         # Bcachefs upstream recommends using the latest kernel
         boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
         # needed for systemd-remount-fs
         system.fsPackages = [ cfg.package ];
         services.udev.packages = [ cfg.package ];
+
+        boot.extraModulePackages = lib.optionals (!config.boot.kernelPackages.bcachefs.meta.broken) [
+          config.boot.kernelPackages.bcachefs
+        ];
 
         systemd = {
           packages = [ cfg.package ];
