@@ -34,6 +34,7 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/freelensapp/freelens/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "freelens";
+    maintainers = with lib.maintainers; [ vitorpavani ];
     platforms = [ "x86_64-linux" ];
 
   };
