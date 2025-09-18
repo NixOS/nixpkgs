@@ -34,6 +34,8 @@
   vfkit,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  coreutils,
+  runtimeShell,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -158,6 +160,9 @@ buildGoModule rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
+      --replace-fail sleep '${coreutils}/bin/sleep' \
+      --replace-fail /bin/sh '${runtimeShell}'
   '';
 
   doInstallCheck = true;
