@@ -59,21 +59,6 @@ let
         --replace \
           'librariesPath = applicationPath.parentDirectory' \
           "librariesPath = AbsolutePath(\"$out\")"
-
-      # Fix case-sensitivity issues.
-      # Upstream PR: https://github.com/apple/swift-package-manager/pull/6500
-      substituteInPlace Sources/CMakeLists.txt \
-        --replace \
-          'packageCollectionsSigning' \
-          'PackageCollectionsSigning'
-      substituteInPlace Sources/PackageCollectionsSigning/CMakeLists.txt \
-        --replace \
-          'SubjectPublickeyInfo' \
-          'SubjectPublicKeyInfo'
-      substituteInPlace Sources/PackageCollections/CMakeLists.txt \
-        --replace \
-          'FilepackageCollectionsSourcesStorage' \
-          'FilePackageCollectionsSourcesStorage'
     '';
   };
 
