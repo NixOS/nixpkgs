@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/metis/files/metis-5.2.1-add-gklib-as-required.patch?id=c78ecbd3fdf9b33e307023baf0de12c4448dd283";
       hash = "sha256-uoXMi6pMs5VrzUmjsLlQYFLob1A8NAt9CbFi8qhQXVQ=";
     })
+    # cmake 4 compatibility
+    (fetchpatch {
+      name = "metis-cmake-minimum-required-bump.patch";
+      url = "https://github.com/KarypisLab/METIS/commit/350931887dfc00c2e3cb7551c5abf30e0297126a.patch";
+      hash = "sha256-vX1GSZOLDxO9IIAQmNa9ADreEWSHCU9eF9L8qiSHye8=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
