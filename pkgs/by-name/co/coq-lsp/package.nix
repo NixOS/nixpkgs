@@ -4,7 +4,6 @@
   fetchFromGitHub,
   coq_8_20,
   makeWrapper,
-  ocamlPackages,
 }:
 
 stdenv.mkDerivation rec {
