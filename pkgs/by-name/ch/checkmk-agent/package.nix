@@ -17,7 +17,7 @@
   # refer to online documentation for details about local checks.
   local ? [ ],
   # deps for actual checkmk-agent script
-  systemd, # section_systemd
+  systemd, # section_systemd + section_timesyncd
   procps, # section_ps and mkjob
   util-linux, # section_df and check_mk_caching_agent (flock)
   gnugrep, # section_mem and many others
@@ -63,7 +63,7 @@
   ntp,
 }:
 let
-  major = "2.3.0p30";
+  major = "2.4.0p11";
   patch = "-1";
   version = major + patch;
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
   # refer to https://checkmk.com/download?platform=cmk&distribution=redhat&release=el9&edition=cre
   src = fetchurl {
     url = "https://download.checkmk.com/checkmk/${major}/check-mk-raw-${major}-el9-38.x86_64.rpm";
-    hash = "sha256-bxCxlxmKtUauDOvEVYO/Lyzp+3Da2oAMTudOe+nUMcw=";
+    hash = "sha256-E9HEj2GqLfA8O0eXV3pH1ZN5/IyJXISXhAbBpKwixdU=";
   };
 
   # we need dpkg for unpacking the debian version
