@@ -7111,10 +7111,6 @@ with pkgs;
 
   aspellDicts = recurseIntoAttrs (callPackages ../by-name/as/aspell/dictionaries.nix { });
 
-  aspellWithDicts = callPackage ../by-name/as/aspell/aspell-with-dicts.nix {
-    aspell = aspell.override { searchNixProfiles = false; };
-  };
-
   astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
 
   attr = callPackage ../development/libraries/attr { };
