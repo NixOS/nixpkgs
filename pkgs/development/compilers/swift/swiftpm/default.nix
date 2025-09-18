@@ -23,7 +23,11 @@
 
 let
 
-  inherit (swift) swiftOs swiftModuleSubdir swiftStaticModuleSubdir;
+  inherit (swift)
+    swiftOs
+    swiftModuleSubdir
+    swiftStaticModuleSubdir
+    ;
   sharedLibraryExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
   sources = callPackage ../sources.nix { };
@@ -322,6 +326,14 @@ let
       fetchSubmodules = true;
     };
 
+    buildInputs = [
+      swift-asn1
+    ];
+
+    patches = [
+      ./patches/install-crypto-extras.patch
+    ];
+
     postPatch = ''
       # Fix use of hardcoded tool paths on Darwin.
       substituteInPlace CMakeLists.txt \
@@ -336,6 +348,12 @@ let
 
       # Headers are not installed.
       cp -r ../Sources/CCryptoBoringSSL/include $out/include
+
+      # Swift modules are put in the wrong place by default (and not all are linked)
+      mkdir -p $out/${swiftModuleSubdir}
+      rm -rf $out/${swiftModuleSubdir}/*.swift{module,doc}
+      # I assume we don't care about .swiftsourceinfo
+      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
     '';
   };
 
