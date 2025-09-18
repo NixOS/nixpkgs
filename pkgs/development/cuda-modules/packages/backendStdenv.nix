@@ -15,7 +15,11 @@
   stdenvAdapters,
 }:
 let
-  inherit (builtins) toJSON;
+  inherit (builtins)
+    throw
+    toJSON
+    toString
+    ;
   inherit (_cuda.db) allSortedCudaCapabilities cudaCapabilityToInfo nvccCompatibilities;
   inherit (_cuda.lib)
     _cudaCapabilityIsDefault
@@ -25,8 +29,19 @@ let
     mkVersionedName
     ;
   inherit (lib) addErrorContext;
+  inherit (lib.asserts) assertMsg;
   inherit (lib.customisation) extendDerivation;
-  inherit (lib.lists) filter intersectLists subtractLists;
+  inherit (lib.lists)
+    filter
+    findFirst
+    intersectLists
+    range
+    reverseList
+    subtractLists
+    ;
+  inherit (lib.strings) toIntBase10 versionAtLeast;
+  inherit (lib.trivial) pipe;
+  inherit (lib.versions) major;
 
   # NOTE: By virtue of processing a sorted list (allSortedCudaCapabilities), our groups will be sorted.
 
@@ -44,6 +59,9 @@ let
 
   passthruExtra = {
     nvccHostCCMatchesStdenvCC = backendStdenv.cc == stdenv.cc;
+
+    # TODO(@connorbaker): Does it make sense to expose the `stdenv` we were called with and the `stdenv` selected
+    # prior to using `stdenvAdapters.useLibsFrom`?
 
     # The Nix system of the host platform.
     hostNixSystem = stdenv.hostPlatform.system;
@@ -146,9 +164,67 @@ let
     _evaluateAssertions assertions
   );
 
+  # TODO(@connorbaker): Seems like `stdenvAdapters.useLibsFrom` breaks clangStdenv's ability to find header files.
+  # To reproduce: use `nix shell .#cudaPackages_12_6.backendClangStdenv.cc` since CUDA 12.6 supports at most Clang
+  # 18, but the current stdenv uses Clang 19, requiring this code path.
+  # With:
+  #
+  # ```cpp
+  # #include <cmath>
+  #
+  # int main() {
+  #     double value = 0.5;
+  #     double result = std::sin(value);
+  #     return 0;
+  # }
+  # ```
+  #
+  # we get:
+  #
+  # ```console
+  # $ clang++ ./main.cpp
+  # ./main.cpp:1:10: fatal error: 'cmath' file not found
+  #     1 | #include <cmath>
+  #       |          ^~~~~~~
+  # 1 error generated.
+  # ```
+  # TODO(@connorbaker): Seems like even using unmodified `clangStdenv` causes issues -- saxpy fails to build CMake
+  # errors during CUDA compiler identification about invalid redefinitions of things like `realpath`.
   backendStdenv =
-    stdenvAdapters.useLibsFrom stdenv
-      pkgs."gcc${nvccCompatibilities.${cudaMajorMinorVersion}.gcc.maxMajorVersion}Stdenv";
+    let
+      hostCCName =
+        if stdenv.cc.isGNU then
+          "gcc"
+        else if stdenv.cc.isClang then
+          "clang"
+        else
+          throw ("cudaPackages.backendStdenv: unsupported host compiler: ${stdenv.cc.name}");
+
+      versions = nvccCompatibilities.${cudaMajorMinorVersion}.${hostCCName};
+    in
+    # If the current stdenv's compiler version is compatible, use it directly.
+    if
+      versionAtLeast (major stdenv.cc.version) versions.minMajorVersion
+      && versionAtLeast versions.maxMajorVersion (major stdenv.cc.version)
+    then
+      stdenv
+    # Otherwise, try to find a compatible stdenv.
+    else
+      let
+        hostStdenv =
+          pipe (range (toIntBase10 versions.minMajorVersion) (toIntBase10 versions.maxMajorVersion))
+            [
+              # Prefer the highest available version.
+              reverseList
+              # Map to the actual stdenvs or null if unavailable.
+              (map (vInt: pkgs."${hostCCName}${toString vInt}Stdenv" or null))
+              # Get the first available version.
+              (findFirst (x: x != null) null)
+            ];
+      in
+      assert assertMsg (hostStdenv != null)
+        "backendStdenv: no supported host compiler found (tried ${hostCCName} ${versions.minMajorVersion} to ${versions.maxMajorVersion})";
+      stdenvAdapters.useLibsFrom stdenv hostStdenv;
 in
 # TODO: Consider testing whether we in fact use the newer libstdc++
 extendDerivation assertCondition passthruExtra backendStdenv
