@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
+  fetchpatch2,
   pythonOlder,
   asn1crypto,
   cffi,
@@ -35,8 +36,6 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix hardcoded `fapi-config.json` configuration path
-    ./fapi-config.patch
     # libtpms (underneath swtpm) bumped the TPM revision
     # https://github.com/tpm2-software/tpm2-pytss/pull/593
     (fetchpatch {
@@ -48,6 +47,12 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
       hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
+    })
+    # Properly restore environment variables upon exit from
+    # FAPIConfig context. Accepted into upstream, not yet released.
+    (fetchpatch2 {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/afdee627d0639eb05711a2191f2f76e460793da9.patch?full_index=1";
+      hash = "sha256-Y6drcBg4gnbSvnCGw69b42Q/QfLI3u56BGRUEkpdB0M=";
     })
   ]
   ++ lib.optionals isCross [
@@ -62,10 +67,6 @@ buildPythonPackage rec {
       crossPrefix = stdenv.hostPlatform.config;
     })
   ];
-
-  postPatch = ''
-    sed -i "s#@TPM2_TSS@#${tpm2-tss.out}#" src/tpm2_pytss/FAPI.py
-  '';
 
   # Hardening has to be disabled
   # due to pycparsing handling it poorly.
@@ -94,6 +95,10 @@ buildPythonPackage rec {
     tpm2-tools
     swtpm
   ];
+
+  preCheck = ''
+    export TSS2_FAPICONF=${tpm2-tss.out}/etc/tpm2-tss/fapi-config-test.json
+  '';
 
   pythonImportsCheck = [ "tpm2_pytss" ];
 
