@@ -13,12 +13,6 @@
   llvmPackages,
   coreutils,
   targetPackages,
-
-  # minimal = true; will remove files that aren't strictly necessary for
-  # regular builds and GHC bootstrapping.
-  # This is "useful" for staying within hydra's output limits for at least the
-  # aarch64-linux architecture.
-  minimal ? false,
 }:
 
 # Prebuilt only does native
@@ -28,12 +22,13 @@ let
   version = "9.6.6";
 
   ghcBinDists = {
-    # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
+    # Binary distributions for the default libc (e.g. glibc)
     # nixpkgs uses for the respective system.
     defaultLibc = {
       powerpc64-linux = {
         variantSuffix = "";
-        # Upstream doesn't release bindists for big-endian POWER anymore
+        # GHC upstream doesn't release bindists tarballs for big-endian POWER anymore.
+        # We're using Debian's binary package, and patching it into a usage-in-Nixpkgs state.
         src = {
           url = "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb";
           sha256 = "722cc301b6ba70b342e5e3d9d0671440bcd749cd2f13dcccbd23c3f6a6060171";
@@ -79,22 +74,16 @@ let
     map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
   );
 
-  libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
-
   runtimeDeps = [
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
     (lib.getBin llvmPackages.llvm)
-  ]
-  # On darwin, we need unwrapped bintools as well (for otool)
-  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-    targetPackages.stdenv.cc.bintools.bintools
   ];
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 
@@ -106,7 +95,9 @@ stdenv.mkDerivation {
   # of the bindist installer can find the libraries they expect.
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location.
-  ${libEnvVar} = libPath;
+  LD_LIBRARY_PATH = libPath;
+
+  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}";
 
   # Custom unpack phase to handle .deb files
   unpackPhase = ''
@@ -114,8 +105,8 @@ stdenv.mkDerivation {
 
     ar x $src
     tar xf data.tar.xz
-    mkdir -p source
-    mv -t source/ usr var
+    mkdir -p ${finalAttrs.sourceRoot}
+    mv -t ${finalAttrs.sourceRoot}/ usr var
 
     runHook postUnpack
   '';
@@ -156,34 +147,12 @@ stdenv.mkDerivation {
           ) binDistUsed.archSpecificLibraries)
         ]
       )
-    # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
-    # during linking
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export NIX_LDFLAGS+=" -no_dtrace_dof"
-      # not enough room in the object files for the full path to libiconv :(
-      for exe in $(find . -type f -executable); do
-        isMachO $exe || continue
-        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
-      done
-    ''
 
     # We have to patch the GMP paths for the ghc-bignum package, for hadrian by
     # modifying the package-db directly
     + ''
       find . -name 'ghc-bignum*.conf' \
           -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib gmpUsed}/lib' -i {} \;
-    ''
-    # Similar for iconv and libffi on darwin
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      find . -name 'base*.conf' \
-          -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib libiconv}/lib' -i {} \;
-
-      # To link RTS in the end we also need libffi now
-      find . -name 'rts*.conf' \
-          -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib libffi}/lib' \
-                    -e 's@/Library/Developer/.*/usr/include/ffi@${lib.getDev libffi}/include@' \
-                    -i {} \;
     ''
     +
       # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
@@ -235,13 +204,6 @@ stdenv.mkDerivation {
         isScript "$i" || continue
         sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
       done
-    ''
-    + lib.optionalString stdenv.targetPlatform.isDarwin ''
-      # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
-      # detects `llvm-ar` even though the resulting archives are not supported by ld64.
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
-      # https://github.com/haskell/cabal/issues/8882
-      sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
     ''
 
     # Patch /usr paths
@@ -310,18 +272,6 @@ stdenv.mkDerivation {
           fi
         done
       ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # not enough room in the object files for the full path to libiconv :(
-      for exe in $(find "$out" -type f -executable); do
-        isMachO $exe || continue
-        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
-      done
-
-      for file in $(find "$out" -name setup-config); do
-        substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
-      done
-    ''
     # Recache package db which needs to happen for Hadrian bindists
     # where we modify the package db before installing
     + ''
@@ -383,4 +333,4 @@ stdenv.mkDerivation {
     teams = [ lib.teams.haskell ];
     broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
-}
+})
