@@ -4,7 +4,7 @@
   stdenv,
   lib,
   replaceVars,
-  aspellWithDicts,
+  aspell,
   at-spi2-core ? null,
   atspiSupport ? true,
   bash,
@@ -110,7 +110,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests
-    (aspellWithDicts (dicts: with dicts; [ en ]))
+    (aspell.withDicts (dicts: [ dicts.en ]))
 
     # for Onboard.SpellChecker.hunspell_cmd doctests
     customHunspell
