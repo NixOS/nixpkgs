@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  yq,
   python3Packages,
   fetchFromGitea,
   iproute2,
@@ -12,18 +14,50 @@
 }:
 
 let
+  version = "2.0.0";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "liske";
+    repo = "ifstate";
+    tag = version;
+    hash = "sha256-YxLyiTVLN4nxc2ppqGGnYCGudbdPLSLV8EwDURtpO0U=";
+  };
+  docs = stdenv.mkDerivation {
+    pname = "ifstate-docs";
+
+    inherit version src;
+
+    nativeBuildInputs = [ yq ];
+
+    buildInputs =
+      with python3Packages;
+      (
+        [
+          mkdocs-material
+          mkdocs-glightbox
+          mkdocs-minify-plugin
+        ]
+        ++ mkdocs-material.optional-dependencies.imaging
+      );
+
+    postPatch = ''
+      # git-revision-date requires a git repository
+      # privacy and social plugin require internet
+      yq -y 'del(.plugins[] | select((type == "object" and (has("git-revision-date-localized") or has("social"))) or (type == "string" and . == "privacy")))' mkdocs.yaml > mkdocs.new.yaml
+      mv mkdocs{.new,}.yaml
+    '';
+
+    buildPhase = ''
+      mkdir -p $out
+      mkdocs build -d $out
+    '';
+  };
   self = python3Packages.buildPythonApplication rec {
     pname = "ifstate";
-    version = "2.0.0";
-    pyproject = true;
 
-    src = fetchFromGitea {
-      domain = "codeberg.org";
-      owner = "liske";
-      repo = "ifstate";
-      tag = version;
-      hash = "sha256-YxLyiTVLN4nxc2ppqGGnYCGudbdPLSLV8EwDURtpO0U=";
-    };
+    inherit version src;
+
+    pyproject = true;
 
     postPatch = ''
       substituteInPlace libifstate/routing/__init__.py \
@@ -72,6 +106,16 @@ let
       # needed for access in schema validaten in module
       jsonschema = "${self}/${python3Packages.python.sitePackages}/libifstate/schema/2/ifstate.conf.schema.json";
     };
+
+    outputs = [
+      "out"
+      "doc"
+    ];
+
+    postInstall = ''
+      mkdir -p $doc
+      cp -r ${docs.out}/* $doc
+    '';
 
     meta = {
       description = "Manage host interface settings in a declarative manner";
