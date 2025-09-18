@@ -2,41 +2,38 @@
   lib,
   stdenv,
   fetchpatch,
-  fetchurl,
   fetchzip,
+  autoreconfHook,
   perl,
   ncurses,
 
   # for tests
-  aspell,
   glibc,
-  runCommand,
+  testers,
 
   searchNixProfiles ? true,
 }:
-
 let
-
   # Source for u-deva.cmap and u-deva.cset: use the Marathi
   # dictionary like Debian does.
   devaMapsSource = fetchzip {
     name = "aspell-u-deva";
     url = "https://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
-    sha256 = "1v8cdl8x2j1d4vbvsq1xrqys69bbccd6mi03fywrhkrrljviyri1";
+    hash = "sha256-IWYft6Q5T5i5dwPEahpjayWjPc49YL3XJi1I0RFtDO0=";
   };
-
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aspell";
   version = "0.60.8.1";
 
-  src = fetchurl {
-    url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
-    hash = "sha256-1toSs01C1Ff6YE5DWtSEp0su/80SD/QKzWuz+yiH0hs=";
+  src = fetchzip {
+    url = "https://ftp.gnu.org/gnu/aspell/aspell-${finalAttrs.version}.tar.gz";
+    hash = "sha256-SK79OKP5usZPfAinhDO75Yum0PdsU8v8Q0L0YAlJap8=";
   };
 
   patches = [
+    ./clang.patch
+
     # fix gcc-15 / clang-19 build. can remove on next update
     (fetchpatch {
       name = "fix-gcc-15-build.patch";
@@ -46,24 +43,23 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
-  postPatch = ''
-    patch interfaces/cc/aspell.h < ${./clang.patch}
-  '';
-
-  nativeBuildInputs = [ perl ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+  ];
   buildInputs = [
     ncurses
     perl
   ];
 
+  enableParallelBuilding = true;
   doCheck = true;
 
-  preConfigure = ''
-    configureFlagsArray=(
-      --enable-pkglibdir=$out/lib/aspell
-      --enable-pkgdatadir=$out/lib/aspell
-    );
-  '';
+  configureFlags = [
+    "--enable-pkglibdir=${placeholder "out"}/lib/aspell"
+    "--enable-pkgdatadir=${placeholder "out"}/lib/aspell"
+  ];
 
   # Include u-deva.cmap and u-deva.cset in the aspell package
   # to avoid conflict between 'mr' and 'hi' dictionaries as they
@@ -73,26 +69,31 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    uses-curses =
-      runCommand "aspell-curses"
-        {
-          buildInputs = [ glibc ];
-        }
-        ''
-          if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
-          then
-            echo "Test failure: It does not look like aspell picked up the curses dependency."
-            exit 1
-          fi
-          touch $out
-        '';
+    uses-curses = testers.runCommand {
+      name = "aspell-curses";
+      buildInputs = [ glibc ];
+      script = ''
+        if ! ldd ${lib.getExe finalAttrs.finalPackage} | grep -q ${ncurses}
+        then
+          echo "Test failure: It does not look like aspell picked up the curses dependency."
+          exit 1
+        fi
+        touch $out
+      '';
+    };
   };
 
   meta = {
     description = "Spell checker for many languages";
     homepage = "http://aspell.net/";
-    license = lib.licenses.lgpl2Plus;
-    maintainers = [ ];
-    platforms = with lib.platforms; all;
+    changelog = "http://aspell.net/man-html/ChangeLog.html";
+    mainProgram = "aspell";
+    license = with lib.licenses; [
+      lgpl2Plus
+      gpl2Plus
+      bsd2
+    ];
+    maintainers = [ lib.maintainers.RossSmyth ];
+    platforms = lib.platforms.all;
   };
-}
+})
