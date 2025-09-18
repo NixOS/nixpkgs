@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gklib";
-  version = "5.1.1-unstable-2023-03-27";
+  version = "5.1.1-unstable-2025-07-15";
 
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "GKlib";
-    rev = "8bd6bad750b2b0d90800c632cf18e8ee93ad72d7";
-    hash = "sha256-tunepMLaRDR5FQVL/9S7/w6e1j+f2+pg01H/0/z/ZCI=";
+    rev = "6e7951358fd896e2abed7887196b6871aac9f2f8";
+    hash = "sha256-jT0hT5Y3E8GnE8OJWzDj5rtz9s59sMEXLduUnBV0I0Y=";
   };
 
   nativeBuildInputs = [ cmake ];
