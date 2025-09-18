@@ -2,9 +2,10 @@
   lib,
   mkKdeDerivation,
   replaceVars,
+  qtdeclarative,
+  kauth,
   samba,
   shadow,
-  qtdeclarative,
 }:
 mkKdeDerivation {
   pname = "kdenetwork-filesharing";
@@ -19,7 +20,10 @@ mkKdeDerivation {
     ./samba-hint.patch
   ];
 
-  extraBuildInputs = [ qtdeclarative ];
+  extraBuildInputs = [
+    qtdeclarative
+    kauth
+  ];
 
   # We can't actually install samba via PackageKit, so let's not confuse users any more than we have to
   extraCmakeFlags = [ "-DSAMBA_INSTALL=OFF" ];
