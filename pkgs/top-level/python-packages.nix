@@ -2388,8 +2388,6 @@ self: super: with self; {
     };
   };
 
-  catkin-pkg = callPackage ../development/python-modules/catkin-pkg { };
-
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
   cattrs = callPackage ../development/python-modules/cattrs { };
