@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
     maintainers = with lib.maintainers; [
-      hjones2199
       returntoreality
     ];
     platforms = lib.platforms.linux;
