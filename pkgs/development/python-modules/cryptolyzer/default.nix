@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-rRiRaXONLMNirKsK+QZWMSvaGeSLrHN9BpM8dhxoaxY=";
   };
 
+  patches = [
+    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
+    ./fix-dirs-exclude.patch
+  ];
+
   pythonRemoveDeps = [ "bs4" ];
 
   build-system = [
@@ -53,6 +58,14 @@ buildPythonPackage rec {
 
   # Tests require networking
   doCheck = false;
+
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
 
   pythonImportsCheck = [ "cryptolyzer" ];
 
