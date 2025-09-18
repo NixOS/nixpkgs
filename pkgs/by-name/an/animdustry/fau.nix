@@ -4,16 +4,15 @@
 }:
 buildNimPackage {
   pname = "fau";
-  version = "0-unstable-2022-05-14";
+  version = "0-unstable-2025-09-18";
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "fau";
-    rev = "73df4a699873d0f82fd612a2a2ac63c21d3f2233";
-    hash = "sha256-9zwmFinDJV4+R/aiVVOQ/Bv30jX7NHJyufzMNWHGA+k=";
+    rev = "73f5fdb8e90cc95073e427c9403b8fa360846620";
+    hash = "sha256-o0TaySlfc1+OPXfemFLb4Mi/gg41SGY7CmkqfhVyrF0=";
     fetchSubmodules = true;
   };
 
-  requiredNimVersion = 1;
   lockFile = ./lock.json;
 }

@@ -2,23 +2,11 @@
   "depends": [
     {
       "method": "fetchzip",
-      "path": "/nix/store/3qxib3f1pglhdymz3kbc4dg361vlfz3a-source",
-      "rev": "f4cc097ca9694f17feced9f82994f583ef7911fe",
-      "sha256": "041cshfzgb4fb1xhamyhrx22dvib74d86y7qnbp6rm1n56mkqpkq",
-      "url": "https://github.com/jangko/msgpack4nim/archive/f4cc097ca9694f17feced9f82994f583ef7911fe.tar.gz",
-      "ref": "v0.4.4",
-      "packages": [
-        "msgpack4nim"
-      ],
-      "srcDir": "src"
-    },
-    {
-      "method": "fetchzip",
-      "path": "/nix/store/fahrda7s5h7nw5nla0rhlm14vnz3nl7k-source",
-      "rev": "987eb0d2270e998f9db317840e3f3608527274ee",
-      "sha256": "0ihx7y0yny7ziq56mczzhkyjvkpgr4rbzfw7qqn2kizahv0y7wv3",
+      "path": "/nix/store/z2mfal6xlhn5plnh0qg3g3q1dpw2jk5y-source",
+      "rev": "edc6e19ddbe6b9e46c3384e9a4131d7063a3f610",
+      "sha256": "09h075sfr8c0lsgdzdm1qz18lwhw6njk5bwrv4g0rnnhv93sb6db",
       "srcDir": "src",
-      "url": "https://github.com/Endermanbugzjfc/bumpy/archive/987eb0d2270e998f9db317840e3f3608527274ee.tar.gz",
+      "url": "https://github.com/treeform/bumpy/archive/edc6e19ddbe6b9e46c3384e9a4131d7063a3f610.tar.gz",
       "subDir": "",
       "packages": [
         "bumpy"
@@ -26,11 +14,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/8yhjzi799183f471wfjrbfcinwhfg940-source",
-      "rev": "640f26142f47fea023a87bfd684a3fa770a785ae",
-      "sha256": "03wp5vm92rjmn8igjkvsjjpkvsvh26ls7px3j7h8lclsxnj4flza",
+      "path": "/nix/store/lk4hcmvwvliliyyidx7k3fk9yfijddc5-source",
+      "rev": "b2e71179174e040884ebf6a16cbac711c84620b9",
+      "sha256": "0pi6cq43ysm1wy5vva3i2dqvyh4dqppjjjl04yj9wfq7mngpqaa1",
       "srcDir": "src",
-      "url": "https://github.com/treeform/chroma/archive/640f26142f47fea023a87bfd684a3fa770a785ae.tar.gz",
+      "url": "https://github.com/treeform/chroma/archive/b2e71179174e040884ebf6a16cbac711c84620b9.tar.gz",
       "subDir": "",
       "packages": [
         "chroma"
@@ -38,11 +26,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/wc0x3n0r9pm5yzpyqdqnmjigd9v8gh1k-source",
-      "rev": "b962cf8bc0be847cbc1b4f77952775de765e9689",
-      "sha256": "0g7ilsplpjpbk3yl1sjnfkic1sj56zma22r1pl6qg4g70qq5h77g",
+      "path": "/nix/store/w4rd1qpdhqq41gc57y49h6wvifis1df5-source",
+      "rev": "6f6cd154e88b33a21183e8f07edd253cf6dc00df",
+      "sha256": "0pfvd40dy5ysrzpmnkr788nr6r682nlzzk6z1l91jw3h886ff2gv",
       "srcDir": "",
-      "url": "https://github.com/c-blake/cligen/archive/b962cf8bc0be847cbc1b4f77952775de765e9689.tar.gz",
+      "url": "https://github.com/c-blake/cligen/archive/6f6cd154e88b33a21183e8f07edd253cf6dc00df.tar.gz",
       "subDir": "",
       "packages": [
         "cligen"
@@ -50,11 +38,35 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/0nj37jsv6fcm4pvp15inl5212lhsnqji-source",
-      "rev": "c87340c9a09fffc794f588c4a19b53c8d71cd6f6",
-      "sha256": "0wc1skj1j0b4wy5lw0dj7fslfb6q14j3ngyh17v030w9gdy1pbsc",
+      "path": "/nix/store/rb4r4bz7bm573vyvlm5mkji3f9cs2ya9-source",
+      "rev": "98eb6526982bb8aae8eec6e8781f4539fa19e049",
+      "sha256": "11iz2d23g3dwpw2ybx951c8ccikziaphr3515vw9c9930r5xmkci",
       "srcDir": "src",
-      "url": "https://github.com/treeform/flatty/archive/c87340c9a09fffc794f588c4a19b53c8d71cd6f6.tar.gz",
+      "url": "https://github.com/guzba/crunchy/archive/98eb6526982bb8aae8eec6e8781f4539fa19e049.tar.gz",
+      "subDir": "",
+      "packages": [
+        "crunchy"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/c4mj544lwqrjpr9k81gw6mibc8iydgnn-source",
+      "rev": "286541ebbdf900d6be896ed5fa359893ba89f1d9",
+      "sha256": "1kmzyvwcwjmia1xyw3bhabn81rf62xrk6fhxk0y4l49xy8v8pdsa",
+      "srcDir": "src",
+      "url": "https://github.com/Endermanbugzjfc/fau/archive/286541ebbdf900d6be896ed5fa359893ba89f1d9.tar.gz",
+      "subDir": "",
+      "packages": [
+        "fau"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/vx0a8hw7hs5an0dnbrn6l16bd6is7hdr-source",
+      "rev": "07f6ba8ab96238e5bd1264cf0cea1d1746abb00c",
+      "sha256": "005nrldaasfl09zdsni1vi8s7dk0y85ijv6rm2wpj94435x66s36",
+      "srcDir": "src",
+      "url": "https://github.com/treeform/flatty/archive/07f6ba8ab96238e5bd1264cf0cea1d1746abb00c.tar.gz",
       "subDir": "",
       "packages": [
         "flatty"
@@ -62,11 +74,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/lzhf46islyz8h33f149nnbvpg9lawrxd-source",
-      "rev": "be73f6862533c4cccedfac512d7766c8a30f3122",
-      "sha256": "1y95n55hnjdpzjz6hx45nqp3i08aqq5qbjd641j168dv6qipqk3d",
+      "path": "/nix/store/2igvzn28dqrsdfsl7383d2dkfls8p71k-source",
+      "rev": "eac00f1d5df3b9f72d8bc00b8cb16190b0638dff",
+      "sha256": "0np02jhpca0bba35x3r9ygdb2drf3zlqycvmbi7vfdrv5x261pmy",
       "srcDir": "src",
-      "url": "https://github.com/Anuken/glfm/archive/be73f6862533c4cccedfac512d7766c8a30f3122.tar.gz",
+      "url": "https://github.com/Anuken/glfm/archive/eac00f1d5df3b9f72d8bc00b8cb16190b0638dff.tar.gz",
       "subDir": "",
       "packages": [
         "glfm"
@@ -74,11 +86,47 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/yw2i5p4sz20z6jxhp1x4ii5h2kphai33-source",
-      "rev": "79e0bb05eb552a7aec229d3ab8a653f11e32d44a",
-      "sha256": "0sicr517nlzn1b6vm5bzak2sak89pfw60jyq6w9a69s055zvb7lj",
+      "path": "/nix/store/axiyv2ywazsmhgvxr7ib43dqs7170qyq-source",
+      "rev": "b8c0edbac379b0507c1967c56725ecf442cfd6d7",
+      "sha256": "0hyxmgqsx2sa68jk82bksk5dkkkl1q0ibsx9j0y3nzd8sny2n60i",
       "srcDir": "src",
-      "url": "https://github.com/guzba/nimsimd/archive/79e0bb05eb552a7aec229d3ab8a653f11e32d44a.tar.gz",
+      "url": "https://www.github.com/Anuken/jsony/archive/b8c0edbac379b0507c1967c56725ecf442cfd6d7.tar.gz",
+      "subDir": "",
+      "packages": [
+        "jsony"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/nprw4if1dhz8k8vyw1f2dkfawrz327yb-source",
+      "rev": "75d4d36e3fdbe17390e67931cb6c70d33c8770a0",
+      "sha256": "02avc4wj9sardjg3wahznfq0mi3jhkc3mnl6nlcg3q7y04b0vbj3",
+      "srcDir": "src",
+      "url": "https://github.com/planetis-m/mimalloc_nim/archive/75d4d36e3fdbe17390e67931cb6c70d33c8770a0.tar.gz",
+      "subDir": "",
+      "packages": [
+        "mimalloc"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/3qxib3f1pglhdymz3kbc4dg361vlfz3a-source",
+      "rev": "f4cc097ca9694f17feced9f82994f583ef7911fe",
+      "sha256": "041cshfzgb4fb1xhamyhrx22dvib74d86y7qnbp6rm1n56mkqpkq",
+      "srcDir": "src",
+      "url": "https://github.com/jangko/msgpack4nim/archive/f4cc097ca9694f17feced9f82994f583ef7911fe.tar.gz",
+      "subDir": "",
+      "packages": [
+        "msgpack4nim"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/bgbr0dgda0lhm0lbg2cljjh34wnw36zp-source",
+      "rev": "3f6b2668ffb0867d0bf786a658b817763e611350",
+      "sha256": "0frxqj34a12xwniac2nhlzdipc8w02m138k8gk6zf4s8yg5yvvhl",
+      "srcDir": "src",
+      "url": "https://github.com/guzba/nimsimd/archive/3f6b2668ffb0867d0bf786a658b817763e611350.tar.gz",
       "subDir": "",
       "packages": [
         "nimsimd"
@@ -86,11 +134,11 @@
     },
     {
       "method": "git",
-      "path": "/nix/store/6ndsxzh74l47xcxv4658plingybwywx3-nimsoloud-c74878d",
-      "rev": "c74878dcb60fd2e2af84f894a8a8ffe901aecd51",
-      "sha256": "08lzvggv4sa61kk1r5bhk22gfn20mqfi3yvmi55dyfwx6d7kvhp7",
+      "path": "/nix/store/j8prgzpc45i941gjxm9rdr6wzs0s4y8c-nimsoloud-ab16472",
+      "rev": "ab16472cc31344ac8f6806b160521bb2cdcbe2d7",
+      "sha256": "11yqid4kvd8yijhnggxsfa8z21m4svzx63sdz9bpidi4xjp50rg4",
       "srcDir": "src",
-      "url": "https://github.com/Anuken/nimsoloud",
+      "url": "https://github.com/Endermanbugzjfc/nimsoloud",
       "subDir": "",
       "fetchSubmodules": true,
       "leaveDotGit": false,
@@ -100,11 +148,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/71nk2pf5711fpbkjni78r02m495lfgra-source",
-      "rev": "2a7d897fa0b021523ea76f6b794a12e6a7c02c5c",
-      "sha256": "1n3ggl9h7vpgdl1fz8g66ymsv1rrnlzd8j27xf8nal82k8jfvvpl",
+      "path": "/nix/store/xjk8cg4dmja48rcswy0nphy3xhmf7nsz-source",
+      "rev": "f3e73f722fbb0e5d496fbc59ee860a9fd49983de",
+      "sha256": "12mqlczckhxcrg6il213fn7mcnqz3khwkh7i4bn57l55nzrhfvrh",
       "srcDir": "src",
-      "url": "https://github.com/Endermanbugzjfc/pixie/archive/2a7d897fa0b021523ea76f6b794a12e6a7c02c5c.tar.gz",
+      "url": "https://github.com/treeform/pixie/archive/f3e73f722fbb0e5d496fbc59ee860a9fd49983de.tar.gz",
       "subDir": "",
       "packages": [
         "pixie"
@@ -112,11 +160,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/rsl57icycln5b3087s5qzl23a83b4gyv-source",
-      "rev": "57e64daacb23890cf9851c57d6d90608fbb4ca98",
-      "sha256": "1pw0lk2wfyyssbv1qr756s48884xg5m25f0fic07anzaxs80z570",
+      "path": "/nix/store/bblmnanbgk0zy0g6y8p6dx07h0w7zb88-source",
+      "rev": "170f1b22c1d13828ad9ef84237b9d4d408b77cc6",
+      "sha256": "0g66sslj2lrp53dgiz4na15fs6m3w1r0w5amn0mhnkvhbvghjibj",
       "srcDir": "src",
-      "url": "https://github.com/rlipsc/polymorph/archive/57e64daacb23890cf9851c57d6d90608fbb4ca98.tar.gz",
+      "url": "https://github.com/Anuken/polymorph/archive/170f1b22c1d13828ad9ef84237b9d4d408b77cc6.tar.gz",
       "subDir": "",
       "packages": [
         "polymorph"
@@ -124,35 +172,37 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/ibfsmhmx9zgfb4dvzix2a7bmk7kvdl40-source",
-      "rev": "35ec546322abe76b69c53baeb4d2a5f3f762ea08",
-      "sha256": "044slvx78c14rmp7cqdh7sasir1043avqmkpcc0ir8h6ml668c66",
+      "path": "/nix/store/mj9475zbr4h7dkx43zrzmq3biql65vng-source",
+      "rev": "28f27b2c4bff0e21084e820dae368addb6ea5236",
+      "sha256": "0kc5amlcvq3sjb6yk14jc34sv1wcbk7i0yhkfzbk24j7fv2ncyvi",
       "srcDir": "src",
-      "url": "https://github.com/Anuken/staticglfw/archive/35ec546322abe76b69c53baeb4d2a5f3f762ea08.tar.gz",
+      "url": "https://github.com/Anuken/staticglfw/archive/28f27b2c4bff0e21084e820dae368addb6ea5236.tar.gz",
       "subDir": "",
       "packages": [
         "staticglfw"
       ]
     },
     {
-      "method": "fetchzip",
-      "path": "/nix/store/7dly89kba9s2ik8cxiicsxzc3jqnlz2h-source",
+      "method": "git",
+      "path": "/nix/store/99l41kv7h7nb0rcwarnvkgjykm771h5w-stb_image-Nim-ba5f452",
       "rev": "ba5f45286bfa9bed93d8d6b941949cd6218ec888",
       "sha256": "13csi17rpaclvm7ji3rw1hcbb1z6x5270819nabinfw1x59al5yz",
       "srcDir": "",
-      "url": "https://github.com/define-private-public/stb_image-Nim/archive/ba5f45286bfa9bed93d8d6b941949cd6218ec888.tar.gz",
+      "url": "https://gitlab.com/define-private-public/stb_image-Nim.git",
       "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
       "packages": [
         "stb_image"
       ]
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/v0pqf0c4db80ymj0xwivgi806ymw9qra-source",
-      "rev": "1110b97fac745feb458aa44164e8456e2777c16d",
-      "sha256": "040mcxnmcm44rhnxpn56q653np3app3mgrzqfv2k8510awmr309n",
+      "path": "/nix/store/f9dp6njaay5rf32f6l9gkw0dm25gim47-source",
+      "rev": "7282ae1247f2f384ebeaec3826d7fa38fd0e1df1",
+      "sha256": "1plw9lfrm42qar01rnjhm0d9mkzsc7c3b8kz43w5pb8j8drx1lyn",
       "srcDir": "src",
-      "url": "https://github.com/treeform/vmath/archive/1110b97fac745feb458aa44164e8456e2777c16d.tar.gz",
+      "url": "https://github.com/treeform/vmath/archive/7282ae1247f2f384ebeaec3826d7fa38fd0e1df1.tar.gz",
       "subDir": "",
       "packages": [
         "vmath"
@@ -160,11 +210,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/6p3kcgnzq4byzk6p01538cxkx9rkh7ks-source",
-      "rev": "1112c71b4e215c1b52b607dec786af27ba55ce9f",
-      "sha256": "1fvxvjmq09lp3pqr0l7rivv9pwiksv4v9dj5jr66r15crjpm72i9",
+      "path": "/nix/store/zcd2hmjxlkp1bpb7c9xrpg153ssj3w0b-source",
+      "rev": "a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f",
+      "sha256": "16qdnyql8d7nm7nwwpq0maflm3p6cpbb2jfaqx6xkld9xkc9lsbv",
       "srcDir": "src",
-      "url": "https://github.com/guzba/zippy/archive/1112c71b4e215c1b52b607dec786af27ba55ce9f.tar.gz",
+      "url": "https://github.com/guzba/zippy/archive/a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f.tar.gz",
       "subDir": "",
       "packages": [
         "zippy"

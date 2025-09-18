@@ -15,16 +15,17 @@
   libGL,
   libXxf86vm,
   libpulseaudio,
-  fau ? callPackage ./fau.nix { }
-}: buildNimPackage (finalAttrs: {
+  fau ? callPackage ./fau.nix { },
+}:
+buildNimPackage (finalAttrs: {
   pname = "animdustry";
-  version = "1.2";
+  version = "1.2-unstable-2024-07-30";
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "animdustry";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-RND5AhlD9uTMg9Koz5fq7WMgJt+Ajiyi6K60WFbF0bg=";
+    rev = "f408e632872929964a9b3f8888f1c7a18e6c1ead";
+    hash = "sha256-BG0U5hk+g74JEMTKFX/3szibUg1Ap/fYNQdVIAQp7HQ=";
   };
 
   buildInputs = [
@@ -53,8 +54,11 @@
 
     "-d:NimblePkgVersion=${finalAttrs.version}"
   ];
-  requiredNimVersion = 1;
   lockFile = ./lock.json;
+
+  preBuild = ''
+    ${fau}/bin/faupack -p:"./assets-raw/sprites" -o:"./assets/atlas"
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -66,12 +70,12 @@
   '';
 
   desktopItems = makeDesktopItem {
-      name = "Animdustry";
-      exec = "animdustry";
-      icon = "animdustry";
-      desktopName = "Animdustry";
-      categories = [ "Game" ];
-    };
+    name = "Animdustry";
+    exec = "animdustry";
+    icon = "animdustry";
+    desktopName = "Animdustry";
+    categories = [ "Game" ];
+  };
 
   meta = {
     homepage = "https://github.com/Anuken/animdustry";
