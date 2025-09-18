@@ -7,6 +7,7 @@
   swift,
   swiftpm,
   swiftpm2nix,
+  Dispatch,
   Foundation,
   XCTest,
   sqlite,
@@ -39,6 +40,10 @@ stdenv.mkDerivation {
     sqlite
     ncursesInput
   ];
+
+  env.LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux (
+    lib.makeLibraryPath [ Dispatch ]
+  );
 
   configurePhase = generated.configure + ''
     swiftpmMakeMutable indexstore-db
