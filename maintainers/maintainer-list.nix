@@ -10345,12 +10345,6 @@
     github = "hitsmaxft";
     githubId = 352727;
   };
-  hjones2199 = {
-    email = "hjones2199@gmail.com";
-    github = "hjones2199";
-    githubId = 5525217;
-    name = "Hunter Jones";
-  };
   hkjn = {
     email = "me@hkjn.me";
     name = "Henrik Jonsson";
@@ -11108,6 +11102,12 @@
     github = "iosmanthus";
     githubId = 16307070;
     name = "iosmanthus";
+  };
+  ipsavitsky = {
+    email = "ipsavitsky234@gmail.com";
+    github = "ipsavitsky";
+    githubId = 33558632;
+    name = "Ilya Savitsky";
   };
   iqubic = {
     email = "sophia.b.caspe@gmail.com";
@@ -14572,6 +14572,12 @@
     github = "nathanielbaxter";
     githubId = 307589;
     name = "Nathaniel Baxter";
+  };
+  liam-w = {
+    email = "liam.weitzel2@gmail.com";
+    github = "Liam-Weitzel";
+    githubId = 22010764;
+    name = "Liam Weitzel";
   };
   liamdiprose = {
     email = "liam@liamdiprose.com";
@@ -18163,6 +18169,12 @@
     github = "NetaliDev";
     githubId = 15304894;
     keys = [ { fingerprint = "F729 2594 6F58 0B05 8FB3  F271 9C55 E636 426B 40A9"; } ];
+  };
+  netbrain = {
+    email = "kim@heldig.org";
+    github = "netbrain";
+    githubId = 341643;
+    name = "Kim Eik";
   };
   netcrns = {
     email = "jason.wing@gmx.de";
@@ -27489,13 +27501,6 @@
     github = "w-lfchen";
     githubId = 115360611;
     name = "Wölfchen";
-  };
-  wackbyte = {
-    name = "wackbyte";
-    email = "wackbyte@pm.me";
-    github = "wackbyte";
-    githubId = 29505620;
-    keys = [ { fingerprint = "E595 7FE4 FEF6 714B 1AD3  1483 937F 2AE5 CCEF BF59"; } ];
   };
   waelwindows = {
     email = "waelwindows9922@gmail.com";
