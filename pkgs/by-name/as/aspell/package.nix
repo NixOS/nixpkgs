@@ -12,6 +12,9 @@
   # for tests
   glibc,
   testers,
+
+  callPackage,
+  aspellDicts,
 }:
 let
   # Source for u-deva.cmap and u-deva.cset: use the Marathi
@@ -72,18 +75,35 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${devaMapsSource}/u-deva.{cmap,cset} $out/lib/aspell/
   '';
 
-  passthru.tests = {
-    uses-curses = testers.runCommand {
-      name = "aspell-curses";
-      buildInputs = [ glibc ];
-      script = ''
-        if ! ldd ${lib.getExe finalAttrs.finalPackage} | grep -q ${ncurses}
-        then
-          echo "Test failure: It does not look like aspell picked up the curses dependency."
-          exit 1
-        fi
-        touch $out
-      '';
+  passthru = {
+    withDicts =
+      f:
+      callPackage ./aspell-with-dicts.nix {
+        aspell = finalAttrs.finalPackage;
+        extraDicts = f aspellDicts;
+      };
+
+    tests = {
+
+      withDicts = testers.testVersion {
+        package = finalAttrs.finalPackage.withDicts (d: [
+          d.zu
+          d.uk
+        ]);
+      };
+
+      uses-curses = testers.runCommand {
+        name = "aspell-curses";
+        buildInputs = [ glibc ];
+        script = ''
+          if ! ldd ${lib.getExe finalAttrs.finalPackage} | grep -q ${ncurses}
+          then
+            echo "Test failure: It does not look like aspell picked up the curses dependency."
+            exit 1
+          fi
+          touch $out
+        '';
+      };
     };
   };
 
