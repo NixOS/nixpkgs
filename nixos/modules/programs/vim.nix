@@ -26,7 +26,7 @@ in
     ];
     environment = {
       systemPackages = [ cfg.package ];
-      variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "vim");
+      sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "vim");
       pathsToLink = [ "/share/vim-plugins" ];
     };
   };
