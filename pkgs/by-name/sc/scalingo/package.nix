@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,8 +22,12 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     rm $out/bin/dists
+    installShellCompletion --cmd scalingo \
+     --bash cmd/autocomplete/scripts/scalingo_complete.bash \
+     --zsh cmd/autocomplete/scripts/scalingo_complete.zsh
   '';
 
   meta = with lib; {
