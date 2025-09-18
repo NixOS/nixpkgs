@@ -2,86 +2,99 @@
   lib,
   fetchFromGitHub,
   stdenv,
+  callPackage,
   cmake,
   boost,
-  ogre_13,
-  mygui,
-  ois,
   SDL2,
-  libX11,
   libvorbis,
   pkg-config,
-  makeWrapper,
   enet,
-  libXcursor,
   bullet,
   openal,
-  tinyxml,
   tinyxml-2,
+  rapidjson,
+  ogre-next,
+  ninja,
+  libX11,
 }:
 
 let
-  stuntrally_ogre = ogre_13.overrideAttrs (old: {
-    cmakeFlags = old.cmakeFlags ++ [
-      "-DOGRE_NODELESS_POSITIONING=ON"
-      "-DOGRE_RESOURCEMANAGER_STRICT=0"
-    ];
-  });
-  stuntrally_mygui = mygui.override {
-    withOgre = true;
-    ogre = stuntrally_ogre;
-  };
+  mygui = callPackage ./mygui.nix { };
 in
-
 stdenv.mkDerivation rec {
   pname = "stuntrally";
-  version = "2.7";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "stuntrally";
-    repo = "stuntrally";
-    rev = version;
-    hash = "sha256-0Eh9ilIHSh/Uz8TuPnXxLQfy7KF7qqNXUgBXQUCz9ys=";
+    repo = "stuntrally3";
+    tag = version;
+    hash = "sha256-BJMMsJ/ONZTpvXetaaHlgm6rih9oZmtJNBXv0IM855Y=";
   };
+
   tracks = fetchFromGitHub {
     owner = "stuntrally";
-    repo = "tracks";
-    rev = version;
-    hash = "sha256-fglm1FetFGHM/qGTtpxDb8+k2iAREn5DQR5GPujuLms=";
+    repo = "tracks3";
+    tag = version;
+    hash = "sha256-nvIN5hIfTfnuJdlLNlmpmYo3WQhUxYWz14OFra/55w4=";
   };
 
-  postPatch = ''
-    substituteInPlace config/*-default.cfg \
-      --replace "screenshot_png = off" "screenshot_png = on"
-    substituteInPlace source/*/BaseApp_Create.cpp \
-      --replace "Codec_FreeImage" "Codec_STBI"
-  '';
+  patches = [
+    ./stuntrally-use-pkg-config-for-ogre-next.patch
+    ./stuntrally-init-data-dirs-to-nix-paths.patch
+  ];
 
-  preConfigure = ''
-    rmdir data/tracks
-    ln -s ${tracks}/ data/tracks
+  postPatch = ''
+    substituteInPlace bin/Release/plugins.cfg \
+      --replace-fail "PluginFolder=." "PluginFolder=${ogre-next}/lib/OGRE/"
+    substituteInPlace src/vdrift/paths.cpp \
+      --replace-fail "@GAME_DATA_DIR@" "$out/share/stuntrally3/data" \
+      --replace-fail "@GAME_CONFIG_DIR@" "$out/share/stuntrally3/config"
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    ninja
   ];
+
   buildInputs = [
     boost
-    stuntrally_ogre
-    stuntrally_mygui
-    ois
+    ogre-next
+    mygui
+    rapidjson
     SDL2
-    libX11
     libvorbis
     enet
-    libXcursor
     bullet
     openal
-    tinyxml
     tinyxml-2
+    libX11
   ];
+
+  installPhase = ''
+    runHook preInstall
+
+    pushd ..
+
+    share_dir=$out/share/stuntrally3
+    mkdir -p $share_dir
+    cp -r config $share_dir/config
+    cp bin/Release/plugins.cfg $share_dir/config
+    cp -r data $share_dir/data
+    cp -r ${tracks} $share_dir/data/tracks
+
+    mkdir -p $out/bin
+    cp bin/Release/{sr-editor3,sr-translator,stuntrally3} $out/bin
+
+    popd
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    inherit mygui;
+  };
 
   meta = {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
