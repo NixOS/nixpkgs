@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "cv2_enumerate_cameras";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lukehugh";
     repo = "cv2_enumerate_cameras";
     tag = "v${version}";
-    hash = "sha256-BInGgnsvRrfTaofqZzf5LawM/Lbr0vdgU/l7j/VQi1o=";
+    hash = "sha256-pIqT5GEEyRIVHjWd9nNSI4oEvsPjOe2mPC3GWxEdonw=";
   };
 
   pyproject = true;
