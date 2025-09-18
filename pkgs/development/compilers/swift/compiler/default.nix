@@ -425,6 +425,13 @@ stdenv.mkDerivation {
            hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
          }
        }
+       patch -p1 -d swift-corelibs-libdispatch -i ${
+         # Fix the build with modern Clang.
+         fetchpatch {
+           url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/38872e2d44d66d2fb94186988509defc734888a5.patch";
+           hash = "sha256-GABwDeTjciV36Sa0FS10mCfFCqRoBBstgW/OiKdPahA=";
+         }
+       }
      ''}
   '';
 
