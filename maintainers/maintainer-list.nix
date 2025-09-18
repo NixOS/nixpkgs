@@ -17179,6 +17179,12 @@
     githubId = 85857;
     name = "Martin Milata";
   };
+  mmkaram = {
+    name = "Mahdy Karam";
+    github = "mmkaram";
+    githubId = 64036912;
+    matrix = "@mmkaram:matrix.org";
+  };
   mmlb = {
     email = "i@m.mmlb.dev";
     github = "mmlb";
