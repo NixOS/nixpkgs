@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
       differences when the data changes.
     '';
     homepage = "https://github.com/dbohdan/jsonwatch";
+    changelog = "https://github.com/dbohdan/jsonwatch/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "jsonwatch";
