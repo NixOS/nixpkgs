@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  fetchpatch,
+  fetchFromGitHub,
   cmake,
   ninja,
   git,
@@ -314,7 +314,13 @@ let
 
   swift-crypto = mkBootstrapDerivation {
     name = "swift-crypto";
-    src = generated.sources.swift-crypto;
+    src = fetchFromGitHub {
+      owner = "apple";
+      repo = "swift-crypto";
+      rev = "95ba0316a9b733e92bb6b071255ff46263bbe7dc"; # 3.15.1, as opposed to the pinned version of 3.0.0
+      sha256 = "sha256-RzoUBx4l12v0ZamSIAEpHHCRQXxJkXJCwVBEj7Qwg9I=";
+      fetchSubmodules = true;
+    };
 
     postPatch = ''
       # Fix use of hardcoded tool paths on Darwin.
