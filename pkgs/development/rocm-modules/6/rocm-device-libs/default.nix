@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   cmake,
   ninja,
   libxml2,
@@ -30,7 +31,14 @@ stdenv.mkDerivation {
     cd amd/device-libs
   '';
 
-  patches = [ ./cmake.patch ];
+  patches = [
+    ./cmake.patch
+    (fetchpatch {
+      name = "cmake-4-compat-dont-set-cmp0053.patch";
+      url = "https://github.com/ROCm/llvm-project/commit/a18cc4c7cb51f94182b6018c7c73acde1b8ebddb.patch";
+      hash = "sha256-LNT7srxd4gXDAJ6lSsJXKnRQKSepkAbHeRNH+eZYIFk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
