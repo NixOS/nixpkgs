@@ -7,6 +7,7 @@
   autoreconfHook,
   perl,
   ncurses,
+  bash,
 
   # for tests
   glibc,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
     perl
+    bash
   ];
 
   enableParallelBuilding = true;
