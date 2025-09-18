@@ -95,9 +95,10 @@ let
       "debian/edk2-vars-generator.py"
       "debian/python"
       "debian/PkKek-1-*.pem"
+      "debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch"
     ];
     rev = "refs/tags/debian/2025.02-8";
-    hash = "sha256-kAwfS8TBdN1PTm5kxTvqFuA9edBfBuMt6XmRWnFnolQ=";
+    hash = "sha256-n/6T5UBwW8U49mYhITRZRgy2tNdipeU4ZgGGDu9OTkg=";
   };
 
   buildPrefix = "Build/*/*";
@@ -171,6 +172,10 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   postUnpack = lib.optionalDrvAttr msVarsTemplate ''
     ln -s ${debian-edk-src}/debian
   '';
+
+  patches = [
+    (debian-edk-src + "/debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch")
+  ];
 
   postConfigure = lib.optionalDrvAttr msVarsTemplate ''
     tr -d '\n' < ${vendorPkKek} | sed \

@@ -2,12 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "itemdb";
   version = "1.3.0";
-  format = "setuptools";
+  format = "pyproject";
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
