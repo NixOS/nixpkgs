@@ -12801,8 +12801,6 @@ self: super: with self; {
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
 
-  pydantic-yaml = callPackage ../development/python-modules/pydantic-yaml { };
-
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
 
   pydash = callPackage ../development/python-modules/pydash { };
