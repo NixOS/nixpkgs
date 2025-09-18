@@ -6,13 +6,13 @@
 }:
 buildFishPlugin {
   pname = "plugin-sudope";
-  version = "0-unstable-2021-04-11";
+  version = "0-unstable-2025-09-16";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
     repo = "plugin-sudope";
-    rev = "83919a692bc1194aa322f3627c859fecace5f496";
-    hash = "sha256-pD4rNuqg6TG22L9m8425CO2iqcYm8JaAEXIVa0H/v/U=";
+    rev = "4ad91e49329811939c3a09221a95e620c3964b17";
+    hash = "sha256-OsgThGY/tGF/XBQFyXTY9qYf50B01wEH93lqWEAxZPY=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
