@@ -101,6 +101,8 @@ let
           + lib.optionalString stdenv.hostPlatform.isDarwin ''
             # On Darwin only, Swift uses arm64 as cpu arch.
             if [ -e cmake/modules/SwiftSupport.cmake ]; then
+              # At least in swift-asn1, this has been removed and the module uses the full target triple as the name
+              # (https://github.com/apple/swift-asn1/pull/103)
               substituteInPlace cmake/modules/SwiftSupport.cmake \
                 --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
             fi
@@ -331,6 +333,32 @@ let
     '';
   };
 
+  swift-asn1 = mkBootstrapDerivation {
+    name = "swift-asn1";
+    src = generated.sources.swift-asn1;
+
+    postInstall =
+      cmakeGlue.SwiftASN1
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+        # SwiftASN1 uses the full target triple as the name of the swiftmodule
+        # (https://github.com/apple/swift-asn1/pull/103)
+        mkdir -p $out/${swiftModuleSubdir}
+        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+      '';
+  };
+
+  swift-certificates = mkBootstrapDerivation {
+    name = "swift-certificates";
+    src = generated.sources.swift-certificates;
+
+    buildInputs = [
+      swift-asn1
+      swift-crypto
+    ];
+
+    postInstall = cmakeGlue.SwiftCertificates;
+  };
+
   # Build a bootrapping swiftpm using CMake.
   swiftpm-bootstrap = mkBootstrapDerivation (
     commonAttrs
@@ -341,6 +369,8 @@ let
         llbuild
         sqlite
         swift-argument-parser
+        swift-asn1
+        swift-certificates
         swift-collections
         swift-crypto
         swift-driver

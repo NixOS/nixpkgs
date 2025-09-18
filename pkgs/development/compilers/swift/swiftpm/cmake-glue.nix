@@ -89,4 +89,14 @@ lib.mapAttrs mkInstallScript {
     add_library(Crypto SHARED IMPORTED)
     set_property(TARGET Crypto PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCrypto@sharedLibExt@")
   '';
+
+  SwiftASN1 = ''
+    add_library(SwiftASN1 SHARED IMPORTED)
+    set_property(TARGET SwiftASN1 PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libSwiftASN1@sharedLibExt@")
+  '';
+
+  SwiftCertificates = ''
+    add_library(SwiftCertificates SHARED IMPORTED)
+    set_property(TARGET SwiftCertificates PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCertificates@sharedLibExt@")
+  '';
 }
