@@ -70,4 +70,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     mainProgram = "coq-lsp";
   };
-}
+})
