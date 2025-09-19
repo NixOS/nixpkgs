@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
 
   meta = with lib; {
     description = "Minimalist and opinionated feed reader";
+    changelog = "https://miniflux.app/releases/${finalAttrs.version}.html";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
     maintainers = with maintainers; [
