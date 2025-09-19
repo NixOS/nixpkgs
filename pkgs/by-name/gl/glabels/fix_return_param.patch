@@ -1,0 +1,58 @@
+diff --git a/src/merge-properties-dialog.c b/src/merge-properties-dialog.c
+index 064223b..57d8b30 100644
+--- a/src/merge-properties-dialog.c
++++ b/src/merge-properties-dialog.c
+@@ -222,18 +222,17 @@ gl_merge_properties_dialog_finalize (GObject *object)
+ /*****************************************************************************/
+ /* NEW merge properties dialog.                                              */
+ /*****************************************************************************/
+-GtkWidget*
++glMergePropertiesDialog*
+ gl_merge_properties_dialog_new (glLabel   *label,
+ 	                        GtkWindow *window)
+ {
+-	GtkWidget *dialog;
++	glMergePropertiesDialog *dialog;
+ 
+ 	gl_debug (DEBUG_MERGE, "START");
+ 
+-	dialog = GTK_WIDGET (g_object_new (GL_TYPE_MERGE_PROPERTIES_DIALOG, NULL));
++	dialog = GL_MERGE_PROPERTIES_DIALOG (g_object_new (GL_TYPE_MERGE_PROPERTIES_DIALOG, NULL));
+ 
+-	gl_merge_properties_dialog_construct (GL_MERGE_PROPERTIES_DIALOG (dialog),
+-					      label, window);
++	gl_merge_properties_dialog_construct (dialog, label, window);
+ 
+ 	gl_debug (DEBUG_MERGE, "END");
+ 
+diff --git a/src/merge-properties-dialog.h b/src/merge-properties-dialog.h
+index 33be5d1..c8c6281 100644
+--- a/src/merge-properties-dialog.h
++++ b/src/merge-properties-dialog.h
+@@ -57,10 +57,10 @@ struct  _glMergePropertiesDialogClass
+ 	GtkDialogClass                  parent_class;
+ };
+ 
+-GType      gl_merge_properties_dialog_get_type    (void) G_GNUC_CONST;
++GType      gl_merge_properties_dialog_get_type          (void) G_GNUC_CONST;
+ 
+-GtkWidget *gl_merge_properties_dialog_new         (glLabel   *label,
+-	                                           GtkWindow *window);
++glMergePropertiesDialog *gl_merge_properties_dialog_new (glLabel   *label,
++	                                                 GtkWindow *window);
+ 
+ G_END_DECLS
+ 
+diff --git a/src/pixbuf-cache.c b/src/pixbuf-cache.c
+index 77b2fc5..8b0f84f 100644
+--- a/src/pixbuf-cache.c
++++ b/src/pixbuf-cache.c
+@@ -125,7 +125,7 @@ gl_pixbuf_cache_add_pixbuf (GHashTable *pixbuf_cache,
+ 	record = g_new0 (CacheRecord, 1);
+ 	record->key        = g_strdup (name);
+ 	record->references = 0; /* Nobody has referenced it yet. */
+-	record->pixbuf     = g_object_ref (G_OBJECT (pixbuf));
++	record->pixbuf     = (GdkPixbuf *) (g_object_ref (G_OBJECT (pixbuf)));
+ 
+ 	g_hash_table_insert (pixbuf_cache, record->key, record);
+ 
