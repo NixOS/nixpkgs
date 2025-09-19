@@ -35,12 +35,12 @@
   cctools, # libtool
   sigtool,
   DarwinTools,
-  apple-sdk_13,
+  apple-sdk_14,
   darwinMinVersionHook,
 }:
 
 let
-  apple-sdk_swift = apple-sdk_13; # Use the SDK that was available when Swift shipped.
+  apple-sdk_swift = apple-sdk_14; # Use the SDK that was available when Swift shipped.
 
   deploymentVersion =
     if lib.versionOlder (targetPlatform.darwinMinVersion or "0") "10.15" then
