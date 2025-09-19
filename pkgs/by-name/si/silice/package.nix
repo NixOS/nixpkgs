@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "silice";
-  version = "0-unstable-2025-07-03";
+  version = "0-unstable-2025-09-14";
 
   src = fetchFromGitHub {
     owner = "sylefeb";
     repo = "silice";
-    rev = "656632ec300f8be3636cfd9bca5be954fc9c9120";
-    hash = "sha256-0awHQrGm4ggWE9+69ova1cXAaesaMNihbzpgAytRTks=";
+    rev = "4e4d22be92ba2739fe164d6102d8cc03cdacb87d";
+    hash = "sha256-/y6HkIf7E2oCZ5n1r4J5cVH5ID/K0eEGy7jgRj9Uarw=";
     fetchSubmodules = true;
   };
 
