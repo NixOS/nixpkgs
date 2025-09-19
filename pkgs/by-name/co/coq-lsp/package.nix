@@ -6,7 +6,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coq-lsp";
   version = "0.2.3";
 
