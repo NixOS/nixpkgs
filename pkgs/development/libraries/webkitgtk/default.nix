@@ -57,6 +57,7 @@
   fontconfig,
   freetype,
   openssl,
+  openxr-loader,
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
@@ -80,7 +81,7 @@
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.48.6";
+  version = "2.50.0";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -100,7 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2awwNLejnCqqVn5hErMSSxWOWRp0Q55Gl0oDHdDkTiQ=";
+    hash = "sha256-5WS4CZ+aOuMkCVObKQu9KtCE6ZttItSqxeUeRVTfi8I=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -189,6 +190,8 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    # For ENABLE_WEBXR
+    openxr-loader
   ]
   ++ lib.optionals withLibsecret [
     libsecret
