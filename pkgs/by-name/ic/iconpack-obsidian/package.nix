@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     mv Obsidian* $out/share/icons
 
@@ -49,6 +51,8 @@ stdenvNoCC.mkDerivation rec {
       rm -f "$broken_symlink"
       ln -s "$target_svg" "$broken_symlink"
     fi
+
+    runHook postInstall
   '';
 
   meta = with lib; {
