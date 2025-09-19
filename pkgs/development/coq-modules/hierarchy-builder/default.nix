@@ -28,20 +28,20 @@ let
         (case (range "8.12" "8.13") "1.1.0")
         (case (isEq "8.11") "0.10.0")
       ] null;
-    release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
-    release."1.8.1".sha256 = "sha256-Z0WAHDyycqgL+Le/zNfEAoLWzFb7WIL+3G3vEBExlb4=";
-    release."1.8.0".sha256 = "sha256-4s/4ZZKj5tiTtSHGIM8Op/Pak4Vp52WVOpd4l9m19fY=";
-    release."1.7.1".sha256 = "sha256-MCmOzMh/SBTFAoPbbIQ7aqd3hMcSMpAKpiZI7dbRaGs=";
-    release."1.7.0".sha256 = "sha256-WqSeuJhmqicJgXw/xGjGvbRzfyOK7rmkVRb6tPDTAZg=";
-    release."1.6.0".sha256 = "sha256-E8s20veOuK96knVQ7rEDSt8VmbtYfPgItD0dTY/mckg=";
-    release."1.5.0".sha256 = "sha256-Lia3o156Pbe8rDHOA1IniGYsG5/qzZkzDKdHecfmS+c=";
-    release."1.4.0".sha256 = "sha256-tOed9UU3kMw6KWHJ5LVLUFEmzHx1ImutXQvZ0ldW9rw=";
-    release."1.3.0".sha256 = "17k7rlxdx43qda6i1yafpgc64na8br285cb0mbxy5wryafcdrkrc";
-    release."1.2.1".sha256 = "sha256-pQYZJ34YzvdlRSGLwsrYgPdz3p/l5f+KhJjkYT08Mj0=";
-    release."1.2.0".sha256 = "0sk01rvvk652d86aibc8rik2m8iz7jn6mw9hh6xkbxlsvh50719d";
-    release."1.1.0".sha256 = "sha256-spno5ty4kU4WWiOfzoqbXF8lWlNSlySWcRReR3zE/4Q=";
-    release."1.0.0".sha256 = "0yykygs0z6fby6vkiaiv3azy1i9yx4rqg8xdlgkwnf2284hffzpp";
-    release."0.10.0".sha256 = "1a3vry9nzavrlrdlq3cys3f8kpq3bz447q8c4c7lh2qal61wb32h";
+    release."1.9.1".hash = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
+    release."1.8.1".hash = "sha256-Z0WAHDyycqgL+Le/zNfEAoLWzFb7WIL+3G3vEBExlb4=";
+    release."1.8.0".hash = "sha256-4s/4ZZKj5tiTtSHGIM8Op/Pak4Vp52WVOpd4l9m19fY=";
+    release."1.7.1".hash = "sha256-MCmOzMh/SBTFAoPbbIQ7aqd3hMcSMpAKpiZI7dbRaGs=";
+    release."1.7.0".hash = "sha256-WqSeuJhmqicJgXw/xGjGvbRzfyOK7rmkVRb6tPDTAZg=";
+    release."1.6.0".hash = "sha256-E8s20veOuK96knVQ7rEDSt8VmbtYfPgItD0dTY/mckg=";
+    release."1.5.0".hash = "sha256-Lia3o156Pbe8rDHOA1IniGYsG5/qzZkzDKdHecfmS+c=";
+    release."1.4.0".hash = "sha256-tOed9UU3kMw6KWHJ5LVLUFEmzHx1ImutXQvZ0ldW9rw=";
+    release."1.3.0".hash = "sha256:17k7rlxdx43qda6i1yafpgc64na8br285cb0mbxy5wryafcdrkrc";
+    release."1.2.1".hash = "sha256-pQYZJ34YzvdlRSGLwsrYgPdz3p/l5f+KhJjkYT08Mj0=";
+    release."1.2.0".hash = "sha256:0sk01rvvk652d86aibc8rik2m8iz7jn6mw9hh6xkbxlsvh50719d";
+    release."1.1.0".hash = "sha256-spno5ty4kU4WWiOfzoqbXF8lWlNSlySWcRReR3zE/4Q=";
+    release."1.0.0".hash = "sha256:0yykygs0z6fby6vkiaiv3azy1i9yx4rqg8xdlgkwnf2284hffzpp";
+    release."0.10.0".hash = "sha256:1a3vry9nzavrlrdlq3cys3f8kpq3bz447q8c4c7lh2qal61wb32h";
     releaseRev = v: "v${v}";
 
     propagatedBuildInputs = [ coq-elpi ];

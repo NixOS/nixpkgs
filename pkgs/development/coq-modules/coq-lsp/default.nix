@@ -14,12 +14,12 @@
 
   useDune = true;
 
-  release."0.1.8+8.16".sha256 = "sha256-dEEAK5IXGjHB8D/fYJRQG/oCotoXJuWLxXB0GQlY2eo=";
-  release."0.2.3+8.17".sha256 = "sha256-s7GXRYxuCMXm0XpKAyEwYqolsVFcKHhM71uabqqK5BY=";
-  release."0.2.3+8.18".sha256 = "sha256-0cEuMWuNJwfiPdc0aHKk3EQbkVRIbVukS586EWSHCgo=";
-  release."0.2.3+8.19".sha256 = "sha256-0eQQheY2yjS7shifhUlVPLXvTmyvgNpx7deLWXBRTfA=";
-  release."0.2.3+8.20".sha256 = "sha256-TUVS8jkgf1MMOOx5y70OaeZkdIgdgmyGQ2/zKxeplEk=";
-  release."0.2.3+9.0".sha256 = "sha256-eZMM4gYRXQroEIKz6XlffyHNYryEF5dIeIoVbEulh6M=";
+  release."0.1.8+8.16".hash = "sha256-dEEAK5IXGjHB8D/fYJRQG/oCotoXJuWLxXB0GQlY2eo=";
+  release."0.2.3+8.17".hash = "sha256-s7GXRYxuCMXm0XpKAyEwYqolsVFcKHhM71uabqqK5BY=";
+  release."0.2.3+8.18".hash = "sha256-0cEuMWuNJwfiPdc0aHKk3EQbkVRIbVukS586EWSHCgo=";
+  release."0.2.3+8.19".hash = "sha256-0eQQheY2yjS7shifhUlVPLXvTmyvgNpx7deLWXBRTfA=";
+  release."0.2.3+8.20".hash = "sha256-TUVS8jkgf1MMOOx5y70OaeZkdIgdgmyGQ2/zKxeplEk=";
+  release."0.2.3+9.0".hash = "sha256-eZMM4gYRXQroEIKz6XlffyHNYryEF5dIeIoVbEulh6M=";
 
   inherit version;
   defaultVersion =

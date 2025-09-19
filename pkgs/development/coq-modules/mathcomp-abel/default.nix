@@ -37,10 +37,10 @@ mkCoqDerivation {
       ]
       null;
 
-  release."1.2.1".sha256 = "sha256-M1q6WIPBsayHde2hwlTxylH169hcTs3OuFsEkM0e3yc=";
-  release."1.2.0".sha256 = "1picd4m85ipj22j3b84cv8ab3330radzrhd6kp0gpxq14dhv02c2";
-  release."1.1.2".sha256 = "0565w713z1cwxvvdlqws2z5lgdys8lddf0vpwfdj7bpd7pq9hwxg";
-  release."1.0.0".sha256 = "190jd8hb8anqsvr9ysr514pm5sh8qhw4030ddykvwxx9d9q6rbp3";
+  release."1.2.1".hash = "sha256-M1q6WIPBsayHde2hwlTxylH169hcTs3OuFsEkM0e3yc=";
+  release."1.2.0".hash = "sha256:1picd4m85ipj22j3b84cv8ab3330radzrhd6kp0gpxq14dhv02c2";
+  release."1.1.2".hash = "sha256:0565w713z1cwxvvdlqws2z5lgdys8lddf0vpwfdj7bpd7pq9hwxg";
+  release."1.0.0".hash = "sha256:190jd8hb8anqsvr9ysr514pm5sh8qhw4030ddykvwxx9d9q6rbp3";
 
   propagatedBuildInputs = [
     mathcomp.field

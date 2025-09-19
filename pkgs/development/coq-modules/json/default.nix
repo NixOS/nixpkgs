@@ -23,8 +23,8 @@
       (case (range "8.14" "8.20") "0.1.3")
     ] null;
   release = {
-    "0.2.0".sha256 = "sha256-qDRTgWLUvu4x3/d3BDcqo2I4W5ZmLyRiwuY/Tm/FuKA=";
-    "0.1.3".sha256 = "sha256-lElAzW4IuX+BB6ngDjlyKn0MytLRfbhQanB+Lct/WR0=";
+    "0.2.0".hash = "sha256-qDRTgWLUvu4x3/d3BDcqo2I4W5ZmLyRiwuY/Tm/FuKA=";
+    "0.1.3".hash = "sha256-lElAzW4IuX+BB6ngDjlyKn0MytLRfbhQanB+Lct/WR0=";
   };
   releaseRev = v: "v${v}";
 
