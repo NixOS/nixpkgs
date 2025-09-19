@@ -371,6 +371,7 @@
   ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-autosuggestions.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
+  ./programs/zsh/zsh-history-substring-search.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/acme
