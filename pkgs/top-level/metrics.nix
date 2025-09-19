@@ -93,7 +93,7 @@ stdenvNoCC.mkDerivation {
     # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
     num="$(wc -l < metrics/nix-env.qa/output)"
     echo "nix-env.qaCount $num" >> hydra-metrics
-    qaCountDrv="$(jq -r 'reduce .[].drvPath as $d (0; .+1)' metrics/nix-env.qaDrv/output)"
+    qaCountDrv="$(jq -r 'reduce (.[].drvPath? // empty) as $d (0; .+1)' metrics/nix-env.qaDrv/output)"
     numBroken="$((num - $qaCountDrv))"
     echo "nix-env.qaCountBroken $numBroken" >> hydra-metrics
 

@@ -208,6 +208,10 @@ let
   ++ [
     "systemd-exit.service"
     "systemd-update-done.service"
+
+    # Capsule support
+    "capsule@.service"
+    "capsule.slice"
   ]
   ++ cfg.additionalUpstreamSystemUnits;
 
