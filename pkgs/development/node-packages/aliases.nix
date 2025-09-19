@@ -47,7 +47,7 @@ mapAliases {
   "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
-  "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
+  "@prisma/language-server" = pkgs.prisma-language-server; # added 2025-09-08
   "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
