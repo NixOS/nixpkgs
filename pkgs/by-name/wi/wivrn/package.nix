@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -21,6 +22,7 @@
   glslang,
   harfbuzz,
   kdePackages,
+  libarchive,
   libdrm,
   libGL,
   libnotify,
@@ -35,7 +37,7 @@
   onnxruntime,
   opencomposite,
   openxr-loader,
-  ovrCompatSearchPaths ? "${opencomposite}/lib/opencomposite:${xrizer}/lib/xrizer",
+  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   pipewire,
   pkg-config,
   python3,
@@ -51,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.6.1";
+  version = "25.9";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DqgayLXI+RPIb8tLzJoHi+Z12px4pdzU50C0UBSa2u4=";
+    hash = "sha256-XP0bpXgtira2QIlS0fNEteNP48WnEjBYFM1Xmt2sm5I=";
   };
 
   monado = applyPatches {
@@ -65,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "bb9bcee2a3be75592de819d9e3fb2c8ed27bb7dc";
-      hash = "sha256-+PiWxnvMXaSFc+67r17GBRXo7kbjikSElawNMJCydrk=";
+      rev = "7a4018e2d89151e60e562fac79eba90ca7a328d8";
+      hash = "sha256-DPIvJb23bK7SDjZr9mK0Wt6Zbo3Ari3Ar8TtPe5QgKY=";
     };
 
     postPatch = ''
@@ -117,10 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.kirigami
     kdePackages.qcoro
     kdePackages.qqc2-desktop-style
+    libarchive
     libdrm
     libGL
     libnotify
     libpulseaudio
+    librsvg
     libva
     libX11
     libXrandr
