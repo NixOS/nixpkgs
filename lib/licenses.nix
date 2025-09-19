@@ -1218,6 +1218,11 @@ lib.mapAttrs mkLicense (
       fullName = "SGML UG SGML Parser Materials license";
     };
 
+    sissl11 = {
+      spdxId = "SISSL";
+      fullName = "Sun Industry Standards Source License 1.1";
+    };
+
     sleepycat = {
       spdxId = "Sleepycat";
       fullName = "Sleepycat License";

@@ -12,11 +12,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.4.0";
+  version = "0.5.4";
 
   src = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${finalAttrs.version}/${asset}";
-    hash = "sha256-5uPzphiVsqczo3XOVrT0c0Y9hkFRUsyaORPRgJSqpck=";
+    hash = "sha256-rwvL5cjxPOC1ZWopo54+I1NWGMewnm6lTTl6YhNlSBk=";
   };
 
   phases = [
