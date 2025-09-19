@@ -1,18 +1,18 @@
-# Almost 1:1 copy of idris2's nix/package.nix. Some work done in their flake.nix
-# we do here instead.
 {
-  stdenv,
   lib,
+  stdenv,
+  fetchFromGitHub,
   chez,
   chez-racket,
   clang,
   gmp,
-  fetchFromGitHub,
+  installShellFiles,
   makeWrapper,
   gambit,
   nodejs,
   zsh,
   callPackage,
+  idris2Packages,
 }:
 
 # NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs
@@ -24,22 +24,22 @@ let
     else
       chez-racket;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "idris2";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
-    rev = "v${version}";
-    sha256 = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    makeWrapper
     clang
     platformChez
+    installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
   buildInputs = [
@@ -47,11 +47,9 @@ stdenv.mkDerivation rec {
     gmp
   ];
 
-  prePatch = ''
-    patchShebangs --build tests
-  '';
+  enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional stdenv.hostPlatform.isDarwin "OS=";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ] ++ lib.optional stdenv.hostPlatform.isDarwin "OS=";
 
   # The name of the main executable of pkgs.chez is `scheme`
   buildFlags = [
@@ -59,6 +57,7 @@ stdenv.mkDerivation rec {
     "SCHEME=scheme"
   ];
 
+  doCheck = false;
   checkTarget = "test";
   nativeCheckInputs = [
     gambit
@@ -99,21 +98,30 @@ stdenv.mkDerivation rec {
         --suffix IDRIS2_PACKAGE_PATH ':' "${globalLibrariesPath}" \
         --suffix DYLD_LIBRARY_PATH ':' "$out/${name}/lib" \
         --suffix LD_LIBRARY_PATH ':' "$out/${name}/lib"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd idris2 \
+        --bash <($out/bin/idris2 --bash-completion-script idris2)
     '';
 
   # Run package tests
-  passthru.tests = callPackage ./tests.nix { inherit pname; };
+  passthru.tests = callPackage ./tests.nix {
+    idris2 = finalAttrs.finalPackage;
+    idris2Packages = idris2Packages.override { idris2 = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Purely functional programming language with first class types";
     mainProgram = "idris2";
     homepage = "https://github.com/idris-lang/Idris2";
+    changelog = "https://github.com/idris-lang/Idris2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       fabianhjr
       wchresta
       mattpolzin
+      RossSmyth
     ];
-    inherit (chez.meta) platforms;
+    platforms = lib.platforms.all;
   };
-}
+})
