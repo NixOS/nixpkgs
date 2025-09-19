@@ -75,7 +75,7 @@ rec {
 
     # Type
     ```
-    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
+    normalizeHash :: { hashTypes :: List String, required :: Bool, fetcher :: String } -> AttrSet -> AttrSet
     ```
 
     # Arguments
@@ -85,10 +85,14 @@ rec {
 
     required
     : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+
+    fetcher
+    : the name of the fetcher, possibly with other details such as the URL, for use in error messages and warnings
   */
   normalizeHash =
     {
       hashTypes ? [ "sha256" ],
+      fetcher ? "fetcher",
       required ? true,
     }:
     let
@@ -98,6 +102,7 @@ rec {
         tail
         throwIf
         warn
+        unique
         ;
       inherit (lib.attrsets)
         attrsToList
@@ -113,6 +118,7 @@ rec {
       args
     else
       let
+        hashTypes_ = unique ([ "hash" ] ++ hashTypes);
         # The argument hash, as a {name, value} pair
         h =
           # All hashes passed in arguments (possibly 0 or >1) as a list of {name, value} pairs
@@ -120,9 +126,11 @@ rec {
             hashesAsNVPairs = attrsToList (intersectAttrs hashSet args);
           in
           if hashesAsNVPairs == [ ] then
-            throwIf required "fetcher called without `hash`" null
+            throwIf required "${fetcher} called without a required hash argument (pass one of ${
+              concatMapStringsSep ", " (a: "`${a}`") hashTypes_
+            })" null
           else if tail hashesAsNVPairs != [ ] then
-            throw "fetcher called with mutually-incompatible arguments: ${
+            throw "${fetcher} called with mutually-incompatible arguments: ${
               concatMapStringsSep ", " (a: a.name) hashesAsNVPairs
             }"
           else
@@ -136,7 +144,7 @@ rec {
             let
               fakeHash = fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}");
             in
-            warn "found empty ${h.name}, assuming '${fakeHash}'" fakeHash
+            warn "${fetcher}: found empty ${h.name}, assuming '${fakeHash}'" fakeHash
           else
             h.value;
       });
