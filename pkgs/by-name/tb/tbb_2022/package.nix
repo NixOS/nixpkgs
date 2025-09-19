@@ -5,6 +5,7 @@
   cmake,
   ninja,
   ctestCheckHook,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,25 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # <https://github.com/uxlfoundation/oneTBB/pull/1849>
     ./fix-libtbbmalloc-dlopen.patch
+
+    # These two fix build errors outside of x86 and aarch64, one for gcc and one for clang:
+    #
+    # <https://github.com/uxlfoundation/oneTBB/pull/1768>
+    # <https://github.com/uxlfoundation/oneTBB/pull/1792>
+    #
+    # /nix/store/2hb2iha41g11y92c5w9yr7q5cp6hmyyv-riscv64-unknown-linux-gnu-gcc-wrapper-14.3.0/bin/riscv64-unknown-linux-gnu-g++ -D__TBB_BUILD -D__TBB_SKIP_DEPENDENCY_SIGNATURE_VERIFICATION=1 -I/build/source/src/tbb/../../include -O3 -DNDEBUG -std=c++11 -flto=auto -fno-fat-lto-objects -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -flifetime-dse=1 -Wall -Wextra -Werror -Wfatal-errors -fcf-protection=full -fstack-clash-protection -D__TBB_GNU_ASM_VERSION=2044 -fno-strict-overflow -fno-delete-null-pointer-checks -fwrapv -Wformat -Wformat-security -Werror=format-security -fstack-protector-strong -D_FORTIFY_SOURCE=2 -ffile-prefix-map=/build/source/= -ffile-prefix-map=..//= -MD -MT src/tbb/CMakeFiles/tbb.dir/governor.cpp.o -MF src/tbb/CMakeFiles/tbb.dir/governor.cpp.o.d -o src/tbb/CMakeFiles/tbb.dir/governor.cpp.o -c /build/source/src/tbb/governor.cpp
+    # cc1plus: error: '-fcf-protection=full' is not supported for this target
+    # compilation terminated due to -Wfatal-errors.
+    #
+    # Remove these when updating to a new release of TBB.
+    (fetchpatch {
+      url = "https://github.com/uxlfoundation/oneTBB/commit/65d46656f56200a7e89168824c4dbe4943421ff9.patch";
+      hash = "sha256-hhHDuvUsWSqs7AJ5smDYUP1yYZmjV2VISBeKHcFAfG4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/uxlfoundation/oneTBB/commit/e57411968661ab1205322ba1c84fc1cd90a306c6.patch";
+      hash = "sha256-PFixW4lYqA5oy4LSwewvxgJbjVKJceRHnp8mgW9zBF0=";
+    })
   ];
 
   nativeBuildInputs = [
