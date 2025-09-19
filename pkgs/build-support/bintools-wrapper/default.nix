@@ -47,12 +47,8 @@
   defaultHardeningFlags ? [
     "bindnow"
     "format"
-  ]
-  ++ lib.optionals (!stdenvNoCC.targetPlatform.isCygwin) [
     "fortify"
     "fortify3"
-  ]
-  ++ [
     "pic"
     "relro"
     "stackclashprotection"
