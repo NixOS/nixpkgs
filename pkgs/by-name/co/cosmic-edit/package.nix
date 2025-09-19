@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
