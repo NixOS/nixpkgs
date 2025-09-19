@@ -12,14 +12,15 @@
 let
   pname = "uucd";
   webpage = "https://erratique.ch/software/${pname}";
+  version = "17.0.0";
 in
-stdenv.mkDerivation rec {
-  name = "ocaml-${pname}-${version}";
-  version = "16.0.0";
+stdenv.mkDerivation {
+  pname = "ocaml${ocaml.version}-${pname}";
+  inherit version;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = "sha256-VVGPG6ZjchUqo8xMCJRahqCCF5WheDBpK1stuts+orM=";
+    hash = "sha256-ifjEBUN+Lqw4W9FeoGX4XBjnxcJL15ukd+aSSDS8KC0=";
   };
 
   nativeBuildInputs = [
