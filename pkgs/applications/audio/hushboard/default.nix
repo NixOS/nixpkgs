@@ -16,6 +16,9 @@
 
 buildPythonApplication {
   pname = "hushboard";
+  # r-ryantm keeps failing to update this package;
+  # there is no stable version available.
+  # nixpkgs-update: no auto update
   version = "unstable-2021-03-17";
   format = "setuptools";
 
