@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "jing-trang";
-  version = "20181222";
+  version = "20241231";
 
   src = fetchFromGitHub {
     owner = "relaxng";
