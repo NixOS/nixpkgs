@@ -215,7 +215,6 @@ in
         include <abstractions/golang>
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
         r ${cfg.package}/bin/miniflux,
-        r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
         rw /run/miniflux/**,
       }
     '';
