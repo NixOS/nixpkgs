@@ -48,8 +48,10 @@ stdenv.mkDerivation {
     configureScript="../$sourceRoot/configure"
   '';
 
-  env.CXXFLAGS_FOR_TARGET = "-Wno-error";
-  env.LDFLAGS_FOR_TARGET = "-L${lib.getLib mingw_w64}/w32api";
+  env.CXXFLAGS_FOR_TARGET = toString [
+    "-Wno-error=register"
+    "-L${lib.getLib mingw_w64}/lib/w32api"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -71,8 +73,8 @@ stdenv.mkDerivation {
   enableParallelInstalling = false;
 
   hardeningDisable = [
+    # conflicts with internal definition of 'bzero'
     "fortify"
-    "stackprotector"
   ];
   configurePlatforms = [
     "build"
