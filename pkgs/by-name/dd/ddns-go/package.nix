@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -23,6 +24,8 @@ buildGoModule rec {
 
   # network required
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) ddns-go; };
 
   meta = with lib; {
     homepage = "https://github.com/jeessy2/ddns-go";
