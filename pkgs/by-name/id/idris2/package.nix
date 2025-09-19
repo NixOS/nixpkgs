@@ -18,6 +18,19 @@
 # NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs
 
 let
+  version = "0.7.0";
+  src = fetchFromGitHub {
+    owner = "idris-lang";
+    repo = "Idris2";
+    rev = "v${version}";
+    hash = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
+  };
+
+  # Runtime library
+  libidris2_support = callPackage ./libidris2_support.nix { inherit src version; };
+  libsupportLib = lib.makeLibraryPath [ libidris2_support ];
+  libsupportShare = lib.makeSearchPath "share" [ libidris2_support ];
+
   platformChez =
     if (stdenv.system == "x86_64-linux") || (lib.versionAtLeast chez.version "10.0.0") then
       chez
@@ -25,15 +38,8 @@ let
       chez-racket;
 in
 stdenv.mkDerivation (finalAttrs: {
+  inherit version src;
   pname = "idris2";
-  version = "0.7.0";
-
-  src = fetchFromGitHub {
-    owner = "idris-lang";
-    repo = "Idris2";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
-  };
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -45,16 +51,23 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     platformChez
     gmp
+    libidris2_support
   ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ] ++ lib.optional stdenv.hostPlatform.isDarwin "OS=";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "IDRIS2_SUPPORT_DIR=${libsupportLib}"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "OS=";
 
   # The name of the main executable of pkgs.chez is `scheme`
   buildFlags = [
     "bootstrap"
     "SCHEME=scheme"
+    "IDRIS2_LIBS=${libsupportLib}"
+    "IDRIS2_DATA=${libsupportShare}"
   ];
 
   doCheck = false;
@@ -62,8 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     gambit
     nodejs
-  ]; # racket ];
-  checkFlags = [ "INTERACTIVE=" ];
+  ];
+  checkFlags = [
+    "INTERACTIVE="
+    "IDRIS2_DATA=${libsupportShare}"
+    "IDRIS2_LIBS=${libsupportLib}"
+    "TEST_IDRIS2_DATA=${libsupportShare}"
+    "TEST_IDRIS2_LIBS=${libsupportLib}"
+    "TEST_IDRIS2_SUPPORT_DIR=${libsupportLib}"
+  ];
 
   # TODO: Move this into its own derivation, such that this can be changed
   #       without having to recompile idris2 every time.
@@ -105,9 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   # Run package tests
-  passthru.tests = callPackage ./tests.nix {
-    idris2 = finalAttrs.finalPackage;
-    idris2Packages = idris2Packages.override { idris2 = finalAttrs.finalPackage; };
+  passthru = {
+    inherit libidris2_support;
+    tests = callPackage ./tests.nix {
+      idris2 = finalAttrs.finalPackage;
+      idris2Packages = idris2Packages.override { idris2 = finalAttrs.finalPackage; };
+    };
   };
 
   meta = {
