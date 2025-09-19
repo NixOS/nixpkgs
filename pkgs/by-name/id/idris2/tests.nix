@@ -2,7 +2,6 @@
   stdenv,
   runCommand,
   lib,
-  pname,
   idris2,
   idris2Packages,
   zsh,
@@ -18,6 +17,7 @@ let
       packages ? [ ],
     }:
     let
+      inherit (idris2) pname;
       packageString = builtins.concatStringsSep " " (map (p: "--package " + p) packages);
     in
     runCommand "${pname}-${testName}"
@@ -61,6 +61,7 @@ let
       expectedTree,
     }:
     let
+      inherit (idris2) pname;
       idrisPkg = transformBuildIdrisOutput (idris2Packages.buildIdris buildIdrisArgs);
     in
     runCommand "${pname}-${testName}"
