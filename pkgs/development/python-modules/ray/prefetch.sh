@@ -3,7 +3,7 @@
 
 outfile="ray-hashes.nix"
 # Clear file
-echo "" >$outfile
+rm -f $outfile
 
 prefetch() {
     package_attr="python${1}Packages.ray"
