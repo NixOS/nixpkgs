@@ -3,7 +3,7 @@
   stdenvNoCC,
   makeWrapper,
   coreutils,
-  codeowners,
+  gnused,
   jq,
   curl,
   github-cli,
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
         --set PATH ${
           lib.makeBinPath [
             coreutils
-            codeowners
+            gnused
             jq
             curl
             github-cli
