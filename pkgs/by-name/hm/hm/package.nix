@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   fetchpatch,
   gitUpdater,
   cmake,
@@ -12,21 +12,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hm";
   version = "18.0";
 
-  src = fetchFromGitLab {
-    domain = "vcgit.hhi.fraunhofer.de";
-    owner = "jvet";
+  src = fetchFromGitHub {
+    owner = "johnrichardrinehart";
     repo = "HM";
-    tag = "HM-${finalAttrs.version}";
-    hash = "sha256-zWBwrnCNKi2sIopdu2XQj/7IoTsJQzlcIFNNKM0glDQ=";
+    rev = "f3947be0720bfd9ce3312478d64cd35a619c5eae";
+    hash = "sha256-kY7YE+S1NJs9yjUnVKjZ8jbIJm/nv/s0DNmNZej66b8=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-building-on-arm.patch";
-      url = "https://vcgit.hhi.fraunhofer.de/jvet/HM/-/commit/fd37cd88f557478b591dc0b9157d027354d82e2f.patch";
-      hash = "sha256-xP54lBvDabc9Dy1UklH2BJH7fUGLTA4sf9WLt7WzoU8=";
-    })
-  ];
 
   cmakeFlags = [
     (lib.cmakeBool "HIGH_BITDEPTH" true)
