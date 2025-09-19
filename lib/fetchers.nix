@@ -97,6 +97,7 @@ rec {
         head
         tail
         throwIf
+        warn
         ;
       inherit (lib.attrsets)
         attrsToList
@@ -132,7 +133,10 @@ rec {
         outputHashAlgo = if h.name == "hash" then null else h.name;
         outputHash =
           if h.value == "" then
-            fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}")
+            let
+              fakeHash = fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}");
+            in
+            warn "found empty ${h.name}, assuming '${fakeHash}'" fakeHash
           else
             h.value;
       });
