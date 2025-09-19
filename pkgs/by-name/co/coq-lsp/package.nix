@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol implementation for Coq";
     longDescription = ''
       coq-lsp is a Language Server Protocol (LSP) implementation for the Coq
