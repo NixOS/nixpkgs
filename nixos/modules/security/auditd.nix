@@ -256,18 +256,18 @@ in
       };
     };
 
-    systemd.tmpfiles.packages = [ pkgs.audit.out ];
     systemd.packages = [ pkgs.audit.out ];
-
-    # will try to look in /etc for rules to load, which we don't set up
-    systemd.services.audit-rules.enable = lib.mkDefault false;
 
     systemd.services.auditd = {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        # https://github.com/linux-audit/audit-userspace/pull/501
+        # set up audit directories using systemd service instead of tmpfiles
         LogsDirectory = "audit";
+        LogsDirectoryMode = "0700";
         RuntimeDirectory = "audit";
+        RuntimeDirectoryMode = "0755";
         ExecStart = [
           # the upstream unit does not allow symlinks, so clear and rewrite the ExecStart
           ""
