@@ -615,13 +615,13 @@
     "vendorHash": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y="
   },
   "htpasswd": {
-    "hash": "sha256-Kc3L8oqQOP+k8PZAWkRApDj+3LRgs3P3mm4vX2QcUdg=",
+    "hash": "sha256-ALTyTTVyS2HHenmk8HVwtQenCmJX05kyXifJTzzmnHE=",
     "homepage": "https://registry.terraform.io/providers/loafoe/htpasswd",
     "owner": "loafoe",
     "repo": "terraform-provider-htpasswd",
-    "rev": "v1.2.1",
+    "rev": "v1.5.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-zo22ng+J9ItkptdgUt6Pekkd9T7hFTYdVAWnp2k2vrs="
+    "vendorHash": "sha256-6+ZQVWc4/2RoNjQLzetLTl9L8AdbFu2uFmqJ9Kxcc7Q="
   },
   "http": {
     "hash": "sha256-IXqKZ9RQP0kZVxc9OfaWglF8GeycSAl5DATdqc8n35g=",
