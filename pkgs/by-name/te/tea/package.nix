@@ -3,21 +3,40 @@
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
   pname = "tea";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "tea";
     rev = "v${version}";
-    sha256 = "sha256-Dhb3y13sxkyE+2BjNj7YcsjiIPgznIVyuzWs0F8LNfU=";
+    sha256 = "sha256-jM/TR3bApWv0ci98Vb/0YPjlmLuO91WPY9eMHBInIQI=";
   };
 
-  vendorHash = "sha256-mKCsBPBWs3+61em53cEB0shTLXgUg4TivJRogy1tYXw=";
+  vendorHash = "sha256-Y9YDwfubT+RR1v6BTFD+A8GP2ArQaIIoMJmak+Vcx88=";
+
+  ldflags = [
+    "-X code.gitea.io/tea/cmd.Version=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tea \
+      --bash <($out/bin/tea completion bash) \
+      --fish <($out/bin/tea completion fish) \
+      --zsh <($out/bin/tea completion zsh)
+
+    mkdir $out/share/powershell/ -p
+    $out/bin/tea completion pwsh > $out/share/powershell/tea.Completion.ps1
+
+    $out/bin/tea man --out $out/share/man/man1/tea.1
+  '';
 
   meta = with lib; {
     description = "Gitea official CLI client";
@@ -29,20 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "tea";
   };
-
-  ldflags = [
-    "-X code.gitea.io/tea/cmd.Version=${version}"
-  ];
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = ''
-    installShellCompletion --cmd tea \
-      --bash <($out/bin/tea completion bash) \
-      --fish <($out/bin/tea completion fish) \
-      --zsh <($out/bin/tea completion zsh)
-
-    mkdir $out/share/powershell/ -p
-    $out/bin/tea completion pwsh > $out/share/powershell/tea.Completion.ps1
-  '';
 }
