@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytrogen";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = finalAttrs.version;
-    hash = "sha256-vFzOGadWR5xwhIKrKPHoAHstoeyFw4GrS5aYlpvEF5E=";
+    hash = "sha256-I7juUTIN+ZhD9w2WXSU5YMBulxcGUYDdv6eiLZ1Byyw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
