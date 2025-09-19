@@ -3,3 +3,5 @@
 source "https://rubygems.org"
 
 gem "facter"
+
+gem "base64", "~> 0.2.0"
