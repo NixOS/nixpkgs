@@ -1,0 +1,30 @@
+From 9f1cfa813d51c3157bf826d429144419e9d0de93 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
+Date: Thu, 4 Sep 2025 10:24:35 +0200
+Subject: [PATCH 2/2] build svelte files inside the current directory
+
+For development porpuses, after building the /frontend/ project, the
+resulting files will be placed into /templates/html. Since we want to
+separate the frontend and the backend build in Nix, this wouldn't work.
+---
+ svelte.config.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/svelte.config.js b/svelte.config.js
+index 397fe4d4..3a08f7a2 100644
+--- a/svelte.config.js
++++ b/svelte.config.js
+@@ -12,8 +12,8 @@ const config = {
+         },
+         adapter: adapter({
+             fallback: null,
+-            pages: '../templates/html',
+-            assets: '../static/v1',
++            pages: 'dist/templates/html',
++            assets: 'dist/static/v1',
+             precompress: true,
+             strict: true,
+         }),
+-- 
+2.50.1
+
