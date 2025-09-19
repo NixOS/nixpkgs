@@ -143,7 +143,7 @@ let
     };
 
   commonServiceConfig = {
-    AmbientCapablities = [ ];
+    AmbientCapabilities = [ ];
     CapabilityBoundingSet = [ ];
     LockPersonality = true;
     MemoryDenyWriteExecute = true;
