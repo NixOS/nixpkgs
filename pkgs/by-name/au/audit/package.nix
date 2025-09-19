@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "out"
     "man"
+    "scripts"
   ];
 
   strictDeps = true;
@@ -102,6 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     bashNonInteractive
   ];
 
+  # bin output is used if audit is enabled, becoming part of the system closure.
+  outputChecks.bin.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
+
   nativeCheckInputs = lib.optionals enablePython [
     python3Packages.pythonImportsCheckHook
   ];
@@ -114,15 +121,18 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash init.d/audit.bash_completion
   '';
 
+  # augenrules is a bit broken, but may be helpful to collect audit rules in a builder.
+  # It is not required on a running system, it can just go into its own output.
   # audit-rules.service relies on augenrules, and is not useful on a nixos system.
   # It is intended to collect rule files from /etc/audit/rules.d, which we don't set up.
   # Instead, we load audit rules in a dedicated module.
   postFixup = ''
-    substituteInPlace $bin/bin/augenrules \
+    moveToOutput bin/augenrules $scripts
+    substituteInPlace $scripts/bin/augenrules \
       --replace-fail "/sbin/auditctl -R" "$bin/bin/auditctl -R" \
       --replace-fail "auditctl -s" "$bin/bin/auditctl -s" \
       --replace-fail "/bin/ls" "ls"
-    wrapProgram $bin/bin/augenrules \
+    wrapProgram $scripts/bin/augenrules \
       --prefix PATH : ${
         lib.makeBinPath [
           gawk
