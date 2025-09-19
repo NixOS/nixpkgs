@@ -986,6 +986,74 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
 
 
 @patch("subprocess.run", autospec=True)
+def test_execute_build_dry_run_build_and_target_remote(
+    mock_run: Mock, tmp_path: Path
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+    mock_run.side_effect = [
+        CompletedProcess([], 0, str(config_path)),
+        CompletedProcess([], 0),
+        CompletedProcess([], 0, str(config_path)),
+    ]
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "dry-build",
+            "--flake",
+            "/path/to/config#hostname",
+            "--build-host",
+            "user@build-host",
+            "--target-host",
+            "user@target-host",
+        ]
+    )
+
+    assert mock_run.call_count == 3
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "eval",
+                    "--raw",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["nix-copy-closure", "--to", "user@build-host", config_path],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "nix",
+                    "--extra-experimental-features",
+                    "'nix-command flakes'",
+                    "build",
+                    f"'{config_path}^*'",
+                    "--print-out-paths",
+                    "--dry-run",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch("subprocess.run", autospec=True)
 def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
