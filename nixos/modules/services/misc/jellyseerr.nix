@@ -28,7 +28,7 @@ in
 
     configDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/jellyseerr/config";
+      default = "/var/lib/jellyseerr";
       description = "Config data directory";
     };
   };
