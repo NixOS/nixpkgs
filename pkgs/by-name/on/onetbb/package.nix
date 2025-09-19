@@ -40,9 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Only enable fcf-protection on x86 based processors
     # <https://github.com/uxlfoundation/oneTBB/pull/1768>
+    # <https://github.com/uxlfoundation/oneTBB/pull/1792>
     (fetchpatch {
       url = "https://github.com/uxlfoundation/oneTBB/commit/65d46656f56200a7e89168824c4dbe4943421ff9.patch?full_index=1";
       hash = "sha256-hhHDuvUsWSqs7AJ5smDYUP1yYZmjV2VISBeKHcFAfG4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/uxlfoundation/oneTBB/commit/e57411968661ab1205322ba1c84fc1cd90a306c6.patch";
+      hash = "sha256-PFixW4lYqA5oy4LSwewvxgJbjVKJceRHnp8mgW9zBF0=";
     })
   ];
 
