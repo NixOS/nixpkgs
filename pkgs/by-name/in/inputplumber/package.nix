@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inputplumber";
-  version = "0.62.2";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "ShadowBlip";
