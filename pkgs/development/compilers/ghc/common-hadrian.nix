@@ -208,7 +208,7 @@
             extraPrefix = "libraries/unix/";
           })
         ]
-      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
+      ++ lib.optionals (lib.versionOlder version "9.8") [
         # Fix unlit being installed under a different name than is used in the
         # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317
         (fetchpatch {
