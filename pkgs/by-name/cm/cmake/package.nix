@@ -13,6 +13,7 @@
   openssl,
   pkg-config,
   ps,
+  sysctl,
   rhash,
   sphinx,
   texinfo,
@@ -69,12 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
       vm_stat = lib.getExe' darwin.system_cmds "vm_stat";
     })
   ]
-  # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
-  ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
-    replaceVars ./darwin-bsd-ps-abspath.patch {
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
+    (replaceVars ./darwin-bsd-binary-paths.patch {
+      # `ps(1)` is theoretically used on Linux too, but only when
+      # `/proc` is inaccessible, so we can skip the dependency.
       ps = lib.getExe ps;
-    }
-  )
+      sysctl = lib.getExe sysctl;
+    })
+  ]
   ++ [
     # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/11134
     ./fix-curl-8.16.patch
