@@ -74,10 +74,16 @@ let
           RCU_EXP_KTHREAD = yes;
         };
 
-        extraPassthru.updateScript = [
-          ./update-xanmod.sh
-          variant
-        ];
+        extraPassthru.updateScript = {
+          command = [
+            ./update-xanmod.sh
+            variant
+          ];
+          supportedFeatures = [
+            "commit"
+          ];
+        };
+
         inherit isLTS;
 
         extraMeta = {
