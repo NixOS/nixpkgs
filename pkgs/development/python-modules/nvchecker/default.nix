@@ -1,32 +1,28 @@
 {
   lib,
-  platformdirs,
+  awesomeversion,
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
-  nix-update-script,
   flaky,
   installShellFiles,
+  lxml,
+  packaging,
+  platformdirs,
   pycurl,
   pytest-asyncio,
   pytest-httpbin,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   structlog,
   tomli,
   tornado,
-  awesomeversion,
-  packaging,
-  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
   version = "2.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
@@ -35,6 +31,8 @@ buildPythonPackage rec {
     hash = "sha256-C8g8uhuWOl3zPCjTaGs21yJ8k3tmvZE8U9LzSXoDSxE=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools ];
 
   nativeBuildInputs = [
@@ -42,7 +40,7 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     structlog
     platformdirs
     tornado
@@ -50,7 +48,12 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  __darwinAllowLocalNetworking = true;
+  optional-dependencies = {
+    # vercmp = [ pyalpm ];
+    awesomeversion = [ awesomeversion ];
+    pypi = [ packaging ];
+    htmlparser = [ lxml ];
+  };
 
   nativeCheckInputs = [
     flaky
@@ -72,20 +75,11 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "needs_net" ];
 
-  optional-dependencies = {
-    # vercmp = [ pyalpm ];
-    awesomeversion = [ awesomeversion ];
-    pypi = [ packaging ];
-    htmlparser = [ lxml ];
-  };
-
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "New version checker for software";
     homepage = "https://github.com/lilydjwg/nvchecker";
-    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
+    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.mdaniels5757 ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }
