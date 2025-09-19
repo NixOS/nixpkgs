@@ -2,7 +2,7 @@
 { lib }:
 let
   commonH = hashTypes: rec {
-    hashNames = [ "hash" ] ++ hashTypes;
+    hashNames = lib.unique ([ "hash" ] ++ hashTypes);
     hashSet = lib.genAttrs hashNames (lib.const { });
   };
 
@@ -75,7 +75,7 @@ rec {
 
     # Type
     ```
-    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
+    normalizeHash :: { hashTypes :: List String, required :: Bool, fetcher :: String } -> AttrSet -> AttrSet
     ```
 
     # Arguments
@@ -85,10 +85,14 @@ rec {
 
     required
     : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+
+    fetcher
+    : the name of the fetcher, possibly with other details such as the URL, for use in error messages and warnings
   */
   normalizeHash =
     {
       hashTypes ? [ "sha256" ],
+      fetcher ? "fetcher",
       required ? true,
     }:
     let
@@ -104,6 +108,7 @@ rec {
         intersectAttrs
         removeAttrs
         optionalAttrs
+        attrNames
         ;
 
       inherit (commonH hashTypes) hashNames hashSet;
@@ -120,9 +125,11 @@ rec {
             hashesAsNVPairs = attrsToList (intersectAttrs hashSet args);
           in
           if hashesAsNVPairs == [ ] then
-            throwIf required "fetcher called without `hash`" null
+            throwIf required "${fetcher} called without a required hash argument (pass one of ${
+              concatMapStringsSep ", " (a: "`${a}`") hashNames
+            })" null
           else if tail hashesAsNVPairs != [ ] then
-            throw "fetcher called with mutually-incompatible arguments: ${
+            throw "${fetcher} called with mutually-incompatible arguments: ${
               concatMapStringsSep ", " (a: a.name) hashesAsNVPairs
             }"
           else
@@ -134,9 +141,13 @@ rec {
         outputHash =
           if h.value == "" then
             let
-              fakeHash = fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}");
+              fakeHash =
+                fakeH.${h.name}
+                  or (throw "${fetcher}: no “fake hash” defined for hash algorithm ${h.name}; pass in a real hash or try one of ${
+                    concatMapStringsSep ", " (a: "`${a}`") (attrNames fakeH)
+                  }");
             in
-            warn "found empty ${h.name}, assuming '${fakeHash}'" fakeHash
+            warn "${fetcher}: found empty ${h.name}, assuming '${fakeHash}'" fakeHash
           else
             h.value;
       });
