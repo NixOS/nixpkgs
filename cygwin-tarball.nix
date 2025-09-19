@@ -69,12 +69,21 @@ let
 
   activate = writeShellScript "activate" ''
     (
-      export PATH=${lib.makeBinPath [ coreutils ]}:/bin
+      export PATH=${
+        lib.makeBinPath [
+          coreutils
+          nix
+        ]
+      }:/bin
       rm -rf /etc
       mkdir -p /etc/ssl/certs
       ln -fsr "${cacert}"/etc/ssl/certs/ca-bundle.crt /etc/ssl/certs/ca-certificates.crt
       ln -fsr "${cacert}"/etc/ssl/trust-source /etc/ssl/
       ln -fsr "${profile}" /etc/profile
+      if [[ -f /nix-path-registration ]]; then
+        nix --load-db < /nix-path-registration
+        rm /nix-path-registration
+      fi
     )
   '';
 
