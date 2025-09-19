@@ -199,6 +199,7 @@ let
         foldlAttrs
         foldAttrs
         collect
+        collect'
         nameValuePair
         mapAttrs
         mapAttrs'
