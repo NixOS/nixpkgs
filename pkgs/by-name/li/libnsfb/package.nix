@@ -4,12 +4,18 @@
   fetchurl,
   SDL,
   pkg-config,
-  buildsystem,
-  uilib,
+  netsurf-buildsystem,
+  uilib ? "gtk3",
 }:
 
+assert lib.assertOneOf "uilib" uilib [
+  "framebuffer"
+  "gtk2"
+  "gtk3"
+];
+
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libnsfb";
+  pname = "libnsfb";
   version = "0.2.2";
 
   src = fetchurl {
@@ -21,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL
-    buildsystem
+    netsurf-buildsystem
   ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
     "TARGET=${uilib}"
   ];
 
@@ -34,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.netsurf-browser.org/projects/libnsfb/";
     description = "Netsurf framebuffer abstraction library";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
