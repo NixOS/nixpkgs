@@ -40,8 +40,9 @@ let
 
         putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
         putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
+        # TODO: this is deprecated and can be removed once the TT-RSS package is bumped to >= 2025-05-22
+        # conversely, this might have some complications regarding upgrades?
         putenv('TTRSS_ICONS_DIR=${cfg.root}/feed-icons');
-        putenv('TTRSS_ICONS_URL=feed-icons');
         putenv('TTRSS_SELF_URL_PATH=${cfg.selfUrlPath}');
 
         putenv('TTRSS_MYSQL_CHARSET=UTF8');
@@ -619,8 +620,10 @@ in
             index = "index.php";
           };
 
-          locations."^~ /feed-icons" = {
-            root = "${cfg.root}";
+          # some clients might still access this old path directly, forward them to the API instead
+          # e.g. https://apps.apple.com/de/app/tiny-reader-rss/id689519762 at version 2.2.0
+          locations."~* /feed-icons/(\\d+)\\.ico" = {
+            return = "301 /public.php?op=feed_icon&id=$1";
           };
 
           locations."~ \\.php$" = {
@@ -641,6 +644,8 @@ in
       "d '${cfg.root}/cache/upload' 0755 ${cfg.user} tt_rss - -"
       "d '${cfg.root}/cache/images' 0755 ${cfg.user} tt_rss - -"
       "d '${cfg.root}/cache/export' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/feed-icons' 0755 ${cfg.user} tt_rss - -"
+      # deprecated path, but still needed so tt-rss can migrate old icons to the new directory
       "d '${cfg.root}/feed-icons' 0755 ${cfg.user} tt_rss - -"
       "L+ '${cfg.root}/www' - - - - ${servedRoot}"
     ];
