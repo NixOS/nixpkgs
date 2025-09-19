@@ -114,6 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash init.d/audit.bash_completion
   '';
 
+  # audit-rules.service relies on augenrules, and is not useful on a nixos system.
+  # It is intended to collect rule files from /etc/audit/rules.d, which we don't set up.
+  # Instead, we load audit rules in a dedicated module.
   postFixup = ''
     substituteInPlace $bin/bin/augenrules \
       --replace-fail "/sbin/auditctl -R" "$bin/bin/auditctl -R" \
@@ -127,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
           coreutils
         ]
       }
+
+      rm $out/lib/systemd/system/audit-rules.service
   '';
 
   enableParallelBuilding = true;

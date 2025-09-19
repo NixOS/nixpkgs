@@ -259,9 +259,6 @@ in
     systemd.tmpfiles.packages = [ pkgs.audit.out ];
     systemd.packages = [ pkgs.audit.out ];
 
-    # will try to look in /etc for rules to load, which we don't set up
-    systemd.services.audit-rules.enable = lib.mkDefault false;
-
     systemd.services.auditd = {
       wantedBy = [ "multi-user.target" ];
 
