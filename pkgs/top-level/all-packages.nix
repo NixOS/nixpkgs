@@ -7636,7 +7636,7 @@ with pkgs;
     else if libc == "ucrt" then
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "cygwin" then
-      targetPackages.windows.cygwin-nobin or windows.cygwin-nobin
+      windows.cygwin-nobin
     else if libc == "libSystem" then
       if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
     else if libc == "fblibc" then
