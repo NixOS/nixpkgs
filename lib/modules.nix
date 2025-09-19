@@ -1573,19 +1573,18 @@ let
           x:
           throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.assertions =
+      config.assertions = setAttrByPath (optionName ++ [ "removed" ]) (
         let
           opt = getAttrFromPath optionName options;
         in
-        [
-          {
-            assertion = !opt.isDefined;
-            message = ''
-              The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
-              ${replacementInstructions}
-            '';
-          }
-        ];
+        {
+          assertion = !opt.isDefined;
+          message = ''
+            The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
+            ${replacementInstructions}
+          '';
+        }
+      );
     };
 
   /**
@@ -1703,15 +1702,20 @@ let
       );
 
       config = {
-        warnings = filter (x: x != "") (
+        warnings = foldl' recursiveUpdate { } (
           map (
-            f:
-            let
-              val = getAttrFromPath f config;
-              opt = getAttrFromPath f options;
-            in
-            optionalString (val != "_mkMergedOptionModule")
-              "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
+            path:
+            setAttrByPath (path ++ [ "mergedOption" ]) {
+              condition = (getAttrFromPath path config) != "_mkMergedOptionModule";
+              message =
+                let
+                  opt = getAttrFromPath path options;
+                in
+                ''
+                  The option `${showOption path}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type.
+                  Please read `${showOption to}' documentation and update your configuration accordingly.
+                '';
+            }
           ) from
         );
       }
@@ -1917,9 +1921,10 @@ let
       );
       config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
-          warnings =
-            optional (warn && fromOpt.isDefined)
-              "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          warnings = setAttrByPath (from ++ [ "aliased" ]) {
+            condition = warn && fromOpt.isDefined;
+            message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          };
         })
         (
           if withPriority then
