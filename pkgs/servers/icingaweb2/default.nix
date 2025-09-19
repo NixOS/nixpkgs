@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
     ln -s ${icingaweb2-ipl} $out/share/icinga-php/ipl
     ln -s ${icingaweb2-thirdparty} $out/share/icinga-php/vendor
 
-    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}"
+    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}" --suffix ICINGAWEB_LIBDIR : $out/share/icinga-php
   '';
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };
