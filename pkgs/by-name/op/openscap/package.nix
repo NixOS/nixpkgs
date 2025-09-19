@@ -35,7 +35,7 @@
   perl,
   doxygen,
   pkg-config,
-  perl538Packages,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    with perl538Packages;
+    with perlPackages;
     [
       XMLXPath
       LinuxACL
