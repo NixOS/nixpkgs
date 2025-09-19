@@ -11,7 +11,6 @@
   cargo,
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
-  removeReferencesTo,
 
   pcre2,
   openssl,
@@ -35,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.04.21.00";
+  version = "2025.09.15.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZRrG7bgmh7hW7ihQISQP5pnWAVGhDLL93rCP7ZtUnA=";
+    hash = "sha256-ZIFGCOoIuy4Ns51oek3HnBLtCSnI742FTA2YmorBpyk=";
   };
 
   patches = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -95,12 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
-    cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
-  '';
 
-  postFixup = ''
-    # TODO: Do this in `fmt` rather than downstream.
-    remove-references-to -t ${folly.fmt.dev} $out/bin/*
+    cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
+
+    # The build system looks for `/usr/bin/python3`. It falls back
+    # gracefully if it’s not found, but let’s dodge the potential
+    # reproducibility risk for unsandboxed Darwin.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /usr/bin /var/empty
+
+    # Facebook Thrift requires C++20 now but Watchman hasn’t been
+    # updated yet… (Aren’t these things meant to be integrated together
+    # in a monorepo?)
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
   passthru.updateScript = ./update.sh;
