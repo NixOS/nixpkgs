@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "copyright-update";
-  version = "2016.1018";
+  version = "2025.0404";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "jaalto";
     repo = "project--copyright-update";
     rev = "release/${version}";
-    sha256 = "1kj6jlgyxrgvrpv7fcgbibfqqa83xljp17v6sas42dlb105h6sgd";
+    sha256 = "sha256-FeKWCgCDA77iJ/cWtfx6hXSyWxwmlkW4EidPxy1W9VY=";
   };
 
   buildInputs = [ perl ];
