@@ -100,7 +100,7 @@ lib.mapAttrs mkInstallScript {
     set_property(TARGET SwiftASN1 PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libSwiftASN1@sharedLibExt@")
   '';
 
-  swift-certificates = ''
+  SwiftCertificates = ''
     add_library(SwiftCertificates SHARED IMPORTED)
     set_property(TARGET SwiftCertificates PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCertificates@sharedLibExt@")
   '';

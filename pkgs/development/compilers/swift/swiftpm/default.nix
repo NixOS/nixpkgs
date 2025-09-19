@@ -351,7 +351,7 @@ let
       swift-crypto
     ];
 
-    postInstall = cmakeGlue.swift-certificates;
+    postInstall = cmakeGlue.SwiftCertificates;
   };
 
   # Build a bootrapping swiftpm using CMake.
