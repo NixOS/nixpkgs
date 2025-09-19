@@ -1,8 +1,5 @@
-let
-  mirrors = import ./mirrors.nix;
-in
-
 {
+  mirrors,
   rewriteURL,
   system,
 }:
