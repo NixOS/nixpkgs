@@ -603,6 +603,7 @@ stdenvNoCC.mkDerivation {
         if targetPlatform.isCygwin then
           ''
             echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_bin}/lib" >> $out
+            echo appendToVar configureFlags gl_cv_clean_version_stddef=yes >> $out
           ''
         else
           ''
