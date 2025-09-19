@@ -141,7 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.ovn.org";
     changelog = "https://github.com/ovn-org/ovn/blob/refs/tags/${finalAttrs.src.tag}/NEWS";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      lgpl21Plus # bugtool plugins
+      sissl11 # lib/sflow from ovs submodule
+    ];
     maintainers = with lib.maintainers; [
       adamcstephens
       booxter
