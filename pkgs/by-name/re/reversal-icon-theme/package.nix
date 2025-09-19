@@ -73,7 +73,7 @@ lib.checkListOfEnum "${pname}: color variants"
       mkdir -p $out/share/icons
 
       name= ./install.sh \
-        ${if allColorVariants then "-a" else builtins.toString colorVariants} \
+        ${if allColorVariants then "-a" else toString colorVariants} \
         -d $out/share/icons
 
       rm $out/share/icons/*/{AUTHORS,COPYING}

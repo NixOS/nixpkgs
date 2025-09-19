@@ -6,7 +6,7 @@
   hello,
 }:
 
-builtins.derivation {
+derivation {
   name = "test-bootstrap-tools";
 
   inherit (stdenv.hostPlatform) system;

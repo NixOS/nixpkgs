@@ -10,7 +10,7 @@
 }:
 
 let
-  attrsToSources = attrs: builtins.map ({ repo, version, ... }: "${repo}@${version}") attrs;
+  attrsToSources = attrs: map ({ repo, version, ... }: "${repo}@${version}") attrs;
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
       ) externalPlugins)
     }
     diff -u plugin.cfg.orig plugin.cfg || true
-    for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
+    for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
     GOOS= GOARCH= go generate
     go mod vendor
   '';

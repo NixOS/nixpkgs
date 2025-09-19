@@ -22,8 +22,8 @@ let
       sync_effects_enabled = ${toPyBoolStr cfg.syncEffectsEnabled}
       devices_off_on_screensaver = ${toPyBoolStr cfg.devicesOffOnScreensaver}
       battery_notifier = ${toPyBoolStr cfg.batteryNotifier.enable}
-      battery_notifier_freq = ${builtins.toString cfg.batteryNotifier.frequency}
-      battery_notifier_percent = ${builtins.toString cfg.batteryNotifier.percentage}
+      battery_notifier_freq = ${toString cfg.batteryNotifier.frequency}
+      battery_notifier_percent = ${toString cfg.batteryNotifier.percentage}
 
       [Statistics]
       key_statistics = ${toPyBoolStr cfg.keyStatistics}

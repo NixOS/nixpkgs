@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "SKIP_UNIT_TESTS" true)
-    (lib.cmakeFeature "IGC_DIR" (builtins.toString intel-graphics-compiler))
+    (lib.cmakeFeature "IGC_DIR" (toString intel-graphics-compiler))
     (lib.cmakeFeature "OCL_ICD_VENDORDIR" "${placeholder "out"}/etc/OpenCL/vendors")
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")

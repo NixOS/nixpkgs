@@ -9,7 +9,7 @@ let
     lib.optionalString (value != null) ''
       <property>
         <name>${name}</name>
-        <value>${builtins.toString value}</value>
+        <value>${toString value}</value>
       </property>
     '';
   siteXml =
@@ -22,7 +22,7 @@ let
       </configuration>
     '';
   cfgLine = name: value: ''
-    ${name}=${builtins.toString value}
+    ${name}=${toString value}
   '';
   cfgFile =
     fileName: properties:

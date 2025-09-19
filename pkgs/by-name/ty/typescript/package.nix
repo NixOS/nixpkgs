@@ -64,7 +64,7 @@ buildNpmPackage (finalAttrs: {
       ];
       runtimeEnv = {
         PNAME = finalAttrs.pname;
-        PKG_DIR = builtins.toString ./.;
+        PKG_DIR = toString ./.;
         FORCE_EMPTY_CACHE = "true";
         OLD_NPM_DEPS_HASH = finalAttrs.npmDepsHash;
       };

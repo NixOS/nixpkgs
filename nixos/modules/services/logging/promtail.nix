@@ -85,7 +85,7 @@ in
         RestrictSUIDSGID = true;
         PrivateMounts = true;
         CacheDirectory = "promtail";
-        ReadWritePaths = lib.optional allowPositionsFile (builtins.dirOf positionsFile);
+        ReadWritePaths = lib.optional allowPositionsFile (dirOf positionsFile);
 
         User = "promtail";
         Group = "promtail";

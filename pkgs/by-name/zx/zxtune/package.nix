@@ -115,11 +115,11 @@ stdenv.mkDerivation rec {
     in
     ''
       runHook preBuild
-      make ${builtins.toString makeOptsCommon} -C apps/xtractor
-      make ${builtins.toString makeOptsCommon} -C apps/zxtune123
+      make ${toString makeOptsCommon} -C apps/xtractor
+      make ${toString makeOptsCommon} -C apps/zxtune123
     ''
     + lib.optionalString withQt ''
-      make ${builtins.toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
+      make ${toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
     ''
     + ''
       runHook postBuild

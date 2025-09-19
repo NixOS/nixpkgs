@@ -71,7 +71,7 @@
 
   solutions.default =
     let
-      out = builtins.placeholder "out";
+      out = placeholder "out";
       scriptsDir = "${out}/share/pihole/advanced/Scripts";
     in
     {

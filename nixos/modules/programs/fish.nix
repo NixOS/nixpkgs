@@ -300,7 +300,7 @@ in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = builtins.map generateCompletions config.environment.systemPackages;
+            paths = map generateCompletions config.environment.systemPackages;
           };
       })
 

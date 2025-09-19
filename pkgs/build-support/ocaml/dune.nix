@@ -66,7 +66,7 @@ else
       strictDeps = true;
 
     }
-    // (builtins.removeAttrs args [
+    // (removeAttrs args [
       "minimalOCamlVersion"
       "duneVersion"
     ])

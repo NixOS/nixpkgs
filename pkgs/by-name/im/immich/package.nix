@@ -56,7 +56,7 @@ let
 
   buildLock = {
     sources =
-      builtins.map
+      map
         (p: {
           name = p.pname;
           inherit (p) version;

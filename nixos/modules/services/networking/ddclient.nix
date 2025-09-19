@@ -8,7 +8,7 @@ let
   cfg = config.services.ddclient;
   boolToStr = bool: if bool then "yes" else "no";
   dataDir = "/var/lib/ddclient";
-  StateDirectory = builtins.baseNameOf dataDir;
+  StateDirectory = baseNameOf dataDir;
   RuntimeDirectory = StateDirectory;
 
   configFile' = pkgs.writeText "ddclient.conf" ''

@@ -83,7 +83,7 @@
 
       makeFlags = (previousAttrs.makeFlags or [ ]) ++ [
         "localedata/install-locales"
-        "localedir=${builtins.placeholder "out"}/lib/locale"
+        "localedir=${placeholder "out"}/lib/locale"
       ];
 
       installPhase = ''

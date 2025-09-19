@@ -10,7 +10,7 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule rec {
   pname = "opa-envoy-plugin";
