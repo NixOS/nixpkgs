@@ -75,6 +75,7 @@ stdenv.mkDerivation {
   hardeningDisable = [
     # conflicts with internal definition of 'bzero'
     "fortify"
+    "stackprotector"
   ];
   configurePlatforms = [
     "build"
