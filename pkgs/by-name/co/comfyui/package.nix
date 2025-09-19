@@ -3,6 +3,10 @@
   python3Packages,
   fetchFromGitHub,
   makeWrapper,
+
+  additionalDependencies ? [],
+
+  callPackage,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -58,7 +62,7 @@ python3Packages.buildPythonApplication rec {
     tqdm
     transformers
     yarl
-  ];
+  ] ++ additionalDependencies;
 
   installPhase = ''
     runHook preInstall
@@ -93,6 +97,13 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
+
+  # python3Packages.
+  passthru.plugins.comfyui-gguf = callPackage ./nodes/comfyui-gguf.nix {
+    mkComfyuiNode = passthru.mkComfyuiNode;
+    # pythonPackages = python3Packages;
+  };
+  passthru.mkComfyuiNode = callPackage ./node-builder.nix { pythonPackages = python3Packages; };
 
   meta = {
     description = "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface";
