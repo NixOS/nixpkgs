@@ -819,7 +819,7 @@ in
       src,
       modDirVersion ? lib.versions.pad 3 version,
       configfile,
-      allowImportFromDerivation ? true,
+      allowImportFromDerivation ? false,
     }:
     recurseIntoAttrs (
       packagesFor (manualConfig {
