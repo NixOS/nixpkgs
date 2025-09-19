@@ -7,7 +7,7 @@
   newScope,
   overrideCC,
   stdenvNoLibc,
-  runCommand,
+  emptyDirectory,
 }:
 
 lib.makeScope newScope (
@@ -20,11 +20,9 @@ lib.makeScope newScope (
       stdenv = stdenvNoLibc;
     };
 
-    cygwin-shim = cygwin // {
-      bin = runCommand "cygwin-shim" { } ''
-        mkdir -p "$out"/bin
-        ln -sr /bin/cygwin1.dll "$out"/bin/
-      '';
+    # this is here to avoid symlinks being made to cygwin1.dll in /nix/store
+    cygwin-nobin = cygwin // {
+      bin = emptyDirectory;
     };
 
     cygwin_headers = callPackage ./cygwin/headers.nix { };
