@@ -71,13 +71,16 @@ stdenv.mkDerivation rec {
 
   # Fix Darwin bundle/dylib linking and macOS function calls
   preBuild = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace libtool \
-      --replace "-bundle" "-dynamiclib" \
-      --replace "-Wl,-bundle" "-Wl,-dynamiclib"
-
     substituteInPlace src/love.cpp \
       --replace "love::macosx::checkDropEvents()" "std::string(\"\")" \
       --replace "love::macosx::getLoveInResources()" "std::string(\"\")"
+  '';
+
+  # Use a more deterministic approach for libtool fixes
+  postConfigure = lib.optionalString stdenv.isDarwin ''
+    # Fix libtool to use dynamiclib instead of bundle for Darwin
+    sed -i 's/-bundle/-dynamiclib/g' libtool
+    sed -i 's/-Wl,-bundle/-Wl,-dynamiclib/g' libtool
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
