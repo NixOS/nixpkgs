@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_spec" ];
 
   meta = {
-    changelog = "https://github.com/pchomik/pytest-spec/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/pchomik/pytest-spec/blob/${src.tag}/CHANGES.txt";
     description = "Pytest plugin to display test execution output like a SPECIFICATION";
     homepage = "https://github.com/pchomik/pytest-spec";
     license = lib.licenses.gpl2Plus;
