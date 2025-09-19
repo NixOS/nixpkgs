@@ -8,19 +8,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tldr";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tldr-python-client";
     tag = version;
-    hash = "sha256-lc0Jen8vW4BNg784td1AZa2GTYvXC1d83FnAe5RZqpY=";
+    hash = "sha256-q+0tnqpfIlho++eaxgeybJQDU0Xzr5GQlFUQhhpMHiA=";
   };
 
   build-system = with python3Packages; [
-    setuptools
-    wheel
+    hatchling
   ];
 
   dependencies = with python3Packages; [
@@ -50,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "Simplified and community-driven man pages";
+    description = "Simplified and community-driven man pages.";
     longDescription = ''
       tldr pages gives common use cases for commands, so you don't need to hunt
       through a man page for the correct flags.
