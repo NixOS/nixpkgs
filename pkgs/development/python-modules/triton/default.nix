@@ -317,6 +317,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       SomeoneSerge
+      Madouura
       derdennisop
     ];
   };

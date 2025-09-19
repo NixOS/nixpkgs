@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     cd ../..
 
     # Remove dev dependencies.
-    CI=true pnpm --ignore-scripts prune --prod
+    pnpm --ignore-scripts prune --prod
     # Clean up broken symlinks left behind by `pnpm prune`
     find node_modules/.bin -xtype l -delete
 

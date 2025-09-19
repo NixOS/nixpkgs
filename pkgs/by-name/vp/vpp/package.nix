@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
     homepage = "https://s3-docs.fd.io/vpp/${version}/";
     license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ azey7f ];
+    maintainers = with lib.maintainers; [ romner-set ];
     mainProgram = "vpp";
     platforms = lib.platforms.linux;
   };

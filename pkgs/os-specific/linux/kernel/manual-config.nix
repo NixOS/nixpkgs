@@ -32,18 +32,24 @@ let
 
   readConfig =
     configfile:
-    let
-      matchLine =
-        line:
-        let
-          match = lib.match "(CONFIG_[^=]+)=([ym])" line;
-        in
-        lib.optional (match != null) {
-          name = lib.elemAt match 0;
-          value = lib.elemAt match 1;
-        };
-    in
-    lib.listToAttrs (lib.concatMap matchLine (lib.splitString "\n" (builtins.readFile configfile)));
+    lib.listToAttrs (
+      map
+        (
+          line:
+          let
+            match = lib.match "(.*)=\"?(.*)\"?" line;
+          in
+          {
+            name = lib.elemAt match 0;
+            value = lib.elemAt match 1;
+          }
+        )
+        (
+          lib.filter (line: !(lib.hasPrefix "#" line || line == "")) (
+            lib.splitString "\n" (builtins.readFile configfile)
+          )
+        )
+    );
 in
 lib.makeOverridable (
   {

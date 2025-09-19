@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -61,11 +60,6 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "intents/tests"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isx86_64 [
-    # assert 100 == -100.0
-    "test_HassLightSet_name_brightness"
   ];
 
   meta = with lib; {

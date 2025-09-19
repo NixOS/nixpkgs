@@ -256,9 +256,7 @@ in
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
 
-        # Meilisearch needs to determine cgroup memory limits to set its own memory limits.
-        # This means this can't be set to "pid"
-        ProcSubset = "all";
+        ProcSubset = "pid";
         ProtectProc = "invisible";
 
         NoNewPrivileges = true;

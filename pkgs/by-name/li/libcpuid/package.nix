@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [
       orivej
+      artuuge
     ];
     platforms = platforms.x86;
   };

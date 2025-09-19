@@ -335,13 +335,13 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-WyIXWOpplukkdCVcI6EyJxcpL1lE+gOwkgLM7ZYjPMM=",
+    "hash": "sha256-0ewJLIrKCdTAb3+up7xdbxXscr3hmcIWWcAEGp2TaG4=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.74.0",
+    "rev": "v3.73.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-29N8ejKj9kuo56hPZkdrQDEF4nwNNzAS1+BSsYOvvl0="
+    "vendorHash": "sha256-RsIuWBhiziUeil/buqOKNH5tPuuWcMoGbKKQUMH17sc="
   },
   "deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
@@ -615,13 +615,13 @@
     "vendorHash": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y="
   },
   "htpasswd": {
-    "hash": "sha256-ALTyTTVyS2HHenmk8HVwtQenCmJX05kyXifJTzzmnHE=",
+    "hash": "sha256-Kc3L8oqQOP+k8PZAWkRApDj+3LRgs3P3mm4vX2QcUdg=",
     "homepage": "https://registry.terraform.io/providers/loafoe/htpasswd",
     "owner": "loafoe",
     "repo": "terraform-provider-htpasswd",
-    "rev": "v1.5.0",
+    "rev": "v1.2.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-6+ZQVWc4/2RoNjQLzetLTl9L8AdbFu2uFmqJ9Kxcc7Q="
+    "vendorHash": "sha256-zo22ng+J9ItkptdgUt6Pekkd9T7hFTYdVAWnp2k2vrs="
   },
   "http": {
     "hash": "sha256-IXqKZ9RQP0kZVxc9OfaWglF8GeycSAl5DATdqc8n35g=",
@@ -1219,13 +1219,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "signalfx": {
-    "hash": "sha256-cZnG8WohzR4OPBoX9PHdbvsziPfcsR75apXZX8EwtEQ=",
+    "hash": "sha256-hNMZbrihV+xlfamXRaGszQRqO8Tn2829rd4+pH83lrU=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.21.1",
+    "rev": "v9.19.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TMoZ1uR7G9oC7/9CiwC9rIJazqB9g6Xb+vxvYX2T9RY="
+    "vendorHash": "sha256-wpm7J8kfkm4vDZhZ0koQsgpW5JwWY7DngSYXfaWh3FQ="
   },
   "skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",

@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       davidak
       johnrtitor
+      Madouura
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";

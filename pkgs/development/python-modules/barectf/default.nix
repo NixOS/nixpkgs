@@ -50,5 +50,6 @@ buildPythonPackage rec {
     mainProgram = "barectf";
     homepage = "https://github.com/efficios/barectf";
     license = licenses.mit;
+    maintainers = with maintainers; [ Madouura ];
   };
 }

@@ -150,10 +150,10 @@
       sourceVersion = {
         major = "7";
         minor = "3";
-        patch = "20";
+        patch = "19";
       };
 
-      hash = "sha256-d4bdp2AAPi6nQJwQN+UCAMV47EJ84CRaxM11hxCyBvs=";
+      hash = "sha256-SBfARLtGmjJ05gqjZFdw+B60+RZup/3E5sNRNFVUyNg=";
       pythonVersion = "3.11";
       db = db.override { dbmSupport = !stdenv.hostPlatform.isDarwin; };
       python = __splicedPackages.pypy27;

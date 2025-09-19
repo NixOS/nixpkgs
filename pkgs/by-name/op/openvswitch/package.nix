@@ -160,11 +160,7 @@ stdenv.mkDerivation rec {
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
     '';
     homepage = "https://www.openvswitch.org/";
-    license = with lib.licenses; [
-      asl20
-      lgpl21Plus # ovs-bugtool
-      sissl11 # lib/sflow
-    ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       adamcstephens
       booxter

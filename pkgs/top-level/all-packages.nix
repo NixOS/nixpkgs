@@ -1915,6 +1915,8 @@ with pkgs;
     extraPackages = [ ffmpeg ];
   };
 
+  commitizen = with python3Packages; toPythonApplication commitizen;
+
   compactor = callPackage ../applications/networking/compactor {
     protobuf = protobuf_21;
   };
@@ -6654,6 +6656,8 @@ with pkgs;
   ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix { };
+
+  cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
 
   # can't use override - it triggers infinite recursion
   cmakeMinimal = callPackage ../by-name/cm/cmake/package.nix {
@@ -14806,11 +14810,12 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops { })
     mkKops
-    kops_1_31
-    kops_1_32
-    kops_1_33
+    kops_1_27
+    kops_1_28
+    kops_1_29
+    kops_1_30
     ;
-  kops = kops_1_33;
+  kops = kops_1_29;
 
   lilypond = callPackage ../misc/lilypond { };
 

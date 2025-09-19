@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    CI=true pnpm --ignore-scripts prune --prod
+    pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar

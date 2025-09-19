@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lightweight Wayland notification daemon";
-    homepage = "https://github.com/emersion/mako";
+    homepage = "https://wayland.emersion.fr/mako/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir

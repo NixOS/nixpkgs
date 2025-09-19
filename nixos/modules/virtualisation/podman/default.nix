@@ -103,24 +103,13 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      description = ''
-        Extra dependencies for podman to be placed on $PATH in the wrapper.
-      '';
-    };
-
-    extraRuntimes = mkOption {
-      type = with types; listOf package;
-      # keep the default in sync with the podman package
-      default = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ];
-      defaultText = lib.literalExpression ''lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ]'';
       example = lib.literalExpression ''
         [
           pkgs.gvisor
         ]
       '';
       description = ''
-        Extra runtime packages to be installed in the Podman wrapper.
-        Those are then placed in libexec/podman, i.e. are seen as podman internal commands.
+        Extra packages to be installed in the Podman wrapper.
       '';
     };
 
@@ -172,20 +161,21 @@ in
                 config.systemd.package # To allow systemd-based container healthchecks
               ]
               ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-            extraRuntimes =
-              cfg.extraRuntimes
-              ++
-                lib.optionals
-                  (
-                    config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
-                    == "slirp4netns"
-                  )
-                  (
-                    with pkgs;
-                    [
-                      slirp4netns
-                    ]
-                  );
+            extraRuntimes = [
+              pkgs.runc
+            ]
+            ++
+              lib.optionals
+                (
+                  config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
+                  == "slirp4netns"
+                )
+                (
+                  with pkgs;
+                  [
+                    slirp4netns
+                  ]
+                );
           };
       };
 
@@ -242,6 +232,10 @@ in
       # containers cannot reach aardvark-dns otherwise
       networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
 
+      virtualisation.podman.extraPackages = [
+        pkgs.iptables
+      ]
+      ++ lib.optional config.networking.nftables.enable pkgs.nftables;
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
