@@ -585,6 +585,18 @@ in
             ];
         }
       );
+      users.users = toHardenedClientAttrs (
+        client:
+        nameValuePair client.user.name {
+          extraGroups = [
+            /*
+              allows debug bundles to gather systemd logs for `netbird*.service`
+              this is not ideal for hardening as it grants access to the whole journal, not just own logs
+            */
+            "systemd-journal"
+          ];
+        }
+      );
     }
     # Hardening section
     (mkIf (hardenedClients != { }) {
