@@ -9,7 +9,9 @@
   gmp,
   zlib,
   librdf_raptor2,
-  nix-update-script,
+  writeShellScript,
+  nix-update,
+  common-updater-scripts,
 }:
 
 stdenv.mkDerivation {
@@ -50,7 +52,13 @@ stdenv.mkDerivation {
   #     libYap.a(pl-buffer.o):/build/yap-6.3.3/H/pl-yap.h:230: first defined here
   env.NIX_CFLAGS_COMPILE = "-fpermissive -fcommon";
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = writeShellScript "update-yap" ''
+    ${lib.getExe nix-update} yap --version=branch
+    version=$(nix eval --raw --file . yap.version)
+    src=$(nix eval --raw --file . yap.src)
+    latestVersion=$(grep -E '^[[:space:]]*set\(YAP_(MAJOR|MINOR|PATCH)_VERSION' "$src"/CMakeLists.txt | sed -E 's/.* ([0-9]+).*/\1/' | paste -sd.)
+    ${lib.getExe' common-updater-scripts "update-source-version"} yap ''${latestVersion}-''${version#*-} --ignore-same-hash
+  '';
 
   meta = {
     # linux 32 bit build fails.
