@@ -116,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $bin/bin/augenrules \
-      --replace-fail "/sbin/auditctl" "$bin/bin/auditctl" \
+      --replace-fail "/sbin/auditctl -R" "$bin/bin/auditctl -R" \
+      --replace-fail "auditctl -s" "$bin/bin/auditctl -s" \
       --replace-fail "/bin/ls" "ls"
     wrapProgram $bin/bin/augenrules \
       --prefix PATH : ${
