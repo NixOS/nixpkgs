@@ -31,11 +31,13 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    async-timeout
     bluetooth-adapters
     btsocket
     pyric
     usb-devices
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
