@@ -82,6 +82,7 @@
   tree-sitter-prisma = lib.importJSON ./tree-sitter-prisma.json;
   tree-sitter-proto = lib.importJSON ./tree-sitter-proto.json;
   tree-sitter-pug = lib.importJSON ./tree-sitter-pug.json;
+  tree-sitter-purescript = lib.importJSON ./tree-sitter-purescript.json;
   tree-sitter-python = lib.importJSON ./tree-sitter-python.json;
   tree-sitter-ql = lib.importJSON ./tree-sitter-ql.json;
   tree-sitter-ql-dbscheme = lib.importJSON ./tree-sitter-ql-dbscheme.json;
