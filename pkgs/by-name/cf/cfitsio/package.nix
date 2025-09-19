@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   cmake,
   bzip2,
@@ -29,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./cfitsio-pc-cmake.patch
+
+    (fetchpatch {
+      name = "cfitsio-fix-cmake-4.patch";
+      url = "https://github.com/HEASARC/cfitsio/commit/101e0880fca41e2223df7eec56d9e84e90b9ed56.patch";
+      hash = "sha256-rufuqOBfE7ItTYwsGdu9G4BXSz4vZd52XmJi09kqrCM=";
+    })
   ];
 
   nativeBuildInputs = [
