@@ -49,6 +49,7 @@ stdenv.mkDerivation {
   '';
 
   env.CXXFLAGS_FOR_TARGET = "-Wno-error";
+  env.LDFLAGS_FOR_TARGET = "-L${lib.getLib mingw_w64}/w32api";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
