@@ -4,6 +4,7 @@ let
   inherit (nixpkgs.pkgsCross.x86_64-cygwin)
     bash
     buildEnv
+    buildPackages
     cacert
     coreutils
     lib
@@ -19,6 +20,7 @@ let
 
     paths = [
       bash
+      coreutils
       nix
     ];
 
@@ -56,17 +58,24 @@ let
       @echo off
       set PATH=%~dp0\bin;%PATH%
       set BASH="%~dp0${lib.replaceString "/" "\\" (lib.getBin bash).outPath}\bin\bash.exe"
-      %BASH% nix\var\nix\profiles\system\activate || exit /b
+      %BASH% /nix/var/nix/profiles/system/activate || exit /b
       %BASH% --login -i || exit /b
     ''
   );
 
+  profile = writeText "profile" ''
+    export PATH="${lib.getBin sw}"/bin:$PATH
+  '';
+
   activate = writeShellScript "activate" ''
     (
       export PATH=${lib.makeBinPath [ coreutils ]}:/bin
-      ln -sr "${cacert}"/ssl /etc/ssl
+      rm -rf /etc
+      mkdir -p /etc/ssl/certs
+      ln -fsr "${cacert}"/etc/ssl/certs/ca-bundle.crt /etc/ssl/certs/ca-certificates.crt
+      ln -fsr "${cacert}"/etc/ssl/trust-source /etc/ssl/
+      ln -fsr "${profile}" /etc/profile
     )
-    exec "${lib.getBin bash}"/bin/bash --login -i
   '';
 
 in
@@ -93,9 +102,9 @@ in
     }
   ];
 
-  extraCommands = ''
-    mkdir etc tmp
-    ln -sr "${system}" /nix/var/nix/profiles/system
+  extraCommands = buildPackages.writeShellScript "extra-commands.sh" ''
+    mkdir -p tmp nix/var/nix/profiles
+    ln -s "$(realpath -s --relative-to=/nix/var/nix/profiles "${system}")" nix/var/nix/profiles/system
   '';
 })
 // {
