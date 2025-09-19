@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.80";
+  version = "0.9.81";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PIoI1tpVqxcWB46TGCB/YhCRAKcOoiBigyndicY11ic=";
+    hash = "sha256-aj4XBphkIeqGdqiWz3Um1+dGSYF6G3b+9DdN/4qZcZI=";
     fetchSubmodules = true;
   };
 
