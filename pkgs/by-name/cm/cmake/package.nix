@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (
     let
       cc = stdenv.cc;
-      bintools = lib.getBin (cc.bintools.bintools or cc.bintools);
+      bintools = lib.getBin (if cc.bintools.bintools != null then cc.bintools.bintools else cc.bintools);
       targetPrefix = cc.targetPrefix;
     in
     [
