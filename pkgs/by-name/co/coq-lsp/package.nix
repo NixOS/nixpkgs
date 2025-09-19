@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       error reporting, completion, and incremental compilation for Coq files.
     '';
     homepage = "https://github.com/ejgallego/coq-lsp";
-    changelog = "https://github.com/ejgallego/coq-lsp/blob/0.2.3+8.20/CHANGES.md";
+    changelog = "https://github.com/ejgallego/coq-lsp/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ thomasjm ];
     platforms = platforms.unix;
