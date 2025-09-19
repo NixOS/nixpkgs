@@ -19,11 +19,12 @@
   awesomeversion,
   packaging,
   lxml,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.18";
+  version = "2.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = "nvchecker";
     tag = "v${version}";
-    hash = "sha256-6uFox07mZeKwyhRXGuU8dMoPhLB5CkgdLaWCfG2dy4k=";
+    hash = "sha256-C8g8uhuWOl3zPCjTaGs21yJ8k3tmvZE8U9LzSXoDSxE=";
   };
 
   build-system = [ setuptools ];
@@ -77,6 +78,8 @@ buildPythonPackage rec {
     awesomeversion = [ awesomeversion ];
     pypi = [ packaging ];
     htmlparser = [ lxml ];
+    rpmrepo = [ lxml ] ++ lib.optionals (pythonOlder "3.14") [ zstandard ];
+    jq = [ jq ];
   };
 
   passthru.updateScript = nix-update-script { };
