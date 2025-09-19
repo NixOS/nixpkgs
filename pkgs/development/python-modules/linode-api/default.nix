@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.34.0";
+  version = "5.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "linode";
     repo = "python-linode-api";
     tag = "v${version}";
-    hash = "sha256-yaItHYxO2+oMiqNAHJJG1B0VRHyKNvicupktihbTNr8=";
+    hash = "sha256-Ak92yjTDi8ql+Trzl4IRAn+DucRZsdHSK75RjFECcCY=";
   };
 
   build-system = [ setuptools ];
