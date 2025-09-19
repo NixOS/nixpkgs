@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.14.0";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-KPVv4WU6MC17QDvcdpV86FH+FUcS8RMHxzmN/Gx2Cx8=";
+    hash = "sha256-p+Z2c+PBNdjfaRjZErWwWgihzuddV14PgTHE3NVNHs8=";
   };
 
   build-system = [
