@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     libtheora
     which
     libtool
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.isLinux [
     xorg.libX11 # SDL2 optional depend, for SDL_syswm.h
     libGLU
     libGL
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     substituteInPlace libtool \
       --replace "-bundle" "-dynamiclib" \
       --replace "-Wl,-bundle" "-Wl,-dynamiclib"
-    
+
     substituteInPlace src/love.cpp \
       --replace "love::macosx::checkDropEvents()" "std::string(\"\")" \
       --replace "love::macosx::getLoveInResources()" "std::string(\"\")"
