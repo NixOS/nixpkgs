@@ -137,7 +137,7 @@ in
       name = "ax25-kissattach-${portName}";
       value = {
         description = "AX.25 KISS attached interface for ${portName}";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "ax25-axports.target" "multi-user.target" ];
         before = [ "ax25-axports.target" ];
         partOf = [ "ax25-axports.target" ];
         serviceConfig = {
