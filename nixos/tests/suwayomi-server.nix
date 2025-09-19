@@ -1,10 +1,6 @@
-{
-  system ? builtins.currentSystem,
-  pkgs,
-  lib ? pkgs.lib,
-}:
+{ lib, runTest }:
+
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (lib) recursiveUpdate;
 
   baseTestConfig = {
@@ -17,22 +13,23 @@ let
           settings.server.port = 1234;
         };
       };
-    testScript = ''
-      machine.wait_for_unit("suwayomi-server.service")
-      machine.wait_for_open_port(1234)
-      machine.succeed("curl --fail http://localhost:1234/")
-    '';
   };
 in
 
 {
-  without-auth = makeTest (
+  without-auth = runTest (
     recursiveUpdate baseTestConfig {
       name = "suwayomi-server-without-auth";
+
+      testScript = ''
+        machine.wait_for_unit("suwayomi-server.service")
+        machine.wait_for_open_port(1234)
+        machine.succeed("curl --fail http://localhost:1234/")
+      '';
     }
   );
 
-  with-auth = makeTest (
+  with-auth = runTest (
     recursiveUpdate baseTestConfig {
       name = "suwayomi-server-with-auth";
 
@@ -50,6 +47,12 @@ in
             };
           };
         };
+
+      testScript = ''
+        machine.wait_for_unit("suwayomi-server.service")
+        machine.wait_for_open_port(1234)
+        machine.succeed("curl --fail -u alice:pass http://localhost:1234/")
+      '';
     }
   );
 }
