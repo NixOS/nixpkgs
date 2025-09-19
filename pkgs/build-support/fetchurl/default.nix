@@ -144,54 +144,24 @@ let
     in
     if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
-  hash_ =
-    if
-      with lib.lists;
-      length (
-        filter (s: s != "") [
-          hash
-          outputHash
-          sha1
-          sha256
-          sha512
-        ]
-      ) > 1
-    then
-      throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
-    else
-
-    if hash != "" then
-      {
-        outputHashAlgo = null;
-        outputHash = hash;
-      }
-    else if outputHash != "" then
-      if outputHashAlgo != "" then
-        { inherit outputHashAlgo outputHash; }
-      else
-        throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
-    else if sha512 != "" then
-      {
-        outputHashAlgo = "sha512";
-        outputHash = sha512;
-      }
-    else if sha256 != "" then
-      {
-        outputHashAlgo = "sha256";
-        outputHash = sha256;
-      }
-    else if sha1 != "" then
-      {
-        outputHashAlgo = "sha1";
-        outputHash = sha1;
-      }
-    else if cacert != null then
-      {
-        outputHashAlgo = "sha256";
-        outputHash = "";
-      }
-    else
-      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
+  hashAttrsUnfiltered = {
+    inherit
+      hash
+      sha256
+      sha512
+      sha1
+      outputHash
+      outputHashAlgo
+      ;
+  };
+  hashAttrsFiltered = lib.filterAttrs (_: hash: hash != "") hashAttrsUnfiltered;
+  # Only allow fake hash (by setting `hash = ""`) if we have cacert (and thus can avoid MITM attacks)
+  hashAttrs =
+    if hashAttrsFiltered == { } && cacert != null then { hash = ""; } else hashAttrsFiltered;
+  hash_ = lib.fetchers.normalizeHash {
+    hashTypes = builtins.attrNames hashAttrsUnfiltered;
+    fetcher = "fetchurl (${lib.concatMapStringsSep ", " lib.escapeShellArg preRewriteUrls})";
+  } hashAttrs;
 
   resolvedUrl =
     let
