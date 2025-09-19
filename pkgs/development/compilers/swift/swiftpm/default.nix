@@ -57,7 +57,7 @@ let
       substituteInPlace Sources/PackageModel/UserToolchain.swift \
         --replace-fail \
           'librariesPath = applicationPath.parentDirectory' \
-          "librariesPath = AbsolutePath(\"$out\")"
+          "librariesPath = try AbsolutePath(validating: \"$out\")"
     '';
   };
 
