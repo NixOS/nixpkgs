@@ -1,4 +1,5 @@
 repo,branch,alias
+https://github.com/Aasim-A/scrollEOF.nvim,pr/large-scrolloff-support,
 https://github.com/euclidianAce/BetterLua.vim/,,
 https://github.com/vim-scripts/BufOnly.vim/,,
 https://github.com/jackMort/ChatGPT.nvim/,HEAD,
