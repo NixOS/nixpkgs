@@ -2594,6 +2594,8 @@ self: super: with self; {
 
   ckzg = callPackage ../development/python-modules/ckzg { };
 
+  clang-repl-kernel = callPackage ../development/python-modules/clang-repl-kernel { };
+
   clarabel = callPackage ../development/python-modules/clarabel { };
 
   clarifai = callPackage ../development/python-modules/clarifai { };
