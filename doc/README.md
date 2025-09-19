@@ -213,17 +213,14 @@ Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
 
-### Writing Reference Documentation
+### Writing Function Documentation
 
-[Reference documentation](https://diataxis.fr/reference/) should **only describe** the subject being documented.
+Function documentation is *reference documentation*, for which
+[diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
 
-We use **descriptive, present-active** style to describe.
-
-👉 Rule of thumb: Always describe what the function does. Only give instructions when the user actually needs to act (e.g. migrations).
-
-👉 When drafting, think of a full sentence like: *"subtractValues does ..."*
-
-But since the function name already appears in the signature or heading, repeating it is redundant. Drop the subject and start directly with the verb:
+On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
+the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+For example:
 
 ```nix
 /**
