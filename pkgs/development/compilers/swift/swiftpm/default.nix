@@ -314,6 +314,10 @@ let
     name = "swift-crypto";
     src = generated.sources.swift-crypto;
 
+    patches = [
+      ./patches/install-crypto-extras.patch
+    ];
+
     postPatch = ''
       # Fix use of hardcoded tool paths on Darwin.
       substituteInPlace CMakeLists.txt \

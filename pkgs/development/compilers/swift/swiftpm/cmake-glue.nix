@@ -90,6 +90,8 @@ lib.mapAttrs mkInstallScript {
     set_property(TARGET Crypto PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCrypto@sharedLibExt@")
 
     add_library(_CryptoExtras SHARED IMPORTED)
+    # this can't possibly be right... I really think it should be `libCryptoExtras`
+    # swift-certificates did build with this though.....
     set_property(TARGET _CryptoExtras PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCrypto@sharedLibExt@")
   '';
 
