@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The following scripts are modified from [Guix's](https://packages.guix.gnu.org/packages/s7/).
 
+  patches = [ ./0001-fix-uname-in-windows.patch ];
+
   postPatch = ''
     substituteInPlace s7.c \
         --replace-fail libc_s7.so $out/lib/libc_s7.so

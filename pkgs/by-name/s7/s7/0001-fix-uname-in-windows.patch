@@ -1,0 +1,107 @@
+From ee1d69434d7a6c20f2c80001191b721b2b534899 Mon Sep 17 00:00:00 2001
+From: Jinser Kafka <aimer@purejs.icu>
+Date: Fri, 19 Sep 2025 07:01:02 +0800
+Subject: [PATCH] fix uname in windows
+
+---
+ s7.c | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+
+diff --git a/s7.c b/s7.c
+index 150c145..52157b9 100644
+--- a/s7.c
++++ b/s7.c
+@@ -38601,6 +38601,82 @@ static s7_pointer g_time(s7_scheme *sc, s7_pointer args)
+ }
+ 
+ /* -------------------------------- uname -------------------------------- */
++#if defined(_MSC_VER) || defined(__MINGW32__)
++// avoid including <windows.h> directly due to macro pollution
++typedef struct {
++    char sysname[256];
++    char nodename[256];
++    char release[256];
++    char version[256];
++    char machine[256];
++} uname_info;
++
++extern __declspec(dllimport) int __stdcall GetVersionExA(void*);
++extern __declspec(dllimport) void __stdcall GetSystemInfo(void*);
++extern __declspec(dllimport) int __stdcall GetComputerNameA(char*, unsigned long*);
++
++typedef struct {
++    unsigned long dwOSVersionInfoSize;
++    unsigned long dwMajorVersion;
++    unsigned long dwMinorVersion;
++    unsigned long dwBuildNumber;
++    unsigned long dwPlatformId;
++    char szCSDVersion[128];
++} OSVERSIONINFOA;
++
++typedef struct {
++    unsigned short wProcessorArchitecture;
++    unsigned short wReserved;
++} SYSTEM_INFO;
++
++static s7_pointer g_uname(s7_scheme *sc, s7_pointer args)
++{
++  uname_info buf;
++  OSVERSIONINFOA osvi = {0};
++  SYSTEM_INFO si = {0};
++  char hostname[256] = "localhost";
++  unsigned long hostname_size = sizeof(hostname);
++
++  osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
++  GetVersionExA(&osvi);
++  GetSystemInfo(&si);
++  GetComputerNameA(hostname, &hostname_size);
++
++  strcpy(buf.sysname, "Windows");
++  strcpy(buf.nodename, hostname);
++  snprintf(buf.release, sizeof(buf.release), "%lu.%lu",
++           osvi.dwMajorVersion, osvi.dwMinorVersion);
++  snprintf(buf.version, sizeof(buf.version), "Build %lu %s",
++           osvi.dwBuildNumber, osvi.szCSDVersion);
++
++  switch (si.wProcessorArchitecture) {
++      case 9: // PROCESSOR_ARCHITECTURE_AMD64
++          strcpy(buf.machine, "x86_64");
++          break;
++      case 0: // PROCESSOR_ARCHITECTURE_INTEL
++          strcpy(buf.machine, "i386");
++          break;
++      case 6: // PROCESSOR_ARCHITECTURE_IA64
++          strcpy(buf.machine, "ia64");
++          break;
++      case 5: // PROCESSOR_ARCHITECTURE_ARM
++          strcpy(buf.machine, "arm");
++          break;
++      case 12: // PROCESSOR_ARCHITECTURE_ARM64
++          strcpy(buf.machine, "aarch64");
++          break;
++      default:
++          strcpy(buf.machine, "unknown");
++          break;
++  }
++
++  return(s7_list(sc, 5, s7_make_strins(sc, buf.sysname),
++                        s7_make_string(sc, buf.machine),
++                        s7_make_string(sc, buf.nodename),
++                        s7_make_string(sc, buf.version),
++                        s7_make_string(sc, buf.release)));
++}
++#else
+ #include <sys/utsname.h>
+ static s7_pointer g_uname(s7_scheme *sc, s7_pointer args)
+ {
+@@ -38612,6 +38688,7 @@ static s7_pointer g_uname(s7_scheme *sc, s7_pointer args)
+ 		 s7_make_string(sc, buf.version),
+ 		 s7_make_string(sc, buf.release)));
+ }
++#endif
+ 
+ /* -------------------------------- unlink -------------------------------- */
+ static s7_pointer g_unlink(s7_scheme *sc, s7_pointer args)
+-- 
+2.51.0
+
