@@ -57,7 +57,6 @@ dont-distribute-packages:
  - AlignmentAlgorithms
  - alloy-proxy-fd
  - alms
- - alpha
  - alsa-gui
  - alsa-pcm-tests
  - alsa-seq-tests
@@ -156,7 +155,6 @@ dont-distribute-packages:
  - aviation-cessna172-weight-balance
  - aviation-navigation
  - aviation-weight-balance
- - AvlTree
  - awesomium
  - awesomium-glut
  - aws-configuration-tools
@@ -460,10 +458,8 @@ dont-distribute-packages:
  - clickhouse-haskell
  - clifford
  - clippings
- - clod
  - cloud-haskell
  - cloud-seeder
- - cloudevents-haskell
  - cloudyfs
  - clr-bindings
  - clr-inline
@@ -568,7 +564,6 @@ dont-distribute-packages:
  - conversion-text
  - conversions
  - convert
- - convert-annotation
  - convertible-ascii
  - convertible-text
  - coordinate
@@ -712,6 +707,7 @@ dont-distribute-packages:
  - dfinity-radix-tree
  - dhall-lex
  - dhall-secret
+ - dhscanner-kbgen
  - dia-functions
  - diagrams-html5
  - diagrams-wx
@@ -740,6 +736,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_2_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -876,7 +873,6 @@ dont-distribute-packages:
  - exference
  - exist
  - exist-instances
- - expand
  - expat-enumerator
  - expiring-containers
  - explicit-iomodes-bytestring
@@ -1116,7 +1112,6 @@ dont-distribute-packages:
  - gloss-raster-accelerate
  - gloss-sodium
  - gltf-loader
- - gmap
  - gmndl
  - gnome-desktop
  - gnomevfs
@@ -1215,7 +1210,6 @@ dont-distribute-packages:
  - guarded-rewriting
  - GuiHaskell
  - GuiTV
- - H
  - h3spec
  - habit
  - hablo
@@ -1615,7 +1609,6 @@ dont-distribute-packages:
  - hscope
  - hsdev
  - Hsed
- - hsendxmpp
  - hsfacter
  - HSGEP
  - HSHHelpers
@@ -1727,7 +1720,6 @@ dont-distribute-packages:
  - ifscs
  - ige-mac-integration
  - igrf
- - ihaskell-inline-r
  - ihaskell-rlangqq
  - ihttp
  - imap
@@ -1754,7 +1746,6 @@ dont-distribute-packages:
  - indentation-trifecta
  - indexation
  - IndexedList
- - indieweb-algorithms
  - indigo
  - inferno-core
  - inferno-lsp
@@ -1788,7 +1779,6 @@ dont-distribute-packages:
  - irc-fun-client
  - irc-fun-color
  - irc-fun-messages
- - iri-orphans
  - ironforge
  - isevaluated
  - ismtp
@@ -1913,7 +1903,6 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
- - knead
  - knit-haskell
  - koji-install
  - koji-tool
@@ -1950,7 +1939,6 @@ dont-distribute-packages:
  - lame-tester
  - landlock
  - lang
- - langchain-hs
  - language-ats
  - language-boogie
  - language-ecmascript-analysis
@@ -2038,7 +2026,6 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
- - llvm-dsl
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
@@ -2285,7 +2272,6 @@ dont-distribute-packages:
  - multirec-binary
  - multisetrewrite
  - Munkres-simple
- - murder
  - murmurhash3
  - mushu
  - music-graphics
@@ -2408,7 +2394,6 @@ dont-distribute-packages:
  - oath
  - oauth2-jwt-bearer
  - obdd
- - oberon0
  - obj
  - objectid
  - objective
@@ -2423,7 +2408,6 @@ dont-distribute-packages:
  - ogma-language-fret-cs
  - ogma-language-fret-reqs
  - ois-input-manager
- - ollama-holes-plugin
  - olwrapper
  - om-kubernetes
  - online-csv
@@ -2491,7 +2475,6 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
- - patch-image
  - pathfindingcore
  - patterns
  - paypal-rest-client
@@ -2592,7 +2575,6 @@ dont-distribute-packages:
  - pointless-rewrite
  - poker
  - polh-lexicon
- - poly-rec
  - polydata
  - polysemy-account
  - polysemy-account-api
@@ -2813,8 +2795,6 @@ dont-distribute-packages:
  - reflex-localize
  - reflex-monad-auth
  - reflex-process
- - reform-blaze
- - reform-happstack
  - refractor
  - refurb
  - reg-alloc-graph-color
@@ -2958,7 +2938,6 @@ dont-distribute-packages:
  - sandwich-webdriver
  - sandwich-webdriver_0_4_0_1
  - sarsi
- - sasha
  - sasl
  - sat-micro-hs
  - satchmo-examples
@@ -3029,7 +3008,6 @@ dont-distribute-packages:
  - seqloc
  - seqloc-datafiles
  - sequor
- - serdoc-binary
  - serpentine
  - serv
  - serv-wai
@@ -3332,7 +3310,6 @@ dont-distribute-packages:
  - syntax-example-json
  - syntax-pretty
  - syntax-printer
- - SyntaxMacros
  - syntaxnet-haskell
  - sys-process
  - systemstats
@@ -3498,8 +3475,6 @@ dont-distribute-packages:
  - type-sub-th
  - TypeClass
  - typed-encoding-encoding
- - typed-gui
- - typed-protocols-doc
  - typed-streams
  - typedflow
  - TypeIlluminator
@@ -3681,7 +3656,6 @@ dont-distribute-packages:
  - wikipedia4epub
  - windowslive
  - winery
- - winio
  - Wired
  - wl-pprint-ansiterm
  - wl-pprint-terminfo
