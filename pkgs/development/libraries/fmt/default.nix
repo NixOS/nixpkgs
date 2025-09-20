@@ -90,4 +90,9 @@ in
     version = "11.2.0";
     hash = "sha256-sAlU5L/olxQUYcv8euVYWTTB8TrVeQgXLHtXy8IMEnU=";
   };
+
+  fmt_12 = generic {
+    version = "12.0.0";
+    hash = "sha256-AZDmIeU1HbadC+K0TIAGogvVnxt0oE9U6ocpawIgl6g=";
+  };
 }
