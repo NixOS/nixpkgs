@@ -5,7 +5,7 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   bison,
-  util-linux,
+  util-linuxMinimal,
 
   interactive ? true,
   readline,
@@ -23,19 +23,19 @@ let
       inherit sha256;
     }
   );
+  patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 in
 lib.warnIf (withDocs != null)
   ''
     bash: `.override { withDocs = true; }` is deprecated, the docs are always included.
   ''
   stdenv.mkDerivation
-  rec {
+  (finalAttrs: {
     pname = "bash${lib.optionalString interactive "-interactive"}";
     version = "5.3${patch_suffix}";
-    patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
     src = fetchurl {
-      url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
+      url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix finalAttrs.version}.tar.gz";
       hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
     };
 
@@ -45,7 +45,7 @@ lib.warnIf (withDocs != null)
     # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
     # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
     # or you can check libc/include/sys/cdefs.h in bionic source code
-    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+    ++ lib.optionals (stdenv.hostPlatform.libc == "bionic") [ "fortify" ];
 
     outputs = [
       "out"
@@ -126,9 +126,9 @@ lib.warnIf (withDocs != null)
       updateAutotoolsGnuConfigScriptsHook
       bison
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ stdenv.cc.bintools ];
 
-    buildInputs = lib.optional interactive readline;
+    buildInputs = lib.optionals interactive [ readline ];
 
     enableParallelBuilding = true;
 
@@ -137,7 +137,7 @@ lib.warnIf (withDocs != null)
       "SHOBJ_LIBS=-lbash"
     ];
 
-    nativeCheckInputs = [ util-linux ];
+    nativeCheckInputs = [ util-linuxMinimal ];
     doCheck = false; # dependency cycle, needs to be interactive
 
     postInstall = ''
@@ -162,7 +162,7 @@ lib.warnIf (withDocs != null)
       tests.static = pkgsStatic.bash;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.gnu.org/software/bash/";
       description =
         "GNU Bourne-Again Shell, the de facto standard shell on Linux"
@@ -177,8 +177,8 @@ lib.warnIf (withDocs != null)
         interactive use.  In addition, most sh scripts can be run by
         Bash without modification.
       '';
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = [ ];
@@ -194,4 +194,4 @@ lib.warnIf (withDocs != null)
           update = lib.elemAt versionSplit 2;
         };
     };
-  }
+  })
