@@ -101,6 +101,24 @@ let
       };
     };
   };
+
+
+  systemdAxports = mapAttrs' (portName: portCfg: {
+      name = "ax25-kissattach-${portName}";
+      value = {
+        description = "AX.25 KISS attached interface for ${portName}";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "exec";
+          ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
+        };
+        postStart = optionalString (portCfg.kissParams != null) ''
+          ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
+        '';
+      };
+    }) enabledAxports;
+
+    systemdAxportsNames = map (n: "ax25-kissattach-${n}.service") (builtins.attrNames enabledAxports);
 in
 {
 
@@ -131,23 +149,10 @@ in
 
     systemd.targets.ax25-axports = {
       description = "AX.25 axports group target";
+      requires = systemdAxportsNames;
+      after = systemdAxportsNames;
     };
 
-    systemd.services = mapAttrs' (portName: portCfg: {
-      name = "ax25-kissattach-${portName}";
-      value = {
-        description = "AX.25 KISS attached interface for ${portName}";
-        wantedBy = [ "multi-user.target" ];
-        before = [ "ax25-axports.target" ];
-        partOf = [ "ax25-axports.target" ];
-        serviceConfig = {
-          Type = "exec";
-          ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
-        };
-        postStart = optionalString (portCfg.kissParams != null) ''
-          ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
-        '';
-      };
-    }) enabledAxports;
+    systemd.services = systemdAxports;
   };
 }
