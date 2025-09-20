@@ -2,7 +2,6 @@
   lib,
   mkKdeDerivation,
   replaceVars,
-  dbus,
   fontconfig,
   xorg,
   lsof,
@@ -24,7 +23,6 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
