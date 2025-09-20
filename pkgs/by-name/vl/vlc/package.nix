@@ -4,21 +4,22 @@
   alsa-lib,
   autoreconfHook,
   avahi,
+  bison,
   cairo,
   curl,
   dbus,
   faad2,
+  fetchFromGitLab,
   fetchpatch,
-  fetchurl,
   # Please unpin FFmpeg on the next upstream release.
   ffmpeg_6,
   flac,
+  flex,
   fluidsynth,
   fontconfig,
   freefont_ttf,
   freetype,
   fribidi,
-  genericUpdater,
   gnutls,
   harfbuzz,
   libGL,
@@ -66,6 +67,7 @@
   live555,
   lua5,
   ncurses,
+  nix-update-script,
   perl,
   pkg-config,
   pkgsBuildBuild,
@@ -106,15 +108,20 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.21";
 
-  src = fetchurl {
-    url = "https://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = "vlc";
+    rev = finalAttrs.version;
+    hash = "sha256-whid+CqDxn9+lkqsL41iU8LTkqLJYVmzl/hh0BUkQJk=";
   };
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];
 
   nativeBuildInputs = [
     autoreconfHook
+    bison
+    flex
     lua5
     perl
     pkg-config
@@ -248,6 +255,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    echo "$version" > src/revision.txt
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
       --replace \
         /usr/share/fonts/truetype/freefont \
@@ -312,11 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
-  passthru.updateScript = genericUpdater {
-    versionLister = writeShellScript "vlc-versionLister" ''
-      ${curl}/bin/curl -s https://get.videolan.org/vlc/ | sed -En 's/^.*href="([0-9]+(\.[0-9]+)+)\/".*$/\1/p'
-    '';
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform media player and streaming server";
