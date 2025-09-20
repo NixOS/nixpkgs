@@ -67,6 +67,10 @@ let
   ++ [
     "--debug"
     (toString cfg.logLevel)
+  ]
+  ++ optionals (cfg.authHeader != null) [
+    "--auth-header"
+    cfg.authHeader
   ];
 
 in
@@ -97,6 +101,15 @@ in
         default = null;
         example = "eth0";
         description = "Network interface to bind.";
+      };
+
+      authHeader = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          HTTP Header name for auth proxy. This will configure ttyd to let a HTTP
+          reverse proxy handle authentication.
+        '';
       };
 
       username = mkOption {
