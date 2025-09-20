@@ -19540,6 +19540,12 @@
     githubId = 645664;
     name = "Philippe Hürlimann";
   };
+  p-louis = {
+    email = "patrick.louis@mailbox.org";
+    github = "p-louis";
+    githubId = 20523289;
+    name = "Patrick Louis";
+  };
   p-rintz = {
     email = "nix@rintz.net";
     github = "p-rintz";
