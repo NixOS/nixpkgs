@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "kholtman";
     repo = "afio";
     tag = "v${version}";
-    sha256 = "1vbxl66r5rp5a1qssjrkfsjqjjgld1cq57c871gd0m4qiq9rmcfy";
+    hash = "sha256-3rGaE46YVNBeOIidgllo9EmJpXYzS61xUOXmko2hfe0=";
   };
 
   patches = [

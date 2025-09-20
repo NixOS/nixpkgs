@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "blablack";
     repo = "ams-lv2";
     rev = version;
-    sha256 = "1lz2mvk4gqsyf92yxd3aaldx0d0qi28h4rnnvsaz4ls0ccqm80nk";
+    hash = "sha256-0wJUMWNAU/KV3tZmApGIGDTQG1VqtO5Fcl7jR+au4tM=";
   };
 
   nativeBuildInputs = [

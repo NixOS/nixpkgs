@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.5.1";
 
   src = fetchFromGitHub {
-    sha256 = "1gywad0rvvz3c5balz8cxsnx0562hj2ngzqyr8zsy2mb4pn0lpgv";
+    hash = "sha256-+10K7CWrCq8/yh7/Z4WEwhTQre4MfapWYePvnUFT3L8=";
     rev = version;
     repo = "aha";
     owner = "theZiz";

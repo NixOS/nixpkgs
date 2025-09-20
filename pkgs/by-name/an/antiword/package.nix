@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.37";
 
   src = fetchurl {
-    url = "http://www.winfield.demon.nl/linux/antiword-${version}.tar.gz";
-    sha256 = "1b7mi1l20jhj09kyh0bq14qzz8vdhhyf35gzwsq43mn6rc7h0b4f";
+    url = "https://web.archive.org/web/20221117105329if_/http://www.winfield.demon.nl/linux/antiword-${version}.tar.gz";
+    hash = "sha256-jiwAD8vG1kGw5v+V4TyEbaP/MQl4AehnAhJKIGiI9aw=";
   };
 
   prePatch = ''

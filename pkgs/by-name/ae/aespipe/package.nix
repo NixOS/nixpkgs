@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/loop-aes/aespipe/aespipe-v${version}.tar.bz2";
-    sha256 = "sha256-RI/h5YYSwYSVFkXd2Sb8W9tk/E8vgox2bIKqESfpo+I=";
+    hash = "sha256-RI/h5YYSwYSVFkXd2Sb8W9tk/E8vgox2bIKqESfpo+I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

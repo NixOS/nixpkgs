@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "nhartland";
     repo = "APFELgrid";
     tag = "v${version}";
-    sha256 = "0l0cyxd00kmb5aggzwsxg83ah0qiwav0shbxkxwrz3dvw78n89jk";
+    hash = "sha256-UyZk0eG7jZ95n31BDbbiEQOoBnpd8/+eKqtOAFr3DFA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

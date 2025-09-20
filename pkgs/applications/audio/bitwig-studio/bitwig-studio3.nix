@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
+    hash = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
   };
 
   nativeBuildInputs = [

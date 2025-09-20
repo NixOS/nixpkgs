@@ -10,12 +10,12 @@ stdenv.mkDerivation {
   version = "11.0.0.0";
   srcAmr = fetchurl {
     url = "https://www.3gpp.org/ftp/Specs/latest/Rel-11/26_series/26104-b00.zip";
-    sha256 = "1wf8ih0hk7w20vdlnw7jb7w73v15hbxgbvmq4wq7h2ghn0j8ppr3";
+    hash = "sha256-I9+LJLDwCXgwJ7ju9fqCJexx+FnycEvbBoKfCQGMyPE=";
   };
 
   src = fetchurl {
-    url = "http://www.penguin.cz/~utx/ftp/amr/amrnb-11.0.0.0.tar.bz2";
-    sha256 = "1qgiw02n2a6r32pimnd97v2jkvnw449xrqmaxiivjy2jcr5h141q";
+    url = "https://web.archive.org/web/20230317115833if_/http://www.penguin.cz/~utx/ftp/amr/amrnb-11.0.0.0.tar.bz2";
+    hash = "sha256-OJAAS2ZSeLlj7Kri3BMh3O4pxT6p2RqvGNkoYQXg8eE=";
   };
 
   nativeBuildInputs = [ unzip ];

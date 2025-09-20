@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     tag = "v${version}";
-    sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
+    hash = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];

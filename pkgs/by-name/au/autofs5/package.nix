@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/daemons/autofs/v5/autofs-${version}.tar.xz";
-    sha256 = "sha256-h+avagN5S5Ri6lGXgeUOfSO198ks1Z4RQshdJJOzwks=";
+    hash = "sha256-h+avagN5S5Ri6lGXgeUOfSO198ks1Z4RQshdJJOzwks=";
   };
   patches = [
     (fetchpatch {

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/nikitabobko/AeroSpace/releases/download/v${version}/AeroSpace-v${version}.zip";
-    sha256 = "sha256-6RyGw84GhGwULzN0ObjsB3nzRu1HYQS/qoCvzVWOYWQ=";
+    hash = "sha256-6RyGw84GhGwULzN0ObjsB3nzRu1HYQS/qoCvzVWOYWQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/acct/acct-${version}.tar.gz";
-    sha256 = "0gv6m8giazshvgpvwbng98chpas09myyfw1zr2y7hqxib0mvy5ac";
+    hash = "sha256-TBW/K1ixY3i8yD9w531NQKsLGUrPLr7v21B/FR+qZj8=";
   };
 
   doCheck = true;
