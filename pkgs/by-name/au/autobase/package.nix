@@ -2,7 +2,12 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
+  nodejs,
+  prefetch-npm-deps,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -27,7 +32,24 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScriptSrc = gitUpdater {
+      rev-prefix = "v";
+    };
+    updateScriptVendor = writeShellApplication {
+      name = "update-autobase-lockfile-npmDepsHash";
+      runtimeInputs = [
+        nix
+        nodejs
+        prefetch-npm-deps
+      ];
+      text = lib.strings.readFile ./updateVendor.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc.command
+      (lib.getExe finalAttrs.passthru.updateScriptVendor)
+    ];
+  };
 
   meta = {
     description = "Concise multiwriter for data structures with Hypercore";
