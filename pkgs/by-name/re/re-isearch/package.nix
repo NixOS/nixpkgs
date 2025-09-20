@@ -6,7 +6,7 @@
   file,
   libnsl,
   writableTmpDirAsHomeHook,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -75,9 +75,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Novel multimodal search and retrieval engine";
