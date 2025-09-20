@@ -2,12 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
   replaceVars,
   gdb,
   lldb,
+  setuptools,
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
@@ -26,9 +26,7 @@
 buildPythonPackage rec {
   pname = "debugpy";
   version = "1.8.17";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
@@ -91,6 +89,8 @@ buildPythonPackage rec {
         }
       )'';
 
+  build-system = [ setuptools ];
+
   # Disable tests for unmaintained versions of python
   doCheck = pythonAtLeast "3.11";
 
@@ -141,12 +141,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debugpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
