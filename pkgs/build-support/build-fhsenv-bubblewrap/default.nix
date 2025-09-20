@@ -47,10 +47,14 @@ lib.customisation.extendMkDerivation {
       privateTmp ? false,
       chdirToPwd ? true,
       dieWithParent ? true,
+      multiArch ? false, # Whether to include 32bit packages
       ...
     }@args:
     let
-      buildFHSEnv = callPackage ./buildFHSEnv.nix { };
+      # `targetPkgs` and `multiPkgs` are functions that are not present in the
+      # attribute set of the derivation which is why `overrideAttrs` does not work
+      # here and `override` is needed here
+      buildFHSEnv = lib.makeOverridable (callPackage ./buildFHSEnv.nix { });
 
       fhsenv = buildFHSEnv (
         lib.attrsets.removeAttrs args [
@@ -152,26 +156,46 @@ lib.customisation.extendMkDerivation {
           exec ${run} "$@"
         '';
 
-      bwrapCmd = import ./wrapper.nix {
-        #outside dependencies
-        inherit
+      # "use of glibc_multi is only supported on x86_64-linux"
+      isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
+
+      bin = stdenvNoCC.mkDerivation {
+        name = "${name}-bwrap";
+
+        src = ./wrapper.sh;
+        dontUnpack = true;
+        dontConfigure = true;
+        dontFixup = true;
+        dontCheck = true;
+
+        buildPhase = ''
+          mkdir -p $out
+          cp .attrs.sh $out/.attrs.sh
+          echo "#!$builder" >> $out/wrapper.sh
+          echo "source $out/.attrs.sh" >> $out/wrapper.sh
+          cat $src >> $out/wrapper.sh
+          chmod +x $out/wrapper.sh
+        '';
+
+        buildInputs = [
           bubblewrap
           coreutils
           glibc
-          lib
-          ;
+        ]
+        ++ lib.optionals isMultiBuild [ pkgsHostTarget.pkgsi686Linux.glibc ];
 
-        # The splicing code does not handle `pkgsi686Linux` well, so we have to be
-        # explicit about which package set it's coming from.
-        inherit (pkgsHostTarget) pkgsi686Linux;
+        __structuredAttrs = true;
 
-        #internal deps
+        #pass buildInputs in a easier to access way
+        inherit bubblewrap coreutils glibc;
+        ia32Glibc = if isMultiBuild then pkgsHostTarget.pkgsi686Linux.glibc else "";
+
+        # internal arguments
         inherit
           privateTmp
           extraPreBwrapCmds
           fhsenv
           etcBindEntries
-          realInit
           chdirToPwd
           unshareUser
           unshareIpc
@@ -181,14 +205,13 @@ lib.customisation.extendMkDerivation {
           unshareCgroup
           dieWithParent
           runScript
+          isMultiBuild
           extraBwrapArgs
           containerInit
           ;
-
+        realInit = realInit runScript;
+        initArgs = ''$@'';
       };
-      bin = writeShellScript "${name}-bwrap" (bwrapCmd {
-        initArgs = ''"$@"'';
-      });
       # we don't know which have been supplied, and want to avoid defaulting missing attrs to null.
       nameAttrs = lib.filterAttrs (
         key: value:
@@ -200,9 +223,11 @@ lib.customisation.extendMkDerivation {
       ) args;
     in
     {
+      inherit bin;
+
       buildPhase = ''
         mkdir -p $out/bin
-        ln -s ${bin} $out/bin/${executableName}
+        ln -s $bin/wrapper.sh $out/bin/${executableName}
 
         ${extraInstallCommands}
       '';
@@ -214,10 +239,11 @@ lib.customisation.extendMkDerivation {
       dontConfigure = true;
 
       passthru = passthru // {
+        #is this actually useable?
         env =
           runCommandLocal "${name}-shell-env"
             {
-              shellHook = bwrapCmd { };
+              shellHook = bin.overrideAttrs { initArgs = ""; };
             }
             ''
               echo >&2 ""
