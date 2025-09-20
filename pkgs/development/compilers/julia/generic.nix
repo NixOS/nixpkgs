@@ -21,7 +21,6 @@
   stdenv,
   unzip,
   which,
-  xcbuild,
   zlib,
 }:
 
@@ -50,8 +49,8 @@ stdenv.mkDerivation rec {
     curl
     darwin.DarwinTools
     darwin.sigtool
+    darwin.autoSignDarwinBinariesHook
     unzip
-    xcbuild
   ];
 
   buildInputs = [
@@ -103,10 +102,6 @@ stdenv.mkDerivation rec {
     lib.optionalString (lib.versionAtLeast version "1.10" && stdenv.hostPlatform.isDarwin)
       ''
         codesign -s - --force --entitlements ./contrib/mac/app/Entitlements.plist $out/bin/julia
-
-        # We also need to re-sign the dylibs. Julia will be killed by macOS when you try to
-        # start it without this line. This will output errors for some of the dylibs.
-        find $out -name "*.dylib" -exec codesign -s - --force {} \;
       '';
 
   # tests are flaky for aarch64-linux on hydra
