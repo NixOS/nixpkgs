@@ -605,12 +605,6 @@ let
     })
     tryCPEPatchVersionInUpdateWithVendor
   ];
-  hasAllPURLParts =
-    purlParts:
-    let
-      values = attrValues purlParts;
-    in
-    (length values == 2) && !any isNull values;
 
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
@@ -718,14 +712,16 @@ let
               ) possibleCPEPartsFuns;
 
           purlParts = attrs.meta.identifiers.purlParts or { };
-          purl = if hasAllPURLParts purlParts then "pkg:${purlParts.type}/${purlParts.spec}" else null;
-          purls = optional (purl != null) purl;
+          purl =
+            attrs.meta.identifiers.purl or (
+              if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null
+            );
+          purls = attrs.meta.identifiers.purls or (optional (purl != null) purl);
 
           v1 = {
             inherit
               cpeParts
               possibleCPEs
-              purlParts
               purls
               ;
             ${if cpe != null then "cpe" else null} = cpe;
@@ -734,7 +730,7 @@ let
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.

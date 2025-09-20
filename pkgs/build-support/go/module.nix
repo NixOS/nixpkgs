@@ -424,7 +424,12 @@ lib.extendMkDerivation {
       meta = {
         # Add default meta information.
         platforms = go.meta.platforms or lib.platforms.all;
-        identifiers.purlParts = finalAttrs.src.meta.identifiers.purlParts or { };
+        identifiers = {
+          ${if (finalAttrs.src.meta.identifiers.purl or null) != null then "purl" else null} =
+            finalAttrs.src.meta.identifiers.purl;
+          ${if (finalAttrs.src.meta.identifiers.purls or null) != null then "purls" else null} =
+            finalAttrs.src.meta.identifiers.purls;
+        };
       }
       // meta;
     };
