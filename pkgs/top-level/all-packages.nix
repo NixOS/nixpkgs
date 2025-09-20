@@ -1915,8 +1915,6 @@ with pkgs;
     extraPackages = [ ffmpeg ];
   };
 
-  commitizen = with python3Packages; toPythonApplication commitizen;
-
   compactor = callPackage ../applications/networking/compactor {
     protobuf = protobuf_21;
   };
