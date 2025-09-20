@@ -29027,6 +29027,12 @@
     githubId = 332534;
     name = "Zach Shipko";
   };
+  zspher = {
+    email = "zeph.valderrama@protonmail.com";
+    github = "zspher";
+    githubId = 66728045;
+    name = "Ian Valderrama";
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
