@@ -15,8 +15,6 @@
     pkgs.w3m-nographics # needed for the manual anyway
     pkgs.testdisk # useful for repairing boot problems
     pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
-    pkgs.efibootmgr
-    pkgs.efivar
     pkgs.parted
     pkgs.gptfdisk
     pkgs.ddrescue
@@ -48,7 +46,17 @@
 
     # Some utilities
     pkgs.jq
-  ];
+  ]
+  ++ (
+    # See https://github.com/NixOS/nixpkgs/issues/388309
+    if pkgs.stdenv.hostPlatform.is32bit then
+      [ ]
+    else
+      [
+        pkgs.efibootmgr
+        pkgs.efivar
+      ]
+  );
 
   # Include support for various filesystems and tools to create / manipulate them.
   boot.supportedFilesystems = lib.mkMerge [
