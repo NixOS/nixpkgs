@@ -103,7 +103,7 @@ clangStdenv.mkDerivation rec {
     mainProgram = "xcpp";
     homepage = "https://github.com/jupyter-xeus/xeus-cling";
     maintainers = with lib.maintainers; [ thomasjm ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.darwin;
     license = lib.licenses.mit;
   };
 }
