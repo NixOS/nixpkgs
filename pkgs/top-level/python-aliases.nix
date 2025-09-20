@@ -730,6 +730,7 @@ mapAliases ({
   ROPGadget = ropgadget; # added 2021-07-06
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   rtslib = rtslib-fb; # added 2025-03-14
+  rtsp-to-webrtc = throw "rtsp-to-webrtc has been removed because it is unmaintained"; # added 2025-09-20
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
