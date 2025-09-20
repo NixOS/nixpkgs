@@ -2726,6 +2726,8 @@ self: super: with self; {
 
   clx-sdk-xms = callPackage ../development/python-modules/clx-sdk-xms { };
 
+  cmapy = callPackage ../development/python-modules/cmapy { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmaes = callPackage ../development/python-modules/cmaes { };
@@ -9154,6 +9156,8 @@ self: super: with self; {
   mediafile = callPackage ../development/python-modules/mediafile { };
 
   mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
+
+  mediapipe-bin =  ../development/python-modules/mediapipe-bin { };
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
