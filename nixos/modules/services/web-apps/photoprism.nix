@@ -81,6 +81,18 @@ in
       '';
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "photoprism";
+      description = "User under which photoprism runs.";
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "photoprism";
+      description = "Group under which photoprism runs.";
+    };
+
     package = lib.mkPackageOption pkgs "photoprism" { };
 
     settings = lib.mkOption {
@@ -102,11 +114,11 @@ in
 
       serviceConfig = {
         Restart = "on-failure";
-        User = "photoprism";
-        Group = "photoprism";
+        User = cfg.user;
+        Group = cfg.group;
         DynamicUser = true;
         StateDirectory = "photoprism";
-        WorkingDirectory = "/var/lib/photoprism";
+        WorkingDirectory = cfg.storagePath;
         RuntimeDirectory = "photoprism";
         ReadWritePaths = [
           cfg.originalsPath
