@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiopg";
-  version = "1.4.0";
+  version = "1.5.0a1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiopg";
     rev = "v${version}";
-    hash = "sha256-GD5lRSUjASTwBk5vEK8v3xD8eNyxpwSrO3HHvtwubmk=";
+    hash = "sha256-9NS4oAaSODNGFcV4QHGD6PyS6wG9gsdqnSk3S24lrz0=";
   };
 
   propagatedBuildInputs = [
