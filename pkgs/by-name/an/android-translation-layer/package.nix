@@ -30,27 +30,24 @@
 
 stdenv.mkDerivation {
   pname = "android-translation-layer";
-  version = "0-unstable-2025-08-06";
+  version = "0-unstable-2025-09-14";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "android_translation_layer";
-    rev = "d52985a6df81d73a8f6dfbdee337f7ff90b724cb";
-    hash = "sha256-fJ8S04YucoCzHiIQdiQd+Il0YGNFsOkSiGWjZKNMTIM=";
+    rev = "9de91586994af5078decda17db92ce50c5673951";
+    hash = "sha256-iRjP++WzLsV7oDGNdF3m9JJJS7zLrG5W46U3h39H5uk=";
   };
 
   patches = [
-    # meson: use pkg-config from art-standalone instead of manual library search
-    # See: https://gitlab.com/android_translation_layer/android_translation_layer/-/merge_requests/164
-    (replaceVars ./configure-art-path.patch {
-      artStandalonePackageDir = "${art-standalone}";
-    })
-
     # Required gio-unix dependency is missing in meson.build
     ./add-gio-unix-dep.patch
 
     # Patch custon Dex install dir
     ./configure-dex-install-dir.patch
+
+    # Patch atl to load microg apk from custom path
+    ./configure-microg-path.patch
   ];
 
   postPatch = ''
@@ -85,10 +82,20 @@ stdenv.mkDerivation {
     webkitgtk_6_0
   ];
 
+  postInstall = ''
+    install -D $src/com.google.android.gms.apk $out/share/com.google.android.gms.apk
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/android-translation-layer \
       --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art \
-      --prefix PATH : ${lib.makeBinPath [ bintools ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          art-standalone # dex2oat
+          bintools # addr2line
+        ]
+      } \
+      --set MICROG_APK_PATH "$out/share/com.google.android.gms.apk"
   '';
 
   passthru.tests = {
