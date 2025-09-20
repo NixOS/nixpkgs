@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
   fixupPhase = ''
-      find $out -type f -name '._embedded.provisionprofile' -exec rm -rf {} \;
-      find $driver -type f -name '._embedded.provisionprofile' -exec rm -rf {} \;
+    find $out -type f -name '._embedded.provisionprofile' -exec rm -rf {} \;
+    find $driver -type f -name '._embedded.provisionprofile' -exec rm -rf {} \;
   '';
 
 
