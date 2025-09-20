@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aqrln ];
+    mainProgram = "prisma";
     platforms = platforms.unix;
   };
 })
