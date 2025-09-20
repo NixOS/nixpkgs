@@ -213,6 +213,34 @@ Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
 
+### Writing Function Documentation
+
+Function documentation is *reference documentation*, for which
+[diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
+
+On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
+the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+For example:
+
+```nix
+/**
+  Subtracts value `b` from value `a`.
+
+  Returns the difference as a number.
+*/
+subtractValues # ...elided code
+```
+
+Renders as:
+
+```md
+## `subtractValues`
+
+Subtracts value `b` from value `a`.
+
+Returns the difference as a number.
+```
+
 ### Callouts and examples
 
 Use the [admonition syntax](#admonitions) for callouts and examples.
