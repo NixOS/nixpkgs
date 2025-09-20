@@ -716,6 +716,7 @@
   ./services/logging/graylog.nix
   ./services/logging/heartbeat.nix
   ./services/logging/journalbeat.nix
+  ./services/logging/journald-notify-nu.nix
   ./services/logging/journaldriver.nix
   ./services/logging/journalwatch.nix
   ./services/logging/klogd.nix
