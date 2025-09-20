@@ -4035,6 +4035,8 @@ self: super: with self; {
 
   django-payments = callPackage ../development/python-modules/django-payments { };
 
+  django-peeringdb = callPackage ../development/python-modules/django-peeringdb { };
+
   django-pgactivity = callPackage ../development/python-modules/django-pgactivity { };
 
   django-pghistory = callPackage ../development/python-modules/django-pghistory { };
