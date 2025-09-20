@@ -28644,14 +28644,6 @@
     githubId = 37774475;
     name = "Yusuf Duran";
   };
-  yuu = {
-    email = "yuunix@grrlz.net";
-    matrix = "@yuu:matrix.org";
-    github = "yuuyins";
-    githubId = 86538850;
-    name = "Yuu Yin";
-    keys = [ { fingerprint = "9F19 3AE8 AA25 647F FC31  46B5 416F 303B 43C2 0AC3"; } ];
-  };
   yvan-sraka = {
     email = "yvan@sraka.xyz";
     github = "yvan-sraka";
