@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nixosTests,
   cmake,
   pkg-config,
   qttools,
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ ];
 
   installPhase = "mkdir -p $out; cp -R lib $out/";
+
+  passthru.tests = nixosTests.qodeassist-plugin;
 
   meta = {
     description = "AI-powered coding assistant plugin for Qt Creator";
