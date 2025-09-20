@@ -13079,6 +13079,8 @@ self: super: with self; {
 
   pyglm = callPackage ../development/python-modules/pyglm { };
 
+  pyglove = callPackage ../development/python-modules/pyglove { };
+
   pygls = callPackage ../development/python-modules/pygls { };
 
   pygltflib = callPackage ../development/python-modules/pygltflib { };
