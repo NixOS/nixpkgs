@@ -235,6 +235,10 @@ in
         system.fsPackages = [ cfg.package ];
         services.udev.packages = [ cfg.package ];
 
+        boot.extraModulePackages = lib.optionals (!config.boot.kernelPackages.bcachefs.meta.broken) [
+          config.boot.kernelPackages.bcachefs
+        ];
+
         systemd = {
           packages = [ cfg.package ];
           services = lib.mapAttrs' (mkUnits "") (
