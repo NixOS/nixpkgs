@@ -14,7 +14,6 @@
   libxml2,
   libadwaita,
   libgee,
-  libgnome-games-support_2_0,
   meson,
   ninja,
   desktop-file-utils,
@@ -47,15 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libadwaita
     libgee
-    libgnome-games-support_2_0
   ];
-
-  # The "we can link with libadwaita?" valac.links() check fails otherwise.
-  # Command line: `valac testfile.vala --pkg=libadwaita-1 --Xcc=-w --Xcc=-DVALA_STRICT_C` -> 1
-  # testfile.vala.c:50:46: error: passing argument 2 of 'adw_about_dialog_set_developers'
-  # from incompatible pointer type [-Wincompatible-pointer-types]
-  # 50 |         adw_about_dialog_set_developers (ad, s);
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-nibbles"; };
