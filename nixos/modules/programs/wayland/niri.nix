@@ -12,12 +12,21 @@ in
     enable = lib.mkEnableOption "Niri, a scrollable-tiling Wayland compositor";
 
     package = lib.mkPackageOption pkgs "niri" { };
+
+    xwaylandSatellite = {
+      enable = lib.mkEnableOption "xwayland-satellite for Niri";
+
+      package = lib.mkPackageOption pkgs "xwayland-satellite" { };
+    };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment.systemPackages = [
+          cfg.package
+        ]
+        ++ lib.optional cfg.xwaylandSatellite cfg.xwaylandSatellite.package;
 
         services = {
           displayManager.sessionPackages = [ cfg.package ];
