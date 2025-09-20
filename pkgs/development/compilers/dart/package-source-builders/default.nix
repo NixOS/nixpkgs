@@ -10,7 +10,6 @@
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   olm = callPackage ./olm { };
-  objectbox_flutter_libs = callPackage ./objectbox_flutter_libs { };
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };
   rhttp = callPackage ./rhttp { };
