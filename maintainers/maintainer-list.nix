@@ -17438,6 +17438,12 @@
     githubId = 15896005;
     name = "Vladyslav Burzakovskyy";
   };
+  mrobbetts = {
+    email = "mrobbetts@gmail.com";
+    github = "mrobbetts";
+    githubId = 1067896;
+    name = "Matthew Robbetts";
+  };
   MrSom3body = {
     email = "nix@sndh.dev";
     matrix = "@mrsom3body:matrix.org";
