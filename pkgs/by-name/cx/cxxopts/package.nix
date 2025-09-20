@@ -8,15 +8,15 @@
   enableUnicodeHelp ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cxxopts";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
     repo = "cxxopts";
-    rev = "v${version}";
-    sha256 = "sha256-aOF3owz7SIV4trJY0PnMtIcwqoUpDbB3tNxZcsl9dzM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-baM6EX9D0yfrKxuPXyUUV9RqdrVLyygeG6x57xN8lc4=";
   };
 
   buildInputs = lib.optionals enableUnicodeHelp [ icu74.dev ];
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.spease ];
     platforms = platforms.all;
   };
-}
+})

@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cmake,
   numpy,
   pybind11,
   setuptools,
   scipy,
   pytestCheckHook,
+  qdldl,
 }:
 
 buildPythonPackage rec {
@@ -15,10 +16,40 @@ buildPythonPackage rec {
   version = "0.1.7.post5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CxOZ4cSbW+1arI/WPvCKtwjTQMN/tCb+ABKLwfNrKG4=";
+  src = fetchFromGitHub {
+    owner = "osqp";
+    repo = "qdldl-python";
+    tag = "v${version}";
+    hash = "sha256-XHdvYWORHDYy/EIqmlmFQZwv+vK3I+rPIrvcEW1JyIw=";
   };
+
+  # use up-to-date qdldl for CMake v4
+  postPatch = ''
+    substituteInPlace c/CMakeLists.txt \
+      --replace-fail \
+        "add_subdirectory(qdldl EXCLUDE_FROM_ALL)" \
+        "find_package(qdldl REQUIRED CONFIG)" \
+      --replace-fail \
+        "add_library(qdldlamd STATIC $""{amd_src} $<TARGET_OBJECTS:qdldlobject>)" \
+        "add_library(qdldlamd STATIC $""{amd_src})
+         target_link_libraries(qdldlamd qdldl::qdldl)"
+    substituteInPlace setup.py \
+      --replace-fail \
+        "os.path.join('c', 'qdldl', 'include')" \
+        "'${lib.getDev qdldl}/include'" \
+      --replace-fail \
+        "language='c++'," \
+        "language='c++',
+         extra_link_args=['-lqdldl'],"
+    substituteInPlace cpp/qdldl.hpp \
+      --replace-fail \
+        "#include \"qdldl/include/qdldl.h\"" \
+        "#include \"qdldl/qdldl.h\""
+    substituteInPlace c/amd/include/SuiteSparse_config.h c/amd/include/perm.h \
+      --replace-fail \
+        "#include \"qdldl_types.h\"" \
+        "#include \"qdldl/qdldl_types.h\""
+  '';
 
   dontUseCmakeConfigure = true;
 
@@ -32,6 +63,10 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     scipy
+  ];
+
+  propagatedBuildInputs = [
+    qdldl
   ];
 
   pythonImportsCheck = [ "qdldl" ];
