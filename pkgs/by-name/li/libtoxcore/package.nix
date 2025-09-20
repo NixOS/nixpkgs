@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   libsodium,
   ncurses,
@@ -15,16 +15,17 @@
 let
   buildToxAV = !stdenv.hostPlatform.isAarch32;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtoxcore";
-  version = "0.2.20";
+  version = "0.2.21";
 
-  src =
-    # We need the prepared sources tarball.
-    fetchurl {
-      url = "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
-      hash = "sha256-qciaja6nRdU+XXjnqsuZx7R5LEQApaaccSOPRdYWT0w=";
-    };
+  src = fetchFromGitHub {
+    owner = "TokTok";
+    repo = "c-toxcore";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-0lWUKW09JvHa0QDX7v4n5B2ckQrKU9TDkjKegDLTIUw=";
+  };
 
   cmakeFlags = [
     "-DDHT_BOOTSTRAP=ON"
@@ -50,13 +51,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ check ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/toxcore.pc \
-      --replace '=''${prefix}/' '=' \
-
-  '';
   # We might be getting the wrong pkg-config file anyway:
   # https://github.com/TokTok/c-toxcore/issues/2334
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/toxcore.pc \
+      --replace-fail '=''${prefix}/' '='
+  '';
 
   meta = {
     description = "P2P FOSS instant messaging application aimed to replace Skype";
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
