@@ -19,7 +19,6 @@
   libpng,
   libunwind,
   libva-minimal,
-  libvdpau,
   llvmPackages,
   lm_sensors,
   meson,
@@ -231,6 +230,7 @@ stdenv.mkDerivation {
     (lib.mesonEnable "gallium-mediafoundation" false) # Windows only
     (lib.mesonEnable "android-libbacktrace" false) # Android only
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonEnable "gallium-vdpau" false) # Gone in 25.3
   ]
   ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
@@ -261,7 +261,6 @@ stdenv.mkDerivation {
       libpng
       libunwind
       libva-minimal
-      libvdpau
       libX11
       libxcb
       libXext
