@@ -37,6 +37,8 @@ self: super: with self; {
 
   abjad = callPackage ../development/python-modules/abjad { };
 
+  abnf = callPackage ../development/python-modules/abnf { };
+
   about-time = callPackage ../development/python-modules/about-time { };
 
   absl-py = callPackage ../development/python-modules/absl-py { };
@@ -2559,6 +2561,8 @@ self: super: with self; {
   ci-py = callPackage ../development/python-modules/ci-py { };
 
   cinemagoer = callPackage ../development/python-modules/cinemagoer { };
+
+  cint = callPackage ../development/python-modules/cint { };
 
   circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
