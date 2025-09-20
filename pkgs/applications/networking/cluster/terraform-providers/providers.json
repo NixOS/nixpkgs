@@ -1219,13 +1219,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "signalfx": {
-    "hash": "sha256-hNMZbrihV+xlfamXRaGszQRqO8Tn2829rd4+pH83lrU=",
+    "hash": "sha256-cZnG8WohzR4OPBoX9PHdbvsziPfcsR75apXZX8EwtEQ=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.19.1",
+    "rev": "v9.21.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-wpm7J8kfkm4vDZhZ0koQsgpW5JwWY7DngSYXfaWh3FQ="
+    "vendorHash": "sha256-TMoZ1uR7G9oC7/9CiwC9rIJazqB9g6Xb+vxvYX2T9RY="
   },
   "skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",
