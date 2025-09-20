@@ -19,7 +19,6 @@ lib.extendMkDerivation {
     {
       nativeBuildInputs ? [ ], # Native build inputs used for the derivation.
       passthru ? { },
-      patches ? [ ],
 
       # A function to override the `goModules` derivation.
       overrideModAttrs ? (finalAttrs: previousAttrs: { }),
