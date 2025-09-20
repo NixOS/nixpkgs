@@ -48,6 +48,11 @@ lib.throwIf (attrs ? name)
       defaultMeta = {
         homepage = "https://metacpan.org/dist/${attrs.pname}";
         inherit (perl.meta) platforms;
+        identifiers.purlParts = {
+          type = "cpan";
+          # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/cpan-definition.md
+          spec = "${attrs.pname}@${attrs.version}";
+        };
       };
 
       package = stdenv.mkDerivation (
