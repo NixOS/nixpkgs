@@ -119,11 +119,15 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   );
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isCygwin ''
-    for link in unzstd zstdcat zstdmt; do
-      ln -sf zstd.exe $bin/bin/$link
-    done
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isCygwin then
+      ''
+        for link in unzstd zstdcat zstdmt; do
+          ln -sf zstd.exe $bin/bin/$link
+        done
+      ''
+    else
+      null;
 
   outputs = [
     "bin"
