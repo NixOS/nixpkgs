@@ -161,6 +161,14 @@ let
           url = "https://github.com/mumble-voip/mumble/commit/fbd21bd422367bed19f801bf278562f567cbb8b7.patch";
           sha256 = "sha256-qFhC2j/cOWzAhs+KTccDIdcgFqfr4y4VLjHiK458Ucs=";
         })
+
+        # Fix build with gcc15
+        # https://github.com/mumble-voip/mumble/pull/6775
+        (fetchpatch {
+          name = "mumble-fix-build-with-gcc15.patch";
+          url = "https://github.com/mumble-voip/mumble/commit/f4259722553335d79e9d28948ab7bdb00293a5ec.patch";
+          hash = "sha256-9vrejtyYk448/Z/fHsbGd4pyGJf4IPq7QYNH0kzaY3U=";
+        })
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
