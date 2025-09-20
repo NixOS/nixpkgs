@@ -267,7 +267,9 @@ let
                 route:
                 let
                   cidr = "${route.address}/${toString route.prefixLength}";
-                  via = optionalString (route.via != null) ''via "${route.via}"'';
+                  # Required for IPv6 next-hop for IPv4 route
+                  inet = "inet" + (if lib.types.address.ipv6.check route.via then "6" else "");
+                  via = optionalString (route.via != null) ''via ${inet} "${route.via}"'';
                   options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
                   type = toString route.type;
                 in

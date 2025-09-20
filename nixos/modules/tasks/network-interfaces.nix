@@ -68,13 +68,18 @@ let
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface: "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
+  addrTypeDynamic =
+    v:
+    assert v == 4 || v == 6;
+    if v == 4 then lib.types.address.ipv4 else lib.types.address.ipv6;
+
   addrOpts =
     v:
     assert v == 4 || v == 6;
     {
       options = {
         address = mkOption {
-          type = types.str;
+          type = addrTypeDynamic v;
           description = ''
             IPv${toString v} address of the interface. Leave empty to configure the
             interface using DHCP.
@@ -94,7 +99,7 @@ let
   routeOpts = v: {
     options = {
       address = mkOption {
-        type = types.str;
+        type = addrTypeDynamic v;
         description = "IPv${toString v} address of the network.";
       };
 
@@ -128,9 +133,9 @@ let
       };
 
       via = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (if v == 6 then lib.types.address.ipv6 else lib.types.address.ip);
         default = null;
-        description = "IPv${toString v} address of the next hop.";
+        description = "IP${if v == 4 then "v4" else ""} address of the next hop.";
       };
 
       options = mkOption {
@@ -157,7 +162,9 @@ let
   gatewayCoerce = address: { inherit address; };
 
   gatewayOpts =
+    v:
     { ... }:
+    assert v == 4 || v == 6;
     {
 
       options = {
@@ -665,7 +672,7 @@ in
         interface = "enp3s0";
         source = "131.211.84.2";
       };
-      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule (gatewayOpts 4)));
       description = ''
         The default gateway. It can be left empty if it is auto-detected through DHCP.
         It can be specified as a string or an option set along with a network interface.
@@ -679,7 +686,7 @@ in
         interface = "enp3s0";
         source = "2001:4d0:1e04:895::2";
       };
-      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule (gatewayOpts 6)));
       description = ''
         The default ipv6 gateway. It can be left empty if it is auto-detected through DHCP.
         It can be specified as a string or an option set along with a network interface.

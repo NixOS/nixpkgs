@@ -220,6 +220,43 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
+# types.ipv4
+IPV4_TYPE_ERROR='A definition for option .* is not of type .valid IPv4 address [(]a\.b\.c\.d[)].. Definition values:\n\s*- In .*: '
+checkConfigOutput '"1.2.3.4"' config.ipv4.ok1 ./types.nix
+checkConfigOutput '"0.0.0.0"' config.ipv4.ok2 ./types.nix
+checkConfigOutput '"255.255.255.255"' config.ipv4.ok3 ./types.nix
+checkConfigError "${IPV4_TYPE_ERROR}\"\"" config.ipv4.bad1 ./types.nix
+checkConfigError "${IPV4_TYPE_ERROR}\"1.2.3\"" config.ipv4.bad2 ./types.nix
+checkConfigError "${IPV4_TYPE_ERROR}\"256.256.256.256\"" config.ipv4.bad3 ./types.nix
+
+# types.ipv6
+IPV6_TYPE_ERROR='A definition for option .* is not of type .valid IPv6 address following rfc5952, rfc6052, and rfc2765.. Definition values:\n\s*- In .*: '
+# Valid IPv6 addresses - testing each regex case
+checkConfigOutput '"2001:0db8:0000:0000:0000:ff00:0042:8329"' config.ipv6.ok1 ./types.nix
+checkConfigOutput '"2001:db8:0:0:1:0:0:1"' config.ipv6.ok2 ./types.nix
+checkConfigOutput '"2001:db8::"' config.ipv6.ok3 ./types.nix
+checkConfigOutput '"2001:db8:0:0:1:0:0::"' config.ipv6.ok4 ./types.nix
+checkConfigOutput '"2001:db8::8"' config.ipv6.ok5 ./types.nix
+checkConfigOutput '"2001:db8:0:0:1::8"' config.ipv6.ok6 ./types.nix
+checkConfigOutput '"2001:db8::1:0:0:1"' config.ipv6.ok7 ./types.nix
+checkConfigOutput '"::1"' config.ipv6.ok8 ./types.nix
+checkConfigOutput '"::"' config.ipv6.ok9 ./types.nix
+checkConfigOutput '"::ffff:192.0.2.1"' config.ipv6.ok10 ./types.nix
+checkConfigOutput '"::192.0.2.33"' config.ipv6.ok11 ./types.nix
+checkConfigOutput '"64:ff9b::192.0.2.33"' config.ipv6.ok12 ./types.nix
+checkConfigOutput '"2001:0DB8:0000:0000:0000:FF00:0042:8329"' config.ipv6.ok13 ./types.nix
+# Invalid IPv6 addresses
+checkConfigError "${IPV6_TYPE_ERROR}\"\"" config.ipv6.bad1 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"gg::1\"" config.ipv6.bad2 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"::ffff:256.0.0.1\"" config.ipv6.bad3 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"2001:db8:::1\"" config.ipv6.bad4 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"2001:db8:0:0:0:0:0:0:1\"" config.ipv6.bad5 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"::ffff:192.0.2\"" config.ipv6.bad6 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"2001:0db8:0000:0000:0000:gg00:0042:8329\"" config.ipv6.bad7 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"12345::\"" config.ipv6.bad8 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"1:2:3:4:5:6:7:8:9\"" config.ipv6.bad9 ./types.nix
+checkConfigError "${IPV6_TYPE_ERROR}\"::1::\"" config.ipv6.bad10 ./types.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix

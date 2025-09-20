@@ -1256,6 +1256,11 @@ let
               prefixLength = 24;
               via = "192.168.1.1";
             }
+            {
+              address = "192.168.3.0";
+              prefixLength = 24;
+              via = "2001:1470:fffd:2097::1";
+            }
           ];
         };
         virtualisation.vlans = [ ];
@@ -1266,6 +1271,7 @@ let
             "10.0.0.0/16 proto static scope link mtu 1500",
             "192.168.1.0/24 proto kernel scope link src 192.168.1.2",
             "192.168.2.0/24 via 192.168.1.1 proto static",
+            "192.168.3.0/24 via inet6 2001:1470:fffd:2097::1 proto static",
         ]
 
         targetIPv6Table = [
@@ -1278,7 +1284,7 @@ let
         machine.wait_for_unit("network.target")
 
         with subtest("test routing tables"):
-            ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n3").strip()
+            ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n4").strip()
             ipv6Table = machine.succeed("ip -6 route list dev eth0 | head -n3").strip()
             assert [
                 l.strip() for l in ipv4Table.splitlines()
