@@ -15,9 +15,9 @@
 buildPythonPackage rec {
   pname = "bleak";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hbldh";
@@ -29,15 +29,17 @@ buildPythonPackage rec {
   postPatch = ''
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
     substituteInPlace bleak/backends/bluezdbus/version.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
+      --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    async-timeout
+  dependencies = [
     dbus-fast
     typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

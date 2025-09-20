@@ -262,6 +262,7 @@ package-set { inherit pkgs lib callPackage; } self
       pkg,
       ver,
       sha256,
+      candidate ? false,
       rev ? {
         revision = null;
         sha256 = null;
@@ -271,7 +272,11 @@ package-set { inherit pkgs lib callPackage; } self
     let
       pkgver = "${pkg}-${ver}";
       firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
-        url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+        url =
+          if candidate then
+            "mirror://hackage/${pkgver}/candidate/${pkgver}.tar.gz"
+          else
+            "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
         inherit sha256;
       }) args;
     in
