@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "consul-template";
-  version = "0.41.1";
+  version = "0.41.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
     rev = "v${version}";
-    hash = "sha256-lQTI3eTKggzNnN0KCu+ZcdqtDT06OfyIWPQg2qfaxro=";
+    hash = "sha256-ExgE1Gw+hlOC+AYDgq15nD90QGa/+rOT1gi3XWY1jj8=";
   };
 
   vendorHash = "sha256-Tz80n37NBqKX+h3OE6RBufPQ7OteWpZaa5br2WFIvOs=";
