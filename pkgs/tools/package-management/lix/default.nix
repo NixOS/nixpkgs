@@ -208,14 +208,14 @@ lib.makeExtensible (
       attrName = "git";
 
       lix-args = rec {
-        version = "2.94.0-pre-20250912_${builtins.substring 0 12 src.rev}";
+        version = "2.94.0-pre-20250920_${builtins.substring 0 12 src.rev}";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
-          rev = "d90e4a65812c6d3dd90aed7e44941eba3215f876";
-          hash = "sha256-rbf0ptj4BTSwsitKQu3FuaiJwhNDePGBeBJovm5HLdQ=";
+          rev = "3ee839cc5ed4ed107882c203e378ec9e22e1d7a8";
+          hash = "sha256-H9rZgPQqZn8xC7J3Pv7zE0WY5x9sZXazm5U8j8gvMZ4=";
         };
 
         patches = [
