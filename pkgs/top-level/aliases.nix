@@ -2355,6 +2355,7 @@ mapAliases {
   starpls-bin = starpls; # Added 2024-10-30
   starspace = throw "starspace has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
   station = throw "station has been removed from nixpkgs, as there were no committers among its maintainers to unblock security issues"; # added 2025-06-16
+  steamcontroller = throw "'steamcontroller' has been removed due to lack of upstream maintenance. Consider using 'sc-controller' instead."; # Added 2025-09-20
   steamPackages = {
     steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable"; # Added 2024-10-16
     steam = lib.warnOnInstantiate "`steamPackages.steam` has been moved to top level as `steam-unwrapped`" steam-unwrapped; # Added 2024-10-16
