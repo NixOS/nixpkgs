@@ -20,7 +20,10 @@ rec {
           HOME=$TMPDIR
           mkdir -p .emscriptencache
           export EM_CACHE=$(pwd)/.emscriptencache
-          emcmake cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
+          # Always call cmake with a quoted array; avoid raw $cmakeFlags.
+          flagsArray=()
+          concatTo flagsArray cmakeFlags cmakeFlagsArray
+          emcmake cmake . "''${flagsArray[@]}" -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
         '';
         checkPhase = ''
           echo "================= testing json_c using node ================="

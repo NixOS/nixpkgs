@@ -24,3 +24,9 @@ export PYTHONHASHSEED=0;
 # Determinism. Whenever Python is included, it should not check user site-packages.
 # This option is only relevant when the sandbox is disabled.
 export PYTHONNOUSERSITE=1;
+
+# Prefer array flags via CMAKE_FLAGS_NL; fall back to legacy cmakeFlags.
+if [ "${cmakeFlagsArray+x}" = x ] && ((${#cmakeFlagsArray[@]})); then
+  export CMAKE_FLAGS_NL
+  CMAKE_FLAGS_NL="$(printf '%s\n' "${cmakeFlagsArray[@]}")"
+fi

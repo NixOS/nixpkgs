@@ -30,12 +30,12 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-cHuaqA89r90TCPVHNP7B1cfK+WxqmfTXndJ/dRdmM24=";
   };
-  # Allows to forward cmake args through the conventional `cmakeFlags`
+  # Prefer array flags via CMAKE_FLAGS_NL; fall back to legacy cmakeFlags.
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail \
         "cmake_args = [" \
-        'cmake_args = [ *os.environ.get("cmakeFlags", "").split(),'
+        'import os, shlex; _nl=os.environ.get("CMAKE_FLAGS_NL"); _cmf=([l for l in _nl.splitlines() if l] if _nl else shlex.split(os.environ.get("cmakeFlags",""))); cmake_args = [*_cmf,'
     substituteInPlace tree/CMakeLists.txt \
       --replace-fail \
         "CMAKE_CXX_STANDARD 14" \
