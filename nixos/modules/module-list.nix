@@ -541,6 +541,7 @@
   ./services/databases/tigerbeetle.nix
   ./services/databases/victorialogs.nix
   ./services/databases/victoriametrics.nix
+  ./services/databases/zero-cache.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
   ./services/desktops/bamf.nix
