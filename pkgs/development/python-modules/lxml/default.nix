@@ -27,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-iY47nhAbA8ScnjmK2/7lVCBP8f65v1zOs3TcgQULlQ0=";
   };
 
+  patches = [
+    ./fix-const-in-fixThreadDictNamesForDtd.patch
+  ];
+
   build-system = [
     cython
     setuptools
