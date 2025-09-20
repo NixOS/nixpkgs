@@ -1,54 +1,82 @@
 {
+  copyDesktopItems,
+  makeDesktopItem,
   lib,
   stdenv,
   fetchurl,
   cmake,
   pkg-config,
   makeWrapper,
-  SDL,
-  SDL_mixer,
-  SDL_net,
+  SDL2,
+  SDL2_mixer,
+  wrapGAppsHook3,
   wxGTK32,
+  zlib,
+  fltk,
+  curl,
+  alsa-lib,
+  deutex,
 }:
 
 stdenv.mkDerivation rec {
   pname = "odamex";
-  version = "0.9.5";
+  version = "11.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.bz2";
-    sha256 = "sha256-WBqO5fWzemw1kYlY192v0nnZkbIEVuWmjWYMy+1ODPQ=";
+    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.gz";
+    hash = "sha256-fk6DrAhUa3eOqeCNWjSoKg9X81Bb3jrUq6JloTwfE4c=";
   };
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "odamex";
+      desktopName = "Odamex";
+      icon = "icon_odamex_512";
+      categories = [ "Game" ];
+      exec = "odamex";
+    })
+    (makeDesktopItem {
+      name = "odalaunch";
+      desktopName = "Odamex Launcher";
+      icon = "icon_odalaunch_512";
+      categories = [ "Game" ];
+      exec = "odalaunch";
+    })
+    (makeDesktopItem {
+      name = "odasrv";
+      desktopName = "Odamex Server";
+      icon = "icon_odasrv_512";
+      categories = [ "Game" ];
+      exec = "odasrv";
+    })
+  ];
+
   nativeBuildInputs = [
+    copyDesktopItems
     cmake
     pkg-config
     makeWrapper
+    deutex
   ];
 
   buildInputs = [
-    SDL
-    SDL_mixer
-    SDL_net
+    wrapGAppsHook3
+    fltk
+    zlib
+    SDL2
+    SDL2_mixer
     wxGTK32
+    curl
+    alsa-lib
   ];
 
   installPhase = ''
     runHook preInstall
-  ''
-  + (
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        mkdir -p $out/{Applications,bin}
-        mv odalaunch/odalaunch.app $out/Applications
-        makeWrapper $out/{Applications/odalaunch.app/Contents/MacOS,bin}/odalaunch
-      ''
-    else
-      ''
-        make install
-      ''
-  )
-  + ''
+    mkdir -p $out/share/pixmaps
+    cp ../media/icon_odamex_512.png $out/share/pixmaps/icon_odamex_512.png
+    cp ../media/icon_odalaunch_512.png $out/share/pixmaps/icon_odalaunch_512.png
+    cp ../media/icon_odasrv_512.png $out/share/pixmaps/icon_odasrv_512.png
+    make install
     runHook postInstall
   '';
 
