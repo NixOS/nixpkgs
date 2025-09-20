@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dsdcc";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "dsdcc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DMCk29O2Lmt2tjo6j5e4ZdZeDL3ZFUh66Sm6TGrIaeU=";
+    hash = "sha256-4wSf4pOEheuhW4ReEDo5i3poiHMC0wgSUk2lXBYWjOs=";
   };
 
   nativeBuildInputs = [
