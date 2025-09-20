@@ -55,7 +55,6 @@ agda.section.md
 android.section.md
 astal.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
 coq.section.md
 cosmic.section.md

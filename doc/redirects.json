@@ -2801,33 +2801,6 @@
   "elixir---phoenix-project": [
     "index.html#elixir---phoenix-project"
   ],
-  "sec-bower": [
-    "index.html#sec-bower"
-  ],
-  "ssec-bower2nix-usage": [
-    "index.html#ssec-bower2nix-usage"
-  ],
-  "ex-bowerJson": [
-    "index.html#ex-bowerJson"
-  ],
-  "ssec-build-bower-components": [
-    "index.html#ssec-build-bower-components"
-  ],
-  "ex-buildBowerComponents": [
-    "index.html#ex-buildBowerComponents"
-  ],
-  "ex-bowerGulpFile": [
-    "index.html#ex-bowerGulpFile"
-  ],
-  "ex-buildBowerComponentsDefaultNix": [
-    "index.html#ex-buildBowerComponentsDefaultNix"
-  ],
-  "ssec-bower2nix-troubleshooting": [
-    "index.html#ssec-bower2nix-troubleshooting"
-  ],
-  "enocache-errors-from-buildbowercomponents": [
-    "index.html#enocache-errors-from-buildbowercomponents"
-  ],
   "sec-chicken": [
     "index.html#sec-chicken"
   ],
