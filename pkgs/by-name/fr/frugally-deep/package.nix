@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   gitUpdater,
   cmake,
@@ -14,6 +15,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frugally-deep";
+  # be careful bumping this, frugally-deep may change its model metadata format
+  # in ways that only fail at runtime
   version = "0.15.24-p0";
 
   src = fetchFromGitHub {
@@ -22,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-yg2SMsYOOSOgsdwIH1bU3iPM45z6c7WeIrgOddt3um4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Backport CMake 4 compat so we can stay on 0.15 for now
+      name = "update-minimum-cmake4-huntergate.patch";
+      url = "https://github.com/Dobiasd/frugally-deep/commit/30a4ce4c932ca810a5a77c4ab943a520bb1048fe.patch";
+      hash = "sha256-J5z+jQis8N2mzWu2Qm7J0fPkrplpjgDCOAJT7binz04=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
