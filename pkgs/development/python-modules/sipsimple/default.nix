@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   fetchpatch,
+  gitUpdater,
   cython,
   setuptools,
   alsa-lib,
@@ -141,6 +142,7 @@ buildPythonPackage rec {
 
   passthru = {
     inherit extDeps;
+    updateScript = gitUpdater { };
   };
 
   meta = {
