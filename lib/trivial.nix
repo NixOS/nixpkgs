@@ -261,6 +261,26 @@ in
   boolToYesNo = b: if b then "yes" else "no";
 
   /**
+    Converts a boolean to an integer.
+
+    This function uses the integers 1 and 0 to represent
+    boolean values.
+
+    # Inputs
+
+    `b`
+
+    : The boolean to convert
+
+    # Type
+
+    ```
+    boolToInt :: bool -> int
+    ```
+  */
+  boolToInt = b: if b then 1 else 0;
+
+  /**
     Merge two attribute sets shallowly, right side trumps left
 
     mergeAttrs :: attrs -> attrs -> attrs
