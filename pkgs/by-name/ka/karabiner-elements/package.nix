@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
+  dontFixup = true; # notarization breaks if fixup is enabled
+
   postPatch = ''
     shopt -s globstar
     for f in *.pkg/Library/**/Launch{Agents,Daemons}/*.plist; do
@@ -54,6 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R Karabiner-DriverKit-VirtualHIDDevice.pkg/Applications Karabiner-DriverKit-VirtualHIDDevice.pkg/Library $driver
 
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    find $out -type f -name '._embedded.provisionprofile' -exec rm -rf {} \;
+    find $out -type f -name '._000-KarabinerElements.png' -exec rm -rf {} \;
+    find $driver -type f -name '._embedded.provisionprofile' -exec rm -rf {} \;
   '';
 
   passthru.updateScript = nix-update-script { };
