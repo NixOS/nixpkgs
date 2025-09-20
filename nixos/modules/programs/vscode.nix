@@ -49,7 +49,7 @@ in
       cfg.finalPackage
     ];
 
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (
+    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (
       lib.mkOverride 900 cfg.finalPackage.meta.mainProgram
     );
 
