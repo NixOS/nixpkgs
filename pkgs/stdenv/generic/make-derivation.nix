@@ -155,6 +155,8 @@ let
     "relro"
     "stackprotector"
     "glibcxxassertions"
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
     "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
@@ -430,6 +432,8 @@ let
           (concretizeFlagImplications "fortify" [ "fortify3" ])
           # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
           (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+          # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+          (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
         ]
       );
       enabledHardeningOptions =
