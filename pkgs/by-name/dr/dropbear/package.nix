@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   CFLAGS = lib.pipe (lib.attrNames dflags) [
-    (builtins.map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
+    (map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
     (lib.concatStringsSep " ")
   ];
 

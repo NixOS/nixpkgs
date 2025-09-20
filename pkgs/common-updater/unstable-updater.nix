@@ -164,7 +164,7 @@ let
 in
 [
   (lib.getExe updateScript)
-  "--url=${builtins.toString url}"
+  "--url=${toString url}"
   "--tag-format=${tagFormat}"
 ]
 ++ lib.optionals (branch != null) [

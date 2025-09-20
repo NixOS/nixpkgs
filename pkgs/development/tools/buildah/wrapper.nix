@@ -55,7 +55,7 @@ runCommand buildah-unwrapped.name
 
     preferLocalBuild = true;
 
-    meta = builtins.removeAttrs buildah-unwrapped.meta [ "outputsToInstall" ];
+    meta = removeAttrs buildah-unwrapped.meta [ "outputsToInstall" ];
 
     outputs = [
       "out"

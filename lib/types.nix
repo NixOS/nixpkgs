@@ -1366,7 +1366,7 @@ let
             if builtins.isString v then
               ''"${v}"''
             else if builtins.isInt v then
-              builtins.toString v
+              toString v
             else if builtins.isBool v then
               boolToString v
             else

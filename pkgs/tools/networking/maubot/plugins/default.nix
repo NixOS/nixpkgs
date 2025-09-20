@@ -25,7 +25,7 @@ let
       ...
     }:
     stdenvNoCC.mkDerivation (
-      builtins.removeAttrs attrs [ "base_config" ]
+      removeAttrs attrs [ "base_config" ]
       // {
         pluginName = "${pname}-v${version}.mbp";
         nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [

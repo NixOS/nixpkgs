@@ -101,8 +101,8 @@ let
         testScript = ''
           machine.wait_for_x()
 
-          machine.succeed("mkdir /root/${builtins.dirOf file}")
-          machine.succeed("cp -vr /etc/${imageDataDir}/${file} /root/${builtins.dirOf file}")
+          machine.succeed("mkdir /root/${dirOf file}")
+          machine.succeed("cp -vr /etc/${imageDataDir}/${file} /root/${dirOf file}")
 
           # Start thumbnailer, wait for idle shutdown
           machine.systemctl("start dbus-com.lomiri.Thumbnailer", "root")
@@ -174,7 +174,7 @@ let
   makeFormatTests =
     detailsList:
     builtins.listToAttrs (
-      builtins.map (
+      map (
         {
           name,
           file,

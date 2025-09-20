@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
             echo "OK"
           '';
         in
-        builtins.concatStringsSep "\n" (builtins.map script builderKeys);
+        builtins.concatStringsSep "\n" (map script builderKeys);
     in
     ''
       pushd $(mktemp -d)

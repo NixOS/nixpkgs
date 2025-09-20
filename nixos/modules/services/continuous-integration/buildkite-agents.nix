@@ -218,7 +218,7 @@ in
             tagStr =
               name: value:
               if lib.isList value then
-                lib.concatStringsSep "," (builtins.map (v: "${name}=${v}") value)
+                lib.concatStringsSep "," (map (v: "${name}=${v}") value)
               else
                 "${name}=${value}";
             tagsStr = lib.concatStringsSep "," (lib.mapAttrsToList tagStr cfg.tags);

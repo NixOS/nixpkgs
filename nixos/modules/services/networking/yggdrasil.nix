@@ -166,7 +166,7 @@ in
         script = ''
           if [ ! -e ${keysPath} ]
           then
-            mkdir --mode=700 -p ${builtins.dirOf keysPath}
+            mkdir --mode=700 -p ${dirOf keysPath}
             ${binYggdrasil} -genconf -json \
               | ${pkgs.jq}/bin/jq \
                   'to_entries|map(select(.key|endswith("Key")))|from_entries' \

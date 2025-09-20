@@ -272,7 +272,7 @@ stdenv.mkDerivation (
           # and thus fails under the sandbox:
           ''
             substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
+              --replace-fail '/usr/bin/sw_vers' "${(toString darwin.DarwinTools) + "/bin/sw_vers"}"
           ''
         +
           # This test tries to call the intrinsics `@llvm.roundeven.f32` and

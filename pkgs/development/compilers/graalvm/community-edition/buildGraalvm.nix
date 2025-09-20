@@ -24,7 +24,7 @@
 }@args:
 
 let
-  extraArgs = builtins.removeAttrs args [
+  extraArgs = removeAttrs args [
     "lib"
     "stdenv"
     "alsa-lib"

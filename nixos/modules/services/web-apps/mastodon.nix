@@ -159,7 +159,7 @@ let
     name: processCfg:
     lib.nameValuePair "mastodon-sidekiq-${name}" (
       let
-        jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
+        jobClassArgs = toString (map (c: "-q ${c}") processCfg.jobClasses);
         jobClassLabel = toString ([ "" ] ++ processCfg.jobClasses);
         threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
       in

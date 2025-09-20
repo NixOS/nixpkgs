@@ -76,7 +76,7 @@ let
     else
       throw "Unknown UWSGI plugin ${name}, available : ${all}";
 
-  needed = builtins.map getPlugin plugins;
+  needed = map getPlugin plugins;
 in
 
 stdenv.mkDerivation (finalAttrs: {

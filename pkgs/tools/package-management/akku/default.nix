@@ -30,9 +30,9 @@ lib.makeScope newScope (self: rec {
           src = fetchurl {
             inherit url sha256;
           };
-          buildInputs = builtins.map (x: akkuself.${x}) dependencies;
+          buildInputs = map (x: akkuself.${x}) dependencies;
           r7rs = source == "snow-fort";
-          nativeBuildInputs = builtins.map (x: akkuself.${x}) dev-dependencies;
+          nativeBuildInputs = map (x: akkuself.${x}) dev-dependencies;
           unpackPhase = "tar xf $src";
 
           meta.homepage = homepage;
