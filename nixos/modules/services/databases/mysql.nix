@@ -691,7 +691,7 @@ in
       serviceConfig = lib.mkMerge [
         {
           Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
+          Restart = "on-abnormal";
           RestartSec = "5s";
 
           # User and group
