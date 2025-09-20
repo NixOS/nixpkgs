@@ -655,6 +655,8 @@ self: super: with self; {
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
+  ament-lint-jazzy = callPackage ../development/python-modules/ament-lint-jazzy { };
+
   ament-package = callPackage ../development/python-modules/ament-package { };
 
   amply = callPackage ../development/python-modules/amply { };
