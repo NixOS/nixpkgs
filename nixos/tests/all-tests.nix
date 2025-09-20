@@ -745,6 +745,7 @@ in
   invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
+  ipget = runTest ./ipget.nix;
   ipv6 = runTest ./ipv6.nix;
   iscsi-multipath-root = runTest ./iscsi-multipath-root.nix;
   iscsi-root = runTest ./iscsi-root.nix;
