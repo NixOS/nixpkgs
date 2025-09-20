@@ -3,21 +3,20 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests,
   requests-mock,
+  requests-toolbelt,
+  sseclient-py,
 }:
 
 buildPythonPackage rec {
   pname = "tagoio-sdk";
   version = "5.0.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tago-io";
@@ -28,15 +27,15 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "requests" ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     python-dateutil
     python-socketio
     requests
+    requests-toolbelt
+    sseclient-py
   ];
 
   nativeCheckInputs = [
