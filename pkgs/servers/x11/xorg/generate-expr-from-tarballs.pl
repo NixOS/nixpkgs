@@ -318,6 +318,7 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
+  appres,
   bdftopcf,
   font-adobe-100dpi,
   font-adobe-75dpi,
@@ -424,6 +425,7 @@ print OUT <<EOF;
 self: with self; {
 
   inherit
+    appres
     bdftopcf
     gccmakedep
     ico
