@@ -28,12 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # vendored glog is too old and breaks on CMake 4, gets bumped in ROCm 7.0
+  postPatch = ''
+    substituteInPlace external/glog/cmake/GetCacheVariables.cmake \
+      --replace-fail "(VERSION 3.3)" "(VERSION 3.5)"
+  '';
+
   nativeBuildInputs = [
     cmake
     clang
     clr
   ];
 
+  # TODO(@LunNova): use system fmt&glog once upstream fixes flag to not vendor
   buildInputs = [
     numactl
     libpciaccess
