@@ -407,7 +407,6 @@ with lib.maintainers;
     members = [ ];
     githubTeams = [
       "nixpkgs-committers"
-      "release-engineers"
     ];
     scope = "Dummy team for the #everyone else' section during feture freezes, not to be used as package maintainers!";
     shortName = "Everyone else";
