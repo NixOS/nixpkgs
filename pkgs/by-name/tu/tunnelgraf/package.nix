@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to manage SSH tunnel hops to many endpoints";
     homepage = "https://github.com/denniswalker/tunnelgraf";
-    changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/v${version}";
+    changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tunnelgraf";
