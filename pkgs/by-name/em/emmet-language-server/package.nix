@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # remove unnecessary and non-deterministic files
   preInstall = ''
-    pnpm --ignore-scripts --prod prune
+    CI=true pnpm --ignore-scripts --prod prune
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules -xtype l -delete
