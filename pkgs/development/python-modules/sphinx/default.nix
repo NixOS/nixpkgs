@@ -103,6 +103,17 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  disabledTestPaths = lib.optionals isPyPy [
+    # internals are asserted which are sightly different in PyPy
+    "tests/test_extensions/test_ext_autodoc.py"
+    "tests/test_extensions/test_ext_autodoc_autoclass.py"
+    "tests/test_extensions/test_ext_autodoc_autofunction.py"
+    "tests/test_extensions/test_ext_autodoc_automodule.py"
+    "tests/test_extensions/test_ext_autodoc_preserve_defaults.py"
+    "tests/test_util/test_util_inspect.py"
+    "tests/test_util/test_util_typing.py"
+  ];
+
   disabledTests = [
     # requires network access
     "test_latex_images"
@@ -145,13 +156,10 @@ buildPythonPackage rec {
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
     "test_autosummary_generate_content_for_module"
     "test_autosummary_generate_content_for_module_skipped"
-    # internals are asserted which are sightly different in PyPy
-    "test_autodoc_inherited_members_None"
-    "test_automethod_for_builtin"
-    "test_builtin_function"
-    "test_isattributedescriptor"
-    "test_methoddescriptor"
-    "test_partialfunction"
+    # Struct vs struct.Struct
+    "test_restify"
+    "test_stringify_annotation"
+    "test_stringify_type_union_operator"
   ];
 
   passthru.tests = {
