@@ -103,6 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
   };
 
+  patches = [
+    ./CVE-2025-9086.patch
+    # The unfixed patch is there just to avoid rebuilds for now.
+    (if websocketSupport then ./CVE-2025-10148-fixed.patch else ./CVE-2025-10148.patch)
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
