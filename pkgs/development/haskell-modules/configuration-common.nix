@@ -357,6 +357,10 @@ with haskellLib;
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
+  # 2025-09-20: Restrictive upper bound on hashable.
+  # https://github.com/softwarefactory-project/matrix-client-haskell/issues/46
+  matrix-client = doJailbreak super.matrix-client;
+
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
 
