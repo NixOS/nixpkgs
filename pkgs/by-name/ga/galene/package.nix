@@ -3,7 +3,10 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
-  nix-update-script,
+  gitUpdater,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
 }:
 
 buildGoModule (finalAttrs: {
@@ -37,9 +40,20 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests.vm = nixosTests.galene.basic;
-    updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=galene-(.*)" ];
+    updateScriptSrc = gitUpdater {
+      rev-prefix = "galene-";
     };
+    updateScriptVendor = writeShellApplication {
+      name = "update-galene-vendorHash";
+      runtimeInputs = [
+        nix
+      ];
+      text = lib.strings.readFile ./updateVendor.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc.command
+      (lib.getExe finalAttrs.passthru.updateScriptVendor)
+    ];
   };
 
   meta = {
