@@ -34,15 +34,15 @@ buildRubyGem rec {
     wrapProgram $out/bin/anystyle --prefix PATH : ${poppler-utils}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to the AnyStyle Parser and Finder";
     homepage = "https://anystyle.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       aschleck
       shamilton
     ];
     mainProgram = "anystyle";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

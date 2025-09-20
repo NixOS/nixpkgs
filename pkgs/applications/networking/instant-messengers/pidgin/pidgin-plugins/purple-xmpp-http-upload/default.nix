@@ -28,11 +28,11 @@ stdenv.mkDerivation {
     install -Dm644 -t $out/lib/purple-2 jabber_http_file_upload.so
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Junker/purple-xmpp-http-upload";
     description = "HTTP File Upload plugin for libpurple (XMPP Protocol XEP-0363)";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ emmanuelrosa ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
   };
 }

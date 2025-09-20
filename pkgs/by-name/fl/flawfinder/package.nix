@@ -23,12 +23,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "flawfinder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to examines C/C++ source code for security flaws";
     mainProgram = "flawfinder";
     homepage = "https://dwheeler.com/flawfinder/";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.all;
   };
 }

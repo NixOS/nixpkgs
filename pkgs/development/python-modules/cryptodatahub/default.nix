@@ -56,11 +56,11 @@ buildPythonPackage rec {
     rm test/common/test_utils.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Repository of cryptography-related data";
     homepage = "https://gitlab.com/coroner/cryptodatahub";
     changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${version}/CHANGELOG.rst";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

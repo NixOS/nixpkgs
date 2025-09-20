@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "enamlx.widgets"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frmdstryr/enamlx";
     description = "Additional Qt Widgets for Enaml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

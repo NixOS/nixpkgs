@@ -46,10 +46,10 @@ buildPythonPackage rec {
     "pywt._extensions._swt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wavelet transform module";
     homepage = "https://github.com/PyWavelets/pywt";
     changelog = "https://github.com/PyWavelets/pywt/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

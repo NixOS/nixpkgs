@@ -33,14 +33,14 @@ let
         find . -name '*.woff2'  -exec install -Dt $out/share/fonts/woff2 {} \;
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://github.com/subframe7536/Maple-font";
         description = ''
           Open source ${desc} font with round corner and ligatures for IDE and command line
         '';
-        license = licenses.ofl;
-        platforms = platforms.all;
-        maintainers = with maintainers; [ oluceps ];
+        license = lib.licenses.ofl;
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [ oluceps ];
       };
     };
 

@@ -158,13 +158,13 @@ stdenv.mkDerivation (finalAttrs: {
     grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mpickering ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mpickering ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
     mainProgram = "grass";
   };
 })

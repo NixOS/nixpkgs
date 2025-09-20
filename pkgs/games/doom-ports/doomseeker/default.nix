@@ -52,12 +52,12 @@ stdenv.mkDerivation {
     ln -s $out/lib/doomseeker/doomseeker $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
     mainProgram = "doomseeker";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

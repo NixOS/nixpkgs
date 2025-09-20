@@ -46,13 +46,13 @@ mkDerivation rec {
       --replace /usr/share/httraqt/ $out/share/httraqt
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Easy-to-use offline browser / website mirroring utility - QT frontend";
     mainProgram = "httraqt";
     homepage = "http://www.httrack.com";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = with lib.platforms; unix;
   };
 }

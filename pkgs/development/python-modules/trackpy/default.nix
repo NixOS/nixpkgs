@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trackpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
     changelog = "https://github.com/soft-matter/trackpy/releases/tag/${src.tag}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };

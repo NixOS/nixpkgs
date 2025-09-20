@@ -23,11 +23,11 @@ python3Packages.buildPythonApplication {
   doCheck = false;
   pythonImportsCheck = [ "av98" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tildegit.org/solderpunk/AV-98";
     description = "Experimental console client for the Gemini protocol";
     mainProgram = "av98";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
 
     broken = true;
   };

@@ -63,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mido" ];
 
-  meta = with lib; {
+  meta = {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
     changelog = "https://github.com/mido/mido/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

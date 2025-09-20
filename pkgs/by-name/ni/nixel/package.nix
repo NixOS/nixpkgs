@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = nixel; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lexer, Parser, Abstract Syntax Tree and Concrete Syntax Tree for the Nix Expressions Language";
     mainProgram = "nixel";
     homepage = "https://github.com/kamadorueda/nixel";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

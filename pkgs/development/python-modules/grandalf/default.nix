@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grandalf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for experimentations with graphs and drawing algorithms";
     homepage = "https://github.com/bdcht/grandalf";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

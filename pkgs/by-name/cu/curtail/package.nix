@@ -81,11 +81,11 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple & useful image compressor";
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
   };
 }

@@ -70,12 +70,12 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "MacOS Big Sur style icon theme for Linux desktops";
       homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ icy-thought ];
     };
 
   }

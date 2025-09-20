@@ -1107,10 +1107,10 @@ buildPythonPackage rec {
   # Package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations for aiobotocore generated with mypy-boto3-builder";
     homepage = "https://pypi.org/project/types-aiobotocore/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

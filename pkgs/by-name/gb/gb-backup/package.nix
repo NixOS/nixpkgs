@@ -27,10 +27,10 @@ buildGoModule {
     wrapProgram $out/bin/gb --prefix PATH : ${lib.makeBinPath [ lepton ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gamer Backup, a super opinionated cloud backup system";
     homepage = "https://github.com/leijurv/gb";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ babbaj ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ babbaj ];
   };
 }

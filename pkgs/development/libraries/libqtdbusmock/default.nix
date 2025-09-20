@@ -81,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library for mocking DBus interactions using Qt";
     homepage = "https://launchpad.net/libqtdbusmock";
-    license = licenses.lgpl3Only;
-    platforms = platforms.unix;
-    teams = [ teams.lomiri ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lomiri ];
     pkgConfigModules = [
       "libqtdbusmock-1"
     ];

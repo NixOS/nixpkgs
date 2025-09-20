@@ -29,11 +29,11 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nemo DBus plugin for qml";
     homepage = "https://git.sailfishos.org/mer-core/nemo-qml-plugin-dbus/";
-    license = licenses.lgpl2Only;
-    maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Only;
+    maintainers = [ lib.maintainers.Thra11 ];
+    platforms = lib.platforms.linux;
   };
 }

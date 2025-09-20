@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.kwm.plist --subst-var out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiling window manager with focus follows mouse for OSX";
     homepage = "https://github.com/koekeishiya/kwm";
     downloadPage = "https://github.com/koekeishiya/kwm/releases";
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ lnl7 ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ lnl7 ];
     mainProgram = "kwmc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

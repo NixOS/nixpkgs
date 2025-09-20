@@ -12,7 +12,7 @@ let
   pyVersion = "${lib.versions.major python.version}${lib.versions.minor python.version}";
   buildVersion = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tensorrt";
   version = buildVersion;
 
@@ -43,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tensorrt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for TensorRT, a high-performance deep learning interface";
     homepage = "https://developer.nvidia.com/tensorrt";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aidalgol ];
+    maintainers = with lib.maintainers; [ aidalgol ];
     broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
   };
 }

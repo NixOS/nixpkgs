@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gin provides a lightweight configuration framework for Python, based on dependency injection";
     homepage = "https://github.com/google/gin-config";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jethro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jethro ];
   };
 }

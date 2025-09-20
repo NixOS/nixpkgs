@@ -29,10 +29,10 @@ buildGoModule rec {
     ln -s $out/bin/fission-cli $out/bin/fission
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli used by end user to interact Fission";
     homepage = "https://fission.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ neverbehave ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ neverbehave ];
   };
 }

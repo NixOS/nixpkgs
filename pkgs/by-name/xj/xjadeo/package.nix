@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     portmidi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "X Jack Video Monitor";
     longDescription = ''
       Xjadeo is a software video player that displays a video-clip in sync with
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
       synchronizing movie frames with external events.
     '';
     homepage = "https://xjadeo.sourceforge.net";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mitchmindtree ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mitchmindtree ];
   };
 }

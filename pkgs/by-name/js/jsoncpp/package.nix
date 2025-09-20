@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     (stdenv.buildPlatform != stdenv.hostPlatform) || secureMemory
   ) "-DJSONCPP_WITH_TESTS=OFF";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "C++ library for interacting with JSON";
-    maintainers = with maintainers; [ ttuegel ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

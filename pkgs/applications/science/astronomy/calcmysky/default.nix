@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     inherit stellarium;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simulator of light scattering by planetary atmospheres";
     homepage = "https://github.com/10110111/CalcMySky";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "User and system administration help for the GNOME desktop";
     homepage = "https://help.gnome.org/users/gnome-help/";
-    license = licenses.cc-by-30;
-    teams = [ teams.gnome ];
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-30;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.all;
   };
 }

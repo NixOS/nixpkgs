@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ protobuf ];
   propagatedBuildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "GameNetworkingSockets is a basic transport layer for games";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     inherit (src.meta) homepage;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

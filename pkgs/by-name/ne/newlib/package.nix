@@ -138,7 +138,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     libdir = "/${stdenvNoLibc.targetPlatform.config}/lib";
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library intended for use on embedded systems";
     homepage = "https://sourceware.org/newlib/";
     # arch has "bsd" while gentoo has "NEWLIB LIBGLOSS GPL-2" while COPYING has "gpl2"
@@ -148,6 +148,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     # COPYING.LIBGLOSS
     # COPYING.NEWLIB
     # COPYING3
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 })

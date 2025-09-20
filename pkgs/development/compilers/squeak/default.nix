@@ -236,10 +236,10 @@ stdenv.mkDerivation {
     cp --no-preserve mode "$sourcesSrc" "$out"/lib/squeak/SqueakV${lib.escapeShellArg squeakSourcesVersion}.sources
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Squeak virtual machine";
     homepage = "https://opensmalltalk.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];

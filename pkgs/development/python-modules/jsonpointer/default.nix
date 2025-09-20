@@ -14,10 +14,10 @@ buildPythonPackage rec {
     hash = "sha256-Ky1ynyCRUi1hw7MfguEYcPYLaPQ/vHBct2v0uDKvWe8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Resolve JSON Pointers in Python";
     mainProgram = "jsonpointer";
     homepage = "https://github.com/stefankoegl/python-json-pointer";
-    license = licenses.bsd2; # "Modified BSD license, says pypi"
+    license = lib.licenses.bsd2; # "Modified BSD license, says pypi"
   };
 }

@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Pantum universal driver";
     homepage = "https://global.pantum.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ deinferno ];
+    maintainers = with lib.maintainers; [ deinferno ];
   };
 }

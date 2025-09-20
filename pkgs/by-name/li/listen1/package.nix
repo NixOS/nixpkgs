@@ -27,10 +27,10 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "One for all free music in China";
     homepage = "http://listen1.github.io/listen1/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "listen1";
   };
 }

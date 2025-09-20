@@ -104,8 +104,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://hexler.net/touchosc";
     description = "Next generation modular control surface";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = [
       "aarch64-linux"

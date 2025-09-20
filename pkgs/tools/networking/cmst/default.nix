@@ -36,15 +36,15 @@ mkDerivation rec {
     rev-prefix = "${pname}-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "QT GUI for Connman with system tray icon";
     mainProgram = "cmst";
     homepage = "https://github.com/andrew-bibb/cmst";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matejc
       romildo
     ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.pubsub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://github.com/googleapis/python-pubsub";
     changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "fixup_pubsub_v1_keywords.py";
   };

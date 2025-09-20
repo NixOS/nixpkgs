@@ -60,11 +60,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shlevy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shlevy ];
   };
 }

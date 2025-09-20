@@ -32,10 +32,10 @@ stdenv.mkDerivation {
     cp $src/src/*.h $out/include/aruco
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/opentrack/aruco";
     description = "C++ library for detection of AR markers based on OpenCV";
-    license = licenses.isc;
-    maintainers = with maintainers; [ zaninime ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ zaninime ];
   };
 }

@@ -59,16 +59,16 @@ stdenv.mkDerivation rec {
     "DEFINES+=USE_LOCAL_STK"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Soundfont editor for creating musical instruments";
     mainProgram = "polyphone";
     homepage = "https://www.polyphone-soundfonts.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       maxdamantus
       orivej
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

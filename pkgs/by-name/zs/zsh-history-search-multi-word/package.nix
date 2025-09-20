@@ -26,13 +26,13 @@ stdenvNoCC.mkDerivation rec {
     cp -r -- history-* hsmw-* "$plugindir"/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-word, syntax highlighted history searching for Zsh";
     homepage = "https://github.com/zdharma-continuum/history-search-multi-word";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       mit
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "testcursornext"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitter library for Python";
     homepage = "https://github.com/tweepy/tweepy";
     changelog = "https://github.com/tweepy/tweepy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

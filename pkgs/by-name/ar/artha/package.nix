@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     wordnet
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Offline thesaurus based on WordNet";
     homepage = "https://artha.sourceforge.net";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "artha";
   };
 }

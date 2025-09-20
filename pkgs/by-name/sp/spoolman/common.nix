@@ -12,11 +12,11 @@ in
     hash = "sha256-EVGpwcjEh4u8Vtgu2LypqMqArYLZe7oh1qYhGZpgjh0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Keep track of your inventory of 3D-printer filament spools";
     homepage = "https://github.com/Donkie/Spoolman";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       MayNiklas
       pinpox
     ];

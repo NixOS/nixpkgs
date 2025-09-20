@@ -53,10 +53,10 @@ stdenv.mkDerivation {
       Linux.
     '';
     homepage = "https://www.umlet.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ oxzi ];
+    platforms = lib.platforms.all;
     mainProgram = "umlet";
   };
 }

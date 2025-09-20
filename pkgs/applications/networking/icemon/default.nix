@@ -38,12 +38,12 @@ mkDerivation rec {
     libarchive
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Icecream GUI Monitor";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "icemon";
   };
 }

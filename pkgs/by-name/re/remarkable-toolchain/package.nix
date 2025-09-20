@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Toolchain for cross-compiling to reMarkable tablets";
     homepage = "https://remarkable.engineering/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nickhu
       siraben
     ];

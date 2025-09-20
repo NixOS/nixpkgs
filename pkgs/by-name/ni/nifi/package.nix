@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
       Apache NiFi supports powerful and scalable directed graphs of data routing,
       transformation, and system mediation logic.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://nifi.apache.org";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ izorkin ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

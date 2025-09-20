@@ -138,9 +138,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://avocode.com/";
     description = "Bridge between designers and developers";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ megheaiulian ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ megheaiulian ];
   };
 }

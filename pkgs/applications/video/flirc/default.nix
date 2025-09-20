@@ -44,9 +44,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://flirc.tv/more/flirc-usb";
     description = "Use any Remote with your Media Center";
-    maintainers = with maintainers; [ aanderse ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ aanderse ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     mainProgram = "Flirc";
     platforms = [ "x86_64-linux" ];
   };

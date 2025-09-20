@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
     install -D -m 0444 weemoji.json $out/share/wee-slack/weemoji.json
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wee-slack/wee-slack";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     description = ''
       A WeeChat plugin for Slack.com. Synchronizes read markers, provides typing notification, search, etc..

@@ -90,14 +90,14 @@ stdenv.mkDerivation rec {
       + supported sound systems: ASIO, DirectSound, MME, ALSA, OSS, JACK, Audiobus, IAA.
     '';
     homepage = "https://warmplace.ru/soft/ans/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
     # I cannot test the Darwin version, so I'll leave it disabled
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ jacg ];
+    maintainers = with lib.maintainers; [ jacg ];
   };
 
 }

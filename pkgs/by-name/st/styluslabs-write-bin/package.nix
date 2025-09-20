@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.styluslabs.com/";
     description = "Write is a word processor for handwriting";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       oyren
       lukts30
       atemu

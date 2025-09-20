@@ -32,15 +32,15 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dit7ya
       figsoda
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "boxxy";
   };

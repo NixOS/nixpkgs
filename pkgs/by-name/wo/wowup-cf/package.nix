@@ -33,9 +33,9 @@ appimageTools.wrapType1 {
     mainProgram = "wowup-cf";
     homepage = "https://wowup.io/";
     downloadPage = "https://github.com/WowUp/WowUp.CF/releases";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ pbek ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ pbek ];
     platforms = [ "x86_64-linux" ];
   };
 }

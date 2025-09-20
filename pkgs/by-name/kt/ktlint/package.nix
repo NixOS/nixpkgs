@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Anti-bikeshedding Kotlin linter with built-in formatter";
     homepage = "https://ktlint.github.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = jre_headless.meta.platforms;
     changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tadfisher
       SubhrajyotiSen
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "ktlint";
   };
 }

@@ -70,7 +70,7 @@ buildPythonPackage rec {
     "update_matrices_tests"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Operator Splitting QP Solver";
     longDescription = ''
       Numerical optimization package for solving problems in the form
@@ -81,7 +81,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://osqp.org/";
     downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

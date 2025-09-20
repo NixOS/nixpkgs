@@ -18,8 +18,8 @@ let
       repo = "REAPER";
       owner = "gillesdegottex";
     };
-    meta = with lib; {
-      license = licenses.asl20;
+    meta = {
+      license = lib.licenses.asl20;
     };
   };
 
@@ -30,8 +30,8 @@ let
       repo = "libqaudioextra";
       owner = "gillesdegottex";
     };
-    meta = with lib; {
-      license = licenses.gpl3Plus;
+    meta = {
+      license = lib.licenses.gpl3Plus;
     };
   };
 
@@ -62,7 +62,7 @@ mkDerivation rec {
     substituteInPlace dfasma.pro --replace "CONFIG += file_sdif" "";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analyse and compare audio files in time and frequency";
     mainProgram = "dfasma";
     longDescription = ''
@@ -75,9 +75,9 @@ mkDerivation rec {
     '';
     homepage = "https://gillesdegottex.gitlab.io/dfasma-website/";
     license = [
-      licenses.gpl3Plus
+      lib.licenses.gpl3Plus
       reaperFork.meta.license
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

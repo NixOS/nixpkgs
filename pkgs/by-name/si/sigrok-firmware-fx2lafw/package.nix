@@ -29,14 +29,14 @@ stdenv.mkDerivation {
 
     # licensing details explained in:
     # https://sigrok.org/gitweb/?p=sigrok-firmware-fx2lafw.git;a=blob;f=README;hb=HEAD#l122
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus # overall
       lgpl21Plus # fx2lib, Hantek 6022BE, Sainsmart DDS120 firmwares
     ];
 
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       panicgh
       vifino
     ];

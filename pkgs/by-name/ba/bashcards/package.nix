@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     cp bashcards $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Practice flashcards in bash";
     homepage = "https://github.com/rpearce/bashcards/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rpearce ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rpearce ];
+    platforms = lib.platforms.all;
     mainProgram = "bashcards";
   };
 }

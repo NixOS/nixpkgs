@@ -26,12 +26,12 @@ buildNpmPackage rec {
     installManPage doc/djot.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript implementation of djot";
     homepage = "https://github.com/jgm/djot.js";
     changelog = "https://github.com/jgm/djot.js/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "djot";
   };
 }

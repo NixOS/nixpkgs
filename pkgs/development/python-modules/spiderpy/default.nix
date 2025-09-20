@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spiderpy.spiderapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Python wrapper for the Spider API";
     homepage = "https://www.github.com/peternijssen/spiderpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

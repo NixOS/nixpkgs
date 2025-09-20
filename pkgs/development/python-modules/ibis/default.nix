@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight template engine";
     homepage = "https://github.com/dmulholland/ibis";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     maintainers = [ ];
   };
 }

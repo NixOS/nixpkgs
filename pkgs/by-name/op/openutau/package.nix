@@ -99,14 +99,14 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "Open source singing synthesis platform and UTAU successor";
     homepage = "http://www.openutau.com/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       # deps
       binaryBytecode
       # some deps and worldline resampler
       binaryNativeCode
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

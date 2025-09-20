@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage rec {
     installManPage maker-panel.5
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Make mechanical PCBs by combining shapes together";
     homepage = "https://github.com/twitchyliquid64/maker-panel";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

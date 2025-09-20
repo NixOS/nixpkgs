@@ -67,7 +67,7 @@ buildPythonPackage rec {
     requirements-parser
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Content management platform built using the Django framework";
     mainProgram = "mezzanine-project";
     longDescription = ''
@@ -87,8 +87,8 @@ buildPythonPackage rec {
     '';
     homepage = "http://mezzanine.jupo.org/";
     downloadPage = "https://github.com/stephenmcd/mezzanine/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prikhi ];
+    platforms = lib.platforms.unix;
   };
 }

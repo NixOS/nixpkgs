@@ -75,12 +75,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mautrix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
     changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       nyanloutre
       ma27
       sumnerevans

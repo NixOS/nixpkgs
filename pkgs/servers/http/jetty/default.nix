@@ -36,13 +36,13 @@ let
         changelog = "https://github.com/jetty/jetty.project/releases/tag/jetty-${version}";
         description = "Web server and javax.servlet container";
         homepage = "https://jetty.org/";
-        platforms = platforms.all;
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        license = with licenses; [
+        platforms = lib.platforms.all;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+        license = with lib.licenses; [
           asl20
           epl10
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           emmanuelrosa
           anthonyroussel
         ];

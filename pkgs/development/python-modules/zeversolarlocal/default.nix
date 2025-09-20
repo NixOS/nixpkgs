@@ -60,10 +60,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zeversolarlocal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with Zeversolar inverters";
     homepage = "https://github.com/sander76/zeversolarlocal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

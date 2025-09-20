@@ -76,9 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.soundtracker.org/";
     downloadPage = "https://sourceforge.net/projects/soundtracker/files/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
 })

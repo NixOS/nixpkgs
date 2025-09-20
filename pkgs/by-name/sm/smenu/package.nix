@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/p-gen/smenu";
     description = "Terminal selection utility";
     longDescription = ''
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
       input to create a nice selection window just below the cursor. Once done,
       your selection will be sent to standard output.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
     mainProgram = "smenu";
   };
 }

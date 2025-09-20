@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Various meters (VU, PPM, DPM, JF, SCO) for Jack Audio Connection Kit";
     homepage = "http://plugin.org.uk/meterbridge/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.nico202 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
     mainProgram = "meterbridge";
   };
 }

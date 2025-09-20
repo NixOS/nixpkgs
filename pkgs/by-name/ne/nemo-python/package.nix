@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
 
   passthru.nemoPythonExtensionDeps = [ python3.pkgs.pygobject3 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-python";
     description = "Python bindings for the Nemo extension library";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

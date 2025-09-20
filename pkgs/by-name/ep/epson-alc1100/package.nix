@@ -90,13 +90,13 @@ stdenv.mkDerivation {
         };
     '';
 
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [
       mit
       eapl
     ];
-    maintainers = [ maintainers.eperuffo ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.eperuffo ];
+    platforms = lib.platforms.linux;
   };
 
 }

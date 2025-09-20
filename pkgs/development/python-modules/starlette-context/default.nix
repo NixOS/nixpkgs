@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "starlette_context" ];
 
-  meta = with lib; {
+  meta = {
     description = "Middleware for Starlette that allows you to store and access the context data of a request";
     homepage = "https://github.com/tomwojcik/starlette-context";
     changelog = "https://github.com/tomwojcik/starlette-context/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

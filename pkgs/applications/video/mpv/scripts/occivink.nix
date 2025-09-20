@@ -30,10 +30,10 @@ let
 
         scriptPath = "scripts/${pname}.lua";
 
-        meta = with lib; {
+        meta = {
           homepage = "https://github.com/occivink/mpv-scripts";
-          license = licenses.unlicense;
-          maintainers = with maintainers; [ nicoo ];
+          license = lib.licenses.unlicense;
+          maintainers = with lib.maintainers; [ nicoo ];
         };
 
         # Sadly needed to make `common-updaters` work here

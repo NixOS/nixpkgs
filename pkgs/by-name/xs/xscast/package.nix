@@ -44,9 +44,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KeyboardFire/xscast";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Screencasts of windows with list of keystrokes overlayed";
     maintainers = [ ];
     mainProgram = "xscast";

@@ -63,11 +63,11 @@ python3Packages.buildPythonApplication {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     broken = true; # dependencies are not up to date, the project doesn't look well maintained, this doesn't look like it's going in the right direction. I'm happy to handle maintainership to whoever wants to.
     homepage = "https://github.com/openai/chatgpt-retrieval-plugin";
     description = "Tool to search and find personal or work documents by asking questions in everyday language";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

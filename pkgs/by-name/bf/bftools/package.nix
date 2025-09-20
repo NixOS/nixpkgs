@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     homepage = "https://www.openmicroscopy.org/bio-formats/";
-    maintainers = [ maintainers.tbenst ];
+    maintainers = [ lib.maintainers.tbenst ];
   };
 }

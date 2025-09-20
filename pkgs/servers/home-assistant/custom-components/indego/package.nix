@@ -19,11 +19,11 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ pyindego ];
 
-  meta = with lib; {
+  meta = {
     description = "Bosch Indego lawn mower component";
     changelog = "https://github.com/sander1988/Indego/releases/tag/${version}";
     homepage = "https://github.com/sander1988/Indego";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -71,8 +71,8 @@ buildPythonPackage rec {
     description = "Extends Selenium's Python bindings to give you the ability to inspect requests made by the browser";
     homepage = "https://github.com/wkeeling/selenium-wire";
     changelog = "https://github.com/wkeeling/selenium-wire/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     broken = versionAtLeast blinker.version "1.8";
   };
 }

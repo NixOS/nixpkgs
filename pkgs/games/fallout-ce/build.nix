@@ -77,11 +77,11 @@ stdenv.mkDerivation {
   '';
 
   meta =
-    with lib;
+
     {
-      license = licenses.sustainableUse;
-      maintainers = with maintainers; [ hughobrien ];
-      platforms = platforms.linux;
+      license = lib.licenses.sustainableUse;
+      maintainers = with lib.maintainers; [ hughobrien ];
+      platforms = lib.platforms.linux;
     }
     // extraMeta;
 }

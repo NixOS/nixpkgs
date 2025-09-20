@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Design spring animations";
     homepage = "https://gitlab.gnome.org/World/elastic/";
     mainProgram = "app.drey.Elastic";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ];
-    teams = [ teams.gnome-circle ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ _0xMRTT ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

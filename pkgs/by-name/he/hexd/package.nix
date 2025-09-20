@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Colourful, human-friendly hexdump tool";
     homepage = "https://github.com/FireyFly/hexd";
-    maintainers = [ maintainers.FireyFly ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.FireyFly ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "hexd";
   };
 }

@@ -48,10 +48,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fedora-python/python-ethtool/blob/${src.rev}/CHANGES.rst";
     description = "Python bindings for the ethtool kernel interface";
     homepage = "https://github.com/fedora-python/python-ethtool";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

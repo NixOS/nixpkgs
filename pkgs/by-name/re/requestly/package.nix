@@ -25,10 +25,10 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Intercept & Modify HTTP Requests";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://requestly.io";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "requestly";
   };
 }

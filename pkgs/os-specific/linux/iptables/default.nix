@@ -88,13 +88,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program to configure the Linux IP packet filtering ruleset";
     homepage = "https://www.netfilter.org/projects/iptables/index.html";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "iptables";
-    maintainers = with maintainers; [ fpletz ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
   };
 }

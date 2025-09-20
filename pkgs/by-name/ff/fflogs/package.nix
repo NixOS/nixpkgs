@@ -29,10 +29,10 @@ appimageTools.wrapType2 {
     description = "Application for uploading Final Fantasy XIV combat logs to fflogs.com";
     homepage = "https://www.fflogs.com/client/download";
     downloadPage = "https://github.com/RPGLogs/Uploaders-fflogs/releases/latest";
-    license = licenses.unfree; # no license listed
+    license = lib.licenses.unfree; # no license listed
     mainProgram = "fflogs";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keysmashes ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ keysmashes ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

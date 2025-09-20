@@ -72,10 +72,10 @@ stdenv.mkDerivation rec {
     homepage = "https://jquake.net";
     downloadPage = "https://jquake.net/en/terms.html?os=linux&arch=any";
     changelog = "https://jquake.net/en/changelog.html";
-    maintainers = with maintainers; [ nessdoor ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ nessdoor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     mainProgram = "JQuake";
   };
 }

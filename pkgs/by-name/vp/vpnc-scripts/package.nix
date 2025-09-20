@@ -60,12 +60,12 @@ stdenv.mkDerivation {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.infradead.org/openconnect/";
     description = "Script for vpnc to configure the network routing and name service";
     mainProgram = "vpnc-script";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jerith666 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jerith666 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

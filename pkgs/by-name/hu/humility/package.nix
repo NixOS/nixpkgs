@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage {
   # Prevent building and installing xtask, as it's a developer utility not intended for the end user
   cargoBuildFlags = [ "-p humility-cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Debugger for Hubris";
     mainProgram = "humility";
     homepage = "https://github.com/oxidecomputer/humility";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ therishidesai ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ therishidesai ];
   };
 }

@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     cp .config/znt/n-* $out/share/zsh/site-functions/.config/znt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Curses-based tools for ZSH";
     homepage = "https://github.com/psprint/zsh-navigation-tools";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; unix;
   };
 }

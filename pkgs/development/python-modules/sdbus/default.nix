@@ -22,11 +22,11 @@ buildPythonPackage {
     hash = "sha256-QdYbdswFqepB0Q1woR6fmobtlfQPcTYwxeGDQODkx28=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern Python library for D-Bus";
     homepage = "https://github.com/python-sdbus/python-sdbus";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ camelpunch ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ camelpunch ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
         analyses, editors, code-review applications, and more — to share
         information with each other smoothly.  '';
     homepage = "https://kythe.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.mpickering ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.mpickering ];
   };
 }

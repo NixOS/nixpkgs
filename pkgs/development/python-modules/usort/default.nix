@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "usort" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safe, minimal import sorting for Python projects";
     mainProgram = "usort";
     homepage = "https://github.com/facebook/usort";
     changelog = "https://github.com/facebook/usort/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

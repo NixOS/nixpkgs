@@ -11,15 +11,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "drake";
 
-  meta = with lib; {
+  meta = {
     description = "Branch of Rake supporting automatic parallelizing of tasks";
     homepage = "http://quix.github.io/rake/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       romildo
       manveru
       nicknovitski
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

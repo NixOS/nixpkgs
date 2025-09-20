@@ -34,11 +34,11 @@ buildPythonPackage rec {
     "tests/online/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Ethernet/IP library for communicating with Allen-Bradley PLCs";
     homepage = "https://github.com/ottowayi/pycomm3";
     changelog = "https://github.com/ottowayi/pycomm3/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

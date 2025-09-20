@@ -138,16 +138,16 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Userspace checkpoint/restore for Linux";
     homepage = "https://criu.org";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
       "loongarch64-linux"
     ];
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

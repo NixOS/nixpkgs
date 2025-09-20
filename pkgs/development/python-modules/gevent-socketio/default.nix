@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "socketio" ];
 
-  meta = with lib; {
+  meta = {
     description = "SocketIO server based on the Gevent pywsgi server";
     homepage = "https://github.com/abourget/gevent-socketio";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

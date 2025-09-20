@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-o test";
 
-  meta = with lib; {
+  meta = {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
     homepage = "https://vamp-plugins.org/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Build2 project dependency manager";
     mainProgram = "bdep";
     # https://build2.org/bdep/doc/bdep.xhtml
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/bdep/tree/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
+    platforms = lib.platforms.all;
   };
 }

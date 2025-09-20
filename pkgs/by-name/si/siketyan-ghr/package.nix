@@ -52,11 +52,11 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Yet another repository management with auto-attaching profiles";
     homepage = "https://github.com/siketyan/ghr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sei40kr ];
     mainProgram = "ghr";
   };
 }

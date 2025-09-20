@@ -109,10 +109,10 @@ stdenv.mkDerivation rec {
       compared to an equivalent Java application.
     '';
     homepage = "https://www.scala-lang.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     branch = versions.majorMinor version;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nequissimus
       kashw2
     ];

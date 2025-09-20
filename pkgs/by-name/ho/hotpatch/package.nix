@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-loader-test.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Hot patching executables on Linux using .so file injection";
     mainProgram = "hotpatcher";
     homepage = src.meta.homepage;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [
       "i686-linux"

@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     patchShebangs --build config/install-mod.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Molecular structure store for testing";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/grimme-lab/mstore";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

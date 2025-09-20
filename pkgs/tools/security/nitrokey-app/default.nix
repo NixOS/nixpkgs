@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cppcodec
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides extra functionality for the Nitrokey Pro and Storage";
     mainProgram = "nitrokey-app";
     longDescription = ''
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Nitrokey/nitrokey-app";
     changelog = "https://github.com/Nitrokey/nitrokey-app/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kaiha
       panicgh
     ];

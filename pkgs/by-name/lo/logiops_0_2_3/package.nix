@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     libconfig
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial userspace driver for HID++ Logitech devices";
     mainProgram = "logid";
     homepage = "https://github.com/PixlOne/logiops";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -20,12 +20,12 @@ rustPlatform.buildRustPackage rec {
   # too many tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Mutation testing tool for Rust";
     mainProgram = "cargo-mutants";
     homepage = "https://github.com/sourcefrog/cargo-mutants";
     changelog = "https://github.com/sourcefrog/cargo-mutants/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

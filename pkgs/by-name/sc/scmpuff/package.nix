@@ -35,12 +35,12 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Numeric file shortcuts for common git commands";
     homepage = "https://github.com/mroth/scmpuff";
     changelog = "https://github.com/mroth/scmpuff/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpcloud
       christoph-heiss
     ];

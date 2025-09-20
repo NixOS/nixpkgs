@@ -30,9 +30,9 @@ mkDerivation {
     extra-cmake-modules
   ];
 
-  meta = with lib; {
-    license = [ licenses.lgpl2 ];
-    platforms = platforms.linux;
+  meta = {
+    license = [ lib.licenses.lgpl2 ];
+    platforms = lib.platforms.linux;
   };
 
 }

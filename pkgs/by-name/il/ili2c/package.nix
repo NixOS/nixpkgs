@@ -58,14 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
       Checks the syntactical correctness of an INTERLIS data model.
     '';
     homepage = "https://www.interlis.ch/downloads/ili2c";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ das-g ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ das-g ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
     mainProgram = "ili2c";
   };
 })

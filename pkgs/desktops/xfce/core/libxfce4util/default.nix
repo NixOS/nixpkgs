@@ -35,10 +35,10 @@ mkXfceDerivation {
     patchShebangs xdt-gen-visibility
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extension library for Xfce";
     mainProgram = "xfce4-kiosk-query";
-    license = licenses.lgpl2Plus;
-    teams = [ teams.xfce ];
+    license = lib.licenses.lgpl2Plus;
+    teams = [ lib.teams.xfce ];
   };
 }

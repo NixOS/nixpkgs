@@ -107,9 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Sophisticated software modeler";
     homepage = "https://staruml.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ kashw2 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ kashw2 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "staruml";
   };

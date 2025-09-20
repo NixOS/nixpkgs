@@ -36,7 +36,7 @@ buildPythonPackage rec {
     hypothesmith
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for Flake8 to find bugs and design problems";
     homepage = "https://github.com/PyCQA/flake8-bugbear";
     changelog = "https://github.com/PyCQA/flake8-bugbear/blob/${version}/README.rst#change-log";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       A plugin for flake8 finding likely bugs and design problems in your
       program.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

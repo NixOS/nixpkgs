@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "tests/test_elasticsearch/test_es_naming.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lucene query parser generating ElasticSearch queries";
     homepage = "https://github.com/jurismarches/luqum";
     changelog = "https://github.com/jurismarches/luqum/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

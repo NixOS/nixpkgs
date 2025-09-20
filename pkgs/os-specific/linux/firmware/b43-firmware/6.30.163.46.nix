@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation rec {
     b43-fwcutter -w $out/lib/firmware *.wl_apsta.o
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Firmware for cards supported by the b43 kernel module";
     homepage = "https://wireless.wiki.kernel.org/en/users/drivers/b43";
     downloadPage = "http://www.lwfinger.com/b43-firmware";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

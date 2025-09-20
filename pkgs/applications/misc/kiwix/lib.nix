@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Common code base for all Kiwix ports";
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ colinsane ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ colinsane ];
   };
 })

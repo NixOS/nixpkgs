@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     make install-links prefix="$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";
     homepage = "http://dag.wieers.com/home-made/unoconv/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "unoconv";
   };
 }

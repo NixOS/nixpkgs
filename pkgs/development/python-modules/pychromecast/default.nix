@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pychromecast" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Python to communicate with the Google Chromecast";
     homepage = "https://github.com/home-assistant-libs/pychromecast";
     changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

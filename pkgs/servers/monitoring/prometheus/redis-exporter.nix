@@ -55,12 +55,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Redis metrics";
     mainProgram = "redis_exporter";
     homepage = "https://github.com/oliver006/redis_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       eskytthe
       srhb
       ma27

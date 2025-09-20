@@ -27,7 +27,7 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Webserver";
     longDescription = ''
       Swiss army knife Webserver in Golang. Similar to the Python
@@ -35,8 +35,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/nodauf/Swego";
     changelog = "https://github.com/nodauf/Swego/releases/tag/${src.tag}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
     broken = stdenv.hostPlatform.isDarwin;

@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     install -Dm755 GUI/i7z_GUI $out/bin/i7z-gui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Better i7 (and now i3, i5) reporting tool for Linux";
     mainProgram = "i7z";
     homepage = "https://github.com/DimitryAndric/i7z";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     # broken on ARM
     platforms = [ "x86_64-linux" ];
   };

@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Kafka command line browser";
     homepage = "https://github.com/cswank/kcli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cswank ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cswank ];
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

@@ -13,7 +13,7 @@ let
   beat =
     package: extraArgs:
     buildGoModule (
-      lib.attrsets.recursiveUpdate (rec {
+      lib.attrsets.recursiveUpdate rec {
         pname = package;
         version = elk7Version;
 
@@ -28,17 +28,17 @@ let
 
         subPackages = [ package ];
 
-        meta = with lib; {
+        meta = {
           homepage = "https://www.elastic.co/products/beats";
-          license = licenses.asl20;
-          maintainers = with maintainers; [
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             fadenb
             basvandijk
             dfithian
           ];
-          platforms = platforms.linux;
+          platforms = lib.platforms.linux;
         };
-      }) extraArgs
+      } extraArgs
     );
 in
 rec {

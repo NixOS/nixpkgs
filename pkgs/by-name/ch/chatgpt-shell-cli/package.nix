@@ -46,10 +46,10 @@ stdenv.mkDerivation {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/0xacx/chatGPT-shell-cli";
     description = "Simple shell script to use OpenAI's ChatGPT and DALL-E from the terminal. No Python or JS required";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
   };
 }

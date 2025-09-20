@@ -51,7 +51,7 @@ let
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
 in
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation {
   pname = "klee";
   version = "3.1-unstable-2025-07-11";
 
@@ -237,7 +237,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "klee";
     description = "Symbolic virtual machine built on top of LLVM";
     longDescription = ''
@@ -260,9 +260,9 @@ llvmPackages.stdenv.mkDerivation rec {
       environment variables, and passing command line arguments.
     '';
     homepage = "https://klee.github.io";
-    license = licenses.ncsa;
+    license = lib.licenses.ncsa;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ numinit ];
+    maintainers = with lib.maintainers; [ numinit ];
     # Upstream is still working on support for LLVM ≥ 16; see:
     #
     # * <https://github.com/klee/klee/pull/1664>

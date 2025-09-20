@@ -19,10 +19,10 @@ buildPythonPackage rec {
   # https://github.com/arsho/bangla/issues/5
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Bangla is a package for Bangla language users with various functionalities including Bangla date and Bangla numeric conversation";
     homepage = "https://github.com/arsho/bangla";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the RCT Power GmbH Serial Communication Protocol";
     homepage = "https://github.com/svalouch/python-rctclient";
     changelog = "https://github.com/svalouch/python-rctclient/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ _9R ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ _9R ];
   };
 }

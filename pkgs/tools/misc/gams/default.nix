@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       GAMS is designed for modeling and solving linear, nonlinear, and mixed-integer optimization problems.
     '';
     homepage = "https://www.gams.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.Scriptkiddi ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.Scriptkiddi ];
+    platforms = lib.platforms.linux;
   };
 }

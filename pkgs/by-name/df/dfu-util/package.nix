@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tLU7ohqC7349TEffKVKt9fpJT0mbawtXxYxdBK6P8Z4=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Device firmware update (DFU) USB programmer";
     longDescription = ''
       dfu-util is a program that implements the host (PC) side of the USB
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       upload firmware from it.
     '';
     homepage = "https://dfu-util.sourceforge.net";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.fpletz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.fpletz ];
   };
 }

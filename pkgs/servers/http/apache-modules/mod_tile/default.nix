@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jglukasik ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jglukasik ];
+    platforms = lib.platforms.linux;
   };
 }

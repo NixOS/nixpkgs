@@ -22,14 +22,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/MihailJP/oldsindhi";
     description = "Free Sindhi Khudabadi font";
-    maintainers = with maintainers; [ mathnerd314 ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ mathnerd314 ];
+    license = with lib.licenses; [
       mit
       ofl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -26,10 +26,10 @@ buildKodiAddon rec {
     pythonPath = "resources/lib";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/siku2/script.service.sponsorblock";
     description = "Port of SponsorBlock for Invidious and YouTube Plugin";
-    license = licenses.mit;
-    teams = [ teams.kodi ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

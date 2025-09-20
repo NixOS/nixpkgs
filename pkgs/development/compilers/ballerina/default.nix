@@ -50,9 +50,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Open-source programming language for the cloud";
     mainProgram = "bal";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = openjdk.meta.platforms;
-    maintainers = with maintainers; [ eigengrau ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ eigengrau ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

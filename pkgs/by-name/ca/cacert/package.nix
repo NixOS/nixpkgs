@@ -25,15 +25,15 @@ let
 
   srcVersion = "3.115";
   version = if nssOverride != null then nssOverride.version else srcVersion;
-  meta = with lib; {
+  meta = {
     homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       fpletz
       lukegb
     ];
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
   };
   certdata = stdenv.mkDerivation {
     pname = "nss-cacert-certdata";

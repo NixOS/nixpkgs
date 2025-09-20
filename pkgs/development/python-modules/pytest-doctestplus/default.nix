@@ -61,10 +61,10 @@ buildPythonPackage rec {
     "test_remote_data_all"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

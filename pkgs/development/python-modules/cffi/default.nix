@@ -64,12 +64,12 @@ else
       "test_dlopen_handle"
     ];
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/python-cffi/cffi/releases/tag/v${version}";
       description = "Foreign Function Interface for Python calling C code";
       downloadPage = "https://github.com/python-cffi/cffi";
       homepage = "https://cffi.readthedocs.org/";
-      license = licenses.mit;
-      teams = [ teams.python ];
+      license = lib.licenses.mit;
+      teams = [ lib.teams.python ];
     };
   }

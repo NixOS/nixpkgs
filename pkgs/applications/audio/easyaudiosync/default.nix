@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio library syncing and conversion utility";
     longDescription = ''
       Easy Audio Sync is an audio library syncing and conversion utility.
@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
       GUI-based instead of CLI-based.
     '';
     homepage = "https://github.com/complexlogic/EasyAudioSync";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ matteopacini ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ matteopacini ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslotest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo test framework";
     homepage = "https://github.com/openstack/oslotest";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

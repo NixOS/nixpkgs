@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
       SMC can also generate GraphViz state diagrams from the input file.
     '';
     homepage = "https://smc.sourceforge.net/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mpl11;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mpl11;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "smc";
   };
 }

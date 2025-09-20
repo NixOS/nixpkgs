@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source penetration testing framework designed for social engineering";
     longDescription = ''
       The Social-Engineer Toolkit is an open-source penetration testing framework
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/trustedsec/social-engineer-toolkit";
     mainProgram = "setoolkit";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

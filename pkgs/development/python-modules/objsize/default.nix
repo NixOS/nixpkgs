@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test_objsize.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Traversal over objects subtree and calculate the total size";
     homepage = "https://github.com/liran-funaro/objsize";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ocfox ];
   };
 }

@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     smoke-test = nixosTests.bittorrent;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and free BitTorrent client";
     mainProgram =
       if (enableQt5 || enableQt6) then
@@ -221,10 +221,10 @@ stdenv.mkDerivation (finalAttrs: {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "https://www.transmissionbt.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       mit
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

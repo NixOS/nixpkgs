@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   passthru.tests.pytest = pysmi.overridePythonAttrs { doCheck = true; };
 
-  meta = with lib; {
+  meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
     changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

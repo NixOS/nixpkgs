@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/helio" "$out/bin/helio"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     mainProgram = "helio";
     homepage = "https://helio.fm/";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.suhr ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.suhr ];
     platforms = [ "x86_64-linux" ];
   };
 }

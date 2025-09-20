@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     # commercial version of the software is available, and licensed
     # through the Office of Technology Management at Washington
     # University School of Medicine.
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     homepage = "https://github.com/dkoboldt/varscan";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.all;
   };
 
 }

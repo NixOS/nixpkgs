@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
       crop, etc), PDF and PNG output.
     '';
     homepage = "http://swingsane.com/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     mainProgram = "swingsane";
   };
 }

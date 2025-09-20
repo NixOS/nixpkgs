@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
     url = "git://git.joeyh.name/moreutils";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = "https://joeyh.name/code/moreutils/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       koral
       pSub
     ];
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
   };
 }

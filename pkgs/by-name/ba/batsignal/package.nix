@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/electrickite/batsignal";
     description = "Lightweight battery daemon written in C";
-    license = licenses.isc;
-    maintainers = with maintainers; [ SlothOfAnarchy ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ SlothOfAnarchy ];
+    platforms = lib.platforms.linux;
     mainProgram = "batsignal";
   };
 }

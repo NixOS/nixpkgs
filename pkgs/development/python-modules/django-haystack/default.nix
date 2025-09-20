@@ -60,11 +60,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     changelog = "https://github.com/django-haystack/django-haystack/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

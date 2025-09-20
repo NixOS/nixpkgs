@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     substituteInPlace src/picosat/picosat.c --replace-fail '<sys/unistd.h>' '<unistd.h>'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced SAT Solver";
     mainProgram = "cryptominisat5";
     homepage = "https://github.com/msoos/cryptominisat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.unix;
   };
 }

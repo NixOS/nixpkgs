@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
     mainProgram = "frostwire";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ gavin ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ gavin ];
     platforms = [ "x86_64-linux" ];
   };
 }

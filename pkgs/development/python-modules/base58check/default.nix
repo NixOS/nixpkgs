@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "base58check" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Base58Check encoding scheme";
     homepage = "https://github.com/joeblackwaslike/base58check";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

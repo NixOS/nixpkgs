@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.sqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support sqlite for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-sqlite";
     changelog = "https://github.com/SigmaHQ/pySigma-backend-sqlite/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

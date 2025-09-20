@@ -21,10 +21,10 @@ buildKodiAddon rec {
     jurialmunkey
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jurialmunkey/script.texturemaker/tree/main";
     description = "Texture Maker helps skinners build gradient based textures";
-    license = licenses.gpl3Plus;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

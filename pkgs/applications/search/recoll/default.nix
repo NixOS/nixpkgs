@@ -164,9 +164,9 @@ mkDerivation rec {
       if [[ ! "$f" =~ \.zip$ ]]; then
   ''
   + lib.concatStrings (
-    lib.mapAttrsToList (k: v: (''
+    lib.mapAttrsToList (k: v: ''
       substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-    '')) filters
+    '') filters
   )
   + ''
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
@@ -205,9 +205,9 @@ mkDerivation rec {
     '';
     homepage = "https://www.recoll.org";
     changelog = "https://www.recoll.org/pages/release-history.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       jcumming
     ];
 

@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free programming font with cursive italics and ligatures";
     homepage = "https://rubjo.github.io/victor-mono";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ jpotier ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ jpotier ];
+    platforms = lib.platforms.all;
   };
 }

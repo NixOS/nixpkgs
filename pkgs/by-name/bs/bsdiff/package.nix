@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     cp bspatch.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Efficient binary diff/patch tool";
     homepage = "https://www.daemonology.net/bsdiff/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.thoughtpolice ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gitstatus;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linkable library implementation of Git that you can use in your application";
     mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 })

@@ -43,11 +43,11 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for generating fake user data";
     mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

@@ -85,13 +85,13 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensions for Python Markdown";
     homepage = "https://facelessuser.github.io/pymdown-extensions/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ];
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

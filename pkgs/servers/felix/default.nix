@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OSGi gateway";
     homepage = "https://felix.apache.org";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = [ maintainers.sander ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sander ];
     mainProgram = "felix.jar";
   };
 }

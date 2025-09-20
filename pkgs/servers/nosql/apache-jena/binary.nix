@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
       wrapProgram "$i" --prefix "PATH" : "${java}/bin/"
     done
   '';
-  meta = with lib; {
+  meta = {
     description = "RDF database";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };

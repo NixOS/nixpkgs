@@ -25,11 +25,11 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "xdxf2slob" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert XDXF dictionary files to slob format";
     homepage = "https://github.com/itkach/xdxf2slob/";
-    license = licenses.gpl3;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
     mainProgram = "xdxf2slob";
   };
 }

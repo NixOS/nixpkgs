@@ -31,10 +31,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python implementation of the HTTP/2 priority tree";
     homepage = "https://github.com/python-hyper/priority/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

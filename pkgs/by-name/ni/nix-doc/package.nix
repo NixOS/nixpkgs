@@ -58,13 +58,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EC+Wps6u1qXpv7ByM3NkRVCKRKCaBtC1o2vK8cKqzyU=";
 
-  meta = with lib; {
+  meta = {
     description = "Interactive Nix documentation tool";
     longDescription = "An interactive Nix documentation tool providing a CLI for function search, a Nix plugin for docs in the REPL, and a ctags implementation for Nix script";
     homepage = "https://github.com/lf-/nix-doc";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.philiptaron ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.philiptaron ];
+    platforms = lib.platforms.unix;
     mainProgram = "nix-doc";
   };
 }

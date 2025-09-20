@@ -49,11 +49,11 @@ mkDerivation rec {
     cp theme.ini $out/share/nixnote2/theme.ini
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial client of Evernote";
     homepage = "http://www.nixnote.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ htr ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ htr ];
+    platforms = lib.platforms.linux;
   };
 }

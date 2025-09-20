@@ -102,9 +102,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://hexler.net/kodelife";
     description = "Real-time GPU shader editor";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ prusnak ];
     platforms = [
       "aarch64-linux"
       "armv7l-linux"

@@ -74,11 +74,11 @@ buildPythonPackage rec {
     "dipy.nn"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dipy.org/";
     description = "Diffusion imaging toolkit for Python";
     changelog = "https://github.com/dipy/dipy/blob/${version}/Changelog";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

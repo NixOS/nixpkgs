@@ -43,11 +43,11 @@ buildGoModule rec {
         --zsh <(${diffoci}/bin/diffoci completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Diff for Docker and OCI container images";
     homepage = "https://github.com/reproducible-containers/diffoci/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
     mainProgram = "diffoci";
   };
 }

@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast json library for C";
     homepage = "https://github.com/rsyslog/libfastjson";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nequissimus ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nequissimus ];
+    platforms = with lib.platforms; unix;
   };
 }

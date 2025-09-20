@@ -64,13 +64,13 @@ perlPackages.buildPerlPackage rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
     mainProgram = "get_iplayer";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/get-iplayer/get_iplayer";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rika
       chewblacka
     ];

@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webauthn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the WebAuthn API";
     homepage = "https://github.com/duo-labs/py_webauthn";
     changelog = "https://github.com/duo-labs/py_webauthn/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

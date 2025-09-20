@@ -19,10 +19,10 @@ buildPythonPackage rec {
   # tests are not available in pypi tarball
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Handy Python library to validate, manipulate and generate strings";
     homepage = "https://github.com/daveoncode/python-string-utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

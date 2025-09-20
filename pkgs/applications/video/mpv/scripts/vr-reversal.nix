@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.scriptName = "360plugin.lua";
 
-  meta = with lib; {
+  meta = {
     description = "Script for mpv to play VR video with optional saving of head tracking data";
     homepage = "https://github.com/dfaker/VR-reversal";
-    license = licenses.unlicense;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ schnusch ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ schnusch ];
   };
 }

@@ -31,13 +31,13 @@ rec {
 
     meta = with lib; {
       homepage = "https://www.rust-lang.org/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
       mainProgram = "rustc";
-      maintainers = with maintainers; [ qknight ];
+      maintainers = with lib.maintainers; [ qknight ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
     };
 
@@ -139,12 +139,12 @@ rec {
 
     meta = with lib; {
       homepage = "https://doc.rust-lang.org/cargo/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       description = "Rust package manager";
-      maintainers = with maintainers; [ qknight ];
+      maintainers = with lib.maintainers; [ qknight ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
     };
 

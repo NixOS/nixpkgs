@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Raw binary firmware analysis software";
     mainProgram = "binbloom";
     homepage = "https://github.com/quarkslab/binbloom";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erdnaxe ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erdnaxe ];
+    platforms = lib.platforms.linux;
   };
 }

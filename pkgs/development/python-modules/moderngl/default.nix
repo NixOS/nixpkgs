@@ -41,13 +41,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moderngl" ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance rendering for Python";
     homepage = "https://github.com/moderngl/moderngl";
     changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ c0deaddict ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ c0deaddict ];
     # should be mesa.meta.platforms, darwin build breaks.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MIDI controllable audio sampler";
     longDescription = "a fork of Specimen";
     homepage = "https://petri-foo.sourceforge.net";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "petri-foo";
   };

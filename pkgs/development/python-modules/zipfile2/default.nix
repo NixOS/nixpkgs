@@ -33,11 +33,11 @@ buildPythonPackage rec {
     "test_extract"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backwards-compatible improved zipfile class";
     homepage = "https://github.com/cournape/zipfile2";
     changelog = "https://github.com/itziakos/zipfile2/releases/tag/v${version}";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
   };
 }

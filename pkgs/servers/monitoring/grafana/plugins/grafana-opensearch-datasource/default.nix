@@ -9,10 +9,10 @@ grafanaPlugin {
     x86_64-darwin = "sha256-HMifdRPl8RNb+m/eFaXATNRgDYLMG1UA6N/rWHMTR04=";
     aarch64-darwin = "sha256-MLVyOeVZ42zJjLpOnGSa5ogGNa7rlcA4qjASCVeA3eU=";
   };
-  meta = with lib; {
+  meta = {
     description = "Empowers you to seamlessly integrate JSON data into Grafana";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

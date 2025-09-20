@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "System on Chip toolkit for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-soc";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       pbsds
     ];

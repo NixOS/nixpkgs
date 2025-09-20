@@ -29,10 +29,10 @@ buildKodiAddon rec {
     pythonPath = "resources/lib";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anxdpanic/plugin.video.youtube";
     description = "YouTube is one of the biggest video-sharing websites of the world";
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

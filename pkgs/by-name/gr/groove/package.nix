@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GRaphs for Object-Oriented VErification";
     homepage = "https://groove.cs.utwente.nl/";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

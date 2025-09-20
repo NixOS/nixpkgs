@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       "armv7l-linux"
     ];
     hydraPlatforms = [ ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
   };
 }

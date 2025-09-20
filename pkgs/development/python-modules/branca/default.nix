@@ -50,11 +50,11 @@ buildPythonPackage rec {
     "test_rendering_figure_notebook"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate complex HTML+JS pages with Python";
     homepage = "https://github.com/python-visualization/branca";
     changelog = "https://github.com/python-visualization/branca/blob/v${version}/CHANGES.txt";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

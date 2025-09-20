@@ -36,12 +36,12 @@ stdenv.mkDerivation {
     mv -v src/httperf $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HTTP load generator";
     homepage = "https://github.com/httperf/httperf";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     mainProgram = "httperf";
   };
 

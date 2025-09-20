@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     install -Dm644 ../translations/*.qm -t $out/share/stacer/translations
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux System Optimizer and Monitoring";
     homepage = "https://github.com/oguzhaninan/stacer";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    platforms = lib.platforms.linux;
     mainProgram = "stacer";
   };
 }

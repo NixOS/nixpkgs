@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dicom_numpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read DICOM files into Numpy arrays";
     homepage = "https://github.com/innolitics/dicom-numpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

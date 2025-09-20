@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     installManPage mle.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, flexible, terminal-based text editor";
     homepage = "https://github.com/adsr/mle";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ adsr ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ adsr ];
     mainProgram = "mle";
   };
 }

@@ -71,12 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Spectral warping wavetable synth";
     homepage = "https://vital.audio/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [
       unfree # https://vital.audio/eula/
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ PowerUser64 ];
+    maintainers = with lib.maintainers; [ PowerUser64 ];
     mainProgram = "Vital";
   };
 })

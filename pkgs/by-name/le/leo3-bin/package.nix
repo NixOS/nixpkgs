@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Automated theorem prover for classical higher-order logic with choice";
     mainProgram = "leo3";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd3;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://page.mi.fu-berlin.de/lex/leo3/";
   };
 }

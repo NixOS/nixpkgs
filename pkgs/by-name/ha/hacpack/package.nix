@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     cp ./hacpack $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/The-4n/hacPack";
     description = "Make and repack Nintendo Switch NCAs/NSPs";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "hacpack";
   };
 }

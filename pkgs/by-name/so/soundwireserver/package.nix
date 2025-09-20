@@ -34,9 +34,9 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "Turn your Android device into wireless headphones / wireless speaker";
     homepage = "https://georgielabs.net/";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with lib.maintainers; [ mkg20001 ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
   };
 }

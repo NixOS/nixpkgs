@@ -49,10 +49,10 @@ stdenv.mkDerivation {
     url = "https://github.com/chubin/cheat.sh.git";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI client for cheat.sh, a community driven cheat sheet";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fgaz
       evanjs
     ];

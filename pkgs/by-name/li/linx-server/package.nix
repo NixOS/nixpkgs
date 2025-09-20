@@ -25,10 +25,10 @@ buildGoModule {
 
   preBuild = "rice embed-go";
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted file/code/media sharing website";
     homepage = "https://put.icu";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

@@ -39,10 +39,10 @@ let
       install -Dm644 client/play-regular.ttf -t $out/share/soldat
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Opensoldat's base game content";
-      license = licenses.cc-by-40;
-      platforms = platforms.all;
+      license = lib.licenses.cc-by-40;
+      platforms = lib.platforms.all;
       inherit (src.meta) homepage;
     };
   };
@@ -101,14 +101,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unique 2D (side-view) multiplayer action game";
     license = [
-      licenses.mit
+      lib.licenses.mit
       base.meta.license
     ];
     inherit (src.meta) homepage;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

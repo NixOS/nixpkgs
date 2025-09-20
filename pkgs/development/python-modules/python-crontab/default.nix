@@ -38,14 +38,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crontab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for crontab";
     longDescription = ''
       Crontab module for reading and writing crontab files
       and accessing the system cron automatically and simply using a direct API.
     '';
     homepage = "https://gitlab.com/doctormo/python-crontab/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

@@ -25,10 +25,10 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Quake 3 Arena point release";
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.all;
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

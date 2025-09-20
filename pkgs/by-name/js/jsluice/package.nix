@@ -22,10 +22,10 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for extracting URLs, paths, secrets, and other data from JavaScript source code";
     homepage = "https://github.com/BishopFox/jsluice";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

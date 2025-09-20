@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-xstatic/asciinema-player";
     description = "Asciinema-player packaged for python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aither64 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aither64 ];
   };
 }

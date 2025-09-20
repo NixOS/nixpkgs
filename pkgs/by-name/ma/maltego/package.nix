@@ -80,12 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.maltego.com";
     description = "Open source intelligence and forensics application, enabling to easily gather information about DNS, domains, IP addresses, websites, persons, and so on";
     mainProgram = "maltego";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       emilytrau
       d3vil0p3r
     ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
   };
 })

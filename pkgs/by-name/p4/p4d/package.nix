@@ -41,11 +41,11 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Perforce Helix Core Server";
     homepage = "https://www.perforce.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     mainProgram = "p4d";
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       corngood
       impl
     ];

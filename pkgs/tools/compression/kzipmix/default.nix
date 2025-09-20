@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool that aggressively optimizes the sizes of Zip archives";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     homepage = "http://advsys.net/ken/utils.htm";
-    maintainers = [ maintainers.sander ];
+    maintainers = [ lib.maintainers.sander ];
   };
 }

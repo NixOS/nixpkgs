@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "haxor-news";
   version = "unstable-2022-04-22";
   format = "setuptools";
@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
     "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/donnemartin/haxor-news";
     description = "Browse Hacker News like a haxor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 
 }

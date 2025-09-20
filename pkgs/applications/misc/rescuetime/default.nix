@@ -80,8 +80,8 @@ mkDerivation rec {
     description = "Helps you understand your daily habits so you can focus and be more productive";
     homepage = "https://www.rescuetime.com";
     maintainers = [ ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -36,16 +36,16 @@ gccStdenv.mkDerivation {
     make install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linus Torvalds's random version of microemacs with his personal modifications";
     homepage = "https://git.kernel.org/pub/scm/editors/uemacs/uemacs.git/about/";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ networkexception ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ networkexception ];
     mainProgram = "em";
     # MicroEMACS 3.9 can be copied and distributed freely for any
     # non-commercial purposes. MicroEMACS 3.9 can only be incorporated
     # into commercial software with the permission of the current author
     # [Daniel M. Lawrence].
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

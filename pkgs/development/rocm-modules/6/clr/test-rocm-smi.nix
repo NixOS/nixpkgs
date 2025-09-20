@@ -21,7 +21,7 @@ makeImpureTest {
     rocm-smi | grep -A1 GPU
   '';
 
-  meta = with lib; {
-    teams = [ teams.rocm ];
+  meta = {
+    teams = [ lib.teams.rocm ];
   };
 }

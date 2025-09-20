@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosmb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SMB library";
     homepage = "https://github.com/skelsec/aiosmb";
     changelog = "https://github.com/skelsec/aiosmb/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     belr
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.linphone.org/BC/public/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers. Part of the Linphone project";
     mainProgram = "belle_sip_tester";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

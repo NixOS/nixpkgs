@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/canokeys/canokey-qemu";
     description = "CanoKey QEMU Virt Card";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oxalica ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oxalica ];
   };
 }

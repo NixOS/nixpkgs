@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/flyway/flyway";
     homepage = "https://flywaydb.org/";
     changelog = "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.cmcdragonkai ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
   };
 })

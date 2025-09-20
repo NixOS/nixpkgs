@@ -24,11 +24,11 @@ buildGoModule rec {
     ln -s $out/bin/XD $out/bin/XD-CLI
   '';
 
-  meta = with lib; {
+  meta = {
     description = "i2p bittorrent client";
     homepage = "https://xd-torrent.github.io";
-    maintainers = with maintainers; [ nixbitcoin ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ nixbitcoin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

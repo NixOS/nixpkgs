@@ -45,12 +45,12 @@ buildGoModule rec {
     command = "kompose version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help users who are familiar with docker-compose move to Kubernetes";
     mainProgram = "kompose";
     homepage = "https://kompose.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       thpham
       vdemeester
     ];

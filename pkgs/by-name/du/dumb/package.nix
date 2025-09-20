@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_EXAMPLES='OFF'"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kode54/dumb";
     description = "Module/tracker based music format parser and player library";
-    license = licenses.free; # Derivative of GPL
-    maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.all;
+    license = lib.licenses.free; # Derivative of GPL
+    maintainers = with lib.maintainers; [ Madouura ];
+    platforms = lib.platforms.all;
   };
 }

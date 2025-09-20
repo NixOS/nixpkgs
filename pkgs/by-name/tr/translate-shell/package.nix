@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.soimort.org/translate-shell";
     description = "Command-line translator using Google Translate, Bing Translator, Yandex.Translate, and Apertium";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ ebzzry ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ ebzzry ];
     mainProgram = "trans";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
