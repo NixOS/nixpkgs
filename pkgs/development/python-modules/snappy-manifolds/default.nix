@@ -26,6 +26,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/3-manifolds/snappy_manifolds/releases/tag/${src.tag}";
     homepage = "https://snappy.computop.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }
