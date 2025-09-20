@@ -18768,6 +18768,8 @@ self: super: with self; {
 
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
+  tt-smi = callPackage ../development/python-modules/tt-smi { };
+
   tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
 
   ttach = callPackage ../development/python-modules/ttach { };
