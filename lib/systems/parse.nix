@@ -783,11 +783,11 @@ rec {
           throw "system string '${lib.concatStringsSep "-" l}' with 1 component is ambiguous";
       "2" = # We only do 2-part hacks for things Nix already supports
         if elemAt l 1 == "cygwin" then
-          {
-            cpu = elemAt l 0;
-            kernel = "windows";
-            abi = "cygnus";
-          }
+          mkSkeletonFromList [
+            (elemAt l 0)
+            "pc"
+            "cygwin"
+          ]
         # MSVC ought to be the default ABI so this case isn't needed. But then it
         # becomes difficult to handle the gnu* variants for Aarch32 correctly for
         # minGW. So it's easier to make gnu* the default for the MinGW, but
@@ -850,6 +850,13 @@ rec {
                 "windows" # autotools breaks on -gnu for window
               else
                 elemAt l 2;
+          }
+        # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
+        else if elemAt l 2 == "cygwin" then
+          {
+            cpu = elemAt l 0;
+            kernel = "windows";
+            abi = "cygnus";
           }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";

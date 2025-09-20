@@ -1,0 +1,44 @@
+diff --git a/nix-meson-build-support/common/meson.build b/nix-meson-build-support/common/meson.build
+index 9d77831..5b543f0 100644
+--- a/nix-meson-build-support/common/meson.build
++++ b/nix-meson-build-support/common/meson.build
+@@ -5,6 +5,10 @@ if not (host_machine.system() == 'windows' and cxx.get_id() == 'gcc')
+   deps_private += dependency('threads')
+ endif
+ 
++if host_machine.system() == 'cygwin'
++  add_project_arguments('-D_POSIX_C_SOURCE=200809L', '-D_GNU_SOURCE', language: 'cpp')
++endif
++
+ add_project_arguments(
+   '-Wdeprecated-copy',
+   '-Werror=suggest-override',
+diff --git a/src/libexpr/meson.build b/src/libexpr/meson.build
+index 2666722..4d2ab6c 100644
+--- a/src/libexpr/meson.build
++++ b/src/libexpr/meson.build
+@@ -62,6 +62,9 @@ if bdw_gc.found()
+   endforeach
+   # Affects ABI, because it changes what bdw_gc itself does!
+   configdata_pub.set('GC_THREADS', 1)
++  if host_machine.system() == 'cygwin'
++    configdata_pub.set('GC_NO_INLINE_STD_NEW', 1)
++  endif
+ endif
+ # Used in public header. Affects ABI!
+ configdata_pub.set('NIX_USE_BOEHMGC', bdw_gc.found().to_int())
+diff --git a/src/libutil/unix/signals.cc b/src/libutil/unix/signals.cc
+index 8a94cc2..a73715e 100644
+--- a/src/libutil/unix/signals.cc
++++ b/src/libutil/unix/signals.cc
+@@ -103,8 +103,8 @@ void unix::setChildSignalMask(sigset_t * sigs)
+ {
+     assert(sigs); // C style function, but think of sigs as a reference
+ 
+-#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 1) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE) \
+-    || (defined(_POSIX_SOURCE) && _POSIX_SOURCE)
++#if ((defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 1) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE) \
++    || (defined(_POSIX_SOURCE) && _POSIX_SOURCE)) && !defined(__CYGWIN__)
+     sigemptyset(&savedSignalMask);
+     // There's no "assign" or "copy" function, so we rely on (math) idempotence
+     // of the or operator: a or a = a.

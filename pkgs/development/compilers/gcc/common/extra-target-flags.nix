@@ -50,5 +50,11 @@ in
           )
         );
     in
-    mkFlags libcCross ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null));
+    mkFlags libcCross
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ lib.optionals (libcCross.w32api or null != null) [
+      "-idirafter ${lib.getDev libcCross.w32api}/include"
+      "-idirafter ${lib.getDev libcCross.w32api}/include/w32api"
+      "-L${lib.getLib libcCross.w32api}/lib/w32api"
+    ];
 }

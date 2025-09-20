@@ -7,6 +7,7 @@
   newScope,
   overrideCC,
   stdenvNoLibc,
+  emptyDirectory,
 }:
 
 lib.makeScope newScope (
@@ -14,6 +15,17 @@ lib.makeScope newScope (
   with self;
   {
     dlfcn = callPackage ./dlfcn { };
+
+    cygwin = callPackage ./cygwin {
+      stdenv = stdenvNoLibc;
+    };
+
+    # this is here to avoid symlinks being made to cygwin1.dll in /nix/store
+    cygwin-nobin = cygwin // {
+      bin = emptyDirectory;
+    };
+
+    cygwin_headers = callPackage ./cygwin/headers.nix { };
 
     mingw_w64 = callPackage ./mingw-w64 {
       stdenv = stdenvNoLibc;

@@ -1,0 +1,20 @@
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index 63de10c17d4..1c0b11cf9ce 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -25,13 +25,13 @@ along with GCC; see the file COPYING3.  If not see
+       if (!TARGET_64BIT)					\
+ 	builtin_define ("__CYGWIN32__");			\
+       builtin_define ("__unix__");				\
+-      builtin_define ("__unix");				\
++      builtin_define ("__unix");								\
++      builtin_define_std ("unix");              \
+     }								\
+   while (0)
+ 
+ #undef CPP_SPEC
+ #define CPP_SPEC "%(cpp_cpu) %{posix:-D_POSIX_SOURCE} \
+-  %{!ansi:-Dunix} \
+   %{pthread:-D_REENTRANT} \
+   %{mwin32:-DWIN32 -D_WIN32 -D__WIN32 -D__WIN32__ %{!ansi:-DWINNT}} \
+   %{!nostdinc:%{!mno-win32:-idirafter ../include/w32api%s -idirafter ../../include/w32api%s}}\

@@ -23,9 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  patches = lib.optionals stdenv.hostPlatform.isWindows [
-    ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
-  ];
+  patches =
+    lib.optionals (stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isUnix) [
+      ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
+    ]
+    ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   outputs = [
     "out"
@@ -51,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     "cc=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isWindows [
+  ++ lib.optionals (stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isUnix) [
     "CFLAGS+=-DHAVE_DIRECT_H"
     "CFLAGS+=-DHAVE_SETENV=0"
     "CFLAGS+=-DHAVE_SYMLINK=0"

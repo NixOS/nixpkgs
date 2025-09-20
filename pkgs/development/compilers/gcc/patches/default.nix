@@ -223,3 +223,11 @@ in
   }
   .${majorVersion} or [ ]
 )
+
+++ optional targetPlatform.isWindows [
+  ./libstdc-fix-compilation-in-freestanding-win32.patch
+]
+
+++ optional targetPlatform.isCygwin [
+  ./cygwin-remove-unix-define.patch
+]

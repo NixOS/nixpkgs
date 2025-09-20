@@ -125,7 +125,9 @@ let
             else
               toString stdenv.hostPlatform.parsed.kernel.execFormat.name
           }"
-          "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+          "target-os=${
+            if stdenv.hostPlatform.isCygwin then "cygwin" else toString stdenv.hostPlatform.parsed.kernel.name
+          }"
 
           # adapted from table in boost manual
           # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
@@ -241,7 +243,8 @@ stdenv.mkDerivation {
         extraPrefix = "libs/context/";
         hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
       })
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   meta = with lib; {
     homepage = "http://boost.org/";

@@ -1,0 +1,70 @@
+diff --git a/Makefile b/Makefile
+index 9be557f..3ebd0c7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -157,8 +157,8 @@ REGRESS_ARGS	+= "--parse-no-deflists"
+ 
+ REGRESS_ENV	 = LC_ALL=en_US.UTF-8
+ 
+-all: bins lowdown.pc liblowdown.so
+-bins: lowdown lowdown-diff
++all: bins lowdown.pc cyglowdown.dll liblowdown.dll.a
++bins: lowdown.exe lowdown-diff
+ 
+ www: all $(HTMLS) $(PDFS) $(THUMBS) lowdown.tar.gz lowdown.tar.gz.sha512
+ 
+@@ -170,17 +170,16 @@ installwww: www
+ 	$(INSTALL) -m 0444 lowdown.tar.gz $(WWWDIR)/snapshots
+ 	$(INSTALL) -m 0444 lowdown.tar.gz.sha512 $(WWWDIR)/snapshots
+ 
+-lowdown: liblowdown.a main.o
++lowdown.exe: liblowdown.a main.o
+ 	$(CC) -o $@ main.o liblowdown.a $(LDFLAGS) $(LDADD_MD5) -lm $(LDADD)
+ 
+-lowdown-diff: lowdown
+-	ln -f lowdown lowdown-diff
++lowdown-diff: lowdown.exe
++	ln -f lowdown.exe lowdown-diff
+ 
+ liblowdown.a: $(OBJS) $(COMPAT_OBJS)
+ 	$(AR) rs $@ $(OBJS) $(COMPAT_OBJS)
+ 
+-liblowdown.so: $(OBJS) $(COMPAT_OBJS)
+-	$(CC) -shared -o $@.$(LIBVER) $(OBJS) $(COMPAT_OBJS) $(LDFLAGS) $(LDADD_MD5) -lm -Wl,${LINKER_SONAME},$@.$(LIBVER) $(LDLIBS)
++cyglowdown.dll liblowdown.dll.a: $(OBJS) $(COMPAT_OBJS)
++	$(CC) -shared -o $@ $(OBJS) $(COMPAT_OBJS) $(LDFLAGS) $(LDADD_MD5) -lm $(LDLIBS) -Wl,--out-implib,liblowdown.dll.a
+-	ln -sf $@.$(LIBVER) $@
+ 
+ uninstall:
+@@ -192,7 +192,7 @@ uninstall:
+ 		rm -f $(MANDIR)/man$$section/$$name ; \
+ 	done
+ 
+-install: bins
++install: bins cyglowdown.dll
+ 	mkdir -p $(DESTDIR)$(BINDIR)
+ 	mkdir -p $(DESTDIR)$(MANDIR)/man1
+ 	mkdir -p $(DESTDIR)$(MANDIR)/man5
+@@ -206,8 +206,9 @@ install: bins
+ 	$(INSTALL_DATA) share/man/* $(DESTDIR)$(SHAREDIR)/lowdown/man
+ 	$(INSTALL_DATA) share/ms/* $(DESTDIR)$(SHAREDIR)/lowdown/ms
+ 	$(INSTALL_DATA) share/odt/* $(DESTDIR)$(SHAREDIR)/lowdown/odt
+-	$(INSTALL_PROGRAM) lowdown $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROGRAM) lowdown.exe $(DESTDIR)$(BINDIR)
+ 	$(INSTALL_PROGRAM) lowdown-diff $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROGRAM) cyglowdown.dll $(DESTDIR)$(BINDIR)
+ 	for f in $(MAN1S) $(MAN5S) ; do \
+ 		name=`basename $$f .html` ; \
+ 		section=$${name##*.} ; \
+@@ -238,9 +239,8 @@ install_lib_common: lowdown.pc
+ uninstall_shared: uninstall_lib_common
+ 	rm -f $(LIBDIR)/liblowdown.so.$(LIBVER) $(LIBDIR)/liblowdown.so
+ 
+-install_shared: liblowdown.so install_lib_common
+-	$(INSTALL_LIB) liblowdown.so.$(LIBVER) $(DESTDIR)$(LIBDIR)
+-	( cd $(DESTDIR)$(LIBDIR) && ln -sf liblowdown.so.$(LIBVER) liblowdown.so )
++install_shared: cyglowdown.dll liblowdown.dll.a install_lib_common
++	$(INSTALL_LIB) liblowdown.dll.a $(DESTDIR)$(LIBDIR)
+ 
+ uninstall_static: uninstall_lib_common
+ 	rm -f $(LIBDIR)/liblowdown.a

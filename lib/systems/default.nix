@@ -124,6 +124,8 @@ let
             "ucrt"
           else if final.isMinGW then
             "msvcrt"
+          else if final.isCygwin then
+            "cygwin"
           else if final.isWasi then
             "wasilibc"
           else if final.isWasm && !final.isWasi then
@@ -203,7 +205,7 @@ let
           system =
             {
               linux = "Linux";
-              windows = "Windows";
+              windows = if final.parsed.abi.name == "cygnus" then "CYGWIN_NT" else "Windows";
               darwin = "Darwin";
               netbsd = "NetBSD";
               freebsd = "FreeBSD";

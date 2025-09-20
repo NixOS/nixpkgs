@@ -4867,7 +4867,7 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = false;
+        langCC = stdenv.targetPlatform.isCygwin; # can't compile libcygwin1.a without C++
         libcCross = libc1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -5687,8 +5687,10 @@ with pkgs;
     callPackage ../build-support/cc-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+          nativeTools =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false && cc == null;
+          nativeLibc =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false && libc == null;
           nativePrefix = stdenv.cc.nativePrefix or "";
           noLibc = !self.nativeLibc && (self.libc == null);
 
@@ -5726,8 +5728,10 @@ with pkgs;
     callPackage ../build-support/bintools-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+          nativeTools =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false && bintools == null;
+          nativeLibc =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false && libc == null;
           nativePrefix = stdenv.cc.nativePrefix or "";
 
           noLibc = (self.libc == null);
@@ -7593,6 +7597,8 @@ with pkgs;
       windows.mingw_w64_headers or fallback
     else if libc == "nblibc" then
       netbsd.headers
+    else if libc == "cygwin" then
+      windows.cygwin_headers
     else
       null;
 
@@ -7629,6 +7635,8 @@ with pkgs;
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "ucrt" then
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
+    else if libc == "cygwin" then
+      windows.cygwin-nobin
     else if libc == "libSystem" then
       if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
     else if libc == "fblibc" then

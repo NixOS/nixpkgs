@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_GSSAPI" withGssapi)
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isWindows [
+  ++ lib.optionals (stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isUnix) [
     "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
     # For ws2_32, referred to by a `*.pc` file
     "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"

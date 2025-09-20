@@ -6,7 +6,8 @@
   updateAutotoolsGnuConfigScriptsHook,
   ncurses,
   termcap,
-  curses-library ? if stdenv.hostPlatform.isWindows then termcap else ncurses,
+  curses-library ?
+    if stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isUnix then termcap else ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       ./no-arch_only-8.2.patch
     ]
     ++ finalAttrs.upstreamPatches
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
+    ++ lib.optionals (stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isUnix) [
       (fetchpatch {
         name = "0001-sigwinch.patch";
         url = "https://github.com/msys2/MINGW-packages/raw/90e7536e3b9c3af55c336d929cfcc32468b2f135/mingw-w64-readline/0001-sigwinch.patch";

@@ -125,7 +125,12 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
-  cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_solib =
+    lib.optionalString (cc != null) (getLib cc)
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_bin =
+    lib.optionalString (cc != null) (getBin cc)
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -594,11 +599,18 @@ stdenvNoCC.mkDerivation {
     stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
-      installPhase = ''
-        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
-        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
-        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
-      '';
+      installPhase =
+        if targetPlatform.isCygwin then
+          ''
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_bin}/lib" >> $out
+            echo appendToVar configureFlags gl_cv_clean_version_stddef=yes >> $out
+          ''
+        else
+          ''
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
+          '';
     }
   );
 
@@ -704,6 +716,10 @@ stdenvNoCC.mkDerivation {
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
           include '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
         done
+      ''
+      + optionalString (libc.w32api or null != null) ''
+        echo '-idirafter ${lib.getDev libc.w32api}/include/w32api' >> $out/nix-support/libc-cflags
+        echo '-L${lib.getLib libc.w32api}/lib/w32api' >> $out/nix-support/libc-cflags
       ''
       + ''
 

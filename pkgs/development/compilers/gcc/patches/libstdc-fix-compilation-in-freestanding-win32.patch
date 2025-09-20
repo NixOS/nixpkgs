@@ -1,0 +1,57 @@
+From 86db1df4590e68346672a7bf023c290e0dc26c89 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Tue, 9 Sep 2025 13:55:48 -0300
+Subject: [PATCH] libstdc++: fix compilation in freestanding win32
+
+---
+ libstdc++-v3/libsupc++/atexit_thread.cc | 12 ++++++++++++
+ libstdc++-v3/libsupc++/unwind-cxx.h     |  8 ++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/libstdc++-v3/libsupc++/atexit_thread.cc b/libstdc++-v3/libsupc++/atexit_thread.cc
+index ae978152c..b4a53950d 100644
+--- a/libstdc++-v3/libsupc++/atexit_thread.cc
++++ b/libstdc++-v3/libsupc++/atexit_thread.cc
+@@ -44,8 +44,20 @@ __cxa_thread_atexit (void (_GLIBCXX_CDTOR_CALLABI *dtor)(void *),
+ #else // __USING_MCFGTHREAD__
+ 
+ #ifdef _GLIBCXX_THREAD_ATEXIT_WIN32
++
++#if _GLIBCXX_HOSTED
++using std::free;
++using std::malloc;
++#else
++// In a freestanding environment, these functions may not be available
++// -- but for now, we assume that they are.
++extern "C" void *malloc (std::size_t);
++extern "C" void free(void *);
++#endif
++
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
++
+ #endif
+ 
+ // Simplify it a little for this file.
+diff --git a/libstdc++-v3/libsupc++/unwind-cxx.h b/libstdc++-v3/libsupc++/unwind-cxx.h
+index abc8b808f..f69689c28 100644
+--- a/libstdc++-v3/libsupc++/unwind-cxx.h
++++ b/libstdc++-v3/libsupc++/unwind-cxx.h
+@@ -30,6 +30,14 @@
+ 
+ // Level 2: C++ ABI
+ 
++#if !_GLIBCXX_HOSTED
++#include <cstdint>
++// In a freestanding environment, these functions may not be available
++// -- but for now, we assume that they are.
++extern "C" void *malloc (std::size_t);
++extern "C" void free(void*);
++#endif
++
+ #include <typeinfo>
+ #include <exception>
+ #include <cstddef>
+-- 
+2.50.1
+

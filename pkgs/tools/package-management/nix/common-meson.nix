@@ -62,7 +62,8 @@ assert (hash == null) -> (src != null);
   sqlite,
   util-linuxMinimal,
   xz,
-  enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  enableDocumentation ?
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.buildPlatform.isCygwin,
   enableStatic ? stdenv.hostPlatform.isStatic,
   withAWS ?
     lib.meta.availableOn stdenv.hostPlatform aws-c-common

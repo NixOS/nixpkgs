@@ -164,6 +164,8 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -294,6 +296,8 @@ let
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
         '';
+
+      allowedImpureDLLs = [ "CRYPT32.dll" ];
 
       postFixup =
         lib.optionalString (!stdenv.hostPlatform.isWindows) ''
