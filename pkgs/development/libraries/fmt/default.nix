@@ -62,7 +62,7 @@ let
         homepage = "https://fmt.dev/";
         changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
         downloadPage = "https://github.com/fmtlib/fmt/";
-        maintainers = [ maintainers.jdehaas ];
+        maintainers = [ ];
         license = licenses.mit;
         platforms = platforms.all;
       };

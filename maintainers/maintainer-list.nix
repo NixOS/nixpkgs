@@ -11800,12 +11800,6 @@
     githubId = 4599384;
     name = "Jack Baldry";
   };
-  jdehaas = {
-    email = "qqlq@nullptr.club";
-    github = "jeroendehaas";
-    githubId = 117874;
-    name = "Jeroen de Haas";
-  };
   jdelStrother = {
     email = "me@delstrother.com";
     github = "jdelStrother";
