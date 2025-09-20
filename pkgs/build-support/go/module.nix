@@ -424,6 +424,7 @@ lib.extendMkDerivation {
       meta = {
         # Add default meta information.
         platforms = go.meta.platforms or lib.platforms.all;
+        identifiers.purlParts = finalAttrs.src.meta.identifiers.purlParts or { };
       }
       // meta;
     };
