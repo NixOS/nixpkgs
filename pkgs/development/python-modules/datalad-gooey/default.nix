@@ -27,6 +27,11 @@ buildPythonPackage {
     hash = "sha256-8779SLcV4wwJ3124lteGzvimDxgijyxa818ZrumPMs4=";
   };
 
+  patches = [
+    # https://github.com/datalad/datalad-gooey/pull/441
+    ./setuptools.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
