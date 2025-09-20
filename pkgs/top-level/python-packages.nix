@@ -11605,6 +11605,8 @@ self: super: with self; {
 
   peco = callPackage ../development/python-modules/peco { };
 
+  peeringdb-py = callPackage ../development/python-modules/peeringdb-py { };
+
   peewee = callPackage ../development/python-modules/peewee { };
 
   peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
