@@ -74,14 +74,19 @@ let
   # The geodata website is not versioned, so we use the internet archive
   geodata =
     let
-      timestamp = "20250818205425";
-      date =
-        "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
-        + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
+      timestamps= {
+        "cities500.zip"= "20250830185200";
+        "admin1CodesASCII.txt"= "20250828115302";
+        "admin2Codes.txt"= "20250828115302";
+      };
+      urls = builtins.mapAttrs (f: t: "https://web.archive.org/web/${t}/"
+        + "http://download.geonames.org/export/dump/${f}") timestamps; # Convert timestamps to URLs
+      date = (f: "${f 0 + f 2}-${f 4}-${f 6}T${f 8}:${f 10}:${f 12}Z")
+        (x: lib.substring x 2 timestamps."cities500.zip"); # ISO-8601 date format
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-zZHAomW1C4qReFbhme5dkVnTiLw+jmhZhzuYvoBVBCY=";
+        outputHash = "sha256-zcRHKkrb56WsjVoep7Bxm21UkWzqgo9Mx8f5FQD/W2s=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -93,10 +98,9 @@ let
       }
       ''
         mkdir $out
-        url="https://web.archive.org/web/${timestamp}/http://download.geonames.org/export/dump"
-        curl -Lo ./cities500.zip "$url/cities500.zip"
-        curl -Lo $out/admin1CodesASCII.txt "$url/admin1CodesASCII.txt"
-        curl -Lo $out/admin2Codes.txt "$url/admin2Codes.txt"
+        curl -Lo ./cities500.zip "${urls."cities500.zip"}"
+        curl -Lo $out/admin1CodesASCII.txt "${urls."admin1CodesASCII.txt"}"
+        curl -Lo $out/admin2Codes.txt "${urls."admin2Codes.txt"}"
         curl -Lo $out/ne_10m_admin_0_countries.geojson \
           https://github.com/nvkelso/natural-earth-vector/raw/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
 
