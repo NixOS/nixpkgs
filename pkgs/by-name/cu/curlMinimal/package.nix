@@ -34,7 +34,6 @@
   http3Support ? false,
   nghttp3,
   ngtcp2,
-  quictls,
   websocketSupport ? false,
   idnSupport ? false,
   libidn2,
@@ -85,10 +84,6 @@ assert
     ]) > 1
   );
 
-let
-  openssl' = if http3Support then quictls else openssl;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
   version = "8.16.0";
@@ -137,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     # See https://github.com/curl/curl/pull/16928
-    openssl'
+    openssl
   ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -156,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional idnSupport libidn2
     ++ lib.optional ldapSupport openldap
-    ++ lib.optional opensslSupport openssl'
+    ++ lib.optional opensslSupport openssl
     ++ lib.optional pslSupport libpsl
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
@@ -190,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
     (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl'))
+    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
     (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
   ]
@@ -255,8 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       useThisCurl = attr: attr.override { curl = finalAttrs.finalPackage; };
     in
     {
-      inherit opensslSupport;
-      openssl = openssl';
+      inherit opensslSupport openssl;
       tests = {
         withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
           doCheck = true;

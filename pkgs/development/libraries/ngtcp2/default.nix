@@ -1,28 +1,24 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
   brotli,
   libev,
   nghttp3,
-  quictls,
+  openssl,
   withJemalloc ? false,
   jemalloc,
-  curlHTTP3,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.14.0";
+  version = "1.15.1";
 
-  src = fetchFromGitHub {
-    owner = "ngtcp2";
-    repo = "ngtcp2";
-    # must match version usage in meta.changelog
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-5Pmk752i/lgO/os2SegevGN+MKaVuQii2HrVWaR15Gg=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v${finalAttrs.version}/ngtcp2-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Bbf6cvldAd3fvDVuHL89VPx1h1wvY2CGW5gIsDNM75c=";
   };
 
   outputs = [
@@ -36,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     brotli
     libev
     nghttp3
-    quictls
+    openssl
   ]
   ++ lib.optional withJemalloc jemalloc;
 
@@ -47,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.tests = {
-    inherit curlHTTP3;
+    inherit curl;
   };
 
   meta = {
