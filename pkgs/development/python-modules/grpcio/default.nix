@@ -8,6 +8,7 @@
   openssl,
   pkg-config,
   protobuf,
+  typing-extensions,
   pythonOlder,
   setuptools,
   zlib,
@@ -46,7 +47,10 @@ buildPythonPackage rec {
     zlib
   ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    typing-extensions
+  ];
 
   preBuild = ''
     export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
