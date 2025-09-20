@@ -1,19 +1,19 @@
 {
-  "version": "4.3.2",
+  "version": "4.3.3",
   "aarch64-darwin": {
-    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.2/html-report-4.3.2-darwin.arm64.zip",
-    "hash": "sha256-30RW9I9QTGncnwNTj0/rLlVCQ1wo8oJ2Q0gchHk+ioM="
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.3/html-report-4.3.3-darwin.arm64.zip",
+    "hash": "sha256-YDLwR7nAZD7Eqa2FLB598wjp1oVx+P1JAlEuNDPVW18="
   },
   "x86_64-darwin": {
-    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.2/html-report-4.3.2-darwin.x86_64.zip",
-    "hash": "sha256-6dC1gObS4msHr+KyKZufDpDQ9MgAIfqUPSIW7jWewtU="
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.3/html-report-4.3.3-darwin.x86_64.zip",
+    "hash": "sha256-wfAia/4ITdM7dWXbqqLByD/C159xcw1nmu4AtPxrzWQ="
   },
   "aarch64-linux": {
-    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.2/html-report-4.3.2-linux.arm64.zip",
-    "hash": "sha256-sayeQCuoJbeDWK7s/86ApMhzxHhxsyBB4D9QCMxJ/p8="
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.3/html-report-4.3.3-linux.arm64.zip",
+    "hash": "sha256-DXuZ1hW2GVCYmzMEVzY8Pbv5KYm4HiheLv4xL1VoCpk="
   },
   "x86_64-linux": {
-    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.2/html-report-4.3.2-linux.x86_64.zip",
-    "hash": "sha256-Dq/GubhDB1RsuK2Rp5T8L+evmImNPN/d5n29ET9n0MI="
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.3/html-report-4.3.3-linux.x86_64.zip",
+    "hash": "sha256-WnZSDi09Y5GeoAI2luFMPNgJD3fLMn/EDBnDsd2VaAg="
   }
 }
