@@ -63,13 +63,16 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isCygwin "-D_GNU_SOURCE";
-  # Fix rpath change on darwin to avoid failure like:
-  #     error: install_name_tool: changing install names or
-  #     rpaths can't be redone for: liblowdown.1.dylib (for architecture
-  #     arm64) because larger
-  #   https://github.com/NixOS/nixpkgs/pull/344532#issuecomment-238475791
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isCygwin { NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE"; }
+    # Fix rpath change on darwin to avoid failure like:
+    #     error: install_name_tool: changing install names or
+    #     rpaths can't be redone for: liblowdown.1.dylib (for architecture
+    #     arm64) because larger
+    #   https://github.com/NixOS/nixpkgs/pull/344532#issuecomment-238475791
+    // {
+      NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+    };
 
   makeFlags = [
     "bins" # prevents shared object from being built unnecessarily
