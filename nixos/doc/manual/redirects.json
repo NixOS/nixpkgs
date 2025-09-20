@@ -539,6 +539,12 @@
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
   ],
+  "module-services-immich": [
+    "index.html#module-services-immich"
+  ],
+  "module-services-immich-vectorchord-migration": [
+    "index.html#module-services-immich-vectorchord-migration"
+  ],
   "module-services-plausible": [
     "index.html#module-services-plausible"
   ],
