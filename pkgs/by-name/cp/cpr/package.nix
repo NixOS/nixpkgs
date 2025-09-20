@@ -36,13 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    # NOTE: Does not build with CPPCHECK
-    # (lib.cmakeBool "CPR_ENABLE_CPPCHECK" true)
+    (lib.cmakeBool "CPR_ENABLE_CPPCHECK" true)
     (lib.cmakeBool "CPR_BUILD_TEST" true)
     (lib.cmakeBool "CURL_ZLIB" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "CPR_USE_SYSTEM_CURL" true)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
   ];
 
   # Install headers
