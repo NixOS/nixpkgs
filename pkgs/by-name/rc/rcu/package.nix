@@ -23,7 +23,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.26";
+  version = "4.0.29";
 
   format = "other";
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-yY3OFZVHxhVurfjSEeR+UUNHQdpc08jhgaDEvMWRsLA=";
+        hash = "sha256-qbHjRKH9GOwBduyod8AOm2SYOjGUH1mYSpCTifOehVM=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in
@@ -182,6 +182,9 @@ python3Packages.buildPythonApplication rec {
           lib.strings.substring versionSuffixPos 1 rcu.version
         })";
     };
+
+    # Python stuff automatically adds an updateScript that just fails
+    updateScript = null;
   };
 
   meta = {
