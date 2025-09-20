@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   runCommand,
   which,
@@ -191,6 +192,13 @@ rustPlatform.buildRustPackage {
     (substitute {
       src = ./remove-web-interface.patch;
     })
+    # This commit adds the `grammars.[*].title` option. TODO: remove once it
+    # has landed in a release of Tree-sitter.
+    (fetchpatch {
+      name = "chore: update config schema";
+      url = "https://github.com/tree-sitter/tree-sitter/commit/9d8a4da47190b6cfd2ab80afbcb759fd63d42625.diff";
+      hash = "sha256-F04ez6SrZJLqLjyitHfM9QEfh2XNewVq5NKtyNnl7jw=";
+    })
   ];
 
   postPatch = lib.optionalString webUISupport ''
@@ -211,6 +219,9 @@ rustPlatform.buildRustPackage {
     PREFIX=$out make install
     ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+
+    #<<< TODO: multiple outputs instead? >>>
+    mv docs/src/assets/schemas/config.schema.json $out/
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tree-sitter \
