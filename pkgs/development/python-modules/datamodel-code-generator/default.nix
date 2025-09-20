@@ -2,10 +2,12 @@
   argcomplete,
   black,
   buildPythonPackage,
+  datamodel-code-generator,
   fetchFromGitHub,
-  freezegun,
   genson,
   graphql-core,
+  hatchling,
+  hatch-vcs,
   httpx,
   inflect,
   isort,
@@ -13,14 +15,13 @@
   lib,
   openapi-spec-validator,
   packaging,
-  poetry-core,
-  poetry-dynamic-versioning,
   prance,
-  pytest-mock,
-  pytestCheckHook,
   pydantic,
+  pysnooper,
+  pythonOlder,
   pyyaml,
-  toml,
+  ruff,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -35,51 +36,53 @@ buildPythonPackage rec {
     hash = "sha256-sFMNs8wHRTxK1TU4IWfbKf/qUCb11bh2Td1/FngFavo=";
   };
 
-  pythonRelaxDeps = [
-    "inflect"
-    "isort"
-  ];
-
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     argcomplete
     black
     genson
-    graphql-core
-    httpx
     inflect
     isort
     jinja2
-    openapi-spec-validator
     packaging
     pydantic
     pyyaml
-    toml
-  ];
-
-  nativeCheckInputs = [
-    freezegun
-    prance
-    pytest-mock
-    pytestCheckHook
-  ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "datamodel_code_generator" ];
 
-  disabledTests = [
-    # remote testing, name resolution failure.
-    "test_openapi_parser_parse_remote_ref"
-  ];
+  optional-dependencies = {
+    all = [
+      datamodel-code-generator
+    ];
+    debug = [
+      pysnooper
+    ];
+    graphql = [
+      graphql-core
+    ];
+    http = [
+      httpx
+    ];
+    ruff = [
+      ruff
+    ];
+    validation = [
+      openapi-spec-validator
+      prance
+    ];
+  };
 
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
     homepage = "https://github.com/koxudaxi/datamodel-code-generator";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
-    mainProgram = "datamodel-code-generator";
+    mainProgram = "datamodel-codegen";
   };
 }
