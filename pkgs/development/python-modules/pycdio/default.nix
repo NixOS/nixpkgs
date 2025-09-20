@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pycdio";
-  version = "2.1.1-unstable-2024-02-26";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
