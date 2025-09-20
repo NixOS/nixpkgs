@@ -6,8 +6,10 @@
   fetchPypi,
   hatchling,
   orjson,
+  python-dateutil,
   pythonOlder,
   requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +26,11 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [ elastic-transport ];
+  dependencies = [
+    elastic-transport
+    python-dateutil
+    typing-extensions
+  ];
 
   optional-dependencies = {
     async = [ aiohttp ];
