@@ -23,7 +23,7 @@
 
 let
   pname = "liquidsoap";
-  version = "2.3.3";
+  version = "2.4.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     owner = "savonet";
     repo = "liquidsoap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EQFWFtgWvwsV+ZhO36Sd7mpxYOnd4Vv6Z+6xsgi335k=";
+    hash = "sha256-PVaprBzjdVc4qhzHrBdjU/z03aUdacj4TjT0Gywv7js=";
   };
 
   postPatch = ''
