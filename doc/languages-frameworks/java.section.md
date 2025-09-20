@@ -1,6 +1,6 @@
 # Java {#sec-language-java}
 
-Ant-based Java packages are typically built from source as follows:
+Java packages are typically built from source as follows:
 
 ```nix
 stdenv.mkDerivation {
@@ -12,14 +12,17 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    ant
     jdk
     stripJavaArchivesHook # removes timestamp metadata from jar files
   ];
 
+  # IMPORTANT: See the tip below if your project uses a build system
   buildPhase = ''
     runHook preBuild
-    ant # build the project using ant
+
+    javac com/example/MyProject/*.java
+    jar cf MyProject.jar com/example/MyProject/*.class
+
     runHook postBuild
   '';
 
@@ -27,12 +30,25 @@ stdenv.mkDerivation {
     runHook preInstall
 
     # copy generated jar file(s) to an appropriate location in $out
-    install -Dm644 build/foo.jar $out/share/java/foo.jar
+    install -Dm644 MyProject.jar $out/share/java/MyProject.jar
 
     runHook postInstall
   '';
 }
 ```
+
+::: {.tip}
+Many build systems, such as Ant, Gradle, and Maven, have
+[setup hooks](#ssec-setup-hooks) or builders to make building packages
+easier by automatically setting [the build phase](#build-phase)
+and other phases to common values as appropriate.
+
+For more information about setup hooks for Java build systems, see
+the following sections in the manual:
+* [Gradle](#gradle)
+* [Maven](#maven)
+* [Ant](#ant)
+:::
 
 Note that `jdk` is an alias for the OpenJDK (self-built where available,
 or pre-built via Zulu).

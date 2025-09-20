@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     jdk_headless
     ant
+    ant.hook
     saxon
   ];
 
@@ -31,8 +32,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./no-git-during-build.patch
   ];
-
-  preBuild = "ant";
 
   installPhase = ''
     mkdir -p "$out"/{share/java,bin}

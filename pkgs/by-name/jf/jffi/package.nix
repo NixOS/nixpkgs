@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     ant
+    ant.hook
     jdk
     pkg-config
     texinfo
@@ -34,22 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
   # The pkg-config script in the build.xml doesn't work propery
   # set the lib path manually to work around this.
   env.LIBFFI_LIBS = "${libffi}/lib/libffi${stdenv.hostPlatform.extensions.sharedLibrary}";
-  env.ANT_ARGS = "-Duse.system.libffi=1";
 
-  buildPhase = ''
-    runHook preBuild
-    ant jar
-    ant archive-platform-jar
-    runHook postBuild
-  '';
+  antFlags = [ "-Duse.system.libffi=1" ];
+
+  antBuildFlags = [
+    "jar"
+    "archive-platform-jar"
+  ];
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-    ant test
-    runHook postCheck
-  '';
+  antCheckFlags = [ "test" ];
 
   installPhase = ''
     runHook preInstall
