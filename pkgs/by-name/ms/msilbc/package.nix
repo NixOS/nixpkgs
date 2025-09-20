@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ilbc,
-  mediastreamer,
+  linphonePackages,
   pkg-config,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     ilbc
-    mediastreamer
+    linphonePackages.mediastreamer2
   ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "ILBC_LIBS=ilbc"
     "ILBC_CFLAGS=-I${ilbc}/include"
     "MEDIASTREAMER_LIBS=mediastreamer"
-    "MEDIASTREAMER_CFLAGS=-I${mediastreamer}/include"
+    "MEDIASTREAMER_CFLAGS=-I${linphonePackages.mediastreamer2}/include"
   ];
 
   meta = with lib; {
