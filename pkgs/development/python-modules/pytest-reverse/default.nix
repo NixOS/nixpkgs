@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-reverse";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "adamchainz";
     repo = "pytest-reverse";
     rev = version;
-    hash = "sha256-JEJwl/4RL1THQ7cGaS/84KdhIQHB9eLTY5uV+84ald8=";
+    hash = "sha256-d9wx4N3RnPbOk+dZuJaCdbtXfQQwjGo5MwVNrNVGtlo=";
   };
 
   nativeBuildInputs = [ setuptools ];
