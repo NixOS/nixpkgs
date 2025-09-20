@@ -311,7 +311,17 @@ let
           concatStringsSep " \\\n    " (
             mapAttrsToList (
               tag: share:
-              "-virtfs local,path=${share.source},security_model=${share.securityModel},mount_tag=${tag}"
+              "-virtfs ${
+                lib.concatStrings (
+                  lib.intersperse "," [
+                    "local"
+                    "path=${share.source}"
+                    "security_model=${share.securityModel}"
+                    "mount_tag=${tag}"
+                    "readonly=${if share.readOnly then "on" else "off"}"
+                  ]
+                )
+              }"
             ) config.virtualisation.sharedDirectories
           )
         } \
@@ -551,6 +561,14 @@ in
               - `mapped-xattr`: some of the file attributes like uid, gid, mode bits and link target are stored as file attributes
               - `mapped-file`: the attributes are stored in the hidden .virtfs_metadata directory. Directories exported by this security model cannot interact with other unix tools
               - `none`: same as "passthrough" except the sever won't report failures if it fails to set file attributes like ownership
+            '';
+          };
+          options.readOnly = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              If the guest is disallowed from writing to the share.
+              The host is allowed to do so anyway, regardless of this setting.
             '';
           };
         }
