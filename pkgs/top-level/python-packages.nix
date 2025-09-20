@@ -12777,6 +12777,8 @@ self: super: with self; {
 
   pycurl = callPackage ../development/python-modules/pycurl { };
 
+  pycurl-requests = callPackage ../development/python-modules/pycurl-requests { };
+
   pycxx = callPackage ../development/python-modules/pycxx { };
 
   pycycling = callPackage ../development/python-modules/pycycling { };
