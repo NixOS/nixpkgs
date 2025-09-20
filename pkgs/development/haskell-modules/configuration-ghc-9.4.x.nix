@@ -54,11 +54,22 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
   # Jailbreaks & Version Updates
 
+  # hashable >= 1.5 needs base >= 4.18
+  hashable = self.hashable_1_4_7_0;
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
 
@@ -104,6 +115,10 @@ self: super: {
       happy = self.happy_1_20_1_1; # wants happy < 1.21
     }
   );
+
+  # Last version to not depend on file-io and directory-ospath-streaming,
+  # which both need unix >= 2.8.
+  tar = self.tar_0_6_3_0;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_6_1_3;

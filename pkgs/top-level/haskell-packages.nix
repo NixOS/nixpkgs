@@ -316,7 +316,7 @@ in
       ghcHEAD = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghcHEAD;
         ghc = bh.compiler.ghcHEAD;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.16.x.nix { };
       };
 
       native-bignum =

@@ -12,7 +12,7 @@ let
     ver: pkg:
     lib.warnIf (lib.versionOlder ver
       super.${pkg.pname}.version
-    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
+    ) "override for haskell.packages.ghc98.${pkg.pname} may no longer be needed" pkg;
 
 in
 
@@ -62,10 +62,18 @@ in
   unix = null;
   xhtml = null;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   #
   # Version upgrades
   #
-  megaparsec = doDistribute self.megaparsec_9_7_0;
   ghc-tags = self.ghc-tags_1_8;
 
   #
@@ -93,14 +101,9 @@ in
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  # 2025-04-21: "flavor" for GHC 9.8.5 is missing a fix introduced for 9.8.4. See:
-  # https://github.com/digital-asset/ghc-lib/pull/571#discussion_r2052684630
-  ghc-lib-parser = warnAfterVersion "9.8.5.20250214" (
-    overrideCabal {
-      postPatch = ''
-        substituteInPlace compiler/cbits/genSym.c \
-          --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
-      '';
-    } super.ghc-lib-parser
-  );
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
+
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_3_20250912;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }
