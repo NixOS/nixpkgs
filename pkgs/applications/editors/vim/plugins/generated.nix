@@ -12024,6 +12024,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  oil-git-nvim = buildVimPlugin {
+    pname = "oil-git.nvim";
+    version = "2025-09-03";
+    src = fetchFromGitHub {
+      owner = "benomahony";
+      repo = "oil-git.nvim";
+      rev = "d1f27a5982df35b70fb842aa6bbfac10735c7265";
+      sha256 = "03pl0n7qs51kbqgzfwkcyinmnbl9wyfbbd6ihqzr06mr9xrgf221";
+    };
+    meta.homepage = "https://github.com/benomahony/oil-git.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   oil-git-status-nvim = buildVimPlugin {
     pname = "oil-git-status.nvim";
     version = "2025-04-03";
