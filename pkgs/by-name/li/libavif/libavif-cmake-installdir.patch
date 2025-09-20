@@ -1,0 +1,49 @@
+From 83425cef38eb7053cbb1780b82ba7c9f1a01e9c7 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 19 Jul 2025 16:45:57 +0200
+Subject: [PATCH] Don't hardcode 'include' as includedir
+
+GNUInstallDirs defines CMAKE_INSTALL_INCLUDEDIR as a location
+to install headers. This is important for distributions that
+want to install development files under a different prefix, see
+https://github.com/NixOS/nixpkgs/pull/424658.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ CMakeLists.txt | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 558761e6bc..859860fb16 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,6 +37,7 @@ include(ExternalProject)
+ include(FetchContent)
+ include(FindPkgConfig)
+ include(AvifExternalProjectUtils)
++include(GNUInstallDirs)
+ 
+ option(AVIF_ENABLE_NODISCARD "Add [[nodiscard]] to some functions. CMake must be at least 3.21 to force C23." OFF)
+ 
+@@ -591,7 +592,9 @@ endif()
+ # Main avif library.
+ set_target_properties(avif PROPERTIES VERSION ${LIBRARY_VERSION} SOVERSION ${LIBRARY_SOVERSION})
+ target_link_libraries(avif PRIVATE avif_obj)
+-target_include_directories(avif PUBLIC $<BUILD_INTERFACE:${libavif_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
++target_include_directories(
++    avif PUBLIC $<BUILD_INTERFACE:${libavif_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++)
+ if(BUILD_SHARED_LIBS)
+     target_compile_definitions(avif INTERFACE AVIF_DLL)
+     if(AVIF_LIB_USE_CXX)
+@@ -636,10 +639,6 @@ if(CMAKE_SKIP_INSTALL_RULES)
+     set(SKIP_INSTALL_ALL TRUE)
+ endif()
+ 
+-if(NOT SKIP_INSTALL_ALL)
+-    include(GNUInstallDirs)
+-endif()
+-
+ if(AVIF_BUILD_APPS OR (AVIF_BUILD_TESTS AND (AVIF_FUZZTEST OR AVIF_GTEST)))
+     if(AVIF_ZLIBPNG STREQUAL "OFF")
+         message(FATAL_ERROR "libavif: AVIF_ZLIBPNG cannot be OFF when AVIF_BUILD_APPS or AVIF_BUILD_TESTS is ON")
