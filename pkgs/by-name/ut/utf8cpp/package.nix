@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "utf8cpp";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "nemtrif";
     repo = "utfcpp";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-e8qH4eygLnQw7B8x+HN+vH8cr8fkxnTFz+PKtFJ8dGE=";
+    hash = "sha256-Kz7rPsWETnKcr3gp8MwL7GPs81uL/UXaDMSig4j+yyU=";
   };
 
   nativeBuildInputs = [ cmake ];
