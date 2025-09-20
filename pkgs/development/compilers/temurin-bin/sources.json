@@ -70,6 +70,16 @@
             "version": "24.0.1"
           }
         },
+        "openjdk25": {
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "36",
+            "sha256": "637e47474d411ed86134f413af7d5fef4180ddb0bf556347b7e74a88cf8904c8",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B36/OpenJDK25U-jdk_x64_alpine-linux_hotspot_25_36.tar.gz",
+            "version": "25.0.0"
+          }
+        },
         "openjdk8": {
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -148,6 +158,16 @@
             "sha256": "409eaa7cf973e5d47b285cd86082b620422e6bbbcf0314c10346250f1e6c66d9",
             "url": "https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.1%2B9/OpenJDK24U-jre_x64_alpine-linux_hotspot_24.0.1_9.tar.gz",
             "version": "24.0.1"
+          }
+        },
+        "openjdk25": {
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "36",
+            "sha256": "aa5160aa130f0f0b4379fc62a0d5198c065815224e01318272864e56f260de34",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B36/OpenJDK25U-jre_x64_alpine-linux_hotspot_25_36.tar.gz",
+            "version": "25.0.0"
           }
         },
         "openjdk8": {
