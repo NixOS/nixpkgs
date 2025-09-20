@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "bottleneck";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yGAkLPIOadWqsuw8XWyMKhXxnkslsouPyiwqEs766dg=";
+    hash = "sha256-Ao1G7ksCWtmrTXmSQROBb4JfYrF7h8nh0NjOFEpKDjE=";
   };
 
   propagatedBuildInputs = [ numpy ];
