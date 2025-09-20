@@ -500,14 +500,30 @@ in
         ) "loose";
 
         # Ports opened on a specific
-        interfaces = listToAttrs (
-          toClientList (client: {
-            name = client.interface;
-            value.allowedUDPPorts = optionals client.openFirewall [
-              5353 # required for the DNS forwarding/routing to work
-            ];
-          })
+        interfaces = lib.mkIf (config.networking.firewall.backend != "firewalld") (
+          listToAttrs (
+            toClientList (client: {
+              name = client.interface;
+              value.allowedUDPPorts = optionals client.openFirewall [
+                5353 # required for the DNS forwarding/routing to work
+              ];
+            })
+          )
         );
+      };
+
+      services.firewalld.zones.netbird = {
+        interfaces = lib.pipe cfg.clients [
+          (lib.filterAttrs (_: client: client.openFirewall))
+          lib.attrValues
+          (map (client: client.interface))
+        ];
+        ports = [
+          {
+            protocol = "udp";
+            port = 5353;
+          }
+        ];
       };
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
