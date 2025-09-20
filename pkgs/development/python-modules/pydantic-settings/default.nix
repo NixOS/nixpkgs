@@ -9,6 +9,7 @@
   pytestCheckHook,
   pytest-examples,
   pytest-mock,
+  pyyaml,
 }:
 
 let
@@ -53,8 +54,14 @@ let
     # ruff is a dependency of pytest-examples which is required to run the tests.
     # We do not want all of the downstream packages that depend on pydantic-settings to also depend on ruff.
     doCheck = false;
-    passthru.tests = {
-      pytest = self.overridePythonAttrs { doCheck = true; };
+    passthru = {
+      tests = {
+        pytest = self.overridePythonAttrs { doCheck = true; };
+      };
+
+      optional-dependencies = {
+        yaml = [ pyyaml ];
+      };
     };
 
     meta = with lib; {
