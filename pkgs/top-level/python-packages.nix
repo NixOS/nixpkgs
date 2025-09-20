@@ -9809,6 +9809,8 @@ self: super: with self; {
 
   mung = callPackage ../development/python-modules/mung { };
 
+  munge = callPackage ../development/python-modules/munge { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
