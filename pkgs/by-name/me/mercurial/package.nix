@@ -31,18 +31,20 @@ let
     docutils
     python
     fb-re2
+    pip
     pygit2
     pygments
     setuptools
+    setuptools_scm
     ;
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.9.4";
+    version = "7.1.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-fqDoOeyDRSd90Z0HJQtEJhNNxdZoL/iAqGorCbTjjs0=";
+      hash = "sha256-R89muonBdVNvr4RMm0zZYutDKvtRbAc+UfQ2vz8LwUg=";
     };
 
     format = "other";
@@ -54,7 +56,7 @@ let
         rustPlatform.fetchCargoVendor {
           inherit src;
           name = "mercurial-${version}";
-          hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
+          hash = "sha256-REMgZ1TiVTDbvT8TCd4EeHfYT/xMJfC4E6weLJFT6Rw=";
           sourceRoot = "mercurial-${version}/rust";
         }
       else
@@ -70,6 +72,8 @@ let
       gettext
       installShellFiles
       setuptools
+      pip
+      setuptools_scm
     ]
     ++ lib.optionals rustSupport [
       rustPlatform.cargoSetupHook
