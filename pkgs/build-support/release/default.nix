@@ -21,6 +21,11 @@ let
 in
 
 rec {
+  binaryTarball = throw "removed (8 Jul 2025)";
+  debBuild = throw "removed (8 Jul 2025)";
+  makeSourceTarball = throw "removed (8 Jul 2025); use releaseTools.sourceTarball";
+  mvnBuild = throw "removed (8 Jul 2025)";
+  rpmBuild = throw "removed (8 Jul 2025)";
 
   sourceTarball =
     args:
@@ -33,26 +38,6 @@ rec {
           automake
           libtool
           ;
-      }
-      // args
-    );
-
-  makeSourceTarball = sourceTarball; # compatibility
-
-  binaryTarball =
-    args:
-    import ./binary-tarball.nix (
-      {
-        inherit lib stdenv;
-      }
-      // args
-    );
-
-  mvnBuild =
-    args:
-    import ./maven-build.nix (
-      {
-        inherit lib stdenv;
       }
       // args
     );
@@ -92,29 +77,6 @@ rec {
       {
         inherit cov-build xz;
         doCoverityAnalysis = true;
-      }
-      // args
-    );
-
-  rpmBuild =
-    args:
-    import ./rpm-build.nix (
-      {
-        inherit lib vmTools;
-      }
-      // args
-    );
-
-  debBuild =
-    args:
-    import ./debian-build.nix (
-      {
-        inherit
-          lib
-          stdenv
-          vmTools
-          checkinstall
-          ;
       }
       // args
     );
