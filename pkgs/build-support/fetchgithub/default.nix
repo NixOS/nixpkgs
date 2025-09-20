@@ -43,35 +43,27 @@ lib.makeOverridable (
     );
     baseUrl = "https://${githubBase}/${owner}/${repo}";
     newMeta =
-      lib.recursiveUpdate
-        (
-          meta
-          // {
-            homepage = meta.homepage or baseUrl;
-          }
-          // lib.optionalAttrs (position != null) {
-            # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-            position = "${position.file}:${toString position.line}";
-          }
-        )
-
-        (
-          {
-            identifiers.purlParts =
-              if githubBase == "github.com" then
-                {
-                  type = "github";
-                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
-                  spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
-                }
-              else
-                {
-                  type = "generic";
-                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-                  spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
-                };
-          }
-        );
+      meta
+      // {
+        homepage = meta.homepage or baseUrl;
+        identifiers.purlParts =
+          if githubBase == "github.com" then
+            {
+              type = "github";
+              # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+              spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
+            }
+          else
+            {
+              type = "generic";
+              # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+              spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
+            };
+      }
+      // lib.optionalAttrs (position != null) {
+        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
+        position = "${position.file}:${toString position.line}";
+      };
 
     passthruAttrs = removeAttrs args [
       "owner"
