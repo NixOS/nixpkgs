@@ -47,7 +47,7 @@ buildPythonPackage rec {
     repo = "Scipp";
     # https://github.com/scipp/scipp/pull/3722
     tag = version;
-    hash = "sha256-s3whsNYqS7hsqvWX73E8KbDMUZTGWLgeqmN08tXPkwE=";
+    hash = "sha256-nLccJlFnnVTpamph2oIaMxRD5ljrw6GlCnnTx7LfrO0=";
   };
   env = {
     SKIP_CONAN = "true";
