@@ -14,7 +14,6 @@
   gettext,
   itstool,
   libxml2,
-  libgnome-games-support_2_0,
   libgee,
   desktop-file-utils,
 }:
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    libgnome-games-support_2_0
     librsvg
     libgee
   ];
