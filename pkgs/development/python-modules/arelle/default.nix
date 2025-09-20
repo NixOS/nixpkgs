@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   setuptools,
@@ -45,16 +44,14 @@
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.30.25";
+  version = "2.37.59";
   pyproject = true;
-
-  disabled = pythonAtLeast "3.13"; # Note: when updating, check if this is still needed
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
     tag = version;
-    hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
+    hash = "sha256-ao4OKe3e1V3Df7396gVn4nqmpKNAbs5ny2y/GsxQwcE=";
   };
 
   outputs = [
@@ -141,6 +138,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/Arelle/Arelle/releases/tag/${src.tag}";
     description = "Open source XBRL platform";
     longDescription = ''
       An open source facility for XBRL, the eXtensible Business Reporting
