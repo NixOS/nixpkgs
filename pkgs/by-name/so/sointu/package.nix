@@ -14,7 +14,7 @@
 
 buildGoModule {
   pname = "sointu";
-  version = "0.4.1-unstable-2025-08-13";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "vsariola";
