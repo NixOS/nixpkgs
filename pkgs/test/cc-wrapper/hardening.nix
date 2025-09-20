@@ -455,25 +455,10 @@ nameDrvAfterAttrName (
       )
     );
 
-    pieExplicitEnabled = brokenIf stdenv.hostPlatform.isStatic (
-      checkTestBin
-        (f2exampleWithStdEnv stdenv {
-          hardeningEnable = [ "pie" ];
-        })
-        {
-          ignorePie = false;
-        }
-    );
-
-    pieExplicitEnabledStructuredAttrs = brokenIf stdenv.hostPlatform.isStatic (
-      checkTestBin
-        (f2exampleWithStdEnv stdenv {
-          hardeningEnable = [ "pie" ];
-          __structuredAttrs = true;
-        })
-        {
-          ignorePie = false;
-        }
+    pieAlwaysEnabled = brokenIf stdenv.hostPlatform.isStatic (
+      checkTestBin (f2exampleWithStdEnv stdenv { }) {
+        ignorePie = false;
+      }
     );
 
     relROExplicitEnabled =
@@ -660,17 +645,6 @@ nameDrvAfterAttrName (
           };
         }
       )
-    );
-
-    pieExplicitDisabled = brokenIf (stdenv.hostPlatform.isMusl && stdenv.cc.isClang) (
-      checkTestBin
-        (f2exampleWithStdEnv stdenv {
-          hardeningDisable = [ "pie" ];
-        })
-        {
-          ignorePie = false;
-          expectFailure = true;
-        }
     );
 
     # can't force-disable ("partial"?) relro
@@ -1100,13 +1074,6 @@ nameDrvAfterAttrName (
         ignoreFortify = false;
         expectFailure = true;
       };
-
-      allExplicitDisabledPie = brokenIf (stdenv.hostPlatform.isMusl && stdenv.cc.isClang) (
-        checkTestBin tb {
-          ignorePie = false;
-          expectFailure = true;
-        }
-      );
 
       # can't force-disable ("partial"?) relro
       allExplicitDisabledRelRO = brokenIf true (
