@@ -1,0 +1,93 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 2c14432c4..18306a8c1 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -400,6 +400,7 @@ libcxxbridge_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+ libcxxbridge_a_SOURCES = \
+   $(CXXBRIDGE_CPP) \
+   $(CXXBRIDGE_H) \
++  support/cleanse.cpp \
+   zcash/cache.cpp \
+   zcash/cache.h
+ 
+@@ -633,7 +634,6 @@ zcashd_LDADD = \
+   $(LIBBITCOIN_SERVER) \
+   $(LIBBITCOIN_WALLET) \
+   $(LIBBITCOIN_COMMON) \
+-  $(LIBCXXBRIDGE) \
+   $(LIBUNIVALUE) \
+   $(LIBBITCOIN_UTIL) \
+   $(LIBBITCOIN_ZMQ) \
+@@ -642,6 +642,7 @@ zcashd_LDADD = \
+   $(LIBBITCOIN_CRYPTO) \
+   $(LIBRUSTZCASH) \
+   $(LIBZCASH) \
++  $(LIBCXXBRIDGE) \
+   $(LIBLEVELDB) \
+   $(LIBLEVELDB_SSE42) \
+   $(LIBMEMENV) \
+@@ -668,15 +669,15 @@ endif
+ zcash_cli_LDADD = \
+   $(LIBBITCOIN_CLI) \
+   $(LIBUNIVALUE) \
+-  $(LIBBITCOIN_UTIL) \
+-  $(LIBCXXBRIDGE) \
+   $(BOOST_LIBS) \
+   $(EVENT_LIBS) \
++  $(LIBBITCOIN_UTIL) \
+   $(LIBRUSTZCASH) \
++  $(LIBZCASH_LIBS) \
++  $(LIBCXXBRIDGE) \
+   $(LIBZCASH) \
+   $(LIBBITCOIN_CRYPTO) \
+-  $(LIBSECP256K1) \
+-  $(LIBZCASH_LIBS)
++  $(LIBSECP256K1)
+ #
+ 
+ # zcash-tx binary #
+@@ -696,12 +697,12 @@ zcash_tx_LDADD = \
+   $(LIBBITCOIN_UTIL) \
+   $(LIBBITCOIN_CONSENSUS) \
+   $(LIBBITCOIN_SCRIPT) \
++  $(LIBZCASH_LIBS) \
++  $(LIBZCASH) \
++  $(LIBRUSTZCASH) \
+   $(LIBCXXBRIDGE) \
+   $(LIBSECP256K1) \
+-  $(LIBRUSTZCASH) \
+-  $(LIBZCASH) \
+-  $(LIBBITCOIN_CRYPTO) \
+-  $(LIBZCASH_LIBS)
++  $(LIBBITCOIN_CRYPTO)
+ 
+ zcash_tx_LDADD += $(BOOST_LIBS)
+ #
+diff --git a/src/Makefile.bench.include b/src/Makefile.bench.include
+index 3a2552f02..6b9bdcc0a 100644
+--- a/src/Makefile.bench.include
++++ b/src/Makefile.bench.include
+@@ -28,20 +28,20 @@ bench_bench_bitcoin_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CLFAGS
+ bench_bench_bitcoin_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+ bench_bench_bitcoin_LDADD = \
+   $(LIBBITCOIN_SERVER) \
+-  $(LIBBITCOIN_COMMON) \
+   $(LIBBITCOIN_UNIVALUE) \
+   $(LIBBITCOIN_UTIL) \
+   $(LIBBITCOIN_CONSENSUS) \
++  $(LIBBITCOIN_COMMON) \
+   $(LIBBITCOIN_SCRIPT) \
+   $(LIBBITCOIN_CRYPTO) \
+-  $(LIBCXXBRIDGE) \
+   $(LIBLEVELDB) \
+   $(LIBLEVELDB_SSE42) \
+   $(LIBMEMENV) \
+   $(LIBSECP256K1) \
+   $(LIBUNIVALUE) \
++  $(LIBZCASH) \
+   $(LIBRUSTZCASH) \
+-  $(LIBZCASH)
++  $(LIBCXXBRIDGE)
+ 
+ if ENABLE_ZMQ
+ bench_bench_bitcoin_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
