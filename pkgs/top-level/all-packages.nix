@@ -6227,11 +6227,13 @@ with pkgs;
   samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
 
   inherit (callPackages ../applications/networking/cluster/spark { })
+    spark_4_0
     spark_3_5
     spark_3_4
     ;
   spark3 = spark_3_5;
-  spark = spark3;
+  spark4 = spark_4_0;
+  spark = spark_4_0;
 
   inherit
     ({
