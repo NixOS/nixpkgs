@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   undmg,
+  ...
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "helium";
@@ -27,6 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     .${stdenvNoCC.system} or (throw "helium: ${stdenvNoCC.system} is unsupported.");
 
   nativeBuildInputs = [ undmg ];
+
+  sourceRoot = "Helium.app";
 
   installPhase = ''
     runHook preInstall
