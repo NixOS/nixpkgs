@@ -11837,6 +11837,8 @@ self: super: with self; {
 
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
 
+  pixelmatch = callPackage ../development/python-modules/pixelmatch { };
+
   pizzapi = callPackage ../development/python-modules/pizzapi { };
 
   pjsua2 =
