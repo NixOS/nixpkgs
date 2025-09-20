@@ -13,7 +13,6 @@
   forFHSEnv ? false,
 
   pkgsStatic,
-  ncurses,
 }:
 
 let
@@ -70,9 +69,6 @@ lib.warnIf (withDocs != null)
     + ''
       -DNON_INTERACTIVE_LOGIN_SHELLS
       -DSSH_SOURCE_BASHRC
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isCygwin) ''
-      -Wno-error=incompatible-pointer-types
     '';
 
     patchFlags = [ "-p0" ];
@@ -107,9 +103,6 @@ lib.warnIf (withDocs != null)
       }"
     ]
     ++ lib.optionals stdenv.hostPlatform.isCygwin [
-      "--without-libintl-prefix"
-      "--without-libiconv-prefix"
-      "--with-curses"
       "bash_cv_dev_stdin=present"
       "bash_cv_dev_fd=standard"
       "gt_cv_func_printf_posix=yes"
@@ -132,8 +125,7 @@ lib.warnIf (withDocs != null)
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
-    buildInputs =
-      lib.optional interactive readline ++ lib.optional stdenv.hostPlatform.isCygwin ncurses;
+    buildInputs = lib.optional interactive readline;
 
     enableParallelBuilding = true;
 
