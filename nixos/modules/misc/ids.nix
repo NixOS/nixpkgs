@@ -114,7 +114,7 @@ in
       iodined = 66;
       #libvirtd = 67; # unused
       graphite = 68;
-      #statsd = 69; # removed 2018-11-14
+      #statsd = 69; # removed 2018-11-14; dynamically allocated as of 2023-10-21
       transmission = 70;
       postgres = 71;
       #vboxusers = 72; # unused
