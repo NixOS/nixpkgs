@@ -4,26 +4,20 @@
   fetchurl,
   makeDesktopItem,
   makeWrapper,
-  stdenv,
+  stdenvNoCC,
   lib,
   udev,
   buildPackages,
-  cpio,
-  xar,
   libdbusmenu,
   alsa-lib,
   libgbm,
   nss,
   nspr,
   systemd,
+  darwin,
 }:
 
 let
-
-  inherit (stdenv.hostPlatform) system;
-
-  throwSystem = throw "Unsupported system: ${system}";
-
   pname = "wire-desktop";
 
   versions = builtins.fromJSON (builtins.readFile ./versions.json);
@@ -79,7 +73,7 @@ let
     supportedFeatures = [ "commit" ];
   };
 
-  linux = stdenv.mkDerivation rec {
+  linux = stdenvNoCC.mkDerivation rec {
     inherit
       pname
       version
@@ -89,7 +83,7 @@ let
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
-      inherit hash;
+      hash = "sha256-BbY+7fGAWW5CR/z4GeoBl5aOewCRuWzQjpQX4x1rzls=";
     };
 
     desktopItem = makeDesktopItem {
@@ -159,7 +153,7 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation {
+  darwin' = darwin.installBinaryPackage rec {
     inherit
       pname
       version
@@ -169,40 +163,11 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";
-      inherit hash;
+      hash = "sha256-k6CIqHt67AFL70zdK0/91aQcpbb00OIggk5TF7y1IOY=";
     };
 
-    buildInputs = [
-      cpio
-      xar
-    ];
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      xar -xf $src
-      cd com.wearezeta.zclient.mac.pkg
-
-      runHook postUnpack
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      cat Payload | gunzip -dc | cpio -i
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/Applications
-      cp -r Wire.app $out/Applications
-
-      runHook postInstall
-    '';
+    appName = "Wire.app";
   };
 
 in
-if stdenv.hostPlatform.isDarwin then darwin else linux
+if stdenvNoCC.hostPlatform.isDarwin then darwin' else linux
