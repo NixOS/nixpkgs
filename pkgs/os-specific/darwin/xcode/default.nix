@@ -45,6 +45,7 @@ let
       meta = with lib; {
         homepage = "https://developer.apple.com/xcode/";
         description = "Apple's Xcode developer tools";
+        maintainers = with lib.maintainers; [ DimitarNestorov ];
         license = licenses.unfree;
         platforms = platforms.darwin ++ platforms.linux;
         hydraPlatforms = [ ];
