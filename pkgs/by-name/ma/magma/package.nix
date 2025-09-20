@@ -4,6 +4,7 @@
   cmake,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
+  fetchpatch,
   fetchurl,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
@@ -124,6 +125,15 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "test"
+  ];
+
+  patches = [
+    (fetchpatch {
+      # [PATCH] Drop CMP0037 to fix cmake 4.0 build error
+      name = "drop-cmp0037-old.patch";
+      url = "https://github.com/icl-utk-edu/magma/commit/2fecaf3f0c811344363f713669c1fe30f6879acd.patch";
+      hash = "sha256-Dfzq2gqoLSByCLWV5xvY/lXZeVa/yQ67lDSoIAa9jUU=";
+    })
   ];
 
   postPatch = ''
