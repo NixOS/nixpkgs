@@ -182,6 +182,9 @@ python3Packages.buildPythonApplication rec {
           lib.strings.substring versionSuffixPos 1 rcu.version
         })";
     };
+
+    # Python stuff automatically adds an updateScript that just fails
+    updateScript = null;
   };
 
   meta = {
