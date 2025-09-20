@@ -16,17 +16,17 @@
 
 buildGoModule rec {
   inherit pname;
-  version = "2.11.5";
+  version = "2.12.0";
   tags = lib.optionals enableGateway [ "gateway" ];
 
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
     tag = version;
-    hash = "sha256-gNojkBMdTbBLnN5Xpbpm7chLfCT+7S8mJTilEABuVis=";
+    hash = "sha256-5syQFcYBY/xKipIsAJdjVrXYXt7NNjjCeXiDVNO9NTo=";
   };
 
-  vendorHash = "sha256-Sy67XRPob++DH+pKFY5lZOfc3f1MaP3nI1znnvjYB+M=";
+  vendorHash = "sha256-KgZYKopW+FOdwBIGxa2RLiEbefZ/1vAhcsWtcYhgdFs=";
 
   # no test files
   doCheck = false;
