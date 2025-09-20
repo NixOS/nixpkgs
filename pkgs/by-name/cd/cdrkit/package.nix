@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oOqvSA2MAURf0YOrWM5Ft6Ln43gXw7SEvNxxRrDs8sI=";
   };
 
+  patches = [
+    ./cmake-4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     quilt
