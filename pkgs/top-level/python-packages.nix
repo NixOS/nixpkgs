@@ -6854,6 +6854,8 @@ self: super: with self; {
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
+  hyperglot = toPythonModule (pkgs.hyperglot.override { python3Packages = self; });
+
   hyperion-py = callPackage ../development/python-modules/hyperion-py { };
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
