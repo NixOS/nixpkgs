@@ -15,6 +15,18 @@ in
 
     package = mkPackageOption pkgs "lldap" { };
 
+    user = mkOption {
+      default = "lldap";
+      type = types.str;
+      description = "The name of the user of the systemd service.";
+    };
+
+    group = mkOption {
+      default = "lldap";
+      type = types.str;
+      description = "The name of the group of the systemd service.";
+    };
+
     environment = mkOption {
       type = with types; attrsOf str;
       default = { };
@@ -231,12 +243,17 @@ in
         StateDirectoryMode = "0750";
         WorkingDirectory = "%S/lldap";
         UMask = "0027";
-        User = "lldap";
-        Group = "lldap";
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
       };
       inherit (cfg) environment;
+    };
+
+    users.groups."${cfg.group}" = { };
+    users.users."${cfg.user}" = {
+      isSystemUser = true;
+      group = cfg.group;
     };
   };
 }
