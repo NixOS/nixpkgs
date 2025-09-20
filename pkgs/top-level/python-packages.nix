@@ -3943,6 +3943,8 @@ self: super: with self; {
 
   django-guardian = callPackage ../development/python-modules/django-guardian { };
 
+  django-handleref = callPackage ../development/python-modules/django-handleref { };
+
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
   django-hcaptcha = callPackage ../development/python-modules/django-hcaptcha { };
