@@ -2,20 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtbase,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cubiomes-viewer";
   version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "Cubitect";
-    repo = pname;
-    rev = version;
+    repo = "cubiomes-viewer";
+    tag = finalAttrs.version;
     hash = "sha256-izDKS08LNT2rV5rIxlWRHevJAKEbAVzekjfZy0Oen1I=";
     fetchSubmodules = true;
   };
@@ -27,13 +23,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    qtbase
+    qt5.qtbase
   ];
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   preBuild = ''
@@ -45,17 +41,27 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp cubiomes-viewer $out/bin
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p "$out/Applications/"
+          cp -R cubiomes-viewer.app "$out/Applications/cubiomes-viewer.app"
+          ln -s "$out/Applications/cubiomes-viewer.app/Contents/MacOS/cubiomes-viewer" "$out/bin/cubiomes-viewer"
+        ''
+      else
+        ''
+          cp cubiomes-viewer $out/bin
 
-    mkdir -p $out/share/{pixmaps,applications}
-    cp rc/icons/map.png $out/share/pixmaps/com.github.cubitect.cubiomes-viewer.png
-    cp etc/com.github.cubitect.cubiomes-viewer.desktop $out/share/applications
+          mkdir -p $out/share/{pixmaps,applications}
+          cp rc/icons/map.png $out/share/pixmaps/com.github.cubitect.cubiomes-viewer.png
+          cp etc/com.github.cubitect.cubiomes-viewer.desktop $out/share/applications
+        ''
+    }
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     homepage = "https://github.com/Cubitect/cubiomes-viewer";
     description = "Graphical Minecraft seed finder and map viewer";
     mainProgram = "cubiomes-viewer";
@@ -63,8 +69,8 @@ stdenv.mkDerivation rec {
       Cubiomes Viewer provides a graphical interface for the efficient and flexible seed-finding
       utilities provided by cubiomes and a map viewer for the Minecraft biomes and structure generation.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hqurve ];
   };
-}
+})
