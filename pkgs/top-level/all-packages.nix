@@ -5048,8 +5048,6 @@ with pkgs;
 
   idris2Packages = recurseIntoAttrs (callPackage ../development/compilers/idris2 { });
 
-  inherit (idris2Packages) idris2;
-
   inherit (callPackage ../development/tools/database/indradb { })
     indradb-server
     indradb-client
