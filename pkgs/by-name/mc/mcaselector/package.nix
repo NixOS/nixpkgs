@@ -7,7 +7,7 @@
   jre,
 }:
 let
-  jre = jre.override {
+  jre' = jre.override {
     enableJavaFX = true;
   };
 in
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   nativeBuildInputs = [
-    jre
+    jre'
     makeWrapper
     wrapGAppsHook3
   ];
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper ${jre}/bin/java $out/bin/mcaselector \
+    makeWrapper ${jre'}/bin/java $out/bin/mcaselector \
       --add-flags "-jar $out/lib/mcaselector/mcaselector.jar" \
       ''${gappsWrapperArgs[@]}
   '';
