@@ -11,19 +11,13 @@
 
 buildPythonPackage rec {
   pname = "zstandard";
-  version = "0.23.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-stjGLQjnJV9o96dAuuhbPJuOVGa6qcv39X8c3grGvAk=";
+    hash = "sha256-dxPhF50WLPXHkG2oduwsy5w6ncvf/vDMf3DDZnogXws=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<69.0.0" "setuptools" \
-      --replace-fail "cffi==" "cffi>="
-  '';
 
   build-system = [
     cffi
