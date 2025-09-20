@@ -6,53 +6,49 @@
   fetchFromGitHub,
   mock,
   pyparsing,
+  pysocks,
   pytest-cov-stub,
   pytest-forked,
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.22.0";
-  format = "setuptools";
+  version = "0.31.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httplib2";
     repo = "httplib2";
-    rev = "v${version}";
-    hash = "sha256-76gdiRbF535CEaNXwNqsVeVc0dKglovMPQpGsOkbd/4=";
+    tag = "v${version}";
+    hash = "sha256-faeanUBpNmhBEffENP9hl9tnZoRmKf3Fq1s4FdPs8LQ=";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
 
   nativeCheckInputs = [
     cryptography
     mock
+    pysocks
     pytest-cov-stub
     pytest-forked
     pytest-randomly
     pytest-timeout
-    six
     pytestCheckHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  # Don't run tests for older Pythons
-  doCheck = pythonAtLeast "3.9";
-
   disabledTests = [
     # ValueError: Unable to load PEM file.
     # https://github.com/httplib2/httplib2/issues/192#issuecomment-993165140
     "test_client_cert_password_verified"
-
-    # improper pytest marking
-    "test_head_301"
-    "test_303"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails with "ConnectionResetError: [Errno 54] Connection reset by peer"
@@ -62,13 +58,12 @@ buildPythonPackage rec {
     "test_connection_close"
   ];
 
-  disabledTestPaths = [ "python2" ];
-
   pythonImportsCheck = [ "httplib2" ];
 
   meta = with lib; {
     description = "Comprehensive HTTP client library";
     homepage = "https://github.com/httplib2/httplib2";
+    changelog = "https://github.com/httplib2/httplib2/blob/${src.tag}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
