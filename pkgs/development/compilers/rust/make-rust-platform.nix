@@ -8,6 +8,7 @@
   runCommand,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
+  GLOBAL_RUSTFLAGS ? "",
 }@prev:
 
 {
@@ -36,6 +37,7 @@
           rustc
           cargo
           cargo-auditable
+          GLOBAL_RUSTFLAGS
           ;
       };
 
