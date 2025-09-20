@@ -14225,6 +14225,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lalit64 = {
+    email = "lalit.yalamanchili@gmail.com";
+    github = "lalit64";
+    githubId = 79628080;
+    name = "Lalit Yalamanchili";
+  };
   lamarios = {
     matrix = "@lamarios:matrix.org";
     github = "lamarios";
