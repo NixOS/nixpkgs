@@ -2,40 +2,41 @@
   stdenv,
   fetchFromGitHub,
   perl,
-  icu,
-  zlib,
-  gmp,
   lib,
   nqp,
   removeReferencesTo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakudo";
-  version = "2025.06.1";
+  version = "2025.08";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
-    rev = version;
-    hash = "sha256-cofiX6VHHeki8GQcMamDyPYoVMUKiuhKVz8Gh8L9qu0=";
+    tag = finalAttrs.version;
+    hash = "sha256-3O4epBLN6f/XQbCyEgqr6HKiu1qrWirIPt4QrUNzmWY=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = [
-    icu
-    zlib
-    gmp
-    perl
-  ];
-  configureScript = "perl ./Configure.pl";
+  configureScript = "${lib.getExe perl} ./Configure.pl";
   configureFlags = [
     "--backends=moar"
-    "--with-nqp=${nqp}/bin/nqp"
+    "--with-nqp=${lib.getExe nqp}"
   ];
+
+  doCheck = true;
+  preCheck = ''
+    # Dubious, test returned 1 (wstat 256, 0x100)
+    rm t/02-rakudo/repl.t
+    # Dubious, test returned 1 (wstat 256, 0x100)
+    rm t/05-messages/03-errors.t
+    # Dubious, test returned 2 (wstat 512, 0x200)
+    rm t/09-moar/01-profilers.t
+  '';
 
   disallowedReferences = [ stdenv.cc.cc ];
   postFixup = ''
@@ -52,5 +53,6 @@ stdenv.mkDerivation rec {
       sgo
       prince213
     ];
+    mainProgram = "rakudo";
   };
-}
+})
