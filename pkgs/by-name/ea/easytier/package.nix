@@ -6,6 +6,7 @@
   protobuf,
   nixosTests,
   nix-update-script,
+  installShellFiles,
   withQuic ? false, # with QUIC protocol support
 }:
 
@@ -33,10 +34,18 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
+    installShellFiles
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
   buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd easytier \
+      --bash <($out/bin/easytier-cli gen-autocomplete bash) \
+      --fish <($out/bin/easytier-cli gen-autocomplete fish) \
+      --zsh <($out/bin/easytier-cli gen-autocomplete zsh)
+  '';
 
   doCheck = false; # tests failed due to heavy rely on network
 
