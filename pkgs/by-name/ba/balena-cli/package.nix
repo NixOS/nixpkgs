@@ -33,9 +33,6 @@ buildNpmPackage' rec {
 
   npmDepsHash = "sha256-WEYhtsCOdupU7nYF7scy4QP3/PVcchJX9CRRWjSkBJQ=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
   makeCacheWritable = true;
 
   nativeBuildInputs = [
