@@ -81,6 +81,7 @@ let
       cli = callLibs ./cli.nix;
       gvariant = callLibs ./gvariant.nix;
       generators = callLibs ./generators.nix;
+      ron = callLibs ./ron.nix;
 
       # misc
       asserts = callLibs ./asserts.nix;
@@ -404,6 +405,7 @@ let
         ;
       inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
       inherit (self.generators) mkLuaInline;
+      inherit (self.ron) fromRON importRON toRON;
       inherit (self.meta)
         addMetaAttrs
         dontDistribute
