@@ -126,7 +126,7 @@ let
         }
       ] package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
-      derivation = mkCoqDerivation ({
+      derivation = mkCoqDerivation {
         inherit
           version
           pname
@@ -172,7 +172,7 @@ let
         };
 
         passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
-      });
+      };
       # split packages didn't exist before 0.6, so building nothing in that case
       patched-derivation1 = derivation.overrideAttrs (
         o:

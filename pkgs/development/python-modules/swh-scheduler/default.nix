@@ -83,6 +83,6 @@ buildPythonPackage rec {
     description = "Job scheduler for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

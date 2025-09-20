@@ -101,7 +101,7 @@ let
     "--verbose_failures"
     "--curses=no"
   ]
-  ++ lib.optionals (isDarwin) [
+  ++ lib.optionals isDarwin [
     "--macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion}"
     "--cxxopt=-isystem"
     "--cxxopt=${lib.getDev stdenv.cc.libcxx}/include/c++/v1"

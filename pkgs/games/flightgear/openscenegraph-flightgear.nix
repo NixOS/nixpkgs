@@ -25,7 +25,7 @@
   libXrandr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openscenegraph";
   version = "2024-build";
 

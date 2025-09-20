@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/VOICEVOX/voicevox_core";
     license = with lib.licenses; [
       mit
-      ({
+      {
         name = "VOICEVOX Core Library Terms of Use";
         url = "https://github.com/VOICEVOX/voicevox_resource/blob/main/core/README.md";
         free = false;
         redistributable = true;
-      })
+      }
     ];
     maintainers = with lib.maintainers; [
       tomasajt

@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     # Vendored copy of Electron.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "bluemail";
   };
 }

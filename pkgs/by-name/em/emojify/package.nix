@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Emoji on the command line";
     homepage = "https://github.com/mrowa44/emojify";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "emojify";
   };

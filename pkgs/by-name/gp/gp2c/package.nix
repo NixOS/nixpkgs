@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--with-perl=${perl}/bin/perl"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pari.math.u-bordeaux.fr/";
     description = "Compiler to translate GP scripts to PARI programs";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";

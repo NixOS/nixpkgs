@@ -127,7 +127,7 @@ in
       description = "Soothing pastel theme for Tmux";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -421,7 +421,7 @@ in
     };
   };
 
-  kanagawa = mkTmuxPlugin rec {
+  kanagawa = mkTmuxPlugin {
     pluginName = "kanagawa";
     version = "0-unstable-2025-02-10";
     src = fetchFromGitHub {
@@ -478,7 +478,7 @@ in
     };
   };
 
-  mode-indicator = mkTmuxPlugin rec {
+  mode-indicator = mkTmuxPlugin {
     pluginName = "mode-indicator";
     version = "unstable-2021-10-01";
     src = fetchFromGitHub {
@@ -606,7 +606,7 @@ in
       wrapProgram $target/scripts/main.sh \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             findutils
             fzf
             gnugrep
@@ -614,7 +614,7 @@ in
             ncurses
             pkgs.pass
             tmux
-          ])
+          ]
         }
     '';
 
@@ -770,13 +770,13 @@ in
       wrapProgram $target/bin/t \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             fzf
             zoxide
             coreutils
             gnugrep
             gnused
-          ])
+          ]
         }
     '';
   };
@@ -1017,11 +1017,11 @@ in
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
           --prefix PATH : ${
-            with pkgs;
-            lib.makeBinPath ([
+
+            lib.makeBinPath [
               pkgs.fzf
               pkgs.zoxide
-            ])
+            ]
           }
 
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'

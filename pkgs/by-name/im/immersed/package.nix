@@ -9,7 +9,7 @@ let
   pname = "immersed";
   version = "10.9.0";
 
-  sources = lib.mapAttrs (_: fetchurl) (rec {
+  sources = lib.mapAttrs (_: fetchurl) rec {
     x86_64-linux = {
       url = "https://web.archive.org/web/20250725134919if_/https://static.immersed.com/dl/Immersed-x86_64.AppImage";
       hash = "sha256-plGcvZRpV+nhQ4FoYiIuLmyOg/SHJ8ZjT4Fh6UyH9W0=";
@@ -23,7 +23,7 @@ let
       hash = "sha256-lmSkatB75Bztm19aCC50qrd/NV+HQX9nBMOTxIguaqI=";
     };
     aarch64-darwin = x86_64-darwin;
-  });
+  };
 
   src = sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 

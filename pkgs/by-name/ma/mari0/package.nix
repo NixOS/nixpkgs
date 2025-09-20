@@ -10,7 +10,7 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mari0";
   version = "1.6.2-unstable-2023-08-08";
 

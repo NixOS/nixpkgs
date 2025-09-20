@@ -30,6 +30,6 @@ php82.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/consolidation/robo";
     license = lib.licenses.mit;
     mainProgram = "robo";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

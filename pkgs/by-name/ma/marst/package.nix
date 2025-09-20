@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         from some other representations to MARST representation.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -23,7 +23,7 @@ let
 
   testLegacyNetwork =
     { nixopsPkg, ... }:
-    pkgs.testers.nixosTest ({
+    pkgs.testers.nixosTest {
       name = "nixops-legacy-network";
       nodes = {
         deployer =
@@ -105,7 +105,7 @@ let
 
           deployer_do("cd ~/unicorn; nixops ssh server 'hello | figlet'")
         '';
-    });
+    };
 
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 

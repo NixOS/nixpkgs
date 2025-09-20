@@ -7,7 +7,7 @@
   gradle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "crossfire-gridarta";
   version = "2025-04";
 

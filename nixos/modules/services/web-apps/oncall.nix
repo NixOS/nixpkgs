@@ -106,10 +106,10 @@ in
 
     # Disable debug, only needed for development
     services.oncall.settings = lib.mkMerge [
-      ({
+      {
         debug = lib.mkDefault false;
         auth.debug = lib.mkDefault false;
-      })
+      }
     ];
 
     services.uwsgi = {
