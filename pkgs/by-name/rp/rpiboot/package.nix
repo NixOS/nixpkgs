@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     mainProgram = "rpiboot";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      cartr
       flokli
       stv0g
     ];
