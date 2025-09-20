@@ -12759,6 +12759,10 @@ with pkgs;
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
+  linphonePackages = recurseIntoAttrs (
+    callPackage ../applications/networking/instant-messengers/linphone { }
+  );
+
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
   typstPackages = typst.packages;
