@@ -150,7 +150,7 @@ let
           test -e ${lib.escapeShellArg appimageName}
           appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
 
-          mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+          mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT,Extras}
           runHook postInstall
         '';
 
@@ -186,6 +186,7 @@ let
             "Video"
             "Graphics"
           ];
+          startupWMClass = "resolve";
         })
       ];
     }
@@ -248,10 +249,12 @@ buildFHSEnv {
 
   extraPreBwrapCmds = lib.optionalString studioVariant ''
     mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+    mkdir -p ~/.local/share/DaVinciResolve/Extras || exit 1
   '';
 
   extraBwrapArgs = lib.optionals studioVariant [
-    "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
+    ''--bind "$HOME"/.local/share/DaVinciResolve/license ${davinci}/.license''
+    ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
   ];
 
   runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
