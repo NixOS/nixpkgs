@@ -43,8 +43,8 @@ let
         '';
       };
       meta = with lib; {
-        homepage = "https://developer.apple.com/downloads/";
-        description = "Apple's XCode SDK";
+        homepage = "https://developer.apple.com/xcode/";
+        description = "Apple's Xcode developer tools";
         license = licenses.unfree;
         platforms = platforms.darwin ++ platforms.linux;
         hydraPlatforms = [ ];
