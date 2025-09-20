@@ -338,6 +338,9 @@ import ./make-test-python.nix (
 
       # wait until the uplink interface has a good status
       router.systemctl("start network-online.target")
+      router.wait_until_succeeds(
+        "journalctl -o cat -u systemd-networkd.service --grep 'eth1: DHCP: received delegated prefix 2001:db8:1000::/48'"
+      )
       router.wait_for_unit("network-online.target")
       router.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 
