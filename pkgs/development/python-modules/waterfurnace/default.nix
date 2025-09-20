@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "waterfurnace";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sdague";
     repo = "waterfurnace";
     tag = "v${version}";
-    sha256 = "1ba247fw1fvi7zy31zj2wbjq7fajrbxhp139cl9jj67rfvxfv8xf";
+    sha256 = "sha256-lix8dU9PxlsXIzKNFuUJkd80cUYXfTXSnFLu1ULACkE=";
   };
 
   postPatch = ''
