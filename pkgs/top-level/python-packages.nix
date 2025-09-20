@@ -18826,6 +18826,8 @@ self: super: with self; {
 
   twentemilieu = callPackage ../development/python-modules/twentemilieu { };
 
+  twentyc-rpc = callPackage ../development/python-modules/twentyc-rpc { };
+
   twiggy = callPackage ../development/python-modules/twiggy { };
 
   twilio = callPackage ../development/python-modules/twilio { };
