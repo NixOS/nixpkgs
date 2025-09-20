@@ -1,15 +1,19 @@
 {
   "version": "3.3.12",
-  "x86_64-linux": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.3.12/Joplin-3.3.12.AppImage",
-    "sha256": "1fjrblmlpm6sf4jdvifmyxic0rw2bs1f4sbw3nz4xy7wlsab5f62"
+  "hash": "sha256-hG08V93YvoOm9Wi60bHpwwP8P5iOWwJS6APTWdhtfLU=",
+  "plugins": {
+    "io.github.jackgruber.backup": {
+      "name": "joplin-plugin-backup",
+      "url": "https://github.com/JackGruber/joplin-plugin-backup/archive/abb58175e2d2bf34899f1b32cb74137e5c788bf9.tar.gz",
+      "hash": "sha256-3J7TP3UClLDH402UqppQMsc1WmFjYIpIQ4uwGlTsyBs=",
+      "npmDepsHash": "sha256-Grn4KQck6o+k8fj6qPxmx7S+4PTWvY5N4pE7Bj+47ps="
+    },
+    "io.github.personalizedrefrigerator.js-draw": {
+      "name": "joplin-plugin-freehand-drawing",
+      "url": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing/archive/49650407c1d56a2a0123d2d56d2387e48eb58415.tar.gz",
+      "hash": "sha256-fgzh3WW9bJ3SEvSxEIyJPh2HnUxOYqgrVRh+Vw0fiMI=",
+      "npmDepsHash": "sha256-dwWt3bnR9+wQxfWRbjFkUQrnqplAmy34dFO60ZoNgDs="
+    }
   },
-  "x86_64-darwin": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.3.12/Joplin-3.3.12.dmg",
-    "sha256": "0rk5jl7i7sj31336r8yn8wf9h4xwdwi66wvwrkblvxrfhgddn2gj"
-  },
-  "aarch64-darwin": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.3.12/Joplin-3.3.12-arm64.dmg",
-    "sha256": "13m4nypg1v5d7i13has9f1sp08dijc44962dr75b9jfiq8q6ciz6"
-  }
+  "deps_hash": "sha256-obMlkN2Ajq7UetAPTdRjzT/BkJSYQP74uP35dowWprA="
 }
