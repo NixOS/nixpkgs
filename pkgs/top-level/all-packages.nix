@@ -5363,6 +5363,8 @@ with pkgs;
     withQt = true;
   };
 
+  lima-additional-guestagents = callPackage ../by-name/li/lima/additional-guestagents.nix { };
+
   lld = llvmPackages.lld;
 
   lldb = llvmPackages.lldb;
