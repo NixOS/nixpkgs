@@ -921,6 +921,46 @@ runBuildTests {
     '';
   };
 
+  vimAtoms = shouldPass rec {
+    format = formats.vim { };
+    input = {
+      attrs.foo = "woot";
+      false = false;
+      float = 3.141001; # # TODO: retest on smaller floats, ex `3.14`
+      int = 10;
+      list = [
+        null
+        null
+      ];
+      mixed = [
+        input.attrs
+      ];
+      null = null;
+      path = /etc/noop;
+      raw = format.lib.mkRaw "{arg1, arg2 -> arg1 - arg2}";
+      storePath = /nix/store/noop.drv;
+      str = "foo";
+      true = true;
+    };
+    expected =
+      "{"
+      + lib.concatStringsSep "," [
+        ''"attrs":{"foo":"woot"}''
+        ''"false":v:false''
+        ''"float":3.141001''
+        ''"int":10''
+        ''"list":[v:null,v:null]''
+        ''"mixed":[{"foo":"woot"}]''
+        ''"null":v:null''
+        ''"path":"/etc/noop"''
+        ''"raw":{arg1, arg2 -> arg1 - arg2}''
+        ''"storePath":"/nix/store/noop.drv"''
+        ''"str":"foo"''
+        ''"true":v:true''
+      ]
+      + "}";
+  };
+
   badgerfishToXmlGenerate = shouldPass {
     format = formats.xml { };
     input = {
