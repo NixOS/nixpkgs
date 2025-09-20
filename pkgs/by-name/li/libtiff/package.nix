@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   nix-update-script,
 
   cmake,
@@ -39,59 +38,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SuK9/a6OUAumEe1kz1itFJGKxJzbmHkBVLMnyXhIwmQ=";
+    hash = "sha256-UiC6s86i7UavW86EKm74oPVlEacvoKmwW7KETjpnNaI=";
   };
 
   patches = [
-    # Fix test_directory test on big-endian
-    # https://gitlab.com/libtiff/libtiff/-/issues/652
-    (fetchpatch {
-      name = "0001-Update-test_directory-not-to-fail-on-big-endian-machines";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/e8233c42f2e0a0ea7260c3cc7ebbaec8e5cb5e07.patch";
-      hash = "sha256-z5odG66j4U+WoUjTUuBIhcVUCGK1GYdvW/cVucawNZI=";
-    })
-
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
-    (fetchpatch {
-      name = "CVE-2024-13978_1.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/7be20ccaab97455f192de0ac561ceda7cd9e12d1.patch";
-      hash = "sha256-cpsQyIvyP6LkGeQTlLX73iNd1AcPkvZ6Xqfns7G3JBc=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-13978_2.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/2ebfffb0e8836bfb1cd7d85c059cd285c59761a4.patch";
-      hash = "sha256-cZlLTeB7/nvylf5SLzKF7g91aBERhZxpV5fmWEJVrX4=";
-    })
-    (fetchpatch {
-      name = "CVE-2025-9165.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/ed141286a37f6e5ddafb5069347ff5d587e7a4e0.patch";
-      hash = "sha256-DIsk8trbHMMTrj6jP5Ae8ciRjHV4CPHdWCN+VbeFnFo=";
-    })
-
-    # Fix the build with CMake 4.
-    (fetchpatch {
-      name = "libtiff-cmake-4-1.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/d1279f0f9c8fee724c380523a7a6cf60c690521d.patch";
-      hash = "sha256-7EwfgG8zYwyNPIpyCYq8PSbf1TBmo4N36e96GB3wWPo=";
-    })
-    (fetchpatch {
-      name = "libtiff-cmake-4-2.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/2b6b70183d048b8f32e6b95e9aa82ed2e46ddf1f.patch";
-      hash = "sha256-fGhlm2PYxjXAyMdM8vyvgcDzzJw8YTHWFRunr+RZnOU=";
-    })
-    (fetchpatch {
-      name = "libtiff-cmake-4-3.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/ff5997ea1206df2ebbbf5e30611c8a84f649a333.patch";
-      hash = "sha256-G2Q8EKOzNLh028kPYAKmoEzAbDu0tGNpnxkd3pMT96U=";
-    })
   ];
 
   postPatch = ''
