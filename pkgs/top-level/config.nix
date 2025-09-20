@@ -105,6 +105,23 @@ let
       '';
     };
 
+    gitConfig = mkOption {
+      type = types.attrsOf (types.attrsOf types.anything);
+      description = ''
+        A git configuration to be passed to the `fetchgit` fetcher (as `gitConfig` argument).
+
+        This has many uses, the most obvious being overriding URLs to point to local mirrors.
+
+        If setting a string is desired instead of an attribute set, override `fetchgit` with a custom `gitConfig` instead.
+
+        Setting this should not cause any rebuilds due to FOD.
+      '';
+      default = { };
+      example = {
+        url."https://my-github-mirror.local".insteadOf = [ "https://github.com" ];
+      };
+    };
+
     doCheckByDefault = mkMassRebuild {
       feature = "run `checkPhase` by default";
     };
