@@ -651,6 +651,7 @@ in
   grub = runTest ./grub.nix;
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
+  gunicorn = runTest ./gunicorn.nix;
   gvisor = runTest ./gvisor.nix;
   h2o = import ./web-servers/h2o { inherit recurseIntoAttrs runTest; };
   hadoop = import ./hadoop {
@@ -1126,6 +1127,7 @@ in
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
   osquery = handleTestOn [ "x86_64-linux" ] ./osquery.nix { };
   osrm-backend = runTest ./osrm-backend.nix;
+  otterwiki = runTest ./otterwiki.nix;
   outline = runTest ./outline.nix;
   overlayfs = runTest ./overlayfs.nix;
   overseerr = runTest ./overseerr.nix;
