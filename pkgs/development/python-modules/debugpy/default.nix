@@ -136,6 +136,12 @@ buildPythonPackage rec {
     "test_systemexit"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # ConnectionResetError: [Errno 54] Connection reset by peer
+    "tests/debugpy/test_breakpoints.py::test_error_in_condition[program-attach_connect(cli)-]"
+    "tests/debugpy/test_breakpoints.py::test_error_in_condition[program-attach_connect(cli)-NameError]"
+  ];
+
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
