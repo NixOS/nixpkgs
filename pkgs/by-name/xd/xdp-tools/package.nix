@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   libbpf,
   elfutils,
@@ -49,7 +50,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     bpftools
-    llvmPackages.clang
     llvmPackages.llvm
     pkg-config
     m4
@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "zerocallusedregs" ];
   # When building BPF, the default CC wrapper is interfering a bit too much.
   BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
+  # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
+  CLANG = lib.getExe buildPackages.llvmPackages.clang;
 
   PRODUCTION = 1;
   DYNAMIC_LIBXDP = 1;
