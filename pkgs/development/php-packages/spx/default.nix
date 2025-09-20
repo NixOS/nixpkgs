@@ -29,6 +29,6 @@ buildPecl {
     description = "Simple & straight-to-the-point PHP profiling extension with its built-in web UI";
     homepage = "https://github.com/NoiseByNorthwest/php-spx";
     license = lib.licenses.php301;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ piotrkwiecinski ];
   };
 }
