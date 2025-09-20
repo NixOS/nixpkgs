@@ -125,6 +125,11 @@ in
                 example = lib.literalExpression ''[ "\.ini$" "Thumbs.db$" "\.DS_Store$" ]'';
                 description = "Regular expressions of files to exclude from sharing.";
               };
+              cache = mkOption {
+                type = types.submodule { freeformType = settingsFormat.type; };
+                default = {};
+                description = "Share cache settings.";
+              };
             };
 
             rooms = mkOption {
@@ -167,6 +172,18 @@ in
                   description = "Total upload download limit";
                 };
               };
+            };
+
+            groups = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Group-based upload/download strategies and limits.";
+            };
+
+            blacklist = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Blacklist configuration.";
             };
 
             filters.search.request = mkOption {
@@ -254,6 +271,54 @@ in
                 default = false;
                 visible = false;
               };
+            };
+
+            debug = mkOption {
+              type = bool;
+              default = false;
+              description = "Enable debug mode.";
+            };
+
+            headless = mkOption {
+              type = bool;
+              default = false;
+              description = "Run without web UI.";
+            };
+
+            instance_name = mkOption {
+              type = str;
+              default = "default";
+              description = "Instance name for multi-instance setups.";
+            };
+
+            relay = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Relay configuration for controller/agent modes.";
+            };
+
+            metrics = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Metrics endpoint configuration.";
+            };
+
+            feature = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Feature flags for the application.";
+            };
+
+            extraConfig = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Extra Soulseek configuration.";
+            };
+
+            integration = mkOption {
+              type = types.submodule { freeformType = settingsFormat.type; };
+              default = {};
+              description = "Integration settings (webhooks, scripts, notifications, etc).";
             };
           };
         };
