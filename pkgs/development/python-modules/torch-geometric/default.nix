@@ -161,6 +161,24 @@ buildPythonPackage rec {
 
     # AttributeError: type object 'Any' has no attribute '_name'
     "test_type_repr"
+
+    # AttributeError: module 'torch.fx._symbolic_trace' has no attribute 'List'
+    "test_graph_level_to_hetero"
+    "test_hetero_transformer_self_loop_error"
+    "test_sequential_to_hetero"
+    "test_set_clear_mask"
+    "test_to_fixed_size"
+    "test_to_hetero_and_rgcn_equal_output"
+    "test_to_hetero_basic"
+    "test_to_hetero_on_static_graphs"
+    "test_to_hetero_validate"
+    "test_to_hetero_with_bases"
+    "test_to_hetero_with_bases_and_rgcn_equal_output"
+    "test_to_hetero_with_bases_on_static_graphs"
+    "test_to_hetero_with_bases_save"
+    "test_to_hetero_with_bases_validate"
+    "test_to_hetero_with_basic_model"
+    "test_to_hetero_with_gcn"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # This test uses `torch.jit` which might not be working on darwin:
