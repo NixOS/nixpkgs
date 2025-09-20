@@ -12,7 +12,7 @@
   ffmpeg-headless,
   writeShellScript,
   xcbuild,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -123,7 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
-    updateScript = nix-update-script { };
+    # Not enough to do a proper bump, requires manual work afterwards
+    updateScript = gitUpdater { };
   };
 
   meta = {
