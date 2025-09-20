@@ -1,0 +1,38 @@
+diff --git a/server/build.gradle.kts b/server/build.gradle.kts
+index 4e11d4a8..605a49ef 100644
+--- a/server/build.gradle.kts
++++ b/server/build.gradle.kts
+@@ -198,33 +198,6 @@ tasks {
+ 
+     named<Copy>("processResources") {
+         duplicatesStrategy = DuplicatesStrategy.INCLUDE
+-        mustRunAfter("downloadWebUI")
+-    }
+-
+-    register<Download>("downloadWebUI") {
+-        src("https://github.com/Suwayomi/Suwayomi-WebUI-preview/releases/download/$webUIRevisionTag/Suwayomi-WebUI-$webUIRevisionTag.zip")
+-        dest("src/main/resources/WebUI.zip")
+-
+-        fun shouldOverwrite(): Boolean {
+-            val zipPath = project.projectDir.absolutePath + "/src/main/resources/WebUI.zip"
+-            val zipFile = net.lingala.zip4j.ZipFile(zipPath)
+-
+-            var shouldOverwrite = true
+-            if (zipFile.isValidZipFile) {
+-                val zipRevision =
+-                    zipFile.getInputStream(zipFile.getFileHeader("revision")).bufferedReader().use {
+-                        it.readText().trim()
+-                    }
+-
+-                if (zipRevision == webUIRevisionTag) {
+-                    shouldOverwrite = false
+-                }
+-            }
+-
+-            return shouldOverwrite
+-        }
+-
+-        overwrite(shouldOverwrite())
+     }
+ 
+     register("runElectron") {
