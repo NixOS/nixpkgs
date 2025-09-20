@@ -35,7 +35,6 @@
   libXrandr,
   nix-update-script,
   onnxruntime,
-  opencv4,
   openhmd,
   openvr,
   orc,
@@ -125,7 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    opencv4
+    # FIXME: OpenCV support causes a segfault on start. See https://github.com/NixOS/nixpkgs/issues/439075
+    # opencv4
     openhmd
     openvr
     orc

@@ -208,7 +208,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tshaynik
       magnetophon
-      yuu
       astavie
       PowerUser64
     ];

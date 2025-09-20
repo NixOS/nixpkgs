@@ -18,8 +18,8 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "76bb24329e8bf5f39704eb10d21b9a80befa7c81";
-      hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
+      rev = "987c57f325f7fa8472fa84e1f885f7534d391b0d";
+      hash = "sha256-6Ro7miql9+wcArsOKTjlyDSyD91rmmPsIfO5auk9kiI=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
@@ -86,7 +86,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.3.5";
+  version = "3.3.6";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-HykExdosK5XpAOQeic/jsc6yYxjdoiaP8rRkA/yAfuU=";
+    hash = "sha256-6lZ36XFMsjzck/ouSSiX47+dxbEzXgrMhw1Mi3PEnq4=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];

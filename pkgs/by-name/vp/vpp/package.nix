@@ -38,11 +38,6 @@ let
     ];
   });
 
-  xdp-tools' = xdp-tools.overrideAttrs (old: {
-    postInstall = "";
-    dontDisableStatic = true;
-  });
-
   # in 25.02 only ID seems to be of interest, so keep it simple
   os-release-fake = writeText "os-release-fake" ''
     ID=nixos
@@ -116,7 +111,12 @@ stdenv.mkDerivation rec {
     # af_xdp plugin
     libelf
     libbpf
-    xdp-tools'
+    xdp-tools
+    zlib
+  ];
+
+  patches = lib.optionals enableAfXdp [
+    ./use-dynamic-libxdp-libbpf.patch
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
     homepage = "https://s3-docs.fd.io/vpp/${version}/";
     license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ romner-set ];
+    maintainers = with lib.maintainers; [ azey7f ];
     mainProgram = "vpp";
     platforms = lib.platforms.linux;
   };

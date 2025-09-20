@@ -338,6 +338,9 @@ package-maintainers:
     - tz
     - weeder
     - witch
+  mikatammi:
+    - botan-bindings
+    - botan-low
   mpscholten:
     - ihp-hsx
     - push-notify-apn

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     description = "Netbox plugin to add context buttons to the links, making navigating less clicky";
     homepage = "https://github.com/PieterL75/netbox_contextmenus/";
     changelog = "https://github.com/PieterL75/netbox_contextmenus/releases/tag/${src.tag}";
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
   };
 }

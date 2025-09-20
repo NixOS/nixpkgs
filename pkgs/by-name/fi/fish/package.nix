@@ -152,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.2";
+  version = "4.0.8";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-UpoZPipXZbzLWCOXzDjfyTDrsKyXGbh3Rkwj5IeWeY4=";
+    hash = "sha256-bve82WLP/mZrGZNW9JZFCnFiEy1QNB9M8+r3OVh9E3w=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-FkJB33vVVz7Kh23kfmjQDn61X2VkKLG9mUt8f3TrCHg=";
+    hash = "sha256-f1nxATT2iJiqQiYc6qHrUvRscupvZa8R41W4fvrgj08=";
   };
 
   patches = [
@@ -234,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/pexpects/job_summary.py
     rm tests/pexpects/signals.py
     rm tests/pexpects/fg.py
+    rm tests/checks/fish_exit.fish
   ''
   + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
     # This test seems to consistently fail on aarch64 and darwin

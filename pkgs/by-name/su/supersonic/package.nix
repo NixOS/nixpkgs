@@ -18,16 +18,16 @@
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
-    rev = "v${version}";
-    hash = "sha256-/8GFrMQvr2dXtK5Cyi5mc+9wxJ95jCzkpZ2Xk6ULrp8=";
+    tag = "v${version}";
+    hash = "sha256-NzgmkxG58XvaxcIcu9J0VeRjCQ922rJOp3IWX49dgIU=";
   };
 
-  vendorHash = "sha256-C610AlCpY7hpW4AQbT9HYaRxJdLmpqgQbi5mIsdSTrM=";
+  vendorHash = "sha256-dG5D7a13TbVurjqFbKwiZ5IOPul39sCmyPCCzRx0NEY=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -88,13 +88,14 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
     description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    platforms = platforms.linux ++ lib.optionals (!waylandSupport) platforms.darwin;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${src.tag}";
+    platforms = lib.platforms.linux ++ lib.optionals (!waylandSupport) lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zane
       sochotnicky
     ];

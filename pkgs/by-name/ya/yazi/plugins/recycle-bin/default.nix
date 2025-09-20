@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "recycle-bin.yazi";
-  version = "0-unstable-2025-09-08";
+  version = "0-unstable-2025-09-16";
 
   src = fetchFromGitHub {
     owner = "uhs-robert";
     repo = "recycle-bin.yazi";
-    rev = "728c0af4111ad043f9361ce6373949b5f9dec4a3";
-    hash = "sha256-XnDiWuKLyI1jszwKTaVnPR8AX3+9mdkkof+V6E8RkR4=";
+    rev = "03f6c4a3085c218a0909671dcc2014558fff18a7";
+    hash = "sha256-M33RjtFQhnh9pIFKQKrsvZuWZNbe0lfepDKFsAuaYC4=";
   };
 
   meta = {

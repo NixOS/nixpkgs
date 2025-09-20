@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "2.0.4";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
     tag = "v${version}";
-    hash = "sha256-nzTqakEMl9gywIQpC9OR0xiqZzawU5RxOx3NQT+CiFc=";
+    hash = "sha256-Cmc0GXucoSSBWii+Xkx2jhG81kO+UeQUX3fKHUgLNS4=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];

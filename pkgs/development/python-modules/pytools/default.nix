@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/pytools/";
     changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ artuuge ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

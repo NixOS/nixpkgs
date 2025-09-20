@@ -2,7 +2,9 @@
   lib,
   stdenv,
   jdk,
+  jre-generate-cacerts,
   maven,
+  perl,
   writers,
 }:
 
@@ -60,10 +62,10 @@ let
 
         # handle cacert by populating a trust store on the fly
         if [[ -n "''${NIX_SSL_CERT_FILE-}" ]] && [[ "''${NIX_SSL_CERT_FILE-}" != "/no-cert-file.crt" ]];then
-          keyStoreFile="$(mktemp -d)/keystore"
-          keyStorePwd="$(head -c10 /dev/random | base32)"
-          echo y | ${jdk}/bin/keytool -importcert -file "$NIX_SSL_CERT_FILE" -alias alias -keystore "$keyStoreFile" -storepass "$keyStorePwd"
-          MAVEN_EXTRA_ARGS="$MAVEN_EXTRA_ARGS -Djavax.net.ssl.trustStore=$keyStoreFile -Djavax.net.ssl.trustStorePassword=$keyStorePwd"
+          echo "using ''${NIX_SSL_CERT_FILE-} as trust store"
+          ${jre-generate-cacerts} ${jdk}/lib/openjdk/bin/keytool $NIX_SSL_CERT_FILE
+
+          MAVEN_EXTRA_ARGS="$MAVEN_EXTRA_ARGS -Djavax.net.ssl.trustStore=cacerts -Djavax.net.ssl.trustStorePassword=changeit"
         fi
       ''
       + lib.optionalString buildOffline ''

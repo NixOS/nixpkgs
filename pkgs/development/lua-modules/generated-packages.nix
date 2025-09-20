@@ -814,15 +814,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2185-1";
+      version = "0.0.2234-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2185-1.rockspec";
-          sha256 = "1cq3gmdr2nnsj2hrlxk22v42dvk1hzjzpsw9h55inp5kqabd5dcg";
+          url = "mirror://luarocks/fzf-lua-0.0.2234-1.rockspec";
+          sha256 = "12pnz4lkx2mxfmig6m9qpsyqb0cpax0pw4ad2cpy9ww4cxlcmwkc";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/ce5a5fa2902933e7b4563ca78210254169463cb6.zip";
-        sha256 = "009fp63ab5qjlkqmkzkk7nn9isld2izwk25g19ynv7akkypclf8q";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/1a8b4246538f2b9c3c3debb460262f549fd7b428.zip";
+        sha256 = "1y5lpv8y3w0vjwz5jrddih1rg9j0a08npds3yaibwafw0xj1f074";
       };
 
       disabled = luaOlder "5.1";
@@ -880,8 +880,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lewis6991";
         repo = "gitsigns.nvim";
-        rev = "6e3c66548035e50db7bd8e360a29aec6620c3641";
-        hash = "sha256-zBUrqL+00Y8j4eVNAgI0nYn2i35zhQo2BVl4mL1cgfs=";
+        rev = "f780609807eca1f783a36a8a31c30a48fbe150c5";
+        hash = "sha256-L5WbNiFUn014hThvGfb5r858O6iLOBhOQHfVUdIlFI4=";
       };
 
       disabled = lua.luaversion != "5.1";
@@ -903,15 +903,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.46-1";
+      version = "1.6.48-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.46-1.rockspec";
-          sha256 = "1vj1li4d3bwj95fizzvzlfcmzaxjjarbw5453d498ccgyvg81zq5";
+          url = "mirror://luarocks/grug-far.nvim-1.6.48-1.rockspec";
+          sha256 = "02x3rzxz610942xy98zbzz3whcslvqwcpiyjzlw94km1h7m5a3kq";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/c5b629399c0f2e436c00df381e44852a13b7313a.zip";
-        sha256 = "1iklplr66dx18mvxim4qy2kh2lw0cj307wcj56z873sg78fap90g";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/50d9ee2b5a19634670441948e7e4afaa042f1059.zip";
+        sha256 = "0pbwlp5i4aq1ffqbcnjf62ygb73b1svyh5ly4vyq6x7jnc0g416g";
       };
 
       disabled = luaOlder "5.1";
@@ -4213,7 +4213,7 @@ final: prev: {
 
       meta = {
         homepage = "https://nvim-orgmode.github.io";
-        description = "Orgmode clone written in Lua for Neovim 0.10.0+.";
+        description = "Orgmode clone written in Lua for Neovim 0.11.0+.";
         license.fullName = "MIT";
       };
     }
@@ -4226,26 +4226,24 @@ final: prev: {
       fetchzip,
       luaOlder,
       nui-nvim,
-      pathlib-nvim,
       sqlite,
     }:
     buildLuarocksPackage {
       pname = "papis.nvim";
-      version = "0.8.0-1";
+      version = "0.9.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/papis.nvim-0.8.0-1.rockspec";
-          sha256 = "07xjy47l94572s7dscvcpig2dl6miqcnxqcl630gkhg13ihd11n0";
+          url = "mirror://luarocks/papis.nvim-0.9.0-1.rockspec";
+          sha256 = "1l5phfq26yc24ww1hyki9w9x3idzncmzxizda6v7rr1bdppbky7g";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/jghauser/papis.nvim/archive/v0.8.0.zip";
-        sha256 = "0blrqk6wx2rigqvypyy3xl0a4263n81xizslam5kwpn7b6mjci1h";
+        url = "https://github.com/jghauser/papis.nvim/archive/v0.9.0.zip";
+        sha256 = "1na7nxacq6ii75qk1i5ylpnnr27272kp7nrn2xlfd8kwjspap3n7";
       };
 
       disabled = luaOlder "5.1";
       propagatedBuildInputs = [
         nui-nvim
-        pathlib-nvim
         sqlite
       ];
 

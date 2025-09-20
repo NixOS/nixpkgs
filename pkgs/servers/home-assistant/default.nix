@@ -85,16 +85,6 @@ let
         ];
       });
 
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.3";
-        src = fetchFromGitHub {
-          owner = "aio-libs";
-          repo = "async-timeout";
-          tag = "v${version}";
-          hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
-        };
-      });
-
       av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
@@ -368,7 +358,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.9.1";
+  hassVersion = "2025.9.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -389,13 +379,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-nHXUv27zoI/48b1a+Bx/VWT2sdgowflFzm49oFGZXNA=";
+    hash = "sha256-d2lsyW2yAkIbq7wx/pLu4Qzroblh/TYDx08r6im8cI8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-mXwawBBMdjnUcfBn5WnRtgEsVD/RVohem2njNXj16IU=";
+    hash = "sha256-mq2cjct4YrURV/T51w/skukwEsUV4iwDphuOftFOUdw=";
   };
 
   build-system = with python.pkgs; [

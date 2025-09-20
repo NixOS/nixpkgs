@@ -8,10 +8,9 @@ let
   cfg = config.services.cachix-watch-store;
 in
 {
-  meta.maintainers = [
-    lib.maintainers.jfroche
-    lib.maintainers.domenkozar
-  ];
+  meta = {
+    maintainers = lib.teams.cachix.members ++ [ lib.maintainers.jfroche ];
+  };
 
   options.services.cachix-watch-store = {
     enable = lib.mkEnableOption "Cachix Watch Store: <https://docs.cachix.org>";

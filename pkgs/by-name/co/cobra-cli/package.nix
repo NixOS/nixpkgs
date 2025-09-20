@@ -44,6 +44,12 @@ buildGoModule rec {
       --bash <($out/bin/cobra-cli completion bash) \
       --fish <($out/bin/cobra-cli completion fish) \
       --zsh <($out/bin/cobra-cli completion zsh) \
+
+    # Ironically, cobra-cli still uses old, slightly buggy completion code
+    # This will correct the #compdef tag and add separate compdef line
+    # allowing direct sourcing to also activate the completion
+    substituteInPlace "$out/share/zsh/site-functions/_cobra-cli" \
+      --replace-fail '#compdef _cobra-cli cobra-cli' "#compdef cobra-cli''\ncompdef _cobra-cli cobra-cli"
   '';
 
   meta = {

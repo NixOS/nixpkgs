@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anyrun";
-  version = "25.9.0";
+  version = "25.9.3";
 
   src = fetchFromGitHub {
     owner = "anyrun-org";
     repo = "anyrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-01XBO8U2PyhhYXo3oZAu7dghqXkxdemeG82MqnNp4wE=";
+    hash = "sha256-IlnFA/a9Clgbt+FuavIKWtauhtH4Fo/rGJIjJDDeYRs=";
   };
 
-  cargoHash = "sha256-Xh+RWrAxa1cg0z6IGr7apzoAIlhDl8ZMpQTfoBAZXRk=";
+  cargoHash = "sha256-gP324zqfoNSYKIuTJFTWRr2fKBreVZFfZNR+jUasp/8=";
 
   strictDeps = true;
   enableParallelBuilding = true;

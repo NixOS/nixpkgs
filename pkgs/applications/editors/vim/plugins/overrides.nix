@@ -401,6 +401,25 @@ assertNoAdditions {
     ];
   };
 
+  claude-fzf-nvim = super.claude-fzf-nvim.overrideAttrs {
+    dependencies = with self; [
+      claudecode-nvim
+      fzf-lua
+    ];
+    # Failed to build help tags!
+    # E670: Mix of help file encodings within a language: doc/claude-fzf-zh.txt
+    # E154: Duplicate tag "claude-fzf-keymaps" in file doc/claude-fzf-en.txt
+    preInstall = ''
+      rm -r doc
+    '';
+  };
+
+  claude-fzf-history-nvim = super.claude-fzf-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      fzf-lua
+    ];
+  };
+
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${lib.getLib llvmPackages.clang.cc}/lib/libclang.so')|" \
@@ -799,6 +818,8 @@ assertNoAdditions {
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
       "conjure-spec.client.fennel.nfnl_spec"
+      # No parser for fennel
+      "conjure.client.fennel.def-str-util"
     ];
   };
 
@@ -2766,6 +2787,10 @@ assertNoAdditions {
     dependencies = with self; [
       plenary-nvim
     ];
+  };
+
+  oil-git-nvim = super.oil-git-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
   };
 
   oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {

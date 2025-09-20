@@ -1,14 +1,14 @@
-commit abaf36af96c7dfc966110c5342d5a8814c0df492
+commit 954e41500e1b409a24fca43ae3bdc1c6a890db48
 Author: r-vdp <ramses@well-founded.dev>
 Date:   Tue Oct 15 14:49:53 2024 +0200
 
     Add output for installed tests
 
 diff --git a/data/tests/meson.build b/data/tests/meson.build
-index da9524677..505d7a80e 100644
+index 3eba65eea..cf3931bb7 100644
 --- a/data/tests/meson.build
 +++ b/data/tests/meson.build
-@@ -131,7 +131,7 @@ configure_file(
+@@ -122,7 +122,7 @@ configure_file(
    configuration: con2,
    install: true,
    install_tag: 'tests',
@@ -18,10 +18,10 @@ index da9524677..505d7a80e 100644
  
  if umockdev_integration_tests.allowed()
 diff --git a/meson.build b/meson.build
-index 312513d75..4faedcc0b 100644
+index cb66be0cc..ca431980b 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -205,8 +205,8 @@ else
+@@ -239,8 +239,8 @@ else
    datadir = join_paths(prefix, get_option('datadir'))
    sysconfdir = join_paths(prefix, get_option('sysconfdir'))
    localstatedir = join_paths(prefix, get_option('localstatedir'))
@@ -32,7 +32,7 @@ index 312513d75..4faedcc0b 100644
    daemon_dir = join_paths(libexecdir, 'fwupd')
  endif
  mandir = join_paths(prefix, get_option('mandir'))
-@@ -536,6 +536,7 @@ gnome = import('gnome')
+@@ -721,6 +721,7 @@ gnome = import('gnome')
  i18n = import('i18n')
  
  conf.set_quoted('FWUPD_PREFIX', prefix)
@@ -56,10 +56,10 @@ index 40103c03e..63c8d288d 100644
    type: 'boolean',
    value: true,
 diff --git a/src/tests/host-emulate/meson.build b/src/tests/host-emulate/meson.build
-index 0a67d70e8..7e07c0a49 100644
+index c36da65cd..f0b70d4d6 100644
 --- a/src/tests/host-emulate/meson.build
 +++ b/src/tests/host-emulate/meson.build
-@@ -10,7 +10,7 @@ if build_standalone
+@@ -9,7 +9,7 @@ if build_standalone
        command: [gzip, '-k', '--stdout', '@INPUT@'],
        install: true,
        install_tag: 'tests',

@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "apache-answer";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "answer";
     tag = "v${version}";
-    hash = "sha256-OocQsCqyVHjkpGSDS23RbOJ+b10Ax32G2hok5bgNDTI=";
+    hash = "sha256-QrLYkGiEDBB4uUzG2yrlEUYXpQxovKFBmGZjLbZiGKk=";
   };
 
   webui = stdenv.mkDerivation {
@@ -55,7 +55,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-jKpUJD8rq+ZvTgJVaI+AfrwMzrrai+cfd4hjoDLYnxc=";
+  vendorHash = "sha256-mWSKoEYj23fy6ix3mK1/5HeGugp1UAUO+iwInXkzgU4=";
 
   doCheck = false; # TODO checks are currently broken upstream
 

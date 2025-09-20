@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.5";
+  version = "6.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "rocky";
     repo = "python-xdis";
     tag = version;
-    hash = "sha256-KbWgA2RGmkzpsPBg2+hcpwHUCgEv7RWS3i5sswtROVE=";
+    hash = "sha256-G4BpvMYjBUBfStP1csfFaFCin0eYEnXwsztCS4amvdY=";
   };
 
   build-system = [

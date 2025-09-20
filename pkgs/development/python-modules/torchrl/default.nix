@@ -5,22 +5,29 @@
   fetchFromGitHub,
 
   # build-system
+  cmake,
   ninja,
+  numpy,
+  pybind11,
   setuptools,
-  which,
+  torch,
 
   # dependencies
   cloudpickle,
-  numpy,
   packaging,
+  pyvers,
   tensordict,
-  torch,
 
   # optional-dependencies
   # atari
   gymnasium,
+  # brax
+  brax,
+  jax,
   # checkpointing
   torchsnapshot,
+  # dm-control
+  dm-control,
   # gym-continuous
   mujoco,
   # llm
@@ -36,6 +43,8 @@
   sentencepiece,
   transformers,
   vllm,
+  # marl
+  pettingzoo,
   # offline-data
   h5py,
   huggingface-hub,
@@ -64,33 +73,51 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-6rU5+J70T0E7+60jihsjwlLls8jJlxKi3nmrL0xm2c0=";
+    hash = "sha256-DqLB1JnQ96cxVEzcXra1hFVfrN7eXTlTwPtlPClnaBA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
+
   build-system = [
+    cmake
     ninja
+    numpy
+    pybind11
     setuptools
-    which
+    torch
   ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
     numpy
     packaging
     tensordict
+    pyvers
     torch
   ];
 
   optional-dependencies = {
-    atari = gymnasium.optional-dependencies.atari;
+    atari = [
+      gymnasium
+    ]
+    ++ gymnasium.optional-dependencies.atari;
+    brax = [
+      brax
+      jax
+    ];
     checkpointing = [ torchsnapshot ];
+    dm-control = [ dm-control ];
     gym-continuous = [
       gymnasium
       mujoco
@@ -109,6 +136,11 @@ buildPythonPackage rec {
       transformers
       vllm
     ];
+    marl = [
+      # dm-meltingpot (unpackaged)
+      pettingzoo
+      # vmas (unpackaged)
+    ];
     offline-data = [
       h5py
       huggingface-hub
@@ -120,10 +152,15 @@ buildPythonPackage rec {
       torchvision
       tqdm
     ];
+    open-spiel = [
+      # open-spiel (unpackaged)
+    ];
     rendering = [ moviepy ];
+    replay-buffer = [ torch ];
     utils = [
       git
       hydra-core
+      # hydra-submitit-launcher (unpackaged)
       tensorboard
       tqdm
       wandb

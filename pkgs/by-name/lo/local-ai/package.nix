@@ -187,7 +187,7 @@ let
     passthru.espeak-ng = espeak-ng';
   };
 
-  piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
+  piper-tts' = piper-tts.overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
     sourceRoot = "${go-piper.src.name}/piper";

@@ -9,6 +9,7 @@
 
   # apparmor deps
   libapparmor,
+  apparmor-bin-utils,
 
   # testing
   perl,
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace rc.apparmor.functions \
       --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser" # FIXME
     substituteInPlace rc.apparmor.functions \
-      --replace-fail "/usr/sbin/aa-status" '$(which aa-status)'
+      --replace-fail "/usr/sbin/aa-status" "${lib.getExe' apparmor-bin-utils "aa-status"}"
     sed -i rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
   '';
 

@@ -32,12 +32,13 @@
   tcl,
   phpSupport ? !stdenv.hostPlatform.isDarwin,
   php,
-  systemd,
+  systemdLibs,
   libxml2,
   pcre2,
   libargon2,
   extraBuildInputs ? [ ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -93,7 +94,7 @@ let
         pcre2
         libargon2
       ]
-      ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
     }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
@@ -112,7 +113,9 @@ stdenv.mkDerivation rec {
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
-  patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
+  patches = lib.optionals gettext.gettextNeedsLdflags [
+    ./gettext-intl.patch
+  ];
 
   outputs = [
     "out"
@@ -136,7 +139,7 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoctor
   ]
-  ++ lib.optional enableTests cpputest;
+  ++ lib.optionals enableTests [ cpputest ];
 
   buildInputs = [
     ncurses
@@ -172,10 +175,8 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/weechat --version
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell

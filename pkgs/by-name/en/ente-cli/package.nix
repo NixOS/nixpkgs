@@ -86,8 +86,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ente-io/ente/tree/main/cli#readme";
     changelog = "https://github.com/ente-io/ente/releases/tag/cli-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = [
-      lib.maintainers.zi3m5f
+    maintainers = with lib.maintainers; [
+      zi3m5f
+      iedame
     ];
     mainProgram = "ente";
   };

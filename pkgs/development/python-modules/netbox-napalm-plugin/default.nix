@@ -10,7 +10,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-napalm-plugin";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "netbox-community";
     repo = "netbox-napalm-plugin";
     tag = "v${version}";
-    hash = "sha256-gaoAFToMHszCtn56Y6nczwemIAAeaijRPVW2aSt+8C4=";
+    hash = "sha256-qo16Bwq2a9AbO80qnQo0WtJ7HbrqqGChMJaqYYD5Aqg=";
   };
 
   build-system = [ setuptools ];

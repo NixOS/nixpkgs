@@ -6,33 +6,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  box2d,
   unstableGitUpdater,
 }:
 
-let
-  inherit (lib) cmakeBool;
-
-  # 2.3.1 is the only supported version
-  box2d' = box2d.overrideAttrs (old: rec {
-    version = "2.3.1";
-    src = fetchFromGitHub {
-      owner = "erincatto";
-      repo = "box2d";
-      tag = "v${version}";
-      hash = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
-    };
-    patches = [ ];
-    postPatch = "";
-    sourceRoot = "${src.name}/Box2D";
-    cmakeFlags = old.cmakeFlags or [ ] ++ [
-      (cmakeBool "BOX2D_INSTALL" true)
-      (cmakeBool "BOX2D_BUILD_SHARED" true)
-      (cmakeBool "BOX2D_BUILD_EXAMPLES" false)
-    ];
-  });
-
-in
 stdenv.mkDerivation {
   pname = "qml-box2d";
   version = "0-unstable-2024-04-15";
@@ -52,13 +28,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    box2d'
     qtbase
     qtdeclarative
-  ];
-
-  cmakeFlags = [
-    (cmakeBool "USE_SYSTEM_BOX2D" true)
   ];
 
   passthru = {

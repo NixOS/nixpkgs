@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts-color-emoji";
-  version = "2.048";
+  version = "2.051";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "noto-emoji";
     rev = "v${version}";
-    hash = "sha256-GYBnMpSUDNjAOZtbRPSmbW39TWP5ljEMukQRwq4J9U4=";
+    hash = "sha256-qngf8t5fLYAOtO2GMhbMv7I34RO/eYfNawW+Th/uaYQ=";
   };
 
   strictDeps = true;

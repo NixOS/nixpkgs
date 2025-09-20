@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       --add-flags "-Dawt.useSystemAAFontSettings=on \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
+                   --add-opens javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED \
                    -cp $out/lib/bluej/boot.jar bluej.Boot"
 
     runHook postInstall

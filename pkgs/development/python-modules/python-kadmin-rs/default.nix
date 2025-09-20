@@ -27,6 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-FEOWsUQhLXU1xqaTLe6GKO1OYi5fVDyT1dowiAyzbGI=";
   };
 
+  postPatch = ''
+    # https://github.com/authentik-community/kadmin-rs/issues/213
+    substituteInPlace kadmin-sys/build.rs \
+      --replace-fail 'bindgen::builder()' 'bindgen::builder().allowlist_type("krb5_boolean")'
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     hash = "sha256-tvjwNfjMc8k4GK9rZXFG9CfcSlUW/B95YimLtH4iEbM=";

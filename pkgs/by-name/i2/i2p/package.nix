@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchzip {
     urls = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de/"
       "https://download.i2p2.no/releases/"
     ]);
-    hash = "sha256-8gnCjSBcTz8KxNPo9KUnnn2IWfCswA/sGDkqzOjNX34=";
+    hash = "sha256-Ogok7s5sawG27ucstG+NYiIAF66Pb3ExOYsL8mfNav8=";
   };
 
   strictDeps = true;

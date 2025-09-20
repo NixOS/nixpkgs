@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.arrl.org/tqsl-download";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.dpflug ];
+    maintainers = [ ];
   };
 }

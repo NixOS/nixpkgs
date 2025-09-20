@@ -44,6 +44,7 @@
   extraMirrors ? [ ],
   recurseIntoAttrs,
   nixfmt,
+  luajit,
 }:
 let
   # various binaries (compiled)
@@ -90,6 +91,7 @@ let
           python3
           ruby
           zip
+          luajit
           ;
       };
     in

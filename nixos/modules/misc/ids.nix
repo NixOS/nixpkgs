@@ -584,7 +584,6 @@ in
       #shout = 206; #unused
       #gateone = 207; #removed 2025-08-21
       namecoin = 208;
-      #lxd = 210; # unused
       #kibana = 211;
       xtreemfs = 212;
       calibre-server = 213;

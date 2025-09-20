@@ -33,13 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-CcZlGLX8/ANHnhoOv5s/ybBN74gRH/8eLYJ6q/BJo/4=";
   };
 
-  postPatch = ''
-    substituteInPlace onnxmltools/proto/__init__.py \
-      --replace-fail \
-        "from onnx.helper import split_complex_to_pairs" \
-        "from onnx.helper import _split_complex_to_pairs as split_complex_to_pairs"
-  '';
-
   build-system = [
     setuptools
   ];

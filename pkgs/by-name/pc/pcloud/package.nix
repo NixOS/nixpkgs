@@ -39,13 +39,13 @@
 
 let
   pname = "pcloud";
-  version = "1.14.15";
-  code = "XZnIXD5ZeetbMDef3yJKjqE1C5hem0svBpPy";
+  version = "1.14.16";
+  code = "XZbJvD5ZfXtwygX5xg7F9ywtRup5H5sBvfhy";
 
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
-    hash = "sha256-/9JPGA4He1XXy5OhZvfWok3mjnbPZadXK2M8Irf363k=";
+    hash = "sha256-6K7QPr3MtZvRZt84N8+i8QZBaKHHeTY1bXMdO+wUCr0=";
   };
 
   appimageContents = appimageTools.extractType2 {

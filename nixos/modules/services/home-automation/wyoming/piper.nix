@@ -10,6 +10,7 @@ let
   cfg = config.services.wyoming.piper;
 
   inherit (lib)
+    literalExpression
     mkOption
     mkEnableOption
     mkPackageOption
@@ -100,6 +101,15 @@ in
                 default = true;
               };
 
+              useCUDA = mkOption {
+                type = bool;
+                default = pkgs.config.cudaSupport;
+                defaultText = literalExpression "pkgs.config.cudaSupport";
+                description = ''
+                  Whether to accelerate the underlying onnxruntime library with CUDA.
+                '';
+              };
+
               extraArgs = mkOption {
                 type = listOf str;
                 default = [ ];
@@ -164,6 +174,9 @@ in
               ]
               ++ lib.optionals options.streaming [
                 "--streaming"
+              ]
+              ++ lib.optionals options.useCUDA [
+                "--use-cuda"
               ]
               ++ options.extraArgs
             );

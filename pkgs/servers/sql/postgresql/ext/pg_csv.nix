@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_csv";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "PostgREST";
     repo = "pg_csv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sw9eMpzz+suotJQ2KHgT0dQAF8OGFojJIhOC8tZ750o=";
+    hash = "sha256-hRTNFlNUmc3mjDf0wgn4CGmHoYPQ+2yfZApzooLwgW4=";
   };
 
   meta = {

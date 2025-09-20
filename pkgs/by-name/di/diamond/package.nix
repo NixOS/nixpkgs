@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diamond";
-  version = "2.1.13";
+  version = "2.1.14";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
-    sha256 = "sha256-1y1eBOmWxZSPKX/VWo1tyimDxqyabOpyP6fX1CcL9sU=";
+    sha256 = "sha256-w6+lSc2YZ1PwPj3p6ieI/yTkoiSLWH2Za863n4BTClo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bbuchfink/diamond";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ thyol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -47,11 +47,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplesat" ];
 
-  preCheck = ''
-    substituteInPlace simplesat/tests/test_pool.py \
-      --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
-  '';
-
   enabledTestPaths = [ "simplesat/tests" ];
 
   meta = with lib; {

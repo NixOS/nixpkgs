@@ -11,7 +11,11 @@ let
     with dotnetCorePackages;
     sdk_9_0
     // {
-      inherit (sdk_8_0)
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+        ])
         packages
         targetPackages
         ;

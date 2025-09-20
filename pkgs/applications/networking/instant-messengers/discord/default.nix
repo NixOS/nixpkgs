@@ -9,9 +9,9 @@ let
   versions =
     if stdenv.hostPlatform.isLinux then
       {
-        stable = "0.0.108";
-        ptb = "0.0.159";
-        canary = "0.0.752";
+        stable = "0.0.110";
+        ptb = "0.0.160";
+        canary = "0.0.756";
         development = "0.0.85";
       }
     else
@@ -26,15 +26,15 @@ let
     x86_64-linux = {
       stable = fetchurl {
         url = "https://stable.dl2.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        hash = "sha256-hKFhylEovj89WxpTexkzR9C6tN47V9iDKQYpCjgojvw=";
+        hash = "sha256-WwMEtpMlaR5psraDsvTNOb4nPwnGnVif4DgmdE9gCtc=";
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        hash = "sha256-Rw3ppCZTuNG+eAB02goLL9yT1ldZhrBD50Tirzuo1CQ=";
+        hash = "sha256-6Oxy1EYhc7iEXJVjtkOCzfb3deSCdGa5U1UrLLyd6rM=";
       };
       canary = fetchurl {
         url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        hash = "sha256-6hq0KIXR9j/AHGPyQIXjhf1uJiYizxB5Nu+0unn/frE=";
+        hash = "sha256-jn7s8T04us+9iTcHuM57F4sO10fs98ZjGQa0pF1SFjk=";
       };
       development = fetchurl {
         url = "https://development.dl2.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
