@@ -15470,12 +15470,6 @@
     name = "madonius";
     matrix = "@madonius:entropia.de";
   };
-  Madouura = {
-    email = "madouura@gmail.com";
-    github = "Madouura";
-    githubId = 93990818;
-    name = "Madoura";
-  };
   maeve = {
     email = "mrey@mailbox.org";
     matrix = "@maeve:catgirl.cloud";

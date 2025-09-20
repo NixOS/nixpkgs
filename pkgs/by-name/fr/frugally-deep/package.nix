@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Header-only library for using Keras (TensorFlow) models in C++";
     homepage = "https://github.com/Dobiasd/frugally-deep";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
   };
 })
