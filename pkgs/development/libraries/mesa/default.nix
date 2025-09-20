@@ -44,6 +44,18 @@
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
   withOpenCL ? lib.meta.availableOn stdenv.hostPlatform llvmPackages.clang,
+  # Check if we have a VA gallium driver enabled
+  # See https://gitlab.freedesktop.org/mesa/mesa/-/blob/25.2/meson.build?ref_type=heads#L675-681
+  withVa ? lib.any (
+    x:
+    lib.elem x [
+      "r600"
+      "radeonsi"
+      "nouveau"
+      "d3d12"
+      "virgl"
+    ]
+  ) galliumDrivers,
 
   # We enable as many drivers as possible here, to build cross tools
   # and support emulation use cases (emulated x86_64 on aarch64, etc)
@@ -134,6 +146,8 @@ let
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   common = import ./common.nix { inherit lib fetchFromGitLab; };
+
+  withDozen = lib.elem "d3d12" galliumDrivers;
 in
 stdenv.mkDerivation {
   inherit (common)
@@ -160,10 +174,6 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
-    # the Dozen drivers depend on libspirv2dxil, but link it statically, and
-    # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
-    # case anything wants to use it at some point
-    "spirv2dxil"
   ]
   # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
   # if the user didn't explicitly ask for it
@@ -176,7 +186,11 @@ stdenv.mkDerivation {
     # - for a cross build (needNativeCLC = true), we provide mesa with `*-clc`
     #   binaries, so it skips building & installing any new CLC files.
     "cross_tools"
-  ];
+  ]
+  # the Dozen drivers depend on libspirv2dxil, but link it statically, and
+  # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
+  # case anything wants to use it at some point
+  ++ lib.optional withDozen "spirv2dxil";
 
   # Keep build-ids so drivers can use them for caching, etc.
   # Also some drivers segfault without this.
@@ -223,6 +237,9 @@ stdenv.mkDerivation {
 
     # Enable Intel RT stuff when available
     (lib.mesonEnable "intel-rt" (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
+
+    # Enable VA-API
+    (lib.mesonEnable "gallium-va" withVa)
 
     # meson auto_features enables these, but we do not want them
     (lib.mesonEnable "gallium-mediafoundation" false) # Windows only
