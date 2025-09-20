@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
-        "-DSCUDO_DEFAULT_OPTIONS=delete_size_mismatch=false:dealloc_type_mismatch=false"
+        "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
       ]
       ++ lib.optionals (!haveLibc) [
         # The compiler got stricter about this, and there is a usellvm patch below
