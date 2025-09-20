@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
+    ./go-env-go_ldso.patch
+    ./go-default-pie.patch
   ];
 
   inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
@@ -99,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
+    if [ -f "$NIX_CC/nix-support/dynamic-linker" ]; then
+      export GO_LDSO=$(cat $NIX_CC/nix-support/dynamic-linker)
+    fi
 
     export PATH=$(pwd)/bin:$PATH
 
@@ -106,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
       # Independent from host/target, CC should produce code for the building system.
       # We only set it when cross-compiling.
       export CC=${buildPackages.stdenv.cc}/bin/cc
+      # teaching go's internal linker to pick the right ELF interpreter is hard for cross
+      # Prefer external linker to work around this
+      # This flag is baked into go as a default and not just for bootstrap
+      export GO_EXTLINK_ENABLED=1
+      export GO_LDSO=
     ''}
     ulimit -a
 
