@@ -15683,6 +15683,8 @@ self: super: with self; {
 
   rclone-python = callPackage ../development/python-modules/rclone-python { };
 
+  rcon = callPackage ../development/python-modules/rcon { };
+
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
   rctclient = callPackage ../development/python-modules/rctclient { };
