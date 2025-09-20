@@ -62,7 +62,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Command-line oriented TCP/IP packet assembler/analyzer";
-    homepage = "http://www.hping.org/";
+    homepage = "https://github.com/antirez/hping";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
   };
