@@ -1,0 +1,15 @@
+diff --git a/configure b/configure
+index e845993..a5b526e 100644q
+--- a/configure
++++ b/configure
+@@ -422,6 +422,10 @@ check_environment()
+         BUILD_MACHINE='sparc32'
+         BUILD_CPU='blend'
+         ;;
++    aarch64)
++        BUILD_MACHINE='arm64'
++        BUILD_CPU='blend'
++        ;;
+     *)
+       log_failure "Cannot determine system"
+       exit 1
