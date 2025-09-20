@@ -117,13 +117,13 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.11.10";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F5Us1w+QCnWK32noi8vfRwgMofHP9vGiRFfN2UAf1vw=";
+    hash = "sha256-aMZM1IOuSzYFwueycrCMUCqTXTnVKQ+qVCa2liR8758=";
   };
 
   vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
