@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -39,7 +40,7 @@ buildGoModule rec {
       "-X ${prefix}.GitVersion=v${version}"
     ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubectl-sigstore \
       --bash <($out/bin/kubectl-sigstore completion bash) \
       --fish <($out/bin/kubectl-sigstore completion fish) \

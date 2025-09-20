@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
@@ -67,7 +68,7 @@ buildGoModule rec {
     cp -r ${web-bundle}/bundle internal/web/root/static/bundle
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # Completions
     installShellCompletion --cmd glasskube \
       --bash <($out/bin/glasskube completion bash) \

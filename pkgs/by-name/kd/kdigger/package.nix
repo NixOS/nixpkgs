@@ -42,7 +42,7 @@ buildGoModule rec {
     ldflags+=" -X github.com/quarkslab/kdigger/commands.GITCOMMIT=$(cat COMMIT)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kdigger \
       --bash <($out/bin/kdigger completion bash) \
       --fish <($out/bin/kdigger completion fish) \

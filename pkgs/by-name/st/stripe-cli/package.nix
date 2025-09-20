@@ -54,7 +54,7 @@ buildGoModule rec {
         rm pkg/plugins/plugin_test.go
       '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd stripe \
       --bash <($out/bin/stripe completion --write-to-stdout --shell bash) \
       --zsh <($out/bin/stripe completion --write-to-stdout --shell zsh)
