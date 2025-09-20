@@ -11,6 +11,7 @@
   pkg-config,
   zlib,
   udevCheckHook,
+  pkgsi686Linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Xz+9YgMpnHyno7vP67aut4tIyG/gTn7SnU2FO2QMND0=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with pkgsi686Linux; [
     nasm
     pkg-config
     udevCheckHook
   ];
 
-  buildInputs = [
+  buildInputs = with pkgsi686Linux; [
     SDL
     libGL
     libGLU
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xyproto/zsnes";
     description = "Maintained fork of zsnes";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
   };
 })
