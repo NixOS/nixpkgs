@@ -1,0 +1,25 @@
+From 5761eccda29777719d919eb0462a6f7d3cc32b36 Mon Sep 17 00:00:00 2001
+From: FayBoy <ahmadyasinfikri@gmail.com>
+Date: Thu, 7 Mar 2024 03:05:59 +0700
+Subject: [PATCH] Avoid error on startup
+
+This is an exclusive fix for older version of Minecraft that is using LWJGL3.
+
+diff --git a/src/wl_window.c b/src/wl_window.c
+index 58382a48..c0a31237 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -2234,8 +2234,8 @@ void _glfwSetWindowTitleWayland(_GLFWwindow* window, const char* title)
+ void _glfwSetWindowIconWayland(_GLFWwindow* window,
+                                int count, const GLFWimage* images)
+ {
+-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The platform does not support setting the window icon");
++    fprintf(stderr,
++            "[GLFW] Wayland: The platform does not support setting the window icon\n");
+ }
+ 
+ void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
+-- 
+2.44.0
+

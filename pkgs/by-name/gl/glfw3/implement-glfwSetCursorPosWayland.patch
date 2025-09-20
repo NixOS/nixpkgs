@@ -1,0 +1,64 @@
+From a5f94d704dd418d6e39cc4f2fe6d6b569dce39f1 Mon Sep 17 00:00:00 2001
+From: FayBoy <ahmadyasinfikri@gmail.com>
+Date: Thu, 22 Feb 2024 19:30:53 +0700
+Subject: [PATCH] Implement glfwSetCursorPosWayland
+
+
+diff --git a/src/wl_platform.h b/src/wl_platform.h
+index 83cb12a5..d51c2134 100644
+--- a/src/wl_platform.h
++++ b/src/wl_platform.h
+@@ -415,6 +415,8 @@ typedef struct _GLFWwindowWayland
+     } fallback;
+ 
+     uint32_t                    pointerAxisTime;
++    double                      askedCursorPosX, askedCursorPosY;
++    GLFWbool                    didAskForSetCursorPos;
+ } _GLFWwindowWayland;
+ 
+ // Wayland-specific global data
+diff --git a/src/wl_window.c b/src/wl_window.c
+index aa4e419a..ae9a6728 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -2674,8 +2674,17 @@ void _glfwGetCursorPosWayland(_GLFWwindow* window, double* xpos, double* ypos)
+ 
+ void _glfwSetCursorPosWayland(_GLFWwindow* window, double x, double y)
+ {
+-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The platform does not support setting the cursor position");
++    if (window->wl.lockedPointer) {
++        zwp_locked_pointer_v1_set_cursor_position_hint(window->wl.lockedPointer,
++                                                       wl_fixed_from_double(x),
++                                                       wl_fixed_from_double(y));
++        window->wl.cursorPosX = x;
++        window->wl.cursorPosY = y;
++    } else {
++        window->wl.didAskForSetCursorPos = GLFW_TRUE;
++        window->wl.askedCursorPosX = x;
++        window->wl.askedCursorPosY = y;
++    }
+ }
+ 
+ void _glfwSetCursorModeWayland(_GLFWwindow* window, int mode)
+@@ -2909,6 +2918,17 @@ static const struct zwp_relative_pointer_v1_listener relativePointerListener =
+ static void lockedPointerHandleLocked(void* userData,
+                                       struct zwp_locked_pointer_v1* lockedPointer)
+ {
++    _GLFWwindow* window = userData;
++
++    if (window->wl.didAskForSetCursorPos)
++    {
++        window->wl.didAskForSetCursorPos = GLFW_FALSE;
++        zwp_locked_pointer_v1_set_cursor_position_hint(window->wl.lockedPointer,
++                                                       wl_fixed_from_double(window->wl.askedCursorPosX),
++                                                       wl_fixed_from_double(window->wl.askedCursorPosY));
++        window->wl.cursorPosX = window->wl.askedCursorPosX;
++        window->wl.cursorPosY = window->wl.askedCursorPosY;
++    }
+ }
+ 
+ static void lockedPointerHandleUnlocked(void* userData,
+-- 
+2.44.0
+
