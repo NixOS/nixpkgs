@@ -57,6 +57,8 @@
     patches = [
       # Fix `call to undeclared function 'sleep'` with clang 16
       ./mariadb-connector-odbc-unistd.patch
+
+      ./mariadb-connector-odbc-musl.patch
     ];
 
     nativeBuildInputs = [ cmake ];
