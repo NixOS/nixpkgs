@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isCygwin ''
     substituteInPlace \
       blake3_impl.h \
       blake3_dispatch.c \
