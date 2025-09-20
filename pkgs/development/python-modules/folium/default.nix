@@ -10,6 +10,7 @@
   numpy,
   pandas,
   pillow,
+  pixelmatch,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -52,7 +53,9 @@ buildPythonPackage rec {
     nbconvert
     pandas
     pillow
+    pixelmatch
     pytestCheckHook
+    selenium
   ];
 
   disabledTests = [
@@ -71,6 +74,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Import issue with selenium.webdriver.common.fedcm
     "tests/selenium"
+    "tests/snapshots/test_snapshots.py"
   ];
 
   pythonImportsCheck = [ "folium" ];
