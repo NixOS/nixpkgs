@@ -285,6 +285,7 @@
   ./programs/oddjobd.nix
   ./programs/opengamepadui.nix
   ./programs/openvpn3.nix
+  ./programs/packet.nix
   ./programs/partition-manager.nix
   ./programs/pay-respects.nix
   ./programs/plotinus.nix
