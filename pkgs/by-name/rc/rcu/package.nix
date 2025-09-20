@@ -189,7 +189,10 @@ python3Packages.buildPythonApplication rec {
     description = "All-in-one offline/local management software for reMarkable e-paper tablets";
     homepage = "http://www.davisr.me/projects/rcu/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [
+      OPNA2608
+      m0streng0
+    ];
     hydraPlatforms = [ ]; # requireFile used as src
   };
 }
