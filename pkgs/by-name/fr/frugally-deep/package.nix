@@ -8,15 +8,18 @@
   functionalplus,
   eigen,
   nlohmann_json,
-  doctest,
   python3Packages,
   buildTests ? false, # Needs tensorflow
+  # for tests
+  doctest,
+  rocmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frugally-deep";
   # be careful bumping this, frugally-deep may change its model metadata format
-  # in ways that only fail at runtime
+  # in ways that only fail at runtime. MIOpen is currently the only package
+  # relying on this, run passthru.tests.miopen-can-load-models to check
   version = "0.15.24-p0";
 
   src = fetchFromGitHub {
@@ -55,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = lib.optionals buildTests [ "-DFDEEP_BUILD_UNITTEST=ON" ];
+  passthru.tests.miopen-can-load-models =
+    rocmPackages.miopen.passthru.tests.can-load-models.override
+      {
+        frugally-deep = finalAttrs.finalPackage;
+      };
   passthru.updateScript = gitUpdater;
 
   meta = with lib; {
