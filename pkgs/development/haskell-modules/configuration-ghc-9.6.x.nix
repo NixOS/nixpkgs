@@ -62,6 +62,15 @@ in
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
 
@@ -188,4 +197,7 @@ in
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
+
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_3_20250912;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }
