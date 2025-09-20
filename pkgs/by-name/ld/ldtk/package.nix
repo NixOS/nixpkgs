@@ -67,10 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern, lightweight and efficient 2D level editor";
     homepage = "https://ldtk.io/";
     changelog = "https://github.com/deepnight/ldtk/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ felschr ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ felschr ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "ldtk";
   };
 })

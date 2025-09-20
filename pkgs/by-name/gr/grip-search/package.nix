@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/general/config.h --replace-fail "CUSTOM-BUILD" "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/sc0ty/grip";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tex ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tex ];
   };
 }

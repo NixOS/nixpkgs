@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform C99 library to get cpu features at runtime";
     homepage = "https://github.com/google/cpu_features";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }

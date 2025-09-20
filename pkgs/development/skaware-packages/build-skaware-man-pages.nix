@@ -41,9 +41,9 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     inherit description license maintainers;
     inherit (src.meta) homepage;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

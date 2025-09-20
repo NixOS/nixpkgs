@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lib4vex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to ingest and generate VEX documents";
     homepage = "https://github.com/anthonyharrison/lib4vex";
     changelog = "https://github.com/anthonyharrison/lib4vex/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teatwig ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ teatwig ];
   };
 }

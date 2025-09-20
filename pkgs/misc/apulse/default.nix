@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     "-DLOG_TO_STDERR=${oz logToStderr}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PulseAudio emulation for ALSA";
     homepage = "https://github.com/i-rinat/apulse";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.jagajaga ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.jagajaga ];
     mainProgram = "apulse";
   };
 }

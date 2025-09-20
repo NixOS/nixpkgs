@@ -110,9 +110,9 @@ buildFHSEnv {
       description = "Open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
       homepage = "https://github.com/SideQuestVR/SideQuest";
       downloadPage = "https://github.com/SideQuestVR/SideQuest/releases";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         joepie91
         rvolosatovs
       ];

@@ -206,13 +206,13 @@ stdenvNoCC.mkDerivation (
         threading models.
       '';
       homepage = "https://software.intel.com/en-us/mkl";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.issl;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.issl;
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
       ];
-      maintainers = with maintainers; [ bhipple ];
+      maintainers = with lib.maintainers; [ bhipple ];
     };
   }
   // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {

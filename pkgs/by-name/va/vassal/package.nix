@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free, open-source boardgame engine";
     homepage = "https://vassalengine.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ tvestelind ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ tvestelind ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "vassal";
   };

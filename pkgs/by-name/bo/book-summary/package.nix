@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     description = "Book auto-summary for gitbook and mdBook";
     mainProgram = "book-summary";
     homepage = "https://github.com/dvogt23/book-summary";
-    license = licenses.mit;
-    teams = with teams; [ iog ];
+    license = lib.licenses.mit;
+    teams = with lib.teams; [ iog ];
   };
 }

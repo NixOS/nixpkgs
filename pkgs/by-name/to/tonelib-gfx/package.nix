@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass";
     homepage = "https://tonelib.net/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       husjon
       orivej
     ];

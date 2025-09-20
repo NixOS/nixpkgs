@@ -60,10 +60,10 @@ let
         '';
         homepage = "https://alloytools.org/";
         downloadPage = "https://alloytools.org/download.html";
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        license = licenses.mit;
-        platforms = platforms.unix;
-        maintainers = with maintainers; [ notbandali ];
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+        license = lib.licenses.mit;
+        platforms = lib.platforms.unix;
+        maintainers = with lib.maintainers; [ notbandali ];
       };
     };
 

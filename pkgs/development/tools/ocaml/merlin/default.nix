@@ -46,10 +46,10 @@ buildDunePackage rec {
     menhirSdk
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

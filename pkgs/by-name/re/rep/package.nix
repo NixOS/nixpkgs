@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   '';
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Single-shot nREPL client";
     mainProgram = "rep";
     homepage = "https://github.com/eraserhd/rep";
-    license = licenses.epl10;
-    platforms = platforms.all;
-    maintainers = [ maintainers.eraserhd ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.eraserhd ];
   };
 }

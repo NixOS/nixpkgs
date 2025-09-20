@@ -39,11 +39,11 @@ let
     '')
     + "/tinycc-${rev}";
 
-  meta = with lib; {
+  meta = {
     description = "Tiny C Compiler's bootstrappable fork";
     homepage = "https://gitlab.com/janneke/tinycc";
-    license = licenses.lgpl21Only;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.lgpl21Only;
+    teams = [ lib.teams.minimal-bootstrap ];
     platforms = [ "i686-linux" ];
   };
 

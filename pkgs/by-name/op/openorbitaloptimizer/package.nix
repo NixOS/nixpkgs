@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
   # Uses a hacky python setup run by cmake, which is hard to get running
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Common orbital optimisation algorithms for quantum chemistry";
-    license = [ licenses.mpl20 ];
+    license = [ lib.licenses.mpl20 ];
     homepage = "https://github.com/susilehtola/OpenOrbitalOptimizer";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

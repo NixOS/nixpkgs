@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Manipulate macOS masterfully, minus the mouse";
     homepage = "https://shortcat.app/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ t-monaghan ];
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
   };
 }

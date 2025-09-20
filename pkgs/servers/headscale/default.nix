@@ -52,7 +52,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) headscale; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/juanfont/headscale";
     description = "Open source, self-hosted implementation of the Tailscale control server";
     longDescription = ''
@@ -71,9 +71,9 @@ buildGoModule rec {
 
       Headscale implements this coordination server.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "headscale";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kradalby
       misterio77
     ];

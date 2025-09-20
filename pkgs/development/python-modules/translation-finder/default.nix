@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "translation_finder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translation file finder for Weblate";
     homepage = "https://github.com/WeblateOrg/translation-finder";
     changelog = "https://github.com/WeblateOrg/translation-finder/blob/${src.tag}/CHANGES.rst";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "weblate-discover";
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

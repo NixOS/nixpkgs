@@ -110,12 +110,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Terminal built on web technologies";
     homepage = "https://hyper.is/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       puffnfresh
       fabiangd
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "hyper";
     broken = true; # Error: 'node-pty' failed to load

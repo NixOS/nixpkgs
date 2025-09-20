@@ -32,10 +32,10 @@ buildDunePackage rec {
     optint
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic type representations. Provides no stability guarantee";
     homepage = "https://github.com/mirage/repr";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

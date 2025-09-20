@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "indexed_bzip2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for parallel decompression and seeking within compressed bzip2 files";
     mainProgram = "ibzip2";
     homepage = "https://github.com/mxmlnkn/indexed_bzip2";
-    license = licenses.mit; # dual MIT and asl20, https://internals.rust-lang.org/t/rationale-of-apache-dual-licensing/8952
+    license = lib.licenses.mit; # dual MIT and asl20, https://internals.rust-lang.org/t/rationale-of-apache-dual-licensing/8952
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

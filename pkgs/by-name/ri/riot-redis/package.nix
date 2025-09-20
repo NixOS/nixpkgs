@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/redis-developer/riot";
     description = "Get data in and out of Redis";
     mainProgram = "riot-redis";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ wesnel ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ wesnel ];
   };
 }

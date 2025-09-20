@@ -22,12 +22,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Liberation Sans fork with improved cyrillic support";
     homepage = "https://sourceforge.net/projects/lib-ka/";
 
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

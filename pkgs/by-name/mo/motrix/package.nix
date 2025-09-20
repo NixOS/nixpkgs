@@ -30,10 +30,10 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "Full-featured download manager";
     homepage = "https://motrix.app";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ dit7ya ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "motrix";
   };
 }

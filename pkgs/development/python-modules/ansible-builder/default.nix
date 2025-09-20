@@ -41,10 +41,10 @@ buildPythonPackage rec {
     packaging
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ansible execution environment builder";
     homepage = "https://ansible-builder.readthedocs.io/en/stable/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melkor333 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melkor333 ];
   };
 }

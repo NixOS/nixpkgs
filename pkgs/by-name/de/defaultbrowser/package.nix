@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "defaultbrowser";
   version = "unstable-2020-07-23";
 
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "defaultbrowser";
     description = "Command line tool for getting and setting a default browser (HTTP handler) in Mac OS X";
     homepage = "https://github.com/kerma/defaultbrowser";
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-XbYfHgpZCGv6w/55dGiFcYTQ36f0n3w8XwnC7wIUFro=";
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast file and directory name linter";
     mainProgram = "ls_lint";
     homepage = "https://ls-lint.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

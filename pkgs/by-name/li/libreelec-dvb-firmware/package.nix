@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DVB firmware from LibreELEC";
     homepage = "https://github.com/LibreELEC/dvb-firmware";
-    license = licenses.unfreeRedistributableFirmware;
-    maintainers = with maintainers; [ kittywitch ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributableFirmware;
+    maintainers = with lib.maintainers; [ kittywitch ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -97,11 +97,11 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Embedded control & testing library";
     homepage = "https://github.com/labgrid-project/labgrid";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -192,11 +192,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CAS for polynomial computations";
-    teams = [ teams.sage ];
+    teams = [ lib.teams.sage ];
     # 32 bit x86 fails with some link error: `undefined reference to `__divmoddi4@GCC_7.0.0'`
     # https://www.singular.uni-kl.de:8002/trac/ticket/837
-    platforms = subtractLists platforms.i686 platforms.unix;
-    license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
+    platforms = subtractLists lib.platforms.i686 lib.platforms.unix;
+    license = lib.licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
     homepage = "https://www.singular.uni-kl.de";
     downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
     mainProgram = "Singular";

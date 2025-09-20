@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Like tree but interactive";
     homepage = "https://github.com/NikitaIvanovV/ictree";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
     mainProgram = "ictree";
   };
 }

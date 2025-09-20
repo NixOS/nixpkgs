@@ -32,11 +32,11 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/fn
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for the fn project";
     mainProgram = "fn";
     homepage = "https://fnproject.io";
-    license = licenses.asl20;
-    maintainers = [ maintainers.c4605 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.c4605 ];
   };
 }

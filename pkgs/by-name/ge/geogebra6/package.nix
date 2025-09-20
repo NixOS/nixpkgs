@@ -22,16 +22,16 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       voidless
       sikmir
     ];
-    license = licenses.geogebra;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.geogebra;
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode # some jars include native binaries
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     hydraPlatforms = [ ];
   };
 

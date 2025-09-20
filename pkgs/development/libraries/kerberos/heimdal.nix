@@ -77,12 +77,12 @@ stdenv.mkDerivation {
     libedit
     pam
   ]
-  ++ lib.optionals (withCJSON) [ cjson ]
-  ++ lib.optionals (withCapNG) [ libcap_ng ]
-  ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
-  ++ lib.optionals (withOpenLDAP) [ openldap ]
-  ++ lib.optionals (withOpenSSL) [ openssl ]
-  ++ lib.optionals (withSQLite3) [ sqlite ];
+  ++ lib.optionals withCJSON [ cjson ]
+  ++ lib.optionals withCapNG [ libcap_ng ]
+  ++ lib.optionals withMicroHTTPD [ libmicrohttpd ]
+  ++ lib.optionals withOpenLDAP [ openldap ]
+  ++ lib.optionals withOpenSSL [ openssl ]
+  ++ lib.optionals withSQLite3 [ sqlite ];
 
   doCheck = true;
   nativeCheckInputs = [
@@ -103,19 +103,19 @@ stdenv.mkDerivation {
     "--without-x"
     "--disable-afs-string-to-key"
   ]
-  ++ lib.optionals (withCapNG) [
+  ++ lib.optionals withCapNG [
     "--with-capng"
   ]
-  ++ lib.optionals (withCJSON) [
+  ++ lib.optionals withCJSON [
     "--with-cjson=${cjson}"
   ]
-  ++ lib.optionals (withOpenLDAP) [
+  ++ lib.optionals withOpenLDAP [
     "--with-openldap=${openldap.dev}"
   ]
-  ++ lib.optionals (withOpenLDAPAsHDBModule) [
+  ++ lib.optionals withOpenLDAPAsHDBModule [
     "--enable-hdb-openldap-module"
   ]
-  ++ lib.optionals (withSQLite3) [
+  ++ lib.optionals withSQLite3 [
     "--with-sqlite3=${sqlite.dev}"
   ];
 
@@ -185,13 +185,13 @@ stdenv.mkDerivation {
     tests.nixos = nixosTests.kerberos.heimdal;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.heimdal.software";
     changelog = "https://github.com/heimdal/heimdal/releases";
     description = "Implementation of Kerberos 5 (and some more stuff)";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       h7x4
       dblsaiko
     ];

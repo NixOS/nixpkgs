@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ebzzry/emem";
     description = "Trivial Markdown to HTML converter";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.ebzzry ];
+    platforms = lib.platforms.unix;
     mainProgram = "emem";
   };
 }

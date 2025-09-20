@@ -73,11 +73,11 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/camunda/camunda-modeler";
     description = "Integrated modeling solution for BPMN, DMN and Forms based on bpmn.io";
-    teams = [ teams.wdz ];
-    license = licenses.mit;
+    teams = [ lib.teams.wdz ];
+    license = lib.licenses.mit;
     inherit (electron.meta) platforms;
     mainProgram = "camunda-modeler";
   };

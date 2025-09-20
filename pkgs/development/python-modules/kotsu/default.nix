@@ -38,11 +38,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "kotsu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight framework for structured and repeatable model validation";
     homepage = "https://github.com/datavaluepeople/kotsu";
     changelog = "https://github.com/datavaluepeople/kotsu/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

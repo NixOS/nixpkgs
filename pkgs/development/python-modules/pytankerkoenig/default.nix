@@ -18,10 +18,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pytankerkoenig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get fuel data from tankerkoenig.de";
     homepage = "https://github.com/ultrara1n/pytankerkoenig";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

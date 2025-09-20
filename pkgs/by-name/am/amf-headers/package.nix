@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     cp -r amf/public/include/* $out/include/AMF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Headers for The Advanced Media Framework (AMF)";
     homepage = "https://github.com/GPUOpen-LibrariesAndSDKs/AMF";
-    license = licenses.mit;
-    maintainers = with maintainers; [ devusb ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.unix;
   };
 }

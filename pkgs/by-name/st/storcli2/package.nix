@@ -60,9 +60,9 @@ stdenvNoCC.mkDerivation (
       # Then search manually for the latest version.
       homepage = "https://www.broadcom.com/support/download-search?pg=&pf=Host+Bus+Adapters&pn=&pa=&po=&dk=storcli2&pl=&l=false";
       description = "Storage Command Line Tool";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      maintainers = with maintainers; [ edwtjo ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ edwtjo ];
       mainProgram = "storcli2";
       platforms = [
         "x86_64-linux"

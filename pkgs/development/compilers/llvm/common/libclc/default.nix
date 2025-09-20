@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (''
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/libclc "$out"
-  '');
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libclc";
 
@@ -101,11 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $dev/bin prepare_builtins
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
     mainProgram = "prepare_builtins";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 })

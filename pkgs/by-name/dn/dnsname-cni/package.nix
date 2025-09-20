@@ -27,12 +27,12 @@ buildGoModule rec {
 
   doCheck = false; # NOTE: requires root privileges
 
-  meta = with lib; {
+  meta = {
     description = "DNS name resolution for containers";
     mainProgram = "dnsname";
     homepage = "https://github.com/containers/dnsname";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mikroskeem ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mikroskeem ];
   };
 }

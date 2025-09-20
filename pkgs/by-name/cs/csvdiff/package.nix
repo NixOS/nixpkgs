@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-rhOjBMCyfirEI/apL3ObHfKZeuNPGSt84R9lwCbRIpg=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aswinkarthik.github.io/csvdiff/";
     description = "Fast diff tool for comparing csv files";
     mainProgram = "csvdiff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ turion ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ turion ];
   };
 }

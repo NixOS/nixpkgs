@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dlfcn-win32/dlfcn-win32";
     description = "Set of functions that allows runtime dynamic library loading";
-    license = licenses.mit;
-    platforms = platforms.windows;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.windows;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

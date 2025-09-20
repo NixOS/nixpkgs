@@ -28,11 +28,11 @@
     sha256 = "1jdfz5x24dfvpwyfxalkhv83gf9ylyaqii1kg8rjl8dzickawrix";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gerbil Crypto: Extra Cryptographic Primitives for Gerbil";
     homepage = "https://github.com/fare/gerbil-crypto";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fare ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fare ];
   };
 }

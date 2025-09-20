@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin libwhich
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Like `which`, for dynamic libraries";
     mainProgram = "libwhich";
     homepage = "https://github.com/vtjnash/libwhich";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

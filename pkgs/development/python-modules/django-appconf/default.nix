@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "appconf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper class for handling configuration defaults of packaged apps gracefully";
     homepage = "https://django-appconf.readthedocs.org/";
     changelog = "https://github.com/django-compressor/django-appconf/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

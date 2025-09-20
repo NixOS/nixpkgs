@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flat Material Design theme for GTK 3, GTK 2 and Gnome-Shell";
     homepage = "https://github.com/vinceliuice/Layan-gtk-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.vanilla ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.vanilla ];
   };
 }

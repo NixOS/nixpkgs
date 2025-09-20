@@ -93,12 +93,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Pitch and note annotation of unaccompanied melody";
     mainProgram = "tony";
     homepage = "https://www.sonicvisualiser.org/tony/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }

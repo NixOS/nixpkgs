@@ -54,15 +54,15 @@ let
         pkg-config
       ];
 
-      meta = with lib; {
+      meta = {
         description = "LDAP connector for Bitwarden";
         homepage = "https://github.com/bitwarden/directory-connector";
-        license = licenses.gpl3Only;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl3Only;
+        maintainers = with lib.maintainers; [
           Silver-Golden
           SuperSandro2000
         ];
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
         mainProgram = name;
       };
     };

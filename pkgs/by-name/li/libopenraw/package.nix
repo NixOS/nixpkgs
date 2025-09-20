@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
     "--with-boost=${lib.getDev boost}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "RAW camerafile decoding library";
     homepage = "https://libopenraw.freedesktop.org";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.struan ];
+    maintainers = [ lib.maintainers.struan ];
   };
 }

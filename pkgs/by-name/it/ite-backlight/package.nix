@@ -42,15 +42,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Commands to control ite-backlight devices";
     longDescription = ''
       This project aims to provide a set of simple utilities for controlling ITE 8291
       keyboard backlight controllers.
     '';
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     homepage = "https://github.com/hexagonal-sun/ite-backlight";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hexagonal-sun ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
 }

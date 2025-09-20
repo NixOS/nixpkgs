@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/SeleniumHQ/htmlunit-driver";
     description = "WebDriver server for running Selenium tests on the HtmlUnit headless browser";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       coconnor
       offline
     ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
   };
 }

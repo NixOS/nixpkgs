@@ -353,9 +353,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Time series database with millisecond precision";
     homepage = "http://opentsdb.net";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # maven dependencies
     ];

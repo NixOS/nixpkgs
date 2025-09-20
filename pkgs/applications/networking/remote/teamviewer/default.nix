@@ -156,14 +156,14 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jagajaga
       jraygauthier
       gador

@@ -50,9 +50,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter lab environment notebook server extension";
     homepage = "https://github.com/jupyter/nbclassic";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

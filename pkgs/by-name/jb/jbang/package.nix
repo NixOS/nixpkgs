@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
     ];
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moaxcp ];
   };
 }

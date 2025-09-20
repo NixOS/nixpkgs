@@ -59,10 +59,10 @@ buildPythonPackage rec {
   # no tests on pypi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Reflex Hosting CLI";
     homepage = "https://pypi.org/project/reflex-hosting-cli/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

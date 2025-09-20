@@ -55,15 +55,15 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utilities extending hledger";
     homepage = "https://gitlab.com/nobodyinperson/hledger-utils";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc0
       cc-by-40
       gpl3
     ];
-    maintainers = with maintainers; [ nobbz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ nobbz ];
+    platforms = lib.platforms.all;
   };
 }

@@ -127,13 +127,13 @@ stdenv.mkDerivation {
       can always download the latest version from makemkv.com that will reset the
       expiration date.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = [
-      licenses.unfree
-      licenses.lgpl21
+      lib.licenses.unfree
+      lib.licenses.lgpl21
     ];
     homepage = "https://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jchw ];
+    maintainers = with lib.maintainers; [ jchw ];
   };
 }

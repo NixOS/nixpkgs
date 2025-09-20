@@ -50,15 +50,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application for practicing playing musical scores and ear training";
     mainProgram = "nootka";
     homepage = "https://nootka.sourceforge.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mmlb
       orivej
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

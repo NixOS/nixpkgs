@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opendata_transport" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for interacting with transport.opendata.ch";
     homepage = "https://github.com/home-assistant-ecosystem/python-opendata-transport";
     changelog = "https://github.com/home-assistant-ecosystem/python-opendata-transport/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

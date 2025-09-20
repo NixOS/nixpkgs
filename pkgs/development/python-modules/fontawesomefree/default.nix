@@ -19,13 +19,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fontawesomefree" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FortAwesome/Font-Awesome";
     description = "Icon library and toolkit";
-    license = with licenses; [
+    license = with lib.licenses; [
       ofl
       cc-by-40
     ];
-    maintainers = with maintainers; [ netali ];
+    maintainers = with lib.maintainers; [ netali ];
   };
 }

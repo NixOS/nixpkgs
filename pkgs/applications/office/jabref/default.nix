@@ -132,17 +132,17 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
       binaryNativeCode # source bundles dependencies as jars
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       linsui
     ];
   };

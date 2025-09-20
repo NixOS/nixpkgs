@@ -80,11 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heatclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Heat built on the Heat orchestration API";
     mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

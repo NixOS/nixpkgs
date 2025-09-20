@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_standard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Standards document describing ASDF";
     homepage = "https://github.com/asdf-format/asdf-standard";
     changelog = "https://github.com/asdf-format/asdf-standard/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

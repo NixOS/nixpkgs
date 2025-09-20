@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of some concepts from category theory";
     homepage = "https://gitlab.com/danielhones/pycategories";
     changelog = "https://gitlab.com/danielhones/pycategories/-/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dmvianna ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dmvianna ];
   };
 }

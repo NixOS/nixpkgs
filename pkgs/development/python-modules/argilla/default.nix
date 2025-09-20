@@ -185,12 +185,12 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source data curation platform for LLMs";
     homepage = "https://github.com/argilla-io/argilla";
     changelog = "https://github.com/argilla-io/argilla/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "argilla";
   };
 }

@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IPv6 attack toolkit";
     homepage = "https://github.com/vanhauser-thc/thc-ipv6";
-    maintainers = with maintainers; [ ajs124 ];
-    platforms = platforms.linux;
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ ajs124 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.agpl3Only;
   };
 }

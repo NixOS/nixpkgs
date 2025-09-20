@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

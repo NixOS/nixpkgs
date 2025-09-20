@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "test_get_picon_name"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a python interface to interact with a device running OpenWebIf";
     downloadPage = "https://github.com/autinerd/openwebifpy";
     homepage = "https://openwebifpy.readthedocs.io/";
     changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

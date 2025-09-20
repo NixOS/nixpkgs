@@ -102,14 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library with common API for various GNOME modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 })

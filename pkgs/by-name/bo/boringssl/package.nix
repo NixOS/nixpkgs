@@ -76,12 +76,12 @@ buildGoModule {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
-    maintainers = [ maintainers.thoughtpolice ];
-    license = with licenses; [
+    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = with lib.licenses; [
       openssl
       isc
       mit

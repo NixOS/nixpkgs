@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dotmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python for dot-access dictionaries";
     homepage = "https://github.com/drgrib/dotmap";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

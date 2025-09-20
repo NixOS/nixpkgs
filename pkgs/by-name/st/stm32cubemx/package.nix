@@ -95,9 +95,9 @@ let
         step-by-step process.
       '';
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.unfree;
-      maintainers = with maintainers; [
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [
         angaz
         wucke13
       ];

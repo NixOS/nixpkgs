@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
     "LIBS=-lgc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Follow a symlink and print out its target file";
     longDescription = ''
       A commandline program that chases symbolic filesystems links to the original file
     '';
     homepage = "https://qa.debian.org/developer.php?login=rotty%40debian.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.polyrod ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.polyrod ];
+    platforms = lib.platforms.all;
     mainProgram = "chase";
   };
 }

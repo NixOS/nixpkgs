@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
       --replace "m='rU" "m='r"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LV2 port of the internal modules found in Alsa Modular Synth";
     homepage = "https://github.com/blablack/ams-lv2";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
     # `ModuleNotFoundError: No module named 'imp'`

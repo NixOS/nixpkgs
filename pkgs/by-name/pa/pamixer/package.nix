@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulseaudio command line mixer";
     longDescription = ''
       Features:
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
         - Mute or unmute a device
     '';
     homepage = "https://github.com/cdemoulins/pamixer";
-    maintainers = with maintainers; [ thiagokokada ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "pamixer";
   };
 }

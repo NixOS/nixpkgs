@@ -12,15 +12,15 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "hiera-eyaml";
 
-  meta = with lib; {
+  meta = {
     description = "Per-value asymmetric encryption of sensitive data for Hiera";
     homepage = "https://github.com/voxpupuli/hiera-eyaml";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       benley
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "eyaml";
   };
 }

@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aesthetically pleasing YouTube TUI written in Rust";
     homepage = "https://siriusmart.github.io/youtube-tui";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Ruixi-rebirth ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Ruixi-rebirth ];
     mainProgram = "youtube-tui";
   };
 }

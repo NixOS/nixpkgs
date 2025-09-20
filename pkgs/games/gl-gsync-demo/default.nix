@@ -36,10 +36,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    license = with licenses; mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ atemu ];
+  meta = {
+    license = with lib.licenses; mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ atemu ];
     description = "Very basic OpenGL demo for testing NVIDIA's G-SYNC technology on Linux";
     mainProgram = "gl-gsync-demo";
     longDescription = ''

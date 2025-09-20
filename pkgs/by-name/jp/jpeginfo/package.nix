@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
-  meta = with lib; {
+  meta = {
     description = "Prints information and tests integrity of JPEG/JFIF files";
     homepage = "https://www.kokkonen.net/tjko/projects.html";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.bjornfor ];
+    platforms = lib.platforms.all;
     mainProgram = "jpeginfo";
   };
 }

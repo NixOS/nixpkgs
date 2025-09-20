@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/g0hl1n/xprintidle";
     description = "Utility that queries the X server for the user's idle time and prints it to stdout";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
     mainProgram = "xprintidle";
   };
 })

@@ -37,10 +37,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python CommonMark parser ";
     mainProgram = "cmark";
     homepage = "https://github.com/readthedocs/commonmark.py";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

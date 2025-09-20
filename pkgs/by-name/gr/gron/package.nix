@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.gronVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Make JSON greppable";
     mainProgram = "gron";
     longDescription = ''
@@ -33,8 +33,8 @@ buildGoModule rec {
       documentation.
     '';
     homepage = "https://github.com/tomnomnom/gron";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fgaz
       SuperSandro2000
     ];

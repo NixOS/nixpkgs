@@ -13,11 +13,11 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-/7RysJOJigU4coC6d/Ob2lrtw8u8nLZI8wBk4oEEY3g=";
   };
-  meta = with lib; {
+  meta = {
     description = "Remote vanilla PDB (over TCP sockets)";
     homepage = "https://github.com/ionelmc/python-remote-pdb";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.all;
   };
 }

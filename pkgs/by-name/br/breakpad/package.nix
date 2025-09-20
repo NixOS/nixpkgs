@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${lss} $sourceRoot/src/third_party/lss
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source multi-platform crash reporting system";
     homepage = "https://chromium.googlesource.com/breakpad";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ berberman ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ berberman ];
+    platforms = lib.platforms.all;
   };
 })

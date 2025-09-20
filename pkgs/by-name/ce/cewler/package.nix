@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Custom Word List generator Redefined";
     mainProgram = "cewler";
     homepage = "https://github.com/roys/cewler";
-    license = licenses.cc-by-nc-40;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.cc-by-nc-40;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

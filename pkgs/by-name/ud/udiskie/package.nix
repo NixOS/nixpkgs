@@ -88,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     package = udiskie;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coldfix/udiskie";
     changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
@@ -106,7 +106,7 @@ python3Packages.buildPythonApplication rec {
       - loop devices (mounting iso archives)
       - password caching (requires python keyutils 0.3)
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

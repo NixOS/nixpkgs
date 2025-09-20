@@ -117,8 +117,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
     homepage = "https://www.meteor.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = builtins.attrNames srcs;
     maintainers = [ ];
     mainProgram = "meteor";

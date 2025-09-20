@@ -77,11 +77,11 @@ stdenv.mkDerivation (finalAttr: {
     mv $out/{Python,resource} $out/share/${finalAttr.pname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Arknights assistant";
     homepage = "https://github.com/MaaAssistantArknights/MaaAssistantArknights";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Cryolitia ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Cryolitia ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

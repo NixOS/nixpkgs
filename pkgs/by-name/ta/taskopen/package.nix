@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
          --set PERL5LIB "$PERL5LIB"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script for taking notes and open urls with taskwarrior";
     mainProgram = "taskopen";
     homepage = "https://github.com/ValiValpas/taskopen";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.winpat ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.winpat ];
   };
 }

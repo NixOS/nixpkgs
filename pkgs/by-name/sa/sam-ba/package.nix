@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     '';
     # Alternatively: https://www.microchip.com/en-us/development-tool/SAM-BA-In-system-Programmer
     homepage = "http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

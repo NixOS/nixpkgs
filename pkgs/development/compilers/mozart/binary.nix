@@ -81,8 +81,8 @@ stdenv.mkDerivation {
       interfaces. Mozart implements the Oz language and provides both
       expressive power and advanced functionality.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
     platforms = attrNames binaries;
     hydraPlatforms = [ ];
   };

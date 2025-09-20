@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-liconv";
 
-  meta = with lib; {
+  meta = {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

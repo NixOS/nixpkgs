@@ -31,13 +31,13 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/${name}.png $out/share/icons/hicolor/512x512/apps/cables.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standalone version of cables, a tool for creating beautiful interactive content";
     homepage = "https://cables.gl";
     changelog = "https://cables.gl/changelog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rubikcubed ];
-    platforms = with platforms; linux ++ darwin ++ windows;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rubikcubed ];
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
     mainProgram = "cables";
   };

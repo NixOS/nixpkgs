@@ -16,9 +16,9 @@ let
   ethercalc = lib.head (lib.attrValues nodePackages);
 
   combined = ethercalc.override {
-    meta = with lib; {
+    meta = {
       description = "Online collaborative spreadsheet";
-      license = with licenses; [
+      license = with lib.licenses; [
         cpal10
         artistic2
         mit
@@ -27,8 +27,8 @@ let
         mpl20
       ];
       homepage = "https://github.com/audreyt/ethercalc";
-      maintainers = with maintainers; [ iblech ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ iblech ];
+      platforms = lib.platforms.unix;
     };
   };
 in

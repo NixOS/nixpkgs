@@ -21,12 +21,12 @@ stdenv.mkDerivation {
     install -D ckati $out/bin/ckati
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Experimental GNU make clone";
     mainProgram = "ckati";
     homepage = "https://github.com/google/kati";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danielfullmer ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danielfullmer ];
   };
 }

@@ -112,12 +112,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.exaile.org/";
     description = "Music player with a simple interface and powerful music management capabilities";
     mainProgram = "exaile";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ryneeverett ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ryneeverett ];
+    platforms = lib.platforms.all;
   };
 }

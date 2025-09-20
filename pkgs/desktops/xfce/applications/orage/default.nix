@@ -31,9 +31,9 @@ mkXfceDerivation {
     substituteInPlace src/tz_zoneinfo_read.c  --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple calendar application for Xfce";
     mainProgram = "orage";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

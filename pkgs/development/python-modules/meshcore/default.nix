@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meshcore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communicating with meshcore companion radios";
     homepage = "https://github.com/meshcore-dev/meshcore_py";
-    license = licenses.mit;
-    maintainers = [ maintainers.haylin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.haylin ];
   };
 }

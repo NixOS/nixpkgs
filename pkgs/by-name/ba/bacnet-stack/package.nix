@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     cp -r bin $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BACnet open source protocol stack for embedded systems, Linux, and Windows";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ WhittlesJr ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ WhittlesJr ];
   };
 }

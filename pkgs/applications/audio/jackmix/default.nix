@@ -47,12 +47,12 @@ mkDerivation rec {
     install -D jackmix/jackmix $out/bin/jackmix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
     mainProgram = "jackmix";
     homepage = "https://github.com/kampfschlaefer/jackmix";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kampfschlaefer ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kampfschlaefer ];
+    platforms = lib.platforms.linux;
   };
 }

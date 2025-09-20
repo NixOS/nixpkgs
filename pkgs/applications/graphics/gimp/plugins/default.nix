@@ -143,11 +143,11 @@ lib.makeScope pkgs.newScope (
 
       installTargets = [ "install-admin" ];
 
-      meta = with lib; {
+      meta = {
         broken = gimp.majorVersion != "2.0";
         description = "Batch Image Manipulation Plugin for GIMP";
         homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
         maintainers = [ ];
       };
     };
@@ -207,11 +207,11 @@ lib.makeScope pkgs.newScope (
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         broken = gimp.majorVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
-        license = with licenses; [ gpl3Plus ];
+        license = with lib.licenses; [ gpl3Plus ];
       };
     };
 

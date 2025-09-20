@@ -45,10 +45,10 @@
 
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.gpl3Plus;
   };
 }).overrideAttrs
   (

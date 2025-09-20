@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../src";
 
-  meta = with lib; {
+  meta = {
     description = "Dock (desktop panel) for Linux desktop";
     mainProgram = "crystal-dock";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     homepage = "https://github.com/dangvd/crystal-dock";
-    maintainers = with maintainers; [ rafameou ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ rafameou ];
+    platforms = lib.platforms.linux;
   };
 })

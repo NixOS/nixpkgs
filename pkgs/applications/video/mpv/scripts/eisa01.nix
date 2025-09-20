@@ -27,9 +27,9 @@ let
         };
         passthru.updateScript = unstableGitUpdater { };
 
-        meta = with lib; {
+        meta = {
           homepage = "https://github.com/Eisa01/mpv-scripts";
-          license = licenses.bsd2;
+          license = lib.licenses.bsd2;
         };
 
         # Sadly needed to make `common-updaters` work here

@@ -103,9 +103,9 @@ stdenv.mkDerivation {
     homepage = "https://pinegrow.com";
     description = "UI Web Editor";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ unfreeRedistributable ];
-    maintainers = with maintainers; [ gador ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [ unfreeRedistributable ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "pinegrow";
   };
 }

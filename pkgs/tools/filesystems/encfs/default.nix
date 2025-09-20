@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     "-DINSTALL_LIBENCFS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encrypted filesystem in user-space via FUSE";
     homepage = "https://vgough.github.io/encfs";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

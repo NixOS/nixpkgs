@@ -49,11 +49,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings.django_test_settings
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/surenkov/django-pydantic-field/releases/tag/${src.tag}";
     description = "Django JSONField with Pydantic models as a Schema";
     homepage = "https://github.com/surenkov/django-pydantic-field";
     maintainers = with lib.maintainers; [ kiara ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

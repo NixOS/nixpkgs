@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open Source, Distributed, RESTful Search Engine";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.elastic20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       apeschar
       basvandijk
     ];

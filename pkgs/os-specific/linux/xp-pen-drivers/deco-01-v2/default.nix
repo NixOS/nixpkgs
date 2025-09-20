@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.xp-pen.com/product/461.html";
     description = "Drivers for the XP-PEN Deco 01 v2 drawing tablet";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ virchau13 ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ virchau13 ];
+    license = lib.licenses.unfree;
   };
 }

@@ -54,14 +54,14 @@ stdenv.mkDerivation {
     '';
     homepage = "https://docs.sysdig.com/en/docs/installation/sysdig-secure/install-vulnerability-cli-scanner/";
     mainProgram = "sysdig-cli-scanner";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ tembleking ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ tembleking ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

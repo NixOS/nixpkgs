@@ -40,9 +40,9 @@ buildGoModule rec {
     mv $out/bin/edition $out/bin/documize
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
     mainProgram = "documize";
     homepage = "https://www.documize.com/";

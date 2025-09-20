@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Yet Another X Grabber script";
     longDescription = ''
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
       of your screen. Similar command-line interface to scrot but is overall
       more flexible and less buggy.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ neonfuz ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ neonfuz ];
     mainProgram = "yaxg";
   };
 }

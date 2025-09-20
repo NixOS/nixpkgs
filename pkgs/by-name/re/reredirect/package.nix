@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
       --replace "reredirect" "${placeholder "out"}/bin/reredirect"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to dynamicly redirect outputs of a running process";
     homepage = "https://github.com/jerome-pouiller/reredirect";
-    license = licenses.mit;
-    maintainers = [ maintainers.tobim ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.tobim ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

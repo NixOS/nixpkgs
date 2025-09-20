@@ -128,13 +128,13 @@ stdenv.mkDerivation rec {
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ citadelcore ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ citadelcore ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

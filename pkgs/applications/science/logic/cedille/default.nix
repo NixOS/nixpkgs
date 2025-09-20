@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory";
     homepage = "https://cedille.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mpickering ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mpickering ];
+    platforms = lib.platforms.unix;
 
     # Broken due to Agda update.  See
     # https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881107449.

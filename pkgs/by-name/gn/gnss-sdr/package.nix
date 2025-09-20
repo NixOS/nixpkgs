@@ -69,7 +69,7 @@ gnuradio.pkgs.mkDerivation rec {
   ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     gnuradio.unwrapped.uhd
   ]
-  ++ lib.optionals (enableRawUdp) [
+  ++ lib.optionals enableRawUdp [
     libpcap
   ]
   ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
@@ -82,7 +82,7 @@ gnuradio.pkgs.mkDerivation rec {
   ++ lib.optionals (gnuradio.hasFeature "gr-pdu") [
     gnuradio.unwrapped.libad9361
   ]
-  ++ lib.optionals (enableOsmosdr) [
+  ++ lib.optionals enableOsmosdr [
     gnuradio.pkgs.osmosdr
   ];
 
@@ -114,10 +114,10 @@ gnuradio.pkgs.mkDerivation rec {
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

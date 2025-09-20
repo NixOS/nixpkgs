@@ -45,10 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
-    maintainers = [ maintainers.naxdy ];
-    license = licenses.unfree;
+    maintainers = [ lib.maintainers.naxdy ];
+    license = lib.licenses.unfree;
     description = "Kernel module for the Blackmagic Design Decklink cards";
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

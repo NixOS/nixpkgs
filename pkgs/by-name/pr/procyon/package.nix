@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Suite of Java metaprogramming tools including a Java decompiler";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     homepage = "https://github.com/mstrobel/procyon/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "procyon";
   };

@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cccolutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Kerberos 5 Credential Cache Collection Utilities";
     homepage = "https://pagure.io/cccolutils";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ disassembler ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ disassembler ];
   };
 }

@@ -22,9 +22,9 @@ buildPythonPackage rec {
       "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of time.monotonic() for Python 2 & < 3.3";
     homepage = "https://github.com/atdt/monotonic";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

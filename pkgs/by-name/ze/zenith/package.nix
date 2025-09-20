@@ -34,14 +34,14 @@ rustPlatform.buildRustPackage rec {
       --suffix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "Sort of like top or htop but with zoom-able charts, network, and disk usage"
       + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
     mainProgram = "zenith";
     homepage = "https://github.com/bvaisvil/zenith";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
-    platforms = if nvidiaSupport then platforms.linux else platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = if nvidiaSupport then lib.platforms.linux else lib.platforms.unix;
   };
 }

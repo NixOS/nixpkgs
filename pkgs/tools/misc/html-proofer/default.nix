@@ -15,12 +15,12 @@ bundlerEnv rec {
 
   passthru.updateScript = bundlerUpdateScript pname;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to validate HTML files";
     homepage = "https://github.com/gjtorikian/html-proofer";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "htmlproofer";
   };
 }

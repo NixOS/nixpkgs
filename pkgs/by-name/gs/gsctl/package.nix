@@ -40,11 +40,11 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Giant Swarm command line interface";
     homepage = "https://github.com/giantswarm/gsctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ joesalisbury ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ joesalisbury ];
     mainProgram = "gsctl";
   };
 }

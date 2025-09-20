@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ ]
-    ++ lib.optionals (enableDjvu) [ "--enable-djvu" ]
-    ++ lib.optionals (enableEpub) [ "--enable-epub" ]
-    ++ lib.optionals (enablePostScript) [ "--enable-ps" ]
-    ++ lib.optionals (enableXps) [ "--enable-xps" ]
-    ++ lib.optionals (enableImages) [ "--enable-pixbuf" ];
+    ++ lib.optionals enableDjvu [ "--enable-djvu" ]
+    ++ lib.optionals enableEpub [ "--enable-epub" ]
+    ++ lib.optionals enablePostScript [ "--enable-ps" ]
+    ++ lib.optionals enableXps [ "--enable-xps" ]
+    ++ lib.optionals enableImages [ "--enable-pixbuf" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
     odd-unstable = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

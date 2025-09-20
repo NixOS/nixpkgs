@@ -32,9 +32,9 @@ stdenvNoCC.mkDerivation rec {
     description = "RISC-V Assembler and Runtime Simulator";
     mainProgram = "rars";
     homepage = "https://github.com/TheThirdOne/rars";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ athas ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ athas ];
+    platforms = lib.platforms.all;
   };
 }

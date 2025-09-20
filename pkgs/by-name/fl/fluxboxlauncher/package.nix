@@ -59,12 +59,12 @@ python3.pkgs.buildPythonApplication {
     install -Dm444 fluxboxlauncher.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gui editor (gtk) to configure applications launching on a fluxbox session";
     mainProgram = "fluxboxlauncher";
     homepage = "https://github.com/mothsART/fluxboxlauncher";
-    maintainers = with maintainers; [ mothsart ];
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mothsart ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
   };
 }

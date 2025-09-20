@@ -43,11 +43,11 @@ buildGoModule rec {
     cp config/pg_featureserv.toml.example $out/share/config/pg_featureserv.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight RESTful Geospatial Feature Server for PostGIS in Go";
     mainProgram = "pg_featureserv";
     homepage = "https://github.com/CrunchyData/pg_featureserv";
-    license = licenses.asl20;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.geospatial ];
   };
 }

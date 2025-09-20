@@ -56,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
       $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PythonQt is a dynamic Python binding for the Qt framework. It offers an easy way to embed the Python scripting language into your C++ Qt applications";
     homepage = "https://pythonqt.sourceforge.net/";
-    license = licenses.lgpl21;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hlolli ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ hlolli ];
   };
 })

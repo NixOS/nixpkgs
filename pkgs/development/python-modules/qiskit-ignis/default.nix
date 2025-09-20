@@ -43,9 +43,9 @@ buildPythonPackage rec {
     scikit-learn
     scipy
   ]
-  ++ lib.optionals (withCvx) [ cvxpy ]
-  ++ lib.optionals (withVisualization) [ matplotlib ]
-  ++ lib.optionals (withJit) [ numba ];
+  ++ lib.optionals withCvx [ cvxpy ]
+  ++ lib.optionals withVisualization [ matplotlib ]
+  ++ lib.optionals withJit [ numba ];
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
@@ -65,12 +65,12 @@ buildPythonPackage rec {
     "test_fitters" # Fails check that arrays are close. Might be due to aarch64 math issues.
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qiskit tools for quantum hardware verification, noise characterization, and error correction";
     homepage = "https://qiskit.org/ignis";
     downloadPage = "https://github.com/QISKit/qiskit-ignis/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

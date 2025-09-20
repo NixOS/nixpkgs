@@ -41,11 +41,11 @@ maven.buildMavenPackage rec {
     description = "Platform for visualizing and manipulating large graphs";
     mainProgram = "gephi";
     homepage = "https://gephi.org";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.gpl3;
-    maintainers = [ maintainers.taeer ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.taeer ];
   };
 }

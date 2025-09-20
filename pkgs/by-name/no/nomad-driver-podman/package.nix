@@ -22,12 +22,12 @@ buildGoModule rec {
   # some tests require a running podman service
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.github.com/hashicorp/nomad-driver-podman";
     description = "Podman task driver for Nomad";
     mainProgram = "nomad-driver-podman";
-    platforms = platforms.linux;
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

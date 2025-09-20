@@ -33,7 +33,7 @@ buildGhidraExtension {
       The GnuDisassembler extension may be also be required as a disassembly provider.
     '';
     downloadPage = "https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Extensions/SleighDevTools";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];

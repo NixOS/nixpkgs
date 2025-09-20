@@ -45,11 +45,11 @@ stdenvNoCC.mkDerivation {
     xcursorgen
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clayrisser/breeze-hacked-cursor-theme";
     description = "Breeze Hacked cursor theme";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ anomalocaris ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ anomalocaris ];
+    platforms = lib.platforms.linux;
   };
 }

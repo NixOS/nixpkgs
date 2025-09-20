@@ -26,11 +26,11 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  meta = with lib; {
+  meta = {
     description = "Policy enforcement for your pipelines";
     homepage = "https://github.com/siderolabs/conform";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       jmgilman
       jk
     ];

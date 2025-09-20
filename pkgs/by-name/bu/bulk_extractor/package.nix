@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital forensics tool for extracting information from file systems";
     longDescription = ''
       bulk_extractor is a C++ program that scans a disk image, a file, or a
@@ -65,15 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/simsong/bulk_extractor";
     downloadPage = "http://downloads.digitalcorpora.org/downloads/bulk_extractor/";
     changelog = "https://github.com/simsong/bulk_extractor/blob/${finalAttrs.src.rev}/ChangeLog";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = with platforms; unix ++ windows;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = with lib.platforms; unix ++ windows;
+    license = with lib.licenses; [
       mit
       cpl10
       gpl3Only
       lgpl21Only
       lgpl3Only
-      licenses.openssl
+      lib.licenses.openssl
     ];
   };
 })

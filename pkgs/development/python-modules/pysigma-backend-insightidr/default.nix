@@ -37,10 +37,10 @@ buildPythonPackage rec {
     "sigma.pipelines.insight_idr"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support the Rapid7 InsightIDR backend for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-insightidr";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

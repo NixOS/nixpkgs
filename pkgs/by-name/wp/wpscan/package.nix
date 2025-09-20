@@ -19,15 +19,15 @@ bundlerApp {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Black box WordPress vulnerability scanner";
     homepage = "https://wpscan.org/";
     changelog = "https://github.com/wpscanteam/wpscan/releases";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
       nyanloutre
       manveru
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -350,17 +350,17 @@ rec {
 
     passthru = { inherit version buildInputs; };
 
-    meta = with lib; {
+    meta = {
       description = "Basic binaries for TeX Live";
       homepage = "http://www.tug.org/texlive";
       license = lib.licenses.gpl2Plus;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         veprbl
         lovek323
         raskin
         jwiegley
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -540,7 +540,7 @@ rec {
       # https://github.com/gucci-on-fleek/context-packaging
       context_packaging_release = "2025-06-12-14-21-B";
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "luametatex";
       version = "2.11.07";
 
@@ -557,10 +557,10 @@ rec {
         ninja
       ];
 
-      meta = with lib; {
+      meta = {
         description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
         homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [
           apfelkuchen6
           xworld21
@@ -668,7 +668,7 @@ rec {
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.ctan.org/pkg/pygmentex";
       description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
       longDescription = ''
@@ -679,8 +679,8 @@ rec {
         software such as forum systems, wikis or other applications that need to
         prettify source code.
       '';
-      license = licenses.lppl13c;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.lppl13c;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   };
 

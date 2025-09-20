@@ -92,9 +92,9 @@ stdenv.mkDerivation rec {
       or for translating subtitles.
     '';
     homepage = "https://nikse.dk/subtitleedit";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = [ ];
   };
 }

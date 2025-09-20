@@ -64,12 +64,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsnap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for downloading and mounting EBS snapshots using the EBS Direct API's";
     homepage = "https://github.com/RhinoSecurityLabs/dsnap";
     changelog = "https://github.com/RhinoSecurityLabs/dsnap/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dsnap";
   };
 }

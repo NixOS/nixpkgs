@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # No tests in package
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joe-jordan/pyvoro";
     description = "2D and 3D Voronoi tessellations: a python entry point for the voro++ library";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
 
     # Cython generated code is vendored directly and no longer compatible with

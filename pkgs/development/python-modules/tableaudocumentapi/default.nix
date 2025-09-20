@@ -41,11 +41,11 @@ buildPythonPackage rec {
   # ModuleNotFoundError: No module named 'test.assets'
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python module for working with Tableau files";
     homepage = "https://github.com/tableau/document-api-python";
     changelog = "https://github.com/tableau/document-api-python/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

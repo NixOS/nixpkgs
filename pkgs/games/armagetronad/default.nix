@@ -226,7 +226,7 @@ let
       '';
 
       passthru =
-        if (dedicatedServer) then
+        if dedicatedServer then
           {
             # No passthru, end of the line.
             # https://www.youtube.com/watch?v=NOMa56y_Was
@@ -248,13 +248,13 @@ let
             tests.armagetronad = nixosTests.armagetronad;
           };
 
-      meta = with lib; {
+      meta = {
         inherit mainProgram;
         homepage = "https://www.armagetronad.org";
         description = "Multiplayer networked arcade racing game in 3D similar to Tron";
-        maintainers = with maintainers; [ numinit ];
-        license = licenses.gpl2Plus;
-        platforms = platforms.linux;
+        maintainers = with lib.maintainers; [ numinit ];
+        license = lib.licenses.gpl2Plus;
+        platforms = lib.platforms.linux;
       };
     };
 in

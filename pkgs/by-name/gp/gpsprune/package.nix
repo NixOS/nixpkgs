@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
     changelog = "https://activityworkshop.net/software/gpsprune/whats_new.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rycee ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ rycee ];
+    platforms = lib.platforms.all;
     mainProgram = "gpsprune";
   };
 }

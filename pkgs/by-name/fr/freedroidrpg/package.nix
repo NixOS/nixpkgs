@@ -100,10 +100,10 @@ stdenv.mkDerivation {
 
     homepage = "https://www.freedroid.org/";
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
 }

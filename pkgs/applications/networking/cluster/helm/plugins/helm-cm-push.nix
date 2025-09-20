@@ -39,10 +39,10 @@ buildGoModule rec {
   # Tests require the ChartMuseum service.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin to push chart package to ChartMuseum";
     homepage = "https://github.com/chartmuseum/helm-push";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -37,11 +37,11 @@ buildPythonPackage rec {
     inherit (nixosTests.prometheus-exporters) py-air-control;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Exports Air Quality Metrics to Prometheus";
     mainProgram = "py-air-control-exporter";
     homepage = "https://github.com/urbas/py-air-control-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urbas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urbas ];
   };
 }

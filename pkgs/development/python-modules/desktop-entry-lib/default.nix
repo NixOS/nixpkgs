@@ -26,11 +26,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "desktop_entry_lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows reading and writing .desktop files according to the Desktop Entry Specification";
     homepage = "https://codeberg.org/JakobDev/desktop-entry-lib";
     changelog = "https://codeberg.org/JakobDev/desktop-entry-lib/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ Madouura ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ Madouura ];
   };
 }

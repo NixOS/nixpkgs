@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bacpypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the BACnet application layer and network layer";
     homepage = "https://github.com/JoelBender/bacpypes";
     changelog = "https://github.com/JoelBender/bacpypes/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bachp ];
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     libjpeg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities for manipulating OpenEXR images";
     homepage = "http://scanline.ca/exrtools";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

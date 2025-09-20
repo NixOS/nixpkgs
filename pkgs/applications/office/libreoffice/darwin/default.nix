@@ -74,9 +74,9 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ tricktron ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ tricktron ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"

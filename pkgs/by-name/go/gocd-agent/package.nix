@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       grahamc
       swarren83
     ];

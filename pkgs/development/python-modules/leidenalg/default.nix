@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "leidenalg" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/vtraag/leidenalg/blob/${version}/CHANGELOG";
     description = "Implementation of the Leiden algorithm for various quality functions to be used with igraph in Python";
     homepage = "https://github.com/vtraag/leidenalg";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }

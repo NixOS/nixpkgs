@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command to run commands as root";
     longDescription = ''
       Sudo (su "do") allows a system administrator to delegate
@@ -94,14 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
-    license = with licenses; [
+    license = with lib.licenses; [
       sudo
       bsd2
       bsd3
       zlib
     ];
-    maintainers = with maintainers; [ rhendric ];
-    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
+    maintainers = with lib.maintainers; [ rhendric ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
     mainProgram = "sudo";
   };
 })

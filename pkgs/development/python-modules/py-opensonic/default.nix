@@ -32,11 +32,11 @@ buildPythonPackage rec {
     "libopensonic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to wrap the Open Subsonic REST API";
     homepage = "https://github.com/khers/py-opensonic";
     changelog = "https://github.com/khers/py-opensonic/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

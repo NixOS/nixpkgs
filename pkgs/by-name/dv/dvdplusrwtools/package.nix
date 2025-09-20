@@ -90,11 +90,11 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools";
     description = "Tools for mastering Blu-ray and DVD+-RW/+-R media";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       gpl2Only
       publicDomain
     ];

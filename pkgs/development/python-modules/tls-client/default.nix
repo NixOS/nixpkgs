@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tls_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced HTTP Library";
     homepage = "https://github.com/FlorianREGAZ/Python-Tls-Client";
     changelog = "https://github.com/FlorianREGAZ/Python-Tls-Client/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

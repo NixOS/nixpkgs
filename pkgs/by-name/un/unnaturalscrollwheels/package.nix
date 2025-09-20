@@ -29,9 +29,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Invert scroll direction for physical scroll wheels";
     homepage = "https://github.com/ther0n/UnnaturalScrollWheels";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.darwin;
   };
 })

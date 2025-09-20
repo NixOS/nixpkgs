@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cache of key-value pairs with persistent storage for C++ 11";
     longDescription = ''
       A persistent cache for arbitrary (possibly large amount of data, such as
@@ -116,9 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp";
     changelog = "https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "libpersistent-cache-cpp"
     ];

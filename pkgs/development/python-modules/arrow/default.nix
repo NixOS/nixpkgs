@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arrow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for date manipulation";
     homepage = "https://github.com/crsmithdev/arrow";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -160,12 +160,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
 
-  meta = with lib; {
+  meta = {
     description = "Performance portable programming model for machine learning tensor operators";
     homepage = "https://github.com/ROCm/composable_kernel";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
     broken = true;
   };
 })

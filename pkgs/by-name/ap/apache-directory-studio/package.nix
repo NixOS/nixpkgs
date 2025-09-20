@@ -77,14 +77,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Eclipse-based LDAP browser and directory client";
     homepage = "https://directory.apache.org/studio/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     # Upstream supports macOS and Windows too.
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "ApacheDirectoryStudio";
   };
 }

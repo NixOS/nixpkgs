@@ -20,12 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TltizTFKrMvHNQcSoow9fuNLy6appYq9Y4LicEQrfRE=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/spantaleev/sftpman-rs";
     description = "Application that handles sshfs/sftp file systems mounting";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       contrun
       fugi
     ];

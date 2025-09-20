@@ -44,12 +44,12 @@ buildGoModule rec {
         --zsh  <(${emulator} $out/bin/gnmic completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "gNMI CLI client and collector";
     homepage = "https://gnmic.openconfig.net/";
     changelog = "https://github.com/openconfig/gnmic/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vincentbernat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vincentbernat ];
     mainProgram = "gnmic";
   };
 }

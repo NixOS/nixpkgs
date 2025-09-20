@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Graph RBAC Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/graphrbac/azure-graphrbac";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-graphrbac_${version}/sdk/graphrbac/azure-graphrbac/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

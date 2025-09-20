@@ -95,13 +95,13 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "SQL powered operating system instrumentation, monitoring, and analytics";
     homepage = "https://osquery.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       asl20
     ];
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [
       znewman01
       lewo
       squalus

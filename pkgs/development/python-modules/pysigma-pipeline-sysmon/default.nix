@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.pipelines.sysmon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support Sysmon pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon";
     changelog = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lsp/elixir-ls";
     description = ''
       A frontend-independent IDE "smartness" server for Elixir.
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
       It adheres to the Language Server Protocol, a standard for frontend-independent IDE support.
       Debugger integration is accomplished through the similar VS Code Debug Protocol.
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "elixir-ls";
-    teams = [ teams.beam ];
+    teams = [ lib.teams.beam ];
   };
   passthru.updateScript = nix-update-script { };
 }

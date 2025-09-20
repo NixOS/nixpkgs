@@ -18,11 +18,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Simplified perturbations models library";
     homepage = "https://github.com/dnwrnr/sgp4";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ alexwinter ];
+    platforms = lib.platforms.unix;
   };
 }

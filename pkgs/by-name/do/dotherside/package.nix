@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C language library for creating bindings for the Qt QML language";
     homepage = "https://filcuc.github.io/dotherside";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ toastal ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ toastal ];
   };
 })

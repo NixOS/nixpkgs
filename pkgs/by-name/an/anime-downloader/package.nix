@@ -54,11 +54,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anime-dl/anime-downloader";
     description = "Simple but powerful anime downloader and streamer";
-    license = licenses.unlicense;
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "anime";
   };

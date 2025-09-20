@@ -35,10 +35,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://justine.lol/cosmopolitan/";
     description = "Actually Portable Python using Cosmopolitan";
-    platforms = platforms.x86_64;
+    platforms = lib.platforms.x86_64;
     badPlatforms = platforms.darwin;
-    license = licenses.isc;
-    teams = [ teams.cosmopolitan ];
+    license = lib.licenses.isc;
+    teams = [ lib.teams.cosmopolitan ];
     mainProgram = "python.com";
   };
 }

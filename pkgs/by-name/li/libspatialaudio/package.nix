@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
       --replace '-L${lib.getDev libmysofa}' '-L${lib.getLib libmysofa}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ambisonic encoding / decoding and binauralization library in C++";
     homepage = "https://github.com/videolabs/libspatialaudio";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ krav ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ krav ];
   };
 }

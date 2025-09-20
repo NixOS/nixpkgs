@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/books
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interpreter and prover for a Lisp dialect";
     mainProgram = "acl2";
     longDescription = ''
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.cs.utexas.edu/users/moore/acl2/";
     downloadPage = "https://github.com/acl2-devel/acl2-devel/releases";
     license =
-      with licenses;
+      with lib.licenses;
       [
         # ACL2 itself is bsd3
         bsd3
@@ -192,10 +192,10 @@ stdenv.mkDerivation rec {
         publicDomain
         unfreeRedistributable
       ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kini
       raskin
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

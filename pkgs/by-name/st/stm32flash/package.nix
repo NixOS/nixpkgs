@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     cp stm32flash $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source flash program for the STM32 ARM processors using the ST bootloader";
     mainProgram = "stm32flash";
     homepage = "https://sourceforge.net/projects/stm32flash/";
     license = lib.licenses.gpl2;
-    platforms = platforms.all; # Should work on all platforms
-    maintainers = with maintainers; [ elitak ];
+    platforms = lib.platforms.all; # Should work on all platforms
+    maintainers = with lib.maintainers; [ elitak ];
   };
 }

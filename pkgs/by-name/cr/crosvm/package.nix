@@ -76,12 +76,12 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure virtual machine monitor for KVM";
     homepage = "https://crosvm.dev/";
     mainProgram = "crosvm";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.bsd3;
     platforms = [
       "aarch64-linux"
       "riscv64-linux"

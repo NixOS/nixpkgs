@@ -69,11 +69,11 @@ buildPythonPackage rec {
     "blinkpy.sync_module"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Blink Camera system";
     homepage = "https://github.com/fronzbot/blinkpy";
     changelog = "https://github.com/fronzbot/blinkpy/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.michalrus ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.michalrus ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "geekbench4";
   };

@@ -33,14 +33,14 @@ buildDotnetModule rec {
   meta = with lib; {
     description = ".NET Core global tool to display and update outdated NuGet packages in a project";
     homepage = "https://github.com/dotnet-outdated/dotnet-outdated";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       # deps
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilioziniades ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilioziniades ];
     mainProgram = "dotnet-outdated";
   };
 }

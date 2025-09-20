@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
-    license = licenses.free; # some custom license
-    platforms = platforms.unix;
+    license = lib.licenses.free; # some custom license
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

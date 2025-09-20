@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for serializing and deserializing Sigstore messages";
     homepage = "https://pypi.org/project/sigstore-protobuf-specs/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

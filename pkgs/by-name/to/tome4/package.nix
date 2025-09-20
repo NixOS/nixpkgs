@@ -93,12 +93,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tales of Maj'eyal (rogue-like game)";
     mainProgram = "tome4";
     homepage = "https://te4.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

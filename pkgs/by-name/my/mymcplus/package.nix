@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mymcplus" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~thestr4ng3r/mymcplus";
     description = "PlayStation 2 memory card manager";
     mainProgram = "mymcplus";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

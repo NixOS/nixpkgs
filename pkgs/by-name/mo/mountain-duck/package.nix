@@ -28,9 +28,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Mount server and cloud storage as a disk on macOS and Windows";
     homepage = "https://mountainduck.io";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.darwin;
   };
 })

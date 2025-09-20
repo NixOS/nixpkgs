@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_http" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP plugin for dvc";
     homepage = "https://github.com/iterative/dvc-http";
     changelog = "https://github.com/iterative/dvc-http/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

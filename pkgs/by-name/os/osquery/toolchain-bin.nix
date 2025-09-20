@@ -43,11 +43,11 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [
       gpl2Only
       asl20
     ];
-    maintainers = with maintainers; [ squalus ];
+    maintainers = with lib.maintainers; [ squalus ];
   };
 }

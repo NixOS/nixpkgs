@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mill" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Mill heater devices";
     homepage = "https://github.com/Danielhiversen/pymill";
     changelog = "https://github.com/Danielhiversen/pymill/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

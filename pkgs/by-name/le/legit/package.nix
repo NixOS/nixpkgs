@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "legit" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frostming/legit";
     description = "Git for Humans, Inspired by GitHub for Mac";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ryneeverett ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ryneeverett ];
     mainProgram = "legit";
   };
 }

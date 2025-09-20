@@ -25,15 +25,15 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Miniscule SVG versions of common logos";
     longDescription = ''
       Super Tiny Web Icons are minuscule SVG versions of your favourite logos.
       The average size is under 568 bytes!
     '';
     homepage = "https://github.com/edent/SuperTinyIcons";
-    license = licenses.mit;
-    maintainers = [ maintainers.h7x4 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.h7x4 ];
+    platforms = lib.platforms.all;
   };
 }

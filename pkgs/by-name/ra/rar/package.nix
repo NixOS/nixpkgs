@@ -71,10 +71,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "rar";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = lib.attrNames srcs;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

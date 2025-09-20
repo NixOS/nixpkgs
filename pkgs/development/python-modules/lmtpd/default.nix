@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lmtpd" ];
 
-  meta = with lib; {
+  meta = {
     description = "LMTP counterpart to smtpd in the Python standard library";
     homepage = "https://github.com/moggers87/lmtpd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

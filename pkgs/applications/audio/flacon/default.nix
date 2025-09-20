@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$bin_path";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extracts audio tracks from an audio CD image to separate tracks";
     mainProgram = "flacon";
     homepage = "https://flacon.github.io/";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ snglth ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ snglth ];
   };
 }

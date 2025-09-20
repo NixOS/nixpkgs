@@ -42,9 +42,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://v2.airbuddy.app";
     changelog = "https://support.airbuddy.app/articles/airbuddy-2-changelog";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ stepbrobd ];
+    license = with lib.licenses; [ unfree ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"

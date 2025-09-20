@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "http://wiredtiger.com/";
     description = "";
     mainProgram = "wt";
-    license = licenses.gpl2;
-    platforms = intersectLists platforms.unix platforms.x86_64;
+    license = lib.licenses.gpl2;
+    platforms = intersectLists lib.platforms.unix lib.platforms.x86_64;
   };
 }

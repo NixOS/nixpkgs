@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.avr-asm-tutorial.net/gavrasm/";
     description = "AVR Assembler for ATMEL AVR-Processors";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mafo ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ mafo ];
+    platforms = lib.platforms.linux;
   };
 }

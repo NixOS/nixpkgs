@@ -20,11 +20,11 @@ buildGoModule rec {
   # See also: https://todo.sr.ht/~bouncepaw/betula/91
   checkFlags = "-skip=TestTitles|TestHEntries";
 
-  meta = with lib; {
+  meta = {
     description = "Single-user self-hosted bookmarking software";
     mainProgram = "betula";
     homepage = "https://betula.mycorrhiza.wiki/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ GoldsteinE ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ GoldsteinE ];
   };
 }

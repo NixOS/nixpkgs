@@ -126,10 +126,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       michalrus
     ];
   };

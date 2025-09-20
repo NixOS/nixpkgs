@@ -194,15 +194,15 @@ stdenv.mkDerivation {
       OCCI, Pro*C, ODBC or JDBC). This package includes the sqlplus
       command line SQL client.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ dylanmtaylor ];
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
     hydraPlatforms = [ ];
   };
 }

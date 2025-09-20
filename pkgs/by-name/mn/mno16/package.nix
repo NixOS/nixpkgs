@@ -19,9 +19,9 @@ stdenvNoCC.mkDerivation rec {
     cp fonts/*.ttf $out/share/fonts/truetype/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist monospaced font";
     homepage = "https://sev.dev/fonts/mno16";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

@@ -45,10 +45,10 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "P2P file sharing system";
     homepage = "https://fopnu.com";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "fopnu";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

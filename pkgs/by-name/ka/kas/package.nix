@@ -42,10 +42,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "kas" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/siemens/kas";
     description = "Setup tool for bitbake based projects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bachp ];
   };
 }

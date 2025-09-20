@@ -123,10 +123,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CAD for artists";
     homepage = "https://www.plasticity.xyz";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [ imadnyc ];
     platforms = [ "x86_64-linux" ];
   };
 }

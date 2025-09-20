@@ -32,10 +32,10 @@ buildPythonPackage rec {
     rm -r rpack
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pack a set of rectangles into a bounding box with minimum area";
     homepage = "https://github.com/Penlect/rectangle-packer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
   };
 }

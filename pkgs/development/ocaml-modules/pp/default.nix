@@ -25,10 +25,10 @@ buildDunePackage rec {
   checkInputs = [ ppx_expect ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Alternative pretty printing library to the Format module of the OCaml standard library";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

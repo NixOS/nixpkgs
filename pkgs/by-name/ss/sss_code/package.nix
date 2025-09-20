@@ -36,14 +36,14 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Libraries and tools for building screenshots in a high-performance image format";
     mainProgram = "sss_code";
     homepage = "https://github.com/SergioRibera/sss";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ krovuxdev ];
+    maintainers = with lib.maintainers; [ krovuxdev ];
   };
 }

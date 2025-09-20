@@ -48,14 +48,14 @@ stdenv.mkDerivation rec {
     "--without-cppunit"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       commandodev
       ztzg
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

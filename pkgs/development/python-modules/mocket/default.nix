@@ -96,11 +96,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mocket" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

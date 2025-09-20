@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
       gameplay features, and performance built on top of Airplane.
     '';
     homepage = "https://purpurmc.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "minecraft-server";
   };

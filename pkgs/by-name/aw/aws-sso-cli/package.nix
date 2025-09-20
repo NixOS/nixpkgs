@@ -54,11 +54,11 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/synfinatic/aws-sso-cli";
     description = "AWS SSO CLI is a secure replacement for using the aws configure sso wizard";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ devusb ];
     mainProgram = "aws-sso";
   };
 }

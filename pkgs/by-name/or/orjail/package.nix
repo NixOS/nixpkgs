@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       --replace '--hostname=host ' ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Force programs to exclusively use tor network";
     mainProgram = "orjail";
     homepage = "https://github.com/orjail/orjail";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
   };
 }

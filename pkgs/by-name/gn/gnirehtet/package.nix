@@ -57,12 +57,12 @@ rustPlatform.buildRustPackage rec {
       This relies on adb, make sure you have the required permissions/udev rules.
     '';
     homepage = "https://github.com/Genymobile/gnirehtet";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # gnirehtet.apk
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ symphorien ];
+    platforms = lib.platforms.unix;
   };
 }
