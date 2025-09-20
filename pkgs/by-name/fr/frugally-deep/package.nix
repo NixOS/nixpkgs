@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frugally-deep";
-  version = "0.18.2-unstable-2025-06-16";
+  version = "0.15.24-p0";
 
   src = fetchFromGitHub {
     owner = "Dobiasd";
     repo = "frugally-deep";
-    rev = "30a4ce4c932ca810a5a77c4ab943a520bb1048fe";
-    hash = "sha256-tcwCRSHhN61ZFDFVQ/GItvgSSjeLSbFDoNMqwswtvto=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yg2SMsYOOSOgsdwIH1bU3iPM45z6c7WeIrgOddt3um4=";
   };
 
   nativeBuildInputs = [
