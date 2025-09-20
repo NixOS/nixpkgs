@@ -325,9 +325,21 @@ print OUT <<EOF;
   font-adobe-utopia-75dpi,
   font-adobe-utopia-type1,
   font-alias,
+  font-bh-100dpi,
+  font-bh-75dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bh-lucidatypewriter-75dpi,
   font-bh-ttf,
   font-bh-type1,
+  font-bitstream-100dpi,
+  font-bitstream-75dpi,
+  font-bitstream-type1,
+  font-cronyx-cyrillic,
   font-encodings,
+  font-isas-misc,
+  font-micro-misc,
+  font-misc-cyrillic,
+  font-misc-ethiopic,
   font-mutt-misc,
   font-util,
   gccmakedep,
@@ -485,8 +497,20 @@ self: with self; {
   fontadobeutopia75dpi = font-adobe-utopia-75dpi;
   fontadobeutopiatype1 = font-adobe-utopia-type1;
   fontalias = font-alias;
+  fontbh100dpi = font-bh-100dpi;
+  fontbh75dpi = font-bh-75dpi;
+  fontbhlucidatypewriter100dpi = font-bh-lucidatypewriter-100dpi;
+  fontbhlucidatypewriter75dpi = font-bh-lucidatypewriter-75dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontbitstream100dpi = font-bitstream-100dpi;
+  fontbitstream75dpi = font-bitstream-75dpi;
+  fontbitstreamtype1 = font-bitstream-type1;
+  fontcronyxcyrillic = font-cronyx-cyrillic;
+  fontisasmisc = font-isas-misc;
+  fontmicromisc = font-micro-misc;
+  fontmisccyrillic = font-misc-cyrillic;
+  fontmiscethiopic = font-misc-ethiopic;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;

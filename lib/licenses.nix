@@ -167,6 +167,11 @@ lib.mapAttrs mkLicense (
       fullName = "Apache License 2.0";
     };
 
+    bitstreamCharter = {
+      spdxId = "Bitstream-Charter";
+      fullName = "Bitstream Charter Font License";
+    };
+
     bitstreamVera = {
       spdxId = "Bitstream-Vera";
       fullName = "Bitstream Vera Font License";

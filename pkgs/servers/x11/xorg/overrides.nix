@@ -1,6 +1,7 @@
 {
   callPackage,
   lib,
+  config,
   stdenv,
   makeWrapper,
   fetchurl,
@@ -939,27 +940,6 @@ self: super:
   });
 
   xwd = addMainProgram super.xwd { };
-
-  # convert Type1 vector fonts to OpenType fonts
-  fontbitstreamtype1 = super.fontbitstreamtype1.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
-
-    postBuild = ''
-      # convert Postscript (Type 1) font to otf
-      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
-          name=$(basename $i | cut -d. -f1)
-          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
-      done
-    '';
-
-    postInstall = ''
-      # install the otf fonts
-      fontDir="$out/lib/X11/fonts/misc/"
-      install -D -m 644 -t "$fontDir" *.otf
-      mkfontscale "$fontDir"
-    '';
-  });
-
 }
 
 # mark some packages as unfree
@@ -968,13 +948,6 @@ self: super:
     # unfree but redistributable
     redist = [
       "fontibmtype1"
-      "fontbh100dpi"
-      "fontbh75dpi"
-
-      # Bigelow & Holmes fonts
-      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
@@ -1000,3 +973,8 @@ self: super:
   mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
   // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
 )
+
+# deprecate some packages
+// lib.optionalAttrs config.allowAliases {
+  fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005";
+}
