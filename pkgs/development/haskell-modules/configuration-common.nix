@@ -1768,10 +1768,22 @@ with haskellLib;
   # Lift bound on lens <5.3
   lsp-types_2_1_1_0 = doDistribute (doJailbreak super.lsp-types_2_1_1_0);
 
-  # 2025-03-03: dhall-lsp-server-1.1.4 requires lsp-2.1.0.0
-  dhall-lsp-server = super.dhall-lsp-server.override {
-    lsp = self.lsp_2_1_0_0;
-  };
+  dhall-lsp-server =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "dhall-lsp-server-text-2.1.2.patch";
+          url = "https://github.com/dhall-lang/dhall-haskell/commit/9f2d4d44be643229784bfc502ab49184ec82bc05.patch";
+          hash = "sha256-cwNH5+7YY8UbA9zHhTRfVaqtIMowZGfFT5Kj+wSlapA=";
+          relative = "dhall-lsp-server";
+        })
+      ]
+      (
+        # 2025-03-03: dhall-lsp-server-1.1.4 requires lsp-2.1.0.0
+        super.dhall-lsp-server.override {
+          lsp = self.lsp_2_1_0_0;
+        }
+      );
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = lib.pipe super.reflex-dom-core [

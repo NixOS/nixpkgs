@@ -1357,7 +1357,6 @@ broken-packages:
   - dhall-check # failure in job https://hydra.nixos.org/build/233206425 at 2023-09-02
   - dhall-csv # failure in job https://hydra.nixos.org/build/233256049 at 2023-09-02
   - dhall-fly # failure in job https://hydra.nixos.org/build/233220306 at 2023-09-02
-  - dhall-lsp-server # failure in job https://hydra.nixos.org/build/307610458 at 2025-09-19
   - dhall-recursive-adt # failure in job https://hydra.nixos.org/build/233210665 at 2023-09-02
   - dhall-text # failure in job https://hydra.nixos.org/build/233253809 at 2023-09-02
   - dhall-text-shell # failure in job https://hydra.nixos.org/build/244399613 at 2024-01-01
