@@ -15,6 +15,65 @@ let
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
   };
+
+  browserType =
+    if cfg.package == null then
+      null
+    else
+      let
+        packageName = cfg.package.pname or (builtins.baseNameOf cfg.package);
+      in
+      lib.optionalString (lib.hasPrefix "google-chrome" packageName) "chrome"
+      ++ lib.optionalString (lib.hasPrefix "brave-browser" packageName) "brave"
+      ++ lib.optionalString (
+        lib.hasPrefix "ungoogled-chromium" packageName || lib.hasPrefix "chromium" packageName
+      ) "chromium";
+
+  browserEtcConfig = {
+    chromium = {
+      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
+        lib.mkIf (cfg.enablePlasmaBrowserIntegration)
+          {
+            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
+          };
+      "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+        text = builtins.toJSON defaultProfile;
+      };
+      "chromium/policies/managed/extra.json" = lib.mkIf (mergedExtraOpts != { }) {
+        text = builtins.toJSON mergedExtraOpts;
+      };
+      "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
+        text = builtins.toJSON cfg.initialPrefs;
+      };
+    };
+
+    chrome = {
+      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
+        lib.mkIf (cfg.enablePlasmaBrowserIntegration)
+          {
+            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json";
+          };
+      "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+        text = builtins.toJSON defaultProfile;
+      };
+      "opt/chrome/policies/managed/extra.json" = lib.mkIf (mergedExtraOpts != { }) {
+        text = builtins.toJSON mergedExtraOpts;
+      };
+    };
+
+    brave = {
+      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+        text = builtins.toJSON defaultProfile;
+      };
+      "brave/policies/managed/extra.json" = lib.mkIf (mergedExtraOpts != { }) {
+        text = builtins.toJSON mergedExtraOpts;
+      };
+    };
+  };
+
+  mergedExtraOpts = browserPolicies // cfg.extraOpts;
+  browserPolicies = cfg.policies.${browserType} or { };
+  selectedBrowserConfig = browserEtcConfig.${browserType} or { };
 in
 
 {
@@ -22,7 +81,19 @@ in
 
   options = {
     programs.chromium = {
-      enable = lib.mkEnableOption "policies for chromium based browsers like Chromium, Google Chrome or Brave";
+      enable = lib.mkEnableOption "Enable Chrome or Chromium browser";
+
+      # Intentionally set to `null` in order to keep the old behaviour
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = null;
+        description = "Chromium browser package to install, `programs.chromium.enable` must be `true`.";
+        defaultText = lib.literalExpression "pkgs.chromium";
+        relatedPackages = [
+          "brave"
+          "ungoogled-chromium"
+        ];
+      };
 
       enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
@@ -122,47 +193,35 @@ in
           }
         '';
       };
+
+      policies = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.attrs);
+        default = { };
+        description = "Browser-specific policies.";
+        example = lib.literalExpression ''
+          {
+            chrome = {
+              BrowserSignin = 0;
+            };
+            chromium = {
+              SyncDisabled = true;
+            };
+            brave = {
+              HomepageLocation = "https://brave.com/";
+            };
+          }
+        '';
+      };
     };
   };
 
   ###### implementation
 
-  config = {
-    environment.etc = lib.mkIf cfg.enable {
-      # for chromium
-      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
-      "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
-        text = builtins.toJSON cfg.initialPrefs;
-      };
-      # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
-      "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      # for brave
-      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
+  config = lib.mkIf cfg.enable {
+    environment = {
+      etc = selectedBrowserConfig;
+
+      systemPackages = lib.optionals (cfg.package != null) [ cfg.package ];
     };
   };
 }
