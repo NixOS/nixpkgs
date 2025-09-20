@@ -594,13 +594,6 @@
     "hash": "sha256-d/Yzd3mdYssQDJO9kSTZKHC2hY4OleQ1XQf1pLDfax0=",
     "description": "Microsoft Azure Command-Line Tools IpGroup Extension"
   },
-  "k8s-extension": {
-    "pname": "k8s-extension",
-    "version": "1.6.7",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_extension-1.6.7-py3-none-any.whl",
-    "hash": "sha256-TU2bAc44Zpd//GyziclX7V8BU1cExK/SduKLV++FxqE=",
-    "description": "Microsoft Azure Command-Line Tools K8s-extension Extension"
-  },
   "k8s-runtime": {
     "pname": "k8s-runtime",
     "version": "2.0.0",
