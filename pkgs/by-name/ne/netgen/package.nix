@@ -35,24 +35,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2505";
+  version = "6.2.2506";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
+    hash = "sha256-7OAFwStUq3bgkzbfCTEqeK7phtd9c8zUYVnPPRUqHXQ=";
   };
 
   patches = [
+    (fetchpatch2 {
+      url = "https://github.com/NGSolve/netgen/pull/221/commits/fc492f31f7872e96dc4815bbce882767882986eb.patch?full_index=1";
+      hash = "sha256-ooiI0ILxezuPPDF9Fwy6v/6s6rdWVsIR1gaTtxBfzZc=";
+    })
     # disable some platform specified code used by downstream ngsolve
     # can be enabled with -march=armv8.3-a+simd when compiling ngsolve
     # note compiling netgen itself is not influenced by this feature
     (fetchpatch2 {
-      url = "https://github.com/NGSolve/netgen/pull/197/commits/1d93dfba00f224787cfc2cde1af2ab5d7f5b87f7.patch";
-      hash = "sha256-3Nom4uGhGLtSGn/k+qKKSxVxrGtGTHqPtcNn3D/gkZU";
+      url = "https://github.com/NGSolve/netgen/pull/222/commits/ef06642cc21b43f055f57be44c72ea26ade05bbc.patch?full_index=1";
+      hash = "sha256-MzZOefpQqxPT+9Wcjq6uwFdSVYpn5UfCJC+CEg42/Bs=";
     })
-
     (fetchpatch2 {
       url = "${patchSource}/use-local-catch2.patch";
       hash = "sha256-h4ob8tl6mvGt5B0qXRFNcl9MxPXxRhYw+PrGr5iRGGk=";
