@@ -5555,6 +5555,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  git-dashboard-nvim = buildVimPlugin {
+    pname = "git-dashboard-nvim";
+    version = "2025-01-02";
+    src = fetchFromGitHub {
+      owner = "juansalvatore";
+      repo = "git-dashboard-nvim";
+      rev = "c54fa2faf8ebe1c4091cc0c17c840835534943a6";
+      sha256 = "0b7b6glp89pqyff21fnhhbh1r7iwdn7w3f0wklmxvl1cai49mh1y";
+    };
+    meta.homepage = "https://github.com/juansalvatore/git-dashboard-nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   git-messenger-vim = buildVimPlugin {
     pname = "git-messenger.vim";
     version = "2025-05-30";
