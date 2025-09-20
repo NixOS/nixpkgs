@@ -5,20 +5,18 @@
   kernel,
   kernelModuleMakeFlags,
   nixosTests,
+  gitUpdater,
 }:
 
-let
-  tag = "0.3.14";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apfs";
-  version = "${tag}-${kernel.version}";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "v${tag}";
-    hash = "sha256-bv3WGcIKx5RVj+cQg0U5U1zGPRzjxMlCZmol9QvAmc4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/qJ8QvnVhVXvuxeZ/UYLTXGMPPVnC7fHOSWI1B15r/M=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -31,6 +29,9 @@ stdenv.mkDerivation {
   ];
 
   passthru.tests.apfs = nixosTests.apfs;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "APFS module for linux";
@@ -48,4 +49,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ Luflosi ];
   };
-}
+})
