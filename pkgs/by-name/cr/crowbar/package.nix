@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "crowbar";
-  version = "unstable-2020-04-23";
+  version = "4.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
