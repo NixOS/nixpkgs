@@ -2631,15 +2631,12 @@ with pkgs;
     websocketSupport = true;
   };
 
-  curlHTTP3 = curl.override {
-    http3Support = true;
-  };
-
   curl = curlMinimal.override (
     {
       idnSupport = true;
       pslSupport = true;
       zstdSupport = true;
+      http3Support = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
       brotliSupport = true;
