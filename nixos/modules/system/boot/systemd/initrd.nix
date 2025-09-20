@@ -641,7 +641,7 @@ in
             # Assume the directory containing the init script is the closure.
             closure="$(dirname "$closure")"
 
-            ln --symbolic "$closure" /nixos-closure
+            ln -sf "$closure" /nixos-closure
 
             # If we are not booting a NixOS closure (e.g. init=/bin/sh),
             # we don't know what root to prepare so we don't do anything
