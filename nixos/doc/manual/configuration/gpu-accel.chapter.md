@@ -97,7 +97,7 @@ example:
 
 ```ShellSession
 $ export \
-  VK_ICD_FILENAMES=`nix-build '<nixpkgs>' --no-out-link -A amdvlk`/share/vulkan/icd.d/amd_icd64.json
+  VK_ICD_FILENAMES=`nix-build '<nixpkgs>' --no-out-link -A mesa`/share/vulkan/icd.d/radeon_icdx86_64.json
 ```
 
 The second mechanism is to add the Vulkan driver package to
@@ -129,25 +129,7 @@ vulkan-tools package.
 
 Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
-supported through either radv, which is part of mesa, or the amdvlk
-package. Adding the amdvlk package to
-[](#opt-hardware.graphics.extraPackages)
-makes amdvlk the default driver and hides radv and lavapipe from the device list.
-A specific driver can be forced as follows:
-
-```nix
-{
-  hardware.graphics.extraPackages = [ pkgs.amdvlk ];
-
-  # To enable Vulkan support for 32-bit applications, also add:
-  hardware.graphics.extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
-
-  # Force radv
-  environment.variables.AMD_VULKAN_ICD = "RADV";
-  # Or
-  environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-}
-```
+supported through the RADV driver, which is part of mesa.
 
 ## VA-API {#sec-gpu-accel-va-api}
 
