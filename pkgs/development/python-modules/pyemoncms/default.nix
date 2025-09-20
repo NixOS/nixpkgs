@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyemoncms";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Open-Building-Management";
     repo = "pyemoncms";
     tag = "v${version}";
-    hash = "sha256-61i7VKmPSMUrUSgnDtKROdDdM0QDqOTsqnLjGLkgGII=";
+    hash = "sha256-Bvcnl3av9SF0CNUjg/QDdvENIEgPg26fAJ522jBrL7Q=";
   };
 
   build-system = [ setuptools ];
