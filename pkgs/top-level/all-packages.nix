@@ -12541,8 +12541,6 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  soci = callPackage ../development/libraries/soci { };
-
   socialscan = with python3.pkgs; toPythonApplication socialscan;
 
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
