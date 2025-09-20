@@ -12083,6 +12083,12 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
+  inherit (callPackage ../applications/misc/karabiner-elements { })
+    karabiner-elements_14
+    karabiner-elements_15
+    ;
+  karabiner-elements = karabiner-elements_15;
+
   kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
   kuma-experimental = callPackage ../applications/networking/cluster/kuma {
     isFull = true;
