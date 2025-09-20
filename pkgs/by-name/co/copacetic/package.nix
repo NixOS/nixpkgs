@@ -2,62 +2,47 @@
   lib,
   stdenv,
   buildGoModule,
-  docker,
   fetchFromGitHub,
-  installShellFiles,
   nix-update-script,
-  oras,
+  installShellFiles,
   versionCheckHook,
 }:
-
 buildGoModule rec {
   pname = "copacetic";
-  version = "0.11.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
     tag = "v${version}";
-    hash = "sha256-kgFT+IK6zCGoGK8L/lwXyiUXCWYG7ElziPs0Q1cq+fw=";
+    hash = "sha256-aLFRhmxJ5Hj2vvdYCwALBeK0avPF/jDWUgQiSw0fFGg=";
   };
 
-  vendorHash = "sha256-qe2VJHXSYtZJlMd5R2J1NXWcXb8+cbTiDBQeN20fbEE=";
+  vendorHash = "sha256-+iS6nom52eofgcj/fZPVs2Eog9Un5ThSX+EBVmHTSlo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    docker
-    oras
-  ];
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   env.CGO_ENABLED = "0";
-
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/project-copacetic/copacetic/pkg/version.GitVersion=${version}"
-    "-X=main.version=${version}"
+    "-X github.com/project-copacetic/copacetic/pkg/version.GitVersion=${version}"
+    "-X main.version=${version}"
   ];
 
   checkFlags =
     let
-      # Skip tests that require network access and container services
+      # Skip tests that require network access
       skippedTests = [
         "TestNewClient/custom_buildkit_addr"
         "TestPatch"
         "TestPlugins/docker.io"
-        "TestPatchPartialArchitectures"
-        "TestPushToRegistry"
-        "TestMultiPlatformPluginPatch"
-        "TestPodmanLoader_Load_Success"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
 
   postInstall = ''
@@ -73,9 +58,8 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Tool for directly patching vulnerabilities in container images";
     homepage = "https://project-copacetic.github.io/copacetic/";
-    changelog = "https://github.com/project-copacetic/copacetic/releases/tag/${src.tag}";
+    description = "Tool for directly patching vulnerabilities in container images";
     license = lib.licenses.asl20;
     mainProgram = "copa";
     maintainers = with lib.maintainers; [ ];

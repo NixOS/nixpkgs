@@ -70,6 +70,8 @@ let
 
     mlterm.pkg = p: p.mlterm;
 
+    mrxvt.pkg = p: p.mrxvt;
+
     qterminal.pkg = p: p.lxqt.qterminal;
     qterminal.kill = true;
 

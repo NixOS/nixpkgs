@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   setuptools-rust,
   rustPlatform,
   cargo,
@@ -60,10 +59,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "verilogae" ];
 
   hardeningDisable = [ "pic" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
 
   meta = {
     description = "Verilog-A tool useful for compact model parameter extraction";

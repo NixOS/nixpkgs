@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter335,
+  flutter332,
   keybinder3,
   nodejs,
   pnpm_9,
   python3Packages,
   writableTmpDirAsHomeHook,
-  buildGoModule,
+  buildGo125Module,
   pkg-config,
   autoPatchelfHook,
   xorg,
@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.0.0-beta.5";
+  version = "2.0.0-beta.4";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-ZuKsIWooLqGeEex8uRiMVYVxnAJyiQt0soZ9OP6+qq0=";
+    hash = "sha256-KOndb8snDk1BwOontI5G9wnBBvO8KV85YF5zzp95t/M=";
   };
 
   metaCommon = {
@@ -38,7 +38,7 @@ let
     maintainers = with lib.maintainers; [ ];
   };
 
-  ui-flutter = flutter335.buildFlutterApplication {
+  ui-flutter = flutter332.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
@@ -97,7 +97,7 @@ let
     meta = metaCommon;
   });
 
-  plugin-python = python3Packages.buildPythonApplication {
+  plugin-python = python3Packages.buildPythonApplication rec {
     pname = "wox-plugin";
     inherit version src;
     pyproject = true;
@@ -109,7 +109,7 @@ let
     meta = metaCommon;
   };
 
-  plugin-host-python = python3Packages.buildPythonApplication {
+  plugin-host-python = python3Packages.buildPythonApplication rec {
     pname = "wox-plugin-host-python";
     inherit version src;
     pyproject = true;
@@ -137,7 +137,7 @@ let
     };
   };
 in
-buildGoModule {
+buildGo125Module {
   pname = "wox";
   inherit version src;
 

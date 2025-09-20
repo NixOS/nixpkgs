@@ -3,21 +3,29 @@
   python3Packages,
   fetchFromGitHub,
   fetchpatch,
-  unstableGitUpdater,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "plecost";
-  version = "0-unstable-2022-08-03";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iniqua";
     repo = "plecost";
     # Release is untagged
-    rev = "4895e345d71bffe956be43530632e303dd379a5f";
-    hash = "sha256-cXXFLoiLZpo3qiAPztavns4EkOG2aC6UKMf0N4Eun/w=";
+    rev = "aa40e504bee95cf731f0cc9f228bcf5fdfbe6194";
+    sha256 = "K8ESI2EOqH9zBDfSKgVcTKjCMdRhBiwltIbXDt1vF+M=";
   };
+
+  patches = [
+    # Fix compatibility with aiohttp 3.x
+    # Merged - pending next release
+    (fetchpatch {
+      url = "https://github.com/iniqua/plecost/pull/34/commits/c09e7fab934f136f8fbc5f219592cf5fec151cf9.patch";
+      sha256 = "sha256-G7Poo3+d+PQTrg8PCrmsG6nMHt8CXgiuAu+ZNvK8oiw=";
+    })
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -32,8 +40,6 @@ python3Packages.buildPythonApplication {
   doCheck = false;
 
   pythonImportsCheck = [ "plecost_lib" ];
-
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = with lib; {
     description = "Vulnerability fingerprinting and vulnerability finder for Wordpress blog engine";
