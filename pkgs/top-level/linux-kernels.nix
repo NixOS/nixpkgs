@@ -349,6 +349,8 @@ in
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
         ];
+        buildKernelModule = callPackage ../build-support/kernel/build-kernel-module.nix { };
+
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05
         inherit (pkgs) bcc bpftrace; # added 2021-12
