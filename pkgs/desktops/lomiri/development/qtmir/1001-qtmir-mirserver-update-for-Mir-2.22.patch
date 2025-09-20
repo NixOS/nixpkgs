@@ -1,0 +1,75 @@
+From 97155294fb44c95b305f3aebe98d9e29bbd398fc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20Sawicz?= <michal@sawicz.net>
+Date: Thu, 4 Sep 2025 09:19:11 +0200
+Subject: [PATCH] mirserver: update for Mir 2.22
+
+---
+ include/miroil/edid.h                      | 27 ----------------------
+ src/platforms/mirserver/platformscreen.cpp |  8 +++++++
+ 2 files changed, 8 insertions(+), 27 deletions(-)
+
+diff --git a/include/miroil/edid.h b/include/miroil/edid.h
+index ec5996e5..fcd197a5 100644
+--- a/include/miroil/edid.h
++++ b/include/miroil/edid.h
+@@ -34,33 +34,6 @@ struct Edid
+ 
+     struct PhysicalSizeMM { int width; int height; };
+     PhysicalSizeMM size{0,0};
+-
+-    struct Descriptor {
+-        enum class Type : uint8_t {
+-            timing_identifiers = 0xfa,
+-            white_point_data = 0xfb,
+-            monitor_name = 0xfc,
+-            monitor_limits = 0xfd,
+-            unspecified_text = 0xfe,
+-            serial_number = 0xff,
+-
+-            undefined = 0x00,
+-        };
+-
+-        union Value {
+-            char monitor_name[13];
+-            char unspecified_text[13];
+-            char serial_number[13];
+-        };
+-
+-        Type type{Type::undefined};
+-        Value value{{0}};
+-
+-        std::string string_value() const;
+-    };
+-    Descriptor descriptors[4];
+-
+-    Edid& parse_data(std::vector<uint8_t> const&);
+ };
+ 
+ }
+diff --git a/src/platforms/mirserver/platformscreen.cpp b/src/platforms/mirserver/platformscreen.cpp
+index d27ce391..ff6bc495 100644
+--- a/src/platforms/mirserver/platformscreen.cpp
++++ b/src/platforms/mirserver/platformscreen.cpp
+@@ -260,11 +260,19 @@ void PlatformScreen::setMirDisplayConfiguration(const mir::graphics::DisplayConf
+ 
+     // Output data - each output has a unique id and corresponding type. Can be multiple cards.
+     m_displayId.output_id = screen.id;
++
++#if MIR_SERVER_VERSION < MIR_VERSION_NUMBER(2, 22, 0)
+     try {
+         m_displayId.edid.parse_data(reinterpret_cast<std::vector<uint8_t> const&>(screen.edid));
+     } catch (std::runtime_error const& e) {
+         printf("Failed to parse EDID - %s\n", e.what());
+     }
++#else
++    m_displayId.edid.vendor = screen.display_info.vendor.value_or("");
++    m_displayId.edid.product_code = screen.display_info.product_code.value_or(0);
++    m_displayId.edid.serial_number = screen.display_info.serial_number.value_or(0);
++    m_displayId.edid.size = {screen.physical_size_mm.width.as_int(), screen.physical_size_mm.height.as_int()};
++#endif
+ 
+     auto type = static_cast<qtmir::OutputTypes>(screen.type); //FIXME: need compile time check these are equivalent
+     if (m_type != type) {
+-- 
+GitLab
+
