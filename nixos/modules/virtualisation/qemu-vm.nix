@@ -129,7 +129,7 @@ let
     NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
     if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
-        echo "Disk image do not exist, creating the virtualisation disk image..."
+        echo "Disk image does not exist, creating the virtualisation disk image..."
 
         ${
           if (cfg.useBootLoader && cfg.useDefaultFilesystems) then
