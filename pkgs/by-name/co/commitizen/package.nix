@@ -2,45 +2,25 @@
   lib,
   commitizen,
   fetchFromGitHub,
-  buildPythonPackage,
   gitMinimal,
-  pythonOlder,
   stdenv,
   installShellFiles,
-  poetry-core,
   nix-update-script,
-  testers,
-  argcomplete,
-  charset-normalizer,
-  colorama,
-  decli,
-  importlib-metadata,
-  jinja2,
-  packaging,
-  pyyaml,
-  questionary,
-  termcolor,
-  tomlkit,
-  py,
-  pytest-freezer,
-  pytest-mock,
-  pytest-regressions,
-  pytest7CheckHook,
-  deprecated,
+  python3Packages,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.8.3";
+  version = "4.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-ukmLvv1/Ez04UhwXcb5QYiVWXCV7LvYd13Go6ASxsxI=";
+    hash = "sha256-vHA+TvKs9TOu/0/FpxLHHbDgshQFhP9Dwe6ZMnUOBKc=";
   };
 
   pythonRelaxDeps = [
@@ -49,15 +29,16 @@ buildPythonPackage rec {
     "termcolor"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = with python3Packages; [ poetry-core ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     argcomplete
     charset-normalizer
     colorama
     decli
+    deprecated
     importlib-metadata
     jinja2
     packaging
@@ -68,23 +49,25 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    argcomplete
-    deprecated
     gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
+    argcomplete
     py
     pytest-freezer
     pytest-mock
     pytest-regressions
     pytest7CheckHook
-  ];
+  ]);
+
+  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "commitizen" ];
 
   # The tests require a functional git installation
-  # which requires a valid HOME directory.
   preCheck = ''
-    export HOME="$(mktemp -d)"
-
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
     git init .
@@ -105,7 +88,7 @@ buildPythonPackage rec {
 
   postInstall =
     let
-      register-python-argcomplete = lib.getExe' argcomplete "register-python-argcomplete";
+      register-python-argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
     in
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd cz \
@@ -116,19 +99,15 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = commitizen;
-      command = "cz version";
-    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
-    changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "cz";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
       anthonyroussel
     ];
