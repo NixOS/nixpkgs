@@ -104,6 +104,8 @@ in
     services.graphical-desktop.enable = true;
 
     xdg = {
+      # Required for cosmic-osd
+      sounds.enable = true;
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
 
       portal = {
