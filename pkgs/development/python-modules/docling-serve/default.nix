@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "1.1.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-A8q1mjrtm8VgwsOpBCVD61K88wrjsYHiWdbv0XvACG4=";
+    hash = "sha256-V0xu9CjGXWRiJ5hX9MhCtbWHbRjqhw+LdYgQOd7tOqc=";
   };
 
   build-system = [
