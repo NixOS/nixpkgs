@@ -32,6 +32,8 @@ buildPythonPackage rec {
   # no pytest tests exist
   doCheck = false;
 
+  passthru.updateScript = null;
+
   meta = {
     description = "SàT extension widgets for Urwid";
     homepage = "https://libervia.org";
