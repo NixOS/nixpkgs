@@ -29,11 +29,11 @@
 
 let
   pname = "x2goserver";
-  version = "4.1.0.3";
+  version = "4.1.0.5";
 
   src = fetchurl {
     url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
+    hash = "sha256-Q1vbB84iQZ2eRWDf+Kyn+utrNgkdVayrwXZCm5Ia65Y=";
   };
 
   x2go-perl = perlPackages.buildPerlPackage {
