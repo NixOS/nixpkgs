@@ -13,6 +13,7 @@
   libXtst,
   mpg123,
   pipewire,
+  lua-language-server,
   releasePath ? null,
 }:
 
@@ -91,6 +92,17 @@ stdenv.mkDerivation rec {
     cp Installer/renoise-48.png $out/share/icons/hicolor/48x48/apps/renoise.png
     cp Installer/renoise-64.png $out/share/icons/hicolor/64x64/apps/renoise.png
     cp Installer/renoise-128.png $out/share/icons/hicolor/128x128/apps/renoise.png
+
+    # Internal scripting editor
+    LuaLS="$out/3rdParty/LuaLS"
+
+    rm -r $LuaLS
+    mkdir -p $LuaLS/bin
+
+    pushd $LuaLS/bin
+      platform="linux_${platforms.${stdenv.system}.archSuffix}"
+      ln -s ${lua-language-server}/bin/lua-language-server lua-language-server-$platform
+    popd
   '';
 
   postFixup = ''
