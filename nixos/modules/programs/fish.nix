@@ -77,6 +77,15 @@ in
         example = false;
       };
 
+      extraCompletionPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "config.users.users.alice.packages";
+        description = ''
+          Additional packages to generate completions from, if {option}`programs.fish.generateCompletions` is enabled.
+        '';
+      };
+
       vendor.config.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -300,7 +309,9 @@ in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = builtins.map generateCompletions config.environment.systemPackages;
+            paths = builtins.map generateCompletions (
+              config.environment.systemPackages ++ cfg.extraCompletionPackages
+            );
           };
       })
 
