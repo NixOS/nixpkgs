@@ -30,6 +30,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional useSystemd systemd;
 
+  hardeningEnable = [ "pie" ];
+
   configureFlags = [
     "--with-systemdsystemunitdir=${
       if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
