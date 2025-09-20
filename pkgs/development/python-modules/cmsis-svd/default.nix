@@ -7,16 +7,16 @@
   lxml,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "cmsis-svd";
-  version = "0.4-unstable-2024-01-25";
+  version = "0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cmsis-svd";
     repo = "cmsis-svd";
-    rev = "38d21d30abd0d4c2f34fd79d83b34392ed4bb7a3";
-    hash = "sha256-lFA0sNHVj4a4+EwOTmFUbM/nhmzJ4mx4GvT6Ykutakk=";
+    tag = "python-${version}";
+    hash = "sha256-fx9eR9/Nw/oxPaP9rm1G6sjGI7iU4bhkmTS7f8i2RrQ=";
   };
 
   preBuild = ''
@@ -38,6 +38,7 @@ buildPythonPackage {
   meta = {
     description = "CMSIS SVD parser";
     homepage = "https://github.com/cmsis-svd/cmsis-svd";
+    changelog = "https://github.com/cmsis-svd/cmsis-svd/blob/${src.rev}/CHANGELOG";
     maintainers = [ lib.maintainers.dump_stack ];
     license = lib.licenses.asl20;
   };
