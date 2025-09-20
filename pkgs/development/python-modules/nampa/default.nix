@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "nampa";
-  version = "1.0-unstable-2024-12-18";
+  version = "1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
