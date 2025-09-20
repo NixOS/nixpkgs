@@ -6637,8 +6637,6 @@ with pkgs;
 
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix { };
 
-  cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
-
   # can't use override - it triggers infinite recursion
   cmakeMinimal = callPackage ../by-name/cm/cmake/package.nix {
     isMinimalBuild = true;

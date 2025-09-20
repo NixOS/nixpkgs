@@ -120,7 +120,6 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [
         garaiza-93
-        Madouura
         d3vil0p3r
       ];
       platforms = lib.platforms.unix;
