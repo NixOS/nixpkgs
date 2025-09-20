@@ -8,42 +8,21 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.11.2";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
+    hash = "sha256-vKKNI/wLplsT4o8ffg4DwCScl4qSi21RZMoAYlGKUBU=";
   };
 
   build-system = [
     python3Packages.poetry-core
   ];
 
-  # The upstream project changed the behavior of the CLI when --set-admin and --set-role are used together.
-  # Previously, it would raise an error, but now it issues a deprecation warning.
-  # This patch updates the test assertion to expect the new deprecation warning message.
-  # See upstream commit 6eda1b6119b3e41bdf8896e74b4a07d3c9e97609.
-  postPatch = ''
-    substituteInPlace fittrackee/tests/users/test_users_commands.py \
-      --replace '"--set-admin and --set-role can not be used together."' '"WARNING: --set-admin is deprecated. Please use --set-role option instead."'
-  '';
-
-  pythonRelaxDeps = [
-    "authlib"
-    "fitdecode"
-    "flask"
-    "flask-limiter"
-    "flask-migrate"
-    "nh3"
-    "lxml"
-    "pyopenssl"
-    "pytz"
-    "sqlalchemy"
-    "xmltodict"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies =
     with python3Packages;
@@ -53,18 +32,25 @@ python3Packages.buildPythonApplication rec {
       click
       dramatiq
       dramatiq-abort
+      feedgenerator
       fitdecode
       flask
+      flask-babel
       flask-bcrypt
       flask-dramatiq
       flask-limiter
       flask-migrate
       flask-sqlalchemy
+      geoalchemy2
+      geopandas
       gpxpy
       gunicorn
       humanize
       jsonschema
       nh3
+      mistune
+      numpy
+      pandas
       psycopg2-binary
       pyjwt
       pyopenssl
@@ -84,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     freezegun
     postgresqlTestHook
-    postgresql
+    (postgresql.withPackages (ps: with ps; [ postgis ]))
     time-machine
   ];
 
@@ -93,6 +79,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postgresqlTestSetupPost = ''
+    echo "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" | PGUSER=postgres psql test_db
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
