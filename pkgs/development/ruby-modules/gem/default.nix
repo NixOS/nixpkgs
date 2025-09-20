@@ -308,7 +308,11 @@ lib.makeOverridable (
         };
       })
       // (lib.optionalAttrs (type == "git") {
-        identifiers.purlParts = src.meta.identifiers.purlParts or { };
+        identifiers = {
+          ${if (src.meta.identifiers.purl or null) != null then "purl" else null} = src.meta.identifiers.purl;
+          ${if (src.meta.identifiers.purls or null) != null then "purls" else null} =
+            src.meta.identifiers.purls;
+        };
       })
       // meta;
     }
