@@ -30,7 +30,12 @@ in
       services.displayManager.defaultSession = "sway";
       programs.sway.enable = true;
     };
-
+  nodes.machineShell =
+    { ... }:
+    lib.attrsets.recursiveUpdate machineBase {
+      services.displayManager.ly.x11Support = false;
+      services.displayManager.defaultSession = "shell";
+    };
   testScript =
     { nodes, ... }:
     let
@@ -64,5 +69,20 @@ in
       machineNoX11.wait_for_file("/run/user/${toString user.uid}/sway-ipc.*.sock")
       machineNoX11.sleep(5)
       machineNoX11.screenshot("sway")
+
+      machineShell.wait_until_tty_matches("1", "password:")
+      machineShell.send_key("ctrl-alt-f1")
+      machineShell.sleep(1)
+      machineShell.screenshot("ly-shell")
+      machineShell.send_chars("alice")
+      machineShell.send_key("tab")
+      machineShell.send_chars("${user.password}")
+      machineShell.send_key("ret")
+      machineShell.wait_until_tty_matches("1","alice@machineShell")
+      machineShell.send_chars("echo The shell is alive.")
+      machineShell.send_key("ret")
+      machineShell.wait_until_tty_matches("1","alive")
+      machineShell.sleep(1)
+      machineShell.screenshot("shell")
     '';
 }
