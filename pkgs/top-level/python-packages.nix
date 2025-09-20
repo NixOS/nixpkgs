@@ -3961,6 +3961,8 @@ self: super: with self; {
 
   django-import-export = callPackage ../development/python-modules/django-import-export { };
 
+  django-inet = callPackage ../development/python-modules/django-inet { };
+
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
