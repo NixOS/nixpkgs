@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.038";
+  version = "5.040";
 
   # Verilator gets the version from this environment variable
   # if it can't do git describe while building.
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "verilator";
     repo = "verilator";
     rev = "v${version}";
-    hash = "sha256-uPGVE7y3zm+5ZydGjd1+/kIjW+a5u6d+YzjUSE4KnCY=";
+    hash = "sha256-S+cDnKOTPjLw+sNmWL3+Ay6+UM8poMadkyPSGd3hgnc=";
   };
 
   enableParallelBuilding = true;
