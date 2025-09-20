@@ -603,7 +603,6 @@ in
     inherit runTest;
     forgejoPackage = pkgs.forgejo-lts;
   };
-  freenet = runTest ./freenet.nix;
   freeswitch = runTest ./freeswitch.nix;
   freetube = discoverTests (import ./freetube.nix);
   freshrss = import ./freshrss { inherit runTest; };
@@ -746,6 +745,7 @@ in
   hound = runTest ./hound.nix;
   hub = runTest ./git/hub.nix;
   hydra = runTest ./hydra;
+  hyphanet = runTest ./hyphanet.nix;
   i18n = runTest ./i18n.nix;
   i3wm = runTest ./i3wm.nix;
   icecast = runTest ./icecast.nix;
