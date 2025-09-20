@@ -18,6 +18,7 @@
   typing-extensions,
 
   # tests
+  datafusion,
   pytestCheckHook,
   torch,
 }:
@@ -64,6 +65,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "rerun" ];
 
   nativeCheckInputs = [
+    datafusion
     pytestCheckHook
     torch
   ];
@@ -74,6 +76,9 @@ buildPythonPackage {
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
+
+    # ConnectionError: Connection error: transport error
+    "rerun_py/tests/unit/test_datafusion_tables.py"
   ];
 
   meta = {
