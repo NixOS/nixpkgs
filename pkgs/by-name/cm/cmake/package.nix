@@ -13,6 +13,7 @@
   openssl,
   pkg-config,
   ps,
+  sysctl,
   rhash,
   sphinx,
   texinfo,
@@ -60,8 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Add NIXPKGS_CMAKE_PREFIX_PATH to cmake which is like CMAKE_PREFIX_PATH
     # except it is not searched for programs
     ./nixpkgs-cmake-prefix-path.patch
-    # Don't search in non-Nix locations such as /usr, but do search in our libc.
-    ./search-path.patch
+
+    # Add the libc paths from the compiler wrapper.
+    ./add-nixpkgs-libc-paths.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-binary-paths.patch {
@@ -69,15 +71,20 @@ stdenv.mkDerivation (finalAttrs: {
       vm_stat = lib.getExe' darwin.system_cmds "vm_stat";
     })
   ]
-  # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
-  ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
-    replaceVars ./darwin-bsd-ps-abspath.patch {
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
+    (replaceVars ./darwin-bsd-binary-paths.patch {
+      # `ps(1)` is theoretically used on Linux too, but only when
+      # `/proc` is inaccessible, so we can skip the dependency.
       ps = lib.getExe ps;
-    }
-  )
+      sysctl = lib.getExe sysctl;
+    })
+  ]
   ++ [
     # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/11134
     ./fix-curl-8.16.patch
+
+    # Remove references to non‐Nix search paths.
+    ./remove-impure-search-paths.patch
   ];
 
   outputs = [
@@ -121,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional qt5UI qtbase;
 
   preConfigure = ''
-    fixCmakeFiles .
     substituteInPlace Modules/Platform/UnixPaths.cmake \
       --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
@@ -177,14 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
   # make install attempts to use the just-built cmake
   preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
-  '';
-
-  # Undo some of `fixCmakeFiles` for Darwin to make sure that checks for libraries in the SDK find them
-  # (e.g., `find_library(MATH_LIBRARY m)` should find `$SDKROOT/usr/lib/libm.tbd`).
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace "$out/share/cmake-${lib.versions.majorMinor finalAttrs.version}/Modules/Platform/Darwin.cmake" \
-       --replace-fail '/var/empty/include' '/usr/include' \
-       --replace-fail '/var/empty/lib' '/usr/lib'
   '';
 
   dontUseCmakeConfigure = true;

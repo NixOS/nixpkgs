@@ -94,7 +94,6 @@ stdenv.mkDerivation rec {
   ];
 
   separateDebugInfo = true;
-  dontFixCmake = true;
 
   cmakeFlags = [
     "-DFDB_RELEASE=TRUE"
