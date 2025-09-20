@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  nix-update-script,
+  unstableGitUpdater,
   serve,
   stdenv,
   xsel,
@@ -48,9 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir $out
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
