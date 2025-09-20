@@ -746,6 +746,7 @@ in
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
   ipv6 = runTest ./ipv6.nix;
+  irqbalance = runTest ./irqbalance.nix;
   iscsi-multipath-root = runTest ./iscsi-multipath-root.nix;
   iscsi-root = runTest ./iscsi-root.nix;
   isolate = runTest ./isolate.nix;
