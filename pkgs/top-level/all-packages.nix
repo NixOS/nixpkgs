@@ -12866,8 +12866,6 @@ with pkgs;
 
   skrooge = kdePackages.callPackage ../applications/office/skrooge { };
 
-  soci = callPackage ../development/libraries/soci { };
-
   socialscan = with python3.pkgs; toPythonApplication socialscan;
 
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
