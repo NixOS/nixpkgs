@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "grandalf";
-  version = "0.7";
+  version = "0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "bdcht";
     repo = "grandalf";
     rev = "v${version}";
-    hash = "sha256-j2SvpQvDMfwoj2PAQSxzEIyIzzJ61Eb9wgetKyni6A4=";
+    hash = "sha256-oKuzk/vsEkoiEPgt/fsaaurKfz5CElXPEJe88aFBLqU=";
   };
 
   propagatedBuildInputs = [
