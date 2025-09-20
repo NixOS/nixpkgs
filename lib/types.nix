@@ -289,7 +289,7 @@ let
     # `optionType`: The option type to parenthesize or not.
     #   The option whose description we're returning.
     #
-    # Return value
+    # Returns value
     #
     # The description of the `optionType`, with parentheses if there may be an
     # ambiguity.

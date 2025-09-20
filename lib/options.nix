@@ -503,7 +503,7 @@ rec {
     loc: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    # Return early if we only have one element
+    # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then
