@@ -272,7 +272,6 @@ let
         diagrams-builder
         echidna
         elm2nix
-        emanote
         fffuu
         futhark
         ghcid

@@ -1547,6 +1547,7 @@ broken-packages:
   - email-header # failure in job https://hydra.nixos.org/build/233243713 at 2023-09-02
   - email-postmark # failure in job https://hydra.nixos.org/build/233245426 at 2023-09-02
   - emailaddress # failure in job https://hydra.nixos.org/build/233202700 at 2023-09-02
+  - emanote # failure in job https://hydra.nixos.org/build/307609841 at 2025-09-18
   - embed-config # failure in job https://hydra.nixos.org/build/233237733 at 2023-09-02
   - embla # failure in job https://hydra.nixos.org/build/233206703 at 2023-09-02
   - emgm # failure in job https://hydra.nixos.org/build/233257789 at 2023-09-02
