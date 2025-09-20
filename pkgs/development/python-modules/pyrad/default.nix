@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pyrad";
-  version = "2.4-unstable-2024-07-24";
+  version = "2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
