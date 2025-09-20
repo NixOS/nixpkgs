@@ -10,7 +10,7 @@ with python3Packages;
 
 buildPythonApplication {
   pname = "steamcontroller";
-  version = "2017-08-11";
+  version = "1.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
