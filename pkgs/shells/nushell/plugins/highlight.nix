@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mgttlinger ];
+    broken = true;
   };
 })
