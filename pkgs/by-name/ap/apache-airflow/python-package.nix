@@ -1,106 +1,77 @@
 {
   lib,
-  stdenv,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchYarnDeps,
+  hatchling,
   alembic,
   argcomplete,
-  asgiref,
-  attrs,
-  blinker,
-  cached-property,
-  cattrs,
-  clickclick,
   colorlog,
   configupdater,
   connexion,
   cron-descriptor,
   croniter,
   cryptography,
-  deprecated,
   dill,
-  flask,
-  flask-login,
-  flask-appbuilder,
   flask-caching,
   flask-session,
-  flask-wtf,
+  fsspec,
+  gitdb,
   gitpython,
-  google-re2,
-  graphviz,
   gunicorn,
-  httpx,
-  iso8601,
-  importlib-resources,
-  importlib-metadata,
-  inflection,
-  itsdangerous,
-  jinja2,
-  jsonschema,
   lazy-object-proxy,
   linkify-it-py,
   lockfile,
-  markdown,
-  markupsafe,
   marshmallow-oneofschema,
   mdit-py-plugins,
-  numpy,
-  openapi-spec-validator,
+  methodtools,
+  mkYarnPackage,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
+  packaging,
   pandas,
   pathspec,
   pendulum,
+  pluggy,
   psutil,
-  pydantic,
-  pygments,
-  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python,
   python-daemon,
-  python-dateutil,
   python-nvd3,
   python-slugify,
-  python3-openid,
-  pythonOlder,
-  pyyaml,
-  rich,
   rich-argparse,
   setproctitle,
+  smmap,
   sqlalchemy,
   sqlalchemy-jsonfield,
-  swagger-ui-bundle,
+  stdenv,
   tabulate,
   tenacity,
   termcolor,
-  typing-extensions,
-  unicodecsv,
-  werkzeug,
-  freezegun,
-  pytest-asyncio,
-  pytestCheckHook,
-  time-machine,
-  mkYarnPackage,
-  fetchYarnDeps,
+  tomli,
+  trove-classifiers,
+  universal-pathlib,
   writeScript,
 
-  # Extra airflow providers to enable
+  # extra airflow providers to enable
   enabledProviders ? [ ],
 }:
 let
-  version = "2.7.3";
+  version = "2.10.5";
 
   airflow-src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     rev = "refs/tags/${version}";
-    # Download using the git protocol rather than using tarballs, because the
+    # download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-+YbiKFZLigSDbHPaUKIl97kpezW1rIt/j09MMa6lwhQ=";
+    hash = "sha256-q5/CM+puXE31+15F3yZmcrR74LrqHppdCDUqjLQXPfk=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
-  # This replicates this shell script, fixing bugs in yarn.lock and package.json
+  # this replicates this shell script, fixing bugs in yarn.lock and package.json
 
   airflow-frontend = mkYarnPackage rec {
     name = "airflow-frontend";
@@ -110,15 +81,15 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-WQKuQgNp35fU6z7owequXOSwoUGJDJYcUgkjPDMOops=";
+      hash = "sha256-hKgtMH4c8sPRDLPLVn+H8rmwc2Q6ei6U4er6fGuFn4I=";
     };
 
     distPhase = "true";
 
-    # The webpack license plugin tries to create /licenses when given the
+    # the webpack license plugin tries to create /3rd-party-licenses when given the
     # original relative path
     postPatch = ''
-      sed -i 's!../../../../licenses/LICENSES-ui.txt!licenses/LICENSES-ui.txt!' webpack.config.js
+      sed -i 's!../../../../3rd-party-licenses/LICENSES-ui.txt!/3rd-party-licenses/LICENSES-ui.txt!' webpack.config.js
     '';
 
     configurePhase = ''
@@ -136,130 +107,165 @@ let
     '';
   };
 
-  # Import generated file with metadata for provider dependencies and imports.
-  # Enable additional providers using enabledProviders above.
+  requiredProviders = [
+    "common_compat"
+    "common_io"
+    "common_sql"
+    "fab"
+    "ftp"
+    "http"
+    "imap"
+    "smtp"
+    "sqlite"
+  ];
+
+  # import generated file with metadata for provider dependencies and imports
+  # enable additional providers using enabledProviders above.
   providers = import ./providers.nix;
+  getProviderPath = provider: lib.replaceStrings [ "_" ] [ "/" ] provider;
   getProviderDeps = provider: map (dep: python.pkgs.${dep}) providers.${provider}.deps;
   getProviderImports = provider: providers.${provider}.imports;
-  providerDependencies = lib.concatMap getProviderDeps enabledProviders;
   providerImports = lib.concatMap getProviderImports enabledProviders;
+
+  buildProvider =
+    provider:
+    let
+      providerPath = getProviderPath provider;
+    in
+    python.pkgs.buildPythonPackage {
+      pname = "apache-airflow-providers-${provider}";
+      version = "unstable"; # will be extracted in the build phase
+      pyproject = false; # providers packages don't have pyproject.toml nor setup.py
+
+      src = airflow-src;
+
+      propagatedBuildInputs = getProviderDeps provider;
+      dependencies = [ packaging ];
+
+      buildPhase = ''
+        # extract version from the provider's __init__.py file
+        if [ -f "airflow/providers/${providerPath}/__init__.py" ]; then
+          version=$(grep -oP "(?<=__version__ = ')[^']+" "airflow/providers/${providerPath}/__init__.py" || echo "0.0.0")
+          echo "Provider ${provider} version: $version"
+        else
+          echo "Error: __init__.py not found for provider ${provider} at path airflow/providers/${providerPath}"
+          exit 1
+        fi
+      '';
+
+      installPhase = ''
+                      # create directory structure
+                      mkdir -p $out/${python.sitePackages}/airflow/providers
+
+                      # copy the provider directory
+                      if [ -d "airflow/providers/${providerPath}" ]; then
+                        mkdir -p $out/${python.sitePackages}/airflow/providers/$(dirname "${providerPath}")
+                        cp -r airflow/providers/${providerPath} $out/${python.sitePackages}/airflow/providers/$(dirname "${providerPath}")
+
+                        # create parent __init__.py files
+                        touch $out/${python.sitePackages}/airflow/__init__.py
+                        touch $out/${python.sitePackages}/airflow/providers/__init__.py
+
+                        # create any needed intermediate __init__.py files for nested providers
+                        providerDir=$(dirname "${providerPath}")
+                        while [ "$providerDir" != "." ] && [ -n "$providerDir" ]; do
+                          mkdir -p $out/${python.sitePackages}/airflow/providers/$providerDir
+                          touch $out/${python.sitePackages}/airflow/providers/$providerDir/__init__.py
+                          providerDir=$(dirname "$providerDir")
+                        done
+
+                        # create egg-info for package discovery
+                        mkdir -p $out/${python.sitePackages}/apache_airflow_providers_${provider}.egg-info
+                        cat > $out/${python.sitePackages}/apache_airflow_providers_${provider}.egg-info/PKG-INFO <<EOF
+        Metadata-Version: 2.1
+        Name: apache-airflow-providers-${lib.replaceStrings [ "_" ] [ "-" ] provider}
+        Version: ${version}
+        Summary: Apache Airflow Provider for ${provider}
+        EOF
+                      else
+                        echo "Provider directory not found: airflow/providers/${providerPath}"
+                        exit 1
+                      fi
+      '';
+    };
+
+  providerPackages = map buildProvider (requiredProviders ++ enabledProviders);
+
 in
 buildPythonPackage rec {
   pname = "apache-airflow";
   inherit version;
-  format = "setuptools";
   src = airflow-src;
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    pandas
+    providerPackages
     alembic
     argcomplete
-    asgiref
-    attrs
-    blinker
-    cached-property
-    cattrs
-    clickclick
     colorlog
     configupdater
     connexion
     cron-descriptor
     croniter
     cryptography
-    deprecated
+    python-daemon
     dill
-    flask
-    flask-appbuilder
     flask-caching
     flask-session
-    flask-wtf
-    flask-login
+    fsspec
+    gitdb
     gitpython
-    google-re2
-    graphviz
     gunicorn
-    httpx
-    iso8601
-    importlib-resources
-    inflection
-    itsdangerous
-    jinja2
-    jsonschema
     lazy-object-proxy
-    linkify-it-py
     lockfile
-    markdown
-    markupsafe
-    marshmallow-oneofschema
-    mdit-py-plugins
-    numpy
-    openapi-spec-validator
-    opentelemetry-api
-    opentelemetry-exporter-otlp
-    pandas
+    methodtools
+    packaging
     pathspec
     pendulum
+    pluggy
     psutil
-    pydantic
-    pygments
-    pyjwt
-    python-daemon
-    python-dateutil
-    python-nvd3
-    python-slugify
-    python3-openid
-    pyyaml
-    rich
     rich-argparse
     setproctitle
+    smmap
     sqlalchemy
     sqlalchemy-jsonfield
-    swagger-ui-bundle
     tabulate
     tenacity
     termcolor
-    typing-extensions
-    unicodecsv
-    werkzeug
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-metadata
-  ]
-  ++ providerDependencies;
-
-  buildInputs = [
-    airflow-frontend
+    tomli
+    trove-classifiers
+    universal-pathlib
+    linkify-it-py
+    mdit-py-plugins
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    python-nvd3
+    python-slugify
   ];
 
   nativeCheckInputs = [
-    freezegun
     pytest-asyncio
     pytestCheckHook
-    time-machine
+    marshmallow-oneofschema
   ];
 
-  # By default, source code of providers is included but unusable due to missing
-  # transitive dependencies. To enable a provider, add it to extraProviders
-  # above
-  INSTALL_PROVIDERS_FROM_SOURCES = "true";
+  checkPhase = ''
+    export PYTEST_ADDOPTS="--asyncio_default_fixture_loop_scope=cache"
+  '';
 
   postPatch = ''
-    # https://github.com/apache/airflow/issues/33854
     substituteInPlace pyproject.toml \
-      --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Fix failing test on Hydra
-    substituteInPlace airflow/utils/db.py \
-      --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
+      --replace-fail "\"/airflow/providers/\"," ""
   '';
 
   pythonRelaxDeps = [
     "colorlog"
-    "flask-appbuilder"
-    "opentelemetry-api"
     "pathspec"
+    "trove-classifiers"
+    "apache-airflow-providers-fab" # fab provider package has wrong version
   ];
 
   # allow for gunicorn processes to have access to Python packages
@@ -269,7 +275,7 @@ buildPythonPackage rec {
 
   postInstall = ''
     cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
-    # Needed for pythonImportsCheck below
+    # needed for pythonImportsCheck below
     export HOME=$(mktemp -d)
   '';
 
@@ -283,13 +289,9 @@ buildPythonPackage rec {
     export AIRFLOW__CORE__UNIT_TEST_MODE=True
     export AIRFLOW_DB="$HOME/airflow.db"
     export PATH=$PATH:$out/bin
-
-    airflow version
-    airflow db init
-    airflow db reset -y
   '';
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests/core/test_core.py"
   ];
 
@@ -297,19 +299,19 @@ buildPythonPackage rec {
     "bash_operator_kill" # psutil.AccessDenied
   ];
 
-  # Updates yarn.lock and package.json
+  # updates yarn.lock and package.json
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p common-updater-scripts curl pcre "python3.withPackages (ps: with ps; [ pyyaml ])" yarn2nix
 
     set -euo pipefail
 
-    # Get new version
+    # get new version
     new_version="$(curl -s https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html |
       pcregrep -o1 'Airflow ([0-9.]+).' | head -1)"
     update-source-version ${pname} "$new_version"
 
-    # Update frontend
+    # update frontend
     cd ./pkgs/servers/apache-airflow
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
@@ -319,30 +321,27 @@ buildPythonPackage rec {
     ./update-providers.py
   '';
 
-  # Note on testing the web UI:
-  # You can (manually) test the web UI as follows:
+  # note on testing the web UI:
+  # you can (manually) test the web UI as follows:
   #
   #   nix shell .#apache-airflow
+  #   airflow version
   #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
-  #   airflow db init
   #   airflow standalone
   #
-  # Then navigate to the localhost URL using the credentials printed, try
-  # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
-  # see if they report success.
+  # then navigate to the localhost URL using the credentials printed, try
+  # triggering the 'example_bash_operator' DAG and see if it reports success.
 
-  meta = with lib; {
+  meta = {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "https://airflow.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       bhipple
       gbpdt
       ingenieroariel
-    ];
-    knownVulnerabilities = [
-      "CVE-2023-50943"
-      "CVE-2023-50944"
+      taranarmo
     ];
   };
 }
