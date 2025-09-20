@@ -170,15 +170,17 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isCygwin [
-      # -std=gnu on cygwin defines 'unix', which conflicts with the namespace
-      "-D_POSIX_C_SOURCE=200809L"
-      "-D_GNU_SOURCE"
-      # undefined reference to `__wrap__Znwm'
-      "-DGC_NO_INLINE_STD_NEW=1"
-    ]
-  );
+  env = lib.optionalAttrs stdenv.hostPlatform.isCygwin {
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals stdenv.hostPlatform.isCygwin [
+        # -std=gnu on cygwin defines 'unix', which conflicts with the namespace
+        "-D_POSIX_C_SOURCE=200809L"
+        "-D_GNU_SOURCE"
+        # undefined reference to `__wrap__Znwm'
+        "-DGC_NO_INLINE_STD_NEW=1"
+      ]
+    );
+  };
 
   checkInputs = [
     gtest

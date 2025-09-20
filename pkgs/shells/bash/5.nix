@@ -129,6 +129,8 @@ lib.warnIf (withDocs != null)
 
     enableParallelBuilding = true;
 
+    makeFlags = [ ];
+
     nativeCheckInputs = [ util-linux ];
     doCheck = false; # dependency cycle, needs to be interactive
 

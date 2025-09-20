@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gDBLnDBup5kyfwHZp1Sb2ygxd4kYJjHxtU9FEbQgbdY=";
   };
 
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isCygwin [
     ./fix-symver-on-non-elf.patch
   ];
 
