@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchFromGitLab,
   breeze-icons,
   gtk3,
   gnome-icon-theme,
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "BeautyLine";
   version = "2.4";
 
-  src = prev.fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "garuda-linux";
     repo = "themes-and-settings/artwork/beautyline";
     rev = "0df6f5df71c19496f9a873f8a52fbb5e84e95b12";
