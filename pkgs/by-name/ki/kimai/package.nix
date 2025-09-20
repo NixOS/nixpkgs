@@ -41,13 +41,15 @@ php.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-U9yBSHL3682dWf2VZDw6/CiSmHLMS0EO/o/JgWbfwVM=";
 
   composerNoPlugins = false;
-  composerNoScripts = false;
 
   postInstall = ''
     # Make available the console utility, as Kimai doesn't list this in
     # composer.json.
     mkdir -p "$out"/share/php/kimai "$out"/bin
     ln -s "$out"/share/php/kimai/bin/console "$out"/bin/console
+
+    # Copy bundled assets into its place.
+    (cd "$out"/share/php/kimai && php ./bin/console assets:install)
   '';
 
   passthru.tests = {
