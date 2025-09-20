@@ -23437,6 +23437,12 @@
     githubId = 56278796;
     name = "Sergio Ribera";
   };
+  serpent213 = {
+    name = "Steffen Beyer";
+    email = "steffen@beyer.io";
+    github = "serpent213";
+    githubId = 106662;
+  };
   servalcatty = {
     email = "servalcat@pm.me";
     github = "servalcatty";
