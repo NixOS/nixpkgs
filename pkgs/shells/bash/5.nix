@@ -133,6 +133,8 @@ lib.warnIf (withDocs != null)
 
     enableParallelBuilding = true;
 
+    makeFlags = [ ];
+
     doCheck = false; # Can't be enabled by default due to dependency cycle, use passthru.tests.withChecks instead
 
     postInstall = ''
