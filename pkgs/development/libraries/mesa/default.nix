@@ -43,6 +43,7 @@
   zstd,
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  withOpenCL ? lib.meta.availableOn stdenv.hostPlatform llvmPackages.clang,
 
   # We enable as many drivers as possible here, to build cross tools
   # and support emulation use cases (emulated x86_64 on aarch64, etc)
@@ -159,14 +160,14 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
-    # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
-    # if the user didn't explicitly ask for it
-    "opencl"
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
     # case anything wants to use it at some point
     "spirv2dxil"
   ]
+  # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
+  # if the user didn't explicitly ask for it
+  ++ lib.optional withOpenCL "opencl"
   ++ lib.optionals (!needNativeCLC) [
     # tools for the host platform to be used when cross-compiling.
     # mesa builds these only when not already built. hence:
@@ -210,11 +211,8 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
-    # Required for OpenCL
-    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
-
     # Rusticl, new OpenCL frontend
-    (lib.mesonBool "gallium-rusticl" true)
+    (lib.mesonBool "gallium-rusticl" withOpenCL)
     (lib.mesonOption "gallium-rusticl-enable-drivers" "auto")
 
     # Enable more sensors in gallium-hud
@@ -244,6 +242,10 @@ stdenv.mkDerivation {
   ++ lib.optionals needNativeCLC [
     (lib.mesonOption "mesa-clc" "system")
     (lib.mesonOption "precomp-compiler" "system")
+  ]
+  ++ lib.optionals withOpenCL [
+    # Required for OpenCL
+    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
   ];
 
   strictDeps = true;
@@ -268,10 +270,6 @@ stdenv.mkDerivation {
       libXrandr
       libxshmfence
       libXxf86vm
-      llvmPackages.clang
-      llvmPackages.clang-unwrapped
-      llvmPackages.libclc
-      llvmPackages.libllvm
       lm_sensors
       python3Packages.python # for shebang
       spirv-llvm-translator
@@ -285,6 +283,12 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals withValgrind [
       valgrind-light
+    ]
+    ++ lib.optionals withOpenCL [
+      llvmPackages.clang
+      llvmPackages.clang-unwrapped
+      llvmPackages.libclc
+      llvmPackages.libllvm
     ];
 
   depsBuildBuild = [
@@ -336,10 +340,12 @@ stdenv.mkDerivation {
     moveToOutput bin/panfrostdump $cross_tools
     moveToOutput bin/vtn_bindgen2 $cross_tools
 
-    moveToOutput "lib/lib*OpenCL*" $opencl
-    # Construct our own .icd file that contains an absolute path.
-    mkdir -p $opencl/etc/OpenCL/vendors/
-    echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
+    ${lib.optionalString withOpenCL ''
+      moveToOutput "lib/lib*OpenCL*" $opencl
+      # Construct our own .icd file that contains an absolute path.
+      mkdir -p $opencl/etc/OpenCL/vendors/
+      echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
+    ''}
 
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
