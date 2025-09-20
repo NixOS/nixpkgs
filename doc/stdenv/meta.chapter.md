@@ -322,7 +322,7 @@ A readonly attribute containing the list of guesses for what CPE for this packag
 
 ### Package URL {#sec-meta-identifiers-purl}
 
-[Package URL](https://github.com/package-url/purl-spec) (pURL) is a specification to reliably identify and locate software packages.
+[Package URL](https://github.com/package-url/purl-spec) (pURL) is a specification to reliably identify and locate software packages. Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management. Package URL's default to the mkDerivation.src, as the original consumed software package is the single point of truth.
 
 #### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
 
@@ -333,4 +333,8 @@ This attribute contains an attribute set of all parts of the pURL for this packa
 
 #### `meta.identifiers.purl` {#var-meta-identifiers-purl}
 
-A readonly attribute which is built based on purlParts.
+A readonly attribute which is built based on purlParts. It is the main identifier, consumers should consider using the pURL's list interface to be prepared for edge cases.
+
+#### `meta.identifiers.purls` {#var-meta-identifiers-purls}
+
+A readonly attribute list which defaults to a single element equal to the main pURL. It provides an interface for additional identifiers of mkDerivation.src and / or vendored dependencies inside mkDerivation.src, which maintainers can conciously decide to use on top. Identifiers different to the default src identifier are not recommended by default as they might cause maintenance overhead or may diverge (e.g. differences between source distribution pkg:github and binary distribution like pkg:pypi).
