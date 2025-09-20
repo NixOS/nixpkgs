@@ -104,6 +104,37 @@ in
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
 
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_3_20250912;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
+  haddock-library = doJailbreak super.haddock-library;
+  apply-refact = addBuildDepend self.data-default-class super.apply-refact;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
+  inherit
+    (
+      let
+        hls_overlay = lself: lsuper: {
+          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
+          Cabal = lself.Cabal_3_10_3_0;
+          extensions = dontCheck (doJailbreak super.extensions_0_1_0_1);
+        };
+      in
+      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
+        haskell-language-server = allowInconsistentDependencies (
+          addBuildDepends [ self.retrie self.floskell ] super.haskell-language-server
+        );
+        ormolu = doDistribute self.ormolu_0_7_4_0;
+        fourmolu = doDistribute (dontCheck (doJailbreak self.fourmolu_0_15_0_0));
+        hlint = doDistribute self.hlint_3_8;
+        stylish-haskell = self.stylish-haskell_0_14_6_0;
+        retrie = doJailbreak (unmarkBroken super.retrie);
+        floskell = doJailbreak super.floskell;
+      }
+    )
+    retrie
+    floskell
+    haskell-language-server
+    fourmolu
+    ormolu
+    hlint
+    stylish-haskell
+    ;
 }
