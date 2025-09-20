@@ -1830,8 +1830,6 @@ with pkgs;
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
-  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
-
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
@@ -3326,13 +3324,9 @@ with pkgs;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
-  lolcat = callPackage ../tools/misc/lolcat { };
-
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
     lua = lua5_2_compat;
   };
-
-  kdbg = callPackage ../development/tools/misc/kdbg { };
 
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
@@ -4323,8 +4317,6 @@ with pkgs;
   usort = with python3Packages; toPythonApplication usort;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
-
-  vampire = callPackage ../applications/science/logic/vampire { };
 
   vcmi = libsForQt5.callPackage ../games/vcmi { };
 
@@ -8318,8 +8310,6 @@ with pkgs;
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
   libxmlxx3 = callPackage ../development/libraries/libxmlxx/v3.nix { };
 
-  libxslt = callPackage ../development/libraries/libxslt { };
-
   libwpe = callPackage ../development/libraries/libwpe { };
 
   libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
@@ -11461,8 +11451,6 @@ with pkgs;
     libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   };
 
-  fclones = callPackage ../tools/misc/fclones { };
-
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
@@ -11673,23 +11661,10 @@ with pkgs;
     jdk = jdk.override { enableJavaFX = true; };
   };
 
-  gphoto2 = callPackage ../applications/misc/gphoto2 { };
-
-  gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
-
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
-
-  googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
-
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
-
-  gpsbabel-gui = gpsbabel.override {
-    withGUI = true;
-    withDoc = true;
-  };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
@@ -12817,10 +12792,6 @@ with pkgs;
   nsxiv = callPackage ../by-name/ns/nsxiv/package.nix {
     imlib2 = imlib2Full;
   };
-
-  dropbox = callPackage ../applications/networking/dropbox { };
-
-  dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
   maestral = with python3Packages; toPythonApplication maestral;
 
