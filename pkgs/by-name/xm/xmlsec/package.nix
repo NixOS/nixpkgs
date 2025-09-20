@@ -33,6 +33,7 @@ lib.fix (
     patches = [
       ./lt_dladdsearchdir.patch
       ./remove_bsd_base64_decode_flag.patch
+      ./remove_bad_const_qualifier.patch # xmlDoc.encoding is no longer const in libxml 2.15
     ];
 
     postPatch = ''
