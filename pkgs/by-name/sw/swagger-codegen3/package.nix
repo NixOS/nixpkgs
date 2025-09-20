@@ -4,46 +4,46 @@
   fetchurl,
   jre,
   makeWrapper,
-  testers,
-  swagger-codegen3,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.0.62";
+stdenv.mkDerivation (finalAttrs: {
   pname = "swagger-codegen";
-
-  jarfilename = "${pname}-cli-${version}.jar";
-
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  version = "3.0.73";
 
   src = fetchurl {
-    url = "mirror://maven/io/swagger/codegen/v3/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "sha256-23opx14BRfG7SjcSKXu59wmrrJsJiGebiMRvidV2gE8=";
+    url = "mirror://maven/io/swagger/codegen/v3/swagger-codegen-cli/${finalAttrs.version}/swagger-codegen-cli-${finalAttrs.version}.jar";
+    hash = "sha256-E2BP9qfAlHzrhzpRvxh7EHghD0ZOGIDdzZnT4VOZi2o=";
   };
 
   dontUnpack = true;
 
-  installPhase = ''
-    install -D $src $out/share/java/${jarfilename}
+  nativeBuildInputs = [ makeWrapper ];
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname}3 \
-      --add-flags "-jar $out/share/java/${jarfilename}"
+  installPhase = ''
+    runHook preInstall
+
+    install -D $src $out/share/java/swagger-codegen-cli-${finalAttrs.version}.jar
+
+    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen3 \
+      --add-flags "-jar $out/share/java/swagger-codegen-cli-${finalAttrs.version}.jar"
+
+    runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = swagger-codegen3;
-    command = "swagger-codegen3 version";
-  };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "version";
+
+  meta = {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/swagger-api/swagger-codegen/tree/3.0.0";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = [ maintainers._1000101 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers._1000101 ];
     mainProgram = "swagger-codegen3";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})
