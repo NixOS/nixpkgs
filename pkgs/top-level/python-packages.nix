@@ -8187,6 +8187,8 @@ self: super: with self; {
 
   libear = callPackage ../development/python-modules/libear { };
 
+  liberty-parser = callPackage ../development/python-modules/liberty-parser { };
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (
