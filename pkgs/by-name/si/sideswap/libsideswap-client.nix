@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsideswap-client";
-  version = "0-unstable-2025-06-05";
+  version = "0-unstable-2025-06-24";
 
   # This version is pinned in https://github.com/sideswap-io/sideswapclient/blob/v1.8.0/deploy/build_linux.sh
   src = fetchFromGitHub {
     owner = "sideswap-io";
     repo = "sideswap_rust";
-    rev = "0ba7485f77c86d1a6ae64a0cfedba22afe4ed98a";
-    hash = "sha256-6qfFpCE6DMZlKuhQbXjJmmb8rPxFB2TA7CpOk06tuDk=";
+    rev = "91791efbceb3fac4774d1e42a519e70b14b876cf";
+    hash = "sha256-SUAmmKnL/thGLfPU22UxzO+LVXgrHh+lZVdXuAJ4q1E=";
   };
 
-  cargoHash = "sha256-ecftCyNMRWdFP5SDEmLnssTVSfg9mo/TQEqyeDj4VpQ=";
+  cargoHash = "sha256-bbNFi0cmFFf66IDKi0V8HC/lSU3JLRpgZ+NHeMJog8c=";
 
   # sideswap_client uses vergen to detect Git commit hash at build time. It
   # tries to access .git directory which is not present in Nix build dir.

@@ -82,11 +82,10 @@
   libXcursor,
   gl2ps,
   libGL,
-  qt5,
   qt6,
 
   # custom options
-  qtVersion ? null,
+  withQt6 ? false,
   # To avoid conflicts between the propagated vtkPackages.hdf5
   # and the input hdf5 used by most downstream packages,
   # we set mpiSupport to false by default.
@@ -97,15 +96,6 @@
   testers,
 }:
 let
-  qtPackages =
-    if (isNull qtVersion) then
-      null
-    else if (qtVersion == "6") then
-      qt6
-    else if (qtVersion == "5") then
-      qt5
-    else
-      throw ''qtVersion must be "5", "6" or null'';
   vtkPackages = lib.makeScope newScope (self: {
     inherit
       tbb
@@ -174,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrender
     libXcursor
   ]
-  ++ lib.optional (!(isNull qtPackages)) qtPackages.qttools
+  ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
   ++ lib.optional pythonSupport tk;
 
@@ -235,12 +225,6 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # wrapper script calls qmlplugindump, crashes due to lack of minimal platform plugin
-  # Could not find the Qt platform plugin "minimal" in ""
-  preConfigure = lib.optionalString (qtVersion == "5") ''
-    export QT_PLUGIN_PATH=${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
-  '';
-
   env = {
     CMAKE_PREFIX_PATH = "${lib.getDev openvdb}/lib/cmake/OpenVDB";
     NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
@@ -276,8 +260,8 @@ stdenv.mkDerivation (finalAttrs: {
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenVR" false) # openvr
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingAnari" false) # anari
 
-    # qtSupport
-    (vtkBool "VTK_GROUP_ENABLE_Qt" (!(isNull qtPackages)))
+    # withQt6
+    (vtkBool "VTK_GROUP_ENABLE_Qt" withQt6)
     (lib.cmakeFeature "VTK_QT_VERSION" "Auto") # will search for Qt6 first
 
     # pythonSupport
@@ -325,9 +309,9 @@ stdenv.mkDerivation (finalAttrs: {
 
         package = finalAttrs.finalPackage;
 
-        nativeBuildInputs = lib.optionals (!(isNull qtPackages)) [
-          qtPackages.qttools
-          qtPackages.wrapQtAppsHook
+        nativeBuildInputs = lib.optionals withQt6 [
+          qt6.qttools
+          qt6.wrapQtAppsHook
         ];
       };
     };
