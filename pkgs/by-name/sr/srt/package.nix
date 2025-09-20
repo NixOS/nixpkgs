@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   openssl,
-  windows,
+  windowsPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.pthreads
+    windowsPackages.pthreads
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [

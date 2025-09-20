@@ -5,7 +5,7 @@
   gmp,
   mpfr,
   ntl,
-  windows,
+  windowsPackages,
   autoconf,
   automake,
   gettext,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ntl
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.pthreads
+    windowsPackages.pthreads
   ];
 
   # We're not using autoreconfHook because flint's bootstrap

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  windows,
+  windowsPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.pthreads;
+  buildInputs = lib.optional stdenv.hostPlatform.isWindows windowsPackages.pthreads;
 
   makeFlags = [
     "prefix=$(out)"

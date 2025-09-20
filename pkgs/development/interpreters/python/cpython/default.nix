@@ -35,7 +35,7 @@
 
   # platform-specific dependencies
   bashNonInteractive,
-  windows,
+  windowsPackages,
 
   # optional dependencies
   bluezSupport ? !withMinimalDeps && stdenv.hostPlatform.isLinux,
@@ -257,8 +257,8 @@ let
       bluez-headers
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
-      windows.dlfcn
-      windows.pthreads
+      windowsPackages.dlfcn
+      windowsPackages.pthreads
     ]
     ++ optionals tzdataSupport [
       tzdata

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  windows,
   autoreconfHook,
   mingw_w64_headers,
   crt ? stdenv.hostPlatform.libc,

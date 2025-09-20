@@ -8,7 +8,7 @@
   libxau,
   libxdmcp,
   xcb-proto,
-  windows,
+  windowsPackages,
   writeScript,
   testers,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # $dev/include/xcb/xcb.h includes pthread.h
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isMinGW windowsPackages.pthreads;
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''

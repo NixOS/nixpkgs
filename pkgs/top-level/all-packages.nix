@@ -2828,7 +2828,7 @@ with pkgs;
   };
 
   file = callPackage ../tools/misc/file {
-    inherit (windows) libgnurx;
+    inherit (windowsPackages) libgnurx;
   };
 
   findutils = callPackage ../tools/misc/findutils { };
@@ -7590,7 +7590,7 @@ with pkgs;
       inherit (stdenv.hostPlatform) libc;
     in
     if stdenv.hostPlatform.isMinGW then
-      windows.mingw_w64_headers or fallback
+      windowsPackages.mingw_w64_headers or fallback
     else if libc == "nblibc" then
       netbsd.headers
     else
@@ -7626,9 +7626,9 @@ with pkgs;
     else if libc == "musl" then
       musl
     else if libc == "msvcrt" then
-      if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
+      if stdenv.hostPlatform.isMinGW then windowsPackages.mingw_w64 else windowsPackages.sdk
     else if libc == "ucrt" then
-      if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
+      if stdenv.hostPlatform.isMinGW then windowsPackages.mingw_w64 else windowsPackages.sdk
     else if libc == "libSystem" then
       if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
     else if libc == "fblibc" then
@@ -7652,7 +7652,7 @@ with pkgs;
         # other possible values: win32 or posix
         model = "mcf";
         # For win32 or posix set this to null
-        package = windows.mcfgthreads;
+        package = windowsPackages.mcfgthreads;
       };
 
   # Only supported on Linux and only on glibc
@@ -10753,7 +10753,7 @@ with pkgs;
 
   v4l-utils = callPackage ../os-specific/linux/v4l-utils { };
 
-  windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
+  windowsPackages = recurseIntoAttrs (callPackages ../os-specific/windows { });
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 

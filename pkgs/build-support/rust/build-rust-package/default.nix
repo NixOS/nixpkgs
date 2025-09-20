@@ -12,7 +12,7 @@
   cargo-auditable,
   buildPackages,
   rustc,
-  windows,
+  windowsPackages,
 }:
 
 lib.extendMkDerivation {
@@ -139,7 +139,7 @@ lib.extendMkDerivation {
           cargo
         ];
 
-      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windowsPackages.pthreads ];
 
       patches = cargoPatches ++ patches;
 

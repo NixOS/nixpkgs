@@ -109,7 +109,7 @@ let
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
-    windows.pthreads = nativePlatforms;
+    windowsPackages.pthreads = nativePlatforms;
   };
 
   wasiCommon = {

@@ -4,7 +4,7 @@
   fetchurl,
   openssl,
   zlib,
-  windows,
+  windowsPackages,
 
   # for passthru.tests
   aria2,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
-  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windowsPackages.mingw_w64;
 
   passthru.tests = {
     inherit
