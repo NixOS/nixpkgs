@@ -20,15 +20,15 @@
 }:
 
 let
-  nix = nixVersions.nix_2_28;
+  nix = nixVersions.nix_2_30;
   common = rec {
     version = "2.6.4";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
-      tag = version;
-      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
+      rev = "15a3376f65de9e7984429b975777f3569430b8a6";
+      hash = "sha256-0MvTa6l071JAbePgP3qTkNXr1CbeGDmqyDyvVHxetqg=";
     };
 
     nativeBuildInputs = [
