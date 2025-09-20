@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-mcp-server";
-  version = "0.5.4";
+  version = "0.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omarbenhamid";
     repo = "django-mcp-server";
     tag = "v${version}";
-    hash = "sha256-MaJq+NCfYuNyvDhz5oZ3po5+XkJeE1qSOwcaqJfJl+o=";
+    hash = "sha256-HR4AzeDT/oWJe/exsV5AqwSebJPGT/vlzuk3qTgVb/M=";
   };
 
   build-system = [ poetry-core ];
