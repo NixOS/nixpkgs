@@ -1,0 +1,24 @@
+diff --git a/glycin/src/sandbox.rs b/glycin/src/sandbox.rs
+index c527f788b7..7d663b3572 100644
+--- a/glycin/src/sandbox.rs
++++ b/glycin/src/sandbox.rs
+@@ -300,15 +300,15 @@
+                 "/",
+                 // Make /usr available as read only
+                 "--ro-bind",
+-                "/usr",
+-                "/usr",
++                "/nix/store",
++                "/nix/store",
+                 // Make tmpfs dev available
+                 "--dev",
+                 "/dev",
+                 // Additional linker configuration via /etc/ld.so.conf if available
+                 "--ro-bind-try",
+-                "/etc/ld.so.cache",
+-                "/etc/ld.so.cache",
++                "/run/current-system/",
++                "/run/current-system/",
+                 // Create a fake HOME for glib to not throw warnings
+                 "--tmpfs",
+                 "/tmp-home",
