@@ -19,11 +19,11 @@ assert runTests -> gflags != null;
 
 stdenv.mkDerivation rec {
   pname = "ceres-solver";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "http://ceres-solver.org/ceres-solver-${version}.tar.gz";
-    sha256 = "sha256-99dO7N4K7XW/xR7EjJHQH+Fqa/FrzhmHpwcyhnAeL8Y=";
+    sha256 = "sha256-SLIwKnmG7OFyiYR3w7zW3rj7XPGbMye8SZaarUzt6C0=";
   };
 
   outputs = [
