@@ -8,6 +8,7 @@
   rustPlatform,
   scdoc,
   testers,
+  runCommand,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -71,6 +72,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "syd -V";
     };
+
+    # Generate a Syd profile that allows access to
+    # the Nix store closure of `allowPackages`.
+    # The `nopie` profile is prepended and any
+    # addional `rules` are appended.
+    closureProfile =
+      {
+        allowPackages,
+        rules ? "",
+      }:
+      runCommand "nix-closure.syd-3"
+        {
+          exportReferencesGraph =
+            with builtins;
+            foldl' (
+              acc: p:
+              acc
+              ++ [
+                "graph.${toString (length acc)}"
+                p
+              ]
+            ) [ ] allowPackages;
+        }
+        ''
+          echo include_profile nopie >>$out
+          cat graph.* | sort -u | awk '/nix\/store/ {
+              print "allow/read,exec,ioctl,stat+" $1 "/**"
+              print "allow/lock/read,exec,ioctl+" $1
+            }' >>$out
+          cat << END_OF_RULES >>$out
+          ${rules}
+
+          END_OF_RULES
+        '';
 
     updateScript = nix-update-script { };
   };
