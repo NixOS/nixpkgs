@@ -6,6 +6,7 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatchling,
   pyopenssl,
   pytest-asyncio_0_21,
   pytest-mock,
@@ -14,7 +15,6 @@
   pythonAtLeast,
   pythonOlder,
   pytz,
-  setuptools,
   sortedcontainers,
   typing-extensions,
 }:
@@ -41,7 +41,7 @@ buildPythonPackage rec {
       --replace-fail "tools/" "$out/bin/"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiofiles
