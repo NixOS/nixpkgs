@@ -36,8 +36,6 @@
   devExtraCmakeFlags ? [ ],
   getVersionFile,
   fetchpatch,
-  # for tests
-  libllvm,
 }:
 
 let
@@ -208,6 +206,8 @@ stdenv.mkDerivation (
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
+      ]
+      ++ [
         # Just like the `llvm-lit-cfg` patch, but for `polly`.
         (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
       ]
@@ -591,15 +591,8 @@ stdenv.mkDerivation (
 
     checkTarget = "check-all";
 
-    passthru = {
-      # For the update script:
-      inherit monorepoSrc;
-      tests.withoutOptionalFeatures = libllvm.override {
-        enablePFM = false;
-        enablePolly = false;
-        enableTerminfo = false;
-      };
-    };
+    # For the update script:
+    passthru.monorepoSrc = monorepoSrc;
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {

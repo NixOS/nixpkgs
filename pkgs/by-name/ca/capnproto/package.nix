@@ -46,8 +46,6 @@ clangStdenv.mkDerivation rec {
   patches = [
     # https://github.com/capnproto/capnproto/pull/2377
     ./fix-libucontext.patch
-    # https://github.com/capnproto/capnproto/pull/2410
-    ./fix-libatomic.patch
   ];
 
   nativeBuildInputs = [
