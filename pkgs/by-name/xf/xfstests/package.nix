@@ -11,17 +11,20 @@
   fetchzip,
   fio,
   gawk,
+  gdbm,
   keyutils,
   killall,
   lib,
   libaio,
   libcap,
   libtool,
+  liburing,
   libuuid,
   libxfs,
   lvm2,
   openssl,
   perl,
+  pkg-config,
   procps,
   quota,
   time,
@@ -34,23 +37,26 @@
 
 stdenv.mkDerivation rec {
   pname = "xfstests";
-  version = "2023.05.14";
+  version = "2025.09.07";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${version}.tar.gz";
-    hash = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
+    hash = "sha256-7nNs0otveEHJTMSlMfwdRB9mYKasxioockSLOXysylI=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    gdbm
+    pkg-config
   ];
   buildInputs = [
     acl
     attr
     gawk
     libaio
+    liburing
     libuuid
     libxfs
     openssl
