@@ -8330,6 +8330,12 @@
     keys = [ { fingerprint = "7391 BF2D A2C3 B2C9 BE25  ACA9 C7A7 4616 F302 5DF4"; } ];
     matrix = "@felipeqq2:pub.solar";
   };
+  felissedano = {
+    name = "Felis Sedano";
+    email = "contact@felissedano.com";
+    github = "felissedano";
+    githubId = 109383955;
+  };
   felixalbrigtsen = {
     email = "felix@albrigtsen.it";
     github = "felixalbrigtsen";
