@@ -16025,8 +16025,6 @@ self: super: with self; {
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
-  rki-covid-parser = callPackage ../development/python-modules/rki-covid-parser { };
-
   rkm-codes = callPackage ../development/python-modules/rkm-codes { };
 
   rlax = callPackage ../development/python-modules/rlax { };
@@ -16210,8 +16208,6 @@ self: super: with self; {
   rtree = callPackage ../development/python-modules/rtree { inherit (pkgs) libspatialindex; };
 
   rtslib-fb = callPackage ../development/python-modules/rtslib-fb { };
-
-  rtsp-to-webrtc = callPackage ../development/python-modules/rtsp-to-webrtc { };
 
   ruamel-base = callPackage ../development/python-modules/ruamel-base { };
 
