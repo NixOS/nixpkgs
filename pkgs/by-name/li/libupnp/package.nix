@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
-  version = "1.14.18";
+  version = "1.14.25";
 
   outputs = [
     "out"
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pupnp";
     repo = "pupnp";
-    rev = "release-${version}";
-    sha256 = "sha256-eQKtZioZjI53J1fsoer032pzqebbK5IabOnkAXwBPos=";
+    tag = "release-${version}";
+    hash = "sha256-emMZKskaFYmLnIZLduHlZ5I3praaBgXY2JHLDAGPO28=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace '\''${exec_prefix}/' "" \
       --replace '\''${prefix}/' ""
+  '';
+
+  # Fix broken cmake files
+  # https://gitlab.archlinux.org/archlinux/packaging/packages/libupnp/-/commit/69a99f8ccd4c6f335db9b5842f0facde585721eb
+  postFixup = ''
+    sed -e 's|/COMPONENT||g' -e 's|/UPNP_Development||g' -i ${placeholder "dev"}/lib/cmake/*/*.cmake
   '';
 
   meta = {
