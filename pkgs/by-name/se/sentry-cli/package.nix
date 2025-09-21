@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
-  version = "2.53.0";
+  version = "2.54.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    hash = "sha256-M/F9Qkpmaz6p1l8hYVJ4EeD8SpKzweKexZ/fR4luCQw=";
+    hash = "sha256-D6ep1N8IZO1jps1ihmiAiEJXSTW2PNDW3cnYrrM3Svg=";
   };
   doCheck = false;
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  cargoHash = "sha256-STwAUUHUlXhrjSXQVYDgkFXym4S/JgofbdQ5lWTCUoA=";
+  cargoHash = "sha256-uvaxGVVxbp1TnAarItgNSLzguqgt7LfTalDVS6TFpoY=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sentry-cli \
