@@ -206,8 +206,6 @@ stdenv.mkDerivation (
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
-      ]
-      ++ [
         # Just like the `llvm-lit-cfg` patch, but for `polly`.
         (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
       ]
