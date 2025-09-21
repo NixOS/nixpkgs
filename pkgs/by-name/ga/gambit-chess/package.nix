@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -32,7 +31,7 @@ buildGoModule rec {
     "-X=main.CommitSHA=${src.rev}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd gambit \
       --bash <($out/bin/gambit completion bash) \
       --fish <($out/bin/gambit completion fish) \

@@ -41,9 +41,9 @@ let
     ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${lib.boolToString cfg.clientCertRequired}
-    ${lib.optionalString (cfg.sslCert != null) "sslCert=${cfg.sslCert}"}
-    ${lib.optionalString (cfg.sslKey != null) "sslKey=${cfg.sslKey}"}
-    ${lib.optionalString (cfg.sslCa != null) "sslCA=${cfg.sslCa}"}
+    ${lib.optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
+    ${lib.optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
+    ${lib.optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -56,7 +56,7 @@ in
     (lib.mkRemovedOptionModule [
       "services"
       "murmur"
-      "logFile"
+      "logfile"
     ] "This option has been superseded by services.murmur.logToFile")
   ];
 
@@ -238,20 +238,20 @@ in
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
       sslCert = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
+        type = lib.types.str;
+        default = "";
         description = "Path to your SSL certificate.";
       };
 
       sslKey = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
+        type = lib.types.str;
+        default = "";
         description = "Path to your SSL key.";
       };
 
       sslCa = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
+        type = lib.types.str;
+        default = "";
         description = "Path to your SSL CA certificate.";
       };
 
@@ -355,10 +355,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [
-          cfg.stateDir
-        ];
+        ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
@@ -418,13 +415,13 @@ in
     + lib.optionalString cfg.logToFile ''
       rw /var/log/murmur/murmurd.log,
     ''
-    + lib.optionalString (cfg.sslCert != null) ''
+    + lib.optionalString (cfg.sslCert != "") ''
       r ${cfg.sslCert},
     ''
-    + lib.optionalString (cfg.sslKey != null) ''
+    + lib.optionalString (cfg.sslKey != "") ''
       r ${cfg.sslKey},
     ''
-    + lib.optionalString (cfg.sslCa != null) ''
+    + lib.optionalString (cfg.sslCa != "") ''
       r ${cfg.sslCa},
     ''
     + lib.optionalString (cfg.dbus != null) ''

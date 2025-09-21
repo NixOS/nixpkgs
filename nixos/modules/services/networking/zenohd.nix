@@ -10,7 +10,6 @@ let
     types
     mkDefault
     mkOption
-    mkPackageOption
     ;
 
   json = pkgs.formats.json { };
@@ -23,7 +22,12 @@ in
     services.zenohd = {
       enable = lib.mkEnableOption "Zenoh daemon.";
 
-      package = mkPackageOption pkgs "zenoh" { };
+      package = mkOption {
+        description = "The zenoh package to use.";
+        type = types.package;
+        default = pkgs.zenoh;
+        defaultText = "pkgs.zenoh";
+      };
 
       settings = mkOption {
         description = ''

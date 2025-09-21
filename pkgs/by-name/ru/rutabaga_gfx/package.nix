@@ -26,8 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/zeWWL4Mdb/kIJ0J3nky5dastsZUOXm9YTXUjKCDJcY=";
   };
 
-  separateDebugInfo = true;
-
   nativeBuildInputs = [
     cargo
     meson

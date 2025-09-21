@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +28,7 @@ buildGoModule rec {
     "-X github.com/plexsystems/konstraint/internal/commands.version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd konstraint \
       --bash <($out/bin/konstraint completion bash) \
       --fish <($out/bin/konstraint completion fish) \

@@ -58,8 +58,6 @@ stdenv.mkDerivation rec {
 
   TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport) ];
-
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...
   postInstall = ''

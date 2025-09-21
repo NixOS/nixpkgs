@@ -14,13 +14,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "minc-tools";
   version = "2.3.06-unstable-2023-08-12";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = "minc-tools";
+    repo = pname;
     rev = "c86a767dbb63aaa05ee981306fa09f6133bde427";
     hash = "sha256-PLNcuDU0ht1PcjloDhrPzpOpE42gbhPP3rfHtP7WnM4=";
   };

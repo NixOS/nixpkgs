@@ -35,7 +35,7 @@ let
 
         src = fetchFromGitHub {
           owner = "hashicorp";
-          repo = "nomad";
+          repo = pname;
           rev = "v${version}";
           inherit hash;
         };

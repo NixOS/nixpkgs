@@ -1,5 +1,6 @@
 {
   lib,
+  commitizen,
   fetchFromGitHub,
   gitMinimal,
   stdenv,
@@ -19,7 +20,7 @@ python3Packages.buildPythonPackage rec {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-4hsKCBJHeRjc519h7KO/X8BJhGuw0N6XmC6u+QEiAnc=";
+    hash = "sha256-vHA+TvKs9TOu/0/FpxLHHbDgshQFhP9Dwe6ZMnUOBKc=";
   };
 
   pythonRelaxDeps = [

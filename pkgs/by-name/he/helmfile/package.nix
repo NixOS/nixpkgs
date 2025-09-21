@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGo125Module,
   fetchFromGitHub,
   installShellFiles,
@@ -40,7 +39,7 @@ buildGo125Module rec {
       wrapProgram $out/bin/helmfile \
         --set HELM_PLUGINS "${pluginsDir}"
     ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    + ''
       installShellCompletion --cmd helmfile \
         --bash <($out/bin/helmfile completion bash) \
         --fish <($out/bin/helmfile completion fish) \

@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "gto";
-  version = "1.8.0";
+  version = "1.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "gto";
     tag = version;
-    hash = "sha256-XgVV/WPs9QcxjVVsdvloo2+QWNViAJE404Nue7ZcBak=";
+    hash = "sha256-8ht22RqiGWqDoBrZnX5p3KKOLVPRm1a54962qKlTK4Q=";
   };
 
   build-system = [
@@ -78,11 +78,6 @@ buildPythonPackage rec {
     "remote_repo"
     "remote_git_repo"
     "test_action_doesnt_push_even_if_repo_has_remotes_set"
-    # ValueError: stderr not separately captured
-    "test_register"
-    "test_assign"
-    "test_stderr_gto_exception"
-    "test_stderr_exception"
   ];
 
   pythonImportsCheck = [ "gto" ];
@@ -90,7 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for Git Tag Operations";
     homepage = "https://github.com/iterative/gto";
-    changelog = "https://github.com/iterative/gto/releases/tag/${src.tag}";
+    changelog = "https://github.com/iterative/gto/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "gto";

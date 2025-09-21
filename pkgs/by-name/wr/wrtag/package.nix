@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wrtag";
-  version = "0.18.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "wrtag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQyvm4nFMLuIIBhlqI/tiqjEDnMDHQas5lg5SN+1ENU=";
+    hash = "sha256-I4lvkyw2vJH29CdNhNc1qhlFdIq00QHPRlaP13UjlJQ=";
   };
 
   vendorHash = "sha256-bqqt/p4wzYpz/nkM9ZgzVYHo/I5bUkG/pvY6irx6Z+w=";

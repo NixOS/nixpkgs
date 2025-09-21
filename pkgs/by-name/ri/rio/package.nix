@@ -48,16 +48,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.30";
+  version = "0.2.29";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkZq9mPQTeYtDuvGrEzV7PlDQZHUED/JuSLvsFWxYI0=";
+    hash = "sha256-hM5WFZMZRq5iA/kGpbOncmHTyG//xt/B+Jmi7Y/gGwk=";
   };
 
-  cargoHash = "sha256-Rr6FiievKElzWhLEXOQZdcJ4KKlfvW9p8k7r7wIm0MQ=";
+  cargoHash = "sha256-pD3s446lrXtJp67fZfjbm7Eej0FyLYf9op8AF/GkeJ8=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
-    homepage = "https://rioterm.com/";
+    homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       tornax

@@ -154,8 +154,7 @@ in
     # FIXME: https://github.com/NixOS/nixpkgs/issues/431458
     # fzf-lua throws `address already in use` on darwin
     # Previewer transient failure
-    # UI tests fail either transiently or consistently in certain software/hardware configurations
-    doCheck = false;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     checkInputs = [
       fd
       fzf

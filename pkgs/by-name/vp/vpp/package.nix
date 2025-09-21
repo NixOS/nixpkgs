@@ -38,6 +38,11 @@ let
     ];
   });
 
+  xdp-tools' = xdp-tools.overrideAttrs (old: {
+    postInstall = "";
+    dontDisableStatic = true;
+  });
+
   # in 25.02 only ID seems to be of interest, so keep it simple
   os-release-fake = writeText "os-release-fake" ''
     ID=nixos
@@ -111,12 +116,7 @@ stdenv.mkDerivation rec {
     # af_xdp plugin
     libelf
     libbpf
-    xdp-tools
-    zlib
-  ];
-
-  patches = lib.optionals enableAfXdp [
-    ./use-dynamic-libxdp-libbpf.patch
+    xdp-tools'
   ];
 
   passthru.updateScript = nix-update-script { };

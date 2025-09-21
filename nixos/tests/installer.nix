@@ -774,7 +774,7 @@ let
                   config.boot.bootspec.package
                 ]
                 ++ optionals clevisTest [ pkgs.klibc ]
-                ++ optional systemdStage1 config.system.nixos-init.package;
+                ++ optional systemdStage1 pkgs.chroot-realpath;
 
               nix.settings = {
                 substituters = mkForce [ ];
@@ -1096,7 +1096,7 @@ let
           ${
             if systemdStage1 then
               ''
-                target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
+                target.wait_for_text("Enter key for rpool/root")
               ''
             else
               ''

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   python3,
   fetchFromGitHub,
   installShellFiles,
@@ -52,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath [ awscli ])
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd nimbo \
       --zsh <(_NIMBO_COMPLETE=source_zsh $out/bin/nimbo) \
       --bash <(_NIMBO_COMPLETE=source_bash $out/bin/nimbo) \

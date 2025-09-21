@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -66,7 +65,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "trashcli" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     for bin in trash-empty trash-list trash-restore trash-put trash; do
       installShellCompletion --cmd "$bin" \
         --bash <("$out/bin/$bin" --print-completion bash) \

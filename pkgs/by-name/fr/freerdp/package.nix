@@ -63,13 +63,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.17.1";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-KAlxpoGOqvHTqKkb/yMrquSckFfMXgbEfxr2IuLPZFQ=";
+    hash = "sha256-86RbzRgC93ZOt3MHRKJIRklEuyCQs6tHff5jk++yFok=";
   };
 
   postPatch = ''

@@ -18,7 +18,12 @@ in
         description = "The name of the command to use";
       };
 
-      package = lib.mkPackageOption pkgs "kubeswitch" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.kubeswitch;
+        defaultText = lib.literalExpression "pkgs.kubeswitch";
+        description = "The package to install for kubeswitch";
+      };
     };
   };
 

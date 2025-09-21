@@ -11,17 +11,15 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.11.0";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = "whitenoise";
     tag = version;
-    hash = "sha256-pcU4qa2dlyPfMgyi1O8zME4GukIvKN4MQhFtJJjdn9w=";
+    hash = "sha256-UmM8Az22ql3uUpyY6jj7ky3LelmttFBqGMYlzlNRAHg=";
   };
-
-  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -31,6 +29,15 @@ buildPythonPackage rec {
     django
     pytestCheckHook
     requests
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = [
+    # Don't run Django tests
+    "tests/test_django_whitenoise.py"
+    "tests/test_runserver_nostatic.py"
+    "tests/test_storage.py"
   ];
 
   disabledTests = [

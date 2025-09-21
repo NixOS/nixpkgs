@@ -14,7 +14,7 @@ class LogFormatter(logging.Formatter):
     }
 
     @override
-    def format(self, record: logging.LogRecord) -> Any:
+    def format(self, record: logging.LogRecord) -> str:
         record.levelname = record.levelname.lower()
         formatter = self.formatters.get(record.levelno, self.formatters["DEFAULT"])
         return formatter.format(record)

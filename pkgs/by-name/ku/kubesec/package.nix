@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -30,7 +29,7 @@ buildGoModule rec {
   # Tests wants to download the kubernetes schema for use with kubeval
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd kubesec \
       --bash <($out/bin/kubesec completion bash) \
       --fish <($out/bin/kubesec completion fish) \

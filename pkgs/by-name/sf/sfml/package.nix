@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -25,16 +26,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
-  version = "3.0.2";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
     tag = finalAttrs.version;
-    hash = "sha256-YqlrY0iIsxcjlLb+buMU0zpXo7/eKSKxOsITWf7BX6s=";
+    hash = "sha256-yTNoDHcBRzk270QHjSFVpjFKm2+uVvmVLg6XlAppwYk=";
   };
 
   patches = [
+    (fetchpatch2 {
+      name = "Fix-pkg-config-when-SFML_PKGCONFIG_INSTALL_DIR-is-unset.patch";
+      url = "https://github.com/SFML/SFML/commit/a87763becbc4672b38f1021418ed94caa0f6540a.patch?full_index=1";
+      hash = "sha256-tJmXTdhwtWq6XfUPBzw47yTrc6EzwmSiVj9n6jQwHig=";
+    })
+
     # Not upstreamble in the near future, see https://github.com/SFML/SFML/pull/3555
     ./unvendor-miniaudio.patch
   ];

@@ -110,7 +110,7 @@ in
     graphitePort = lib.mkOption {
       description = "Port of Graphite server (i.e. carbon-cache).";
       default = null;
-      type = lib.types.nullOr lib.types.port;
+      type = lib.types.nullOr lib.types.int;
     };
 
     extraConfig = lib.mkOption {

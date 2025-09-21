@@ -9,10 +9,10 @@ let
   cfg = config.services.chromadb;
   inherit (lib)
     mkEnableOption
-    mkPackageOption
     mkOption
     mkIf
     types
+    literalExpression
     ;
 in
 {
@@ -29,7 +29,13 @@ in
     services.chromadb = {
       enable = mkEnableOption "ChromaDB, an open-source AI application database.";
 
-      package = mkPackageOption pkgs [ "python3Packages" "chromadb" ] { };
+      package = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.python3Packages.chromadb";
+        default = pkgs.python3Packages.chromadb;
+        defaultText = "pkgs.python3Packages.chromadb";
+        description = "ChromaDB package to use.";
+      };
 
       host = mkOption {
         type = types.str;
