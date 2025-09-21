@@ -531,8 +531,8 @@ broken-packages:
   - bliplib # failure in job https://hydra.nixos.org/build/233195751 at 2023-09-02
   - blockchain # failure in job https://hydra.nixos.org/build/233245492 at 2023-09-02
   - blockhash # failure in job https://hydra.nixos.org/build/233227049 at 2023-09-02
-  - blockio-uring # failure in job https://hydra.nixos.org/build/302801498, https://github.com/well-typed/blockio-uring/issues/44 at 2025-07-27
-  - blockio-uring # https://github.com/well-typed/blockio-uring/issues/44, added 2025-07-27
+  - blockio-uring # failure in job https://hydra.nixos.org/build/302801498, https://github.com/well-typed/blockio-uring/issues/47 at 2025-07-27
+  - blockio-uring # https://github.com/well-typed/blockio-uring/issues/47, added 2025-07-27
   - Blogdown # failure in job https://hydra.nixos.org/build/233239841 at 2023-09-02
   - BlogLiterately # failure in job https://hydra.nixos.org/build/233202164 at 2023-09-02
   - bloodhound-amazonka-auth # failure building library in job https://hydra.nixos.org/build/237245625 at 2023-10-21
