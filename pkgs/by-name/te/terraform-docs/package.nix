@@ -7,16 +7,17 @@
   buildGo124Module,
   fetchFromGitHub,
   installShellFiles,
+  testers,
 }:
 
-buildGo124Module rec {
+buildGo124Module (finalAttrs: {
   pname = "terraform-docs";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = "terraform-docs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
   };
 
@@ -40,6 +41,11 @@ buildGo124Module rec {
     installShellCompletion terraform-docs.{bash,fish,zsh}
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
+  };
+
   meta = with lib; {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
@@ -47,4 +53,4 @@ buildGo124Module rec {
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };
-}
+})
