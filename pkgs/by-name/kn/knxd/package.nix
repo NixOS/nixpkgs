@@ -8,7 +8,7 @@
   indent,
   perl,
   argp-standalone,
-  fmt_9,
+  fmt,
   libev,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fmt_9
+    fmt
     libev
   ]
   ++ lib.optional withSystemd systemd
