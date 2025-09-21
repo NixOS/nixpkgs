@@ -121,8 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}
     mv $out/meshlab.app $out/Applications/
-    ln $out/Applications/meshlab.app/Contents/Frameworks/libmeshlab-common.dylib $out/lib/
+    ln $out/Applications/meshlab.app/Contents/Frameworks/libmeshlab-common{,-gui}.dylib $out/lib/
     makeWrapper $out/{Applications/meshlab.app/Contents/MacOS,bin}/meshlab
+    substituteInPlace $out/lib/cmake/meshlab/meshlabTargets-release.cmake --replace-fail \
+      "{_IMPORT_PREFIX}/meshlab.app" \
+      "{_IMPORT_PREFIX}/Applications/meshlab.app"
   '';
 
   # The hook will wrap all the plugin binaries, make they are not a
