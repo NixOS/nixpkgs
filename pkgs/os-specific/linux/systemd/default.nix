@@ -250,6 +250,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./0018-meson-Don-t-link-ssh-dropins.patch
 
     ./0019-install-unit_file_exists_full-follow-symlinks.patch
+    ./0021-kbd-util-add-etc-kbd-keymaps-to-keymap-directories.patch
+    ./0022-locale-util-search-for-locales-in-NixOS-location.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch

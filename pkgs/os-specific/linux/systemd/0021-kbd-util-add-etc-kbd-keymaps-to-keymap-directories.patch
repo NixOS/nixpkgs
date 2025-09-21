@@ -1,0 +1,26 @@
+From 4041b5718b37dc65c836894303ccbdcc9f1d4e20 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Sun, 21 Sep 2025 16:59:59 +0000
+Subject: [PATCH 1/2] kbd-util: add `/etc/kbd/keymaps` to keymap directories
+
+---
+ src/shared/kbd-util.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/shared/kbd-util.c b/src/shared/kbd-util.c
+index 60e0429b82..749bf600b0 100644
+--- a/src/shared/kbd-util.c
++++ b/src/shared/kbd-util.c
+@@ -14,7 +14,8 @@
+ #define KBD_KEYMAP_DIRS                         \
+         "/usr/share/keymaps/",                  \
+         "/usr/share/kbd/keymaps/",              \
+-        "/usr/lib/kbd/keymaps/"
++        "/usr/lib/kbd/keymaps/",                \
++        "/etc/kbd/keymaps"
+ 
+ int keymap_directories(char ***ret) {
+         assert(ret);
+-- 
+2.50.0
+
