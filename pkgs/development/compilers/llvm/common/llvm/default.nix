@@ -36,6 +36,8 @@
   devExtraCmakeFlags ? [ ],
   getVersionFile,
   fetchpatch,
+  # for tests
+  libllvm,
 }:
 
 let
@@ -589,8 +591,15 @@ stdenv.mkDerivation (
 
     checkTarget = "check-all";
 
-    # For the update script:
-    passthru.monorepoSrc = monorepoSrc;
+    passthru = {
+      # For the update script:
+      inherit monorepoSrc;
+      tests.withoutOptionalFeatures = libllvm.override {
+        enablePFM = false;
+        enablePolly = false;
+        enableTerminfo = false;
+      };
+    };
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
