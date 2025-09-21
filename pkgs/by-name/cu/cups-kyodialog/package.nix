@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     # 2. Search for printer model, e.g. "TASKalfa 6053ci"
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
     urls = [
-      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_20240521_tar_gz.download.gz"
+      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
     ];
     hash = "sha256-H9n4KpaLGNk5du4+BAmMjRyLmXaHap8HdNZlX/Kia4E=";
     extension = "tar.gz";
