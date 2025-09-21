@@ -420,7 +420,7 @@ stdenv.mkDerivation {
   # GHC cannot currently produce outputs that are ready for `-pie` linking.
   # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
   # See:
-  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://github.com/NixOS/nixpkgs/issues/129247 krank:ignore-line
   # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
   hardeningDisable = [ "pie" ];
 

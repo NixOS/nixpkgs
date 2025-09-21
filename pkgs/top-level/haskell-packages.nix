@@ -87,7 +87,7 @@ in
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
         bootPkgs =
           # Building with 9.2 is broken due to
-          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914 krank:ignore-line
           bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
