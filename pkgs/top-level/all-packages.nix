@@ -1915,8 +1915,6 @@ with pkgs;
     extraPackages = [ ffmpeg ];
   };
 
-  commitizen = with python3Packages; toPythonApplication commitizen;
-
   compactor = callPackage ../applications/networking/compactor {
     protobuf = protobuf_21;
   };
@@ -6646,8 +6644,6 @@ with pkgs;
   ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix { };
-
-  cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
 
   # can't use override - it triggers infinite recursion
   cmakeMinimal = callPackage ../by-name/cm/cmake/package.nix {

@@ -2789,6 +2789,10 @@ assertNoAdditions {
     ];
   };
 
+  oil-git-nvim = super.oil-git-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
+  };
+
   oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
     dependencies = [ self.oil-nvim ];
   };

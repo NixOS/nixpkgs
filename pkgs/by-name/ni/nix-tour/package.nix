@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [
       qknight
-      yuu
     ];
     mainProgram = "nix-tour";
   };
