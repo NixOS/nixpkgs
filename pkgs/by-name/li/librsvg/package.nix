@@ -64,6 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vBu81BkSCwmNsovqVTNdneJHDU5qn27pcge0EPwVhn0=";
   };
 
+  patches = [
+    # too_many_elements test fails with libxml 2.15.0,
+    # because libxml2 no longer updates the element count
+    # before erroring out, which breaks the librsvg limit check.
+    #
+    # This is okay, because the error is still detected.
+    # The error is simply not reported accurately.
+    # https://gitlab.gnome.org/GNOME/librsvg/-/issues/1201
+    ./expect-any-error-too-many-elements.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
