@@ -3323,6 +3323,8 @@ self: super: with self; {
 
   dashing = callPackage ../development/python-modules/dashing { };
 
+  dashscope = callPackage ../development/python-modules/dashscope { };
+
   dask = callPackage ../development/python-modules/dask { };
 
   dask-awkward = callPackage ../development/python-modules/dask-awkward { };
