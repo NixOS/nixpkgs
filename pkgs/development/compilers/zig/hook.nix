@@ -4,6 +4,7 @@
   zig,
   stdenv,
   xcbuild,
+  globalBuildFlags ? [ "-Dcpu=baseline" ],
 }:
 
 makeSetupHook {
@@ -47,10 +48,7 @@ makeSetupHook {
           else
             "-Drelease-safe=true";
       in
-      [
-        "-Dcpu=baseline"
-        releaseType
-      ];
+      globalBuildFlags ++ [ releaseType ];
   };
 
   passthru = { inherit zig; };
