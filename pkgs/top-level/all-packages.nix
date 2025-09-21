@@ -12744,7 +12744,6 @@ with pkgs;
   transmission_3_noSystemd = transmission_3.override { enableSystemd = false; };
 
   transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
-    fmt = fmt_9;
     libutp = libutp_3_4;
   };
   libtransmission_4 = transmission_4.override {
