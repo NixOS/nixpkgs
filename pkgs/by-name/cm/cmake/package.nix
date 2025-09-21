@@ -162,23 +162,30 @@ stdenv.mkDerivation (finalAttrs: {
     "--sphinx-info"
     "--sphinx-man"
   ]
-  ++ [
-    "--"
-    # We should set the proper `CMAKE_SYSTEM_NAME`.
-    # http://www.cmake.org/Wiki/CMake_Cross_Compiling
-    #
-    # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
-    # strip. Otherwise they are taken to be relative to the source root of the
-    # package being built.
-    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${stdenv.cc.targetPrefix}c++")
-    (lib.cmakeFeature "CMAKE_C_COMPILER" "${stdenv.cc.targetPrefix}cc")
-    (lib.cmakeFeature "CMAKE_AR" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar")
-    (lib.cmakeFeature "CMAKE_RANLIB" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib")
-    (lib.cmakeFeature "CMAKE_STRIP" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip")
+  ++ (
+    let
+      cc = stdenv.cc;
+      bintools = lib.getBin (if cc.bintools.bintools != null then cc.bintools.bintools else cc.bintools);
+      targetPrefix = cc.targetPrefix;
+    in
+    [
+      "--"
+      # We should set the proper `CMAKE_SYSTEM_NAME`.
+      # http://www.cmake.org/Wiki/CMake_Cross_Compiling
+      #
+      # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
+      # strip. Otherwise they are taken to be relative to the source root of the
+      # package being built.
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${targetPrefix}c++")
+      (lib.cmakeFeature "CMAKE_C_COMPILER" "${targetPrefix}cc")
+      (lib.cmakeFeature "CMAKE_AR" "${bintools}/bin/${targetPrefix}ar")
+      (lib.cmakeFeature "CMAKE_RANLIB" "${bintools}/bin/${targetPrefix}ranlib")
+      (lib.cmakeFeature "CMAKE_STRIP" "${bintools}/bin/${targetPrefix}strip")
 
-    (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
-    (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
-  ];
+      (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
+      (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
+    ]
+  );
 
   # make install attempts to use the just-built cmake
   preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
