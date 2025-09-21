@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "nocasedict";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pywbem";
