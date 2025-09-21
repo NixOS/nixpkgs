@@ -859,7 +859,10 @@ self: super: with self; {
 
   arelle = callPackage ../development/python-modules/arelle { gui = true; };
 
-  arelle-headless = callPackage ../development/python-modules/arelle { gui = false; };
+  arelle-headless = callPackage ../development/python-modules/arelle {
+    gui = false;
+    arelle = arelle-headless;
+  };
 
   aresponses = callPackage ../development/python-modules/aresponses { };
 

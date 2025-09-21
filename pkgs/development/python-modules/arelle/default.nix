@@ -1,4 +1,5 @@
 {
+  callPackage,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -45,6 +46,12 @@
 
   pytestCheckHook,
   boto3,
+
+  # self-reference; TODO: use finalAttrs when available for buildPythonPackage
+  arelle,
+
+  # make default package refer to headless tests, so that ofborg builds them
+  arelle-headless,
 }:
 
 buildPythonPackage rec {
@@ -146,6 +153,16 @@ buildPythonPackage rec {
     "tests/unit_tests/arelle/test_updater.py"
     "tests/unit_tests/arelle/test_import.py"
   ];
+
+  passthru.hasGUI = gui;
+
+  passthru.tests = {
+    cli = callPackage ./test-cli.nix { inherit arelle; };
+  }
+  # ofborg will find the arelle tests, but not necessarily the headless ones; include those too.
+  // lib.optionalAttrs gui {
+    headless = lib.recurseIntoAttrs arelle-headless.tests;
+  };
 
   meta = {
     changelog = "https://github.com/Arelle/Arelle/releases/tag/${src.tag}";
