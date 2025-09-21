@@ -51,6 +51,9 @@ buildGo124Module (finalAttrs: {
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [
+      zimbatm
+      anthonyroussel
+    ];
   };
 })
