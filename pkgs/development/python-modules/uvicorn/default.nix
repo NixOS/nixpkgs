@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.35.0";
+  version = "0.36.0";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "uvicorn";
     tag = version;
-    hash = "sha256-6tuLL0KMggujYI97HSSBHjiLrePwEkxFHjq2HWl8kqE=";
+    hash = "sha256-jbn+nDBKzHchXkduRjlNdAMqho1gVQlA6tc7VHAfNS4=";
   };
 
   outputs = [
