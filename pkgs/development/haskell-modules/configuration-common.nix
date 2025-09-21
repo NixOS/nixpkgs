@@ -897,8 +897,24 @@ with haskellLib;
   }) super.xml-picklers;
 
   # 2025-08-03: Too strict bounds on open-browser, data-default and containers
-  # https://github.com/lierdakil/pandoc-crossref/issues/478
-  pandoc-crossref = doJailbreak super.pandoc-crossref;
+  # https://github.com/lierdakil/pandoc-crossref/issues/478 krank:ignore-line
+  pandoc-crossref = lib.pipe super.pandoc-crossref [
+    (warnAfterVersion "0.3.21")
+    doJailbreak
+
+    # We are still using pandoc == 3.7.*
+    (appendPatch (
+      lib.warnIf (lib.versionAtLeast self.pandoc.version "3.8")
+        "haskellPackages.pandoc-crossref: remove revert of pandoc-3.8 patch"
+        pkgs.fetchpatch
+        {
+          name = "pandoc-crossref-revert-pandoc-3.8-highlight.patch";
+          url = "https://github.com/lierdakil/pandoc-crossref/commit/b0c35a59d5a802f6525407bfeb31699ffd0b4671.patch";
+          hash = "sha256-MIITL9Qr3+1fKf1sTwHzXPcYTt3YC+vr9CpMgqsBXlc=";
+          revert = true;
+        }
+    ))
+  ];
 
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
