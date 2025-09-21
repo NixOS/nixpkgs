@@ -450,9 +450,6 @@ with haskellLib;
   # store. Testing is done upstream.
   arion-compose = dontCheck super.arion-compose;
 
-  # 2023-07-17: Outdated base bound https://github.com/srid/lvar/issues/5
-  lvar = doJailbreak super.lvar;
-
   # Don't call setEnv in parallel in the test suite (which leads to flaky failures)
   env-extra =
     appendPatches
