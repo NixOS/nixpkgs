@@ -4,20 +4,23 @@
   apple-sdk_13,
   darwinMinVersionHook,
   rustPlatform,
+  runCommand,
+  karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   writeShellScriptBin,
+  jq,
   withCmd ? false,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
   };
 
@@ -33,7 +36,6 @@ rustPlatform.buildRustPackage rec {
       echo 'ProductVersion: 13.0'
     '')
   ];
-
   buildFeatures = lib.optional withCmd "cmd";
 
   postInstall = ''
@@ -47,6 +49,17 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    darwinDriver = lib.optional stdenv.hostPlatform.isDarwin (
+      karabiner-dk.override ({
+        driver-version = builtins.readFile "${
+          runCommand "darwin-driver-version" { } ''
+            DRIVER_FOLDER="$(find "${finalAttrs.cargoDeps}" -type d -name "karabiner-driverkit-*" )"
+            cat "$DRIVER_FOLDER/c_src/Karabiner-DriverKit-VirtualHIDDevice/version.json" | ${lib.getExe jq} --raw-output .package_version | tr -d '\n' > $out
+          ''
+
+        }";
+      })
+    );
   };
 
   meta = with lib; {
@@ -60,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
     mainProgram = "kanata";
   };
-}
+})
