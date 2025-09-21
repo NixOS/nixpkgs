@@ -8,7 +8,7 @@
 }:
 let
   pname = "swagger-typescript-api";
-  version = "13.2.8";
+  version = "13.2.13";
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "acacode";
     repo = "swagger-typescript-api";
     rev = version;
-    hash = "sha256-3IPap3Ln8UheYD3/PE4y1ga1KXMNihm36bkMCKy6WuQ=";
+    hash = "sha256-2nwLdL22tWSanBmnfe4S3j6Fh3Ne9DLSyP/g6Vg0dEA=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-3vVaW9beLNuudq7RB8pnw6aMJ8nJ1YBFaYr1d9K/k5U=";
+    hash = "sha256-A3DEV0/8kBpt7+NJa9f4ca+kQbbJj4EpPGqsV70Z7aY=";
   };
 
   buildPhase = ''
