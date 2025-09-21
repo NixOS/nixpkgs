@@ -30,7 +30,12 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  passthru.tests.apfs = nixosTests.apfs;
+  passthru = {
+    tests.apfs = nixosTests.apfs;
+
+    inherit tag;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "APFS module for linux";
