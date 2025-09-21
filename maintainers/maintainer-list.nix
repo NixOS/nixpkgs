@@ -18650,6 +18650,11 @@
     githubId = 47303199;
     name = "Simon Gutgesell";
   };
+  non-bin = {
+    name = "Alice Jacka";
+    github = "non-bin";
+    githubId = 36313060;
+  };
   noodlez1232 = {
     email = "contact@nathanielbarragan.xyz";
     matrix = "@noodlez1232:matrix.org";
