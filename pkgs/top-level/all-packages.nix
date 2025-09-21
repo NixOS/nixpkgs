@@ -13771,7 +13771,6 @@ with pkgs;
 
   zeroad-unwrapped = callPackage ../by-name/ze/zeroad-unwrapped/package.nix {
     wxGTK = wxGTK32;
-    fmt = fmt_9;
   };
 
   ### DESKTOP ENVIRONMENTS
