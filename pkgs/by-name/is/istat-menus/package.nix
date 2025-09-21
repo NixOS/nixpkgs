@@ -48,7 +48,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Set of nine separate and highly configurable menu items that let you know exactly what's going on inside your Mac";
     homepage = "https://bjango.com/mac/istatmenus/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [
+      FlameFlag
+      iedame
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
