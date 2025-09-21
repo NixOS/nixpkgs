@@ -15,7 +15,6 @@
   unbound,
   zeromq,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lokinet";
   version = "0.9.13";
