@@ -1,5 +1,6 @@
 Sandboxed builds need a fallback value for the version of the Command Line Tools
-being used.
+being used. Not calling `CLTVersion()` avoids relying on absolute paths,
+improving the reproducibility of non-sandboxed builds.
 
 diff --git a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
 index 508f6ccac3e..44bcd988c4c 100644

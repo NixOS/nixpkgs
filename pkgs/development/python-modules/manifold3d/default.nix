@@ -11,7 +11,7 @@
   pkg-config,
   numpy,
   clipper2,
-  tbb,
+  onetbb,
   pytestCheckHook,
   trimesh,
 }:
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    tbb
+    onetbb
     clipper2
   ];
 

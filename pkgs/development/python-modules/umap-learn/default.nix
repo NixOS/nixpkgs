@@ -73,7 +73,10 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [ tbb ];
+    tbb = [
+      # Not packaged.
+      #tbb
+    ];
 
     all = plot ++ parametric_umap ++ tbb;
   };

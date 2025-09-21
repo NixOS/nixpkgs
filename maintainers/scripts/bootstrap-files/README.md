@@ -1,6 +1,6 @@
 # Bootstrap files
 
-Currently `nixpkgs` builds most of it's packages using bootstrap seed binaries (without the reliance on external inputs):
+Currently `nixpkgs` builds most of its packages using bootstrap seed binaries (without the reliance on external inputs):
 
 - `bootstrap-tools`: an archive with the compiler toolchain and other helper tools enough to build the rest of the `nixpkgs`.
 - initial binaries needed to unpack `bootstrap-tools.*`.

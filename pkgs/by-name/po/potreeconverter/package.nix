@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   boost,
-  tbb,
+  onetbb,
   makeWrapper,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    tbb
+    onetbb
   ];
 
   nativeBuildInputs = [

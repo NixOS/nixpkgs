@@ -9,7 +9,7 @@
   cgal,
   cmake,
   gmp,
-  tbb,
+  onetbb,
   LAStools,
   eigen,
   mpfr,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     mpfr
     boost
     zlib
-    tbb
+    onetbb
     eigen
   ]
   ++ lib.optionals withLAS [

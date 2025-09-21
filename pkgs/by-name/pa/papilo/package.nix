@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   boost,
-  tbb_2022,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     cmake
-    tbb_2022
+    onetbb
   ];
 
-  propagatedBuildInputs = [ tbb_2022 ];
+  propagatedBuildInputs = [ onetbb ];
 
   strictDeps = true;
 

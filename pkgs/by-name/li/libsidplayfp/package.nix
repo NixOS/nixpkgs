@@ -13,7 +13,6 @@
   libgcrypt,
   perl,
   pkg-config,
-  unittest-cpp,
   xa,
 }:
 
@@ -52,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     libexsid
     libgcrypt
   ];
-
-  checkInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 

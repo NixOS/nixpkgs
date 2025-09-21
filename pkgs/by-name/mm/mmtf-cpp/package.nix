@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  msgpack,
+  msgpack-cxx,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ msgpack ];
+  propagatedBuildInputs = [ msgpack-cxx ];
+
+  # Fix the build with msgpack-cxx ≥ 6.0.
+  #
+  # Upstream is unmaintained and does not plan to fix this; see
+  # <https://github.com/rcsb/mmtf-cpp/issues/44>.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(msgpack)' 'find_package(msgpack-cxx)' \
+      --replace-fail msgpackc msgpack-cxx
+  '';
 
   meta = with lib; {
     description = "Library of exchange-correlation functionals with arbitrary-order derivatives";

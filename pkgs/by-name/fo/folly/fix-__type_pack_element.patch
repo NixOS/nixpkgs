@@ -1,0 +1,34 @@
+From acccee8947977178f36d117cd9d3240cbdb5f018 Mon Sep 17 00:00:00 2001
+From: ihb2032 <1355790728@qq.com>
+Date: Wed, 10 Sep 2025 17:31:41 +0800
+Subject: [PATCH] fix(folly): Replace `__type_pack_element` in
+ `ForeachTest.cpp` to support GCC 14
+
+The use of the `__type_pack_element` compiler builtin directly in function signatures in `folly/container/test/ForeachTest.cpp` causes a build failure with GCC 14. This is because the builtin is not intended for use in contexts that affect name mangling.
+
+This commit resolves the issue by replacing the direct usage of `__type_pack_element_t` with `std::tuple_element_t`. This is a standards-compliant library trait that provides the same functionality and is safe to use in function signatures.
+
+This change ensures that `ForeachTest` continues to compile successfully with newer versions of GCC, maintaining compiler compatibility.
+
+Signed-off-by: lyd1992 <liuyudong@iscas.ac.cn>
+
+Signed-off-by: ihb2032 <1355790728@qq.com>
+---
+ folly/container/test/ForeachTest.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/folly/container/test/ForeachTest.cpp b/folly/container/test/ForeachTest.cpp
+index c055f26effe..3adec1a7371 100644
+--- a/folly/container/test/ForeachTest.cpp
++++ b/folly/container/test/ForeachTest.cpp
+@@ -314,8 +314,8 @@ TEST(ForEach, FetchTestPreferIterator) {
+ template <typename...>
+ struct LargeTuple {};
+ template <size_t I, typename... T>
+-type_pack_element_t<I, T...>& get(LargeTuple<T...>&) {
+-  static type_pack_element_t<I, T...> elem;
++std::tuple_element_t<I, std::tuple<T...>>& get(LargeTuple<T...>&) {
++  static std::tuple_element_t<I, std::tuple<T...>> elem;
+   return elem;
+ }
+ namespace std {

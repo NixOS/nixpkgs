@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   validatePkgConfig,
 }:
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-M3GocT0hodw3Sc2NHcFDiPVZ1XN7BqIUuYLW8OaXMqM=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "console-bridge-fix-cmake-4.patch";
+      url = "https://github.com/ros/console_bridge/commit/81ec67f6daf3cd19ef506e00f02efb1645597b9c.patch";
+      hash = "sha256-qSYnqjD+63lWBdtrXbTawt1OpiAO9uvT7R5KmfpUmwQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

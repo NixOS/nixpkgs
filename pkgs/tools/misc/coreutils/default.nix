@@ -105,6 +105,11 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > "$f"
     done
 
+    # These tests sometimes fail on ZFS-backed NFS filesystems
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-file-has-acl-1.sh
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-set-mode-acl-1.sh
+    sed '2i echo "Skipping test: ls/removed-directory" && exit 77' -i ./tests/ls/removed-directory.sh
+
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 

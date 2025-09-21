@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.16.2";
+  version = "2.17.1";
 
   outputs = [
     "bin"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # ref: https://github.com/NixOS/nixpkgs/pull/401037#discussion_r2055430206
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/${finalAttrs.version}/fontconfig-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FluP0qEZhkyHRksjOYbEobwJ77CcZd4cpAzB6F/7d+I=";
+    hash = "sha256-n1yuk/T//B+8Ba6ZzfxwjNYN/WYS/8BRKCcCXAJvpUE=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
 
     # Test causes error without patch shebangs.
-    patchShebangs doc/check-whitespace-in-args.py
+    patchShebangs doc/check-whitespace-in-args.py \
+      doc/check-missing-doc.py
   '';
 
   configureFlags = [

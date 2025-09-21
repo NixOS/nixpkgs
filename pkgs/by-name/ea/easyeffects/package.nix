@@ -35,7 +35,7 @@
   rubberband,
   soundtouch,
   speexdsp,
-  tbb,
+  onetbb,
   wrapGAppsHook4,
   zam-plugins,
   zita-convolver,
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     rubberband
     soundtouch
     speexdsp'
-    tbb
+    onetbb
     zita-convolver
   ];
 

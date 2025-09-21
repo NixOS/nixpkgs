@@ -64,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable introspection test in installed tests
     # (minijasmine:1317): GLib-GIO-WARNING **: 17:33:39.556: Error creating IO channel for /proc/self/mountinfo: No such file or directory (g-io-error-quark, 1)
     ./disable-introspection-test.patch
+
+    # The reason is unclear, but a test that creates a file named "öäü-3" fails only on ZFS filesystems:
+    # 24/78 gjs:JS / GIMarshalling  FAIL  0.59s  726/727 subtests passed
+    # not ok 796 Filename tests various types of path existing
+    # Message: Error opening file “/build/.UGHEA3/öäü-3”: Invalid or incomplete multibyte or wide character in /build/gjs-1.84.2/build/../installed-tests/js/testGIMarshalling.js (line 2937)
+    ./disable-umlaut-test.patch
   ];
 
   nativeBuildInputs = [

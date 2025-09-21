@@ -62,6 +62,15 @@ in
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
 
@@ -188,17 +197,7 @@ in
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
+
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_3_20250912;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }
-# super.ghc is required to break infinite recursion as Nix is strict in the attrNames
-//
-  lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4")
-    {
-      # The NCG backend for aarch64 generates invalid jumps in some situations,
-      # the workaround on 9.6 is to revert to the LLVM backend (which is used
-      # for these sorts of situations even on 9.2 and 9.4).
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
-      inherit (lib.mapAttrs (_: self.forceLlvmCodegenBackend) super)
-        tls
-        mmark
-        ;
-    }

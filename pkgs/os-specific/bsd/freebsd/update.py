@@ -66,7 +66,7 @@ def query_version(work_dir: str) -> dict[str, typing.Any]:
     fields["major"] = parsed.major
     fields["minor"] = parsed.minor
 
-    # Extract the patch number from `RELAESE-p<patch>`, which is used
+    # Extract the patch number from `RELEASE-p<patch>`, which is used
     # e.g. in the "releng" branches.
     m = _RELEASE_PATCH_PATTERN.match(fields["branch"])
     if m is not None:

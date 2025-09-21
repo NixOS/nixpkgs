@@ -5,7 +5,6 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  rocm-device-libs,
   clr,
   pkg-config,
   rpp,
@@ -42,13 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-SisCbUDCAiWQ1Ue7qrtoT6vO/1ztzqji+3cJD6MXUNw=";
+    hash = "sha256-07MivgCYmKLnhGDjOYsFBfwIxEoQLYNoRbOo3MPpVzE=";
   };
 
   patches = [
@@ -58,8 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    clr
     pkg-config
+  ]
+  ++ lib.optionals (!useOpenCL && !useCPU) [
+    clr
   ]
   ++ lib.optionals buildDocs [
     rocm-docs-core
@@ -67,10 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    miopen
-    migraphx
     rpp
-    rocblas
     openmp
     half
     protobuf
@@ -83,28 +81,31 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     python3Packages.pybind11
     python3Packages.numpy
-    python3Packages.torchWithRocm
+  ]
+  ++ lib.optionals (!useOpenCL && !useCPU) [
+    miopen
+    rocblas
+    migraphx
   ];
 
   cmakeFlags = [
-    "-DROCM_PATH=${clr}"
-    "-DAMDRPP_PATH=${rpp}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_PREFIX_PYTHON=lib"
-    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
     # "-DAMD_FP16_SUPPORT=ON" `error: typedef redefinition with different types ('__half' vs 'half_float::half')`
   ]
   ++ lib.optionals (gpuTargets != [ ]) [
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ]
   ++ lib.optionals (!useOpenCL && !useCPU) [
+    "-DROCM_PATH=${clr}"
+    "-DAMDRPP_PATH=${rpp}"
     "-DBACKEND=HIP"
+    "-DCMAKE_C_COMPILER=hipcc"
+    "-DCMAKE_CXX_COMPILER=hipcc"
   ]
   ++ lib.optionals (useOpenCL && !useCPU) [
     "-DBACKEND=OCL"
@@ -114,17 +115,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # We need to not use hipcc and define the CXXFLAGS manually due to `undefined hidden symbol: tensorflow:: ...`
-    export CXXFLAGS+=" --rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
-    # Properly find miopen, fix ffmpeg version detection
-    substituteInPlace amd_openvx_extensions/CMakeLists.txt \
-      --replace-fail "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
-      --replace-fail "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
-
     # Properly find turbojpeg
     substituteInPlace cmake/FindTurboJpeg.cmake \
       --replace-fail "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
       --replace-fail "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
+
+    ${lib.optionalString (!useOpenCL && !useCPU) ''
+      # Properly find miopen
+      substituteInPlace amd_openvx_extensions/CMakeLists.txt \
+        --replace-fail "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
+        --replace-fail "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
+    ''}
   '';
 
   postBuild = lib.optionalString buildDocs ''

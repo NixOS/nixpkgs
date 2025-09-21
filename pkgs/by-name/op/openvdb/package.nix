@@ -6,7 +6,7 @@
   boost,
   jemalloc,
   c-blosc,
-  tbb,
+  onetbb,
   zlib,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    tbb
+    onetbb
     jemalloc
     c-blosc
     zlib

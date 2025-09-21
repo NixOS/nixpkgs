@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
-        "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+        "-DSCUDO_DEFAULT_OPTIONS=delete_size_mismatch=false:dealloc_type_mismatch=false"
       ]
       ++ lib.optionals (!haveLibc) [
         # The compiler got stricter about this, and there is a usellvm patch below
@@ -186,6 +186,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
   ]
+  ++
+    lib.optional (stdenv.hostPlatform.isAarch64 && !haveLibc)
+      # Fixes https://github.com/NixOS/nixpkgs/issues/393603
+      (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" true)
   ++ devExtraCmakeFlags;
 
   outputs = [

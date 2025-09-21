@@ -32,11 +32,8 @@ let
     name = "rocm";
     paths = rocmList;
   };
-
-  # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
-  stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucx";
   version = "1.19.0";
 

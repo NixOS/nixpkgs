@@ -28,7 +28,7 @@
   protobuf,
   pugixml,
   snappy,
-  tbb_2022,
+  onetbb,
   cudaPackages,
 }:
 
@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
     opencv
     pugixml
     snappy
-    tbb_2022
+    onetbb
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart

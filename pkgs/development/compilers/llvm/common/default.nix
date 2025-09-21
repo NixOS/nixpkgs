@@ -200,6 +200,8 @@ let
       clang =
         if stdenv.targetPlatform.libc == null then
           tools.clangNoLibc
+        else if stdenv.targetPlatform.isDarwin then
+          tools.systemLibcxxClang
         else if stdenv.targetPlatform.useLLVM or false then
           tools.clangUseLLVM
         else if (pkgs.targetPackages.stdenv or args.stdenv).cc.isGNU then
@@ -218,6 +220,15 @@ let
       libcxxClang = wrapCCWith rec {
         cc = tools.clang-unwrapped;
         libcxx = targetLlvmLibraries.libcxx;
+        extraPackages = [ targetLlvmLibraries.compiler-rt ];
+        extraBuildCommands = mkExtraBuildCommands cc;
+      };
+
+      # Darwin uses the system libc++ by default. It is set up as its own clang definition so that `libcxxClang`
+      # continues to use the libc++ from LLVM.
+      systemLibcxxClang = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = darwin.libcxx;
         extraPackages = [ targetLlvmLibraries.compiler-rt ];
         extraBuildCommands = mkExtraBuildCommands cc;
       };
@@ -290,7 +301,8 @@ let
 
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
         cc = tools.clang-unwrapped;
-        libcxx = targetLlvmLibraries.libcxx;
+        # This is used to build compiler-rt. Make sure to use the system libc++ on Darwin.
+        libcxx = if stdenv.hostPlatform.isDarwin then darwin.libcxx else targetLlvmLibraries.libcxx;
         bintools = bintools';
         extraPackages = [
           targetLlvmLibraries.compiler-rt-no-libc
@@ -381,13 +393,12 @@ let
       clangNoLibcxx = tools.clangWithLibcAndBasicRt;
 
       mlir = callPackage ./mlir { };
+
+      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt {
       };
-    }
-    // lib.optionalAttrs (lib.versionOlder metadata.release_version "22") {
-      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
       flang = callPackage ./flang {

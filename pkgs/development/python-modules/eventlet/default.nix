@@ -32,6 +32,8 @@ buildPythonPackage rec {
     hash = "sha256-fzCN+idYQ97nuDVfYn6VYQFBaaMxmnjWzFrmn+Aj+u4=";
   };
 
+  pythonRelaxDeps = lib.optionals isPyPy [ "greenlet" ];
+
   nativeBuildInputs = [
     hatch-vcs
     hatchling

@@ -11,7 +11,7 @@
   libGL,
   libpng,
   openexr,
-  tbb,
+  onetbb,
   xorg,
   ilmbase,
   llvmPackages,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     libGL
     libpng
     openexr
-    tbb
+    onetbb
     xorg.libX11
     xorg.libXcursor
     xorg.libXext

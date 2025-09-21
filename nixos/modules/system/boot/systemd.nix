@@ -24,7 +24,7 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
-    attrsToSection
+    settingsToSections
     ;
 
   upstreamSystemUnits = [
@@ -603,10 +603,7 @@ in
           upstreamWants = upstreamSystemWants;
         };
 
-        "systemd/system.conf".text = ''
-          [Manager]
-          ${attrsToSection cfg.settings.Manager}
-        '';
+        "systemd/system.conf".text = settingsToSections cfg.settings;
 
         "systemd/sleep.conf".text = ''
           [Sleep]

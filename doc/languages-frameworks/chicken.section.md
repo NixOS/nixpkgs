@@ -6,7 +6,7 @@ compiler. It includes an interactive mode and a custom package format, "eggs".
 
 ## Using Eggs {#sec-chicken-using}
 
-Eggs described in nixpkgs are available inside the
+Eggs described in Nixpkgs are available inside the
 `chickenPackages.chickenEggs` attrset. Including an egg as a build input is
 done in the typical Nix fashion. For example, to include support for [SRFI
 189](https://srfi.schemers.org/srfi-189/srfi-189.html) in a derivation, one
@@ -26,7 +26,7 @@ variables `CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH`.
 
 ## Updating Eggs {#sec-chicken-updating-eggs}
 
-nixpkgs only knows about a subset of all published eggs. It uses
+Nixpkgs only knows about a subset of all published eggs. It uses
 [egg2nix](https://github.com/the-kenny/egg2nix) to generate a
 package set from a list of eggs to include.
 

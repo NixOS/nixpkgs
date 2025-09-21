@@ -36,7 +36,7 @@ buildFHSEnv {
       libdrm
       libxkbcommon
       libudev0-shim
-      tbb
+      onetbb
       xwayland
       qt5.qtwayland
       net-tools # needed by licensing tools

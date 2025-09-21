@@ -69,7 +69,7 @@
   opencascade-occt,
 
   # threading
-  tbb,
+  onetbb,
   llvmPackages,
 
   # rendering
@@ -98,7 +98,6 @@
 let
   vtkPackages = lib.makeScope newScope (self: {
     inherit
-      tbb
       mpi
       mpiSupport
       python3Packages
@@ -195,13 +194,13 @@ stdenv.mkDerivation (finalAttrs: {
     libtheora
     cli11
     openslide
+    onetbb
     vtkPackages.hdf5
     vtkPackages.cgns
     vtkPackages.adios2
     vtkPackages.netcdf
     vtkPackages.catalyst
     vtkPackages.viskores
-    vtkPackages.tbb
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
