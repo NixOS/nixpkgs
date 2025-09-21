@@ -52,14 +52,6 @@ buildPythonPackage rec {
     })
   ];
 
-  # Relax speed constraints on tests that can fail on busy builders
-  postPatch = ''
-    substituteInPlace tests/test_while_loop.py \
-      --replace-fail "speed < 0.1" "speed < 0.5" \
-      --replace-fail "speed < 0.5" "speed < 1" \
-      --replace-fail "speed < 1" "speed < 20"
-  '';
-
   build-system = [ hatchling ];
 
   dependencies = [
@@ -76,7 +68,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # These depend on system load and keep failing on Hydra.
+    "test_speed_while"
+    "test_speed_buffer_while"
+    "test_speed_grad_checkpointed_while"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
     "test_filter"
   ];
