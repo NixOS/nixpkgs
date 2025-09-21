@@ -12,7 +12,6 @@
   wrapGAppsHook4,
   ninja,
   gnome,
-  cairo,
   icu,
   itstool,
   libadwaita,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cairo
     icu
     glib
     gsettings-desktop-schemas
