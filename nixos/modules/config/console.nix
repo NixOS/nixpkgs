@@ -33,12 +33,16 @@ let
     pkgs.buildEnv {
       name = "console-env";
       paths = [ kbd ] ++ cfg.packages;
-      pathsToLink = [
-        "/share/consolefonts"
-        "/share/consoletrans"
-        "/share/keymaps"
-        "/share/unimaps"
-      ];
+      pathsToLink = [ "/share" ];
+      postBuild = ''
+        cd "$out/share"
+        for dir in *; do
+          case "$dir" in
+            consolefonts|consoletrans|keymaps|unimaps) ;;
+            *) rm -rf -- "$dir" ;;
+          esac
+        done
+      '';
     };
 in
 
