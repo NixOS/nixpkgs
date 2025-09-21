@@ -31,7 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.keka.io";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      iedame
+    ];
     platforms = lib.platforms.darwin;
   };
 })
