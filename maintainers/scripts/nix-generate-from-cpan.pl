@@ -438,7 +438,7 @@ my $build_fun = -e "$pkg_path/Build.PL"
 print STDERR "===\n";
 
 print <<EOF;
-  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun {
+  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun rec {
     pname = "$pkg_name";
     version = "$pkg_version";
     src = fetchurl {
@@ -468,6 +468,10 @@ print <<EOF if $opt->maintainer;
       maintainers = [ maintainers.${\$opt->maintainer} ];
 EOF
 print <<EOF;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "${\$module->author->cpanid}/\${pname}@\${version}";
+      };
     };
   };
 EOF

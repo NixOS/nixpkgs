@@ -140,10 +140,14 @@ with self;
       homepage = "https://beyondgrep.com";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.asakura ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  ActionCircuitBreaker = buildPerlPackage {
+  ActionCircuitBreaker = buildPerlPackage rec {
     pname = "Action-CircuitBreaker";
     version = "0.1";
     src = fetchurl {
@@ -162,10 +166,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HANGY/${pname}@${version}";
+      };
     };
   };
 
-  ActionRetry = buildPerlPackage {
+  ActionRetry = buildPerlPackage rec {
     pname = "Action-Retry";
     version = "0.24";
     src = fetchurl {
@@ -183,10 +191,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAMS/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmAnnotate = buildPerlPackage {
+  AlgorithmAnnotate = buildPerlPackage rec {
     pname = "Algorithm-Annotate";
     version = "0.10";
     src = fetchurl {
@@ -200,10 +212,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CLKAO/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmBackoff = buildPerlPackage {
+  AlgorithmBackoff = buildPerlPackage rec {
     pname = "Algorithm-Backoff";
     version = "0.009";
     src = fetchurl {
@@ -221,10 +237,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLANCAR/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmC3 = buildPerlPackage {
+  AlgorithmC3 = buildPerlPackage rec {
     pname = "Algorithm-C3";
     version = "0.11";
     src = fetchurl {
@@ -237,10 +257,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmCheckDigits = buildPerlModule {
+  AlgorithmCheckDigits = buildPerlModule rec {
     pname = "Algorithm-CheckDigits";
     version = "1.3.6";
     src = fetchurl {
@@ -255,10 +279,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "checkdigits.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAMAWE/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmDiff = buildPerlPackage {
+  AlgorithmDiff = buildPerlPackage rec {
     pname = "Algorithm-Diff";
     version = "1.1903";
     src = fetchurl {
@@ -272,10 +300,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TYEMQ/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmLCSS = buildPerlPackage {
+  AlgorithmLCSS = buildPerlPackage rec {
     pname = "Algorithm-LCSS";
     version = "0.01";
     src = fetchurl {
@@ -290,10 +322,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JFREEMAN/${pname}@${version}";
+      };
     };
   };
 
-  AlgorithmMerge = buildPerlPackage {
+  AlgorithmMerge = buildPerlPackage rec {
     pname = "Algorithm-Merge";
     version = "0.08";
     src = fetchurl {
@@ -307,10 +343,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JSMITH/${pname}@${version}";
+      };
     };
   };
 
-  AlienBaseModuleBuild = buildPerlModule {
+  AlienBaseModuleBuild = buildPerlModule rec {
     pname = "Alien-Base-ModuleBuild";
     version = "1.17";
     src = fetchurl {
@@ -336,10 +376,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  AlienBuild = buildPerlPackage {
+  AlienBuild = buildPerlPackage rec {
     pname = "Alien-Build";
     version = "2.80";
     src = fetchurl {
@@ -369,10 +413,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  AlienBuildPluginDownloadGitLab = buildPerlPackage {
+  AlienBuildPluginDownloadGitLab = buildPerlPackage rec {
     pname = "Alien-Build-Plugin-Download-GitLab";
     version = "0.01";
     src = fetchurl {
@@ -392,10 +440,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  AlienFFI = buildPerlPackage {
+  AlienFFI = buildPerlPackage rec {
     pname = "Alien-FFI";
     version = "0.27";
     src = fetchurl {
@@ -421,10 +473,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  AlienGMP = buildPerlPackage {
+  AlienGMP = buildPerlPackage rec {
     pname = "Alien-GMP";
     version = "1.16";
     src = fetchurl {
@@ -447,10 +503,14 @@ with self;
       description = "Alien package for the GNU Multiple Precision library";
       homepage = "https://metacpan.org/pod/Alien::GMP";
       license = with lib.licenses; [ lgpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  AlienLibGumbo = buildPerlModule {
+  AlienLibGumbo = buildPerlModule rec {
     pname = "Alien-LibGumbo";
     version = "0.05";
     src = fetchurl {
@@ -474,10 +534,14 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # Fails with: ld: unknown option
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RUZ/${pname}@${version}";
+      };
     };
   };
 
-  AlienLibxml2 = buildPerlPackage {
+  AlienLibxml2 = buildPerlPackage rec {
     pname = "Alien-Libxml2";
     version = "0.19";
     src = fetchurl {
@@ -502,10 +566,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  aliased = buildPerlModule {
+  aliased = buildPerlModule rec {
     pname = "aliased";
     version = "0.34";
     src = fetchurl {
@@ -519,10 +587,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  asa = buildPerlPackage {
+  asa = buildPerlPackage rec {
     pname = "asa";
     version = "1.04";
     src = fetchurl {
@@ -536,10 +608,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  AlienSDL = buildPerlModule {
+  AlienSDL = buildPerlModule rec {
     pname = "Alien-SDL";
     version = "1.446";
     src = fetchurl {
@@ -569,10 +645,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FROGGS/${pname}@${version}";
+      };
     };
   };
 
-  AlienTidyp = buildPerlModule {
+  AlienTidyp = buildPerlModule rec {
     pname = "Alien-Tidyp";
     version = "1.4.7";
     src = fetchurl {
@@ -589,10 +669,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KMX/${pname}@${version}";
+      };
     };
   };
 
-  AlienWxWidgets = buildPerlModule {
+  AlienWxWidgets = buildPerlModule rec {
     pname = "Alien-wxWidgets";
     version = "0.69";
     src = fetchurl {
@@ -616,10 +700,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MDOOTSON/${pname}@${version}";
+      };
     };
   };
 
-  Alienm4 = buildPerlPackage {
+  Alienm4 = buildPerlPackage rec {
     pname = "Alien-m4";
     version = "0.21";
     src = fetchurl {
@@ -644,10 +732,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  Alienpatch = buildPerlPackage {
+  Alienpatch = buildPerlPackage rec {
     pname = "Alien-patch";
     version = "0.15";
     src = fetchurl {
@@ -670,10 +762,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  AltCryptRSABigInt = buildPerlPackage {
+  AltCryptRSABigInt = buildPerlPackage rec {
     pname = "Alt-Crypt-RSA-BigInt";
     version = "0.06";
     src = fetchurl {
@@ -698,10 +794,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANAJ/${pname}@${version}";
+      };
     };
   };
 
-  AnyEvent = buildPerlPackage {
+  AnyEvent = buildPerlPackage rec {
     pname = "AnyEvent";
     version = "7.17";
     src = fetchurl {
@@ -715,10 +815,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  AnyEventAIO = buildPerlPackage {
+  AnyEventAIO = buildPerlPackage rec {
     pname = "AnyEvent-AIO";
     version = "1.1";
     src = fetchurl {
@@ -735,6 +839,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
@@ -756,10 +864,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  AnyEventCacheDNS = buildPerlModule {
+  AnyEventCacheDNS = buildPerlModule rec {
     pname = "AnyEvent-CacheDNS";
     version = "0.08";
     src = fetchurl {
@@ -775,10 +887,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "POTYL/${pname}@${version}";
+      };
     };
   };
 
-  AnyEventFastPing = buildPerlPackage {
+  AnyEventFastPing = buildPerlPackage rec {
     pname = "AnyEvent-FastPing";
     version = "2.1";
     src = fetchurl {
@@ -796,10 +912,14 @@ with self;
         gpl2Plus
       ];
       mainProgram = "fastping";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  AnyEventHTTP = buildPerlPackage {
+  AnyEventHTTP = buildPerlPackage rec {
     pname = "AnyEvent-HTTP";
     version = "2.25";
     src = fetchurl {
@@ -816,10 +936,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  AnyEventI3 = buildPerlPackage {
+  AnyEventI3 = buildPerlPackage rec {
     pname = "AnyEvent-I3";
     version = "0.19";
     src = fetchurl {
@@ -836,6 +960,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTPLBG/${pname}@${version}";
+      };
     };
   };
 
@@ -857,10 +985,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ELMEX/${pname}@${version}";
+      };
     };
   };
 
-  AnyEventRabbitMQ = buildPerlPackage {
+  AnyEventRabbitMQ = buildPerlPackage rec {
     pname = "AnyEvent-RabbitMQ";
     version = "1.22";
     src = fetchurl {
@@ -886,10 +1018,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DLAMBLEY/${pname}@${version}";
+      };
     };
   };
 
-  AnyMoose = buildPerlPackage {
+  AnyMoose = buildPerlPackage rec {
     pname = "Any-Moose";
     version = "0.27";
     src = fetchurl {
@@ -906,10 +1042,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  AnyURIEscape = buildPerlPackage {
+  AnyURIEscape = buildPerlPackage rec {
     pname = "Any-URI-Escape";
     version = "0.01";
     src = fetchurl {
@@ -923,10 +1063,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  URIEscapeXS = buildPerlPackage {
+  URIEscapeXS = buildPerlPackage rec {
     pname = "URI-Escape-XS";
     version = "0.14";
     src = fetchurl {
@@ -939,10 +1083,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANKOGAI/${pname}@${version}";
+      };
     };
   };
 
-  ApacheAuthCookie = buildPerlPackage {
+  ApacheAuthCookie = buildPerlPackage rec {
     pname = "Apache-AuthCookie";
     version = "3.31";
     src = fetchurl {
@@ -968,10 +1116,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHOUT/${pname}@${version}";
+      };
     };
   };
 
-  ApacheDB = buildPerlPackage {
+  ApacheDB = buildPerlPackage rec {
     pname = "Apache-DB";
     version = "0.18";
     src = fetchurl {
@@ -985,10 +1137,14 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isLinux; # DB.c: undefined reference to `Perl_init_debugger'
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LZE/${pname}@${version}";
+      };
     };
   };
 
-  ApacheLogFormatCompiler = buildPerlModule {
+  ApacheLogFormatCompiler = buildPerlModule rec {
     pname = "Apache-LogFormat-Compiler";
     version = "0.36";
     src = fetchurl {
@@ -1013,10 +1169,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  ApacheSession = buildPerlModule {
+  ApacheSession = buildPerlModule rec {
     pname = "Apache-Session";
     version = "1.94";
     src = fetchurl {
@@ -1033,10 +1193,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
-  ApacheTest = buildPerlPackage {
+  ApacheTest = buildPerlPackage rec {
     pname = "Apache-Test";
     version = "1.43";
     src = fetchurl {
@@ -1047,10 +1211,14 @@ with self;
     meta = {
       description = "Test.pm wrapper with helpers for testing Apache";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHAY/${pname}@${version}";
+      };
     };
   };
 
-  AppCLI = buildPerlPackage {
+  AppCLI = buildPerlPackage rec {
     pname = "App-CLI";
     version = "0.52";
     src = fetchurl {
@@ -1071,10 +1239,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PTC/${pname}@${version}";
+      };
     };
   };
 
-  AppClusterSSH = buildPerlModule {
+  AppClusterSSH = buildPerlModule rec {
     pname = "App-ClusterSSH";
     version = "4.16";
     src = fetchurl {
@@ -1112,10 +1284,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cssh";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DUNCS/${pname}@${version}";
+      };
     };
   };
 
-  AppCmd = buildPerlPackage {
+  AppCmd = buildPerlPackage rec {
     pname = "App-Cmd";
     version = "0.336";
     src = fetchurl {
@@ -1138,10 +1314,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  AppConfig = buildPerlPackage {
+  AppConfig = buildPerlPackage rec {
     pname = "AppConfig";
     version = "1.71";
     src = fetchurl {
@@ -1155,10 +1335,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  AppFatPacker = buildPerlPackage {
+  AppFatPacker = buildPerlPackage rec {
     pname = "App-FatPacker";
     version = "0.010008";
     src = fetchurl {
@@ -1172,10 +1356,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "fatpack";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  Appcpanminus = buildPerlPackage {
+  Appcpanminus = buildPerlPackage rec {
     pname = "App-cpanminus";
     version = "1.7047";
     src = fetchurl {
@@ -1204,10 +1392,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpanm";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  Appcpm = buildPerlModule {
+  Appcpm = buildPerlModule rec {
     pname = "App-cpm";
     version = "0.997018";
     src = fetchurl {
@@ -1246,10 +1438,14 @@ with self;
       ];
       maintainers = [ maintainers.zakame ];
       mainProgram = "cpm";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  Applify = buildPerlPackage {
+  Applify = buildPerlPackage rec {
     pname = "Applify";
     version = "0.23";
     src = fetchurl {
@@ -1261,10 +1457,14 @@ with self;
       homepage = "https://github.com/jhthorsen/applify";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  AppMusicChordPro = buildPerlPackage {
+  AppMusicChordPro = buildPerlPackage rec {
     pname = "App-Music-ChordPro";
     version = "6.050.7";
     src = fetchurl {
@@ -1304,10 +1504,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "chordpro";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JV/${pname}@${version}";
+      };
     };
   };
 
-  AppPackager = buildPerlPackage {
+  AppPackager = buildPerlPackage rec {
     pname = "App-Packager";
     version = "1.440";
     src = fetchurl {
@@ -1320,6 +1524,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JV/${pname}@${version}";
+      };
     };
   };
 
@@ -1342,10 +1550,14 @@ with self;
       license = lib.licenses.gpl3Plus;
       mainProgram = "papersway";
       maintainers = with lib.maintainers; [ fgaz ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SPWHITTON/${pname}@${version}";
+      };
     };
   };
 
-  Appperlbrew = buildPerlModule {
+  Appperlbrew = buildPerlModule rec {
     pname = "App-perlbrew";
     version = "1.00";
     src = fetchurl {
@@ -1378,10 +1590,14 @@ with self;
       description = "Manage perl installations in your $HOME";
       license = with lib.licenses; [ mit ];
       mainProgram = "perlbrew";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GUGOD/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveAnyLite = buildPerlPackage {
+  ArchiveAnyLite = buildPerlPackage rec {
     pname = "Archive-Any-Lite";
     version = "0.11";
     src = fetchurl {
@@ -1399,10 +1615,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  AppSqitch = buildPerlModule {
+  AppSqitch = buildPerlModule rec {
     version = "1.5.2";
     pname = "App-Sqitch";
     src = fetchurl {
@@ -1450,10 +1670,14 @@ with self;
       homepage = "https://sqitch.org";
       license = with lib.licenses; [ mit ];
       mainProgram = "sqitch";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DWHEELER/${pname}@${version}";
+      };
     };
   };
 
-  AppSt = buildPerlPackage {
+  AppSt = buildPerlPackage rec {
     pname = "App-St";
     version = "1.1.4";
     src = fetchurl {
@@ -1472,7 +1696,7 @@ with self;
     };
   };
 
-  AttributeParamsValidate = buildPerlPackage {
+  AttributeParamsValidate = buildPerlPackage rec {
     pname = "Attribute-Params-Validate";
     version = "1.21";
     src = fetchurl {
@@ -1486,10 +1710,14 @@ with self;
       description = "Validate method/function parameters";
       homepage = "https://metacpan.org/release/Params-Validate";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveLibarchive = buildPerlPackage {
+  ArchiveLibarchive = buildPerlPackage rec {
     pname = "Archive-Libarchive";
     version = "0.09";
     src = fetchurl {
@@ -1525,10 +1753,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveLibarchiveExtract = buildPerlPackage {
+  ArchiveLibarchiveExtract = buildPerlPackage rec {
     pname = "Archive-Libarchive-Extract";
     version = "0.03";
     src = fetchurl {
@@ -1553,10 +1785,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveLibarchivePeek = buildPerlPackage {
+  ArchiveLibarchivePeek = buildPerlPackage rec {
     pname = "Archive-Libarchive-Peek";
     version = "0.04";
     src = fetchurl {
@@ -1581,10 +1817,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  ArrayCompare = buildPerlModule {
+  ArrayCompare = buildPerlModule rec {
     pname = "Array-Compare";
     version = "3.0.8";
     src = fetchurl {
@@ -1603,10 +1843,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVECROSS/${pname}@${version}";
+      };
     };
   };
 
-  ArrayDiff = buildPerlPackage {
+  ArrayDiff = buildPerlPackage rec {
     pname = "Array-Diff";
     version = "0.09";
     src = fetchurl {
@@ -1624,10 +1868,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  ArrayFIFO = buildPerlPackage {
+  ArrayFIFO = buildPerlPackage rec {
     pname = "Array-FIFO";
     version = "0.13";
     src = fetchurl {
@@ -1647,10 +1895,14 @@ with self;
       description = "Simple limitable FIFO array, with sum and average methods";
       homepage = "https://github.com/dwburke/perl-Array-FIFO";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBURKE/${pname}@${version}";
+      };
     };
   };
 
-  ArrayRefElem = buildPerlPackage {
+  ArrayRefElem = buildPerlPackage rec {
     pname = "Array-RefElem";
     version = "1.00";
     src = fetchurl {
@@ -1666,7 +1918,7 @@ with self;
     };
   };
 
-  ArrayUtils = buildPerlPackage {
+  ArrayUtils = buildPerlPackage rec {
     pname = "ArrayUtils";
     version = "0.5";
     src = fetchurl {
@@ -1680,10 +1932,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZMIJ/${pname}@${version}";
+      };
     };
   };
 
-  AsyncPing = buildPerlPackage {
+  AsyncPing = buildPerlPackage rec {
     pname = "AsyncPing";
     version = "2016.1207";
     src = fetchurl {
@@ -1693,10 +1949,14 @@ with self;
     meta = {
       description = "Ping a huge number of servers in several seconds";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XINFWANG/${pname}@${version}";
+      };
     };
   };
 
-  AsyncUtil = buildPerlPackage {
+  AsyncUtil = buildPerlPackage rec {
     pname = "Async-Util";
     version = "0.01";
     src = fetchurl {
@@ -1713,10 +1973,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WHITNEY/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveCpio = buildPerlPackage {
+  ArchiveCpio = buildPerlPackage rec {
     pname = "Archive-Cpio";
     version = "0.10";
     src = fetchurl {
@@ -1730,10 +1994,14 @@ with self;
         gpl1Plus
       ]; # See https://rt.cpan.org/Public/Bug/Display.html?id=43597#txn-569710
       mainProgram = "cpio-filter";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PIXEL/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveExtract = buildPerlPackage {
+  ArchiveExtract = buildPerlPackage rec {
     pname = "Archive-Extract";
     version = "0.88";
     src = fetchurl {
@@ -1746,10 +2014,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveTar = buildPerlPackage {
+  ArchiveTar = buildPerlPackage rec {
     pname = "Archive-Tar";
     version = "3.02";
     src = fetchurl {
@@ -1763,10 +2035,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "ptar";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveTarWrapper = buildPerlPackage {
+  ArchiveTarWrapper = buildPerlPackage rec {
     pname = "Archive-Tar-Wrapper";
     version = "0.38";
     src = fetchurl {
@@ -1781,10 +2057,14 @@ with self;
     meta = {
       description = "API wrapper around the 'tar' utility";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARFREITAS/${pname}@${version}";
+      };
     };
   };
 
-  ArchiveZip = buildPerlPackage {
+  ArchiveZip = buildPerlPackage rec {
     pname = "Archive-Zip";
     version = "1.68";
     src = fetchurl {
@@ -1799,10 +2079,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "crc32";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  AstroFITSHeader = buildPerlModule {
+  AstroFITSHeader = buildPerlModule rec {
     pname = "Astro-FITS-Header";
     version = "3.09";
     src = fetchurl {
@@ -1813,10 +2097,14 @@ with self;
       description = "Object-oriented interface to FITS HDUs";
       homepage = "https://github.com/timj/perl-Astro-FITS-Header";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GSB/${pname}@${version}";
+      };
     };
   };
 
-  AudioCuefileParser = buildPerlPackage {
+  AudioCuefileParser = buildPerlPackage rec {
     pname = "Audio-Cuefile-Parser";
     version = "0.02";
     src = fetchurl {
@@ -1828,10 +2116,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTK/${pname}@${version}";
+      };
     };
   };
 
-  AudioFLACHeader = buildPerlPackage {
+  AudioFLACHeader = buildPerlPackage rec {
     pname = "Audio-FLAC-Header";
     version = "2.4";
     src = fetchurl {
@@ -1844,10 +2136,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANIEL/${pname}@${version}";
+      };
     };
   };
 
-  AudioScan = buildPerlPackage {
+  AudioScan = buildPerlPackage rec {
     pname = "Audio-Scan";
     version = "1.10";
     src = fetchurl {
@@ -1867,7 +2163,7 @@ with self;
     };
   };
 
-  AuthenDecHpwd = buildPerlModule {
+  AuthenDecHpwd = buildPerlModule rec {
     pname = "Authen-DecHpwd";
     version = "2.007";
     src = fetchurl {
@@ -1882,10 +2178,14 @@ with self;
     meta = {
       description = "DEC VMS password hashing";
       license = with lib.licenses; [ gpl1Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  AuthenHtpasswd = buildPerlPackage {
+  AuthenHtpasswd = buildPerlPackage rec {
     pname = "Authen-Htpasswd";
     version = "0.171";
     src = fetchurl {
@@ -1908,10 +2208,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  AuthenKrb5 = buildPerlModule {
+  AuthenKrb5 = buildPerlModule rec {
     pname = "Authen-Krb5";
     version = "1.906";
     src = fetchurl {
@@ -1930,10 +2234,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ODENBACH/${pname}@${version}";
+      };
     };
   };
 
-  AuthenKrb5Admin = buildPerlPackage {
+  AuthenKrb5Admin = buildPerlPackage rec {
     pname = "Authen-Krb5-Admin";
     version = "0.17";
     src = fetchurl {
@@ -1961,10 +2269,14 @@ with self;
     meta = {
       description = "Perl extension for MIT Kerberos 5 admin interface";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SJQUINNEY/${pname}@${version}";
+      };
     };
   };
 
-  AuthenModAuthPubTkt = buildPerlPackage {
+  AuthenModAuthPubTkt = buildPerlPackage rec {
     pname = "Authen-ModAuthPubTkt";
     version = "0.1.1";
     src = fetchurl {
@@ -1988,10 +2300,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mod_auth_pubtkt.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AGORDON/${pname}@${version}";
+      };
     };
   };
 
-  AuthenOATH = buildPerlPackage {
+  AuthenOATH = buildPerlPackage rec {
     pname = "Authen-OATH";
     version = "2.0.1";
     src = fetchurl {
@@ -2012,10 +2328,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  AuthenPassphrase = buildPerlModule {
+  AuthenPassphrase = buildPerlModule rec {
     pname = "Authen-Passphrase";
     version = "0.008";
     src = fetchurl {
@@ -2039,10 +2359,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  AuthenRadius = buildPerlPackage {
+  AuthenRadius = buildPerlPackage rec {
     pname = "Authen-Radius";
     version = "0.32";
     src = fetchurl {
@@ -2057,10 +2381,14 @@ with self;
     meta = {
       description = "Provide simple Radius client facilities";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PORTAONE/${pname}@${version}";
+      };
     };
   };
 
-  AuthenSASL = buildPerlPackage {
+  AuthenSASL = buildPerlPackage rec {
     pname = "Authen-SASL";
     version = "2.1700";
     src = fetchurl {
@@ -2084,10 +2412,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EHUELS/${pname}@${version}";
+      };
     };
   };
 
-  AuthenSASLSASLprep = buildPerlModule {
+  AuthenSASLSASLprep = buildPerlModule rec {
     pname = "Authen-SASL-SASLprep";
     version = "1.100";
     src = fetchurl {
@@ -2103,10 +2435,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFAERBER/${pname}@${version}";
+      };
     };
   };
 
-  AuthenSCRAM = buildPerlPackage {
+  AuthenSCRAM = buildPerlPackage rec {
     pname = "Authen-SCRAM";
     version = "0.011";
     src = fetchurl {
@@ -2130,10 +2466,14 @@ with self;
       homepage = "https://github.com/dagolden/Authen-SCRAM";
       license = with lib.licenses; [ asl20 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  AuthenSimple = buildPerlPackage {
+  AuthenSimple = buildPerlPackage rec {
     pname = "Authen-Simple";
     version = "0.5";
     src = fetchurl {
@@ -2166,10 +2506,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHANSEN/${pname}@${version}";
+      };
     };
   };
 
-  AuthenSimplePasswd = buildPerlModule {
+  AuthenSimplePasswd = buildPerlModule rec {
     pname = "Authen-Simple-Passwd";
     version = "0.6";
     src = fetchurl {
@@ -2187,10 +2531,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHANSEN/${pname}@${version}";
+      };
     };
   };
 
-  autobox = buildPerlPackage {
+  autobox = buildPerlPackage rec {
     pname = "autobox";
     version = "3.0.1";
     src = fetchurl {
@@ -2205,10 +2553,14 @@ with self;
     meta = {
       description = "Call methods on native types";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHOCOLATE/${pname}@${version}";
+      };
     };
   };
 
-  Autodia = buildPerlPackage {
+  Autodia = buildPerlPackage rec {
     pname = "Autodia";
     version = "2.14";
     src = fetchurl {
@@ -2237,10 +2589,14 @@ with self;
       homepage = "http://www.aarontrevena.co.uk/opensource/autodia/";
       license = with lib.licenses; [ gpl2Plus ];
       mainProgram = "autodia.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TEEJAY/${pname}@${version}";
+      };
     };
   };
 
-  AWSSignature4 = buildPerlModule {
+  AWSSignature4 = buildPerlModule rec {
     pname = "AWS-Signature4";
     version = "1.02";
     src = fetchurl {
@@ -2258,10 +2614,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDS/${pname}@${version}";
+      };
     };
   };
 
-  autovivification = buildPerlPackage {
+  autovivification = buildPerlPackage rec {
     pname = "autovivification";
     version = "0.18";
     src = fetchurl {
@@ -2275,10 +2635,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VPIT/${pname}@${version}";
+      };
     };
   };
 
-  BarcodeZBar = buildPerlPackage {
+  BarcodeZBar = buildPerlPackage rec {
     pname = "Barcode-ZBar";
     version = "0.04pre";
     # The meta::cpan version of this module has been unmaintained from 2009
@@ -2300,7 +2664,7 @@ with self;
     };
   };
 
-  BC = buildPerlPackage {
+  BC = buildPerlPackage rec {
     pname = "B-C";
     version = "1.57";
     src = fetchurl {
@@ -2324,10 +2688,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlcc";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  BCOW = buildPerlPackage {
+  BCOW = buildPerlPackage rec {
     pname = "B-COW";
     version = "0.007";
     src = fetchurl {
@@ -2340,10 +2708,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ATOOMIC/${pname}@${version}";
+      };
     };
   };
 
-  BFlags = buildPerlPackage {
+  BFlags = buildPerlPackage rec {
     pname = "B-Flags";
     version = "0.17";
     src = fetchurl {
@@ -2356,10 +2728,14 @@ with self;
         artistic1
         gpl1Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  BeanstalkClient = buildPerlPackage {
+  BeanstalkClient = buildPerlPackage rec {
     pname = "Beanstalk-Client";
     version = "1.07";
     src = fetchurl {
@@ -2376,10 +2752,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GBARR/${pname}@${version}";
+      };
     };
   };
 
-  BerkeleyDB = buildPerlPackage {
+  BerkeleyDB = buildPerlPackage rec {
     pname = "BerkeleyDB";
     version = "0.65";
 
@@ -2398,6 +2778,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMQS/${pname}@${version}";
+      };
     };
   };
 
@@ -2418,10 +2802,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  BHooksEndOfScope = buildPerlPackage {
+  BHooksEndOfScope = buildPerlPackage rec {
     pname = "B-Hooks-EndOfScope";
     version = "0.26";
     src = fetchurl {
@@ -2439,10 +2827,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  BHooksOPAnnotation = buildPerlPackage {
+  BHooksOPAnnotation = buildPerlPackage rec {
     pname = "B-Hooks-OP-Annotation";
     version = "0.44";
     src = fetchurl {
@@ -2456,10 +2848,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHOCOLATE/${pname}@${version}";
+      };
     };
   };
 
-  BHooksOPCheck = buildPerlPackage {
+  BHooksOPCheck = buildPerlPackage rec {
     pname = "B-Hooks-OP-Check";
     version = "0.22";
     src = fetchurl {
@@ -2474,12 +2870,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
   BioExtAlign = callPackage ../development/perl-modules/Bio-Ext-Align { };
 
-  BioDBHTS = buildPerlModule {
+  BioDBHTS = buildPerlModule rec {
     pname = "Bio-DB-HTS";
     version = "3.01";
     src = fetchurl {
@@ -2502,12 +2902,16 @@ with self;
     meta = {
       description = "Perl interface to HTS library for DNA sequencing";
       license = lib.licenses.asl20;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AVULLO/${pname}@${version}";
+      };
     };
   };
 
   BioBigFile = callPackage ../development/perl-modules/Bio-BigFile { };
 
-  BioPerl = buildPerlPackage {
+  BioPerl = buildPerlPackage rec {
     pname = "BioPerl";
     version = "1.7.8";
     src = fetchurl {
@@ -2555,10 +2959,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CJFIELDS/${pname}@${version}";
+      };
     };
   };
 
-  BitVector = buildPerlPackage {
+  BitVector = buildPerlPackage rec {
     pname = "Bit-Vector";
     version = "7.4";
     src = fetchurl {
@@ -2573,10 +2981,14 @@ with self;
         gpl1Plus
         lgpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STBEY/${pname}@${version}";
+      };
     };
   };
 
-  BKeywords = buildPerlPackage {
+  BKeywords = buildPerlPackage rec {
     pname = "B-Keywords";
     version = "1.27";
     src = fetchurl {
@@ -2589,10 +3001,14 @@ with self;
         artistic1
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  boolean = buildPerlPackage {
+  boolean = buildPerlPackage rec {
     pname = "boolean";
     version = "0.46";
     src = fetchurl {
@@ -2606,10 +3022,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  BoostGeometryUtils = buildPerlModule {
+  BoostGeometryUtils = buildPerlModule rec {
     pname = "Boost-Geometry-Utils";
     version = "0.15";
     src = fetchurl {
@@ -2632,10 +3052,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AAR/${pname}@${version}";
+      };
     };
   };
 
-  BotTraining = buildPerlPackage {
+  BotTraining = buildPerlPackage rec {
     pname = "Bot-Training";
     version = "0.07";
     src = fetchurl {
@@ -2659,10 +3083,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "bot-training";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AVAR/${pname}@${version}";
+      };
     };
   };
 
-  BotTrainingMegaHAL = buildPerlPackage {
+  BotTrainingMegaHAL = buildPerlPackage rec {
     pname = "Bot-Training-MegaHAL";
     version = "0.03";
     src = fetchurl {
@@ -2678,10 +3106,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AVAR/${pname}@${version}";
+      };
     };
   };
 
-  BotTrainingStarCraft = buildPerlPackage {
+  BotTrainingStarCraft = buildPerlPackage rec {
     pname = "Bot-Training-StarCraft";
     version = "0.03";
     src = fetchurl {
@@ -2697,10 +3129,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AVAR/${pname}@${version}";
+      };
     };
   };
 
-  BSDResource = buildPerlPackage {
+  BSDResource = buildPerlPackage rec {
     pname = "BSD-Resource";
     version = "1.2911";
     src = fetchurl {
@@ -2711,10 +3147,14 @@ with self;
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHI/${pname}@${version}";
+      };
     };
   };
 
-  BSON = buildPerlPackage {
+  BSON = buildPerlPackage rec {
     pname = "BSON";
     version = "1.12.2";
     src = fetchurl {
@@ -2738,10 +3178,14 @@ with self;
       description = "BSON serialization and deserialization (EOL)";
       homepage = "https://github.com/mongodb-labs/mongo-perl-bson";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MONGODB/${pname}@${version}";
+      };
     };
   };
 
-  BSONXS = buildPerlPackage {
+  BSONXS = buildPerlPackage rec {
     pname = "BSON-XS";
     version = "0.8.4";
     src = fetchurl {
@@ -2768,10 +3212,14 @@ with self;
       homepage = "https://github.com/mongodb-labs/mongo-perl-bson-xs";
       license = with lib.licenses; [ asl20 ];
       platforms = lib.platforms.linux; # configure phase fails with "ld: unknown option: -mmacosx-version-min=10.12"
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MONGODB/${pname}@${version}";
+      };
     };
   };
 
-  BUtils = buildPerlPackage {
+  BUtils = buildPerlPackage rec {
     pname = "B-Utils";
     version = "0.27";
     src = fetchurl {
@@ -2787,10 +3235,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  BusinessHours = buildPerlPackage {
+  BusinessHours = buildPerlPackage rec {
     pname = "Business-Hours";
     version = "0.13";
     src = fetchurl {
@@ -2804,10 +3256,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  BusinessISBN = buildPerlPackage {
+  BusinessISBN = buildPerlPackage rec {
     pname = "Business-ISBN";
     version = "3.008";
     src = fetchurl {
@@ -2819,10 +3275,14 @@ with self;
       description = "Work with International Standard Book Numbers";
       homepage = "https://github.com/briandfoy/business-isbn";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  BusinessISBNData = buildPerlPackage {
+  BusinessISBNData = buildPerlPackage rec {
     pname = "Business-ISBN-Data";
     version = "20231006.001";
     src = fetchurl {
@@ -2833,10 +3293,14 @@ with self;
       description = "Data pack for Business::ISBN";
       homepage = "https://github.com/briandfoy/business-isbn-data";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  BusinessISMN = buildPerlPackage {
+  BusinessISMN = buildPerlPackage rec {
     pname = "Business-ISMN";
     version = "1.203";
     src = fetchurl {
@@ -2848,10 +3312,14 @@ with self;
       description = "Work with International Standard Music Numbers";
       homepage = "https://github.com/briandfoy/business-ismn";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  BusinessISSN = buildPerlPackage {
+  BusinessISSN = buildPerlPackage rec {
     pname = "Business-ISSN";
     version = "1.005";
     src = fetchurl {
@@ -2862,10 +3330,14 @@ with self;
       description = "Perl extension for International Standard Serial Numbers";
       homepage = "https://github.com/briandfoy/business-issn";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  BytesRandomSecure = buildPerlPackage {
+  BytesRandomSecure = buildPerlPackage rec {
     pname = "Bytes-Random-Secure";
     version = "0.29";
     src = fetchurl {
@@ -2883,10 +3355,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVIDO/${pname}@${version}";
+      };
     };
   };
 
-  BytesRandomSecureTiny = buildPerlPackage {
+  BytesRandomSecureTiny = buildPerlPackage rec {
     pname = "Bytes-Random-Secure-Tiny";
     version = "1.011";
     src = fetchurl {
@@ -2900,10 +3376,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVIDO/${pname}@${version}";
+      };
     };
   };
 
-  CacheCache = buildPerlPackage {
+  CacheCache = buildPerlPackage rec {
     pname = "Cache-Cache";
     version = "1.08";
     src = fetchurl {
@@ -2922,10 +3402,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  CacheFastMmap = buildPerlPackage {
+  CacheFastMmap = buildPerlPackage rec {
     pname = "Cache-FastMmap";
     version = "1.57";
     src = fetchurl {
@@ -2939,10 +3423,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROBM/${pname}@${version}";
+      };
     };
   };
 
-  CacheKyotoTycoon = buildPerlModule {
+  CacheKyotoTycoon = buildPerlModule rec {
     pname = "Cache-KyotoTycoon";
     version = "0.16";
     src = fetchurl {
@@ -2966,10 +3454,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  CacheMemcached = buildPerlPackage {
+  CacheMemcached = buildPerlPackage rec {
     pname = "Cache-Memcached";
     version = "1.30";
     src = fetchurl {
@@ -2983,10 +3475,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DORMANDO/${pname}@${version}";
+      };
     };
   };
 
-  CacheMemcachedFast = buildPerlPackage {
+  CacheMemcachedFast = buildPerlPackage rec {
     pname = "Cache-Memcached-Fast";
     version = "0.28";
     src = fetchurl {
@@ -3000,10 +3496,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RAZ/${pname}@${version}";
+      };
     };
   };
 
-  CacheMemory = buildPerlModule {
+  CacheMemory = buildPerlModule rec {
     pname = "Cache";
     version = "2.11";
     src = fetchurl {
@@ -3024,10 +3524,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  CacheSimpleTimedExpiry = buildPerlPackage {
+  CacheSimpleTimedExpiry = buildPerlPackage rec {
     pname = "Cache-Simple-TimedExpiry";
     version = "0.27";
     src = fetchurl {
@@ -3040,10 +3544,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JESSE/${pname}@${version}";
+      };
     };
   };
 
-  Cairo = buildPerlPackage {
+  Cairo = buildPerlPackage rec {
     pname = "Cairo";
     version = "1.109";
     src = fetchurl {
@@ -3062,10 +3570,14 @@ with self;
       description = "Perl interface to the cairo 2d vector graphics library";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  CairoGObject = buildPerlPackage {
+  CairoGObject = buildPerlPackage rec {
     pname = "Cairo-GObject";
     version = "1.005";
     src = fetchurl {
@@ -3084,10 +3596,14 @@ with self;
       description = "Integrate Cairo into the Glib type system";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  CallContext = buildPerlPackage {
+  CallContext = buildPerlPackage rec {
     pname = "Call-Context";
     version = "0.03";
     src = fetchurl {
@@ -3101,10 +3617,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FELIPE/${pname}@${version}";
+      };
     };
   };
 
-  cam_pdf = buildPerlModule {
+  cam_pdf = buildPerlModule rec {
     pname = "CAM-PDF";
     version = "1.60";
     src = fetchurl {
@@ -3121,10 +3641,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CDOLAN/${pname}@${version}";
+      };
     };
   };
 
-  capitalization = buildPerlPackage {
+  capitalization = buildPerlPackage rec {
     pname = "capitalization";
     version = "0.03";
     src = fetchurl {
@@ -3138,10 +3662,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  CanaryStability = buildPerlPackage {
+  CanaryStability = buildPerlPackage rec {
     pname = "Canary-Stability";
     version = "2013";
     src = fetchurl {
@@ -3151,10 +3679,14 @@ with self;
     meta = {
       description = "Canary to check perl compatibility for schmorp's modules";
       license = with lib.licenses; [ gpl1Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  CaptchaReCAPTCHA = buildPerlPackage {
+  CaptchaReCAPTCHA = buildPerlPackage rec {
     pname = "Captcha-reCaptcha";
     version = "0.99";
     src = fetchurl {
@@ -3171,10 +3703,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SUNNYP/${pname}@${version}";
+      };
     };
   };
 
-  CaptureTiny = buildPerlPackage {
+  CaptureTiny = buildPerlPackage rec {
     pname = "Capture-Tiny";
     version = "0.48";
     src = fetchurl {
@@ -3185,10 +3721,14 @@ with self;
       description = "Capture STDOUT and STDERR from Perl, XS or external programs";
       homepage = "https://github.com/dagolden/Capture-Tiny";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  CarpAlways = buildPerlPackage {
+  CarpAlways = buildPerlPackage rec {
     pname = "Carp-Always";
     version = "0.16";
     src = fetchurl {
@@ -3202,10 +3742,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FERREIRA/${pname}@${version}";
+      };
     };
   };
 
-  CarpAssert = buildPerlPackage {
+  CarpAssert = buildPerlPackage rec {
     pname = "Carp-Assert";
     version = "0.22";
     src = fetchurl {
@@ -3218,10 +3762,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YVES/${pname}@${version}";
+      };
     };
   };
 
-  CarpAssertMore = buildPerlPackage {
+  CarpAssertMore = buildPerlPackage rec {
     pname = "Carp-Assert-More";
     version = "2.3.0";
     src = fetchurl {
@@ -3233,10 +3781,14 @@ with self;
     meta = {
       description = "Convenience assertions for common situations";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  CarpClan = buildPerlPackage {
+  CarpClan = buildPerlPackage rec {
     pname = "Carp-Clan";
     version = "6.08";
     src = fetchurl {
@@ -3250,10 +3802,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  Carton = buildPerlPackage {
+  Carton = buildPerlPackage rec {
     pname = "Carton";
     version = "1.0.35";
     src = fetchurl {
@@ -3273,10 +3829,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "carton";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  CatalystActionRenderView = buildPerlPackage {
+  CatalystActionRenderView = buildPerlPackage rec {
     pname = "Catalyst-Action-RenderView";
     version = "0.16";
     src = fetchurl {
@@ -3294,10 +3854,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystActionREST = buildPerlPackage {
+  CatalystActionREST = buildPerlPackage rec {
     pname = "Catalyst-Action-REST";
     version = "1.21";
     src = fetchurl {
@@ -3315,10 +3879,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JJNAPIORK/${pname}@${version}";
+      };
     };
   };
 
-  CatalystAuthenticationCredentialHTTP = buildPerlModule {
+  CatalystAuthenticationCredentialHTTP = buildPerlModule rec {
     pname = "Catalyst-Authentication-Credential-HTTP";
     version = "1.018";
     src = fetchurl {
@@ -3352,10 +3920,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  CatalystAuthenticationStoreHtpasswd = buildPerlModule {
+  CatalystAuthenticationStoreHtpasswd = buildPerlModule rec {
     pname = "Catalyst-Authentication-Store-Htpasswd";
     version = "1.006";
     src = fetchurl {
@@ -3382,10 +3954,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  CatalystAuthenticationStoreDBIxClass = buildPerlPackage {
+  CatalystAuthenticationStoreDBIxClass = buildPerlPackage rec {
     pname = "Catalyst-Authentication-Store-DBIx-Class";
     version = "0.1506";
     src = fetchurl {
@@ -3403,10 +3979,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILMARI/${pname}@${version}";
+      };
     };
   };
 
-  CatalystAuthenticationStoreLDAP = buildPerlPackage {
+  CatalystAuthenticationStoreLDAP = buildPerlPackage rec {
     pname = "Catalyst-Authentication-Store-LDAP";
     version = "1.017";
     src = fetchurl {
@@ -3430,10 +4010,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILMARI/${pname}@${version}";
+      };
     };
   };
 
-  CatalystComponentInstancePerContext = buildPerlPackage {
+  CatalystComponentInstancePerContext = buildPerlPackage rec {
     pname = "Catalyst-Component-InstancePerContext";
     version = "0.001001";
     src = fetchurl {
@@ -3447,10 +4031,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRODITI/${pname}@${version}";
+      };
     };
   };
 
-  CatalystControllerHTMLFormFu = buildPerlPackage {
+  CatalystControllerHTMLFormFu = buildPerlPackage rec {
     pname = "Catalyst-Controller-HTML-FormFu";
     version = "2.04";
     src = fetchurl {
@@ -3493,10 +4081,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NIGELM/${pname}@${version}";
+      };
     };
   };
 
-  CatalystControllerPOD = buildPerlModule {
+  CatalystControllerPOD = buildPerlModule rec {
     pname = "Catalyst-Controller-POD";
     version = "1.0.0";
     src = fetchurl {
@@ -3522,10 +4114,14 @@ with self;
       description = "Serves PODs right from your Catalyst application";
       homepage = "https://search.cpan.org/dist/Catalyst-Controller-POD";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLER/${pname}@${version}";
+      };
     };
   };
 
-  CatalystDevel = buildPerlPackage {
+  CatalystDevel = buildPerlPackage rec {
     pname = "Catalyst-Devel";
     version = "1.42";
     src = fetchurl {
@@ -3553,10 +4149,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystDispatchTypeRegex = buildPerlModule {
+  CatalystDispatchTypeRegex = buildPerlModule rec {
     pname = "Catalyst-DispatchType-Regex";
     version = "5.90035";
     src = fetchurl {
@@ -3570,10 +4170,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MGRIMES/${pname}@${version}";
+      };
     };
   };
 
-  CatalystManual = buildPerlPackage {
+  CatalystManual = buildPerlPackage rec {
     pname = "Catalyst-Manual";
     version = "5.9011";
     src = fetchurl {
@@ -3586,10 +4190,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystModelDBICSchema = buildPerlPackage {
+  CatalystModelDBICSchema = buildPerlPackage rec {
     pname = "Catalyst-Model-DBIC-Schema";
     version = "0.66";
     src = fetchurl {
@@ -3616,10 +4224,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystRuntime = buildPerlPackage {
+  CatalystRuntime = buildPerlPackage rec {
     pname = "Catalyst-Runtime";
     version = "5.90131";
     src = fetchurl {
@@ -3663,10 +4275,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "catalyst.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JJNAPIORK/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginAccessLog = buildPerlPackage {
+  CatalystPluginAccessLog = buildPerlPackage rec {
     pname = "Catalyst-Plugin-AccessLog";
     version = "1.10";
     src = fetchurl {
@@ -3684,10 +4300,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARODLAND/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginAuthentication = buildPerlPackage {
+  CatalystPluginAuthentication = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Authentication";
     version = "0.10023";
     src = fetchurl {
@@ -3702,10 +4322,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginAuthorizationACL = buildPerlPackage {
+  CatalystPluginAuthorizationACL = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Authorization-ACL";
     version = "0.16";
     src = fetchurl {
@@ -3729,10 +4353,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginAuthorizationRoles = buildPerlPackage {
+  CatalystPluginAuthorizationRoles = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Authorization-Roles";
     version = "0.09";
     src = fetchurl {
@@ -3751,10 +4379,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginCache = buildPerlPackage {
+  CatalystPluginCache = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Cache";
     version = "0.12";
     src = fetchurl {
@@ -3773,10 +4405,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginCacheHTTP = buildPerlPackage {
+  CatalystPluginCacheHTTP = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Cache-HTTP";
     version = "0.001000";
     src = fetchurl {
@@ -3801,10 +4437,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRAF/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginCaptcha = buildPerlPackage {
+  CatalystPluginCaptcha = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Captcha";
     version = "0.04";
     src = fetchurl {
@@ -3821,10 +4461,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DIEGOK/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginConfigLoader = buildPerlPackage {
+  CatalystPluginConfigLoader = buildPerlPackage rec {
     pname = "Catalyst-Plugin-ConfigLoader";
     version = "0.35";
     src = fetchurl {
@@ -3842,10 +4486,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginFormValidator = buildPerlPackage {
+  CatalystPluginFormValidator = buildPerlPackage rec {
     pname = "Catalyst-Plugin-FormValidator";
     version = "0.094";
     src = fetchurl {
@@ -3862,10 +4510,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DHOSS/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginFormValidatorSimple = buildPerlPackage {
+  CatalystPluginFormValidatorSimple = buildPerlPackage rec {
     pname = "Catalyst-Plugin-FormValidator-Simple";
     version = "0.15";
     src = fetchurl {
@@ -3882,10 +4534,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DHOSS/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginLogHandler = buildPerlModule {
+  CatalystPluginLogHandler = buildPerlModule rec {
     pname = "Catalyst-Plugin-Log-Handler";
     version = "0.08";
     src = fetchurl {
@@ -3903,10 +4559,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEPE/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginPrometheusTiny = buildPerlPackage {
+  CatalystPluginPrometheusTiny = buildPerlPackage rec {
     pname = "Catalyst-Plugin-PrometheusTiny";
     version = "0.006";
     src = fetchurl {
@@ -3932,10 +4592,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYSPETE/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginSession = buildPerlPackage {
+  CatalystPluginSession = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Session";
     version = "0.43";
     src = fetchurl {
@@ -3957,10 +4621,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginSessionDynamicExpiry = buildPerlPackage {
+  CatalystPluginSessionDynamicExpiry = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Session-DynamicExpiry";
     version = "0.04";
     src = fetchurl {
@@ -3974,10 +4642,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginSessionStateCookie = buildPerlPackage {
+  CatalystPluginSessionStateCookie = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Session-State-Cookie";
     version = "0.18";
     src = fetchurl {
@@ -3991,10 +4663,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginSessionStoreFastMmap = buildPerlPackage {
+  CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Session-Store-FastMmap";
     version = "0.16";
     src = fetchurl {
@@ -4011,10 +4687,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginSessionStoreFile = buildPerlPackage {
+  CatalystPluginSessionStoreFile = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Session-Store-File";
     version = "0.18";
     src = fetchurl {
@@ -4032,10 +4712,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FLORA/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginSmartURI = buildPerlPackage {
+  CatalystPluginSmartURI = buildPerlPackage rec {
     pname = "Catalyst-Plugin-SmartURI";
     version = "0.041";
     src = fetchurl {
@@ -4058,10 +4742,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginStackTrace = buildPerlPackage {
+  CatalystPluginStackTrace = buildPerlPackage rec {
     pname = "Catalyst-Plugin-StackTrace";
     version = "0.12";
     src = fetchurl {
@@ -4075,10 +4763,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginStaticSimple = buildPerlPackage {
+  CatalystPluginStaticSimple = buildPerlPackage rec {
     pname = "Catalyst-Plugin-Static-Simple";
     version = "0.37";
     src = fetchurl {
@@ -4097,10 +4789,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILMARI/${pname}@${version}";
+      };
     };
   };
 
-  CatalystPluginStatusMessage = buildPerlPackage {
+  CatalystPluginStatusMessage = buildPerlPackage rec {
     pname = "Catalyst-Plugin-StatusMessage";
     version = "1.002000";
     src = fetchurl {
@@ -4117,10 +4813,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HKCLARK/${pname}@${version}";
+      };
     };
   };
 
-  CatalystViewCSV = buildPerlPackage {
+  CatalystViewCSV = buildPerlPackage rec {
     pname = "Catalyst-View-CSV";
     version = "1.8";
     src = fetchurl {
@@ -4147,10 +4847,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMREIN/${pname}@${version}";
+      };
     };
   };
 
-  CatalystViewDownload = buildPerlPackage {
+  CatalystViewDownload = buildPerlPackage rec {
     pname = "Catalyst-View-Download";
     version = "0.09";
     src = fetchurl {
@@ -4172,10 +4876,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAUDEON/${pname}@${version}";
+      };
     };
   };
 
-  CatalystViewJSON = buildPerlPackage {
+  CatalystViewJSON = buildPerlPackage rec {
     pname = "Catalyst-View-JSON";
     version = "0.37";
     src = fetchurl {
@@ -4189,10 +4897,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CatalystViewTT = buildPerlPackage {
+  CatalystViewTT = buildPerlPackage rec {
     pname = "Catalyst-View-TT";
     version = "0.46";
     src = fetchurl {
@@ -4210,10 +4922,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JJNAPIORK/${pname}@${version}";
+      };
     };
   };
 
-  CatalystXComponentTraits = buildPerlPackage {
+  CatalystXComponentTraits = buildPerlPackage rec {
     pname = "CatalystX-Component-Traits";
     version = "0.19";
     src = fetchurl {
@@ -4230,10 +4946,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  CatalystXRoleApplicator = buildPerlPackage {
+  CatalystXRoleApplicator = buildPerlPackage rec {
     pname = "CatalystX-RoleApplicator";
     version = "0.005";
     src = fetchurl {
@@ -4250,10 +4970,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HDP/${pname}@${version}";
+      };
     };
   };
 
-  CatalystTraitForRequestProxyBase = buildPerlPackage {
+  CatalystTraitForRequestProxyBase = buildPerlPackage rec {
     pname = "Catalyst-TraitFor-Request-ProxyBase";
     version = "0.000005";
     src = fetchurl {
@@ -4276,10 +5000,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  CatalystXScriptServerStarman = buildPerlPackage {
+  CatalystXScriptServerStarman = buildPerlPackage rec {
     pname = "CatalystX-Script-Server-Starman";
     version = "0.03";
     src = fetchurl {
@@ -4303,10 +5031,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABRAXXA/${pname}@${version}";
+      };
     };
   };
 
-  CDB_File = buildPerlPackage {
+  CDB_File = buildPerlPackage rec {
     pname = "CDB_File";
     version = "1.05";
     src = fetchurl {
@@ -4325,10 +5057,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  Catmandu = buildPerlModule {
+  Catmandu = buildPerlModule rec {
     pname = "Catmandu";
     version = "1.2020";
     src = fetchurl {
@@ -4379,10 +5115,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "catmandu";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HOCHSTEN/${pname}@${version}";
+      };
     };
   };
 
-  CDDB_get = buildPerlPackage {
+  CDDB_get = buildPerlPackage rec {
     pname = "CDDB_get";
     version = "2.28";
     src = fetchurl {
@@ -4394,10 +5134,14 @@ with self;
       license = with lib.licenses; [ artistic1 ];
       maintainers = [ maintainers.endgame ];
       mainProgram = "cddb.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FONKIE/${pname}@${version}";
+      };
     };
   };
 
-  CDDBFile = buildPerlPackage {
+  CDDBFile = buildPerlPackage rec {
     pname = "CDDB-File";
     version = "1.05";
     src = fetchurl {
@@ -4407,10 +5151,14 @@ with self;
     meta = {
       description = "Parse a CDDB/freedb data file";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TMTM/${pname}@${version}";
+      };
     };
   };
 
-  CGI = buildPerlPackage {
+  CGI = buildPerlPackage rec {
     pname = "CGI";
     version = "4.59";
     src = fetchurl {
@@ -4427,10 +5175,14 @@ with self;
       description = "Handle Common Gateway Interface requests and responses";
       homepage = "https://metacpan.org/module/CGI";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEEJO/${pname}@${version}";
+      };
     };
   };
 
-  CGICompile = buildPerlModule {
+  CGICompile = buildPerlModule rec {
     pname = "CGI-Compile";
     version = "0.26";
     src = fetchurl {
@@ -4459,10 +5211,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  CGICookieXS = buildPerlPackage {
+  CGICookieXS = buildPerlPackage rec {
     pname = "CGI-Cookie-XS";
     version = "0.18";
     src = fetchurl {
@@ -4475,10 +5231,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AGENT/${pname}@${version}";
+      };
     };
   };
 
-  CGIEmulatePSGI = buildPerlPackage {
+  CGIEmulatePSGI = buildPerlPackage rec {
     pname = "CGI-Emulate-PSGI";
     version = "0.23";
     src = fetchurl {
@@ -4494,10 +5254,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  CGIExpand = buildPerlPackage {
+  CGIExpand = buildPerlPackage rec {
     pname = "CGI-Expand";
     version = "2.05";
     src = fetchurl {
@@ -4511,10 +5275,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOWMANBS/${pname}@${version}";
+      };
     };
   };
 
-  CGIFast = buildPerlPackage {
+  CGIFast = buildPerlPackage rec {
     pname = "CGI-Fast";
     version = "2.16";
     src = fetchurl {
@@ -4533,10 +5301,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEEJO/${pname}@${version}";
+      };
     };
   };
 
-  CGIFormBuilder = buildPerlPackage {
+  CGIFormBuilder = buildPerlPackage rec {
     pname = "CGI-FormBuilder";
     version = "3.10";
     src = fetchurl {
@@ -4551,10 +5323,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BIGPRESH/${pname}@${version}";
+      };
     };
   };
 
-  CGIMinimal = buildPerlModule {
+  CGIMinimal = buildPerlModule rec {
     pname = "CGI-Minimal";
     version = "1.30";
     src = fetchurl {
@@ -4565,10 +5341,14 @@ with self;
       description = "Lightweight CGI form processing package";
       homepage = "https://github.com/JerilynFranz/perl-CGI-Minimal";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SNOWHARE/${pname}@${version}";
+      };
     };
   };
 
-  CGIPSGI = buildPerlPackage {
+  CGIPSGI = buildPerlPackage rec {
     pname = "CGI-PSGI";
     version = "0.15";
     src = fetchurl {
@@ -4582,10 +5362,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  CGISession = buildPerlModule {
+  CGISession = buildPerlModule rec {
     pname = "CGI-Session";
     version = "4.48";
     src = fetchurl {
@@ -4596,10 +5380,14 @@ with self;
     meta = {
       description = "Persistent session data in CGI applications";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKSTOS/${pname}@${version}";
+      };
     };
   };
 
-  CGISimple = buildPerlPackage {
+  CGISimple = buildPerlPackage rec {
     pname = "CGI-Simple";
     version = "1.282";
     src = fetchurl {
@@ -4616,10 +5404,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANWAR/${pname}@${version}";
+      };
     };
   };
 
-  CGIStruct = buildPerlPackage {
+  CGIStruct = buildPerlPackage rec {
     pname = "CGI-Struct";
     version = "1.21";
     src = fetchurl {
@@ -4630,10 +5422,14 @@ with self;
     meta = {
       description = "Build structures from CGI data";
       license = with lib.licenses; [ bsd2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FULLERMD/${pname}@${version}";
+      };
     };
   };
 
-  CHI = buildPerlPackage {
+  CHI = buildPerlPackage rec {
     pname = "CHI";
     version = "0.61";
     src = fetchurl {
@@ -4673,10 +5469,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASB/${pname}@${version}";
+      };
     };
   };
 
-  Chart = buildPerlPackage {
+  Chart = buildPerlPackage rec {
     pname = "Chart";
     version = "2.403.9";
     src = fetchurl {
@@ -4694,10 +5494,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LICHTKIND/${pname}@${version}";
+      };
     };
   };
 
-  ChipcardPCSC = buildPerlPackage {
+  ChipcardPCSC = buildPerlPackage rec {
     pname = "Chipcard-PCSC";
     version = "1.4.16";
     src = fetchurl {
@@ -4728,10 +5532,14 @@ with self;
       maintainers = with maintainers; [
         anthonyroussel
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WHOM/${pname}@${version}";
+      };
     };
   };
 
-  CiscoIPPhone = buildPerlPackage {
+  CiscoIPPhone = buildPerlPackage rec {
     pname = "Cisco-IPPhone";
     version = "0.05";
     src = fetchurl {
@@ -4741,10 +5549,14 @@ with self;
     meta = {
       description = "Package for creating Cisco IPPhone XML objects";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRPALMER/${pname}@${version}";
+      };
     };
   };
 
-  CLASS = buildPerlPackage {
+  CLASS = buildPerlPackage rec {
     pname = "CLASS";
     version = "1.1.8";
     src = fetchurl {
@@ -4759,10 +5571,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JDEGUEST/${pname}@${version}";
+      };
     };
   };
 
-  ClassAccessor = buildPerlPackage {
+  ClassAccessor = buildPerlPackage rec {
     pname = "Class-Accessor";
     version = "0.51";
     src = fetchurl {
@@ -4775,10 +5591,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KASEI/${pname}@${version}";
+      };
     };
   };
 
-  ClassAccessorChained = buildPerlModule {
+  ClassAccessorChained = buildPerlModule rec {
     pname = "Class-Accessor-Chained";
     version = "0.01";
     src = fetchurl {
@@ -4792,10 +5612,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  ClassAccessorGrouped = buildPerlPackage {
+  ClassAccessorGrouped = buildPerlPackage rec {
     pname = "Class-Accessor-Grouped";
     version = "0.10014";
     src = fetchurl {
@@ -4811,10 +5635,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  ClassAccessorLite = buildPerlPackage {
+  ClassAccessorLite = buildPerlPackage rec {
     pname = "Class-Accessor-Lite";
     version = "0.08";
     src = fetchurl {
@@ -4827,10 +5655,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZUHO/${pname}@${version}";
+      };
     };
   };
 
-  ClassAutouse = buildPerlPackage {
+  ClassAutouse = buildPerlPackage rec {
     pname = "Class-Autouse";
     version = "2.01";
     src = fetchurl {
@@ -4843,10 +5675,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ADAMK/${pname}@${version}";
+      };
     };
   };
 
-  ClassBase = buildPerlPackage {
+  ClassBase = buildPerlPackage rec {
     pname = "Class-Base";
     version = "0.09";
     src = fetchurl {
@@ -4860,10 +5696,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YANICK/${pname}@${version}";
+      };
     };
   };
 
-  ClassC3 = buildPerlPackage {
+  ClassC3 = buildPerlPackage rec {
     pname = "Class-C3";
     version = "0.35";
     src = fetchurl {
@@ -4878,10 +5718,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  ClassC3AdoptNEXT = buildPerlModule {
+  ClassC3AdoptNEXT = buildPerlModule rec {
     pname = "Class-C3-Adopt-NEXT";
     version = "0.14";
     src = fetchurl {
@@ -4900,10 +5744,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ClassC3Componentised = buildPerlPackage {
+  ClassC3Componentised = buildPerlPackage rec {
     pname = "Class-C3-Componentised";
     version = "1.001002";
     src = fetchurl {
@@ -4922,10 +5770,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  ClassClassgenclassgen = buildPerlPackage {
+  ClassClassgenclassgen = buildPerlPackage rec {
     pname = "Class-Classgen-classgen";
     version = "3.03";
     src = fetchurl {
@@ -4939,10 +5791,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "classgen";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHLUE/${pname}@${version}";
+      };
     };
   };
 
-  ClassContainer = buildPerlModule {
+  ClassContainer = buildPerlModule rec {
     pname = "Class-Container";
     version = "0.13";
     src = fetchurl {
@@ -4956,10 +5812,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KWILLIAMS/${pname}@${version}";
+      };
     };
   };
 
-  ClassDataAccessor = buildPerlPackage {
+  ClassDataAccessor = buildPerlPackage rec {
     pname = "Class-Data-Accessor";
     version = "0.04004";
     src = fetchurl {
@@ -4972,10 +5832,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CLACO/${pname}@${version}";
+      };
     };
   };
 
-  ClassDataInheritable = buildPerlPackage {
+  ClassDataInheritable = buildPerlPackage rec {
     pname = "Class-Data-Inheritable";
     version = "0.09";
     src = fetchurl {
@@ -4988,10 +5852,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSHERER/${pname}@${version}";
+      };
     };
   };
 
-  ClassEHierarchy = buildPerlPackage {
+  ClassEHierarchy = buildPerlPackage rec {
     pname = "Class-EHierarchy";
     version = "2.01";
     src = fetchurl {
@@ -5005,10 +5873,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CORLISS/${pname}@${version}";
+      };
     };
   };
 
-  ClassFactory = buildPerlPackage {
+  ClassFactory = buildPerlPackage rec {
     pname = "Class-Factory";
     version = "1.06";
     src = fetchurl {
@@ -5021,10 +5893,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  ClassFactoryUtil = buildPerlModule {
+  ClassFactoryUtil = buildPerlModule rec {
     pname = "Class-Factory-Util";
     version = "1.7";
     src = fetchurl {
@@ -5037,10 +5913,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ClassGomor = buildPerlModule {
+  ClassGomor = buildPerlModule rec {
     pname = "Class-Gomor";
     version = "1.03";
     src = fetchurl {
@@ -5050,10 +5930,14 @@ with self;
     meta = {
       description = "Another class and object builder";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GOMOR/${pname}@${version}";
+      };
     };
   };
 
-  ClassInspector = buildPerlPackage {
+  ClassInspector = buildPerlPackage rec {
     pname = "Class-Inspector";
     version = "1.36";
     src = fetchurl {
@@ -5067,10 +5951,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  ClassISA = buildPerlPackage {
+  ClassISA = buildPerlPackage rec {
     pname = "Class-ISA";
     version = "0.36";
     src = fetchurl {
@@ -5083,10 +5971,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  ClassIterator = buildPerlPackage {
+  ClassIterator = buildPerlPackage rec {
     pname = "Class-Iterator";
     version = "0.3";
     src = fetchurl {
@@ -5099,10 +5991,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TEXMEC/${pname}@${version}";
+      };
     };
   };
 
-  ClassLoader = buildPerlPackage {
+  ClassLoader = buildPerlPackage rec {
     pname = "Class-Loader";
     version = "2.03";
     src = fetchurl {
@@ -5115,10 +6011,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VIPUL/${pname}@${version}";
+      };
     };
   };
 
-  ClassMakeMethods = buildPerlPackage {
+  ClassMakeMethods = buildPerlPackage rec {
     pname = "Class-MakeMethods";
     version = "1.01";
     src = fetchurl {
@@ -5135,10 +6035,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EVO/${pname}@${version}";
+      };
     };
   };
 
-  ClassMember = buildPerlPackage {
+  ClassMember = buildPerlPackage rec {
     pname = "Class-Member";
     version = "1.6";
     src = fetchurl {
@@ -5151,10 +6055,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OPI/${pname}@${version}";
+      };
     };
   };
 
-  ClassMethodMaker = buildPerlPackage {
+  ClassMethodMaker = buildPerlPackage rec {
     pname = "Class-MethodMaker";
     version = "2.24";
     src = fetchurl {
@@ -5169,10 +6077,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SCHWIGON/${pname}@${version}";
+      };
     };
   };
 
-  ClassMethodModifiers = buildPerlPackage {
+  ClassMethodModifiers = buildPerlPackage rec {
     pname = "Class-Method-Modifiers";
     version = "2.15";
     src = fetchurl {
@@ -5190,10 +6102,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ClassMix = buildPerlModule {
+  ClassMix = buildPerlModule rec {
     pname = "Class-Mix";
     version = "0.006";
     src = fetchurl {
@@ -5207,10 +6123,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  ClassRefresh = buildPerlPackage {
+  ClassRefresh = buildPerlPackage rec {
     pname = "Class-Refresh";
     version = "0.07";
     src = fetchurl {
@@ -5234,10 +6154,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  ClassReturnValue = buildPerlPackage {
+  ClassReturnValue = buildPerlPackage rec {
     pname = "Class-ReturnValue";
     version = "0.55";
     src = fetchurl {
@@ -5252,10 +6176,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JESSE/${pname}@${version}";
+      };
     };
   };
 
-  ClassSingleton = buildPerlPackage {
+  ClassSingleton = buildPerlPackage rec {
     pname = "Class-Singleton";
     version = "1.6";
     src = fetchurl {
@@ -5268,10 +6196,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHAY/${pname}@${version}";
+      };
     };
   };
 
-  ClassThrowable = buildPerlPackage {
+  ClassThrowable = buildPerlPackage rec {
     pname = "Class-Throwable";
     version = "0.13";
     src = fetchurl {
@@ -5284,10 +6216,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KMX/${pname}@${version}";
+      };
     };
   };
 
-  ClassTiny = buildPerlPackage {
+  ClassTiny = buildPerlPackage rec {
     pname = "Class-Tiny";
     version = "1.008";
     src = fetchurl {
@@ -5298,10 +6234,14 @@ with self;
       description = "Minimalist class construction";
       homepage = "https://github.com/dagolden/Class-Tiny";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  ClassLoad = buildPerlPackage {
+  ClassLoad = buildPerlPackage rec {
     pname = "Class-Load";
     version = "0.25";
     src = fetchurl {
@@ -5323,10 +6263,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ClassLoadXS = buildPerlPackage {
+  ClassLoadXS = buildPerlPackage rec {
     pname = "Class-Load-XS";
     version = "0.10";
     src = fetchurl {
@@ -5342,10 +6286,14 @@ with self;
       description = "XS implementation of parts of Class::Load";
       homepage = "https://github.com/moose/Class-Load-XS";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ClassObservable = buildPerlPackage {
+  ClassObservable = buildPerlPackage rec {
     pname = "Class-Observable";
     version = "2.004";
     src = fetchurl {
@@ -5359,10 +6307,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARISTOTLE/${pname}@${version}";
+      };
     };
   };
 
-  ClassStd = buildPerlModule {
+  ClassStd = buildPerlModule rec {
     pname = "Class-Std";
     version = "0.013";
     src = fetchurl {
@@ -5375,10 +6327,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
-  ClassStdFast = buildPerlModule {
+  ClassStdFast = buildPerlModule rec {
     pname = "Class-Std-Fast";
     version = "0.0.8";
     src = fetchurl {
@@ -5396,10 +6352,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ACID/${pname}@${version}";
+      };
     };
   };
 
-  ClassUnload = buildPerlPackage {
+  ClassUnload = buildPerlPackage rec {
     pname = "Class-Unload";
     version = "0.11";
     src = fetchurl {
@@ -5414,10 +6374,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILMARI/${pname}@${version}";
+      };
     };
   };
 
-  ClassVirtual = buildPerlPackage {
+  ClassVirtual = buildPerlPackage rec {
     pname = "Class-Virtual";
     version = "0.08";
     src = fetchurl {
@@ -5436,10 +6400,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHWERN/${pname}@${version}";
+      };
     };
   };
 
-  ClassXSAccessor = buildPerlPackage {
+  ClassXSAccessor = buildPerlPackage rec {
     pname = "Class-XSAccessor";
     version = "1.19";
     src = fetchurl {
@@ -5452,10 +6420,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  CLDRNumber = buildPerlModule {
+  CLDRNumber = buildPerlModule rec {
     pname = "CLDR-Number";
     version = "0.19";
     src = fetchurl {
@@ -5481,10 +6453,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PATCH/${pname}@${version}";
+      };
     };
   };
 
-  CLIHelpers = buildPerlPackage {
+  CLIHelpers = buildPerlPackage rec {
     pname = "CLI-Helpers";
     version = "2.0";
     src = fetchurl {
@@ -5506,10 +6482,14 @@ with self;
       description = "Subroutines for making simple command line scripts";
       homepage = "https://github.com/reyjrar/CLI-Helpers";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BLHOTSKY/${pname}@${version}";
+      };
     };
   };
 
-  Clipboard = buildPerlModule {
+  Clipboard = buildPerlModule rec {
     pname = "Clipboard";
     version = "0.28";
     src = fetchurl {
@@ -5529,10 +6509,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  Clone = buildPerlPackage {
+  Clone = buildPerlPackage rec {
     pname = "Clone";
     version = "0.46";
     src = fetchurl {
@@ -5546,10 +6530,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GARU/${pname}@${version}";
+      };
     };
   };
 
-  CloneChoose = buildPerlPackage {
+  CloneChoose = buildPerlPackage rec {
     pname = "Clone-Choose";
     version = "0.010";
     src = fetchurl {
@@ -5568,10 +6556,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HERMES/${pname}@${version}";
+      };
     };
   };
 
-  ClonePP = buildPerlPackage {
+  ClonePP = buildPerlPackage rec {
     pname = "Clone-PP";
     version = "1.08";
     src = fetchurl {
@@ -5584,10 +6576,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  CodeTidyAll = buildPerlPackage {
+  CodeTidyAll = buildPerlPackage rec {
     pname = "Code-TidyAll";
     version = "0.84";
     src = fetchurl {
@@ -5631,10 +6627,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "tidyall";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  CodeTidyAllPluginPerlAlignMooseAttributes = buildPerlPackage {
+  CodeTidyAllPluginPerlAlignMooseAttributes = buildPerlPackage rec {
     pname = "Code-TidyAll-Plugin-Perl-AlignMooseAttributes";
     version = "0.01";
     src = fetchurl {
@@ -5651,10 +6651,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JSWARTZ/${pname}@${version}";
+      };
     };
   };
 
-  ColorLibrary = buildPerlPackage {
+  ColorLibrary = buildPerlPackage rec {
     pname = "Color-Library";
     version = "0.021";
     src = fetchurl {
@@ -5679,10 +6683,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROKR/${pname}@${version}";
+      };
     };
   };
 
-  CommandRunner = buildPerlModule {
+  CommandRunner = buildPerlModule rec {
     pname = "Command-Runner";
     version = "0.200";
     src = fetchurl {
@@ -5704,10 +6712,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  commonsense = buildPerlPackage {
+  commonsense = buildPerlPackage rec {
     pname = "common-sense";
     version = "3.75";
     src = fetchurl {
@@ -5720,10 +6732,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  CompilerLexer = buildPerlModule {
+  CompilerLexer = buildPerlModule rec {
     pname = "Compiler-Lexer";
     version = "0.23";
     src = fetchurl {
@@ -5743,10 +6759,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GOCCY/${pname}@${version}";
+      };
     };
   };
 
-  CompressBzip2 = buildPerlPackage {
+  CompressBzip2 = buildPerlPackage rec {
     pname = "Compress-Bzip2";
     version = "2.28";
     src = fetchurl {
@@ -5759,6 +6779,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
@@ -5775,10 +6799,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  CompressRawBzip2 = buildPerlPackage {
+  CompressRawBzip2 = buildPerlPackage rec {
     pname = "Compress-Raw-Bzip2";
     version = "2.206";
     src = fetchurl {
@@ -5798,10 +6826,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMQS/${pname}@${version}";
+      };
     };
   };
 
-  CompressRawLzma = buildPerlPackage {
+  CompressRawLzma = buildPerlPackage rec {
     pname = "Compress-Raw-Lzma";
     version = "2.206";
     src = fetchurl {
@@ -5821,10 +6853,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMQS/${pname}@${version}";
+      };
     };
   };
 
-  CompressRawZlib = buildPerlPackage {
+  CompressRawZlib = buildPerlPackage rec {
     pname = "Compress-Raw-Zlib";
     version = "2.206";
 
@@ -5853,10 +6889,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMQS/${pname}@${version}";
+      };
     };
   };
 
-  CompressUnLZMA = buildPerlPackage {
+  CompressUnLZMA = buildPerlPackage rec {
     pname = "Compress-unLZMA";
     version = "0.05";
     src = fetchurl {
@@ -5870,10 +6910,14 @@ with self;
         gpl1Plus
         lgpl21Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FERREIRA/${pname}@${version}";
+      };
     };
   };
 
-  ConfigAny = buildPerlPackage {
+  ConfigAny = buildPerlPackage rec {
     pname = "Config-Any";
     version = "0.33";
     src = fetchurl {
@@ -5887,10 +6931,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  ConfigAutoConf = buildPerlPackage {
+  ConfigAutoConf = buildPerlPackage rec {
     pname = "Config-AutoConf";
     version = "0.320";
     src = fetchurl {
@@ -5905,10 +6953,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AMBS/${pname}@${version}";
+      };
     };
   };
 
-  ConfigGeneral = buildPerlPackage {
+  ConfigGeneral = buildPerlPackage rec {
     pname = "Config-General";
     version = "2.65";
     src = fetchurl {
@@ -5918,10 +6970,14 @@ with self;
     meta = {
       description = "Generic Config Module";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TLINDEN/${pname}@${version}";
+      };
     };
   };
 
-  ConfigGitLike = buildPerlPackage {
+  ConfigGitLike = buildPerlPackage rec {
     pname = "Config-GitLike";
     version = "1.18";
     src = fetchurl {
@@ -5939,10 +6995,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXMV/${pname}@${version}";
+      };
     };
   };
 
-  ConfigGrammar = buildPerlPackage {
+  ConfigGrammar = buildPerlPackage rec {
     pname = "Config-Grammar";
     version = "1.13";
     src = fetchurl {
@@ -5956,10 +7016,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSCHWEI/${pname}@${version}";
+      };
     };
   };
 
-  ConfigINI = buildPerlPackage {
+  ConfigINI = buildPerlPackage rec {
     pname = "Config-INI";
     version = "0.029";
     src = fetchurl {
@@ -5974,10 +7038,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  ConfigIdentity = buildPerlPackage {
+  ConfigIdentity = buildPerlPackage rec {
     pname = "Config-Identity";
     version = "0.0019";
     src = fetchurl {
@@ -5996,10 +7064,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  ConfigIniFiles = buildPerlPackage {
+  ConfigIniFiles = buildPerlPackage rec {
     pname = "Config-IniFiles";
     version = "3.000003";
     src = fetchurl {
@@ -6015,10 +7087,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  ConfigMerge = buildPerlPackage {
+  ConfigMerge = buildPerlPackage rec {
     pname = "Config-Merge";
     version = "1.04";
     src = fetchurl {
@@ -6033,10 +7109,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DRTECH/${pname}@${version}";
+      };
     };
   };
 
-  ConfigOnion = buildPerlPackage {
+  ConfigOnion = buildPerlPackage rec {
     pname = "Config-Onion";
     version = "1.007";
     src = fetchurl {
@@ -6058,10 +7138,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSHEROH/${pname}@${version}";
+      };
     };
   };
 
-  ConfigMVP = buildPerlPackage {
+  ConfigMVP = buildPerlPackage rec {
     pname = "Config-MVP";
     version = "2.200013";
     src = fetchurl {
@@ -6084,10 +7168,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  ConfigMVPReaderINI = buildPerlPackage {
+  ConfigMVPReaderINI = buildPerlPackage rec {
     pname = "Config-MVP-Reader-INI";
     version = "2.101465";
     src = fetchurl {
@@ -6105,10 +7193,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  ConfigProperties = buildPerlPackage {
+  ConfigProperties = buildPerlPackage rec {
     pname = "Config-Properties";
     version = "1.80";
     src = fetchurl {
@@ -6121,10 +7213,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
-  ConfigSimple = buildPerlPackage {
+  ConfigSimple = buildPerlPackage rec {
     pname = "Config-Simple";
     version = "4.58";
     src = fetchurl {
@@ -6137,10 +7233,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHERZODR/${pname}@${version}";
+      };
     };
   };
 
-  ConfigStd = buildPerlModule {
+  ConfigStd = buildPerlModule rec {
     pname = "Config-Std";
     version = "0.903";
     src = fetchurl {
@@ -6154,10 +7254,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BRICKER/${pname}@${version}";
+      };
     };
   };
 
-  ConfigTiny = buildPerlPackage {
+  ConfigTiny = buildPerlPackage rec {
     pname = "Config-Tiny";
     version = "2.29";
     src = fetchurl {
@@ -6171,10 +7275,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSAVAGE/${pname}@${version}";
+      };
     };
   };
 
-  ConfigVersioned = buildPerlPackage {
+  ConfigVersioned = buildPerlPackage rec {
     pname = "Config-Versioned";
     version = "1.01";
     src = fetchurl {
@@ -6193,10 +7301,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cfgver";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRSCOTTY/${pname}@${version}";
+      };
     };
   };
 
-  Connector = buildPerlModule {
+  Connector = buildPerlModule rec {
     pname = "Connector";
     version = "1.53";
     src = fetchurl {
@@ -6238,10 +7350,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRSCOTTY/${pname}@${version}";
+      };
     };
   };
 
-  ConstFast = buildPerlModule {
+  ConstFast = buildPerlModule rec {
     pname = "Const-Fast";
     version = "0.014";
     src = fetchurl {
@@ -6259,10 +7375,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ConvertASCIIArmour = buildPerlPackage {
+  ConvertASCIIArmour = buildPerlPackage rec {
     pname = "Convert-ASCII-Armour";
     version = "1.4";
     src = fetchurl {
@@ -6276,10 +7396,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VIPUL/${pname}@${version}";
+      };
     };
   };
 
-  ConvertASN1 = buildPerlPackage {
+  ConvertASN1 = buildPerlPackage rec {
     pname = "Convert-ASN1";
     version = "0.34";
     src = fetchurl {
@@ -6292,10 +7416,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TIMLEGGE/${pname}@${version}";
+      };
     };
   };
 
-  ConvertBase32 = buildPerlPackage {
+  ConvertBase32 = buildPerlPackage rec {
     pname = "Convert-Base32";
     version = "0.06";
     src = fetchurl {
@@ -6310,10 +7438,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IKEGAMI/${pname}@${version}";
+      };
     };
   };
 
-  ConvertBencode = buildPerlPackage {
+  ConvertBencode = buildPerlPackage rec {
     pname = "Convert-Bencode";
     version = "1.03";
     src = fetchurl {
@@ -6326,10 +7458,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ORCLEV/${pname}@${version}";
+      };
     };
   };
 
-  ConvertColor = buildPerlModule {
+  ConvertColor = buildPerlModule rec {
     pname = "Convert-Color";
     version = "0.17";
     src = fetchurl {
@@ -6347,10 +7483,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  ConvertUU = buildPerlPackage {
+  ConvertUU = buildPerlPackage rec {
     pname = "Convert-UU";
     version = "0.5201";
     src = fetchurl {
@@ -6363,10 +7503,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDK/${pname}@${version}";
+      };
     };
   };
 
-  constantboolean = buildPerlModule {
+  constantboolean = buildPerlModule rec {
     pname = "constant-boolean";
     version = "0.02";
     src = fetchurl {
@@ -6380,10 +7524,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  curry = buildPerlPackage {
+  curry = buildPerlPackage rec {
     pname = "curry";
     version = "2.000001";
     src = fetchurl {
@@ -6396,10 +7544,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  constant-defer = buildPerlPackage {
+  constant-defer = buildPerlPackage rec {
     pname = "constant-defer";
     version = "6";
     src = fetchurl {
@@ -6409,10 +7561,14 @@ with self;
     meta = {
       description = "Constant subs with deferred value calculation";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  ContextPreserve = buildPerlPackage {
+  ContextPreserve = buildPerlPackage rec {
     pname = "Context-Preserve";
     version = "0.03";
     src = fetchurl {
@@ -6429,10 +7585,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  CookieBaker = buildPerlModule {
+  CookieBaker = buildPerlModule rec {
     pname = "Cookie-Baker";
     version = "0.11";
     src = fetchurl {
@@ -6451,10 +7611,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  CookieXS = buildPerlPackage {
+  CookieXS = buildPerlPackage rec {
     pname = "Cookie-XS";
     version = "0.11";
     src = fetchurl {
@@ -6468,10 +7632,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AGENT/${pname}@${version}";
+      };
     };
   };
 
-  Coro = buildPerlPackage {
+  Coro = buildPerlPackage rec {
     pname = "Coro";
     version = "6.57";
     src = fetchurl {
@@ -6490,6 +7658,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
@@ -6517,10 +7689,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  Corona = buildPerlPackage {
+  Corona = buildPerlPackage rec {
     pname = "Corona";
     version = "0.1004";
     src = fetchurl {
@@ -6542,10 +7718,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "corona";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  CPAN = buildPerlPackage {
+  CPAN = buildPerlPackage rec {
     pname = "CPAN";
     version = "2.36";
     src = fetchurl {
@@ -6577,10 +7757,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpan";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDK/${pname}@${version}";
+      };
     };
   };
 
-  CPANAudit = buildPerlPackage {
+  CPANAudit = buildPerlPackage rec {
     pname = "CPAN-Audit";
     version = "20230826.001";
     src = fetchurl {
@@ -6607,10 +7791,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  CPANMini = buildPerlPackage {
+  CPANMini = buildPerlPackage rec {
     pname = "CPAN-Mini";
     version = "1.111017";
     src = fetchurl {
@@ -6635,10 +7823,14 @@ with self;
       ];
       maintainers = [ maintainers.sgo ];
       mainProgram = "minicpan";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  CpanelJSONXS = buildPerlPackage {
+  CpanelJSONXS = buildPerlPackage rec {
     pname = "Cpanel-JSON-XS";
     version = "4.37";
     src = fetchurl {
@@ -6653,10 +7845,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpanel_json_xs";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  CPAN02PackagesSearch = buildPerlModule {
+  CPAN02PackagesSearch = buildPerlModule rec {
     pname = "CPAN-02Packages-Search";
     version = "0.100";
     src = fetchurl {
@@ -6673,10 +7869,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  CPANChanges = buildPerlPackage {
+  CPANChanges = buildPerlPackage rec {
     pname = "CPAN-Changes";
     version = "0.400002";
     src = fetchurl {
@@ -6690,10 +7890,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "tidy_changelog";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  CPANChecksums = buildPerlPackage {
+  CPANChecksums = buildPerlPackage rec {
     pname = "CPAN-Checksums";
     version = "2.14";
     src = fetchurl {
@@ -6711,10 +7915,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDK/${pname}@${version}";
+      };
     };
   };
 
-  CPANCommonIndex = buildPerlPackage {
+  CPANCommonIndex = buildPerlPackage rec {
     pname = "CPAN-Common-Index";
     version = "0.010";
     src = fetchurl {
@@ -6736,10 +7944,14 @@ with self;
       description = "Common library for searching CPAN modules, authors and distributions";
       homepage = "https://github.com/Perl-Toolchain-Gang/CPAN-Common-Index";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  CPANDistnameInfo = buildPerlPackage {
+  CPANDistnameInfo = buildPerlPackage rec {
     pname = "CPAN-DistnameInfo";
     version = "0.12";
     src = fetchurl {
@@ -6752,10 +7964,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GBARR/${pname}@${version}";
+      };
     };
   };
 
-  CPANMetaCheck = buildPerlPackage {
+  CPANMetaCheck = buildPerlPackage rec {
     pname = "CPAN-Meta-Check";
     version = "0.018";
     src = fetchurl {
@@ -6769,10 +7985,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CPANPerlReleases = buildPerlPackage {
+  CPANPerlReleases = buildPerlPackage rec {
     pname = "CPAN-Perl-Releases";
     version = "5.20230920";
     src = fetchurl {
@@ -6786,10 +8006,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  CPANPLUS = buildPerlPackage {
+  CPANPLUS = buildPerlPackage rec {
     pname = "CPANPLUS";
     version = "0.9914";
     src = fetchurl {
@@ -6811,10 +8035,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpanp";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  CPANUploader = buildPerlPackage {
+  CPANUploader = buildPerlPackage rec {
     pname = "CPAN-Uploader";
     version = "0.103018";
     src = fetchurl {
@@ -6835,10 +8063,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpan-upload";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  CryptArgon2 = buildPerlModule {
+  CryptArgon2 = buildPerlModule rec {
     pname = "Crypt-Argon2";
     version = "0.019";
     src = fetchurl {
@@ -6849,10 +8081,14 @@ with self;
     meta = {
       description = "Perl interface to the Argon2 key derivation functions";
       license = with lib.licenses; [ cc0 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptBcrypt = buildPerlPackage {
+  CryptBcrypt = buildPerlPackage rec {
     pname = "Crypt-Bcrypt";
     version = "0.011";
     src = fetchurl {
@@ -6865,10 +8101,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptBlowfish = buildPerlPackage {
+  CryptBlowfish = buildPerlPackage rec {
     pname = "Crypt-Blowfish";
     version = "2.14";
     src = fetchurl {
@@ -6878,10 +8118,14 @@ with self;
     meta = {
       description = "Perl Blowfish encryption module";
       license = with lib.licenses; [ bsdOriginalShortened ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DPARIS/${pname}@${version}";
+      };
     };
   };
 
-  CryptCAST5_PP = buildPerlPackage {
+  CryptCAST5_PP = buildPerlPackage rec {
     pname = "Crypt-CAST5_PP";
     version = "1.04";
     src = fetchurl {
@@ -6895,10 +8139,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBMATH/${pname}@${version}";
+      };
     };
   };
 
-  CryptCBC = buildPerlPackage {
+  CryptCBC = buildPerlPackage rec {
     pname = "Crypt-CBC";
     version = "2.33";
     src = fetchurl {
@@ -6911,10 +8159,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDS/${pname}@${version}";
+      };
     };
   };
 
-  CryptCurve25519 = buildPerlPackage {
+  CryptCurve25519 = buildPerlPackage rec {
     pname = "Crypt-Curve25519";
     version = "0.07";
     src = fetchurl {
@@ -6928,10 +8180,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KARASIK/${pname}@${version}";
+      };
     };
   };
 
-  CryptDES = buildPerlPackage {
+  CryptDES = buildPerlPackage rec {
     pname = "Crypt-DES";
     version = "2.07";
     src = fetchurl {
@@ -6946,10 +8202,14 @@ with self;
     meta = {
       description = "Perl DES encryption module";
       license = with lib.licenses; [ bsdOriginalShortened ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DPARIS/${pname}@${version}";
+      };
     };
   };
 
-  CryptDES_EDE3 = buildPerlPackage {
+  CryptDES_EDE3 = buildPerlPackage rec {
     pname = "Crypt-DES_EDE3";
     version = "0.01";
     src = fetchurl {
@@ -6964,10 +8224,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BTROTT/${pname}@${version}";
+      };
     };
   };
 
-  CryptDH = buildPerlPackage {
+  CryptDH = buildPerlPackage rec {
     pname = "Crypt-DH";
     version = "0.07";
     src = fetchurl {
@@ -6981,10 +8245,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MITHALDU/${pname}@${version}";
+      };
     };
   };
 
-  CryptDHGMP = buildPerlPackage {
+  CryptDHGMP = buildPerlPackage rec {
     pname = "Crypt-DH-GMP";
     version = "0.00012";
     src = fetchurl {
@@ -7004,10 +8272,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMAKI/${pname}@${version}";
+      };
     };
   };
 
-  CryptDSA = buildPerlPackage {
+  CryptDSA = buildPerlPackage rec {
     pname = "Crypt-DSA";
     version = "1.17";
     src = fetchurl {
@@ -7026,10 +8298,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ADAMK/${pname}@${version}";
+      };
     };
   };
 
-  CryptECB = buildPerlPackage {
+  CryptECB = buildPerlPackage rec {
     pname = "Crypt-ECB";
     version = "2.22";
     src = fetchurl {
@@ -7042,10 +8318,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "APPEL/${pname}@${version}";
+      };
     };
   };
 
-  CryptEksblowfish = buildPerlModule {
+  CryptEksblowfish = buildPerlModule rec {
     pname = "Crypt-Eksblowfish";
     version = "0.009";
     src = fetchurl {
@@ -7059,10 +8339,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  CryptFormat = buildPerlPackage {
+  CryptFormat = buildPerlPackage rec {
     pname = "Crypt-Format";
     version = "0.12";
     src = fetchurl {
@@ -7080,10 +8364,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FELIPE/${pname}@${version}";
+      };
     };
   };
 
-  CryptHSXKPasswd = buildPerlPackage {
+  CryptHSXKPasswd = buildPerlPackage rec {
     pname = "Crypt-HSXKPasswd";
     version = "3.6";
     src = fetchurl {
@@ -7121,7 +8409,7 @@ with self;
     doCheck = false;
   };
 
-  CryptIDEA = buildPerlPackage {
+  CryptIDEA = buildPerlPackage rec {
     pname = "Crypt-IDEA";
     version = "1.10";
     src = fetchurl {
@@ -7131,10 +8419,14 @@ with self;
     meta = {
       description = "Perl interface to IDEA block cipher";
       license = with lib.licenses; [ bsdOriginalShortened ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BARTB/${pname}@${version}";
+      };
     };
   };
 
-  CryptJWT = buildPerlPackage {
+  CryptJWT = buildPerlPackage rec {
     pname = "Crypt-JWT";
     version = "0.035";
     src = fetchurl {
@@ -7151,10 +8443,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIK/${pname}@${version}";
+      };
     };
   };
 
-  CryptPassphrase = buildPerlPackage {
+  CryptPassphrase = buildPerlPackage rec {
     pname = "Crypt-Passphrase";
     version = "0.016";
     src = fetchurl {
@@ -7168,10 +8464,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptPassphraseArgon2 = buildPerlPackage {
+  CryptPassphraseArgon2 = buildPerlPackage rec {
     pname = "Crypt-Passphrase-Argon2";
     version = "0.009";
     src = fetchurl {
@@ -7188,10 +8488,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptPassphraseBcrypt = buildPerlPackage {
+  CryptPassphraseBcrypt = buildPerlPackage rec {
     pname = "Crypt-Passphrase-Bcrypt";
     version = "0.007";
     src = fetchurl {
@@ -7209,10 +8513,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptPasswdMD5 = buildPerlPackage {
+  CryptPasswdMD5 = buildPerlPackage rec {
     pname = "Crypt-PasswdMD5";
     version = "1.42";
     src = fetchurl {
@@ -7225,10 +8533,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSAVAGE/${pname}@${version}";
+      };
     };
   };
 
-  CryptPKCS10 = buildPerlModule {
+  CryptPKCS10 = buildPerlModule rec {
     pname = "Crypt-PKCS10";
     version = "2.005";
     src = fetchurl {
@@ -7245,10 +8557,14 @@ with self;
       description = "Parse PKCS #10 certificate requests";
       homepage = "https://github.com/openxpki/Crypt-PKCS10";
       license = with lib.licenses; [ gpl1Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRSCOTTY/${pname}@${version}";
+      };
     };
   };
 
-  CryptRandomSeed = buildPerlPackage {
+  CryptRandomSeed = buildPerlPackage rec {
     pname = "Crypt-Random-Seed";
     version = "0.03";
     src = fetchurl {
@@ -7264,10 +8580,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANAJ/${pname}@${version}";
+      };
     };
   };
 
-  CryptRandom = buildPerlPackage {
+  CryptRandom = buildPerlPackage rec {
     pname = "Crypt-Random";
     version = "1.57";
     src = fetchurl {
@@ -7287,10 +8607,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "makerandom";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TIMLEGGE/${pname}@${version}";
+      };
     };
   };
 
-  CryptRandomSource = buildPerlModule {
+  CryptRandomSource = buildPerlModule rec {
     pname = "Crypt-Random-Source";
     version = "0.14";
     src = fetchurl {
@@ -7317,10 +8641,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  CryptRandomTESHA2 = buildPerlPackage {
+  CryptRandomTESHA2 = buildPerlPackage rec {
     pname = "Crypt-Random-TESHA2";
     version = "0.01";
     src = fetchurl {
@@ -7334,10 +8662,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANAJ/${pname}@${version}";
+      };
     };
   };
 
-  CryptRC4 = buildPerlPackage {
+  CryptRC4 = buildPerlPackage rec {
     pname = "Crypt-RC4";
     version = "2.02";
     src = fetchurl {
@@ -7350,10 +8682,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SIFUKURT/${pname}@${version}";
+      };
     };
   };
 
-  CryptRandPasswd = buildPerlPackage {
+  CryptRandPasswd = buildPerlPackage rec {
     pname = "Crypt-RandPasswd";
     version = "0.07";
     src = fetchurl {
@@ -7366,10 +8702,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JANITOR/${pname}@${version}";
+      };
     };
   };
 
-  CryptRIPEMD160 = buildPerlPackage {
+  CryptRIPEMD160 = buildPerlPackage rec {
     pname = "Crypt-RIPEMD160";
     version = "0.08";
     src = fetchurl {
@@ -7384,10 +8724,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  CryptMySQL = buildPerlModule {
+  CryptMySQL = buildPerlModule rec {
     pname = "Crypt-MySQL";
     version = "0.04";
     src = fetchurl {
@@ -7401,10 +8745,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IKEBE/${pname}@${version}";
+      };
     };
   };
 
-  CryptRijndael = buildPerlPackage {
+  CryptRijndael = buildPerlPackage rec {
     pname = "Crypt-Rijndael";
     version = "1.16";
     src = fetchurl {
@@ -7414,10 +8762,14 @@ with self;
     meta = {
       description = "Crypt::CBC compliant Rijndael encryption module";
       license = with lib.licenses; [ gpl3Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptUnixCryptXS = buildPerlPackage {
+  CryptUnixCryptXS = buildPerlPackage rec {
     pname = "Crypt-UnixCrypt_XS";
     version = "0.11";
     src = fetchurl {
@@ -7430,10 +8782,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BORISZ/${pname}@${version}";
+      };
     };
   };
 
-  CryptURandom = buildPerlPackage {
+  CryptURandom = buildPerlPackage rec {
     pname = "Crypt-URandom";
     version = "0.54";
     src = fetchurl {
@@ -7447,10 +8803,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DDICK/${pname}@${version}";
+      };
     };
   };
 
-  CryptScryptKDF = buildPerlModule {
+  CryptScryptKDF = buildPerlModule rec {
     pname = "Crypt-ScryptKDF";
     version = "0.010";
     src = fetchurl {
@@ -7466,10 +8826,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIK/${pname}@${version}";
+      };
     };
   };
 
-  CryptSmbHash = buildPerlPackage {
+  CryptSmbHash = buildPerlPackage rec {
     pname = "Crypt-SmbHash";
     version = "0.12";
     src = fetchurl {
@@ -7479,10 +8843,14 @@ with self;
     meta = {
       description = "Perl-only implementation of lanman and nt md4 hash functions, for use in Samba style smbpasswd entries";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BJKUIT/${pname}@${version}";
+      };
     };
   };
 
-  CryptSodium = buildPerlPackage {
+  CryptSodium = buildPerlPackage rec {
     pname = "Crypt-Sodium";
     version = "0.11";
     src = fetchurl {
@@ -7499,10 +8867,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MGREGORO/${pname}@${version}";
+      };
     };
   };
 
-  CryptSysRandom = buildPerlPackage {
+  CryptSysRandom = buildPerlPackage rec {
     pname = "Crypt-SysRandom";
     version = "0.007";
     src = fetchurl {
@@ -7515,10 +8887,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  CryptTwofish = buildPerlPackage {
+  CryptTwofish = buildPerlPackage rec {
     pname = "Crypt-Twofish";
     version = "2.18";
     src = fetchurl {
@@ -7532,10 +8908,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AMS/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenPGP = buildPerlPackage {
+  CryptOpenPGP = buildPerlPackage rec {
     pname = "Crypt-OpenPGP";
     version = "1.12";
     src = fetchurl {
@@ -7575,10 +8955,14 @@ with self;
       ];
       maintainers = [ maintainers.sgo ];
       mainProgram = "pgplet";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SROMANOV/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenSSLAES = buildPerlPackage {
+  CryptOpenSSLAES = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-AES";
     version = "0.17";
     src = fetchurl {
@@ -7598,10 +8982,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TIMLEGGE/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenSSLBignum = buildPerlPackage {
+  CryptOpenSSLBignum = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-Bignum";
     version = "0.09";
     src = fetchurl {
@@ -7616,10 +9004,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KMX/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenSSLGuess = buildPerlPackage {
+  CryptOpenSSLGuess = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-Guess";
     version = "0.15";
     src = fetchurl {
@@ -7633,10 +9025,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AKIYM/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenSSLRandom = buildPerlPackage {
+  CryptOpenSSLRandom = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-Random";
     version = "0.15";
     src = fetchurl {
@@ -7653,10 +9049,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenSSLRSA = buildPerlPackage {
+  CryptOpenSSLRSA = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-RSA";
     version = "0.35";
     src = fetchurl {
@@ -7674,10 +9074,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  CryptOpenSSLX509 = buildPerlPackage {
+  CryptOpenSSLX509 = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-X509";
     version = "1.915";
     src = fetchurl {
@@ -7697,10 +9101,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JONASBN/${pname}@${version}";
+      };
     };
   };
 
-  CryptPBKDF2 = buildPerlPackage {
+  CryptPBKDF2 = buildPerlPackage rec {
     pname = "Crypt-PBKDF2";
     version = "0.161520";
     src = fetchurl {
@@ -7724,10 +9132,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARODLAND/${pname}@${version}";
+      };
     };
   };
 
-  CryptPerl = buildPerlPackage {
+  CryptPerl = buildPerlPackage rec {
     pname = "Crypt-Perl";
     version = "0.38";
     src = fetchurl {
@@ -7765,10 +9177,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FELIPE/${pname}@${version}";
+      };
     };
   };
 
-  CryptEd25519 = buildPerlPackage {
+  CryptEd25519 = buildPerlPackage rec {
     pname = "Crypt-Ed25519";
     version = "1.05";
     src = fetchurl {
@@ -7783,10 +9199,14 @@ with self;
       description = "Minimal Ed25519 bindings";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.thoughtpolice ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  CryptSSLeay = buildPerlPackage {
+  CryptSSLeay = buildPerlPackage rec {
     pname = "Crypt-SSLeay";
     version = "0.73_06";
     src = fetchurl {
@@ -7806,10 +9226,14 @@ with self;
     meta = {
       description = "OpenSSL support for LWP";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NANIS/${pname}@${version}";
+      };
     };
   };
 
-  CSSDOM = buildPerlPackage {
+  CSSDOM = buildPerlPackage rec {
     pname = "CSS-DOM";
     version = "0.17";
     src = fetchurl {
@@ -7830,10 +9254,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SPROUT/${pname}@${version}";
+      };
     };
   };
 
-  CSSMinifier = buildPerlPackage {
+  CSSMinifier = buildPerlPackage rec {
     pname = "CSS-Minifier";
     version = "0.01";
     src = fetchurl {
@@ -7843,10 +9271,14 @@ with self;
     meta = {
       description = "Perl extension for minifying CSS";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMICHAUX/${pname}@${version}";
+      };
     };
   };
 
-  CSSMinifierXS = buildPerlPackage {
+  CSSMinifierXS = buildPerlPackage rec {
     pname = "CSS-Minifier-XS";
     version = "0.13";
     src = fetchurl {
@@ -7861,10 +9293,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GTERMARS/${pname}@${version}";
+      };
     };
   };
 
-  CSSSquish = buildPerlPackage {
+  CSSSquish = buildPerlPackage rec {
     pname = "CSS-Squish";
     version = "0.10";
     src = fetchurl {
@@ -7879,10 +9315,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TSIBLEY/${pname}@${version}";
+      };
     };
   };
 
-  Curses = buildPerlPackage {
+  Curses = buildPerlPackage rec {
     pname = "Curses";
     version = "1.44";
     src = fetchurl {
@@ -7898,10 +9338,14 @@ with self;
     meta = {
       description = "Perl bindings to ncurses";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GIRAFFED/${pname}@${version}";
+      };
     };
   };
 
-  CursesUI = buildPerlPackage {
+  CursesUI = buildPerlPackage rec {
     pname = "Curses-UI";
     version = "0.9609";
     src = fetchurl {
@@ -7918,10 +9362,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MDXI/${pname}@${version}";
+      };
     };
   };
 
-  CursesUIGrid = buildPerlPackage {
+  CursesUIGrid = buildPerlPackage rec {
     pname = "Curses-UI-Grid";
     version = "0.15";
     src = fetchurl {
@@ -7939,10 +9387,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ADRIANWIT/${pname}@${version}";
+      };
     };
   };
 
-  CryptX = buildPerlPackage {
+  CryptX = buildPerlPackage rec {
     pname = "CryptX";
     version = "0.087";
     src = fetchurl {
@@ -7955,10 +9407,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIK/${pname}@${version}";
+      };
     };
   };
 
-  CryptX509 = buildPerlPackage {
+  CryptX509 = buildPerlPackage rec {
     pname = "Crypt-X509";
     version = "0.55";
     src = fetchurl {
@@ -7972,10 +9428,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRSCOTTY/${pname}@${version}";
+      };
     };
   };
 
-  CwdGuard = buildPerlModule {
+  CwdGuard = buildPerlModule rec {
     pname = "Cwd-Guard";
     version = "0.05";
     src = fetchurl {
@@ -7989,10 +9449,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  DataClone = buildPerlPackage {
+  DataClone = buildPerlPackage rec {
     pname = "Data-Clone";
     version = "0.004";
     src = fetchurl {
@@ -8009,10 +9473,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFUJI/${pname}@${version}";
+      };
     };
   };
 
-  DataCompactReadonly = buildPerlPackage {
+  DataCompactReadonly = buildPerlPackage rec {
     pname = "Data-CompactReadonly";
     version = "0.1.0";
     src = fetchurl {
@@ -8033,10 +9501,14 @@ with self;
         artistic1
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DataCompare = buildPerlPackage {
+  DataCompare = buildPerlPackage rec {
     pname = "Data-Compare";
     version = "1.29";
     src = fetchurl {
@@ -8053,10 +9525,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DataDump = buildPerlPackage {
+  DataDump = buildPerlPackage rec {
     pname = "Data-Dump";
     version = "1.25";
     src = fetchurl {
@@ -8069,10 +9545,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GARU/${pname}@${version}";
+      };
     };
   };
 
-  DataDumperAutoEncode = buildPerlModule {
+  DataDumperAutoEncode = buildPerlModule rec {
     pname = "Data-Dumper-AutoEncode";
     version = "1.00";
     src = fetchurl {
@@ -8088,10 +9568,14 @@ with self;
       description = "Dump with recursive encoding";
       license = with lib.licenses; [ artistic2 ];
       mainProgram = "edumper";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BAYASHI/${pname}@${version}";
+      };
     };
   };
 
-  DataDumperConcise = buildPerlPackage {
+  DataDumperConcise = buildPerlPackage rec {
     pname = "Data-Dumper-Concise";
     version = "2.023";
     src = fetchurl {
@@ -8104,10 +9588,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DataEntropy = buildPerlPackage {
+  DataEntropy = buildPerlPackage rec {
     pname = "Data-Entropy";
     version = "0.008";
     src = fetchurl {
@@ -8127,10 +9615,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RRWO/${pname}@${version}";
+      };
     };
   };
 
-  DataFloat = buildPerlModule {
+  DataFloat = buildPerlModule rec {
     pname = "Data-Float";
     version = "0.013";
     src = fetchurl {
@@ -8143,10 +9635,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  DataFormValidator = buildPerlPackage {
+  DataFormValidator = buildPerlPackage rec {
     pname = "Data-FormValidator";
     version = "4.88";
     src = fetchurl {
@@ -8168,10 +9664,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DFARRELL/${pname}@${version}";
+      };
     };
   };
 
-  DataGUID = buildPerlPackage {
+  DataGUID = buildPerlPackage rec {
     pname = "Data-GUID";
     version = "0.051";
     src = fetchurl {
@@ -8189,10 +9689,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  DataHexDump = buildPerlPackage {
+  DataHexDump = buildPerlPackage rec {
     pname = "Data-HexDump";
     version = "0.04";
     src = fetchurl {
@@ -8208,10 +9712,14 @@ with self;
       ];
       maintainers = [ ];
       mainProgram = "hexdump";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  DataHexdumper = buildPerlPackage {
+  DataHexdumper = buildPerlPackage rec {
     pname = "Data-Hexdumper";
     version = "3.0001";
     src = fetchurl {
@@ -8224,10 +9732,14 @@ with self;
         artistic1
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DataHierarchy = buildPerlPackage {
+  DataHierarchy = buildPerlPackage rec {
     pname = "Data-Hierarchy";
     version = "0.34";
     src = fetchurl {
@@ -8241,10 +9753,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CLKAO/${pname}@${version}";
+      };
     };
   };
 
-  DataICal = buildPerlPackage {
+  DataICal = buildPerlPackage rec {
     pname = "Data-ICal";
     version = "0.24";
     src = fetchurl {
@@ -8266,10 +9782,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  DataIEEE754 = buildPerlPackage {
+  DataIEEE754 = buildPerlPackage rec {
     pname = "Data-IEEE754";
     version = "0.02";
     src = fetchurl {
@@ -8281,10 +9801,14 @@ with self;
       description = "Pack and unpack big-endian IEEE754 floats and doubles";
       homepage = "https://metacpan.org/release/Data-IEEE754";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  DataInteger = buildPerlModule {
+  DataInteger = buildPerlModule rec {
     pname = "Data-Integer";
     version = "0.006";
     src = fetchurl {
@@ -8297,10 +9821,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  DataMessagePack = buildPerlModule {
+  DataMessagePack = buildPerlModule rec {
     pname = "Data-MessagePack";
     version = "1.02";
     src = fetchurl {
@@ -8319,10 +9847,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYOHEX/${pname}@${version}";
+      };
     };
   };
 
-  DataOptList = buildPerlPackage {
+  DataOptList = buildPerlPackage rec {
     pname = "Data-OptList";
     version = "0.114";
     src = fetchurl {
@@ -8340,10 +9872,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  DataPage = buildPerlPackage {
+  DataPage = buildPerlPackage rec {
     pname = "Data-Page";
     version = "2.03";
     src = fetchurl {
@@ -8358,10 +9894,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DataPagePageset = buildPerlModule {
+  DataPagePageset = buildPerlModule rec {
     pname = "Data-Page-Pageset";
     version = "1.02";
     src = fetchurl {
@@ -8379,10 +9919,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHUNZI/${pname}@${version}";
+      };
     };
   };
 
-  DataPassword = buildPerlPackage {
+  DataPassword = buildPerlPackage rec {
     pname = "Data-Password";
     version = "1.12";
     src = fetchurl {
@@ -8395,10 +9939,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RAZINF/${pname}@${version}";
+      };
     };
   };
 
-  DataPerl = buildPerlPackage {
+  DataPerl = buildPerlPackage rec {
     pname = "Data-Perl";
     version = "0.002011";
     src = fetchurl {
@@ -8424,10 +9972,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  DataPrinter = buildPerlPackage {
+  DataPrinter = buildPerlPackage rec {
     pname = "Data-Printer";
     version = "1.001001";
     src = fetchurl {
@@ -8446,10 +9998,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GARU/${pname}@${version}";
+      };
     };
   };
 
-  DataRandom = buildPerlPackage {
+  DataRandom = buildPerlPackage rec {
     pname = "Data-Random";
     version = "0.13";
     src = fetchurl {
@@ -8466,10 +10022,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BAREFOOT/${pname}@${version}";
+      };
     };
   };
 
-  DataSection = buildPerlPackage {
+  DataSection = buildPerlPackage rec {
     pname = "Data-Section";
     version = "0.200008";
     src = fetchurl {
@@ -8488,10 +10048,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  DataSectionSimple = buildPerlPackage {
+  DataSectionSimple = buildPerlPackage rec {
     pname = "Data-Section-Simple";
     version = "0.07";
     src = fetchurl {
@@ -8506,10 +10070,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  DataSerializer = buildPerlModule {
+  DataSerializer = buildPerlModule rec {
     pname = "Data-Serializer";
     version = "0.65";
     src = fetchurl {
@@ -8523,10 +10091,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEELY/${pname}@${version}";
+      };
     };
   };
 
-  DataSExpression = buildPerlPackage {
+  DataSExpression = buildPerlPackage rec {
     pname = "Data-SExpression";
     version = "0.41";
     src = fetchurl {
@@ -8541,10 +10113,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NELHAGE/${pname}@${version}";
+      };
     };
   };
 
-  DataSpreadPagination = buildPerlPackage {
+  DataSpreadPagination = buildPerlPackage rec {
     pname = "Data-SpreadPagination";
     version = "0.1.2";
     src = fetchurl {
@@ -8561,10 +10137,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KNEW/${pname}@${version}";
+      };
     };
   };
 
-  DataStag = buildPerlPackage {
+  DataStag = buildPerlPackage rec {
     pname = "Data-Stag";
     version = "0.14";
     src = fetchurl {
@@ -8578,10 +10158,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CMUNGALL/${pname}@${version}";
+      };
     };
   };
 
-  DataStreamBulk = buildPerlPackage {
+  DataStreamBulk = buildPerlPackage rec {
     pname = "Data-Stream-Bulk";
     version = "0.11";
     src = fetchurl {
@@ -8601,10 +10185,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  DataStructureUtil = buildPerlPackage {
+  DataStructureUtil = buildPerlPackage rec {
     pname = "Data-Structure-Util";
     version = "0.16";
     src = fetchurl {
@@ -8618,10 +10206,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDYA/${pname}@${version}";
+      };
     };
   };
 
-  DataTaxi = buildPerlPackage {
+  DataTaxi = buildPerlPackage rec {
     pname = "Data-Taxi";
     version = "0.96";
     src = fetchurl {
@@ -8635,10 +10227,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKO/${pname}@${version}";
+      };
     };
   };
 
-  DataULID = buildPerlPackage {
+  DataULID = buildPerlPackage rec {
     pname = "Data-ULID";
     version = "1.2.1";
     src = fetchurl {
@@ -8654,10 +10250,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BALDUR/${pname}@${version}";
+      };
     };
   };
 
-  DataUniqid = buildPerlPackage {
+  DataUniqid = buildPerlPackage rec {
     pname = "Data-Uniqid";
     version = "0.12";
     src = fetchurl {
@@ -8670,10 +10270,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MWX/${pname}@${version}";
+      };
     };
   };
 
-  DataUtil = buildPerlModule {
+  DataUtil = buildPerlModule rec {
     pname = "Data-Util";
     version = "0.67";
     src = fetchurl {
@@ -8693,10 +10297,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYOHEX/${pname}@${version}";
+      };
     };
   };
 
-  DataURIEncode = buildPerlPackage {
+  DataURIEncode = buildPerlPackage rec {
     pname = "Data-URIEncode";
     version = "0.11";
     src = fetchurl {
@@ -8709,10 +10317,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RHANDOM/${pname}@${version}";
+      };
     };
   };
 
-  DataUUID = buildPerlPackage {
+  DataUUID = buildPerlPackage rec {
     pname = "Data-UUID";
     version = "1.226";
     src = fetchurl {
@@ -8725,10 +10337,14 @@ with self;
     meta = {
       description = "Globally/Universally Unique Identifiers (GUIDs/UUIDs)";
       license = with lib.licenses; [ bsd0 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  DataUUIDMT = buildPerlPackage {
+  DataUUIDMT = buildPerlPackage rec {
     pname = "Data-UUID-MT";
     version = "1.001";
     src = fetchurl {
@@ -8741,10 +10357,14 @@ with self;
       description = "Fast random UUID generator using the Mersenne Twister algorithm";
       homepage = "https://metacpan.org/release/Data-UUID-MT";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  DataValidateDomain = buildPerlPackage {
+  DataValidateDomain = buildPerlPackage rec {
     pname = "Data-Validate-Domain";
     version = "0.15";
     src = fetchurl {
@@ -8760,10 +10380,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DataValidateIP = buildPerlPackage {
+  DataValidateIP = buildPerlPackage rec {
     pname = "Data-Validate-IP";
     version = "0.31";
     src = fetchurl {
@@ -8779,10 +10403,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DataValidateURI = buildPerlPackage {
+  DataValidateURI = buildPerlPackage rec {
     pname = "Data-Validate-URI";
     version = "0.07";
     src = fetchurl {
@@ -8799,10 +10427,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SONNEN/${pname}@${version}";
+      };
     };
   };
 
-  DataVisitor = buildPerlPackage {
+  DataVisitor = buildPerlPackage rec {
     pname = "Data-Visitor";
     version = "0.32";
     src = fetchurl {
@@ -8821,10 +10453,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DateCalc = buildPerlPackage {
+  DateCalc = buildPerlPackage rec {
     pname = "Date-Calc";
     version = "6.4";
     src = fetchurl {
@@ -8839,10 +10475,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STBEY/${pname}@${version}";
+      };
     };
   };
 
-  DateExtract = buildPerlPackage {
+  DateExtract = buildPerlPackage rec {
     pname = "Date-Extract";
     version = "0.07";
     src = fetchurl {
@@ -8860,10 +10500,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DateManip = buildPerlPackage {
+  DateManip = buildPerlPackage rec {
     pname = "Date-Manip";
     version = "6.92";
     src = fetchurl {
@@ -8883,10 +10527,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SBECK/${pname}@${version}";
+      };
     };
   };
 
-  DateRange = buildPerlPackage {
+  DateRange = buildPerlPackage rec {
     pname = "Date-Range";
     version = "1.41";
     src = fetchurl {
@@ -8897,10 +10545,14 @@ with self;
     meta = {
       description = "Work with a range of dates";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TMTM/${pname}@${version}";
+      };
     };
   };
 
-  DateSimple = buildPerlPackage {
+  DateSimple = buildPerlPackage rec {
     pname = "Date-Simple";
     version = "3.03";
     src = fetchurl {
@@ -8913,10 +10565,14 @@ with self;
         artistic1
         gpl2Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IZUT/${pname}@${version}";
+      };
     };
   };
 
-  DateTime = buildPerlPackage {
+  DateTime = buildPerlPackage rec {
     pname = "DateTime";
     version = "1.59";
     src = fetchurl {
@@ -8937,10 +10593,14 @@ with self;
       description = "Date and time object for Perl";
       homepage = "https://metacpan.org/release/DateTime";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeCalendarJulian = buildPerlPackage {
+  DateTimeCalendarJulian = buildPerlPackage rec {
     pname = "DateTime-Calendar-Julian";
     version = "0.107";
     src = fetchurl {
@@ -8954,10 +10614,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WYANT/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeEventICal = buildPerlPackage {
+  DateTimeEventICal = buildPerlPackage rec {
     pname = "DateTime-Event-ICal";
     version = "0.13";
     src = fetchurl {
@@ -8971,10 +10635,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FGLOCK/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeEventRecurrence = buildPerlPackage {
+  DateTimeEventRecurrence = buildPerlPackage rec {
     pname = "DateTime-Event-Recurrence";
     version = "0.19";
     src = fetchurl {
@@ -8988,10 +10656,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FGLOCK/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatBuilder = buildPerlPackage {
+  DateTimeFormatBuilder = buildPerlPackage rec {
     pname = "DateTime-Format-Builder";
     version = "0.83";
     src = fetchurl {
@@ -9006,10 +10678,14 @@ with self;
       description = "Create DateTime parser classes and objects";
       homepage = "https://metacpan.org/release/DateTime-Format-Builder";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatDateParse = buildPerlModule {
+  DateTimeFormatDateParse = buildPerlModule rec {
     pname = "DateTime-Format-DateParse";
     version = "0.05";
     src = fetchurl {
@@ -9026,10 +10702,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHOBLITT/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatFlexible = buildPerlPackage {
+  DateTimeFormatFlexible = buildPerlPackage rec {
     pname = "DateTime-Format-Flexible";
     version = "0.34";
     src = fetchurl {
@@ -9052,10 +10732,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "THINC/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatHTTP = buildPerlModule {
+  DateTimeFormatHTTP = buildPerlModule rec {
     pname = "DateTime-Format-HTTP";
     version = "0.42";
     src = fetchurl {
@@ -9072,10 +10756,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CKRAS/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatICal = buildPerlModule {
+  DateTimeFormatICal = buildPerlModule rec {
     pname = "DateTime-Format-ICal";
     version = "0.09";
     src = fetchurl {
@@ -9089,10 +10777,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatISO8601 = buildPerlPackage {
+  DateTimeFormatISO8601 = buildPerlPackage rec {
     pname = "DateTime-Format-ISO8601";
     version = "0.16";
     src = fetchurl {
@@ -9108,10 +10800,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatMail = buildPerlPackage {
+  DateTimeFormatMail = buildPerlPackage rec {
     pname = "DateTime-Format-Mail";
     version = "0.403";
     src = fetchurl {
@@ -9128,10 +10824,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatNatural = buildPerlModule {
+  DateTimeFormatNatural = buildPerlModule rec {
     pname = "DateTime-Format-Natural";
     version = "1.18";
     src = fetchurl {
@@ -9158,10 +10858,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dateparse";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SCHUBIGER/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatMySQL = buildPerlModule {
+  DateTimeFormatMySQL = buildPerlModule rec {
     pname = "DateTime-Format-MySQL";
     version = "0.08";
     src = fetchurl {
@@ -9175,10 +10879,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XMIKEW/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatPg = buildPerlModule {
+  DateTimeFormatPg = buildPerlModule rec {
     pname = "DateTime-Format-Pg";
     version = "0.16014";
     src = fetchurl {
@@ -9194,10 +10902,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMAKI/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatStrptime = buildPerlPackage {
+  DateTimeFormatStrptime = buildPerlPackage rec {
     pname = "DateTime-Format-Strptime";
     version = "1.79";
     src = fetchurl {
@@ -9213,10 +10925,14 @@ with self;
       description = "Parse and format strp and strf time patterns";
       homepage = "https://metacpan.org/release/DateTime-Format-Strptime";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatSQLite = buildPerlPackage {
+  DateTimeFormatSQLite = buildPerlPackage rec {
     pname = "DateTime-Format-SQLite";
     version = "0.11";
     src = fetchurl {
@@ -9230,10 +10946,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFAERBER/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeFormatW3CDTF = buildPerlPackage {
+  DateTimeFormatW3CDTF = buildPerlPackage rec {
     pname = "DateTime-Format-W3CDTF";
     version = "0.08";
     src = fetchurl {
@@ -9248,10 +10968,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GWILLIAMS/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeHiRes = buildPerlPackage {
+  DateTimeHiRes = buildPerlPackage rec {
     pname = "DateTime-HiRes";
     version = "0.04";
     src = fetchurl {
@@ -9266,10 +10990,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeLocale = buildPerlPackage {
+  DateTimeLocale = buildPerlPackage rec {
     pname = "DateTime-Locale";
     version = "1.39";
     src = fetchurl {
@@ -9298,6 +11026,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
@@ -9313,10 +11045,14 @@ with self;
       description = "Parse and format RFC3339 datetime strings";
       homepage = "https://search.cpan.org/dist/DateTime-Format-RFC3339";
       license = with lib.licenses; [ cc0 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IKEGAMI/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeSet = buildPerlModule {
+  DateTimeSet = buildPerlModule rec {
     pname = "DateTime-Set";
     version = "0.3900";
     src = fetchurl {
@@ -9334,10 +11070,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FGLOCK/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeTimeZone = buildPerlPackage {
+  DateTimeTimeZone = buildPerlPackage rec {
     pname = "DateTime-TimeZone";
     version = "2.60";
     src = fetchurl {
@@ -9361,10 +11101,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DateTimeXEasy = buildPerlPackage {
+  DateTimeXEasy = buildPerlPackage rec {
     pname = "DateTimeX-Easy";
     version = "0.091";
     src = fetchurl {
@@ -9385,10 +11129,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JJNAPIORK/${pname}@${version}";
+      };
     };
   };
 
-  DebugShowStuff = buildPerlModule {
+  DebugShowStuff = buildPerlModule rec {
     pname = "Debug-ShowStuff";
     version = "1.16";
     src = fetchurl {
@@ -9409,6 +11157,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKO/${pname}@${version}";
+      };
     };
   };
 
@@ -9431,10 +11183,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  DevelCaller = buildPerlPackage {
+  DevelCaller = buildPerlPackage rec {
     pname = "Devel-Caller";
     version = "2.07";
     src = fetchurl {
@@ -9448,10 +11204,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  DevelCheckBin = buildPerlPackage {
+  DevelCheckBin = buildPerlPackage rec {
     pname = "Devel-CheckBin";
     version = "0.04";
     src = fetchurl {
@@ -9465,10 +11225,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  DevelCheckCompiler = buildPerlModule {
+  DevelCheckCompiler = buildPerlModule rec {
     pname = "Devel-CheckCompiler";
     version = "0.07";
     src = fetchurl {
@@ -9483,10 +11247,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYOHEX/${pname}@${version}";
+      };
     };
   };
 
-  DevelChecklib = buildPerlPackage {
+  DevelChecklib = buildPerlPackage rec {
     pname = "Devel-CheckLib";
     version = "1.16";
     src = fetchurl {
@@ -9503,10 +11271,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTN/${pname}@${version}";
+      };
     };
   };
 
-  DevelCheckOS = buildPerlPackage {
+  DevelCheckOS = buildPerlPackage rec {
     pname = "Devel-CheckOS";
     version = "1.96";
     src = fetchurl {
@@ -9521,10 +11293,14 @@ with self;
         gpl2Only
         artistic1
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DevelCover = buildPerlPackage {
+  DevelCover = buildPerlPackage rec {
     pname = "Devel-Cover";
     version = "1.44";
     src = fetchurl {
@@ -9540,10 +11316,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PJCJ/${pname}@${version}";
+      };
     };
   };
 
-  DevelDeprecationsEnvironmental = buildPerlPackage {
+  DevelDeprecationsEnvironmental = buildPerlPackage rec {
     pname = "Devel-Deprecations-Environmental";
     version = "1.101";
     src = fetchurl {
@@ -9563,10 +11343,14 @@ with self;
         gpl2Only
         artistic1
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DevelLeak = buildPerlPackage {
+  DevelLeak = buildPerlPackage rec {
     pname = "Devel-Leak";
     version = "0.03";
     src = fetchurl {
@@ -9580,10 +11364,14 @@ with self;
         artistic1
         gpl1Plus
       ]; # According to Debian
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NI-S/${pname}@${version}";
+      };
     };
   };
 
-  DevelPatchPerl = buildPerlPackage {
+  DevelPatchPerl = buildPerlPackage rec {
     pname = "Devel-PatchPerl";
     version = "2.08";
     src = fetchurl {
@@ -9602,10 +11390,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "patchperl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  DevelRefcount = buildPerlModule {
+  DevelRefcount = buildPerlModule rec {
     pname = "Devel-Refcount";
     version = "0.10";
     src = fetchurl {
@@ -9619,10 +11411,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  DevelPPPort = buildPerlPackage {
+  DevelPPPort = buildPerlPackage rec {
     pname = "Devel-PPPort";
     version = "3.68";
     src = fetchurl {
@@ -9635,10 +11431,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ATOOMIC/${pname}@${version}";
+      };
     };
   };
 
-  DevelTrace = buildPerlPackage {
+  DevelTrace = buildPerlPackage rec {
     pname = "Devel-Trace";
     version = "0.12";
     src = fetchurl {
@@ -9648,10 +11448,14 @@ with self;
     meta = {
       description = "Print out each line before it is executed (like sh -x)";
       license = with lib.licenses; [ publicDomain ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MJD/${pname}@${version}";
+      };
     };
   };
 
-  DeviceMAC = buildPerlPackage {
+  DeviceMAC = buildPerlPackage rec {
     pname = "Device-MAC";
     version = "1.00";
     src = fetchurl {
@@ -9676,10 +11480,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JASONK/${pname}@${version}";
+      };
     };
   };
 
-  DeviceOUI = buildPerlPackage {
+  DeviceOUI = buildPerlPackage rec {
     pname = "Device-OUI";
     version = "1.04";
     src = fetchurl {
@@ -9700,10 +11508,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JASONK/${pname}@${version}";
+      };
     };
   };
 
-  DBDCSV = buildPerlPackage {
+  DBDCSV = buildPerlPackage rec {
     pname = "DBD-CSV";
     version = "0.60";
     src = fetchurl {
@@ -9721,10 +11533,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HMBRAND/${pname}@${version}";
+      };
     };
   };
 
-  DBDMock = buildPerlModule {
+  DBDMock = buildPerlModule rec {
     pname = "DBD-Mock";
     version = "1.59";
     src = fetchurl {
@@ -9742,10 +11558,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JLCOOPER/${pname}@${version}";
+      };
     };
   };
 
-  DBDSQLite = buildPerlPackage {
+  DBDSQLite = buildPerlPackage rec {
     pname = "DBD-SQLite";
     version = "1.74";
 
@@ -9788,10 +11608,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.unix;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  DBDMariaDB = buildPerlPackage {
+  DBDMariaDB = buildPerlPackage rec {
     pname = "DBD-MariaDB";
     version = "1.23";
     src = fetchurl {
@@ -9816,10 +11640,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PALI/${pname}@${version}";
+      };
     };
   };
 
-  DBDmysql = buildPerlPackage {
+  DBDmysql = buildPerlPackage rec {
     pname = "DBD-mysql";
     version = "5.010";
 
@@ -9852,10 +11680,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DVEEDEN/${pname}@${version}";
+      };
     };
   };
 
-  DBDOracle = buildPerlPackage {
+  DBDOracle = buildPerlPackage rec {
     pname = "DBD-Oracle";
     version = "1.83";
 
@@ -9881,10 +11713,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZARQUON/${pname}@${version}";
+      };
     };
   };
 
-  DBDPg = buildPerlPackage {
+  DBDPg = buildPerlPackage rec {
     pname = "DBD-Pg";
     version = "3.17.0";
 
@@ -9909,10 +11745,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.unix;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TURNSTEP/${pname}@${version}";
+      };
     };
   };
 
-  DBDsybase = buildPerlPackage {
+  DBDsybase = buildPerlPackage rec {
     pname = "DBD-Sybase";
     version = "1.23";
 
@@ -9934,10 +11774,14 @@ with self;
         artistic1
         gpl1Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MEWP/${pname}@${version}";
+      };
     };
   };
 
-  DBFile = buildPerlPackage {
+  DBFile = buildPerlPackage rec {
     pname = "DB_File";
     version = "1.859";
 
@@ -9960,10 +11804,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMQS/${pname}@${version}";
+      };
     };
   };
 
-  DBI = buildPerlPackage {
+  DBI = buildPerlPackage rec {
     pname = "DBI";
     version = "1.644";
 
@@ -10022,10 +11870,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HMBRAND/${pname}@${version}";
+      };
     };
   };
 
-  DBICxTestDatabase = buildPerlPackage {
+  DBICxTestDatabase = buildPerlPackage rec {
     pname = "DBICx-TestDatabase";
     version = "0.05";
     src = fetchurl {
@@ -10048,10 +11900,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JROCKWAY/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClass = buildPerlPackage {
+  DBIxClass = buildPerlPackage rec {
     pname = "DBIx-Class";
     version = "0.082843";
     src = fetchurl {
@@ -10088,10 +11944,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dbicadmin";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RIBASUSHI/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassCandy = buildPerlPackage {
+  DBIxClassCandy = buildPerlPackage rec {
     pname = "DBIx-Class-Candy";
     version = "0.005003";
     src = fetchurl {
@@ -10114,10 +11974,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassCursorCached = buildPerlPackage {
+  DBIxClassCursorCached = buildPerlPackage rec {
     pname = "DBIx-Class-Cursor-Cached";
     version = "1.001004";
     src = fetchurl {
@@ -10138,10 +12002,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARCANEZ/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassDynamicDefault = buildPerlPackage {
+  DBIxClassDynamicDefault = buildPerlPackage rec {
     pname = "DBIx-Class-DynamicDefault";
     version = "0.04";
     src = fetchurl {
@@ -10158,10 +12026,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassHTMLWidget = buildPerlPackage {
+  DBIxClassHTMLWidget = buildPerlPackage rec {
     pname = "DBIx-Class-HTMLWidget";
     version = "0.16";
     src = fetchurl {
@@ -10178,10 +12050,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDREMAR/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassHelpers = buildPerlPackage {
+  DBIxClassHelpers = buildPerlPackage rec {
     pname = "DBIx-Class-Helpers";
     version = "2.036000";
     src = fetchurl {
@@ -10210,10 +12086,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassInflateColumnSerializer = buildPerlPackage {
+  DBIxClassInflateColumnSerializer = buildPerlPackage rec {
     pname = "DBIx-Class-InflateColumn-Serializer";
     version = "0.09";
     src = fetchurl {
@@ -10237,10 +12117,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRUIZ/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassIntrospectableM2M = buildPerlPackage {
+  DBIxClassIntrospectableM2M = buildPerlPackage rec {
     pname = "DBIx-Class-IntrospectableM2M";
     version = "0.001002";
     src = fetchurl {
@@ -10254,10 +12138,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILMARI/${pname}@${version}";
+      };
     };
   };
 
-  DBIxClassSchemaLoader = buildPerlPackage {
+  DBIxClassSchemaLoader = buildPerlPackage rec {
     pname = "DBIx-Class-Schema-Loader";
     version = "0.07051";
     src = fetchurl {
@@ -10287,10 +12175,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dbicdump";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VEESH/${pname}@${version}";
+      };
     };
   };
 
-  DBIxConnector = buildPerlPackage {
+  DBIxConnector = buildPerlPackage rec {
     pname = "DBIx-Connector";
     version = "0.59";
     src = fetchurl {
@@ -10305,10 +12197,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARISTOTLE/${pname}@${version}";
+      };
     };
   };
 
-  DBIxDBSchema = buildPerlPackage {
+  DBIxDBSchema = buildPerlPackage rec {
     pname = "DBIx-DBSchema";
     version = "0.47";
     src = fetchurl {
@@ -10322,10 +12218,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IVAN/${pname}@${version}";
+      };
     };
   };
 
-  DBIxSearchBuilder = buildPerlPackage {
+  DBIxSearchBuilder = buildPerlPackage rec {
     pname = "DBIx-SearchBuilder";
     version = "1.77";
     src = fetchurl {
@@ -10348,10 +12248,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  DBIxSimple = buildPerlPackage {
+  DBIxSimple = buildPerlPackage rec {
     pname = "DBIx-Simple";
     version = "1.37";
     src = fetchurl {
@@ -10365,10 +12269,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JUERD/${pname}@${version}";
+      };
     };
   };
 
-  DBMDeep = buildPerlPackage {
+  DBMDeep = buildPerlPackage rec {
     pname = "DBM-Deep";
     version = "2.0017";
     src = fetchurl {
@@ -10389,10 +12297,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DataBinary = buildPerlPackage {
+  DataBinary = buildPerlPackage rec {
     pname = "Data-Binary";
     version = "0.01";
     src = fetchurl {
@@ -10402,10 +12314,14 @@ with self;
     meta = {
       description = "Simple detection of binary versus text in strings";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SNKWATT/${pname}@${version}";
+      };
     };
   };
 
-  DataBuffer = buildPerlPackage {
+  DataBuffer = buildPerlPackage rec {
     pname = "Data-Buffer";
     version = "0.04";
     src = fetchurl {
@@ -10419,10 +12335,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BTROTT/${pname}@${version}";
+      };
     };
   };
 
-  DBIxIntrospector = buildPerlPackage {
+  DBIxIntrospector = buildPerlPackage rec {
     pname = "DBIx-Introspector";
     version = "0.001005";
     src = fetchurl {
@@ -10445,10 +12365,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  DevelCamelcadedb = buildPerlPackage {
+  DevelCamelcadedb = buildPerlPackage rec {
     pname = "Devel-Camelcadedb";
     version = "2023.1";
     src = fetchurl {
@@ -10463,10 +12387,14 @@ with self;
     meta = {
       description = "Perl side of the Perl debugger for IntelliJ IDEA and other JetBrains IDEs";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HURRICUP/${pname}@${version}";
+      };
     };
   };
 
-  DevelCycle = buildPerlPackage {
+  DevelCycle = buildPerlPackage rec {
     pname = "Devel-Cycle";
     version = "1.12";
     src = fetchurl {
@@ -10479,10 +12407,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDS/${pname}@${version}";
+      };
     };
   };
 
-  DevelDeclare = buildPerlPackage {
+  DevelDeclare = buildPerlPackage rec {
     pname = "Devel-Declare";
     version = "0.006022";
     src = fetchurl {
@@ -10504,10 +12436,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DevelFindPerl = buildPerlPackage {
+  DevelFindPerl = buildPerlPackage rec {
     pname = "Devel-FindPerl";
     version = "0.016";
     src = fetchurl {
@@ -10520,10 +12456,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  DevelGlobalDestruction = buildPerlPackage {
+  DevelGlobalDestruction = buildPerlPackage rec {
     pname = "Devel-GlobalDestruction";
     version = "0.14";
     src = fetchurl {
@@ -10538,10 +12478,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  DevelGlobalPhase = buildPerlPackage {
+  DevelGlobalPhase = buildPerlPackage rec {
     pname = "Devel-GlobalPhase";
     version = "0.003003";
     src = fetchurl {
@@ -10554,10 +12498,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  DevelHide = buildPerlPackage {
+  DevelHide = buildPerlPackage rec {
     pname = "Devel-Hide";
     version = "0.0015";
     src = fetchurl {
@@ -10570,10 +12518,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  DevelNYTProf = buildPerlPackage {
+  DevelNYTProf = buildPerlPackage rec {
     pname = "Devel-NYTProf";
     version = "6.12";
     src = fetchurl {
@@ -10599,10 +12551,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JKEENAN/${pname}@${version}";
+      };
     };
   };
 
-  DevelOverloadInfo = buildPerlPackage {
+  DevelOverloadInfo = buildPerlPackage rec {
     pname = "Devel-OverloadInfo";
     version = "0.007";
     src = fetchurl {
@@ -10621,10 +12577,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILMARI/${pname}@${version}";
+      };
     };
   };
 
-  DevelOverrideGlobalRequire = buildPerlPackage {
+  DevelOverrideGlobalRequire = buildPerlPackage rec {
     pname = "Devel-OverrideGlobalRequire";
     version = "0.001";
     src = fetchurl {
@@ -10638,10 +12598,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  DevelPartialDump = buildPerlPackage {
+  DevelPartialDump = buildPerlPackage rec {
     pname = "Devel-PartialDump";
     version = "0.20";
     src = fetchurl {
@@ -10663,10 +12627,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DevelStackTrace = buildPerlPackage {
+  DevelStackTrace = buildPerlPackage rec {
     pname = "Devel-StackTrace";
     version = "2.04";
     src = fetchurl {
@@ -10677,10 +12645,14 @@ with self;
       description = "Object representing a stack trace";
       homepage = "https://metacpan.org/release/Devel-StackTrace";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  DevelSize = buildPerlPackage {
+  DevelSize = buildPerlPackage rec {
     pname = "Devel-Size";
     version = "0.84";
     src = fetchurl {
@@ -10693,10 +12665,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NWCLARK/${pname}@${version}";
+      };
     };
   };
 
-  DevelStackTraceAsHTML = buildPerlPackage {
+  DevelStackTraceAsHTML = buildPerlPackage rec {
     pname = "Devel-StackTrace-AsHTML";
     version = "0.15";
     src = fetchurl {
@@ -10711,10 +12687,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  DevelSymdump = buildPerlPackage {
+  DevelSymdump = buildPerlPackage rec {
     pname = "Devel-Symdump";
     version = "2.18";
     src = fetchurl {
@@ -10727,10 +12707,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDK/${pname}@${version}";
+      };
     };
   };
 
-  DigestCRC = buildPerlPackage {
+  DigestCRC = buildPerlPackage rec {
     pname = "Digest-CRC";
     version = "0.24";
     src = fetchurl {
@@ -10740,10 +12724,14 @@ with self;
     meta = {
       description = "Module that calculates CRC sums of all sorts";
       license = with lib.licenses; [ publicDomain ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OLIMAUL/${pname}@${version}";
+      };
     };
   };
 
-  DigestHMAC = buildPerlPackage {
+  DigestHMAC = buildPerlPackage rec {
     pname = "Digest-HMAC";
     version = "1.05";
     src = fetchurl {
@@ -10757,10 +12745,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARODLAND/${pname}@${version}";
+      };
     };
   };
 
-  DigestJHash = buildPerlPackage {
+  DigestJHash = buildPerlPackage rec {
     pname = "Digest-JHash";
     version = "0.10";
     src = fetchurl {
@@ -10770,10 +12762,14 @@ with self;
     meta = {
       description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  DigestMD2 = buildPerlPackage {
+  DigestMD2 = buildPerlPackage rec {
     pname = "Digest-MD2";
     version = "2.04";
     src = fetchurl {
@@ -10787,10 +12783,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  DigestMD4 = buildPerlPackage {
+  DigestMD4 = buildPerlPackage rec {
     pname = "Digest-MD4";
     version = "1.9";
     src = fetchurl {
@@ -10803,10 +12803,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKEM/${pname}@${version}";
+      };
     };
   };
 
-  DigestMD5File = buildPerlPackage {
+  DigestMD5File = buildPerlPackage rec {
     pname = "Digest-MD5-File";
     version = "0.08";
     src = fetchurl {
@@ -10820,10 +12824,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMUEY/${pname}@${version}";
+      };
     };
   };
 
-  DigestPerlMD5 = buildPerlPackage {
+  DigestPerlMD5 = buildPerlPackage rec {
     pname = "Digest-Perl-MD5";
     version = "1.9";
     src = fetchurl {
@@ -10836,10 +12844,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DELTA/${pname}@${version}";
+      };
     };
   };
 
-  DigestSHA1 = buildPerlPackage {
+  DigestSHA1 = buildPerlPackage rec {
     pname = "Digest-SHA1";
     version = "2.13";
     src = fetchurl {
@@ -10852,10 +12864,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  DigestSHA3 = buildPerlPackage {
+  DigestSHA3 = buildPerlPackage rec {
     pname = "Digest-SHA3";
     version = "1.05";
     src = fetchurl {
@@ -10871,10 +12887,14 @@ with self;
       ];
       maintainers = [ maintainers.sgo ];
       mainProgram = "sha3sum";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSHELOR/${pname}@${version}";
+      };
     };
   };
 
-  DigestSRI = buildPerlPackage {
+  DigestSRI = buildPerlPackage rec {
     pname = "Digest-SRI";
     version = "0.02";
     src = fetchurl {
@@ -10885,10 +12905,14 @@ with self;
       description = "Calculate and verify Subresource Integrity hashes (SRI)";
       homepage = "https://github.com/haukex/Digest-SRI";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAUKEX/${pname}@${version}";
+      };
     };
   };
 
-  DirManifest = buildPerlModule {
+  DirManifest = buildPerlModule rec {
     pname = "Dir-Manifest";
     version = "0.6.1";
     src = fetchurl {
@@ -10903,10 +12927,14 @@ with self;
       description = "Treat a directory and a manifest file as a hash/dictionary of keys to texts or blobs";
       homepage = "https://metacpan.org/release/Dir-Manifest";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  DirSelf = buildPerlPackage {
+  DirSelf = buildPerlPackage rec {
     pname = "Dir-Self";
     version = "0.11";
     src = fetchurl {
@@ -10920,10 +12948,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAUKE/${pname}@${version}";
+      };
     };
   };
 
-  DispatchClass = buildPerlPackage {
+  DispatchClass = buildPerlPackage rec {
     pname = "Dispatch-Class";
     version = "0.02";
     src = fetchurl {
@@ -10937,10 +12969,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAUKE/${pname}@${version}";
+      };
     };
   };
 
-  DistCheckConflicts = buildPerlPackage {
+  DistCheckConflicts = buildPerlPackage rec {
     pname = "Dist-CheckConflicts";
     version = "0.11";
     src = fetchurl {
@@ -10956,10 +12992,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  DistZilla = buildPerlPackage {
+  DistZilla = buildPerlPackage rec {
     pname = "Dist-Zilla";
     version = "6.030";
     src = fetchurl {
@@ -11006,10 +13046,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dzil";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginBundleTestingMania = buildPerlModule {
+  DistZillaPluginBundleTestingMania = buildPerlModule rec {
     pname = "Dist-Zilla-PluginBundle-TestingMania";
     version = "0.25";
     src = fetchurl {
@@ -11048,10 +13092,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOHERTY/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginCheckChangeLog = buildPerlPackage {
+  DistZillaPluginCheckChangeLog = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-CheckChangeLog";
     version = "0.05";
     src = fetchurl {
@@ -11075,10 +13123,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FAYLAND/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginMojibakeTests = buildPerlPackage {
+  DistZillaPluginMojibakeTests = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-MojibakeTests";
     version = "0.8";
     src = fetchurl {
@@ -11094,10 +13146,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYP/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginPodWeaver = buildPerlPackage {
+  DistZillaPluginPodWeaver = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-PodWeaver";
     version = "4.010";
     src = fetchurl {
@@ -11116,10 +13172,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginReadmeAnyFromPod = buildPerlPackage {
+  DistZillaPluginReadmeAnyFromPod = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-ReadmeAnyFromPod";
     version = "0.163250";
     src = fetchurl {
@@ -11148,10 +13208,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RTHOMPSON/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginReadmeMarkdownFromPod = buildPerlPackage {
+  DistZillaPluginReadmeMarkdownFromPod = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-ReadmeMarkdownFromPod";
     version = "0.141140";
     src = fetchurl {
@@ -11173,10 +13237,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RTHOMPSON/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestCPANChanges = buildPerlPackage {
+  DistZillaPluginTestCPANChanges = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-Test-CPAN-Changes";
     version = "0.012";
     src = fetchurl {
@@ -11195,10 +13263,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOHERTY/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestCPANMetaJSON = buildPerlModule {
+  DistZillaPluginTestCPANMetaJSON = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-CPAN-Meta-JSON";
     version = "0.004";
     src = fetchurl {
@@ -11215,10 +13287,14 @@ with self;
       description = "Validate your CPAN META.json files";
       homepage = "https://p3rl.org/Dist::Zilla::Plugin::Test::CPAN::Meta::JSON";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOHERTY/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestCompile = buildPerlModule {
+  DistZillaPluginTestCompile = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-Compile";
     version = "2.058";
     src = fetchurl {
@@ -11240,10 +13316,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestDistManifest = buildPerlModule {
+  DistZillaPluginTestDistManifest = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-DistManifest";
     version = "2.000006";
     src = fetchurl {
@@ -11264,10 +13344,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestEOL = buildPerlModule {
+  DistZillaPluginTestEOL = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-EOL";
     version = "0.19";
     src = fetchurl {
@@ -11288,10 +13372,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestKwalitee = buildPerlModule {
+  DistZillaPluginTestKwalitee = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-Kwalitee";
     version = "2.12";
     src = fetchurl {
@@ -11311,10 +13399,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestMinimumVersion = buildPerlModule {
+  DistZillaPluginTestMinimumVersion = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-MinimumVersion";
     version = "2.000010";
     src = fetchurl {
@@ -11334,10 +13426,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestNoTabs = buildPerlModule {
+  DistZillaPluginTestNoTabs = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-NoTabs";
     version = "0.15";
     src = fetchurl {
@@ -11358,10 +13454,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestPerlCritic = buildPerlModule {
+  DistZillaPluginTestPerlCritic = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-Perl-Critic";
     version = "3.001";
     src = fetchurl {
@@ -11380,10 +13480,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestPodLinkCheck = buildPerlPackage {
+  DistZillaPluginTestPodLinkCheck = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-Test-Pod-LinkCheck";
     version = "1.004";
     src = fetchurl {
@@ -11400,10 +13504,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RWSTAUNER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestPortability = buildPerlModule {
+  DistZillaPluginTestPortability = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-Portability";
     version = "2.001001";
     src = fetchurl {
@@ -11424,10 +13532,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestSynopsis = buildPerlPackage {
+  DistZillaPluginTestSynopsis = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-Test-Synopsis";
     version = "2.000007";
     src = fetchurl {
@@ -11446,10 +13558,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOHERTY/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestUnusedVars = buildPerlModule {
+  DistZillaPluginTestUnusedVars = buildPerlModule rec {
     pname = "Dist-Zilla-Plugin-Test-UnusedVars";
     version = "2.001001";
     src = fetchurl {
@@ -11470,10 +13586,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaPluginTestVersion = buildPerlPackage {
+  DistZillaPluginTestVersion = buildPerlPackage rec {
     pname = "Dist-Zilla-Plugin-Test-Version";
     version = "1.09";
     src = fetchurl {
@@ -11492,10 +13612,14 @@ with self;
     meta = {
       description = "Release Test::Version tests";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  DistZillaRoleFileWatcher = buildPerlModule {
+  DistZillaRoleFileWatcher = buildPerlModule rec {
     pname = "Dist-Zilla-Role-FileWatcher";
     version = "0.006";
     src = fetchurl {
@@ -11518,10 +13642,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  Dotenv = buildPerlPackage {
+  Dotenv = buildPerlPackage rec {
     pname = "Dotenv";
     version = "0.002";
     src = fetchurl {
@@ -11540,10 +13668,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
-  Dumbbench = buildPerlPackage {
+  Dumbbench = buildPerlPackage rec {
     pname = "Dumbbench";
     version = "0.503";
     src = fetchurl {
@@ -11565,10 +13697,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dumbbench";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  EmailAbstract = buildPerlPackage {
+  EmailAbstract = buildPerlPackage rec {
     pname = "Email-Abstract";
     version = "3.010";
     src = fetchurl {
@@ -11587,10 +13723,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailAddress = buildPerlPackage {
+  EmailAddress = buildPerlPackage rec {
     pname = "Email-Address";
     version = "1.913";
     src = fetchurl {
@@ -11604,10 +13744,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailAddressList = buildPerlPackage {
+  EmailAddressList = buildPerlPackage rec {
     pname = "Email-Address-List";
     version = "0.06";
     src = fetchurl {
@@ -11622,10 +13766,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  EmailAddressXS = buildPerlPackage {
+  EmailAddressXS = buildPerlPackage rec {
     pname = "Email-Address-XS";
     version = "1.05";
     src = fetchurl {
@@ -11638,10 +13786,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PALI/${pname}@${version}";
+      };
     };
   };
 
-  EmailDateFormat = buildPerlPackage {
+  EmailDateFormat = buildPerlPackage rec {
     pname = "Email-Date-Format";
     version = "1.008";
     src = fetchurl {
@@ -11655,10 +13807,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailReply = buildPerlPackage {
+  EmailReply = buildPerlPackage rec {
     pname = "Email-Reply";
     version = "1.204";
     src = fetchurl {
@@ -11677,10 +13833,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailMessageID = buildPerlPackage {
+  EmailMessageID = buildPerlPackage rec {
     pname = "Email-MessageID";
     version = "1.408";
     src = fetchurl {
@@ -11694,10 +13854,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailMIME = buildPerlPackage {
+  EmailMIME = buildPerlPackage rec {
     pname = "Email-MIME";
     version = "1.953";
     src = fetchurl {
@@ -11720,10 +13884,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailMIMEAttachmentStripper = buildPerlPackage {
+  EmailMIMEAttachmentStripper = buildPerlPackage rec {
     pname = "Email-MIME-Attachment-Stripper";
     version = "1.317";
     buildInputs = [ CaptureTiny ];
@@ -11743,10 +13911,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailMIMEContentType = buildPerlPackage {
+  EmailMIMEContentType = buildPerlPackage rec {
     pname = "Email-MIME-ContentType";
     version = "1.028";
     src = fetchurl {
@@ -11761,10 +13933,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailMIMEEncodings = buildPerlPackage {
+  EmailMIMEEncodings = buildPerlPackage rec {
     pname = "Email-MIME-Encodings";
     version = "1.317";
     src = fetchurl {
@@ -11779,10 +13955,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailSend = buildPerlPackage {
+  EmailSend = buildPerlPackage rec {
     pname = "Email-Send";
     version = "2.201";
     src = fetchurl {
@@ -11805,10 +13985,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailOutlookMessage = buildPerlModule {
+  EmailOutlookMessage = buildPerlModule rec {
     pname = "Email-Outlook-Message";
     version = "0.921";
     src = fetchurl {
@@ -11832,10 +14016,14 @@ with self;
       ];
       maintainers = with maintainers; [ peterhoeg ];
       mainProgram = "msgconvert";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MVZ/${pname}@${version}";
+      };
     };
   };
 
-  EmailSender = buildPerlPackage {
+  EmailSender = buildPerlPackage rec {
     pname = "Email-Sender";
     version = "2.600";
     src = fetchurl {
@@ -11868,10 +14056,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailSimple = buildPerlPackage {
+  EmailSimple = buildPerlPackage rec {
     pname = "Email-Simple";
     version = "2.218";
     src = fetchurl {
@@ -11886,10 +14078,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailStuffer = buildPerlPackage {
+  EmailStuffer = buildPerlPackage rec {
     pname = "Email-Stuffer";
     version = "0.020";
     src = fetchurl {
@@ -11914,10 +14110,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailValid = buildPerlPackage {
+  EmailValid = buildPerlPackage rec {
     pname = "Email-Valid";
     version = "1.203";
     src = fetchurl {
@@ -11937,10 +14137,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  EmailValidLoose = buildPerlPackage {
+  EmailValidLoose = buildPerlPackage rec {
     pname = "Email-Valid-Loose";
     version = "0.05";
     src = fetchurl {
@@ -11954,10 +14158,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  Encode = buildPerlPackage {
+  Encode = buildPerlPackage rec {
     pname = "Encode";
     version = "3.19";
     src = fetchurl {
@@ -11971,10 +14179,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "piconv";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANKOGAI/${pname}@${version}";
+      };
     };
   };
 
-  EncodeBase32GMP = buildPerlPackage {
+  EncodeBase32GMP = buildPerlPackage rec {
     pname = "Encode-Base32-GMP";
     version = "0.02";
     src = fetchurl {
@@ -11988,10 +14200,14 @@ with self;
       homepage = "https://metacpan.org/release/Encode-Base32-GMP";
       license = with lib.licenses; [ mit ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JWANG/${pname}@${version}";
+      };
     };
   };
 
-  EncodeDetect = buildPerlModule {
+  EncodeDetect = buildPerlModule rec {
     pname = "Encode-Detect";
     version = "1.01";
     src = fetchurl {
@@ -12006,10 +14222,14 @@ with self;
         gpl2Plus
         lgpl2Plus
       ]; # taken from fedora
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JGMYERS/${pname}@${version}";
+      };
     };
   };
 
-  EncodeEUCJPASCII = buildPerlPackage {
+  EncodeEUCJPASCII = buildPerlPackage rec {
     pname = "Encode-EUCJPASCII";
     version = "0.03";
     src = fetchurl {
@@ -12023,10 +14243,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEZUMI/${pname}@${version}";
+      };
     };
   };
 
-  EncodeHanExtra = buildPerlPackage {
+  EncodeHanExtra = buildPerlPackage rec {
     pname = "Encode-HanExtra";
     version = "0.23";
     src = fetchurl {
@@ -12036,10 +14260,14 @@ with self;
     meta = {
       description = "Extra sets of Chinese encodings";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AUDREYT/${pname}@${version}";
+      };
     };
   };
 
-  EncodeIMAPUTF7 = buildPerlPackage {
+  EncodeIMAPUTF7 = buildPerlPackage rec {
     pname = "Encode-IMAPUTF7";
     version = "1.05";
     src = fetchurl {
@@ -12059,7 +14287,7 @@ with self;
     ];
   };
 
-  EncodeJIS2K = buildPerlPackage {
+  EncodeJIS2K = buildPerlPackage rec {
     pname = "Encode-JIS2K";
     version = "0.03";
     src = fetchurl {
@@ -12073,10 +14301,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMAKHOLM/${pname}@${version}";
+      };
     };
   };
 
-  EncodeLocale = buildPerlPackage {
+  EncodeLocale = buildPerlPackage rec {
     pname = "Encode-Locale";
     version = "1.05";
     src = fetchurl {
@@ -12098,10 +14330,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  EncodeNewlines = buildPerlPackage {
+  EncodeNewlines = buildPerlPackage rec {
     pname = "Encode-Newlines";
     version = "0.05";
     src = fetchurl {
@@ -12115,10 +14351,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  EncodePunycode = buildPerlPackage {
+  EncodePunycode = buildPerlPackage rec {
     pname = "Encode-Punycode";
     version = "1.002";
     src = fetchurl {
@@ -12134,10 +14374,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFAERBER/${pname}@${version}";
+      };
     };
   };
 
-  enum = buildPerlPackage {
+  enum = buildPerlPackage rec {
     pname = "enum";
     version = "1.12";
     src = fetchurl {
@@ -12151,10 +14395,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  Env = buildPerlPackage {
+  Env = buildPerlPackage rec {
     pname = "Env";
     version = "1.04";
     src = fetchurl {
@@ -12168,10 +14416,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FLORA/${pname}@${version}";
+      };
     };
   };
 
-  EnvPath = buildPerlPackage {
+  EnvPath = buildPerlPackage rec {
     pname = "Env-Path";
     version = "0.19";
     src = fetchurl {
@@ -12185,10 +14437,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "envpath";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSB/${pname}@${version}";
+      };
     };
   };
 
-  EnvSanctify = buildPerlPackage {
+  EnvSanctify = buildPerlPackage rec {
     pname = "Env-Sanctify";
     version = "1.12";
     src = fetchurl {
@@ -12202,10 +14458,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ENVUtil = buildPerlPackage {
+  ENVUtil = buildPerlPackage rec {
     pname = "ENV-Util";
     version = "0.03";
     src = fetchurl {
@@ -12218,10 +14478,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GARU/${pname}@${version}";
+      };
     };
   };
 
-  Error = buildPerlModule {
+  Error = buildPerlModule rec {
     pname = "Error";
     version = "0.17029";
     src = fetchurl {
@@ -12234,10 +14498,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  EV = buildPerlPackage {
+  EV = buildPerlPackage rec {
     pname = "EV";
     version = "4.34";
     src = fetchurl {
@@ -12249,10 +14517,14 @@ with self;
     meta = {
       description = "Perl interface to libev, a high performance full-featured event loop";
       license = with lib.licenses; [ gpl1Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  EvalClosure = buildPerlPackage {
+  EvalClosure = buildPerlPackage rec {
     pname = "Eval-Closure";
     version = "0.14";
     src = fetchurl {
@@ -12270,6 +14542,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
@@ -12286,10 +14562,14 @@ with self;
       homepage = "https://github.com/mkende/perl-eval-safe";
       license = licenses.mit;
       maintainers = with maintainers; [ figsoda ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATHIAS/${pname}@${version}";
+      };
     };
   };
 
-  ExcelWriterXLSX = buildPerlPackage {
+  ExcelWriterXLSX = buildPerlPackage rec {
     pname = "Excel-Writer-XLSX";
     version = "1.11";
     src = fetchurl {
@@ -12305,10 +14585,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "extract_vba";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMCNAMARA/${pname}@${version}";
+      };
     };
   };
 
-  ExceptionBase = buildPerlModule {
+  ExceptionBase = buildPerlModule rec {
     pname = "Exception-Base";
     version = "0.2501";
     src = fetchurl {
@@ -12325,10 +14609,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  ExceptionClass = buildPerlPackage {
+  ExceptionClass = buildPerlPackage rec {
     pname = "Exception-Class";
     version = "1.45";
     src = fetchurl {
@@ -12345,10 +14633,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ExceptionDied = buildPerlModule {
+  ExceptionDied = buildPerlModule rec {
     pname = "Exception-Died";
     version = "0.06";
     src = fetchurl {
@@ -12369,10 +14661,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  ExceptionWarning = buildPerlModule {
+  ExceptionWarning = buildPerlModule rec {
     pname = "Exception-Warning";
     version = "0.0401";
     src = fetchurl {
@@ -12390,10 +14686,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  ExporterDeclare = buildPerlModule {
+  ExporterDeclare = buildPerlModule rec {
     pname = "Exporter-Declare";
     version = "0.114";
     src = fetchurl {
@@ -12415,10 +14715,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  ExporterLite = buildPerlPackage {
+  ExporterLite = buildPerlPackage rec {
     pname = "Exporter-Lite";
     version = "0.09";
     src = fetchurl {
@@ -12431,10 +14735,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  ExporterTiny = buildPerlPackage {
+  ExporterTiny = buildPerlPackage rec {
     pname = "Exporter-Tiny";
     version = "1.006002";
     src = fetchurl {
@@ -12448,10 +14756,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  Expect = buildPerlPackage {
+  Expect = buildPerlPackage rec {
     pname = "Expect";
     version = "1.35";
     src = fetchurl {
@@ -12465,10 +14777,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JACOBY/${pname}@${version}";
+      };
     };
   };
 
-  ExpectSimple = buildPerlPackage {
+  ExpectSimple = buildPerlPackage rec {
     pname = "Expect-Simple";
     version = "0.04";
     src = fetchurl {
@@ -12482,10 +14798,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DJERIUS/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsCChecker = buildPerlModule {
+  ExtUtilsCChecker = buildPerlModule rec {
     pname = "ExtUtils-CChecker";
     version = "0.11";
     src = fetchurl {
@@ -12499,10 +14819,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsConfig = buildPerlPackage {
+  ExtUtilsConfig = buildPerlPackage rec {
     pname = "ExtUtils-Config";
     version = "0.008";
     src = fetchurl {
@@ -12515,10 +14839,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsConstant = buildPerlPackage {
+  ExtUtilsConstant = buildPerlPackage rec {
     pname = "ExtUtils-Constant";
     version = "0.25";
     src = fetchurl {
@@ -12534,10 +14862,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NWCLARK/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsCppGuess = buildPerlPackage {
+  ExtUtilsCppGuess = buildPerlPackage rec {
     pname = "ExtUtils-CppGuess";
     version = "0.26";
     src = fetchurl {
@@ -12554,10 +14886,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsDepends = buildPerlPackage {
+  ExtUtilsDepends = buildPerlPackage rec {
     pname = "ExtUtils-Depends";
     version = "0.8001";
     src = fetchurl {
@@ -12572,10 +14908,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsF77 = buildPerlPackage {
+  ExtUtilsF77 = buildPerlPackage rec {
     pname = "ExtUtils-F77";
     version = "1.26";
     src = fetchurl {
@@ -12590,10 +14930,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsHelpers = buildPerlPackage {
+  ExtUtilsHelpers = buildPerlPackage rec {
     pname = "ExtUtils-Helpers";
     version = "0.026";
     src = fetchurl {
@@ -12606,10 +14950,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsInstall = buildPerlPackage {
+  ExtUtilsInstall = buildPerlPackage rec {
     pname = "ExtUtils-Install";
     version = "2.22";
     src = fetchurl {
@@ -12623,10 +14971,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsInstallPaths = buildPerlPackage {
+  ExtUtilsInstallPaths = buildPerlPackage rec {
     pname = "ExtUtils-InstallPaths";
     version = "0.012";
     src = fetchurl {
@@ -12640,10 +14992,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsLibBuilder = buildPerlModule {
+  ExtUtilsLibBuilder = buildPerlModule rec {
     pname = "ExtUtils-LibBuilder";
     version = "0.08";
     src = fetchurl {
@@ -12656,10 +15012,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AMBS/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsMakeMaker = buildPerlPackage {
+  ExtUtilsMakeMaker = buildPerlPackage rec {
     pname = "ExtUtils-MakeMaker";
     version = "7.70";
     src = fetchurl {
@@ -12674,10 +15034,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "instmodsh";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsMakeMakerCPANfile = buildPerlPackage {
+  ExtUtilsMakeMakerCPANfile = buildPerlPackage rec {
     pname = "ExtUtils-MakeMaker-CPANfile";
     version = "0.09";
     src = fetchurl {
@@ -12691,10 +15055,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsPkgConfig = buildPerlPackage {
+  ExtUtilsPkgConfig = buildPerlPackage rec {
     pname = "ExtUtils-PkgConfig";
     version = "1.16";
     src = fetchurl {
@@ -12719,6 +15087,10 @@ with self;
       homepage = "https://gitlab.gnome.org/GNOME/perl-extutils-pkgconfig";
       license = with lib.licenses; [ lgpl21Plus ];
       maintainers = [ lib.maintainers.fliegendewurst ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
@@ -12733,7 +15105,7 @@ with self;
   #   5.16.
   #
   # [1] https://metacpan.org/pod/release/SMUELLER/ExtUtils-Typemap-1.00/lib/ExtUtils/Typemap.pm:
-  ExtUtilsTypemap = buildPerlPackage {
+  ExtUtilsTypemap = buildPerlPackage rec {
     pname = "ExtUtils-Typemap";
     version = "1.00";
     src = fetchurl {
@@ -12746,10 +15118,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsTypemapsDefault = buildPerlModule {
+  ExtUtilsTypemapsDefault = buildPerlModule rec {
     pname = "ExtUtils-Typemaps-Default";
     version = "1.05";
     src = fetchurl {
@@ -12762,10 +15138,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsXSBuilder = buildPerlPackage {
+  ExtUtilsXSBuilder = buildPerlPackage rec {
     pname = "ExtUtils-XSBuilder";
     version = "0.28";
     src = fetchurl {
@@ -12782,10 +15162,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRICHTER/${pname}@${version}";
+      };
     };
   };
 
-  ExtUtilsXSpp = buildPerlModule {
+  ExtUtilsXSpp = buildPerlModule rec {
     pname = "ExtUtils-XSpp";
     version = "0.18";
     src = fetchurl {
@@ -12803,10 +15187,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "xspp";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  FatalException = buildPerlModule {
+  FatalException = buildPerlModule rec {
     pname = "Fatal-Exception";
     version = "0.05";
     src = fetchurl {
@@ -12825,10 +15213,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  FCGI = buildPerlPackage {
+  FCGI = buildPerlPackage rec {
     pname = "FCGI";
     version = "0.82";
     src = fetchurl {
@@ -12842,10 +15234,14 @@ with self;
     meta = {
       description = "Fast CGI module";
       license = with lib.licenses; [ oml ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  FCGIClient = buildPerlModule {
+  FCGIClient = buildPerlModule rec {
     pname = "FCGI-Client";
     version = "0.09";
     src = fetchurl {
@@ -12864,10 +15260,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  FCGIProcManager = buildPerlPackage {
+  FCGIProcManager = buildPerlPackage rec {
     pname = "FCGI-ProcManager";
     version = "0.28";
     src = fetchurl {
@@ -12877,10 +15277,14 @@ with self;
     meta = {
       description = "Perl-based FastCGI process manager";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARODLAND/${pname}@${version}";
+      };
     };
   };
 
-  FFIC = buildPerlPackage {
+  FFIC = buildPerlPackage rec {
     pname = "FFI-C";
     version = "0.15";
     src = fetchurl {
@@ -12908,10 +15312,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FFICheckLib = buildPerlPackage {
+  FFICheckLib = buildPerlPackage rec {
     pname = "FFI-CheckLib";
     version = "0.31";
     src = fetchurl {
@@ -12927,10 +15335,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FeatureCompatTry = buildPerlModule {
+  FeatureCompatTry = buildPerlModule rec {
     pname = "Feature-Compat-Try";
     version = "0.05";
     src = fetchurl {
@@ -12945,10 +15357,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  FFICStat = buildPerlPackage {
+  FFICStat = buildPerlPackage rec {
     pname = "FFI-C-Stat";
     version = "0.03";
     src = fetchurl {
@@ -12973,10 +15389,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FFIPlatypus = buildPerlPackage {
+  FFIPlatypus = buildPerlPackage rec {
     pname = "FFI-Platypus";
     version = "2.09";
     src = fetchurl {
@@ -12999,10 +15419,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FFIPlatypusTypePtrObject = buildPerlPackage {
+  FFIPlatypusTypePtrObject = buildPerlPackage rec {
     pname = "FFI-Platypus-Type-PtrObject";
     version = "0.03";
     src = fetchurl {
@@ -13025,10 +15449,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FFIPlatypusTypeEnum = buildPerlPackage {
+  FFIPlatypusTypeEnum = buildPerlPackage rec {
     pname = "FFI-Platypus-Type-Enum";
     version = "0.06";
     src = fetchurl {
@@ -13048,10 +15476,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FennecLite = buildPerlModule {
+  FennecLite = buildPerlModule rec {
     pname = "Fennec-Lite";
     version = "0.004";
     src = fetchurl {
@@ -13065,10 +15497,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  FileChangeNotify = buildPerlPackage {
+  FileChangeNotify = buildPerlPackage rec {
     pname = "File-ChangeNotify";
     version = "0.31";
     src = fetchurl {
@@ -13089,10 +15525,14 @@ with self;
     meta = {
       description = "Watch for changes to files, cross-platform style";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  Filechdir = buildPerlPackage {
+  Filechdir = buildPerlPackage rec {
     pname = "File-chdir";
     version = "0.1011";
     src = fetchurl {
@@ -13105,10 +15545,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  FileBaseDir = buildPerlPackage {
+  FileBaseDir = buildPerlPackage rec {
     version = "0.09";
     pname = "File-BaseDir";
     src = fetchurl {
@@ -13123,10 +15567,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FileBOM = buildPerlModule {
+  FileBOM = buildPerlModule rec {
     pname = "File-BOM";
     version = "0.18";
     src = fetchurl {
@@ -13141,10 +15589,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTLAW/${pname}@${version}";
+      };
     };
   };
 
-  FileCheckTree = buildPerlPackage {
+  FileCheckTree = buildPerlPackage rec {
     pname = "File-CheckTree";
     version = "4.42";
     src = fetchurl {
@@ -13158,10 +15610,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  Filechmod = buildPerlPackage {
+  Filechmod = buildPerlPackage rec {
     pname = "File-chmod";
     version = "0.42";
     src = fetchurl {
@@ -13175,10 +15631,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XENO/${pname}@${version}";
+      };
     };
   };
 
-  FilechmodRecursive = buildPerlPackage {
+  FilechmodRecursive = buildPerlPackage rec {
     pname = "File-chmod-Recursive";
     version = "1.0.3";
     src = fetchurl {
@@ -13193,10 +15653,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MITHUN/${pname}@${version}";
+      };
     };
   };
 
-  FileCopyRecursive = buildPerlPackage {
+  FileCopyRecursive = buildPerlPackage rec {
     pname = "File-Copy-Recursive";
     version = "0.45";
     src = fetchurl {
@@ -13216,10 +15680,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMUEY/${pname}@${version}";
+      };
     };
   };
 
-  FileCopyRecursiveReduced = buildPerlPackage {
+  FileCopyRecursiveReduced = buildPerlPackage rec {
     pname = "File-Copy-Recursive-Reduced";
     version = "0.007";
     src = fetchurl {
@@ -13237,10 +15705,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JKEENAN/${pname}@${version}";
+      };
     };
   };
 
-  FileCountLines = buildPerlPackage {
+  FileCountLines = buildPerlPackage rec {
     pname = "File-CountLines";
     version = "0.0.3";
     src = fetchurl {
@@ -13253,10 +15725,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MORITZ/${pname}@${version}";
+      };
     };
   };
 
-  FileDesktopEntry = buildPerlPackage {
+  FileDesktopEntry = buildPerlPackage rec {
     version = "0.22";
     pname = "File-DesktopEntry";
     src = fetchurl {
@@ -13273,10 +15749,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MICHIELB/${pname}@${version}";
+      };
     };
   };
 
-  FileDirList = buildPerlPackage {
+  FileDirList = buildPerlPackage rec {
     version = "0.05";
     pname = "File-DirList";
     src = fetchurl {
@@ -13292,10 +15772,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TPABA/${pname}@${version}";
+      };
     };
   };
 
-  FileFindIterator = buildPerlPackage {
+  FileFindIterator = buildPerlPackage rec {
     pname = "File-Find-Iterator";
     version = "0.4";
     src = fetchurl {
@@ -13309,10 +15793,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TEXMEC/${pname}@${version}";
+      };
     };
   };
 
-  FileFindObject = buildPerlModule {
+  FileFindObject = buildPerlModule rec {
     pname = "File-Find-Object";
     version = "0.3.8";
     src = fetchurl {
@@ -13328,10 +15816,14 @@ with self;
       description = "Object oriented File::Find replacement";
       homepage = "https://metacpan.org/release/File-Find-Object";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  FileFindObjectRule = buildPerlModule {
+  FileFindObjectRule = buildPerlModule rec {
     pname = "File-Find-Object-Rule";
     version = "0.0313";
     src = fetchurl {
@@ -13357,10 +15849,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "findorule";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  FileFindRule = buildPerlPackage {
+  FileFindRule = buildPerlPackage rec {
     pname = "File-Find-Rule";
     version = "0.34";
     src = fetchurl {
@@ -13381,10 +15877,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "findrule";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  FileFindRulePerl = buildPerlPackage {
+  FileFindRulePerl = buildPerlPackage rec {
     pname = "File-Find-Rule-Perl";
     version = "1.16";
     src = fetchurl {
@@ -13402,10 +15902,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  FileFinder = buildPerlPackage {
+  FileFinder = buildPerlPackage rec {
     pname = "File-Finder";
     version = "0.53";
     src = fetchurl {
@@ -13419,10 +15923,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MERLYN/${pname}@${version}";
+      };
     };
   };
 
-  FileFnMatch = buildPerlPackage {
+  FileFnMatch = buildPerlPackage rec {
     pname = "File-FnMatch";
     version = "0.02";
     src = fetchurl {
@@ -13436,10 +15944,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MJP/${pname}@${version}";
+      };
     };
   };
 
-  FileFcntlLock = buildPerlPackage {
+  FileFcntlLock = buildPerlPackage rec {
     pname = "File-FcntlLock";
     version = "0.22";
     src = fetchurl {
@@ -13450,10 +15962,14 @@ with self;
       description = "File locking with fcntl(2)";
       license = with lib.licenses; [ artistic1 ];
       maintainers = with maintainers; [ das_j ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JTT/${pname}@${version}";
+      };
     };
   };
 
-  FileGrep = buildPerlPackage {
+  FileGrep = buildPerlPackage rec {
     pname = "File-Grep";
     version = "0.02";
     src = fetchurl {
@@ -13467,10 +15983,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MNEYLON/${pname}@${version}";
+      };
     };
   };
 
-  FileHandleUnget = buildPerlPackage {
+  FileHandleUnget = buildPerlPackage rec {
     pname = "FileHandle-Unget";
     version = "0.1634";
     src = fetchurl {
@@ -13488,10 +16008,14 @@ with self;
       homepage = "https://github.com/coppit/filehandle-unget";
       license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCOPPIT/${pname}@${version}";
+      };
     };
   };
 
-  FileHomeDir = buildPerlPackage {
+  FileHomeDir = buildPerlPackage rec {
     pname = "File-HomeDir";
     version = "1.006";
     src = fetchurl {
@@ -13508,10 +16032,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  FileKDBX = buildPerlPackage {
+  FileKDBX = buildPerlPackage rec {
     pname = "File-KDBX";
     version = "0.906";
     src = fetchurl {
@@ -13541,10 +16069,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CCM/${pname}@${version}";
+      };
     };
   };
 
-  FileKeePass = buildPerlPackage {
+  FileKeePass = buildPerlPackage rec {
     pname = "File-KeePass";
     version = "2.03";
     src = fetchurl {
@@ -13558,10 +16090,14 @@ with self;
         gpl2Only
         gpl3Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RHANDOM/${pname}@${version}";
+      };
     };
   };
 
-  Filelchown = buildPerlModule {
+  Filelchown = buildPerlModule rec {
     pname = "File-lchown";
     version = "0.02";
     src = fetchurl {
@@ -13575,10 +16111,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  FileLibMagic = buildPerlPackage {
+  FileLibMagic = buildPerlPackage rec {
     pname = "File-LibMagic";
     version = "1.23";
     src = fetchurl {
@@ -13602,10 +16142,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  FileListing = buildPerlPackage {
+  FileListing = buildPerlPackage rec {
     pname = "File-Listing";
     version = "6.16";
     src = fetchurl {
@@ -13619,10 +16163,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FileLoadLines = buildPerlPackage {
+  FileLoadLines = buildPerlPackage rec {
     pname = "File-LoadLines";
     version = "1.046";
     src = fetchurl {
@@ -13636,10 +16184,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JV/${pname}@${version}";
+      };
     };
   };
 
-  FileMimeInfo = buildPerlPackage {
+  FileMimeInfo = buildPerlPackage rec {
     pname = "File-MimeInfo";
     version = "0.33";
     src = fetchurl {
@@ -13658,10 +16210,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MICHIELB/${pname}@${version}";
+      };
     };
   };
 
-  FileMMagic = buildPerlPackage {
+  FileMMagic = buildPerlPackage rec {
     pname = "File-MMagic";
     version = "1.30";
     src = fetchurl {
@@ -13671,10 +16227,14 @@ with self;
     meta = {
       description = "Guess file type from contents";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KNOK/${pname}@${version}";
+      };
     };
   };
 
-  FileMap = buildPerlModule {
+  FileMap = buildPerlModule rec {
     pname = "File-Map";
     version = "0.71";
     src = fetchurl {
@@ -13695,10 +16255,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  FileModified = buildPerlPackage {
+  FileModified = buildPerlPackage rec {
     pname = "File-Modified";
     version = "0.10";
     src = fetchurl {
@@ -13712,10 +16276,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  FileNext = buildPerlPackage {
+  FileNext = buildPerlPackage rec {
     pname = "File-Next";
     version = "1.18";
     src = fetchurl {
@@ -13725,10 +16293,14 @@ with self;
     meta = {
       description = "File-finding iterator";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  FileNFSLock = buildPerlPackage {
+  FileNFSLock = buildPerlPackage rec {
     pname = "File-NFSLock";
     version = "1.29";
     src = fetchurl {
@@ -13741,10 +16313,14 @@ with self;
         artistic1
         gpl1Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BBB/${pname}@${version}";
+      };
     };
   };
 
-  FilePath = buildPerlPackage {
+  FilePath = buildPerlPackage rec {
     pname = "File-Path";
     version = "2.18";
     src = fetchurl {
@@ -13757,10 +16333,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JKEENAN/${pname}@${version}";
+      };
     };
   };
 
-  FilePid = buildPerlPackage {
+  FilePid = buildPerlPackage rec {
     pname = "File-Pid";
     version = "1.01";
     src = fetchurl {
@@ -13782,10 +16362,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CWEST/${pname}@${version}";
+      };
     };
   };
 
-  Filepushd = buildPerlPackage {
+  Filepushd = buildPerlPackage rec {
     pname = "File-pushd";
     version = "1.016";
     src = fetchurl {
@@ -13796,10 +16380,14 @@ with self;
       description = "Change directory temporarily for a limited scope";
       homepage = "https://github.com/dagolden/File-pushd";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  FileReadBackwards = buildPerlPackage {
+  FileReadBackwards = buildPerlPackage rec {
     pname = "File-ReadBackwards";
     version = "1.06";
     src = fetchurl {
@@ -13813,10 +16401,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FileRemove = buildPerlModule {
+  FileRemove = buildPerlModule rec {
     pname = "File-Remove";
     version = "1.61";
     src = fetchurl {
@@ -13829,10 +16421,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  FileShare = buildPerlPackage {
+  FileShare = buildPerlPackage rec {
     pname = "File-Share";
     version = "0.27";
     src = fetchurl {
@@ -13850,10 +16446,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  FileShareDir = buildPerlPackage {
+  FileShareDir = buildPerlPackage rec {
     pname = "File-ShareDir";
     version = "1.118";
     src = fetchurl {
@@ -13874,10 +16474,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  FileShareDirDist = buildPerlPackage {
+  FileShareDirDist = buildPerlPackage rec {
     pname = "File-ShareDir-Dist";
     version = "0.07";
     src = fetchurl {
@@ -13892,10 +16496,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FileShareDirInstall = buildPerlPackage {
+  FileShareDirInstall = buildPerlPackage rec {
     pname = "File-ShareDir-Install";
     version = "0.14";
     src = fetchurl {
@@ -13909,10 +16517,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  FilesysDf = buildPerlPackage {
+  FilesysDf = buildPerlPackage rec {
     pname = "Filesys-Df";
     version = "0.92";
     src = fetchurl {
@@ -13925,10 +16537,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IGUTHRIE/${pname}@${version}";
+      };
     };
   };
 
-  FilesysNotifySimple = buildPerlPackage {
+  FilesysNotifySimple = buildPerlPackage rec {
     pname = "Filesys-Notify-Simple";
     version = "0.14";
     src = fetchurl {
@@ -13943,10 +16559,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  FilesysDiskUsage = buildPerlPackage {
+  FilesysDiskUsage = buildPerlPackage rec {
     pname = "Filesys-DiskUsage";
     version = "0.13";
     src = fetchurl {
@@ -13961,10 +16581,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "fdu";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANWAR/${pname}@${version}";
+      };
     };
   };
 
-  FileSlurp = buildPerlPackage {
+  FileSlurp = buildPerlPackage rec {
     pname = "File-Slurp";
     version = "9999.32";
     src = fetchurl {
@@ -13977,10 +16601,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CAPOEIRAB/${pname}@${version}";
+      };
     };
   };
 
-  FileSlurper = buildPerlPackage {
+  FileSlurper = buildPerlPackage rec {
     pname = "File-Slurper";
     version = "0.014";
     src = fetchurl {
@@ -13994,10 +16622,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  FileSlurpTiny = buildPerlPackage {
+  FileSlurpTiny = buildPerlPackage rec {
     pname = "File-Slurp-Tiny";
     version = "0.004";
     src = fetchurl {
@@ -14010,10 +16642,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  FileTail = buildPerlPackage {
+  FileTail = buildPerlPackage rec {
     pname = "File-Tail";
     version = "1.3";
     src = fetchurl {
@@ -14027,10 +16663,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MGRABNAR/${pname}@${version}";
+      };
     };
   };
 
-  FileTouch = buildPerlPackage {
+  FileTouch = buildPerlPackage rec {
     pname = "File-Touch";
     version = "0.12";
     src = fetchurl {
@@ -14045,10 +16685,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  FileTreeCreate = buildPerlModule {
+  FileTreeCreate = buildPerlModule rec {
     pname = "File-TreeCreate";
     version = "0.0.1";
     src = fetchurl {
@@ -14059,10 +16703,14 @@ with self;
       homepage = "http://metacpan.org/release/File-TreeCreate";
       description = "Recursively create a directory tree";
       license = lib.licenses.mit;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  FileType = buildPerlModule {
+  FileType = buildPerlModule rec {
     pname = "File-Type";
     version = "0.22";
     src = fetchurl {
@@ -14075,10 +16723,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMISON/${pname}@${version}";
+      };
     };
   };
 
-  FileUtil = buildPerlModule {
+  FileUtil = buildPerlModule rec {
     pname = "File-Util";
     version = "4.201720";
     src = fetchurl {
@@ -14093,10 +16745,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOMMY/${pname}@${version}";
+      };
     };
   };
 
-  FileUtilTempdir = buildPerlPackage {
+  FileUtilTempdir = buildPerlPackage rec {
     pname = "File-Util-Tempdir";
     version = "0.034";
     src = fetchurl {
@@ -14115,10 +16771,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLANCAR/${pname}@${version}";
+      };
     };
   };
 
-  FileWhich = buildPerlPackage {
+  FileWhich = buildPerlPackage rec {
     pname = "File-Which";
     version = "1.27";
     src = fetchurl {
@@ -14132,10 +16792,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FileXDG = buildPerlPackage {
+  FileXDG = buildPerlPackage rec {
     pname = "File-XDG";
     version = "1.03";
     src = fetchurl {
@@ -14155,10 +16819,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  FileZglob = buildPerlPackage {
+  FileZglob = buildPerlPackage rec {
     pname = "File-Zglob";
     version = "0.11";
     src = fetchurl {
@@ -14171,10 +16839,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  Filter = buildPerlPackage {
+  Filter = buildPerlPackage rec {
     pname = "Filter";
     version = "1.64";
     src = fetchurl {
@@ -14187,6 +16859,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
@@ -14238,10 +16914,14 @@ with self;
       description = "Get stock and mutual fund quotes from various exchanges";
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = with lib.maintainers; [ nevivurn ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPSCHUCK/${pname}@${version}";
+      };
     };
   };
 
-  FindLib = buildPerlPackage {
+  FindLib = buildPerlPackage rec {
     pname = "Find-Lib";
     version = "1.04";
     src = fetchurl {
@@ -14254,10 +16934,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YANNK/${pname}@${version}";
+      };
     };
   };
 
-  FontAFM = buildPerlPackage {
+  FontAFM = buildPerlPackage rec {
     pname = "Font-AFM";
     version = "1.20";
     src = fetchurl {
@@ -14270,10 +16954,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  FontTTF = buildPerlPackage {
+  FontTTF = buildPerlPackage rec {
     pname = "Font-TTF";
     version = "1.06";
     src = fetchurl {
@@ -14284,10 +16972,14 @@ with self;
     meta = {
       description = "TTF font support for Perl";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BHALLISSY/${pname}@${version}";
+      };
     };
   };
 
-  ForksSuper = buildPerlPackage {
+  ForksSuper = buildPerlPackage rec {
     pname = "Forks-Super";
     version = "0.97";
     src = fetchurl {
@@ -14302,10 +16994,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MOB/${pname}@${version}";
+      };
     };
   };
 
-  FormValidatorSimple = buildPerlPackage {
+  FormValidatorSimple = buildPerlPackage rec {
     pname = "FormValidator-Simple";
     version = "0.29";
     src = fetchurl {
@@ -14330,10 +17026,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LYOKATO/${pname}@${version}";
+      };
     };
   };
 
-  FreezeThaw = buildPerlPackage {
+  FreezeThaw = buildPerlPackage rec {
     pname = "FreezeThaw";
     version = "0.5001";
     src = fetchurl {
@@ -14347,10 +17047,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILYAZ/${pname}@${version}";
+      };
     };
   };
 
-  FunctionParameters = buildPerlPackage {
+  FunctionParameters = buildPerlPackage rec {
     pname = "Function-Parameters";
     version = "2.002004";
     src = fetchurl {
@@ -14367,10 +17071,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAUKE/${pname}@${version}";
+      };
     };
   };
 
-  Furl = buildPerlModule {
+  Furl = buildPerlModule rec {
     pname = "Furl";
     version = "3.14";
     src = fetchurl {
@@ -14402,10 +17110,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYOHEX/${pname}@${version}";
+      };
     };
   };
 
-  Future = buildPerlModule {
+  Future = buildPerlModule rec {
     pname = "Future";
     version = "0.50";
     src = fetchurl {
@@ -14419,10 +17131,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  FutureAsyncAwait = buildPerlModule {
+  FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
     version = "0.66";
     src = fetchurl {
@@ -14442,10 +17158,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  FutureIO = buildPerlModule {
+  FutureIO = buildPerlModule rec {
     pname = "Future-IO";
     version = "0.14";
     src = fetchurl {
@@ -14465,10 +17185,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  FutureQueue = buildPerlModule {
+  FutureQueue = buildPerlModule rec {
     pname = "Future-Queue";
     version = "0.51";
     src = fetchurl {
@@ -14483,10 +17207,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  GamesSolitaireVerify = buildPerlModule {
+  GamesSolitaireVerify = buildPerlModule rec {
     pname = "Games-Solitaire-Verify";
     version = "0.2403";
     src = fetchurl {
@@ -14509,10 +17237,14 @@ with self;
       mainProgram = "verify-solitaire-solution";
       # Unsuccessful stat on filename containing newline at lib/perl5/5.40.0/File/Path.pm line 361.
       broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  GD = buildPerlPackage {
+  GD = buildPerlPackage rec {
     pname = "GD";
     version = "2.78";
     src = fetchurl {
@@ -14555,10 +17287,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "bdf2gdfont.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  GDGraph = buildPerlPackage {
+  GDGraph = buildPerlPackage rec {
     pname = "GDGraph";
     version = "1.56";
     src = fetchurl {
@@ -14576,10 +17312,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  GDSecurityImage = buildPerlPackage {
+  GDSecurityImage = buildPerlPackage rec {
     pname = "GD-SecurityImage";
     version = "1.75";
     src = fetchurl {
@@ -14593,10 +17333,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BURAK/${pname}@${version}";
+      };
     };
   };
 
-  GDText = buildPerlPackage {
+  GDText = buildPerlPackage rec {
     pname = "GDTextUtil";
     version = "0.86";
     src = fetchurl {
@@ -14610,10 +17354,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MVERB/${pname}@${version}";
+      };
     };
   };
 
-  GeoIP = buildPerlPackage {
+  GeoIP = buildPerlPackage rec {
     pname = "Geo-IP";
     version = "1.51";
     src = fetchurl {
@@ -14631,10 +17379,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  GeoIP2 = buildPerlPackage {
+  GeoIP2 = buildPerlPackage rec {
     pname = "GeoIP2";
     version = "2.006002";
     src = fetchurl {
@@ -14661,10 +17413,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "web-service-request";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  GetoptArgvFile = buildPerlPackage {
+  GetoptArgvFile = buildPerlPackage rec {
     pname = "Getopt-ArgvFile";
     version = "1.11";
     src = fetchurl {
@@ -14675,10 +17431,14 @@ with self;
       description = "Interpolates script options from files into @ARGV or another array";
       license = with lib.licenses; [ artistic1 ];
       maintainers = [ maintainers.pSub ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JSTENZEL/${pname}@${version}";
+      };
     };
   };
 
-  GetoptLong = buildPerlPackage {
+  GetoptLong = buildPerlPackage rec {
     pname = "Getopt-Long";
     version = "2.58";
     src = fetchurl {
@@ -14691,10 +17451,14 @@ with self;
         artistic1
         gpl2Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JV/${pname}@${version}";
+      };
     };
   };
 
-  GetoptLongDescriptive = buildPerlPackage {
+  GetoptLongDescriptive = buildPerlPackage rec {
     pname = "Getopt-Long-Descriptive";
     version = "0.114";
     src = fetchurl {
@@ -14718,10 +17482,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  GetoptTabular = buildPerlPackage {
+  GetoptTabular = buildPerlPackage rec {
     pname = "Getopt-Tabular";
     version = "0.3";
     src = fetchurl {
@@ -14734,10 +17502,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GWARD/${pname}@${version}";
+      };
     };
   };
 
-  Git = buildPerlPackage {
+  Git = buildPerlPackage rec {
     pname = "Git";
     version = "0.42";
     src = fetchurl {
@@ -14749,10 +17521,14 @@ with self;
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSOUTH/${pname}@${version}";
+      };
     };
   };
 
-  GitAutofixup = buildPerlPackage {
+  GitAutofixup = buildPerlPackage rec {
     pname = "App-Git-Autofixup";
     version = "0.004007";
     src = fetchurl {
@@ -14768,10 +17544,14 @@ with self;
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.DamienCassou ];
       mainProgram = "git-autofixup";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TORBIAK/${pname}@${version}";
+      };
     };
   };
 
-  GitPurePerl = buildPerlPackage {
+  GitPurePerl = buildPerlPackage rec {
     pname = "Git-PurePerl";
     version = "0.53";
     src = fetchurl {
@@ -14796,10 +17576,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BROQ/${pname}@${version}";
+      };
     };
   };
 
-  GitRepository = buildPerlPackage {
+  GitRepository = buildPerlPackage rec {
     pname = "Git-Repository";
     version = "1.325";
     src = fetchurl {
@@ -14818,10 +17602,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
-  GitVersionCompare = buildPerlPackage {
+  GitVersionCompare = buildPerlPackage rec {
     pname = "Git-Version-Compare";
     version = "1.005";
     src = fetchurl {
@@ -14835,10 +17623,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
-  Glib = buildPerlPackage {
+  Glib = buildPerlPackage rec {
     pname = "Glib";
     version = "1.3294";
     src = fetchurl {
@@ -14859,10 +17651,14 @@ with self;
       license = with lib.licenses; [ lgpl21Only ];
       # Can't load module IO, dynamic loading not available in this perl.
       broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  GlibObjectIntrospection = buildPerlPackage {
+  GlibObjectIntrospection = buildPerlPackage rec {
     pname = "Glib-Object-Introspection";
     version = "0.051";
     src = fetchurl {
@@ -14904,10 +17700,14 @@ with self;
       description = "Dynamically create Perl language bindings";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  GnuPGInterface = buildPerlPackage {
+  GnuPGInterface = buildPerlPackage rec {
     pname = "GnuPG-Interface";
     version = "1.03";
     src = fetchurl {
@@ -14929,10 +17729,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  GoferTransporthttp = buildPerlPackage {
+  GoferTransporthttp = buildPerlPackage rec {
     pname = "GoferTransport-http";
     version = "1.017";
     src = fetchurl {
@@ -14951,10 +17755,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TIMB/${pname}@${version}";
+      };
     };
   };
 
-  GooCanvas = buildPerlPackage {
+  GooCanvas = buildPerlPackage rec {
     pname = "Goo-Canvas";
     version = "0.06";
     src = fetchurl {
@@ -14973,10 +17781,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YEWENBIN/${pname}@${version}";
+      };
     };
   };
 
-  GooCanvas2 = buildPerlPackage {
+  GooCanvas2 = buildPerlPackage rec {
     pname = "GooCanvas2";
     version = "0.06";
     src = fetchurl {
@@ -14994,6 +17806,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLMAX/${pname}@${version}";
+      };
     };
   };
 
@@ -15014,10 +17830,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASOKOLOV/${pname}@${version}";
+      };
     };
   };
 
-  GoogleProtocolBuffers = buildPerlPackage {
+  GoogleProtocolBuffers = buildPerlPackage rec {
     pname = "Google-ProtocolBuffers";
     version = "0.12";
     src = fetchurl {
@@ -15037,10 +17857,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "protoc-perl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAXJAZMAN/${pname}@${version}";
+      };
     };
   };
 
-  gotofile = buildPerlPackage {
+  gotofile = buildPerlPackage rec {
     pname = "goto-file";
     version = "0.005";
     src = fetchurl {
@@ -15054,10 +17878,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  Graph = buildPerlPackage {
+  Graph = buildPerlPackage rec {
     pname = "Graph";
     version = "0.9727";
     src = fetchurl {
@@ -15074,10 +17902,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  GraphicsColor = buildPerlPackage {
+  GraphicsColor = buildPerlPackage rec {
     pname = "Graphics-Color";
     version = "0.31";
     src = fetchurl {
@@ -15103,10 +17935,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GPHAT/${pname}@${version}";
+      };
     };
   };
 
-  GraphicsTIFF = buildPerlPackage {
+  GraphicsTIFF = buildPerlPackage rec {
     pname = "Graphics-TIFF";
     version = "20";
     src = fetchurl {
@@ -15131,10 +17967,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RATCLIFFE/${pname}@${version}";
+      };
     };
   };
 
-  GraphicsToolkitColor = buildPerlPackage {
+  GraphicsToolkitColor = buildPerlPackage rec {
     pname = "Graphics-Toolkit-Color";
     version = "1.71";
     src = fetchurl {
@@ -15148,10 +17988,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LICHTKIND/${pname}@${version}";
+      };
     };
   };
 
-  GraphViz = buildPerlPackage {
+  GraphViz = buildPerlPackage rec {
     pname = "GraphViz";
     version = "2.26";
     src = fetchurl {
@@ -15175,10 +18019,14 @@ with self;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  GraphViz2 = buildPerlPackage {
+  GraphViz2 = buildPerlPackage rec {
     pname = "GraphViz2";
     version = "2.67";
     src = fetchurl {
@@ -15212,10 +18060,14 @@ with self;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  grepmail = buildPerlPackage {
+  grepmail = buildPerlPackage rec {
     pname = "grepmail";
     version = "5.3111";
     src = fetchurl {
@@ -15239,10 +18091,14 @@ with self;
       homepage = "https://github.com/coppit/grepmail";
       license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCOPPIT/${pname}@${version}";
+      };
     };
   };
 
-  GrowlGNTP = buildPerlModule {
+  GrowlGNTP = buildPerlModule rec {
     pname = "Growl-GNTP";
     version = "0.21";
     src = fetchurl {
@@ -15260,10 +18116,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTN/${pname}@${version}";
+      };
     };
   };
 
-  GSSAPI = buildPerlPackage {
+  GSSAPI = buildPerlPackage rec {
     pname = "GSSAPI";
     version = "0.28";
     src = fetchurl {
@@ -15282,10 +18142,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AGROLMS/${pname}@${version}";
+      };
     };
   };
 
-  Gtk2 = buildPerlPackage {
+  Gtk2 = buildPerlPackage rec {
     pname = "Gtk2";
     version = "1.24993";
     src = fetchurl {
@@ -15305,10 +18169,14 @@ with self;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  Gtk2TrayIcon = buildPerlPackage {
+  Gtk2TrayIcon = buildPerlPackage rec {
     pname = "Gtk2-TrayIcon";
     version = "0.07";
     src = fetchurl {
@@ -15323,10 +18191,14 @@ with self;
       description = "(DEPRECATED) Perl interface to the EggTrayIcon library";
       license = with lib.licenses; [ gpl2Plus ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2TrayIcon.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  Gtk2AppIndicator = buildPerlPackage {
+  Gtk2AppIndicator = buildPerlPackage rec {
     pname = "Gtk2-AppIndicator";
     version = "0.15";
     src = fetchurl {
@@ -15346,10 +18218,14 @@ with self;
     meta = {
       description = "Perl extension for libappindicator";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OESTERHOL/${pname}@${version}";
+      };
     };
   };
 
-  Gtk2ImageView = buildPerlPackage {
+  Gtk2ImageView = buildPerlPackage rec {
     pname = "Gtk2-ImageView";
     version = "0.05";
     src = fetchurl {
@@ -15368,10 +18244,14 @@ with self;
     meta = {
       description = "Perl bindings for the GtkImageView widget";
       license = with lib.licenses; [ lgpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RATCLIFFE/${pname}@${version}";
+      };
     };
   };
 
-  Gtk2Unique = buildPerlPackage {
+  Gtk2Unique = buildPerlPackage rec {
     pname = "Gtk2-Unique";
     version = "0.07";
     src = fetchurl {
@@ -15390,6 +18270,10 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2Unique.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
@@ -15417,6 +18301,10 @@ with self;
     meta = {
       description = "Perl interface to the 3.x series of the gtk+ toolkit";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
@@ -15452,10 +18340,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASOKOLOV/${pname}@${version}";
+      };
     };
   };
 
-  Gtk3SimpleList = buildPerlPackage {
+  Gtk3SimpleList = buildPerlPackage rec {
     pname = "Gtk3-SimpleList";
     version = "0.21";
     src = fetchurl {
@@ -15467,10 +18359,14 @@ with self;
       description = "Simple interface to Gtk3's complex MVC list widget";
       homepage = "https://github.com/soig/Gtk3-SimpleList";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TVIGNAUD/${pname}@${version}";
+      };
     };
   };
 
-  Guard = buildPerlPackage {
+  Guard = buildPerlPackage rec {
     pname = "Guard";
     version = "1.023";
     src = fetchurl {
@@ -15483,10 +18379,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  HamAPRSFAP = buildPerlPackage {
+  HamAPRSFAP = buildPerlPackage rec {
     pname = "Ham-APRS-FAP";
     version = "1.21";
     src = fetchurl {
@@ -15501,10 +18401,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HESSU/${pname}@${version}";
+      };
     };
   };
 
-  Hailo = buildPerlPackage {
+  Hailo = buildPerlPackage rec {
     pname = "Hailo";
     version = "0.75";
     src = fetchurl {
@@ -15559,10 +18463,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "hailo";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AVAR/${pname}@${version}";
+      };
     };
   };
 
-  HashDiff = buildPerlPackage {
+  HashDiff = buildPerlPackage rec {
     pname = "Hash-Diff";
     version = "0.010";
     src = fetchurl {
@@ -15579,10 +18487,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOLAV/${pname}@${version}";
+      };
     };
   };
 
-  HashFlatten = buildPerlPackage {
+  HashFlatten = buildPerlPackage rec {
     pname = "Hash-Flatten";
     version = "1.19";
     src = fetchurl {
@@ -15594,10 +18506,14 @@ with self;
     meta = {
       description = "Flatten/unflatten complex data hashes";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BBC/${pname}@${version}";
+      };
     };
   };
 
-  HashMerge = buildPerlPackage {
+  HashMerge = buildPerlPackage rec {
     pname = "Hash-Merge";
     version = "0.302";
     src = fetchurl {
@@ -15616,10 +18532,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HERMES/${pname}@${version}";
+      };
     };
   };
 
-  HashMergeSimple = buildPerlPackage {
+  HashMergeSimple = buildPerlPackage rec {
     pname = "Hash-Merge-Simple";
     version = "0.051";
     src = fetchurl {
@@ -15640,10 +18560,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROKR/${pname}@${version}";
+      };
     };
   };
 
-  HashMoreUtils = buildPerlPackage {
+  HashMoreUtils = buildPerlPackage rec {
     pname = "Hash-MoreUtils";
     version = "0.06";
     src = fetchurl {
@@ -15657,10 +18581,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  HashMultiValue = buildPerlPackage {
+  HashMultiValue = buildPerlPackage rec {
     pname = "Hash-MultiValue";
     version = "0.16";
     src = fetchurl {
@@ -15674,10 +18602,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARISTOTLE/${pname}@${version}";
+      };
     };
   };
 
-  HashOrdered = buildPerlPackage {
+  HashOrdered = buildPerlPackage rec {
     pname = "Hash-Ordered";
     version = "0.014";
     src = fetchurl {
@@ -15693,10 +18625,14 @@ with self;
       homepage = "https://github.com/dagolden/Hash-Ordered";
       description = "Fast, pure-Perl ordered hash class";
       license = lib.licenses.asl20;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  HashSafeKeys = buildPerlPackage {
+  HashSafeKeys = buildPerlPackage rec {
     pname = "Hash-SafeKeys";
     version = "0.04";
     src = fetchurl {
@@ -15709,10 +18645,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MOB/${pname}@${version}";
+      };
     };
   };
 
-  HashSharedMem = buildPerlModule {
+  HashSharedMem = buildPerlModule rec {
     pname = "Hash-SharedMem";
     version = "0.005";
     src = fetchurl {
@@ -15728,10 +18668,14 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HashSharedMem.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  HashStoredIterator = buildPerlModule {
+  HashStoredIterator = buildPerlModule rec {
     pname = "Hash-StoredIterator";
     version = "0.008";
     src = fetchurl {
@@ -15745,10 +18689,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHWERN/${pname}@${version}";
+      };
     };
   };
 
-  HashUtilFieldHashCompat = buildPerlPackage {
+  HashUtilFieldHashCompat = buildPerlPackage rec {
     pname = "Hash-Util-FieldHash-Compat";
     version = "0.11";
     src = fetchurl {
@@ -15761,10 +18709,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  HeapFibonacci = buildPerlPackage {
+  HeapFibonacci = buildPerlPackage rec {
     pname = "Heap";
     version = "0.80";
     src = fetchurl {
@@ -15777,10 +18729,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMM/${pname}@${version}";
+      };
     };
   };
 
-  HookLexWrap = buildPerlPackage {
+  HookLexWrap = buildPerlPackage rec {
     pname = "Hook-LexWrap";
     version = "0.26";
     src = fetchurl {
@@ -15795,10 +18751,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  HTMLClean = buildPerlPackage {
+  HTMLClean = buildPerlPackage rec {
     pname = "HTML-Clean";
     version = "1.4";
     src = fetchurl {
@@ -15812,10 +18772,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "htmlclean";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AZJADFTRE/${pname}@${version}";
+      };
     };
   };
 
-  HTMLElementExtended = buildPerlPackage {
+  HTMLElementExtended = buildPerlPackage rec {
     pname = "HTML-Element-Extended";
     version = "1.18";
     src = fetchurl {
@@ -15829,10 +18793,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSISK/${pname}@${version}";
+      };
     };
   };
 
-  HTMLEscape = buildPerlModule {
+  HTMLEscape = buildPerlModule rec {
     pname = "HTML-Escape";
     version = "1.11";
     src = fetchurl {
@@ -15850,10 +18818,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFromANSI = buildPerlPackage {
+  HTMLFromANSI = buildPerlPackage rec {
     pname = "HTML-FromANSI";
     version = "2.03";
     src = fetchurl {
@@ -15871,10 +18843,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "ansi2html";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NUFFIN/${pname}@${version}";
+      };
     };
   };
 
-  HTMLForm = buildPerlPackage {
+  HTMLForm = buildPerlPackage rec {
     pname = "HTML-Form";
     version = "6.11";
     src = fetchurl {
@@ -15893,10 +18869,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SIMBABQUE/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormatter = buildPerlPackage {
+  HTMLFormatter = buildPerlPackage rec {
     pname = "HTML-Formatter";
     version = "2.16";
     src = fetchurl {
@@ -15918,10 +18898,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NIGELM/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormatExternal = buildPerlPackage {
+  HTMLFormatExternal = buildPerlPackage rec {
     pname = "HTML-FormatExternal";
     version = "26";
     src = fetchurl {
@@ -15937,10 +18921,14 @@ with self;
       description = "HTML to text formatting using external programs";
       homepage = "https://user42.tuxfamily.org/html-formatexternal/index.html";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormatTextWithLinks = buildPerlModule {
+  HTMLFormatTextWithLinks = buildPerlModule rec {
     pname = "HTML-FormatText-WithLinks";
     version = "0.15";
     src = fetchurl {
@@ -15954,10 +18942,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STRUAN/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormatTextWithLinksAndTables = buildPerlPackage {
+  HTMLFormatTextWithLinksAndTables = buildPerlPackage rec {
     pname = "HTML-FormatText-WithLinks-AndTables";
     version = "0.07";
     src = fetchurl {
@@ -15971,10 +18963,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DALEEVANS/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormFu = buildPerlPackage {
+  HTMLFormFu = buildPerlPackage rec {
     pname = "HTML-FormFu";
     version = "2.07";
     src = fetchurl {
@@ -16015,10 +19011,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFRANKS/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormFuMultiForm = buildPerlPackage {
+  HTMLFormFuMultiForm = buildPerlPackage rec {
     pname = "HTML-FormFu-MultiForm";
     version = "1.03";
     src = fetchurl {
@@ -16037,10 +19037,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NIGELM/${pname}@${version}";
+      };
     };
   };
 
-  HTMLFormHandler = buildPerlPackage {
+  HTMLFormHandler = buildPerlPackage rec {
     pname = "HTML-FormHandler";
     version = "0.40068";
     src = fetchurl {
@@ -16076,10 +19080,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GSHANK/${pname}@${version}";
+      };
     };
   };
 
-  HTMLGumbo = buildPerlModule {
+  HTMLGumbo = buildPerlModule rec {
     pname = "HTML-Gumbo";
     version = "0.18";
     src = fetchurl {
@@ -16093,10 +19101,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RUZ/${pname}@${version}";
+      };
     };
   };
 
-  HTMLMason = buildPerlPackage {
+  HTMLMason = buildPerlPackage rec {
     pname = "HTML-Mason";
     version = "1.60";
     src = fetchurl {
@@ -16118,10 +19130,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  HTMLMasonPSGIHandler = buildPerlPackage {
+  HTMLMasonPSGIHandler = buildPerlPackage rec {
     pname = "HTML-Mason-PSGIHandler";
     version = "0.53";
     src = fetchurl {
@@ -16140,10 +19156,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RUZ/${pname}@${version}";
+      };
     };
   };
 
-  HTMLParser = buildPerlPackage {
+  HTMLParser = buildPerlPackage rec {
     pname = "HTML-Parser";
     version = "3.81";
     src = fetchurl {
@@ -16161,10 +19181,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTagCloud = buildPerlModule {
+  HTMLTagCloud = buildPerlModule rec {
     pname = "HTML-TagCloud";
     version = "0.38";
     src = fetchurl {
@@ -16177,10 +19201,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROBERTSD/${pname}@${version}";
+      };
     };
   };
 
-  HTMLQuoted = buildPerlPackage {
+  HTMLQuoted = buildPerlPackage rec {
     pname = "HTML-Quoted";
     version = "0.04";
     src = fetchurl {
@@ -16194,10 +19222,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TSIBLEY/${pname}@${version}";
+      };
     };
   };
 
-  HTMLRewriteAttributes = buildPerlPackage {
+  HTMLRewriteAttributes = buildPerlPackage rec {
     pname = "HTML-RewriteAttributes";
     version = "0.05";
     src = fetchurl {
@@ -16211,10 +19243,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TSIBLEY/${pname}@${version}";
+      };
     };
   };
 
-  HTMLSelectorXPath = buildPerlPackage {
+  HTMLSelectorXPath = buildPerlPackage rec {
     pname = "HTML-Selector-XPath";
     version = "0.28";
     src = fetchurl {
@@ -16228,10 +19264,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CORION/${pname}@${version}";
+      };
     };
   };
 
-  HTMLScrubber = buildPerlPackage {
+  HTMLScrubber = buildPerlPackage rec {
     pname = "HTML-Scrubber";
     version = "0.19";
     src = fetchurl {
@@ -16249,10 +19289,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NIGELM/${pname}@${version}";
+      };
     };
   };
 
-  HTMLStripScripts = buildPerlPackage {
+  HTMLStripScripts = buildPerlPackage rec {
     pname = "HTML-StripScripts";
     version = "1.06";
     src = fetchurl {
@@ -16265,10 +19309,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DRTECH/${pname}@${version}";
+      };
     };
   };
 
-  HTMLStripScriptsParser = buildPerlPackage {
+  HTMLStripScriptsParser = buildPerlPackage rec {
     pname = "HTML-StripScripts-Parser";
     version = "1.03";
     src = fetchurl {
@@ -16285,10 +19333,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DRTECH/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTableExtract = buildPerlPackage {
+  HTMLTableExtract = buildPerlPackage rec {
     pname = "HTML-TableExtract";
     version = "2.15";
     src = fetchurl {
@@ -16306,10 +19358,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSISK/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTagset = buildPerlPackage {
+  HTMLTagset = buildPerlPackage rec {
     pname = "HTML-Tagset";
     version = "3.20";
     src = fetchurl {
@@ -16322,10 +19378,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTemplate = buildPerlPackage {
+  HTMLTemplate = buildPerlPackage rec {
     pname = "HTML-Template";
     version = "2.97";
     src = fetchurl {
@@ -16340,10 +19400,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAMTREGAR/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTidy = buildPerlPackage {
+  HTMLTidy = buildPerlPackage rec {
     pname = "HTML-Tidy";
     version = "1.60";
     src = fetchurl {
@@ -16361,10 +19425,14 @@ with self;
       homepage = "https://github.com/petdance/html-tidy";
       license = with lib.licenses; [ artistic2 ];
       mainProgram = "webtidy";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTiny = buildPerlPackage {
+  HTMLTiny = buildPerlPackage rec {
     pname = "HTML-Tiny";
     version = "1.08";
     src = fetchurl {
@@ -16377,10 +19445,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARISTOTLE/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTokeParserSimple = buildPerlModule {
+  HTMLTokeParserSimple = buildPerlModule rec {
     pname = "HTML-TokeParser-Simple";
     version = "3.16";
     src = fetchurl {
@@ -16397,10 +19469,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OVID/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTree = buildPerlModule {
+  HTMLTree = buildPerlModule rec {
     pname = "HTML-Tree";
     version = "5.07";
     src = fetchurl {
@@ -16416,10 +19492,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "htmltree";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KENTNL/${pname}@${version}";
+      };
     };
   };
 
-  HTMLTreeBuilderXPath = buildPerlPackage {
+  HTMLTreeBuilderXPath = buildPerlPackage rec {
     pname = "HTML-TreeBuilder-XPath";
     version = "0.14";
     src = fetchurl {
@@ -16436,10 +19516,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIROD/${pname}@${version}";
+      };
     };
   };
 
-  HTMLWidget = buildPerlPackage {
+  HTMLWidget = buildPerlPackage rec {
     pname = "HTML-Widget";
     version = "1.11";
     src = fetchurl {
@@ -16463,10 +19547,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFRANKS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPAcceptLanguage = buildPerlModule {
+  HTTPAcceptLanguage = buildPerlModule rec {
     pname = "HTTP-AcceptLanguage";
     version = "0.02";
     src = fetchurl {
@@ -16481,10 +19569,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YAPPO/${pname}@${version}";
+      };
     };
   };
 
-  HTTPBody = buildPerlPackage {
+  HTTPBody = buildPerlPackage rec {
     pname = "HTTP-Body";
     version = "1.23";
     src = fetchurl {
@@ -16499,10 +19591,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GETTY/${pname}@${version}";
+      };
     };
   };
 
-  HTTPCookieJar = buildPerlPackage {
+  HTTPCookieJar = buildPerlPackage rec {
     pname = "HTTP-CookieJar";
     version = "0.014";
     src = fetchurl {
@@ -16521,10 +19617,14 @@ with self;
       description = "Minimalist HTTP user agent cookie jar";
       homepage = "https://github.com/dagolden/HTTP-CookieJar";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  HTTPCookies = buildPerlPackage {
+  HTTPCookies = buildPerlPackage rec {
     pname = "HTTP-Cookies";
     version = "6.10";
     src = fetchurl {
@@ -16539,10 +19639,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPDaemon = buildPerlPackage {
+  HTTPDaemon = buildPerlPackage rec {
     pname = "HTTP-Daemon";
     version = "6.16";
     src = fetchurl {
@@ -16562,10 +19666,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPDate = buildPerlPackage {
+  HTTPDate = buildPerlPackage rec {
     pname = "HTTP-Date";
     version = "6.06";
     src = fetchurl {
@@ -16580,10 +19688,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPEntityParser = buildPerlModule {
+  HTTPEntityParser = buildPerlModule rec {
     pname = "HTTP-Entity-Parser";
     version = "0.25";
     src = fetchurl {
@@ -16608,10 +19720,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  HTTPDAV = buildPerlPackage {
+  HTTPDAV = buildPerlPackage rec {
     pname = "HTTP-DAV";
     version = "0.49";
     src = fetchurl {
@@ -16626,10 +19742,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dave";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "COSIMO/${pname}@${version}";
+      };
     };
   };
 
-  HTTPHeadersActionPack = buildPerlPackage {
+  HTTPHeadersActionPack = buildPerlPackage rec {
     pname = "HTTP-Headers-ActionPack";
     version = "0.09";
     src = fetchurl {
@@ -16653,10 +19773,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  HTTPHeaderParserXS = buildPerlPackage {
+  HTTPHeaderParserXS = buildPerlPackage rec {
     pname = "HTTP-HeaderParser-XS";
     version = "0.20";
     src = fetchurl {
@@ -16672,10 +19796,14 @@ with self;
       broken =
         stdenv.hostPlatform.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
         || stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTTPHeaderParserXS.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKSMITH/${pname}@${version}";
+      };
     };
   };
 
-  HTTPHeadersFast = buildPerlModule {
+  HTTPHeadersFast = buildPerlModule rec {
     pname = "HTTP-Headers-Fast";
     version = "0.22";
     src = fetchurl {
@@ -16694,10 +19822,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  HTTPLite = buildPerlPackage {
+  HTTPLite = buildPerlPackage rec {
     pname = "HTTP-Lite";
     version = "2.44";
     src = fetchurl {
@@ -16711,10 +19843,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  HTTPMessage = buildPerlPackage {
+  HTTPMessage = buildPerlPackage rec {
     pname = "HTTP-Message";
     version = "6.45";
     src = fetchurl {
@@ -16740,10 +19876,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPMultiPartParser = buildPerlPackage {
+  HTTPMultiPartParser = buildPerlPackage rec {
     pname = "HTTP-MultiPartParser";
     version = "0.02";
     src = fetchurl {
@@ -16757,10 +19897,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHANSEN/${pname}@${version}";
+      };
     };
   };
 
-  HTTPNegotiate = buildPerlPackage {
+  HTTPNegotiate = buildPerlPackage rec {
     pname = "HTTP-Negotiate";
     version = "6.01";
     src = fetchurl {
@@ -16774,10 +19918,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPParserXS = buildPerlPackage {
+  HTTPParserXS = buildPerlPackage rec {
     pname = "HTTP-Parser-XS";
     version = "0.17";
     src = fetchurl {
@@ -16790,10 +19938,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZUHO/${pname}@${version}";
+      };
     };
   };
 
-  HTTPProxy = buildPerlPackage {
+  HTTPProxy = buildPerlPackage rec {
     pname = "HTTP-Proxy";
     version = "0.304";
     src = fetchurl {
@@ -16809,10 +19961,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
-  HTTPRequestAsCGI = buildPerlPackage {
+  HTTPRequestAsCGI = buildPerlPackage rec {
     pname = "HTTP-Request-AsCGI";
     version = "1.2";
     src = fetchurl {
@@ -16829,10 +19985,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FLORA/${pname}@${version}";
+      };
     };
   };
 
-  HTTPResponseEncoding = buildPerlPackage {
+  HTTPResponseEncoding = buildPerlPackage rec {
     pname = "HTTP-Response-Encoding";
     version = "0.06";
     src = fetchurl {
@@ -16847,10 +20007,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANKOGAI/${pname}@${version}";
+      };
     };
   };
 
-  HTTPServerSimple = buildPerlPackage {
+  HTTPServerSimple = buildPerlPackage rec {
     pname = "HTTP-Server-Simple";
     version = "0.52";
     src = fetchurl {
@@ -16865,10 +20029,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  HTTPServerSimpleAuthen = buildPerlPackage {
+  HTTPServerSimpleAuthen = buildPerlPackage rec {
     pname = "HTTP-Server-Simple-Authen";
     version = "0.04";
     src = fetchurl {
@@ -16885,10 +20053,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  HTTPServerSimpleMason = buildPerlPackage {
+  HTTPServerSimpleMason = buildPerlPackage rec {
     pname = "HTTP-Server-Simple-Mason";
     version = "0.14";
     src = fetchurl {
@@ -16906,10 +20078,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JESSE/${pname}@${version}";
+      };
     };
   };
 
-  HTTPServerSimplePSGI = buildPerlPackage {
+  HTTPServerSimplePSGI = buildPerlPackage rec {
     pname = "HTTP-Server-Simple-PSGI";
     version = "0.16";
     src = fetchurl {
@@ -16924,10 +20100,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  HTTPTinyCache = buildPerlPackage {
+  HTTPTinyCache = buildPerlPackage rec {
     pname = "HTTP-Tiny-Cache";
     version = "0.002";
     src = fetchurl {
@@ -16946,10 +20126,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLANCAR/${pname}@${version}";
+      };
     };
   };
 
-  HTTPTinyish = buildPerlPackage {
+  HTTPTinyish = buildPerlPackage rec {
     pname = "HTTP-Tinyish";
     version = "0.18";
     src = fetchurl {
@@ -16967,10 +20151,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  iCalParser = buildPerlPackage {
+  iCalParser = buildPerlPackage rec {
     pname = "iCal-Parser";
     version = "1.21";
     src = fetchurl {
@@ -16989,6 +20177,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RIXED/${pname}@${version}";
+      };
     };
   };
 
@@ -17008,10 +20200,14 @@ with self;
       ];
       mainProgram = "pnginspect";
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.ImagePNGLibpng.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BKB/${pname}@${version}";
+      };
     };
   };
 
-  Imager = buildPerlPackage {
+  Imager = buildPerlPackage rec {
     pname = "Imager";
     version = "1.025";
     src = fetchurl {
@@ -17039,10 +20235,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TONYC/${pname}@${version}";
+      };
     };
   };
 
-  ImagerQRCode = buildPerlPackage {
+  ImagerQRCode = buildPerlPackage rec {
     pname = "Imager-QRCode";
     version = "0.035";
     src = fetchurl {
@@ -17057,10 +20257,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KURIHARA/${pname}@${version}";
+      };
     };
   };
 
-  ImageInfo = buildPerlPackage {
+  ImageInfo = buildPerlPackage rec {
     pname = "Image-Info";
     version = "1.44";
     src = fetchurl {
@@ -17074,10 +20278,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SREZIC/${pname}@${version}";
+      };
     };
   };
 
-  ImageSane = buildPerlPackage {
+  ImageSane = buildPerlPackage rec {
     pname = "Image-Sane";
     version = "5";
     src = fetchurl {
@@ -17101,10 +20309,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RATCLIFFE/${pname}@${version}";
+      };
     };
   };
 
-  ImageScale = buildPerlPackage {
+  ImageScale = buildPerlPackage rec {
     pname = "Image-Scale";
     version = "0.14";
     src = fetchurl {
@@ -17126,10 +20338,14 @@ with self;
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AGRUNDMA/${pname}@${version}";
+      };
     };
   };
 
-  ImageSize = buildPerlPackage {
+  ImageSize = buildPerlPackage rec {
     pname = "Image-Size";
     version = "3.300";
     src = fetchurl {
@@ -17145,10 +20361,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "imgsize";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJRAY/${pname}@${version}";
+      };
     };
   };
 
-  ImageOCRTesseract = buildPerlPackage {
+  ImageOCRTesseract = buildPerlPackage rec {
     pname = "Image-OCR-Tesseract";
     version = "1.26";
     src = fetchurl {
@@ -17187,10 +20407,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "ocr";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEOCHARRE/${pname}@${version}";
+      };
     };
   };
 
-  IMAPClient = buildPerlPackage {
+  IMAPClient = buildPerlPackage rec {
     pname = "IMAP-Client";
     version = "0.13";
     src = fetchurl {
@@ -17204,10 +20428,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CONTEB/${pname}@${version}";
+      };
     };
   };
 
-  Importer = buildPerlPackage {
+  Importer = buildPerlPackage rec {
     pname = "Importer";
     version = "0.026";
     src = fetchurl {
@@ -17220,10 +20448,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  ImportInto = buildPerlPackage {
+  ImportInto = buildPerlPackage rec {
     pname = "Import-Into";
     version = "1.002005";
     src = fetchurl {
@@ -17237,10 +20469,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  IO = buildPerlPackage {
+  IO = buildPerlPackage rec {
     pname = "IO";
     version = "1.51";
     src = fetchurl {
@@ -17254,10 +20490,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  IOAIO = buildPerlPackage {
+  IOAIO = buildPerlPackage rec {
     pname = "IO-AIO";
     version = "4.73";
     src = fetchurl {
@@ -17277,10 +20517,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "treescan";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  IOAll = buildPerlPackage {
+  IOAll = buildPerlPackage rec {
     pname = "IO-All";
     version = "0.87";
     src = fetchurl {
@@ -17294,10 +20538,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  IOAsync = buildPerlModule {
+  IOAsync = buildPerlModule rec {
     pname = "IO-Async";
     version = "0.802";
     src = fetchurl {
@@ -17322,10 +20570,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  IOAsyncSSL = buildPerlModule {
+  IOAsyncSSL = buildPerlModule rec {
     pname = "IO-Async-SSL";
     version = "0.25";
     src = fetchurl {
@@ -17345,10 +20597,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  IOCapture = buildPerlPackage {
+  IOCapture = buildPerlPackage rec {
     pname = "IO-Capture";
     version = "0.05";
     src = fetchurl {
@@ -17361,10 +20617,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REYNOLDS/${pname}@${version}";
+      };
     };
   };
 
-  IOCaptureOutput = buildPerlPackage {
+  IOCaptureOutput = buildPerlPackage rec {
     pname = "IO-CaptureOutput";
     version = "1.1105";
     src = fetchurl {
@@ -17378,10 +20638,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  IOCompress = buildPerlPackage {
+  IOCompress = buildPerlPackage rec {
     pname = "IO-Compress";
     version = "2.206";
     src = fetchurl {
@@ -17402,10 +20666,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "streamzip";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMQS/${pname}@${version}";
+      };
     };
   };
 
-  IODigest = buildPerlPackage {
+  IODigest = buildPerlPackage rec {
     pname = "IO-Digest";
     version = "0.11";
     src = fetchurl {
@@ -17419,10 +20687,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CLKAO/${pname}@${version}";
+      };
     };
   };
 
-  IOHTML = buildPerlPackage {
+  IOHTML = buildPerlPackage rec {
     pname = "IO-HTML";
     version = "1.004";
     src = fetchurl {
@@ -17435,10 +20707,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CJM/${pname}@${version}";
+      };
     };
   };
 
-  IOHandleUtil = buildPerlModule {
+  IOHandleUtil = buildPerlModule rec {
     pname = "IO-Handle-Util";
     version = "0.02";
     src = fetchurl {
@@ -17461,10 +20737,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  IOInterface = buildPerlModule {
+  IOInterface = buildPerlModule rec {
     pname = "IO-Interface";
     version = "1.09";
     src = fetchurl {
@@ -17478,10 +20758,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDS/${pname}@${version}";
+      };
     };
   };
 
-  IOInteractive = buildPerlPackage {
+  IOInteractive = buildPerlPackage rec {
     pname = "IO-Interactive";
     version = "1.025";
     src = fetchurl {
@@ -17492,10 +20776,14 @@ with self;
       description = "Utilities for interactive I/O";
       homepage = "https://github.com/briandfoy/io-interactive";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  IOInteractiveTiny = buildPerlPackage {
+  IOInteractiveTiny = buildPerlPackage rec {
     pname = "IO-Interactive-Tiny";
     version = "0.2";
     src = fetchurl {
@@ -17505,10 +20793,14 @@ with self;
     meta = {
       description = "Is_interactive() without large deps";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMUEY/${pname}@${version}";
+      };
     };
   };
 
-  IOLockedFile = buildPerlPackage {
+  IOLockedFile = buildPerlPackage rec {
     pname = "IO-LockedFile";
     version = "0.23";
     src = fetchurl {
@@ -17521,10 +20813,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RANI/${pname}@${version}";
+      };
     };
   };
 
-  IOMultiplex = buildPerlPackage {
+  IOMultiplex = buildPerlPackage rec {
     pname = "IO-Multiplex";
     version = "1.16";
     src = fetchurl {
@@ -17537,10 +20833,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BBB/${pname}@${version}";
+      };
     };
   };
 
-  IOPager = buildPerlPackage {
+  IOPager = buildPerlPackage rec {
     version = "2.10";
     pname = "IO-Pager";
     src = fetchurl {
@@ -17559,10 +20859,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "tp";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JPIERCE/${pname}@${version}";
+      };
     };
   };
 
-  IOPrompt = buildPerlModule {
+  IOPrompt = buildPerlModule rec {
     pname = "IO-Prompt";
     version = "0.997004";
     src = fetchurl {
@@ -17580,10 +20884,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCONWAY/${pname}@${version}";
+      };
     };
   };
 
-  IOSessionData = buildPerlPackage {
+  IOSessionData = buildPerlPackage rec {
     pname = "IO-SessionData";
     version = "1.03";
     src = fetchurl {
@@ -17600,10 +20908,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  IOSocketINET6 = buildPerlModule {
+  IOSocketINET6 = buildPerlModule rec {
     pname = "IO-Socket-INET6";
     version = "2.73";
     src = fetchurl {
@@ -17618,10 +20930,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  IOSocketSSL = buildPerlPackage {
+  IOSocketSSL = buildPerlPackage rec {
     pname = "IO-Socket-SSL";
     version = "2.083";
     src = fetchurl {
@@ -17645,10 +20961,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SULLR/${pname}@${version}";
+      };
     };
   };
 
-  IOSocketSocks = buildPerlPackage {
+  IOSocketSocks = buildPerlPackage rec {
     pname = "IO-Socket-Socks";
     version = "0.74";
     src = fetchurl {
@@ -17658,10 +20978,14 @@ with self;
     meta = {
       description = "Provides a way to create socks client or server both 4 and 5 version";
       license = lib.licenses.free;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OLEG/${pname}@${version}";
+      };
     };
   };
 
-  IOSocketTimeout = buildPerlModule {
+  IOSocketTimeout = buildPerlModule rec {
     pname = "IO-Socket-Timeout";
     version = "0.32";
     src = fetchurl {
@@ -17680,10 +21004,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAMS/${pname}@${version}";
+      };
     };
   };
 
-  IOString = buildPerlPackage {
+  IOString = buildPerlPackage rec {
     pname = "IO-String";
     version = "1.08";
     src = fetchurl {
@@ -17696,10 +21024,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  IOStringy = buildPerlPackage {
+  IOStringy = buildPerlPackage rec {
     pname = "IO-Stringy";
     version = "2.113";
     src = fetchurl {
@@ -17712,10 +21044,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CAPOEIRAB/${pname}@${version}";
+      };
     };
   };
 
-  IOStty = buildPerlModule {
+  IOStty = buildPerlModule rec {
     pname = "IO-Stty";
     version = "0.04";
     src = fetchurl {
@@ -17732,10 +21068,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  IOTee = buildPerlPackage {
+  IOTee = buildPerlPackage rec {
     pname = "IO-Tee";
     version = "0.66";
     src = fetchurl {
@@ -17748,10 +21088,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  IOTieCombine = buildPerlPackage {
+  IOTieCombine = buildPerlPackage rec {
     pname = "IO-TieCombine";
     version = "1.005";
     src = fetchurl {
@@ -17765,6 +21109,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
@@ -17787,10 +21135,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  IPCConcurrencyLimit = buildPerlPackage {
+  IPCConcurrencyLimit = buildPerlPackage rec {
     pname = "IPC-ConcurrencyLimit";
     version = "0.17";
     src = fetchurl {
@@ -17808,10 +21160,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTK/${pname}@${version}";
+      };
     };
   };
 
-  IPCountry = buildPerlPackage {
+  IPCountry = buildPerlPackage rec {
     pname = "IP-Country";
     version = "2.28";
     src = fetchurl {
@@ -17823,10 +21179,14 @@ with self;
       description = "Fast lookup of country codes from IP addresses";
       license = with lib.licenses; [ mit ];
       mainProgram = "ip2cc";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NWETTERS/${pname}@${version}";
+      };
     };
   };
 
-  GeographyCountries = buildPerlPackage {
+  GeographyCountries = buildPerlPackage rec {
     pname = "Geography-Countries";
     version = "2009041301";
     src = fetchurl {
@@ -17836,10 +21196,14 @@ with self;
     meta = {
       description = "2-letter, 3-letter, and numerical codes for countries";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABIGAIL/${pname}@${version}";
+      };
     };
   };
 
-  IPCRun = buildPerlPackage {
+  IPCRun = buildPerlPackage rec {
     pname = "IPC-Run";
     version = "20231003.0";
     src = fetchurl {
@@ -17855,10 +21219,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  IPCRun3 = buildPerlPackage {
+  IPCRun3 = buildPerlPackage rec {
     pname = "IPC-Run3";
     version = "0.048";
     src = fetchurl {
@@ -17872,10 +21240,14 @@ with self;
         gpl1Plus
         bsd3
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  IPCShareable = buildPerlPackage {
+  IPCShareable = buildPerlPackage rec {
     pname = "IPC-Shareable";
     version = "1.13";
     src = fetchurl {
@@ -17899,10 +21271,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEVEB/${pname}@${version}";
+      };
     };
   };
 
-  IPCShareLite = buildPerlPackage {
+  IPCShareLite = buildPerlPackage rec {
     pname = "IPC-ShareLite";
     version = "0.17";
     src = fetchurl {
@@ -17915,10 +21291,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDYA/${pname}@${version}";
+      };
     };
   };
 
-  IPCSystemSimple = buildPerlPackage {
+  IPCSystemSimple = buildPerlPackage rec {
     pname = "IPC-System-Simple";
     version = "1.30";
     src = fetchurl {
@@ -17932,10 +21312,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JKEENAN/${pname}@${version}";
+      };
     };
   };
 
-  IPCSysV = buildPerlPackage {
+  IPCSysV = buildPerlPackage rec {
     pname = "IPC-SysV";
     version = "2.09";
     src = fetchurl {
@@ -17948,10 +21332,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MHX/${pname}@${version}";
+      };
     };
   };
 
-  IRCUtils = buildPerlPackage {
+  IRCUtils = buildPerlPackage rec {
     pname = "IRC-Utils";
     version = "0.12";
     src = fetchurl {
@@ -17966,12 +21354,16 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HINRIK/${pname}@${version}";
+      };
     };
   };
 
   ImageExifTool = callPackage ../development/perl-modules/ImageExifTool { };
 
-  Inline = buildPerlPackage {
+  Inline = buildPerlPackage rec {
     pname = "Inline";
     version = "0.86";
     src = fetchurl {
@@ -17992,10 +21384,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  InlineC = buildPerlPackage {
+  InlineC = buildPerlPackage rec {
     pname = "Inline-C";
     version = "0.82";
     src = fetchurl {
@@ -18024,10 +21420,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  InlineJava = buildPerlPackage {
+  InlineJava = buildPerlPackage rec {
     pname = "Inline-Java";
     version = "0.67";
 
@@ -18056,10 +21456,14 @@ with self;
       '';
       license = with lib.licenses; [ artistic2 ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.InlineJava.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  IteratorSimple = buildPerlPackage {
+  IteratorSimple = buildPerlPackage rec {
     pname = "Iterator-Simple";
     version = "0.07";
     src = fetchurl {
@@ -18072,10 +21476,14 @@ with self;
         artistic1
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MICHAEL/${pname}@${version}";
+      };
     };
   };
 
-  IPCSignal = buildPerlPackage {
+  IPCSignal = buildPerlPackage rec {
     pname = "IPC-Signal";
     version = "1.00";
     src = fetchurl {
@@ -18088,10 +21496,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROSCH/${pname}@${version}";
+      };
     };
   };
 
-  JavaScriptMinifierXS = buildPerlPackage {
+  JavaScriptMinifierXS = buildPerlPackage rec {
     pname = "JavaScript-Minifier-XS";
     version = "0.15";
     src = fetchurl {
@@ -18106,10 +21518,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GTERMARS/${pname}@${version}";
+      };
     };
   };
 
-  JavaScriptValueEscape = buildPerlModule {
+  JavaScriptValueEscape = buildPerlModule rec {
     pname = "JavaScript-Value-Escape";
     version = "0.07";
     src = fetchurl {
@@ -18123,10 +21539,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  JSON = buildPerlPackage {
+  JSON = buildPerlPackage rec {
     pname = "JSON";
     version = "4.10";
     src = fetchurl {
@@ -18144,10 +21564,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  JSONAny = buildPerlPackage {
+  JSONAny = buildPerlPackage rec {
     pname = "JSON-Any";
     version = "1.40";
     src = fetchurl {
@@ -18167,10 +21591,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  JSONCreate = buildPerlPackage {
+  JSONCreate = buildPerlPackage rec {
     pname = "JSON-Create";
     version = "0.35";
     src = fetchurl {
@@ -18187,10 +21615,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BKB/${pname}@${version}";
+      };
     };
   };
 
-  JSONMaybeXS = buildPerlPackage {
+  JSONMaybeXS = buildPerlPackage rec {
     pname = "JSON-MaybeXS";
     version = "1.004005";
     src = fetchurl {
@@ -18204,10 +21636,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  JSONPP = buildPerlPackage {
+  JSONPP = buildPerlPackage rec {
     pname = "JSON-PP";
     version = "4.16";
     src = fetchurl {
@@ -18221,10 +21657,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "json_pp";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  JSONPPCompat5006 = buildPerlPackage {
+  JSONPPCompat5006 = buildPerlPackage rec {
     pname = "JSON-PP-Compat5006";
     version = "1.09";
     src = fetchurl {
@@ -18237,10 +21677,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAKAMAKA/${pname}@${version}";
+      };
     };
   };
 
-  JSONParse = buildPerlPackage {
+  JSONParse = buildPerlPackage rec {
     pname = "JSON-Parse";
     version = "0.62";
     src = fetchurl {
@@ -18254,10 +21698,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "validjson";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BKB/${pname}@${version}";
+      };
     };
   };
 
-  JSONValidator = buildPerlPackage {
+  JSONValidator = buildPerlPackage rec {
     pname = "JSON-Validator";
     version = "5.14";
     src = fetchurl {
@@ -18274,10 +21722,14 @@ with self;
       homepage = "https://github.com/mojolicious/json-validator";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  JSONWebToken = buildPerlModule {
+  JSONWebToken = buildPerlModule rec {
     pname = "JSON-WebToken";
     version = "0.10";
     src = fetchurl {
@@ -18299,10 +21751,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAICRON/${pname}@${version}";
+      };
     };
   };
 
-  JSONXS = buildPerlPackage {
+  JSONXS = buildPerlPackage rec {
     pname = "JSON-XS";
     version = "4.03";
     src = fetchurl {
@@ -18319,10 +21775,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "json_xs";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  JSONXSVersionOneAndTwo = buildPerlPackage {
+  JSONXSVersionOneAndTwo = buildPerlPackage rec {
     pname = "JSON-XS-VersionOneAndTwo";
     version = "0.31";
     src = fetchurl {
@@ -18336,10 +21796,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LBROCARD/${pname}@${version}";
+      };
     };
   };
 
-  Later = buildPerlPackage {
+  Later = buildPerlPackage rec {
     version = "0.21";
     pname = "Object-Realize-Later";
     src = fetchurl {
@@ -18352,6 +21816,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
@@ -18447,10 +21915,14 @@ with self;
       license = with lib.licenses; [ publicDomain ];
       maintainers = with maintainers; [ xworld21 ];
       mainProgram = "latexmlc";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BRMILLER/${pname}@${version}";
+      };
     };
   };
 
-  LEOCHARRECLI = buildPerlPackage {
+  LEOCHARRECLI = buildPerlPackage rec {
     pname = "LEOCHARRE-CLI";
     version = "1.19";
     src = fetchurl {
@@ -18470,10 +21942,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEOCHARRE/${pname}@${version}";
+      };
     };
   };
 
-  LEOCHARREDebug = buildPerlPackage {
+  LEOCHARREDebug = buildPerlPackage rec {
     pname = "LEOCHARRE-Debug";
     version = "1.03";
     src = fetchurl {
@@ -18486,10 +21962,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEOCHARRE/${pname}@${version}";
+      };
     };
   };
 
-  LexicalSealRequireHints = buildPerlModule {
+  LexicalSealRequireHints = buildPerlModule rec {
     pname = "Lexical-SealRequireHints";
     version = "0.012";
     src = fetchurl {
@@ -18502,6 +21982,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
@@ -18568,7 +22052,7 @@ with self;
     };
   };
 
-  libintl-perl = buildPerlPackage {
+  libintl-perl = buildPerlPackage rec {
     pname = "libintl-perl";
     version = "1.33";
     src = fetchurl {
@@ -18578,10 +22062,14 @@ with self;
     meta = {
       description = "Portable l10n and i10n functions";
       license = with lib.licenses; [ gpl3Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GUIDO/${pname}@${version}";
+      };
     };
   };
 
-  libnet = buildPerlPackage {
+  libnet = buildPerlPackage rec {
     pname = "libnet";
     version = "3.15";
     src = fetchurl {
@@ -18594,10 +22082,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHAY/${pname}@${version}";
+      };
     };
   };
 
-  librelative = buildPerlPackage {
+  librelative = buildPerlPackage rec {
     pname = "lib-relative";
     version = "1.002";
     src = fetchurl {
@@ -18608,10 +22100,14 @@ with self;
       description = "Add paths relative to the current file to @INC";
       homepage = "https://github.com/Grinnz/lib-relative";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  libwwwperl = buildPerlPackage {
+  libwwwperl = buildPerlPackage rec {
     pname = "libwww-perl";
     version = "6.72";
     src = fetchurl {
@@ -18646,10 +22142,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  libxml_perl = buildPerlPackage {
+  libxml_perl = buildPerlPackage rec {
     pname = "libxml-perl";
     version = "0.08";
     src = fetchurl {
@@ -18663,10 +22163,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KMACLEOD/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENFindNumber = buildPerlPackage {
+  LinguaENFindNumber = buildPerlPackage rec {
     pname = "Lingua-EN-FindNumber";
     version = "1.32";
     src = fetchurl {
@@ -18681,10 +22185,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENInflect = buildPerlPackage {
+  LinguaENInflect = buildPerlPackage rec {
     pname = "Lingua-EN-Inflect";
     version = "1.905";
     src = fetchurl {
@@ -18697,10 +22205,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCONWAY/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENInflectNumber = buildPerlPackage {
+  LinguaENInflectNumber = buildPerlPackage rec {
     pname = "Lingua-EN-Inflect-Number";
     version = "1.12";
     src = fetchurl {
@@ -18715,10 +22227,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENInflectPhrase = buildPerlPackage {
+  LinguaENInflectPhrase = buildPerlPackage rec {
     pname = "Lingua-EN-Inflect-Phrase";
     version = "0.20";
     src = fetchurl {
@@ -18738,10 +22254,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENNumberIsOrdinal = buildPerlPackage {
+  LinguaENNumberIsOrdinal = buildPerlPackage rec {
     pname = "Lingua-EN-Number-IsOrdinal";
     version = "0.05";
     src = fetchurl {
@@ -18760,10 +22280,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENTagger = buildPerlPackage {
+  LinguaENTagger = buildPerlPackage rec {
     pname = "Lingua-EN-Tagger";
     version = "0.31";
     src = fetchurl {
@@ -18778,10 +22302,14 @@ with self;
     meta = {
       description = "Part-of-speech tagger for English natural language processing";
       license = with lib.licenses; [ gpl3Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ACOBURN/${pname}@${version}";
+      };
     };
   };
 
-  LinguaENWords2Nums = buildPerlPackage {
+  LinguaENWords2Nums = buildPerlPackage rec {
     pname = "Lingua-EN-Words2Nums";
     version = "0.18";
     src = fetchurl {
@@ -18794,10 +22322,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JOEY/${pname}@${version}";
+      };
     };
   };
 
-  LinguaPTStemmer = buildPerlPackage {
+  LinguaPTStemmer = buildPerlPackage rec {
     pname = "Lingua-PT-Stemmer";
     version = "0.02";
     src = fetchurl {
@@ -18811,10 +22343,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  LinguaStem = buildPerlModule {
+  LinguaStem = buildPerlModule rec {
     pname = "Lingua-Stem";
     version = "2.31";
     src = fetchurl {
@@ -18838,10 +22374,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SNOWHARE/${pname}@${version}";
+      };
     };
   };
 
-  LinguaStemFr = buildPerlPackage {
+  LinguaStemFr = buildPerlPackage rec {
     pname = "Lingua-Stem-Fr";
     version = "0.02";
     src = fetchurl {
@@ -18854,10 +22394,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SDP/${pname}@${version}";
+      };
     };
   };
 
-  LinguaStemIt = buildPerlPackage {
+  LinguaStemIt = buildPerlPackage rec {
     pname = "Lingua-Stem-It";
     version = "0.02";
     src = fetchurl {
@@ -18870,10 +22414,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ACALPINI/${pname}@${version}";
+      };
     };
   };
 
-  LinguaStemRu = buildPerlPackage {
+  LinguaStemRu = buildPerlPackage rec {
     pname = "Lingua-Stem-Ru";
     version = "0.04";
     src = fetchurl {
@@ -18887,10 +22435,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  LinguaStemSnowballDa = buildPerlPackage {
+  LinguaStemSnowballDa = buildPerlPackage rec {
     pname = "Lingua-Stem-Snowball-Da";
     version = "1.01";
     src = fetchurl {
@@ -18900,10 +22452,14 @@ with self;
     meta = {
       description = "Porters stemming algorithm for Denmark";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CINE/${pname}@${version}";
+      };
     };
   };
 
-  LinguaTranslit = buildPerlPackage {
+  LinguaTranslit = buildPerlPackage rec {
     pname = "Lingua-Translit";
     version = "0.29";
     src = fetchurl {
@@ -18918,10 +22474,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "translit";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALINKE/${pname}@${version}";
+      };
     };
   };
 
-  LinkEmbedder = buildPerlPackage {
+  LinkEmbedder = buildPerlPackage rec {
     pname = "LinkEmbedder";
     version = "1.20";
     src = fetchurl {
@@ -18935,10 +22495,14 @@ with self;
       homepage = "https://github.com/jhthorsen/linkembedder";
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  LinuxACL = buildPerlPackage {
+  LinuxACL = buildPerlPackage rec {
     pname = "Linux-ACL";
     version = "0.05";
     src = fetchurl {
@@ -18954,10 +22518,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NAZAROV/${pname}@${version}";
+      };
     };
   };
 
-  LinuxDesktopFiles = buildPerlModule {
+  LinuxDesktopFiles = buildPerlModule rec {
     pname = "Linux-DesktopFiles";
     version = "0.25";
     src = fetchurl {
@@ -18968,10 +22536,14 @@ with self;
       description = "Fast parsing of the Linux desktop files";
       homepage = "https://github.com/trizen/Linux-DesktopFiles";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TRIZEN/${pname}@${version}";
+      };
     };
   };
 
-  LinuxDistribution = buildPerlModule {
+  LinuxDistribution = buildPerlModule rec {
     pname = "Linux-Distribution";
     version = "0.23";
     src = fetchurl {
@@ -18988,10 +22560,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
-  LinuxFD = buildPerlModule {
+  LinuxFD = buildPerlModule rec {
     pname = "Linux-FD";
     version = "0.014";
     src = fetchurl {
@@ -19007,10 +22583,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  LinuxInotify2 = buildPerlPackage {
+  LinuxInotify2 = buildPerlPackage rec {
     pname = "Linux-Inotify2";
     version = "2.3";
     src = fetchurl {
@@ -19026,10 +22606,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  Linuxusermod = buildPerlPackage {
+  Linuxusermod = buildPerlPackage rec {
     pname = "Linux-usermod";
     version = "0.69";
     src = fetchurl {
@@ -19043,10 +22627,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VIDUL/${pname}@${version}";
+      };
     };
   };
 
-  ListAllUtils = buildPerlPackage {
+  ListAllUtils = buildPerlPackage rec {
     pname = "List-AllUtils";
     version = "0.19";
     src = fetchurl {
@@ -19061,10 +22649,14 @@ with self;
       description = "Combines List::Util, List::SomeUtils and List::UtilsBy in one bite-sized package";
       homepage = "https://metacpan.org/release/List-AllUtils";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ListBinarySearch = buildPerlPackage {
+  ListBinarySearch = buildPerlPackage rec {
     pname = "List-BinarySearch";
     version = "0.25";
     src = fetchurl {
@@ -19077,10 +22669,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVIDO/${pname}@${version}";
+      };
     };
   };
 
-  ListCompare = buildPerlPackage {
+  ListCompare = buildPerlPackage rec {
     pname = "List-Compare";
     version = "0.55";
     src = fetchurl {
@@ -19095,10 +22691,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JKEENAN/${pname}@${version}";
+      };
     };
   };
 
-  ListMoreUtils = buildPerlPackage {
+  ListMoreUtils = buildPerlPackage rec {
     pname = "List-MoreUtils";
     version = "0.430";
     src = fetchurl {
@@ -19116,10 +22716,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  ListMoreUtilsXS = buildPerlPackage {
+  ListMoreUtilsXS = buildPerlPackage rec {
     pname = "List-MoreUtils-XS";
     version = "0.430";
     src = fetchurl {
@@ -19130,10 +22734,14 @@ with self;
       description = "Provide the stuff missing in List::Util in XS";
       homepage = "https://metacpan.org/release/List-MoreUtils-XS";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  ListSomeUtils = buildPerlPackage {
+  ListSomeUtils = buildPerlPackage rec {
     pname = "List-SomeUtils";
     version = "0.59";
     src = fetchurl {
@@ -19149,10 +22757,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ListUtilsBy = buildPerlModule {
+  ListUtilsBy = buildPerlModule rec {
     pname = "List-UtilsBy";
     version = "0.12";
     src = fetchurl {
@@ -19165,10 +22777,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  LocaleCodes = buildPerlPackage {
+  LocaleCodes = buildPerlPackage rec {
     pname = "Locale-Codes";
     version = "3.76";
     src = fetchurl {
@@ -19183,10 +22799,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SBECK/${pname}@${version}";
+      };
     };
   };
 
-  LocaleGettext = buildPerlPackage {
+  LocaleGettext = buildPerlPackage rec {
     pname = "gettext";
     version = "1.07";
     strictDeps = true;
@@ -19202,10 +22822,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PVANDRY/${pname}@${version}";
+      };
     };
   };
 
-  LocaleMaketextLexiconGetcontext = buildPerlPackage {
+  LocaleMaketextLexiconGetcontext = buildPerlPackage rec {
     pname = "Locale-Maketext-Lexicon-Getcontext";
     version = "0.05";
     src = fetchurl {
@@ -19216,10 +22840,14 @@ with self;
     meta = {
       description = "PO file parser for Maketext";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAPER/${pname}@${version}";
+      };
     };
   };
 
-  LocaleMOFile = buildPerlPackage {
+  LocaleMOFile = buildPerlPackage rec {
     pname = "Locale-MO-File";
     version = "0.09";
     src = fetchurl {
@@ -19245,10 +22873,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  LocaleMaketextFuzzy = buildPerlPackage {
+  LocaleMaketextFuzzy = buildPerlPackage rec {
     pname = "Locale-Maketext-Fuzzy";
     version = "0.11";
     src = fetchurl {
@@ -19258,10 +22890,14 @@ with self;
     meta = {
       description = "Maketext from already interpolated strings";
       license = with lib.licenses; [ cc0 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AUDREYT/${pname}@${version}";
+      };
     };
   };
 
-  LocaleMaketextLexicon = buildPerlPackage {
+  LocaleMaketextLexicon = buildPerlPackage rec {
     pname = "Locale-Maketext-Lexicon";
     version = "1.00";
     src = fetchurl {
@@ -19273,10 +22909,14 @@ with self;
       homepage = "https://search.cpan.org/dist/Locale-Maketext-Lexicon";
       license = with lib.licenses; [ mit ];
       mainProgram = "xgettext.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DRTECH/${pname}@${version}";
+      };
     };
   };
 
-  LocaleMsgfmt = buildPerlPackage {
+  LocaleMsgfmt = buildPerlPackage rec {
     pname = "Locale-Msgfmt";
     version = "0.15";
     src = fetchurl {
@@ -19289,10 +22929,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AZAWAWI/${pname}@${version}";
+      };
     };
   };
 
-  LocalePO = buildPerlPackage {
+  LocalePO = buildPerlPackage rec {
     pname = "Locale-PO";
     version = "0.27";
     src = fetchurl {
@@ -19306,10 +22950,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "COSIMO/${pname}@${version}";
+      };
     };
   };
 
-  LocaleTextDomainOO = buildPerlPackage {
+  LocaleTextDomainOO = buildPerlPackage rec {
     pname = "Locale-TextDomain-OO";
     version = "1.036";
     src = fetchurl {
@@ -19341,10 +22989,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  LocaleTextDomainOOUtil = buildPerlPackage {
+  LocaleTextDomainOOUtil = buildPerlPackage rec {
     pname = "Locale-TextDomain-OO-Util";
     version = "4.002";
     src = fetchurl {
@@ -19363,10 +23015,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  LocaleUtilsPlaceholderBabelFish = buildPerlPackage {
+  LocaleUtilsPlaceholderBabelFish = buildPerlPackage rec {
     pname = "Locale-Utils-PlaceholderBabelFish";
     version = "0.006";
     src = fetchurl {
@@ -19390,10 +23046,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  LocaleUtilsPlaceholderMaketext = buildPerlPackage {
+  LocaleUtilsPlaceholderMaketext = buildPerlPackage rec {
     pname = "Locale-Utils-PlaceholderMaketext";
     version = "1.005";
     src = fetchurl {
@@ -19416,10 +23076,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  LocaleUtilsPlaceholderNamed = buildPerlPackage {
+  LocaleUtilsPlaceholderNamed = buildPerlPackage rec {
     pname = "Locale-Utils-PlaceholderNamed";
     version = "1.004";
     src = fetchurl {
@@ -19442,10 +23106,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  locallib = buildPerlPackage {
+  locallib = buildPerlPackage rec {
     pname = "local-lib";
     version = "2.000029";
     src = fetchurl {
@@ -19459,10 +23127,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  LockFileSimple = buildPerlPackage {
+  LockFileSimple = buildPerlPackage rec {
     pname = "LockFile-Simple";
     version = "0.208";
     src = fetchurl {
@@ -19475,10 +23147,14 @@ with self;
         artistic1
         gpl2Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SCHWIGON/${pname}@${version}";
+      };
     };
   };
 
-  LogAny = buildPerlPackage {
+  LogAny = buildPerlPackage rec {
     pname = "Log-Any";
     version = "1.717";
     src = fetchurl {
@@ -19494,10 +23170,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PREACTION/${pname}@${version}";
+      };
     };
   };
 
-  LogAnyAdapterLog4perl = buildPerlPackage {
+  LogAnyAdapterLog4perl = buildPerlPackage rec {
     pname = "Log-Any-Adapter-Log4perl";
     version = "0.09";
     src = fetchurl {
@@ -19515,10 +23195,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PREACTION/${pname}@${version}";
+      };
     };
   };
 
-  LogAnyAdapterTAP = buildPerlPackage {
+  LogAnyAdapterTAP = buildPerlPackage rec {
     pname = "Log-Any-Adapter-TAP";
     version = "0.003003";
     src = fetchurl {
@@ -19536,10 +23220,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NERDVANA/${pname}@${version}";
+      };
     };
   };
 
-  LogContextual = buildPerlPackage {
+  LogContextual = buildPerlPackage rec {
     pname = "Log-Contextual";
     version = "0.008001";
     src = fetchurl {
@@ -19559,10 +23247,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  LogDispatch = buildPerlPackage {
+  LogDispatch = buildPerlPackage rec {
     pname = "Log-Dispatch";
     version = "2.71";
     src = fetchurl {
@@ -19584,10 +23276,14 @@ with self;
       description = "Dispatches messages to one or more outputs";
       homepage = "https://metacpan.org/release/Log-Dispatch";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  LogDispatchFileRotate = buildPerlPackage {
+  LogDispatchFileRotate = buildPerlPackage rec {
     pname = "Log-Dispatch-FileRotate";
     version = "1.38";
     src = fetchurl {
@@ -19609,10 +23305,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHOUT/${pname}@${version}";
+      };
     };
   };
 
-  LogfileRotate = buildPerlPackage {
+  LogfileRotate = buildPerlPackage rec {
     pname = "Logfile-Rotate";
     version = "1.04";
     src = fetchurl {
@@ -19627,10 +23327,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PAULG/${pname}@${version}";
+      };
     };
   };
 
-  Logger = buildPerlPackage {
+  Logger = buildPerlPackage rec {
     pname = "Log-ger";
     version = "0.040";
     src = fetchurl {
@@ -19645,10 +23349,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLANCAR/${pname}@${version}";
+      };
     };
   };
 
-  LogHandler = buildPerlModule {
+  LogHandler = buildPerlModule rec {
     pname = "Log-Handler";
     version = "0.90";
     src = fetchurl {
@@ -19662,10 +23370,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BLOONIX/${pname}@${version}";
+      };
     };
   };
 
-  LogMessage = buildPerlPackage {
+  LogMessage = buildPerlPackage rec {
     pname = "Log-Message";
     version = "0.08";
     src = fetchurl {
@@ -19678,10 +23390,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  LogMessageSimple = buildPerlPackage {
+  LogMessageSimple = buildPerlPackage rec {
     pname = "Log-Message-Simple";
     version = "0.10";
     src = fetchurl {
@@ -19695,10 +23411,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  LogTrace = buildPerlPackage {
+  LogTrace = buildPerlPackage rec {
     pname = "Log-Trace";
     version = "1.070";
     src = fetchurl {
@@ -19708,10 +23428,14 @@ with self;
     meta = {
       description = "Provides a unified approach to tracing";
       license = with lib.licenses; [ gpl1Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BBC/${pname}@${version}";
+      };
     };
   };
 
-  MCE = buildPerlPackage {
+  MCE = buildPerlPackage rec {
     pname = "MCE";
     version = "1.889";
     src = fetchurl {
@@ -19725,10 +23449,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARIOROY/${pname}@${version}";
+      };
     };
   };
 
-  LogLog4perl = buildPerlPackage {
+  LogLog4perl = buildPerlPackage rec {
     pname = "Log-Log4perl";
     version = "1.57";
     src = fetchurl {
@@ -19743,10 +23471,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "l4p-tmpl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  LogDispatchArray = buildPerlPackage {
+  LogDispatchArray = buildPerlPackage rec {
     pname = "Log-Dispatch-Array";
     version = "1.005";
     src = fetchurl {
@@ -19762,10 +23494,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  LogDispatchouli = buildPerlPackage {
+  LogDispatchouli = buildPerlPackage rec {
     pname = "Log-Dispatchouli";
     version = "3.007";
     src = fetchurl {
@@ -19788,10 +23524,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  LogJournald = buildPerlModule {
+  LogJournald = buildPerlModule rec {
     pname = "Log-Journald";
     version = "0.30";
     src = fetchurl {
@@ -19810,10 +23550,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LKUNDRAK/${pname}@${version}";
+      };
     };
   };
 
-  LogLogLite = buildPerlPackage {
+  LogLogLite = buildPerlPackage rec {
     pname = "Log-LogLite";
     version = "0.82";
     src = fetchurl {
@@ -19827,10 +23571,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RANI/${pname}@${version}";
+      };
     };
   };
 
-  LongJump = buildPerlPackage {
+  LongJump = buildPerlPackage rec {
     pname = "Long-Jump";
     version = "0.000001";
     src = fetchurl {
@@ -19844,10 +23592,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  LWP = buildPerlPackage {
+  LWP = buildPerlPackage rec {
     pname = "libwww-perl";
     version = "6.72";
     src = fetchurl {
@@ -19884,10 +23636,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  LWPAuthenOAuth = buildPerlPackage {
+  LWPAuthenOAuth = buildPerlPackage rec {
     pname = "LWP-Authen-OAuth";
     version = "1.02";
     src = fetchurl {
@@ -19901,10 +23657,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TIMBRODY/${pname}@${version}";
+      };
     };
   };
 
-  LWPMediaTypes = buildPerlPackage {
+  LWPMediaTypes = buildPerlPackage rec {
     pname = "LWP-MediaTypes";
     version = "6.04";
     src = fetchurl {
@@ -19919,10 +23679,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  LWPProtocolConnect = buildPerlPackage {
+  LWPProtocolConnect = buildPerlPackage rec {
     pname = "LWP-Protocol-connect";
     version = "6.09";
     src = fetchurl {
@@ -19937,10 +23701,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BENNING/${pname}@${version}";
+      };
     };
   };
 
-  LWPProtocolHttps = buildPerlPackage {
+  LWPProtocolHttps = buildPerlPackage rec {
     pname = "LWP-Protocol-https";
     version = "6.11";
     src = fetchurl {
@@ -19966,10 +23734,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  LWPProtocolhttp10 = buildPerlPackage {
+  LWPProtocolhttp10 = buildPerlPackage rec {
     pname = "LWP-Protocol-http10";
     version = "6.03";
     src = fetchurl {
@@ -19983,10 +23755,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  LWPUserAgentCached = buildPerlPackage {
+  LWPUserAgentCached = buildPerlPackage rec {
     pname = "LWP-UserAgent-Cached";
     version = "0.08";
     src = fetchurl {
@@ -20000,10 +23776,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OLEG/${pname}@${version}";
+      };
     };
   };
 
-  LWPUserAgentDNSHosts = buildPerlModule {
+  LWPUserAgentDNSHosts = buildPerlModule rec {
     pname = "LWP-UserAgent-DNS-Hosts";
     version = "0.14";
     src = fetchurl {
@@ -20028,10 +23808,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MASAKI/${pname}@${version}";
+      };
     };
   };
 
-  LWPUserAgentDetermined = buildPerlPackage {
+  LWPUserAgentDetermined = buildPerlPackage rec {
     pname = "LWP-UserAgent-Determined";
     version = "1.07";
     src = fetchurl {
@@ -20045,10 +23829,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXMV/${pname}@${version}";
+      };
     };
   };
 
-  LWPUserAgentMockable = buildPerlModule {
+  LWPUserAgentMockable = buildPerlModule rec {
     pname = "LWP-UserAgent-Mockable";
     version = "1.18";
     src = fetchurl {
@@ -20074,10 +23862,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MJEMMESON/${pname}@${version}";
+      };
     };
   };
 
-  LWPxParanoidAgent = buildPerlPackage {
+  LWPxParanoidAgent = buildPerlPackage rec {
     pname = "LWPx-ParanoidAgent";
     version = "1.12";
     src = fetchurl {
@@ -20095,12 +23887,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAXJAZMAN/${pname}@${version}";
+      };
     };
   };
 
   maatkit = callPackage ../development/perl-modules/maatkit { };
 
-  MacPasteboard = buildPerlPackage {
+  MacPasteboard = buildPerlPackage rec {
     pname = "Mac-Pasteboard";
     version = "0.103";
     src = fetchurl {
@@ -20115,10 +23911,14 @@ with self;
       ];
       platforms = lib.platforms.darwin;
       mainProgram = "pbtool";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WYANT/${pname}@${version}";
+      };
     };
   };
 
-  MacPropertyList = buildPerlPackage {
+  MacPropertyList = buildPerlPackage rec {
     pname = "Mac-PropertyList";
     version = "1.504";
     src = fetchurl {
@@ -20130,10 +23930,14 @@ with self;
       description = "Work with Mac plists at a low level";
       homepage = "https://github.com/briandfoy/mac-propertylist";
       license = lib.licenses.artistic2;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  MacSysProfile = buildPerlPackage {
+  MacSysProfile = buildPerlPackage rec {
     pname = "Mac-SysProfile";
     version = "0.05";
     src = fetchurl {
@@ -20148,10 +23952,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.darwin;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMUEY/${pname}@${version}";
+      };
     };
   };
 
-  MailAuthenticationResults = buildPerlPackage {
+  MailAuthenticationResults = buildPerlPackage rec {
     pname = "Mail-AuthenticationResults";
     version = "2.20230112";
     src = fetchurl {
@@ -20169,10 +23977,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MBRADSHAW/${pname}@${version}";
+      };
     };
   };
 
-  MailDMARC = buildPerlPackage {
+  MailDMARC = buildPerlPackage rec {
     pname = "Mail-DMARC";
     version = "1.20230215";
     src = fetchurl {
@@ -20221,10 +24033,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MBRADSHAW/${pname}@${version}";
+      };
     };
   };
 
-  MailMaildir = buildPerlPackage {
+  MailMaildir = buildPerlPackage rec {
     version = "1.0.0";
     pname = "Mail-Maildir";
     src = fetchurl {
@@ -20237,10 +24053,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEROALTI/${pname}@${version}";
+      };
     };
   };
 
-  MailBox = buildPerlPackage {
+  MailBox = buildPerlPackage rec {
     version = "3.010";
     pname = "Mail-Box";
     src = fetchurl {
@@ -20262,10 +24082,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  MailMboxMessageParser = buildPerlPackage {
+  MailMboxMessageParser = buildPerlPackage rec {
     pname = "Mail-Mbox-MessageParser";
     version = "1.5111";
     src = fetchurl {
@@ -20287,10 +24111,14 @@ with self;
       homepage = "https://github.com/coppit/mail-mbox-messageparser";
       license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCOPPIT/${pname}@${version}";
+      };
     };
   };
 
-  MailMessage = buildPerlPackage {
+  MailMessage = buildPerlPackage rec {
     pname = "Mail-Message";
     version = "3.013";
     src = fetchurl {
@@ -20311,10 +24139,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  MailDKIM = buildPerlPackage {
+  MailDKIM = buildPerlPackage rec {
     pname = "Mail-DKIM";
     version = "1.20230911";
     src = fetchurl {
@@ -20340,10 +24172,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MBRADSHAW/${pname}@${version}";
+      };
     };
   };
 
-  MailIMAPClient = buildPerlPackage {
+  MailIMAPClient = buildPerlPackage rec {
     pname = "Mail-IMAPClient";
     version = "3.43";
     src = fetchurl {
@@ -20357,10 +24193,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLOBBES/${pname}@${version}";
+      };
     };
   };
 
-  MailPOP3Client = buildPerlPackage {
+  MailPOP3Client = buildPerlPackage rec {
     pname = "Mail-POP3Client";
     version = "2.21";
     src = fetchurl {
@@ -20373,10 +24213,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SDOWD/${pname}@${version}";
+      };
     };
   };
 
-  MailRFC822Address = buildPerlPackage {
+  MailRFC822Address = buildPerlPackage rec {
     pname = "Mail-RFC822-Address";
     version = "0.3";
     src = fetchurl {
@@ -20386,10 +24230,14 @@ with self;
     meta = {
       description = "Perl extension for validating email addresses according to RFC822";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PDWARREN/${pname}@${version}";
+      };
     };
   };
 
-  MailSender = buildPerlPackage {
+  MailSender = buildPerlPackage rec {
     pname = "Mail-Sender";
     version = "0.903";
     src = fetchurl {
@@ -20403,10 +24251,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CAPOEIRAB/${pname}@${version}";
+      };
     };
   };
 
-  MailSendmail = buildPerlPackage {
+  MailSendmail = buildPerlPackage rec {
     pname = "Mail-Sendmail";
     version = "0.80";
     src = fetchurl {
@@ -20428,10 +24280,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  MailSPF = buildPerlPackage {
+  MailSPF = buildPerlPackage rec {
     pname = "Mail-SPF";
     version = "2.9.0";
     src = fetchurl {
@@ -20458,10 +24314,14 @@ with self;
       description = "Object-oriented implementation of Sender Policy Framework";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "spfquery";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMEHNLE/${pname}@${version}";
+      };
     };
   };
 
-  MailTools = buildPerlPackage {
+  MailTools = buildPerlPackage rec {
     pname = "MailTools";
     version = "2.21";
     src = fetchurl {
@@ -20476,10 +24336,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  MailTransport = buildPerlPackage {
+  MailTransport = buildPerlPackage rec {
     pname = "Mail-Transport";
     version = "3.005";
     src = fetchurl {
@@ -20494,10 +24358,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  MathBase85 = buildPerlPackage {
+  MathBase85 = buildPerlPackage rec {
     pname = "Math-Base85";
     version = "0.5";
     src = fetchurl {
@@ -20510,10 +24378,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PTC/${pname}@${version}";
+      };
     };
   };
 
-  MathBaseConvert = buildPerlPackage {
+  MathBaseConvert = buildPerlPackage rec {
     pname = "Math-Base-Convert";
     version = "0.11";
     src = fetchurl {
@@ -20526,10 +24398,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKER/${pname}@${version}";
+      };
     };
   };
 
-  MathLibm = buildPerlPackage {
+  MathLibm = buildPerlPackage rec {
     pname = "Math-Libm";
     version = "1.00";
     src = fetchurl {
@@ -20542,10 +24418,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSLEWART/${pname}@${version}";
+      };
     };
   };
 
-  MathCalcParser = buildPerlPackage {
+  MathCalcParser = buildPerlPackage rec {
     pname = "Math-Calc-Parser";
     version = "1.005";
     src = fetchurl {
@@ -20559,10 +24439,14 @@ with self;
       broken = true;
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  MathCalcUnits = buildPerlPackage {
+  MathCalcUnits = buildPerlPackage rec {
     pname = "Math-Calc-Units";
     version = "1.07";
     src = fetchurl {
@@ -20576,10 +24460,14 @@ with self;
         gpl2Only
       ];
       mainProgram = "ucalc";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SFINK/${pname}@${version}";
+      };
     };
   };
 
-  MathBigInt = buildPerlPackage {
+  MathBigInt = buildPerlPackage rec {
     pname = "Math-BigInt";
     version = "1.999842";
     src = fetchurl {
@@ -20592,10 +24480,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PJACKLAM/${pname}@${version}";
+      };
     };
   };
 
-  MathBigIntGMP = buildPerlPackage {
+  MathBigIntGMP = buildPerlPackage rec {
     pname = "Math-BigInt-GMP";
     version = "1.6013";
     src = fetchurl {
@@ -20613,10 +24505,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PJACKLAM/${pname}@${version}";
+      };
     };
   };
 
-  MathBigIntLite = buildPerlPackage {
+  MathBigIntLite = buildPerlPackage rec {
     pname = "Math-BigInt-Lite";
     version = "0.29";
     src = fetchurl {
@@ -20630,10 +24526,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PJACKLAM/${pname}@${version}";
+      };
     };
   };
 
-  MathClipper = buildPerlModule {
+  MathClipper = buildPerlModule rec {
     pname = "Math-Clipper";
     version = "1.29";
     src = fetchurl {
@@ -20654,10 +24554,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHELDRAKE/${pname}@${version}";
+      };
     };
   };
 
-  MathConvexHullMonotoneChain = buildPerlPackage {
+  MathConvexHullMonotoneChain = buildPerlPackage rec {
     pname = "Math-ConvexHull-MonotoneChain";
     version = "0.01";
     src = fetchurl {
@@ -20670,10 +24574,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  MathFibonacci = buildPerlPackage {
+  MathFibonacci = buildPerlPackage rec {
     pname = "Math-Fibonacci";
     version = "1.5";
     src = fetchurl {
@@ -20683,10 +24591,14 @@ with self;
     meta = {
       description = "This module provides a few functions related to Fibonacci numbers";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VIPUL/${pname}@${version}";
+      };
     };
   };
 
-  MathGMP = buildPerlPackage {
+  MathGMP = buildPerlPackage rec {
     pname = "Math-GMP";
     version = "2.25";
     src = fetchurl {
@@ -20702,10 +24614,14 @@ with self;
     meta = {
       description = "High speed arbitrary size integer math";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  MathGMPz = buildPerlPackage {
+  MathGMPz = buildPerlPackage rec {
     pname = "Math-GMPz";
     version = "0.59";
     src = fetchurl {
@@ -20725,10 +24641,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SISYPHUS/${pname}@${version}";
+      };
     };
   };
 
-  MathGeometryVoronoi = buildPerlPackage {
+  MathGeometryVoronoi = buildPerlPackage rec {
     pname = "Math-Geometry-Voronoi";
     version = "1.3";
     src = fetchurl {
@@ -20745,10 +24665,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAMTREGAR/${pname}@${version}";
+      };
     };
   };
 
-  MathInt128 = buildPerlPackage {
+  MathInt128 = buildPerlPackage rec {
     pname = "Math-Int128";
     version = "0.22";
     src = fetchurl {
@@ -20764,10 +24688,14 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.is32bit; # compiler doesn't support a 128-bit integer type
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
-  MathInt64 = buildPerlPackage {
+  MathInt64 = buildPerlPackage rec {
     pname = "Math-Int64";
     version = "0.54";
     src = fetchurl {
@@ -20781,6 +24709,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
@@ -20810,10 +24742,14 @@ with self;
         gpl1Plus
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILYAZ/${pname}@${version}";
+      };
     };
   };
 
-  MathPlanePath = buildPerlPackage {
+  MathPlanePath = buildPerlPackage rec {
     pname = "Math-PlanePath";
     version = "129";
     src = fetchurl {
@@ -20832,10 +24768,14 @@ with self;
     meta = {
       description = "Points on a path through the 2-D plane";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  MathPrimeUtil = buildPerlPackage {
+  MathPrimeUtil = buildPerlPackage rec {
     pname = "Math-Prime-Util";
     version = "0.73";
     src = fetchurl {
@@ -20852,10 +24792,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANAJ/${pname}@${version}";
+      };
     };
   };
 
-  MathPrimeUtilGMP = buildPerlPackage {
+  MathPrimeUtilGMP = buildPerlPackage rec {
     pname = "Math-Prime-Util-GMP";
     version = "0.52";
     src = fetchurl {
@@ -20873,10 +24817,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANAJ/${pname}@${version}";
+      };
     };
   };
 
-  MathProvablePrime = buildPerlPackage {
+  MathProvablePrime = buildPerlPackage rec {
     pname = "Math-ProvablePrime";
     version = "0.51";
     src = fetchurl {
@@ -20898,10 +24846,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FELIPE/${pname}@${version}";
+      };
     };
   };
 
-  MathRandom = buildPerlPackage {
+  MathRandom = buildPerlPackage rec {
     pname = "Math-Random";
     version = "0.72";
     src = fetchurl {
@@ -20915,10 +24867,14 @@ with self;
         gpl1Plus
         publicDomain
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GROMMEL/${pname}@${version}";
+      };
     };
   };
 
-  MathRandomISAAC = buildPerlPackage {
+  MathRandomISAAC = buildPerlPackage rec {
     pname = "Math-Random-ISAAC";
     version = "1.004";
     src = fetchurl {
@@ -20935,10 +24891,14 @@ with self;
         artistic2
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JAWNSY/${pname}@${version}";
+      };
     };
   };
 
-  MathRandomMTAuto = buildPerlPackage {
+  MathRandomMTAuto = buildPerlPackage rec {
     pname = "Math-Random-MT-Auto";
     version = "6.23";
     src = fetchurl {
@@ -20949,10 +24909,14 @@ with self;
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JDHEDDEN/${pname}@${version}";
+      };
     };
   };
 
-  MathRandomSecure = buildPerlPackage {
+  MathRandomSecure = buildPerlPackage rec {
     pname = "Math-Random-Secure";
     version = "0.080001";
     src = fetchurl {
@@ -20972,10 +24936,14 @@ with self;
       description = "Cryptographically-secure, cross-platform replacement for rand()";
       homepage = "https://github.com/frioux/Math-Random-Secure";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  MathRound = buildPerlPackage {
+  MathRound = buildPerlPackage rec {
     pname = "Math-Round";
     version = "0.07";
     src = fetchurl {
@@ -20988,10 +24956,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GROMMEL/${pname}@${version}";
+      };
     };
   };
 
-  MathVecStat = buildPerlPackage {
+  MathVecStat = buildPerlPackage rec {
     pname = "Math-VecStat";
     version = "0.08";
     src = fetchurl {
@@ -21004,10 +24976,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASPINELLI/${pname}@${version}";
+      };
     };
   };
 
-  MaxMindDBCommon = buildPerlPackage {
+  MaxMindDBCommon = buildPerlPackage rec {
     pname = "MaxMind-DB-Common";
     version = "0.040001";
     src = fetchurl {
@@ -21024,10 +25000,14 @@ with self;
       description = "Code shared by the MaxMind DB reader and writer modules";
       homepage = "https://metacpan.org/release/MaxMind-DB-Common";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  MaxMindDBReader = buildPerlPackage {
+  MaxMindDBReader = buildPerlPackage rec {
     pname = "MaxMind-DB-Reader";
     version = "1.000014";
     src = fetchurl {
@@ -21051,10 +25031,14 @@ with self;
       description = "Read MaxMind DB files and look up IP addresses";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  MaxMindDBReaderXS = buildPerlModule {
+  MaxMindDBReaderXS = buildPerlModule rec {
     pname = "MaxMind-DB-Reader-XS";
     version = "1.000009";
     src = fetchurl {
@@ -21077,10 +25061,14 @@ with self;
       description = "Fast XS implementation of MaxMind DB reader";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader-XS";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  MaxMindDBWriter = buildPerlModule {
+  MaxMindDBWriter = buildPerlModule rec {
     pname = "MaxMind-DB-Writer";
     version = "0.300003";
     src = fetchurl {
@@ -21114,10 +25102,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  Memoize = buildPerlPackage {
+  Memoize = buildPerlPackage rec {
     pname = "Memoize";
     version = "1.16";
     src = fetchurl {
@@ -21130,10 +25122,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARISTOTLE/${pname}@${version}";
+      };
     };
   };
 
-  MemoizeExpireLRU = buildPerlPackage {
+  MemoizeExpireLRU = buildPerlPackage rec {
     pname = "Memoize-ExpireLRU";
     version = "0.56";
     src = fetchurl {
@@ -21147,10 +25143,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  MemoryProcess = buildPerlPackage {
+  MemoryProcess = buildPerlPackage rec {
     pname = "Memory-Process";
     version = "0.06";
     src = fetchurl {
@@ -21170,10 +25170,14 @@ with self;
       homepage = "https://github.com/michal-josef-spacek/Memory-Process";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKIM/${pname}@${version}";
+      };
     };
   };
 
-  MemoryUsage = buildPerlPackage {
+  MemoryUsage = buildPerlPackage rec {
     pname = "Memory-Usage";
     version = "0.201";
     src = fetchurl {
@@ -21186,10 +25190,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DONEILL/${pname}@${version}";
+      };
     };
   };
 
-  Menlo = buildPerlPackage {
+  Menlo = buildPerlPackage rec {
     pname = "Menlo";
     version = "1.9019";
     src = fetchurl {
@@ -21217,10 +25225,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  MenloLegacy = buildPerlPackage {
+  MenloLegacy = buildPerlPackage rec {
     pname = "Menlo-Legacy";
     version = "1.9022";
     src = fetchurl {
@@ -21235,10 +25247,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  meta = buildPerlModule {
+  meta = buildPerlModule rec {
     pname = "meta";
     version = "0.012";
     src = fetchurl {
@@ -21253,10 +25269,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  MetaBuilder = buildPerlModule {
+  MetaBuilder = buildPerlModule rec {
     pname = "Meta-Builder";
     version = "0.004";
     src = fetchurl {
@@ -21273,10 +25293,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  MetaCPANClient = buildPerlPackage {
+  MetaCPANClient = buildPerlPackage rec {
     pname = "MetaCPAN-Client";
     version = "2.030000";
     src = fetchurl {
@@ -21313,10 +25337,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MICKEY/${pname}@${version}";
+      };
     };
   };
 
-  MethodSignaturesSimple = buildPerlPackage {
+  MethodSignaturesSimple = buildPerlPackage rec {
     pname = "Method-Signatures-Simple";
     version = "1.07";
     src = fetchurl {
@@ -21330,10 +25358,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RHESA/${pname}@${version}";
+      };
     };
   };
 
-  MetricsAny = buildPerlModule {
+  MetricsAny = buildPerlModule rec {
     pname = "Metrics-Any";
     version = "0.10";
     src = fetchurl {
@@ -21347,11 +25379,15 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
   # TODO: use CPAN version
-  MHonArc = buildPerlPackage {
+  MHonArc = buildPerlPackage rec {
     pname = "MHonArc";
     version = "2.6.24";
 
@@ -21372,10 +25408,14 @@ with self;
       description = "Mail-to-HTML converter";
       mainProgram = "mhonarc";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDIDRY/${pname}@${version}";
+      };
     };
   };
 
-  MIMECharset = buildPerlPackage {
+  MIMECharset = buildPerlPackage rec {
     pname = "MIME-Charset";
     version = "1.013.1";
     src = fetchurl {
@@ -21388,10 +25428,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEZUMI/${pname}@${version}";
+      };
     };
   };
 
-  mimeConstruct = buildPerlPackage {
+  mimeConstruct = buildPerlPackage rec {
     pname = "mime-construct";
     version = "1.11";
     src = fetchurl {
@@ -21411,7 +25455,7 @@ with self;
     '';
   };
 
-  MIMEEncWords = buildPerlPackage {
+  MIMEEncWords = buildPerlPackage rec {
     pname = "MIME-EncWords";
     version = "1.014.3";
     src = fetchurl {
@@ -21427,10 +25471,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROSCH/${pname}@${version}";
+      };
     };
   };
 
-  MIMELite = buildPerlPackage {
+  MIMELite = buildPerlPackage rec {
     pname = "MIME-Lite";
     version = "3.033";
     src = fetchurl {
@@ -21444,10 +25492,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  MIMELiteHTML = buildPerlPackage {
+  MIMELiteHTML = buildPerlPackage rec {
     pname = "MIME-Lite-HTML";
     version = "1.24";
     src = fetchurl {
@@ -21465,10 +25517,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALIAN/${pname}@${version}";
+      };
     };
   };
 
-  MIMETools = buildPerlPackage {
+  MIMETools = buildPerlPackage rec {
     pname = "MIME-tools";
     version = "5.509";
     src = fetchurl {
@@ -21483,10 +25539,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSKOLL/${pname}@${version}";
+      };
     };
   };
 
-  MIMETypes = buildPerlPackage {
+  MIMETypes = buildPerlPackage rec {
     pname = "MIME-Types";
     version = "2.24";
     src = fetchurl {
@@ -21500,10 +25560,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  Minion = buildPerlPackage {
+  Minion = buildPerlPackage rec {
     pname = "Minion";
     version = "10.31";
     src = fetchurl {
@@ -21519,10 +25583,14 @@ with self;
       homepage = "https://github.com/mojolicious/minion";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SRI/${pname}@${version}";
+      };
     };
   };
 
-  MinionBackendRedis = buildPerlModule {
+  MinionBackendRedis = buildPerlModule rec {
     pname = "Minion-Backend-Redis";
     version = "0.003";
     src = fetchurl {
@@ -21541,10 +25609,14 @@ with self;
       description = "Redis backend for Minion job queue";
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DFUG/${pname}@${version}";
+      };
     };
   };
 
-  MinionBackendSQLite = buildPerlModule {
+  MinionBackendSQLite = buildPerlModule rec {
     pname = "Minion-Backend-SQLite";
     version = "5.0.7";
     src = fetchurl {
@@ -21561,10 +25633,14 @@ with self;
       homepage = "https://github.com/Grinnz/Minion-Backend-SQLite";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  MinionBackendmysql = buildPerlPackage {
+  MinionBackendmysql = buildPerlPackage rec {
     pname = "Minion-Backend-mysql";
     version = "1.003";
     src = fetchurl {
@@ -21584,10 +25660,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PREACTION/${pname}@${version}";
+      };
     };
   };
 
-  MixinLinewise = buildPerlPackage {
+  MixinLinewise = buildPerlPackage rec {
     pname = "Mixin-Linewise";
     version = "0.111";
     src = fetchurl {
@@ -21605,10 +25685,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  MLDBM = buildPerlModule {
+  MLDBM = buildPerlModule rec {
     pname = "MLDBM";
     version = "2.05";
     src = fetchurl {
@@ -21621,12 +25705,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
   MNI-Perllib = callPackage ../development/perl-modules/MNI { };
 
-  Mo = buildPerlPackage {
+  Mo = buildPerlPackage rec {
     pname = "Mo";
     version = "0.40";
     src = fetchurl {
@@ -21641,10 +25729,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mo-inline";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TINITA/${pname}@${version}";
+      };
     };
   };
 
-  MockConfig = buildPerlPackage {
+  MockConfig = buildPerlPackage rec {
     pname = "Mock-Config";
     version = "0.03";
     src = fetchurl {
@@ -21657,10 +25749,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  ModernPerl = buildPerlPackage {
+  ModernPerl = buildPerlPackage rec {
     pname = "Modern-Perl";
     version = "1.20230106";
 
@@ -21675,10 +25771,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHROMATIC/${pname}@${version}";
+      };
     };
   };
 
-  Modulecpmfile = buildPerlModule {
+  Modulecpmfile = buildPerlModule rec {
     pname = "Module-cpmfile";
     version = "0.006";
     src = fetchurl {
@@ -21699,10 +25799,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuild = buildPerlPackage {
+  ModuleBuild = buildPerlPackage rec {
     pname = "Module-Build";
     version = "0.4234";
     src = fetchurl {
@@ -21730,10 +25834,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "config_data";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildDeprecated = buildPerlModule {
+  ModuleBuildDeprecated = buildPerlModule rec {
     pname = "Module-Build-Deprecated";
     version = "0.4210";
     src = fetchurl {
@@ -21747,10 +25855,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildPluggable = buildPerlModule {
+  ModuleBuildPluggable = buildPerlModule rec {
     pname = "Module-Build-Pluggable";
     version = "0.10";
     src = fetchurl {
@@ -21770,10 +25882,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildPluggableCPANfile = buildPerlModule {
+  ModuleBuildPluggableCPANfile = buildPerlModule rec {
     pname = "Module-Build-Pluggable-CPANfile";
     version = "0.05";
     src = fetchurl {
@@ -21796,10 +25912,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildPluggablePPPort = buildPerlModule {
+  ModuleBuildPluggablePPPort = buildPerlModule rec {
     pname = "Module-Build-Pluggable-PPPort";
     version = "0.04";
     src = fetchurl {
@@ -21817,10 +25937,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildTiny = buildPerlModule {
+  ModuleBuildTiny = buildPerlModule rec {
     pname = "Module-Build-Tiny";
     version = "0.047";
     src = fetchurl {
@@ -21838,10 +25962,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildWithXSpp = buildPerlModule {
+  ModuleBuildWithXSpp = buildPerlModule rec {
     pname = "Module-Build-WithXSpp";
     version = "0.14";
     src = fetchurl {
@@ -21858,10 +25986,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  ModuleBuildXSUtil = buildPerlModule {
+  ModuleBuildXSUtil = buildPerlModule rec {
     pname = "Module-Build-XSUtil";
     version = "0.19";
     src = fetchurl {
@@ -21881,10 +26013,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HIDEAKIO/${pname}@${version}";
+      };
     };
   };
 
-  ModuleCompile = buildPerlPackage {
+  ModuleCompile = buildPerlPackage rec {
     pname = "Module-Compile";
     version = "0.38";
     src = fetchurl {
@@ -21902,10 +26038,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  ModuleCPANTSAnalyse = buildPerlPackage {
+  ModuleCPANTSAnalyse = buildPerlPackage rec {
     pname = "Module-CPANTS-Analyse";
     version = "1.02";
     src = fetchurl {
@@ -21934,10 +26074,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  ModuleCPANfile = buildPerlPackage {
+  ModuleCPANfile = buildPerlPackage rec {
     pname = "Module-CPANfile";
     version = "1.1004";
     src = fetchurl {
@@ -21952,10 +26096,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  ModuleExtractUse = buildPerlModule {
+  ModuleExtractUse = buildPerlModule rec {
     pname = "Module-ExtractUse";
     version = "0.345";
     src = fetchurl {
@@ -21976,10 +26124,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOMM/${pname}@${version}";
+      };
     };
   };
 
-  ModuleExtractVERSION = buildPerlPackage {
+  ModuleExtractVERSION = buildPerlPackage rec {
     pname = "Module-Extract-VERSION";
     version = "1.116";
     src = fetchurl {
@@ -21990,10 +26142,14 @@ with self;
       homepage = "https://github.com/briandfoy/module-extract-version";
       description = "Extract a module version safely";
       license = lib.licenses.artistic2;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  ModuleFind = buildPerlPackage {
+  ModuleFind = buildPerlPackage rec {
     pname = "Module-Find";
     version = "0.16";
     src = fetchurl {
@@ -22006,10 +26162,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CRENZ/${pname}@${version}";
+      };
     };
   };
 
-  ModuleImplementation = buildPerlPackage {
+  ModuleImplementation = buildPerlPackage rec {
     pname = "Module-Implementation";
     version = "0.09";
     src = fetchurl {
@@ -22028,10 +26188,14 @@ with self;
       description = "Loads one of several alternate underlying implementations for a module";
       homepage = "https://metacpan.org/release/Module-Implementation";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInfo = buildPerlPackage {
+  ModuleInfo = buildPerlPackage rec {
     pname = "Module-Info";
     version = "0.37";
     src = fetchurl {
@@ -22050,10 +26214,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "module_info";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstall = buildPerlPackage {
+  ModuleInstall = buildPerlPackage rec {
     pname = "Module-Install";
     version = "1.21";
     src = fetchurl {
@@ -22072,10 +26240,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallAuthorRequires = buildPerlPackage {
+  ModuleInstallAuthorRequires = buildPerlPackage rec {
     pname = "Module-Install-AuthorRequires";
     version = "0.02";
     src = fetchurl {
@@ -22089,10 +26261,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FLORA/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallAuthorTests = buildPerlPackage {
+  ModuleInstallAuthorTests = buildPerlPackage rec {
     pname = "Module-Install-AuthorTests";
     version = "0.002";
     src = fetchurl {
@@ -22106,10 +26282,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallGithubMeta = buildPerlPackage {
+  ModuleInstallGithubMeta = buildPerlPackage rec {
     pname = "Module-Install-GithubMeta";
     version = "0.30";
     src = fetchurl {
@@ -22126,10 +26306,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallReadmeFromPod = buildPerlPackage {
+  ModuleInstallReadmeFromPod = buildPerlPackage rec {
     pname = "Module-Install-ReadmeFromPod";
     version = "0.30";
     src = fetchurl {
@@ -22151,10 +26335,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallReadmeMarkdownFromPod = buildPerlPackage {
+  ModuleInstallReadmeMarkdownFromPod = buildPerlPackage rec {
     pname = "Module-Install-ReadmeMarkdownFromPod";
     version = "0.04";
     src = fetchurl {
@@ -22174,10 +26362,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTN/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallRepository = buildPerlPackage {
+  ModuleInstallRepository = buildPerlPackage rec {
     pname = "Module-Install-Repository";
     version = "0.06";
     src = fetchurl {
@@ -22192,10 +26384,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  ModuleInstallXSUtil = buildPerlPackage {
+  ModuleInstallXSUtil = buildPerlPackage rec {
     pname = "Module-Install-XSUtil";
     version = "0.45";
     src = fetchurl {
@@ -22210,10 +26406,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFUJI/${pname}@${version}";
+      };
     };
   };
 
-  ModuleManifest = buildPerlPackage {
+  ModuleManifest = buildPerlPackage rec {
     pname = "Module-Manifest";
     version = "1.09";
     src = fetchurl {
@@ -22232,10 +26432,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ModulePath = buildPerlPackage {
+  ModulePath = buildPerlPackage rec {
     pname = "Module-Path";
     version = "0.19";
     src = fetchurl {
@@ -22251,10 +26455,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mpath";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  ModulePluggable = buildPerlPackage {
+  ModulePluggable = buildPerlPackage rec {
     pname = "Module-Pluggable";
     version = "5.2";
     src = fetchurl {
@@ -22272,10 +26480,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SIMONW/${pname}@${version}";
+      };
     };
   };
 
-  ModulePluggableFast = buildPerlPackage {
+  ModulePluggableFast = buildPerlPackage rec {
     pname = "Module-Pluggable-Fast";
     version = "0.19";
     src = fetchurl {
@@ -22289,10 +26501,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRAMBERG/${pname}@${version}";
+      };
     };
   };
 
-  ModuleRefresh = buildPerlPackage {
+  ModuleRefresh = buildPerlPackage rec {
     pname = "Module-Refresh";
     version = "0.18";
     src = fetchurl {
@@ -22306,10 +26522,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  ModuleRuntime = buildPerlModule {
+  ModuleRuntime = buildPerlModule rec {
     pname = "Module-Runtime";
     version = "0.016";
     src = fetchurl {
@@ -22322,10 +26542,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  ModuleRuntimeConflicts = buildPerlPackage {
+  ModuleRuntimeConflicts = buildPerlPackage rec {
     pname = "Module-Runtime-Conflicts";
     version = "0.003";
     src = fetchurl {
@@ -22340,10 +26564,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ModuleScanDeps = buildPerlPackage {
+  ModuleScanDeps = buildPerlPackage rec {
     pname = "Module-ScanDeps";
     version = "1.37";
     src = fetchurl {
@@ -22362,10 +26590,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scandeps.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSCHUPP/${pname}@${version}";
+      };
     };
   };
 
-  ModuleSignature = buildPerlPackage {
+  ModuleSignature = buildPerlPackage rec {
     pname = "Module-Signature";
     version = "0.87";
     src = fetchurl {
@@ -22377,10 +26609,14 @@ with self;
       description = "Module signature file manipulation";
       license = with lib.licenses; [ cc0 ];
       mainProgram = "cpansign";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AUDREYT/${pname}@${version}";
+      };
     };
   };
 
-  ModuleUtil = buildPerlModule {
+  ModuleUtil = buildPerlModule rec {
     pname = "Module-Util";
     version = "1.09";
     src = fetchurl {
@@ -22394,10 +26630,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pm_which";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATTLAW/${pname}@${version}";
+      };
     };
   };
 
-  ModuleVersions = buildPerlPackage {
+  ModuleVersions = buildPerlPackage rec {
     pname = "Module-Versions";
     version = "0.02";
     src = fetchurl {
@@ -22411,10 +26651,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "THW/${pname}@${version}";
+      };
     };
   };
 
-  ModuleVersionsReport = buildPerlPackage {
+  ModuleVersionsReport = buildPerlPackage rec {
     pname = "Module-Versions-Report";
     version = "1.06";
     src = fetchurl {
@@ -22427,10 +26671,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JESSE/${pname}@${version}";
+      };
     };
   };
 
-  MojoDOM58 = buildPerlPackage {
+  MojoDOM58 = buildPerlPackage rec {
     pname = "Mojo-DOM58";
     version = "3.001";
     src = fetchurl {
@@ -22441,10 +26689,14 @@ with self;
       description = "Minimalistic HTML/XML DOM parser with CSS selectors";
       homepage = "https://github.com/Grinnz/Mojo-DOM58";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  mod_perl2 = buildPerlPackage {
+  mod_perl2 = buildPerlPackage rec {
     pname = "mod_perl";
     version = "2.0.13";
     src = fetchurl {
@@ -22460,10 +26712,14 @@ with self;
       description = "Embed a Perl interpreter in the Apache/2.x HTTP server";
       license = with lib.licenses; [ asl20 ];
       mainProgram = "mp2bug";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHAY/${pname}@${version}";
+      };
     };
   };
 
-  Mojolicious = buildPerlPackage {
+  Mojolicious = buildPerlPackage rec {
     pname = "Mojolicious";
     version = "9.39";
     src = fetchurl {
@@ -22480,10 +26736,14 @@ with self;
         thoughtpolice
       ];
       mainProgram = "mojo";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SRI/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginAssetPack = buildPerlPackage {
+  MojoliciousPluginAssetPack = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-AssetPack";
     version = "2.14";
     src = fetchurl {
@@ -22500,10 +26760,14 @@ with self;
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-assetpack";
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SRI/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginGravatar = buildPerlPackage {
+  MojoliciousPluginGravatar = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-Gravatar";
     version = "0.04";
     src = fetchurl {
@@ -22518,10 +26782,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KOORCHIK/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginI18N = buildPerlModule {
+  MojoliciousPluginI18N = buildPerlModule rec {
     pname = "Mojolicious-Plugin-I18N";
     version = "1.6";
     src = fetchurl {
@@ -22536,10 +26804,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHARIFULN/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginMail = buildPerlModule {
+  MojoliciousPluginMail = buildPerlModule rec {
     pname = "Mojolicious-Plugin-Mail";
     version = "1.5";
     src = fetchurl {
@@ -22559,10 +26831,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHARIFULN/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginOpenAPI = buildPerlPackage {
+  MojoliciousPluginOpenAPI = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-OpenAPI";
     version = "5.09";
     src = fetchurl {
@@ -22578,10 +26854,14 @@ with self;
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-openapi";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginRenderFile = buildPerlPackage {
+  MojoliciousPluginRenderFile = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-RenderFile";
     version = "0.12";
     src = fetchurl {
@@ -22597,10 +26877,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KOORCHIK/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginStatus = buildPerlPackage {
+  MojoliciousPluginStatus = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-Status";
     version = "1.17";
     src = fetchurl {
@@ -22619,10 +26903,14 @@ with self;
       homepage = "https://mojolicious.org";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.thoughtpolice ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SRI/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginSyslog = buildPerlPackage {
+  MojoliciousPluginSyslog = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-Syslog";
     version = "0.06";
     src = fetchurl {
@@ -22635,10 +26923,14 @@ with self;
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-syslog";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginTemplateToolkit = buildPerlModule {
+  MojoliciousPluginTemplateToolkit = buildPerlModule rec {
     pname = "Mojolicious-Plugin-TemplateToolkit";
     version = "0.006";
     src = fetchurl {
@@ -22656,10 +26948,14 @@ with self;
       description = "Template Toolkit renderer plugin for Mojolicious";
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginTextExceptions = buildPerlPackage {
+  MojoliciousPluginTextExceptions = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-TextExceptions";
     version = "0.02";
     src = fetchurl {
@@ -22672,10 +26968,14 @@ with self;
       homepage = "https://github.com/marcusramberg/mojolicious-plugin-textexceptions";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRAMBERG/${pname}@${version}";
+      };
     };
   };
 
-  MojoliciousPluginWebpack = buildPerlPackage {
+  MojoliciousPluginWebpack = buildPerlPackage rec {
     pname = "Mojolicious-Plugin-Webpack";
     version = "1.02";
     src = fetchurl {
@@ -22691,10 +26991,14 @@ with self;
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-webpack";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  MojoRedis = buildPerlPackage {
+  MojoRedis = buildPerlPackage rec {
     pname = "Mojo-Redis";
     version = "3.29";
     src = fetchurl {
@@ -22710,10 +27014,14 @@ with self;
       homepage = "https://github.com/jhthorsen/mojo-redis";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  MojoSAML = buildPerlModule {
+  MojoSAML = buildPerlModule rec {
     pname = "Mojo-SAML";
     version = "0.07";
     src = fetchurl {
@@ -22735,10 +27043,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JBERGER/${pname}@${version}";
+      };
     };
   };
 
-  MojoSQLite = buildPerlModule {
+  MojoSQLite = buildPerlModule rec {
     pname = "Mojo-SQLite";
     version = "3.009";
     src = fetchurl {
@@ -22758,10 +27070,14 @@ with self;
       homepage = "https://github.com/Grinnz/Mojo-SQLite";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  Mojomysql = buildPerlPackage {
+  Mojomysql = buildPerlPackage rec {
     pname = "Mojo-mysql";
     version = "1.26";
     src = fetchurl {
@@ -22779,10 +27095,14 @@ with self;
       homepage = "https://github.com/jhthorsen/mojo-mysql";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
-  MojoIOLoopDelay = buildPerlModule {
+  MojoIOLoopDelay = buildPerlModule rec {
     pname = "Mojo-IOLoop-Delay";
     version = "8.76";
     src = fetchurl {
@@ -22796,10 +27116,14 @@ with self;
       homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JBERGER/${pname}@${version}";
+      };
     };
   };
 
-  MojoIOLoopForkCall = buildPerlModule {
+  MojoIOLoopForkCall = buildPerlModule rec {
     pname = "Mojo-IOLoop-ForkCall";
     version = "0.21";
     src = fetchurl {
@@ -22824,10 +27148,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JBERGER/${pname}@${version}";
+      };
     };
   };
 
-  MojoJWT = buildPerlModule {
+  MojoJWT = buildPerlModule rec {
     pname = "Mojo-JWT";
     version = "0.09";
     src = fetchurl {
@@ -22844,10 +27172,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JBERGER/${pname}@${version}";
+      };
     };
   };
 
-  MojoPg = buildPerlPackage {
+  MojoPg = buildPerlPackage rec {
     pname = "Mojo-Pg";
     version = "4.27";
     src = fetchurl {
@@ -22865,10 +27197,14 @@ with self;
       homepage = "https://mojolicious.org";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SRI/${pname}@${version}";
+      };
     };
   };
 
-  MojoUserAgentCached = buildPerlPackage {
+  MojoUserAgentCached = buildPerlPackage rec {
     pname = "Mojo-UserAgent-Cached";
     version = "1.25";
     src = fetchurl {
@@ -22894,10 +27230,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NICOMEN/${pname}@${version}";
+      };
     };
   };
 
-  MongoDB = buildPerlPackage {
+  MongoDB = buildPerlPackage rec {
     pname = "MongoDB";
     version = "2.2.2";
     src = fetchurl {
@@ -22935,10 +27275,14 @@ with self;
       description = "Official MongoDB Driver for Perl (EOL)";
       homepage = "https://github.com/mongodb-labs/mongo-perl-driver";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MONGODB/${pname}@${version}";
+      };
     };
   };
 
-  MonitoringPlugin = buildPerlPackage {
+  MonitoringPlugin = buildPerlPackage rec {
     pname = "Monitoring-Plugin";
     version = "0.40";
     src = fetchurl {
@@ -22960,10 +27304,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NIERLEIN/${pname}@${version}";
+      };
     };
   };
 
-  IOPipely = buildPerlPackage {
+  IOPipely = buildPerlPackage rec {
     pname = "IO-Pipely";
     version = "0.006";
     src = fetchurl {
@@ -22977,10 +27325,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCAPUTO/${pname}@${version}";
+      };
     };
   };
 
-  Moo = buildPerlPackage {
+  Moo = buildPerlPackage rec {
     pname = "Moo";
     version = "2.005005";
     src = fetchurl {
@@ -23000,10 +27352,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  Moose = buildPerlPackage {
+  Moose = buildPerlPackage rec {
     pname = "Moose";
     version = "2.2206";
     src = fetchurl {
@@ -23042,10 +27398,14 @@ with self;
       ];
       maintainers = [ ];
       mainProgram = "moose-outdated";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooXHandlesVia = buildPerlPackage {
+  MooXHandlesVia = buildPerlPackage rec {
     pname = "MooX-HandlesVia";
     version = "0.001009";
     src = fetchurl {
@@ -23067,10 +27427,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  MooXLocalePassthrough = buildPerlPackage {
+  MooXLocalePassthrough = buildPerlPackage rec {
     pname = "MooX-Locale-Passthrough";
     version = "0.001";
     src = fetchurl {
@@ -23085,10 +27449,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  MooXLocaleTextDomainOO = buildPerlPackage {
+  MooXLocaleTextDomainOO = buildPerlPackage rec {
     pname = "MooX-Locale-TextDomain-OO";
     version = "0.001";
     src = fetchurl {
@@ -23106,10 +27474,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  MooXOptions = buildPerlPackage {
+  MooXOptions = buildPerlPackage rec {
     pname = "MooX-Options";
     version = "4.103";
     src = fetchurl {
@@ -23139,10 +27511,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  MooXSingleton = buildPerlModule {
+  MooXSingleton = buildPerlModule rec {
     pname = "MooX-Singleton";
     version = "1.20";
     src = fetchurl {
@@ -23158,10 +27534,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AJGB/${pname}@${version}";
+      };
     };
   };
 
-  MooXStrictConstructor = buildPerlPackage {
+  MooXStrictConstructor = buildPerlPackage rec {
     pname = "MooX-StrictConstructor";
     version = "0.011";
     src = fetchurl {
@@ -23180,10 +27560,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HARTZELL/${pname}@${version}";
+      };
     };
   };
 
-  MooXTypesMooseLike = buildPerlPackage {
+  MooXTypesMooseLike = buildPerlPackage rec {
     pname = "MooX-Types-MooseLike";
     version = "0.29";
     src = fetchurl {
@@ -23201,10 +27585,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATEU/${pname}@${version}";
+      };
     };
   };
 
-  MooXTypesMooseLikeNumeric = buildPerlPackage {
+  MooXTypesMooseLikeNumeric = buildPerlPackage rec {
     pname = "MooX-Types-MooseLike-Numeric";
     version = "1.03";
     src = fetchurl {
@@ -23222,10 +27610,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MATEU/${pname}@${version}";
+      };
     };
   };
 
-  MooXTypeTiny = buildPerlPackage {
+  MooXTypeTiny = buildPerlPackage rec {
     pname = "MooX-TypeTiny";
     version = "0.002003";
     src = fetchurl {
@@ -23244,10 +27636,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  MooseAutobox = buildPerlModule {
+  MooseAutobox = buildPerlModule rec {
     pname = "Moose-Autobox";
     version = "0.16";
     src = fetchurl {
@@ -23272,10 +27668,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXABC = buildPerlPackage {
+  MooseXABC = buildPerlPackage rec {
     pname = "MooseX-ABC";
     version = "0.06";
     src = fetchurl {
@@ -23291,10 +27691,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXAliases = buildPerlPackage {
+  MooseXAliases = buildPerlPackage rec {
     pname = "MooseX-Aliases";
     version = "0.11";
     src = fetchurl {
@@ -23309,10 +27713,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXAppCmd = buildPerlModule {
+  MooseXAppCmd = buildPerlModule rec {
     pname = "MooseX-App-Cmd";
     version = "0.34";
     src = fetchurl {
@@ -23337,10 +27745,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXStorageFormatJSONpm = buildPerlPackage {
+  MooseXStorageFormatJSONpm = buildPerlPackage rec {
     pname = "MooseX-Storage-Format-JSONpm";
     version = "0.093094";
     src = fetchurl {
@@ -23367,10 +27779,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  MooX = buildPerlPackage {
+  MooX = buildPerlPackage rec {
     pname = "MooX";
     version = "0.101";
     src = fetchurl {
@@ -23389,10 +27805,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GETTY/${pname}@${version}";
+      };
     };
   };
 
-  MooXAliases = buildPerlPackage {
+  MooXAliases = buildPerlPackage rec {
     pname = "MooX-Aliases";
     version = "0.001006";
     src = fetchurl {
@@ -23410,10 +27830,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  MooXCmd = buildPerlPackage {
+  MooXCmd = buildPerlPackage rec {
     pname = "MooX-Cmd";
     version = "0.017";
     src = fetchurl {
@@ -23436,10 +27860,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  MooXlate = buildPerlPackage {
+  MooXlate = buildPerlPackage rec {
     pname = "MooX-late";
     version = "0.100";
     src = fetchurl {
@@ -23461,10 +27889,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  MouseXSimpleConfig = buildPerlPackage {
+  MouseXSimpleConfig = buildPerlPackage rec {
     pname = "MouseX-SimpleConfig";
     version = "0.11";
     src = fetchurl {
@@ -23481,10 +27913,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MJGARDNER/${pname}@${version}";
+      };
     };
   };
 
-  TestArchiveLibarchive = buildPerlPackage {
+  TestArchiveLibarchive = buildPerlPackage rec {
     pname = "Test-Archive-Libarchive";
     version = "0.02";
     src = fetchurl {
@@ -23503,10 +27939,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  TestPostgreSQL = buildPerlModule {
+  TestPostgreSQL = buildPerlModule rec {
     pname = "Test-PostgreSQL";
     version = "1.29";
     src = fetchurl {
@@ -23535,10 +27975,14 @@ with self;
       description = "PostgreSQL runner for tests";
       homepage = "https://github.com/TJC/Test-postgresql";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TJC/${pname}@${version}";
+      };
     };
   };
 
-  TestUseAllModules = buildPerlPackage {
+  TestUseAllModules = buildPerlPackage rec {
     pname = "Test-UseAllModules";
     version = "0.17";
     src = fetchurl {
@@ -23551,10 +27995,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  TestValgrind = buildPerlPackage {
+  TestValgrind = buildPerlPackage rec {
     pname = "Test-Valgrind";
     version = "1.19";
     src = fetchurl {
@@ -23574,10 +28022,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VPIT/${pname}@${version}";
+      };
     };
   };
 
-  MouseXTypesPathClass = buildPerlPackage {
+  MouseXTypesPathClass = buildPerlPackage rec {
     pname = "MouseX-Types-Path-Class";
     version = "0.07";
     src = fetchurl {
@@ -23595,10 +28047,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MASAKI/${pname}@${version}";
+      };
     };
   };
 
-  MouseXTypes = buildPerlPackage {
+  MouseXTypes = buildPerlPackage rec {
     pname = "MouseX-Types";
     version = "0.06";
     src = fetchurl {
@@ -23613,10 +28069,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFUJI/${pname}@${version}";
+      };
     };
   };
 
-  MouseXConfigFromFile = buildPerlPackage {
+  MouseXConfigFromFile = buildPerlPackage rec {
     pname = "MouseX-ConfigFromFile";
     version = "0.05";
     src = fetchurl {
@@ -23631,10 +28091,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MASAKI/${pname}@${version}";
+      };
     };
   };
 
-  MouseXGetopt = buildPerlModule {
+  MouseXGetopt = buildPerlModule rec {
     pname = "MouseX-Getopt";
     version = "0.38";
     src = fetchurl {
@@ -23663,10 +28127,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFUJI/${pname}@${version}";
+      };
     };
   };
 
-  MooseXAttributeChained = buildPerlModule {
+  MooseXAttributeChained = buildPerlModule rec {
     pname = "MooseX-Attribute-Chained";
     version = "1.0.3";
     src = fetchurl {
@@ -23680,10 +28148,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOMHUKINS/${pname}@${version}";
+      };
     };
   };
 
-  MooseXAttributeHelpers = buildPerlModule {
+  MooseXAttributeHelpers = buildPerlModule rec {
     pname = "MooseX-AttributeHelpers";
     version = "0.25";
     src = fetchurl {
@@ -23702,10 +28174,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXClone = buildPerlModule {
+  MooseXClone = buildPerlModule rec {
     pname = "MooseX-Clone";
     version = "0.06";
     src = fetchurl {
@@ -23724,10 +28200,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXConfigFromFile = buildPerlModule {
+  MooseXConfigFromFile = buildPerlModule rec {
     pname = "MooseX-ConfigFromFile";
     version = "0.14";
     src = fetchurl {
@@ -23749,10 +28229,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXDaemonize = buildPerlModule {
+  MooseXDaemonize = buildPerlModule rec {
     pname = "MooseX-Daemonize";
     version = "0.22";
     src = fetchurl {
@@ -23775,10 +28259,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXEmulateClassAccessorFast = buildPerlPackage {
+  MooseXEmulateClassAccessorFast = buildPerlPackage rec {
     pname = "MooseX-Emulate-Class-Accessor-Fast";
     version = "0.009032";
     src = fetchurl {
@@ -23796,10 +28284,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  MooseXGetopt = buildPerlModule {
+  MooseXGetopt = buildPerlModule rec {
     pname = "MooseX-Getopt";
     version = "0.76";
     src = fetchurl {
@@ -23827,10 +28319,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXHasOptions = buildPerlPackage {
+  MooseXHasOptions = buildPerlPackage rec {
     pname = "MooseX-Has-Options";
     version = "0.003";
     src = fetchurl {
@@ -23858,10 +28354,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PSHANGOV/${pname}@${version}";
+      };
     };
   };
 
-  MooseXHasSugar = buildPerlPackage {
+  MooseXHasSugar = buildPerlPackage rec {
     pname = "MooseX-Has-Sugar";
     version = "1.000006";
     src = fetchurl {
@@ -23880,10 +28380,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KENTNL/${pname}@${version}";
+      };
     };
   };
 
-  MooseXLazyRequire = buildPerlModule {
+  MooseXLazyRequire = buildPerlModule rec {
     pname = "MooseX-LazyRequire";
     version = "0.11";
     src = fetchurl {
@@ -23906,10 +28410,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXMarkAsMethods = buildPerlPackage {
+  MooseXMarkAsMethods = buildPerlPackage rec {
     pname = "MooseX-MarkAsMethods";
     version = "0.15";
     src = fetchurl {
@@ -23924,10 +28432,14 @@ with self;
       description = "Mark overload code symbols as methods";
       homepage = "https://metacpan.org/release/MooseX-MarkAsMethods";
       license = with lib.licenses; [ lgpl21Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSRCHBOY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXMethodAttributes = buildPerlPackage {
+  MooseXMethodAttributes = buildPerlPackage rec {
     pname = "MooseX-MethodAttributes";
     version = "0.32";
     src = fetchurl {
@@ -23950,10 +28462,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXNonMoose = buildPerlPackage {
+  MooseXNonMoose = buildPerlPackage rec {
     pname = "MooseX-NonMoose";
     version = "0.26";
     src = fetchurl {
@@ -23972,10 +28488,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXOneArgNew = buildPerlPackage {
+  MooseXOneArgNew = buildPerlPackage rec {
     pname = "MooseX-OneArgNew";
     version = "0.007";
     src = fetchurl {
@@ -23990,10 +28510,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  MooseXRelatedClassRoles = buildPerlPackage {
+  MooseXRelatedClassRoles = buildPerlPackage rec {
     pname = "MooseX-RelatedClassRoles";
     version = "0.004";
     src = fetchurl {
@@ -24007,10 +28531,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HDP/${pname}@${version}";
+      };
     };
   };
 
-  MooseXParamsValidate = buildPerlPackage {
+  MooseXParamsValidate = buildPerlPackage rec {
     pname = "MooseX-Params-Validate";
     version = "0.21";
     src = fetchurl {
@@ -24029,10 +28557,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXRoleParameterized = buildPerlModule {
+  MooseXRoleParameterized = buildPerlModule rec {
     pname = "MooseX-Role-Parameterized";
     version = "1.11";
     src = fetchurl {
@@ -24056,10 +28588,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXRoleWithOverloading = buildPerlPackage {
+  MooseXRoleWithOverloading = buildPerlPackage rec {
     pname = "MooseX-Role-WithOverloading";
     version = "0.17";
     src = fetchurl {
@@ -24078,10 +28614,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXRunnable = buildPerlModule {
+  MooseXRunnable = buildPerlModule rec {
     pname = "MooseX-Runnable";
     version = "0.10";
     src = fetchurl {
@@ -24106,10 +28646,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mx-run";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXSemiAffordanceAccessor = buildPerlPackage {
+  MooseXSemiAffordanceAccessor = buildPerlPackage rec {
     pname = "MooseX-SemiAffordanceAccessor";
     version = "0.10";
     src = fetchurl {
@@ -24120,10 +28664,14 @@ with self;
     meta = {
       description = "Name your accessors foo() and set_foo()";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXSetOnce = buildPerlPackage {
+  MooseXSetOnce = buildPerlPackage rec {
     pname = "MooseX-SetOnce";
     version = "0.200002";
     src = fetchurl {
@@ -24138,10 +28686,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  MooseXSingleton = buildPerlModule {
+  MooseXSingleton = buildPerlModule rec {
     pname = "MooseX-Singleton";
     version = "0.30";
     src = fetchurl {
@@ -24161,10 +28713,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXStorage = buildPerlPackage {
+  MooseXStorage = buildPerlPackage rec {
     pname = "MooseX-Storage";
     version = "0.53";
     src = fetchurl {
@@ -24206,10 +28762,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXStrictConstructor = buildPerlPackage {
+  MooseXStrictConstructor = buildPerlPackage rec {
     pname = "MooseX-StrictConstructor";
     version = "0.21";
     src = fetchurl {
@@ -24229,10 +28789,14 @@ with self;
       description = "Make your object constructors blow up on unknown attributes";
       homepage = "https://metacpan.org/release/MooseX-StrictConstructor";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTraits = buildPerlModule {
+  MooseXTraits = buildPerlModule rec {
     pname = "MooseX-Traits";
     version = "0.13";
     src = fetchurl {
@@ -24257,10 +28821,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTraitsPluggable = buildPerlPackage {
+  MooseXTraitsPluggable = buildPerlPackage rec {
     pname = "MooseX-Traits-Pluggable";
     version = "0.12";
     src = fetchurl {
@@ -24279,10 +28847,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypes = buildPerlModule {
+  MooseXTypes = buildPerlModule rec {
     pname = "MooseX-Types";
     version = "0.50";
     src = fetchurl {
@@ -24307,10 +28879,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesCommon = buildPerlModule {
+  MooseXTypesCommon = buildPerlModule rec {
     pname = "MooseX-Types-Common";
     version = "0.001014";
     src = fetchurl {
@@ -24330,10 +28906,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesDateTime = buildPerlModule {
+  MooseXTypesDateTime = buildPerlModule rec {
     pname = "MooseX-Types-DateTime";
     version = "0.13";
     src = fetchurl {
@@ -24356,10 +28936,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesDateTimeMoreCoercions = buildPerlModule {
+  MooseXTypesDateTimeMoreCoercions = buildPerlModule rec {
     pname = "MooseX-Types-DateTime-MoreCoercions";
     version = "0.15";
     src = fetchurl {
@@ -24383,10 +28967,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesLoadableClass = buildPerlModule {
+  MooseXTypesLoadableClass = buildPerlModule rec {
     pname = "MooseX-Types-LoadableClass";
     version = "0.015";
     src = fetchurl {
@@ -24405,10 +28993,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesPathClass = buildPerlModule {
+  MooseXTypesPathClass = buildPerlModule rec {
     pname = "MooseX-Types-Path-Class";
     version = "0.09";
     src = fetchurl {
@@ -24429,10 +29021,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesPathTiny = buildPerlModule {
+  MooseXTypesPathTiny = buildPerlModule rec {
     pname = "MooseX-Types-Path-Tiny";
     version = "0.012";
     src = fetchurl {
@@ -24453,10 +29049,14 @@ with self;
       description = "Path::Tiny types and coercions for Moose";
       homepage = "https://github.com/karenetheridge/moosex-types-path-tiny";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesPerl = buildPerlPackage {
+  MooseXTypesPerl = buildPerlPackage rec {
     pname = "MooseX-Types-Perl";
     version = "0.101344";
     src = fetchurl {
@@ -24471,10 +29071,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesStringlike = buildPerlPackage {
+  MooseXTypesStringlike = buildPerlPackage rec {
     pname = "MooseX-Types-Stringlike";
     version = "0.003";
     src = fetchurl {
@@ -24486,10 +29090,14 @@ with self;
       description = "Moose type constraints for strings or string-like objects";
       homepage = "https://github.com/dagolden/MooseX-Types-Stringlike";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesStructured = buildPerlModule {
+  MooseXTypesStructured = buildPerlModule rec {
     pname = "MooseX-Types-Structured";
     version = "0.36";
     src = fetchurl {
@@ -24514,10 +29122,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MooseXTypesURI = buildPerlModule {
+  MooseXTypesURI = buildPerlModule rec {
     pname = "MooseX-Types-URI";
     version = "0.09";
     src = fetchurl {
@@ -24542,10 +29154,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  MP3CutGapless = buildPerlPackage {
+  MP3CutGapless = buildPerlPackage rec {
     pname = "MP3-Cut-Gapless";
     version = "0.03";
     src = fetchurl {
@@ -24556,10 +29172,14 @@ with self;
     meta = {
       description = "Split an MP3 file without gaps (based on pcutmp3)";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AGRUNDMA/${pname}@${version}";
+      };
     };
   };
 
-  MP3Info = buildPerlPackage {
+  MP3Info = buildPerlPackage rec {
     pname = "MP3-Info";
     version = "1.26";
     src = fetchurl {
@@ -24572,10 +29192,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMERELO/${pname}@${version}";
+      };
     };
   };
 
-  MP3Tag = buildPerlPackage {
+  MP3Tag = buildPerlPackage rec {
     pname = "MP3-Tag";
     version = "1.16";
     src = fetchurl {
@@ -24594,10 +29218,14 @@ with self;
     meta = {
       description = "Module for reading tags of MP3 audio files";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ILYAZ/${pname}@${version}";
+      };
     };
   };
 
-  MockMonkeyPatch = buildPerlModule {
+  MockMonkeyPatch = buildPerlModule rec {
     pname = "Mock-MonkeyPatch";
     version = "1.02";
     src = fetchurl {
@@ -24611,10 +29239,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JBERGER/${pname}@${version}";
+      };
     };
   };
 
-  Mouse = buildPerlModule {
+  Mouse = buildPerlModule rec {
     pname = "Mouse";
     version = "2.5.10";
     src = fetchurl {
@@ -24638,10 +29270,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  MouseXNativeTraits = buildPerlPackage {
+  MouseXNativeTraits = buildPerlPackage rec {
     pname = "MouseX-NativeTraits";
     version = "1.09";
     src = fetchurl {
@@ -24659,10 +29295,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFUJI/${pname}@${version}";
+      };
     };
   };
 
-  MozillaCA = buildPerlPackage {
+  MozillaCA = buildPerlPackage rec {
     pname = "Mozilla-CA";
     version = "20230821";
     src = fetchurl {
@@ -24678,12 +29318,16 @@ with self;
       description = "Mozilla's CA cert bundle in PEM format";
       homepage = "https://github.com/gisle/mozilla-ca";
       license = with lib.licenses; [ mpl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LWP/${pname}@${version}";
+      };
     };
   };
 
   MozillaLdap = callPackage ../development/perl-modules/Mozilla-LDAP { };
 
-  MROCompat = buildPerlPackage {
+  MROCompat = buildPerlPackage rec {
     pname = "MRO-Compat";
     version = "0.15";
     src = fetchurl {
@@ -24697,6 +29341,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
@@ -24719,10 +29367,14 @@ with self;
         artistic1
       ];
       maintainers = with maintainers; [ figsoda ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JACQUESG/${pname}@${version}";
+      };
     };
   };
 
-  MusicBrainzDiscID = buildPerlPackage {
+  MusicBrainzDiscID = buildPerlPackage rec {
     pname = "MusicBrainz-DiscID";
     version = "0.06";
     src = fetchurl {
@@ -24740,10 +29392,14 @@ with self;
     meta = {
       description = "- Perl interface for the MusicBrainz libdiscid library";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NJH/${pname}@${version}";
+      };
     };
   };
 
-  MusicBrainz = buildPerlModule {
+  MusicBrainz = buildPerlModule rec {
     pname = "WebService-MusicBrainz";
     version = "1.0.6";
     src = fetchurl {
@@ -24758,10 +29414,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BFAIST/${pname}@${version}";
+      };
     };
   };
 
-  MustacheSimple = buildPerlPackage {
+  MustacheSimple = buildPerlPackage rec {
     pname = "Mustache-Simple";
     version = "1.3.6";
     src = fetchurl {
@@ -24775,10 +29435,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CMS/${pname}@${version}";
+      };
     };
   };
 
-  MySQLDiff = buildPerlPackage {
+  MySQLDiff = buildPerlPackage rec {
     pname = "MySQL-Diff";
     version = "0.60";
     src = fetchurl {
@@ -24799,10 +29463,14 @@ with self;
       ];
       maintainers = [ maintainers.sgo ];
       mainProgram = "mysqldiff";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ESTRABD/${pname}@${version}";
+      };
     };
   };
 
-  namespaceautoclean = buildPerlPackage {
+  namespaceautoclean = buildPerlPackage rec {
     pname = "namespace-autoclean";
     version = "0.29";
     src = fetchurl {
@@ -24821,10 +29489,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  namespaceclean = buildPerlPackage {
+  namespaceclean = buildPerlPackage rec {
     pname = "namespace-clean";
     version = "0.27";
     src = fetchurl {
@@ -24842,6 +29514,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RIBASUSHI/${pname}@${version}";
+      };
     };
   };
 
@@ -24876,10 +29552,14 @@ with self;
         artistic1
       ];
       maintainers = with maintainers; [ figsoda ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JACQUESG/${pname}@${version}";
+      };
     };
   };
 
-  NetDNSNative = buildPerlPackage {
+  NetDNSNative = buildPerlPackage rec {
     pname = "Net-DNS-Native";
     version = "0.22";
     src = fetchurl {
@@ -24893,10 +29573,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OLEG/${pname}@${version}";
+      };
     };
   };
 
-  NetIdent = buildPerlPackage {
+  NetIdent = buildPerlPackage rec {
     pname = "Net-Ident";
     version = "1.25";
     src = fetchurl {
@@ -24907,10 +29591,14 @@ with self;
       description = "Lookup the username on the remote end of a TCP/IP connection";
       homepage = "https://github.com/toddr/Net-Ident";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  NetINET6Glue = buildPerlPackage {
+  NetINET6Glue = buildPerlPackage rec {
     pname = "Net-INET6Glue";
     version = "0.604";
     src = fetchurl {
@@ -24924,10 +29612,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SULLR/${pname}@${version}";
+      };
     };
   };
 
-  NetAddrIP = buildPerlPackage {
+  NetAddrIP = buildPerlPackage rec {
     pname = "NetAddr-IP";
     version = "4.079";
     src = fetchurl {
@@ -24940,10 +29632,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKER/${pname}@${version}";
+      };
     };
   };
 
-  NetAmazonAWSSign = buildPerlPackage {
+  NetAmazonAWSSign = buildPerlPackage rec {
     pname = "Net-Amazon-AWSSign";
     version = "0.12";
     src = fetchurl {
@@ -24957,10 +29653,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NATON/${pname}@${version}";
+      };
     };
   };
 
-  NetAmazonEC2 = buildPerlPackage {
+  NetAmazonEC2 = buildPerlPackage rec {
     pname = "Net-Amazon-EC2";
     version = "0.36";
     src = fetchurl {
@@ -24981,10 +29681,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MALLEN/${pname}@${version}";
+      };
     };
   };
 
-  NetAmazonMechanicalTurk = buildPerlModule {
+  NetAmazonMechanicalTurk = buildPerlModule rec {
     pname = "Net-Amazon-MechanicalTurk";
     version = "1.02";
     src = fetchurl {
@@ -25001,10 +29705,14 @@ with self;
     meta = {
       description = "Amazon Mechanical Turk SDK for Perl";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MTURK/${pname}@${version}";
+      };
     };
   };
 
-  NetAmazonS3 = buildPerlPackage {
+  NetAmazonS3 = buildPerlPackage rec {
     pname = "Net-Amazon-S3";
     version = "0.991";
     src = fetchurl {
@@ -25044,10 +29752,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "s3cl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BARNEY/${pname}@${version}";
+      };
     };
   };
 
-  NetAmazonS3Policy = buildPerlModule {
+  NetAmazonS3Policy = buildPerlModule rec {
     pname = "Net-Amazon-S3-Policy";
     version = "0.1.6";
     src = fetchurl {
@@ -25061,10 +29773,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "POLETTIX/${pname}@${version}";
+      };
     };
   };
 
-  NetAsyncHTTP = buildPerlModule {
+  NetAsyncHTTP = buildPerlModule rec {
     pname = "Net-Async-HTTP";
     version = "0.49";
     src = fetchurl {
@@ -25096,10 +29812,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  NetAsyncHTTPServer = buildPerlModule {
+  NetAsyncHTTPServer = buildPerlModule rec {
     pname = "Net-Async-HTTP-Server";
     version = "0.14";
     src = fetchurl {
@@ -25123,10 +29843,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.anoa ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  NetAsyncPing = buildPerlPackage {
+  NetAsyncPing = buildPerlPackage rec {
     pname = "Net-Async-Ping";
     version = "0.004001";
     src = fetchurl {
@@ -25148,10 +29872,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABRAXXA/${pname}@${version}";
+      };
     };
   };
 
-  NetAsyncWebSocket = buildPerlModule {
+  NetAsyncWebSocket = buildPerlModule rec {
     pname = "Net-Async-WebSocket";
     version = "0.14";
     src = fetchurl {
@@ -25164,7 +29892,7 @@ with self;
       ProtocolWebSocket
       URI
       URIws
-      meta
+      self.meta
     ];
     preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # network tests fail on Darwin/sandbox, so disable these
@@ -25177,10 +29905,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  NetAMQP = buildPerlModule {
+  NetAMQP = buildPerlModule rec {
     pname = "Net-AMQP";
     version = "0.06";
     src = fetchurl {
@@ -25200,10 +29932,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHIPS/${pname}@${version}";
+      };
     };
   };
 
-  NetCIDR = buildPerlPackage {
+  NetCIDR = buildPerlPackage rec {
     pname = "Net-CIDR";
     version = "0.21";
     src = fetchurl {
@@ -25217,10 +29953,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.bjornfor ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRSAM/${pname}@${version}";
+      };
     };
   };
 
-  NetCIDRLite = buildPerlPackage {
+  NetCIDRLite = buildPerlPackage rec {
     pname = "Net-CIDR-Lite";
     version = "0.22";
     src = fetchurl {
@@ -25234,10 +29974,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STIGTSP/${pname}@${version}";
+      };
     };
   };
 
-  NetCoverArtArchive = buildPerlPackage {
+  NetCoverArtArchive = buildPerlPackage rec {
     pname = "Net-CoverArtArchive";
     version = "1.02";
     src = fetchurl {
@@ -25258,10 +30002,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CYCLES/${pname}@${version}";
+      };
     };
   };
 
-  NetCUPS = buildPerlPackage {
+  NetCUPS = buildPerlPackage rec {
     pname = "Net-CUPS";
     version = "0.64";
     src = fetchurl {
@@ -25286,10 +30034,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NINE/${pname}@${version}";
+      };
     };
   };
 
-  NetDBus = buildPerlPackage {
+  NetDBus = buildPerlPackage rec {
     pname = "Net-DBus";
     version = "1.2.0";
     src = fetchurl {
@@ -25321,10 +30073,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANBERR/${pname}@${version}";
+      };
     };
   };
 
-  NetDNS = buildPerlPackage {
+  NetDNS = buildPerlPackage rec {
     pname = "Net-DNS";
     version = "1.48";
     src = fetchurl {
@@ -25336,10 +30092,14 @@ with self;
     meta = {
       description = "Perl Interface to the Domain Name System";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NLNETLABS/${pname}@${version}";
+      };
     };
   };
 
-  NetDNSResolverMock = buildPerlPackage {
+  NetDNSResolverMock = buildPerlPackage rec {
     pname = "Net-DNS-Resolver-Mock";
     version = "1.20230216";
     src = fetchurl {
@@ -25354,10 +30114,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MBRADSHAW/${pname}@${version}";
+      };
     };
   };
 
-  NetDomainTLD = buildPerlPackage {
+  NetDomainTLD = buildPerlPackage rec {
     pname = "Net-Domain-TLD";
     version = "1.75";
     src = fetchurl {
@@ -25370,10 +30134,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXP/${pname}@${version}";
+      };
     };
   };
 
-  NetFastCGI = buildPerlPackage {
+  NetFastCGI = buildPerlPackage rec {
     pname = "Net-FastCGI";
     version = "0.14";
     src = fetchurl {
@@ -25390,10 +30158,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHANSEN/${pname}@${version}";
+      };
     };
   };
 
-  NetFrame = buildPerlModule {
+  NetFrame = buildPerlModule rec {
     pname = "Net-Frame";
     version = "1.21";
     src = fetchurl {
@@ -25409,10 +30181,14 @@ with self;
     meta = {
       description = "Base framework for frame crafting";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GOMOR/${pname}@${version}";
+      };
     };
   };
 
-  NetFrameLayerIPv6 = buildPerlModule {
+  NetFrameLayerIPv6 = buildPerlModule rec {
     pname = "Net-Frame-Layer-IPv6";
     version = "1.08";
     src = fetchurl {
@@ -25423,10 +30199,14 @@ with self;
     meta = {
       description = "Internet Protocol v6 layer object";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GOMOR/${pname}@${version}";
+      };
     };
   };
 
-  NetFreeDB = buildPerlPackage {
+  NetFreeDB = buildPerlPackage rec {
     pname = "Net-FreeDB";
     version = "0.10";
     src = fetchurl {
@@ -25454,10 +30234,14 @@ with self;
       description = "OOP Interface to FreeDB Server(s)";
       license = with lib.licenses; [ artistic1 ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.NetFreeDB.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSHULTZ/${pname}@${version}";
+      };
     };
   };
 
-  NetHTTP = buildPerlPackage {
+  NetHTTP = buildPerlPackage rec {
     pname = "Net-HTTP";
     version = "6.23";
     src = fetchurl {
@@ -25474,10 +30258,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  NetHTTPSNB = buildPerlPackage {
+  NetHTTPSNB = buildPerlPackage rec {
     pname = "Net-HTTPS-NB";
     version = "0.15";
     src = fetchurl {
@@ -25495,10 +30283,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OLEG/${pname}@${version}";
+      };
     };
   };
 
-  NetIDNEncode = buildPerlModule {
+  NetIDNEncode = buildPerlModule rec {
     pname = "Net-IDN-Encode";
     version = "2.500";
     src = fetchurl {
@@ -25522,10 +30314,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFAERBER/${pname}@${version}";
+      };
     };
   };
 
-  NetIMAPClient = buildPerlPackage {
+  NetIMAPClient = buildPerlPackage rec {
     pname = "Net-IMAP-Client";
     version = "0.9507";
     src = fetchurl {
@@ -25542,10 +30338,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GANGLION/${pname}@${version}";
+      };
     };
   };
 
-  NetIP = buildPerlPackage {
+  NetIP = buildPerlPackage rec {
     pname = "Net-IP";
     version = "1.26";
     src = fetchurl {
@@ -25558,10 +30358,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANU/${pname}@${version}";
+      };
     };
   };
 
-  NetIPLite = buildPerlPackage {
+  NetIPLite = buildPerlPackage rec {
     pname = "Net-IP-Lite";
     version = "0.03";
     src = fetchurl {
@@ -25577,10 +30381,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXKOM/${pname}@${version}";
+      };
     };
   };
 
-  NetIPv4Addr = buildPerlPackage {
+  NetIPv4Addr = buildPerlPackage rec {
     pname = "Net-IPv4Addr";
     version = "0.10";
     src = fetchurl {
@@ -25594,10 +30402,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "ipv4calc";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FRAJULAC/${pname}@${version}";
+      };
     };
   };
 
-  NetIPv6Addr = buildPerlPackage {
+  NetIPv6Addr = buildPerlPackage rec {
     pname = "Net-IPv6Addr";
     version = "1.02";
     src = fetchurl {
@@ -25614,10 +30426,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BKB/${pname}@${version}";
+      };
     };
   };
 
-  NetIPXS = buildPerlPackage {
+  NetIPXS = buildPerlPackage rec {
     pname = "Net-IP-XS";
     version = "0.22";
     src = fetchurl {
@@ -25632,10 +30448,14 @@ with self;
       homepage = "https://github.com/tomhrr/p5-Net-IP-XS";
       description = "IPv4/IPv6 address library";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOMHRR/${pname}@${version}";
+      };
     };
   };
 
-  NetLDAPServer = buildPerlPackage {
+  NetLDAPServer = buildPerlPackage rec {
     pname = "Net-LDAP-Server";
     version = "0.43";
     src = fetchurl {
@@ -25652,10 +30472,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AAR/${pname}@${version}";
+      };
     };
   };
 
-  NetLDAPSID = buildPerlPackage {
+  NetLDAPSID = buildPerlPackage rec {
     pname = "Net-LDAP-SID";
     version = "0.001";
     src = fetchurl {
@@ -25669,10 +30493,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KARMAN/${pname}@${version}";
+      };
     };
   };
 
-  NetLDAPServerTest = buildPerlPackage {
+  NetLDAPServerTest = buildPerlPackage rec {
     pname = "Net-LDAP-Server-Test";
     version = "0.22";
     src = fetchurl {
@@ -25692,10 +30520,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KARMAN/${pname}@${version}";
+      };
     };
   };
 
-  NetLibIDN2 = buildPerlModule {
+  NetLibIDN2 = buildPerlModule rec {
     pname = "Net-LibIDN2";
     version = "1.02";
     src = fetchurl {
@@ -25710,10 +30542,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "THOR/${pname}@${version}";
+      };
     };
   };
 
-  NetNetmask = buildPerlPackage {
+  NetNetmask = buildPerlPackage rec {
     pname = "Net-Netmask";
     version = "2.0002";
     src = fetchurl {
@@ -25731,10 +30567,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMASLAK/${pname}@${version}";
+      };
     };
   };
 
-  NetMPD = buildPerlModule {
+  NetMPD = buildPerlModule rec {
     pname = "Net-MPD";
     version = "0.07";
     buildInputs = [ ModuleBuildTiny ];
@@ -25746,10 +30586,14 @@ with self;
       description = "Communicate with an MPD server";
       homepage = "https://metacpan.org/pod/Net::MPD";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABERNDT/${pname}@${version}";
+      };
     };
   };
 
-  NetMQTTSimple = buildPerlPackage {
+  NetMQTTSimple = buildPerlPackage rec {
     pname = "Net-MQTT-Simple";
     version = "1.28";
     src = fetchurl {
@@ -25765,10 +30609,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JUERD/${pname}@${version}";
+      };
     };
   };
 
-  NetNVD = buildPerlPackage {
+  NetNVD = buildPerlPackage rec {
     pname = "Net-NVD";
     version = "0.0.3";
     src = fetchurl {
@@ -25785,10 +30633,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GARU/${pname}@${version}";
+      };
     };
   };
 
-  NetOAuth = buildPerlModule {
+  NetOAuth = buildPerlModule rec {
     pname = "Net-OAuth";
     version = "0.28";
     src = fetchurl {
@@ -25809,10 +30661,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KGRENNAN/${pname}@${version}";
+      };
     };
   };
 
-  NetPatricia = buildPerlPackage {
+  NetPatricia = buildPerlPackage rec {
     pname = "Net-Patricia";
     version = "1.22";
     src = fetchurl {
@@ -25826,10 +30682,14 @@ with self;
     meta = {
       description = "Patricia Trie perl module for fast IP address lookups";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRUBER/${pname}@${version}";
+      };
     };
   };
 
-  NetPing = buildPerlPackage {
+  NetPing = buildPerlPackage rec {
     pname = "Net-Ping";
     version = "2.75";
     src = fetchurl {
@@ -25842,10 +30702,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  NetDNSResolverProgrammable = buildPerlPackage {
+  NetDNSResolverProgrammable = buildPerlPackage rec {
     pname = "Net-DNS-Resolver-Programmable";
     version = "0.009";
     src = fetchurl {
@@ -25860,10 +30724,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BIGPRESH/${pname}@${version}";
+      };
     };
   };
 
-  NetPrometheus = buildPerlModule {
+  NetPrometheus = buildPerlModule rec {
     pname = "Net-Prometheus";
     version = "0.12";
     src = fetchurl {
@@ -25885,10 +30753,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  NetSCP = buildPerlPackage {
+  NetSCP = buildPerlPackage rec {
     pname = "Net-SCP";
     version = "0.08.reprise";
     src = fetchurl {
@@ -25909,12 +30781,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IVAN/${pname}@${version}";
+      };
     };
   };
 
   NetRemctl = callPackage ../development/perl-modules/NetRemctl { };
 
-  NetServer = buildPerlPackage {
+  NetServer = buildPerlPackage rec {
     pname = "Net-Server";
     version = "2.014";
     src = fetchurl {
@@ -25929,10 +30805,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "net-server";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RHANDOM/${pname}@${version}";
+      };
     };
   };
 
-  NetSFTPForeign = buildPerlPackage {
+  NetSFTPForeign = buildPerlPackage rec {
     pname = "Net-SFTP-Foreign";
     version = "1.93";
     src = fetchurl {
@@ -25949,10 +30829,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
-  NetServerCoro = buildPerlPackage {
+  NetServerCoro = buildPerlPackage rec {
     pname = "Net-Server-Coro";
     version = "1.3";
     src = fetchurl {
@@ -25966,10 +30850,14 @@ with self;
     meta = {
       description = "Co-operative multithreaded server using Coro";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXMV/${pname}@${version}";
+      };
     };
   };
 
-  NetServerSSPrefork = buildPerlPackage {
+  NetServerSSPrefork = buildPerlPackage rec {
     pname = "Net-Server-SS-PreFork";
     version = "0.06pre";
     src = fetchFromGitHub {
@@ -26000,7 +30888,7 @@ with self;
     };
   };
 
-  NetSMTPSSL = buildPerlPackage {
+  NetSMTPSSL = buildPerlPackage rec {
     pname = "Net-SMTP-SSL";
     version = "1.04";
     src = fetchurl {
@@ -26014,10 +30902,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  NetSMTPTLS = buildPerlPackage {
+  NetSMTPTLS = buildPerlPackage rec {
     pname = "Net-SMTP-TLS";
     version = "0.12";
     src = fetchurl {
@@ -26034,10 +30926,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AWESTHOLM/${pname}@${version}";
+      };
     };
   };
 
-  NetSMTPTLSButMaintained = buildPerlPackage {
+  NetSMTPTLSButMaintained = buildPerlPackage rec {
     pname = "Net-SMTP-TLS-ButMaintained";
     version = "0.24";
     src = fetchurl {
@@ -26054,10 +30950,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FAYLAND/${pname}@${version}";
+      };
     };
   };
 
-  NetSNMP = buildPerlModule {
+  NetSNMP = buildPerlModule rec {
     pname = "Net-SNMP";
     version = "6.0.1";
     src = fetchurl {
@@ -26103,10 +31003,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "snmpkey";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DTOWN/${pname}@${version}";
+      };
     };
   };
 
-  NetSNPP = buildPerlPackage {
+  NetSNPP = buildPerlPackage rec {
     pname = "Net-SNPP";
     version = "1.17";
     src = fetchurl {
@@ -26121,10 +31025,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBEYA/${pname}@${version}";
+      };
     };
   };
 
-  NetSSH = buildPerlPackage {
+  NetSSH = buildPerlPackage rec {
     pname = "Net-SSH";
     version = "0.09";
     src = fetchurl {
@@ -26141,10 +31049,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IVAN/${pname}@${version}";
+      };
     };
   };
 
-  NetSSHPerl = buildPerlPackage {
+  NetSSHPerl = buildPerlPackage rec {
     pname = "Net-SSH-Perl";
     version = "2.142";
     src = fetchurl {
@@ -26167,10 +31079,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  NetSSLeay = buildPerlPackage {
+  NetSSLeay = buildPerlPackage rec {
     pname = "Net-SSLeay";
     version = "1.92";
     src = fetchurl {
@@ -26192,10 +31108,14 @@ with self;
     meta = {
       description = "Perl bindings for OpenSSL and LibreSSL";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHRISN/${pname}@${version}";
+      };
     };
   };
 
-  NetStatsd = buildPerlPackage {
+  NetStatsd = buildPerlPackage rec {
     pname = "Net-Statsd";
     version = "0.12";
     src = fetchurl {
@@ -26209,10 +31129,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "benchmark.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "COSIMO/${pname}@${version}";
+      };
     };
   };
 
-  NetTelnet = buildPerlPackage {
+  NetTelnet = buildPerlPackage rec {
     pname = "Net-Telnet";
     version = "3.05";
     src = fetchurl {
@@ -26225,10 +31149,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JROGERS/${pname}@${version}";
+      };
     };
   };
 
-  NetTwitterLite = buildPerlModule {
+  NetTwitterLite = buildPerlModule rec {
     pname = "Net-Twitter-Lite";
     version = "0.12008";
     src = fetchurl {
@@ -26251,10 +31179,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MMIMS/${pname}@${version}";
+      };
     };
   };
 
-  NetWhoisIP = buildPerlPackage {
+  NetWhoisIP = buildPerlPackage rec {
     pname = "Net-Whois-IP";
     version = "1.19";
     src = fetchurl {
@@ -26274,10 +31206,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BSCHMITZ/${pname}@${version}";
+      };
     };
   };
 
-  NetWorks = buildPerlPackage {
+  NetWorks = buildPerlPackage rec {
     pname = "Net-Works";
     version = "0.22";
     src = fetchurl {
@@ -26297,10 +31233,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAXMIND/${pname}@${version}";
+      };
     };
   };
 
-  NumberBytesHuman = buildPerlPackage {
+  NumberBytesHuman = buildPerlPackage rec {
     pname = "Number-Bytes-Human";
     version = "0.11";
     src = fetchurl {
@@ -26313,10 +31253,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FERREIRA/${pname}@${version}";
+      };
     };
   };
 
-  NumberCompare = buildPerlPackage {
+  NumberCompare = buildPerlPackage rec {
     pname = "Number-Compare";
     version = "0.03";
     src = fetchurl {
@@ -26329,10 +31273,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  NumberFormat = buildPerlPackage {
+  NumberFormat = buildPerlPackage rec {
     pname = "Number-Format";
     version = "1.76";
     src = fetchurl {
@@ -26345,10 +31293,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  NumberFraction = buildPerlModule {
+  NumberFraction = buildPerlModule rec {
     pname = "Number-Fraction";
     version = "3.0.4";
     src = fetchurl {
@@ -26365,10 +31317,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVECROSS/${pname}@${version}";
+      };
     };
   };
 
-  NumberMisc = buildPerlModule {
+  NumberMisc = buildPerlModule rec {
     pname = "Number-Misc";
     version = "1.2";
     src = fetchurl {
@@ -26381,10 +31337,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKO/${pname}@${version}";
+      };
     };
   };
 
-  NumberPhone = buildPerlPackage {
+  NumberPhone = buildPerlPackage rec {
     pname = "Number-Phone";
     version = "4.0000";
     src = fetchurl {
@@ -26419,10 +31379,14 @@ with self;
         gpl2Only
         asl20
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  NumberWithError = buildPerlPackage {
+  NumberWithError = buildPerlPackage rec {
     pname = "Number-WithError";
     version = "1.01";
     src = fetchurl {
@@ -26440,10 +31404,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  NTLM = buildPerlPackage {
+  NTLM = buildPerlPackage rec {
     pname = "NTLM";
     version = "1.09";
     src = fetchurl {
@@ -26458,10 +31426,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.pSub ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NBEBOUT/${pname}@${version}";
+      };
     };
   };
 
-  ObjectAccessor = buildPerlPackage {
+  ObjectAccessor = buildPerlPackage rec {
     pname = "Object-Accessor";
     version = "0.48";
     src = fetchurl {
@@ -26474,6 +31446,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
@@ -26494,10 +31470,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ELMEX/${pname}@${version}";
+      };
     };
   };
 
-  ObjectInsideOut = buildPerlModule {
+  ObjectInsideOut = buildPerlModule rec {
     pname = "Object-InsideOut";
     version = "4.05";
     src = fetchurl {
@@ -26511,10 +31491,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JDHEDDEN/${pname}@${version}";
+      };
     };
   };
 
-  ObjectPad = buildPerlModule {
+  ObjectPad = buildPerlModule rec {
     pname = "Object-Pad";
     version = "0.809";
     src = fetchurl {
@@ -26537,10 +31521,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  ObjectSignature = buildPerlPackage {
+  ObjectSignature = buildPerlPackage rec {
     pname = "Object-Signature";
     version = "1.08";
     src = fetchurl {
@@ -26554,10 +31542,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  OggVorbisHeaderPurePerl = buildPerlPackage {
+  OggVorbisHeaderPurePerl = buildPerlPackage rec {
     pname = "Ogg-Vorbis-Header-PurePerl";
     version = "1.05";
     src = fetchurl {
@@ -26570,10 +31562,14 @@ with self;
     meta = {
       description = "Access Ogg Vorbis info and comment fields";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVECROSS/${pname}@${version}";
+      };
     };
   };
 
-  OLEStorage_Lite = buildPerlPackage {
+  OLEStorage_Lite = buildPerlPackage rec {
     pname = "OLE-Storage_Lite";
     version = "0.22";
     src = fetchurl {
@@ -26586,10 +31582,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMCNAMARA/${pname}@${version}";
+      };
     };
   };
 
-  Opcodes = buildPerlPackage {
+  Opcodes = buildPerlPackage rec {
     pname = "Opcodes";
     version = "0.14";
     src = fetchurl {
@@ -26602,10 +31602,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  OpenAPIClient = buildPerlPackage {
+  OpenAPIClient = buildPerlPackage rec {
     pname = "OpenAPI-Client";
     version = "1.07";
     src = fetchurl {
@@ -26618,6 +31622,10 @@ with self;
       homepage = "https://github.com/jhthorsen/openapi-client";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHTHORSEN/${pname}@${version}";
+      };
     };
   };
 
@@ -26661,10 +31669,14 @@ with self;
         gpl1Plus
       ]; # taken from EPEL
       badPlatforms = lib.platforms.darwin;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHM/${pname}@${version}";
+      };
     };
   };
 
-  OpenOfficeOODoc = buildPerlPackage {
+  OpenOfficeOODoc = buildPerlPackage rec {
     pname = "OpenOffice-OODoc";
     version = "2.125";
     src = fetchurl {
@@ -26679,10 +31691,14 @@ with self;
       description = "Perl Open OpenDocument Connector";
       license = with lib.licenses; [ lgpl21Only ];
       maintainers = [ maintainers.wentasah ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMGDOC/${pname}@${version}";
+      };
     };
   };
 
-  NetOpenIDCommon = buildPerlPackage {
+  NetOpenIDCommon = buildPerlPackage rec {
     pname = "Net-OpenID-Common";
     version = "1.20";
     src = fetchurl {
@@ -26699,10 +31715,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WROG/${pname}@${version}";
+      };
     };
   };
 
-  NetOpenIDConsumer = buildPerlPackage {
+  NetOpenIDConsumer = buildPerlPackage rec {
     pname = "Net-OpenID-Consumer";
     version = "1.18";
     src = fetchurl {
@@ -26720,10 +31740,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WROG/${pname}@${version}";
+      };
     };
   };
 
-  NetOpenSSH = buildPerlPackage {
+  NetOpenSSH = buildPerlPackage rec {
     pname = "Net-OpenSSH";
     version = "0.84";
     src = fetchurl {
@@ -26736,10 +31760,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
-  NetZooKeeper = buildPerlPackage {
+  NetZooKeeper = buildPerlPackage rec {
     pname = "Net-ZooKeeper";
     version = "0.42pre";
     src = fetchFromGitHub {
@@ -26773,7 +31801,7 @@ with self;
     };
   };
 
-  nsdiff = buildPerlPackage {
+  nsdiff = buildPerlPackage rec {
     pname = "nsdiff";
     version = "1.85";
 
@@ -26810,7 +31838,7 @@ with self;
     };
   };
 
-  PackageConstants = buildPerlPackage {
+  PackageConstants = buildPerlPackage rec {
     pname = "Package-Constants";
     version = "0.06";
     src = fetchurl {
@@ -26823,10 +31851,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  PackageDeprecationManager = buildPerlPackage {
+  PackageDeprecationManager = buildPerlPackage rec {
     pname = "Package-DeprecationManager";
     version = "0.18";
     src = fetchurl {
@@ -26847,10 +31879,14 @@ with self;
       description = "Manage deprecation warnings for your distribution";
       homepage = "https://metacpan.org/release/Package-DeprecationManager";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  PatchReader = buildPerlPackage {
+  PatchReader = buildPerlPackage rec {
     pname = "PatchReader";
     version = "0.9.6";
     src = fetchurl {
@@ -26860,10 +31896,14 @@ with self;
     meta = {
       description = "Utilities to read and manipulate patches and CVS";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TMANNERM/${pname}@${version}";
+      };
     };
   };
 
-  PackageStash = buildPerlPackage {
+  PackageStash = buildPerlPackage rec {
     pname = "Package-Stash";
     version = "0.40";
     src = fetchurl {
@@ -26888,10 +31928,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "package-stash-conflicts";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  PackageStashXS = buildPerlPackage {
+  PackageStashXS = buildPerlPackage rec {
     pname = "Package-Stash-XS";
     version = "0.30";
     src = fetchurl {
@@ -26909,6 +31953,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
@@ -26943,7 +31991,7 @@ with self;
     };
   };
 
-  Pango = buildPerlPackage {
+  Pango = buildPerlPackage rec {
     pname = "Pango";
     version = "1.227";
     src = fetchurl {
@@ -26959,10 +32007,14 @@ with self;
       description = "Layout and render international text";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAOC/${pname}@${version}";
+      };
     };
   };
 
-  ParallelForkManager = buildPerlPackage {
+  ParallelForkManager = buildPerlPackage rec {
     pname = "Parallel-ForkManager";
     version = "2.02";
     src = fetchurl {
@@ -26978,10 +32030,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YANICK/${pname}@${version}";
+      };
     };
   };
 
-  ParallelLoops = buildPerlPackage {
+  ParallelLoops = buildPerlPackage rec {
     pname = "Parallel-Loops";
     version = "0.12";
     src = fetchurl {
@@ -26997,10 +32053,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMORCH/${pname}@${version}";
+      };
     };
   };
 
-  ParallelPipes = buildPerlModule {
+  ParallelPipes = buildPerlModule rec {
     pname = "Parallel-Pipes";
     version = "0.200";
     src = fetchurl {
@@ -27016,10 +32076,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  ParallelPrefork = buildPerlPackage {
+  ParallelPrefork = buildPerlPackage rec {
     pname = "Parallel-Prefork";
     version = "0.18";
     src = fetchurl {
@@ -27043,10 +32107,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZUHO/${pname}@${version}";
+      };
     };
   };
 
-  ParamsClassify = buildPerlModule {
+  ParamsClassify = buildPerlModule rec {
     pname = "Params-Classify";
     version = "0.015";
     src = fetchurl {
@@ -27059,10 +32127,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  ParamsUtil = buildPerlPackage {
+  ParamsUtil = buildPerlPackage rec {
     pname = "Params-Util";
     version = "1.102";
     src = fetchurl {
@@ -27076,10 +32148,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  ParamsValidate = buildPerlModule {
+  ParamsValidate = buildPerlModule rec {
     pname = "Params-Validate";
     version = "1.31";
     src = fetchurl {
@@ -27095,10 +32171,14 @@ with self;
       description = "Validate method/function parameters";
       homepage = "https://metacpan.org/release/Params-Validate";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  ParamsValidationCompiler = buildPerlPackage {
+  ParamsValidationCompiler = buildPerlPackage rec {
     pname = "Params-ValidationCompiler";
     version = "0.31";
     src = fetchurl {
@@ -27119,10 +32199,14 @@ with self;
       description = "Build an optimized subroutine parameter validator once, use it forever";
       homepage = "https://metacpan.org/release/Params-ValidationCompiler";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  Paranoid = buildPerlPackage {
+  Paranoid = buildPerlPackage rec {
     pname = "Paranoid";
     version = "2.10";
     src = fetchurl {
@@ -27142,10 +32226,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CORLISS/${pname}@${version}";
+      };
     };
   };
 
-  PARDist = buildPerlPackage {
+  PARDist = buildPerlPackage rec {
     pname = "PAR-Dist";
     version = "0.52";
     src = fetchurl {
@@ -27158,10 +32246,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSCHUPP/${pname}@${version}";
+      };
     };
   };
 
-  PAUSEPermissions = buildPerlPackage {
+  PAUSEPermissions = buildPerlPackage rec {
     pname = "PAUSE-Permissions";
     version = "0.17";
     src = fetchurl {
@@ -27183,10 +32275,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pause-permissions";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  Parent = buildPerlPackage {
+  Parent = buildPerlPackage rec {
     pname = "parent";
     version = "0.241";
     src = fetchurl {
@@ -27199,10 +32295,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CORION/${pname}@${version}";
+      };
     };
   };
 
-  ParseWin32Registry = buildPerlPackage {
+  ParseWin32Registry = buildPerlPackage rec {
     pname = "ParseWin32Registry";
     version = "1.1";
     src = fetchurl {
@@ -27215,10 +32315,14 @@ with self;
         artistic1
         gpl1Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMACFARLA/${pname}@${version}";
+      };
     };
   };
 
-  ParseEDID = buildPerlPackage {
+  ParseEDID = buildPerlPackage rec {
     pname = "Parse-Edid";
     version = "1.0.7";
     src = fetchurl {
@@ -27229,10 +32333,14 @@ with self;
     meta = {
       description = "Extended display identification data (EDID) parser";
       license = lib.licenses.gpl3Plus;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GROUSSE/${pname}@${version}";
+      };
     };
   };
 
-  ParseDebControl = buildPerlPackage {
+  ParseDebControl = buildPerlPackage rec {
     pname = "Parse-DebControl";
     version = "2.005";
     src = fetchurl {
@@ -27249,10 +32357,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JAYBONCI/${pname}@${version}";
+      };
     };
   };
 
-  ParseDistname = buildPerlPackage {
+  ParseDistname = buildPerlPackage rec {
     pname = "Parse-Distname";
     version = "0.05";
     src = fetchurl {
@@ -27270,10 +32382,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  ParseIRC = buildPerlPackage {
+  ParseIRC = buildPerlPackage rec {
     pname = "Parse-IRC";
     version = "1.22";
     src = fetchurl {
@@ -27288,10 +32404,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  ParseLocalDistribution = buildPerlPackage {
+  ParseLocalDistribution = buildPerlPackage rec {
     pname = "Parse-LocalDistribution";
     version = "0.19";
     src = fetchurl {
@@ -27309,10 +32429,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  ParsePlainConfig = buildPerlPackage {
+  ParsePlainConfig = buildPerlPackage rec {
     pname = "Parse-PlainConfig";
     version = "3.06";
     src = fetchurl {
@@ -27330,10 +32454,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CORLISS/${pname}@${version}";
+      };
     };
   };
 
-  ParsePMFile = buildPerlPackage {
+  ParsePMFile = buildPerlPackage rec {
     pname = "Parse-PMFile";
     version = "0.44";
     src = fetchurl {
@@ -27347,10 +32475,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  ParseRecDescent = buildPerlModule {
+  ParseRecDescent = buildPerlModule rec {
     pname = "Parse-RecDescent";
     version = "1.967015";
     src = fetchurl {
@@ -27363,10 +32495,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JTBRAUN/${pname}@${version}";
+      };
     };
   };
 
-  ParseSyslog = buildPerlPackage {
+  ParseSyslog = buildPerlPackage rec {
     pname = "Parse-Syslog";
     version = "1.10";
     src = fetchurl {
@@ -27379,10 +32515,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DSCHWEI/${pname}@${version}";
+      };
     };
   };
 
-  ParserMGC = buildPerlModule {
+  ParserMGC = buildPerlModule rec {
     pname = "Parser-MGC";
     version = "0.21";
     src = fetchurl {
@@ -27397,10 +32537,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  ParseYapp = buildPerlPackage {
+  ParseYapp = buildPerlPackage rec {
     pname = "Parse-Yapp";
     version = "1.21";
     src = fetchurl {
@@ -27414,10 +32558,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "yapp";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WBRASWELL/${pname}@${version}";
+      };
     };
   };
 
-  PathClass = buildPerlModule {
+  PathClass = buildPerlModule rec {
     pname = "Path-Class";
     version = "0.37";
     src = fetchurl {
@@ -27430,10 +32578,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KWILLIAMS/${pname}@${version}";
+      };
     };
   };
 
-  PathDispatcher = buildPerlPackage {
+  PathDispatcher = buildPerlPackage rec {
     pname = "Path-Dispatcher";
     version = "1.08";
     src = fetchurl {
@@ -27457,10 +32609,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  PathIteratorRule = buildPerlPackage {
+  PathIteratorRule = buildPerlPackage rec {
     pname = "Path-Iterator-Rule";
     version = "1.015";
     src = fetchurl {
@@ -27482,10 +32638,14 @@ with self;
       description = "Iterative, recursive file finder";
       homepage = "https://github.com/dagolden/Path-Iterator-Rule";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  PathTiny = buildPerlPackage {
+  PathTiny = buildPerlPackage rec {
     pname = "Path-Tiny";
     version = "0.144";
     src = fetchurl {
@@ -27503,10 +32663,14 @@ with self;
       description = "File path utility";
       homepage = "https://github.com/dagolden/Path-Tiny";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  PathTools = buildPerlPackage {
+  PathTools = buildPerlPackage rec {
     pname = "PathTools";
     version = "3.75";
     preConfigure = ''
@@ -27524,10 +32688,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XSAWYERX/${pname}@${version}";
+      };
     };
   };
 
-  PBKDF2Tiny = buildPerlPackage {
+  PBKDF2Tiny = buildPerlPackage rec {
     pname = "PBKDF2-Tiny";
     version = "0.005";
     src = fetchurl {
@@ -27539,10 +32707,14 @@ with self;
       homepage = "https://github.com/dagolden/PBKDF2-Tiny";
       license = with lib.licenses; [ asl20 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  PDFAPI2 = buildPerlPackage {
+  PDFAPI2 = buildPerlPackage rec {
     pname = "PDF-API2";
     version = "2.045";
     src = fetchurl {
@@ -27557,10 +32729,14 @@ with self;
     meta = {
       description = "Create, modify, and examine PDF files";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SSIMMS/${pname}@${version}";
+      };
     };
   };
 
-  PDFBuilder = buildPerlPackage {
+  PDFBuilder = buildPerlPackage rec {
     pname = "PDF-Builder";
     version = "3.025";
     src = fetchurl {
@@ -27576,10 +32752,14 @@ with self;
       description = "Facilitates the creation and modification of PDF files";
       homepage = "https://metacpan.org/pod/PDF::Builder";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PMPERRY/${pname}@${version}";
+      };
     };
   };
 
-  PDL = buildPerlPackage {
+  PDL = buildPerlPackage rec {
     pname = "PDL";
     version = "2.025";
     src = fetchurl {
@@ -27641,10 +32821,14 @@ with self;
       ];
       mainProgram = "pdl2";
       platforms = lib.platforms.unix;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  Pegex = buildPerlPackage {
+  Pegex = buildPerlPackage rec {
     pname = "Pegex";
     version = "0.75";
     src = fetchurl {
@@ -27666,12 +32850,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
   PerconaToolkit = callPackage ../development/perl-modules/Percona-Toolkit { };
 
-  Perl5lib = buildPerlPackage {
+  Perl5lib = buildPerlPackage rec {
     pname = "perl5lib";
     version = "1.02";
     src = fetchurl {
@@ -27684,10 +32872,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NOBULL/${pname}@${version}";
+      };
     };
   };
 
-  Perlosnames = buildPerlPackage {
+  Perlosnames = buildPerlPackage rec {
     pname = "Perl-osnames";
     version = "0.122";
     src = fetchurl {
@@ -27701,10 +32893,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLANCAR/${pname}@${version}";
+      };
     };
   };
 
-  PerlCritic = buildPerlModule {
+  PerlCritic = buildPerlModule rec {
     pname = "Perl-Critic";
     version = "1.150";
     src = fetchurl {
@@ -27741,10 +32937,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlcritic";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  PerlCriticCommunity = buildPerlModule {
+  PerlCriticCommunity = buildPerlModule rec {
     pname = "Perl-Critic-Community";
     version = "1.0.3";
     src = fetchurl {
@@ -27763,6 +32963,10 @@ with self;
       description = "Community-inspired Perl::Critic policies";
       homepage = "https://github.com/Grinnz/Perl-Critic-Community";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
@@ -27782,10 +32986,14 @@ with self;
       description = "Policies for Perl::Critic concerned with using Moose";
       homepage = "https://metacpan.org/release/Perl-Critic-Moose";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  PerlCriticPolicyVariablesProhibitLoopOnHash = buildPerlPackage {
+  PerlCriticPolicyVariablesProhibitLoopOnHash = buildPerlPackage rec {
     pname = "Perl-Critic-Policy-Variables-ProhibitLoopOnHash";
     version = "0.008";
     src = fetchurl {
@@ -27799,10 +33007,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XSAWYERX/${pname}@${version}";
+      };
     };
   };
 
-  PerlCriticPulp = buildPerlPackage {
+  PerlCriticPulp = buildPerlPackage rec {
     pname = "Perl-Critic-Pulp";
     version = "99";
     src = fetchurl {
@@ -27820,10 +33032,14 @@ with self;
       description = "Some add-on policies for Perl::Critic";
       homepage = "https://user42.tuxfamily.org/perl-critic-pulp/index.html";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  PerlDestructLevel = buildPerlPackage {
+  PerlDestructLevel = buildPerlPackage rec {
     pname = "Perl-Destruct-Level";
     version = "0.02";
     src = fetchurl {
@@ -27836,10 +33052,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RGARCIA/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOLayers = buildPerlModule {
+  PerlIOLayers = buildPerlModule rec {
     pname = "PerlIO-Layers";
     version = "0.012";
     src = fetchurl {
@@ -27852,10 +33072,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOeol = buildPerlPackage {
+  PerlIOeol = buildPerlPackage rec {
     pname = "PerlIO-eol";
     version = "0.19";
     src = fetchurl {
@@ -27868,10 +33092,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOgzip = buildPerlPackage {
+  PerlIOgzip = buildPerlPackage rec {
     pname = "PerlIO-gzip";
     version = "0.20";
     src = fetchurl {
@@ -27886,10 +33114,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NWCLARK/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOutf8_strict = buildPerlPackage {
+  PerlIOutf8_strict = buildPerlPackage rec {
     pname = "PerlIO-utf8_strict";
     version = "0.010";
     src = fetchurl {
@@ -27903,10 +33135,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOviadynamic = buildPerlPackage {
+  PerlIOviadynamic = buildPerlPackage rec {
     pname = "PerlIO-via-dynamic";
     version = "0.14";
     src = fetchurl {
@@ -27919,10 +33155,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXMV/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOviasymlink = buildPerlPackage {
+  PerlIOviasymlink = buildPerlPackage rec {
     pname = "PerlIO-via-symlink";
     version = "0.05";
     src = fetchurl {
@@ -27943,10 +33183,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CLKAO/${pname}@${version}";
+      };
     };
   };
 
-  PerlIOviaTimeout = buildPerlModule {
+  PerlIOviaTimeout = buildPerlModule rec {
     pname = "PerlIO-via-Timeout";
     version = "0.32";
     src = fetchurl {
@@ -27964,10 +33208,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAMS/${pname}@${version}";
+      };
     };
   };
 
-  PerlLanguageServer = buildPerlPackage {
+  PerlLanguageServer = buildPerlPackage rec {
     pname = "Perl-LanguageServer";
     version = "2.6.1";
     src = fetchurl {
@@ -27990,10 +33238,14 @@ with self;
     meta = {
       description = "Language Server and Debug Protocol Adapter for Perl";
       license = lib.licenses.artistic2;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRICHTER/${pname}@${version}";
+      };
     };
   };
 
-  perlldap = buildPerlPackage {
+  perlldap = buildPerlPackage rec {
     pname = "perl-ldap";
     version = "0.68";
     src = fetchurl {
@@ -28016,6 +33268,10 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARSCHAP/${pname}@${version}";
+      };
     };
   };
 
@@ -28038,7 +33294,7 @@ with self;
     };
   };
 
-  PerlTidy = buildPerlPackage {
+  PerlTidy = buildPerlPackage rec {
     pname = "Perl-Tidy";
     version = "20230912";
     src = fetchurl {
@@ -28049,10 +33305,14 @@ with self;
       description = "Indent and reformat perl scripts";
       license = with lib.licenses; [ gpl2Plus ];
       mainProgram = "perltidy";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHANCOCK/${pname}@${version}";
+      };
     };
   };
 
-  PHPSerialization = buildPerlPackage {
+  PHPSerialization = buildPerlPackage rec {
     pname = "PHP-Serialization";
     version = "0.34";
     src = fetchurl {
@@ -28065,6 +33325,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
@@ -28090,10 +33354,14 @@ with self;
       ];
       teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  Plack = buildPerlPackage {
+  Plack = buildPerlPackage rec {
     pname = "Plack";
     version = "1.0050";
     src = fetchurl {
@@ -28138,10 +33406,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "plackup";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackAppProxy = buildPerlPackage {
+  PlackAppProxy = buildPerlPackage rec {
     pname = "Plack-App-Proxy";
     version = "0.29";
     src = fetchurl {
@@ -28164,10 +33436,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEEDO/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareAuthDigest = buildPerlModule {
+  PlackMiddlewareAuthDigest = buildPerlModule rec {
     pname = "Plack-Middleware-Auth-Digest";
     version = "0.05";
     src = fetchurl {
@@ -28191,10 +33467,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareConsoleLogger = buildPerlModule {
+  PlackMiddlewareConsoleLogger = buildPerlModule rec {
     pname = "Plack-Middleware-ConsoleLogger";
     version = "0.05";
     src = fetchurl {
@@ -28216,10 +33496,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareDebug = buildPerlModule {
+  PlackMiddlewareDebug = buildPerlModule rec {
     pname = "Plack-Middleware-Debug";
     version = "0.18";
     src = fetchurl {
@@ -28244,10 +33528,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareDeflater = buildPerlPackage {
+  PlackMiddlewareDeflater = buildPerlPackage rec {
     pname = "Plack-Middleware-Deflater";
     version = "0.12";
     src = fetchurl {
@@ -28266,10 +33554,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareFixMissingBodyInRedirect = buildPerlPackage {
+  PlackMiddlewareFixMissingBodyInRedirect = buildPerlPackage rec {
     pname = "Plack-Middleware-FixMissingBodyInRedirect";
     version = "0.12";
     src = fetchurl {
@@ -28287,10 +33579,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SWEETKID/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareHeader = buildPerlPackage {
+  PlackMiddlewareHeader = buildPerlPackage rec {
     pname = "Plack-Middleware-Header";
     version = "0.04";
     src = fetchurl {
@@ -28304,10 +33600,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHIBA/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareMethodOverride = buildPerlPackage {
+  PlackMiddlewareMethodOverride = buildPerlPackage rec {
     pname = "Plack-Middleware-MethodOverride";
     version = "0.20";
     src = fetchurl {
@@ -28321,10 +33621,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareRemoveRedundantBody = buildPerlPackage {
+  PlackMiddlewareRemoveRedundantBody = buildPerlPackage rec {
     pname = "Plack-Middleware-RemoveRedundantBody";
     version = "0.09";
     src = fetchurl {
@@ -28339,10 +33643,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SWEETKID/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareReverseProxy = buildPerlPackage {
+  PlackMiddlewareReverseProxy = buildPerlPackage rec {
     pname = "Plack-Middleware-ReverseProxy";
     version = "0.16";
     src = fetchurl {
@@ -28357,10 +33665,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackMiddlewareSession = buildPerlModule {
+  PlackMiddlewareSession = buildPerlModule rec {
     pname = "Plack-Middleware-Session";
     version = "0.33";
     src = fetchurl {
@@ -28387,10 +33699,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PlackTestExternalServer = buildPerlPackage {
+  PlackTestExternalServer = buildPerlPackage rec {
     pname = "Plack-Test-ExternalServer";
     version = "0.02";
     src = fetchurl {
@@ -28410,10 +33726,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  PLS = buildPerlPackage {
+  PLS = buildPerlPackage rec {
     pname = "PLS";
     version = "0.905";
     src = fetchurl {
@@ -28445,12 +33765,16 @@ with self;
       ];
       maintainers = [ maintainers.artturin ];
       mainProgram = "pls";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MREISNER/${pname}@${version}";
+      };
     };
   };
 
   Po4a = callPackage ../development/perl-modules/Po4a { };
 
-  PodMinimumVersion = buildPerlPackage {
+  PodMinimumVersion = buildPerlPackage rec {
     pname = "Pod-MinimumVersion";
     version = "50";
     src = fetchurl {
@@ -28466,10 +33790,14 @@ with self;
       homepage = "https://user42.tuxfamily.org/pod-minimumversion/index.html";
       license = with lib.licenses; [ gpl3Plus ];
       mainProgram = "pod-minimumversion";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  POE = buildPerlPackage {
+  POE = buildPerlPackage rec {
     pname = "POE";
     version = "1.370";
     src = fetchurl {
@@ -28509,10 +33837,14 @@ with self;
         gpl1Plus
       ];
       teams = [ teams.deshaw ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  POETestLoops = buildPerlPackage {
+  POETestLoops = buildPerlPackage rec {
     pname = "POE-Test-Loops";
     version = "1.360";
     src = fetchurl {
@@ -28528,10 +33860,14 @@ with self;
       ];
       teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCAPUTO/${pname}@${version}";
+      };
     };
   };
 
-  PPI = buildPerlPackage {
+  PPI = buildPerlPackage rec {
     pname = "PPI";
     version = "1.277";
     src = fetchurl {
@@ -28567,10 +33903,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MITHALDU/${pname}@${version}";
+      };
     };
   };
 
-  PPIxQuoteLike = buildPerlModule {
+  PPIxQuoteLike = buildPerlModule rec {
     pname = "PPIx-QuoteLike";
     version = "0.023";
     src = fetchurl {
@@ -28587,10 +33927,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WYANT/${pname}@${version}";
+      };
     };
   };
 
-  PPIxRegexp = buildPerlModule {
+  PPIxRegexp = buildPerlModule rec {
     pname = "PPIx-Regexp";
     version = "0.088";
     src = fetchurl {
@@ -28604,10 +33948,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WYANT/${pname}@${version}";
+      };
     };
   };
 
-  PPIxUtilities = buildPerlModule {
+  PPIxUtilities = buildPerlModule rec {
     pname = "PPIx-Utilities";
     version = "1.001000";
     src = fetchurl {
@@ -28626,10 +33974,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ELLIOTJS/${pname}@${version}";
+      };
     };
   };
 
-  PPIxUtils = buildPerlPackage {
+  PPIxUtils = buildPerlPackage rec {
     pname = "PPIx-Utils";
     version = "0.003";
     src = fetchurl {
@@ -28647,10 +33999,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  PPR = buildPerlPackage {
+  PPR = buildPerlPackage rec {
     pname = "PPR";
     version = "0.001008";
     src = fetchurl {
@@ -28661,10 +34017,14 @@ with self;
       description = "Pattern-based Perl Recognizer";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.artturin ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCONWAY/${pname}@${version}";
+      };
     };
   };
 
-  ProcBackground = buildPerlPackage {
+  ProcBackground = buildPerlPackage rec {
     pname = "Proc-Background";
     version = "1.32";
     src = fetchurl {
@@ -28678,10 +34038,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "timed-process";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NERDVANA/${pname}@${version}";
+      };
     };
   };
 
-  ProcProcessTable = buildPerlPackage {
+  ProcProcessTable = buildPerlPackage rec {
     pname = "Proc-ProcessTable";
     version = "0.636";
     src = fetchurl {
@@ -28691,10 +34055,14 @@ with self;
     meta = {
       description = "Perl extension to access the unix process table";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JWB/${pname}@${version}";
+      };
     };
   };
 
-  ProcDaemon = buildPerlPackage {
+  ProcDaemon = buildPerlPackage rec {
     pname = "Proc-Daemon";
     version = "0.23";
     src = fetchurl {
@@ -28709,10 +34077,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AKREAL/${pname}@${version}";
+      };
     };
   };
 
-  ProcPIDFile = buildPerlPackage {
+  ProcPIDFile = buildPerlPackage rec {
     pname = "Proc-PID-File";
     version = "1.29";
     src = fetchurl {
@@ -28726,10 +34098,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DMITRI/${pname}@${version}";
+      };
     };
   };
 
-  ProcFind = buildPerlPackage {
+  ProcFind = buildPerlPackage rec {
     pname = "Proc-Find";
     version = "0.051";
     src = fetchurl {
@@ -28744,10 +34120,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLANCAR/${pname}@${version}";
+      };
     };
   };
 
-  ProcSafeExec = buildPerlPackage {
+  ProcSafeExec = buildPerlPackage rec {
     pname = "Proc-SafeExec";
     version = "1.5";
     src = fetchurl {
@@ -28760,10 +34140,14 @@ with self;
         gpl1Only
         bsd2
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BILBO/${pname}@${version}";
+      };
     };
   };
 
-  ProcSimple = buildPerlPackage {
+  ProcSimple = buildPerlPackage rec {
     pname = "Proc-Simple";
     version = "1.32";
     src = fetchurl {
@@ -28776,10 +34160,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHILLI/${pname}@${version}";
+      };
     };
   };
 
-  ProcWait3 = buildPerlPackage {
+  ProcWait3 = buildPerlPackage rec {
     pname = "Proc-Wait3";
     version = "0.05";
     src = fetchurl {
@@ -28792,10 +34180,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CTILMES/${pname}@${version}";
+      };
     };
   };
 
-  ProcWaitStat = buildPerlPackage {
+  ProcWaitStat = buildPerlPackage rec {
     pname = "Proc-WaitStat";
     version = "1.00";
     src = fetchurl {
@@ -28809,10 +34201,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROSCH/${pname}@${version}";
+      };
     };
   };
 
-  PrometheusTiny = buildPerlPackage {
+  PrometheusTiny = buildPerlPackage rec {
     pname = "Prometheus-Tiny";
     version = "0.011";
     src = fetchurl {
@@ -28832,10 +34228,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROBN/${pname}@${version}";
+      };
     };
   };
 
-  PrometheusTinyShared = buildPerlPackage {
+  PrometheusTinyShared = buildPerlPackage rec {
     pname = "Prometheus-Tiny-Shared";
     version = "0.027";
     src = fetchurl {
@@ -28862,10 +34262,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROBN/${pname}@${version}";
+      };
     };
   };
 
-  ProtocolRedis = buildPerlPackage {
+  ProtocolRedis = buildPerlPackage rec {
     pname = "Protocol-Redis";
     version = "1.0011";
     src = fetchurl {
@@ -28880,10 +34284,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "UNDEF/${pname}@${version}";
+      };
     };
   };
 
-  ProtocolRedisFaster = buildPerlPackage {
+  ProtocolRedisFaster = buildPerlPackage rec {
     pname = "Protocol-Redis-Faster";
     version = "0.003";
     src = fetchurl {
@@ -28896,10 +34304,14 @@ with self;
       homepage = "https://github.com/Grinnz/Protocol-Redis-Faster";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  ProtocolWebSocket = buildPerlModule {
+  ProtocolWebSocket = buildPerlModule rec {
     pname = "Protocol-WebSocket";
     version = "0.26";
     src = fetchurl {
@@ -28913,10 +34325,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VTI/${pname}@${version}";
+      };
     };
   };
 
-  ProtocolHTTP2 = buildPerlModule {
+  ProtocolHTTP2 = buildPerlModule rec {
     pname = "Protocol-HTTP2";
     version = "1.11";
     src = fetchurl {
@@ -28938,10 +34354,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CRUX/${pname}@${version}";
+      };
     };
   };
 
-  PSGI = buildPerlPackage {
+  PSGI = buildPerlPackage rec {
     pname = "PSGI";
     version = "1.102";
     src = fetchurl {
@@ -28951,10 +34371,14 @@ with self;
     meta = {
       description = "Perl Web Server Gateway Interface Specification";
       license = with lib.licenses; [ cc-by-sa-25 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  PadWalker = buildPerlPackage {
+  PadWalker = buildPerlPackage rec {
     pname = "PadWalker";
     version = "2.5";
     src = fetchurl {
@@ -28967,10 +34391,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROBIN/${pname}@${version}";
+      };
     };
   };
 
-  Perl6Junction = buildPerlPackage {
+  Perl6Junction = buildPerlPackage rec {
     pname = "Perl6-Junction";
     version = "1.60000";
     src = fetchurl {
@@ -28983,10 +34411,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFRANKS/${pname}@${version}";
+      };
     };
   };
 
-  PerlMinimumVersion = buildPerlPackage {
+  PerlMinimumVersion = buildPerlPackage rec {
     pname = "Perl-MinimumVersion";
     version = "1.40";
     src = fetchurl {
@@ -29006,10 +34438,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlver";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DBOOK/${pname}@${version}";
+      };
     };
   };
 
-  PerlPrereqScanner = buildPerlPackage {
+  PerlPrereqScanner = buildPerlPackage rec {
     pname = "Perl-PrereqScanner";
     version = "1.100";
     src = fetchurl {
@@ -29035,10 +34471,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scan-perl-prereqs";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  PerlPrereqScannerNotQuiteLite = buildPerlPackage {
+  PerlPrereqScannerNotQuiteLite = buildPerlPackage rec {
     pname = "Perl-PrereqScanner-NotQuiteLite";
     version = "0.9917";
     src = fetchurl {
@@ -29065,10 +34505,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scan-perl-prereqs-nqlite";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  PerlVersion = buildPerlPackage {
+  PerlVersion = buildPerlPackage rec {
     pname = "Perl-Version";
     version = "1.013";
     src = fetchurl {
@@ -29083,10 +34527,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perl-reversion";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  PodAbstract = buildPerlPackage {
+  PodAbstract = buildPerlPackage rec {
     pname = "Pod-Abstract";
     version = "0.20";
     src = fetchurl {
@@ -29105,10 +34553,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "paf";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BLILBURNE/${pname}@${version}";
+      };
     };
   };
 
-  PodChecker = buildPerlPackage {
+  PodChecker = buildPerlPackage rec {
     pname = "Pod-Checker";
     version = "1.75";
     src = fetchurl {
@@ -29122,10 +34574,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podchecker";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAREKR/${pname}@${version}";
+      };
     };
   };
 
-  PodCoverage = buildPerlPackage {
+  PodCoverage = buildPerlPackage rec {
     pname = "Pod-Coverage";
     version = "0.23";
     src = fetchurl {
@@ -29143,10 +34599,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod_cover";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  PodCoverageTrustPod = buildPerlPackage {
+  PodCoverageTrustPod = buildPerlPackage rec {
     pname = "Pod-Coverage-TrustPod";
     version = "0.100006";
     src = fetchurl {
@@ -29164,10 +34624,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  PodElemental = buildPerlPackage {
+  PodElemental = buildPerlPackage rec {
     pname = "Pod-Elemental";
     version = "0.103006";
     src = fetchurl {
@@ -29191,10 +34655,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  PodElementalPerlMunger = buildPerlPackage {
+  PodElementalPerlMunger = buildPerlPackage rec {
     pname = "Pod-Elemental-PerlMunger";
     version = "0.200007";
     src = fetchurl {
@@ -29213,10 +34681,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  PodEventual = buildPerlPackage {
+  PodEventual = buildPerlPackage rec {
     pname = "Pod-Eventual";
     version = "0.094003";
     src = fetchurl {
@@ -29232,10 +34704,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  PodParser = buildPerlPackage {
+  PodParser = buildPerlPackage rec {
     pname = "Pod-Parser";
     version = "1.66";
     src = fetchurl {
@@ -29246,10 +34722,14 @@ with self;
       description = "Modules for parsing/translating POD format documents";
       license = with lib.licenses; [ artistic1 ];
       mainProgram = "podselect";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAREKR/${pname}@${version}";
+      };
     };
   };
 
-  PodPOM = buildPerlPackage {
+  PodPOM = buildPerlPackage rec {
     pname = "Pod-POM";
     version = "2.01";
     src = fetchurl {
@@ -29269,10 +34749,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pom2";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  PodPOMViewTOC = buildPerlPackage {
+  PodPOMViewTOC = buildPerlPackage rec {
     pname = "Pod-POM-View-TOC";
     version = "0.02";
     src = fetchurl {
@@ -29286,10 +34770,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERLER/${pname}@${version}";
+      };
     };
   };
 
-  PodSection = buildPerlModule {
+  PodSection = buildPerlModule rec {
     pname = "Pod-Section";
     version = "0.02";
     src = fetchurl {
@@ -29305,10 +34793,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podsection";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KTAT/${pname}@${version}";
+      };
     };
   };
 
-  PodLaTeX = buildPerlModule {
+  PodLaTeX = buildPerlModule rec {
     pname = "Pod-LaTeX";
     version = "0.61";
     src = fetchurl {
@@ -29324,10 +34816,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod2latex";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TJENNESS/${pname}@${version}";
+      };
     };
   };
 
-  podlators = buildPerlPackage {
+  podlators = buildPerlPackage rec {
     pname = "podlators";
     version = "5.01";
     src = fetchurl {
@@ -29345,10 +34841,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RRA/${pname}@${version}";
+      };
     };
   };
 
-  podlinkcheck = buildPerlPackage {
+  podlinkcheck = buildPerlPackage rec {
     pname = "podlinkcheck";
     version = "15";
     src = fetchurl {
@@ -29367,10 +34867,14 @@ with self;
       description = "Check POD L<> link references";
       homepage = "https://user42.tuxfamily.org/podlinkcheck/index.html";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  prefork = buildPerlPackage {
+  prefork = buildPerlPackage rec {
     pname = "prefork";
     version = "1.05";
     src = fetchurl {
@@ -29384,10 +34888,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  PodPerldoc = buildPerlPackage {
+  PodPerldoc = buildPerlPackage rec {
     pname = "Pod-Perldoc";
     version = "3.28";
     src = fetchurl {
@@ -29401,10 +34909,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perldoc";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MALLEN/${pname}@${version}";
+      };
     };
   };
 
-  PodPlainer = buildPerlPackage {
+  PodPlainer = buildPerlPackage rec {
     pname = "Pod-Plainer";
     version = "1.04";
     src = fetchurl {
@@ -29418,10 +34930,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RMBARKER/${pname}@${version}";
+      };
     };
   };
 
-  PodMarkdown = buildPerlPackage {
+  PodMarkdown = buildPerlPackage rec {
     pname = "Pod-Markdown";
     version = "3.300";
     src = fetchurl {
@@ -29438,10 +34954,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod2markdown";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RWSTAUNER/${pname}@${version}";
+      };
     };
   };
 
-  PodMarkdownGithub = buildPerlPackage {
+  PodMarkdownGithub = buildPerlPackage rec {
     pname = "Pod-Markdown-Github";
     version = "0.04";
     src = fetchurl {
@@ -29457,10 +34977,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod2github";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MINIMAL/${pname}@${version}";
+      };
     };
   };
 
-  PodSimple = buildPerlPackage {
+  PodSimple = buildPerlPackage rec {
     pname = "Pod-Simple";
     version = "3.45";
     src = fetchurl {
@@ -29473,10 +34997,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KHW/${pname}@${version}";
+      };
     };
   };
 
-  PodSpell = buildPerlPackage {
+  PodSpell = buildPerlPackage rec {
     pname = "Pod-Spell";
     version = "1.26";
     src = fetchurl {
@@ -29499,10 +35027,14 @@ with self;
       homepage = "https://github.com/perl-pod/Pod-Spell";
       license = with lib.licenses; [ artistic2 ];
       mainProgram = "podspell";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  PodStrip = buildPerlModule {
+  PodStrip = buildPerlModule rec {
     pname = "Pod-Strip";
     version = "1.100";
     src = fetchurl {
@@ -29516,10 +35048,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOMM/${pname}@${version}";
+      };
     };
   };
 
-  PodTidy = buildPerlModule {
+  PodTidy = buildPerlModule rec {
     pname = "Pod-Tidy";
     version = "0.10";
     src = fetchurl {
@@ -29540,10 +35076,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podtidy";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHOBLITT/${pname}@${version}";
+      };
     };
   };
 
-  PodWeaver = buildPerlPackage {
+  PodWeaver = buildPerlPackage rec {
     pname = "Pod-Weaver";
     version = "4.019";
     src = fetchurl {
@@ -29569,10 +35109,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  PodWrap = buildPerlModule {
+  PodWrap = buildPerlModule rec {
     pname = "Pod-Wrap";
     version = "0.01";
     src = fetchurl {
@@ -29587,10 +35131,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podwrap";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NUFFIN/${pname}@${version}";
+      };
     };
   };
 
-  ProbePerl = buildPerlPackage {
+  ProbePerl = buildPerlPackage rec {
     pname = "Probe-Perl";
     version = "0.03";
     src = fetchurl {
@@ -29603,10 +35151,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KWILLIAMS/${pname}@${version}";
+      };
     };
   };
 
-  POSIXAtFork = buildPerlPackage {
+  POSIXAtFork = buildPerlPackage rec {
     pname = "POSIX-AtFork";
     version = "0.04";
     src = fetchurl {
@@ -29623,7 +35175,7 @@ with self;
     };
   };
 
-  POSIXstrftimeCompiler = buildPerlModule {
+  POSIXstrftimeCompiler = buildPerlModule rec {
     pname = "POSIX-strftime-Compiler";
     version = "0.44";
     src = fetchurl {
@@ -29643,10 +35195,14 @@ with self;
       broken = stdenv.hostPlatform.isMusl; # Broken for Musl at 2023-01-14, reports:
       # Nixpkgs: https://github.com/NixOS/nixpkgs/issues/210749
       # Upstream: https://github.com/kazeburo/POSIX-strftime-Compiler/issues/8
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  Apprainbarf = buildPerlModule {
+  Apprainbarf = buildPerlModule rec {
     pname = "App-rainbarf";
     version = "1.4";
     src = fetchurl {
@@ -29665,10 +35221,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "rainbarf";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYP/${pname}@${version}";
+      };
     };
   };
 
-  Razor2ClientAgent = buildPerlPackage {
+  Razor2ClientAgent = buildPerlPackage rec {
     pname = "Razor2-Client-Agent";
     version = "2.86";
     src = fetchurl {
@@ -29686,10 +35246,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  Readonly = buildPerlModule {
+  Readonly = buildPerlModule rec {
     pname = "Readonly";
     version = "2.05";
     src = fetchurl {
@@ -29701,10 +35265,14 @@ with self;
       description = "Facility for creating read-only scalars, arrays, hashes";
       homepage = "https://github.com/sanko/readonly";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SANKO/${pname}@${version}";
+      };
     };
   };
 
-  ReadonlyX = buildPerlModule {
+  ReadonlyX = buildPerlModule rec {
     pname = "ReadonlyX";
     version = "1.04";
     src = fetchurl {
@@ -29719,10 +35287,14 @@ with self;
       description = "Faster facility for creating read-only scalars, arrays, hashes";
       homepage = "https://github.com/sanko/readonly";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SANKO/${pname}@${version}";
+      };
     };
   };
 
-  ReadonlyXS = buildPerlPackage {
+  ReadonlyXS = buildPerlPackage rec {
     pname = "Readonly-XS";
     version = "1.05";
     src = fetchurl {
@@ -29736,10 +35308,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROODE/${pname}@${version}";
+      };
     };
   };
 
-  Redis = buildPerlModule {
+  Redis = buildPerlModule rec {
     pname = "Redis";
     version = "2.000";
     src = fetchurl {
@@ -29762,10 +35338,14 @@ with self;
       description = "Perl binding for Redis database";
       homepage = "https://github.com/PerlRedis/perl-redis";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAMS/${pname}@${version}";
+      };
     };
   };
 
-  RefUtil = buildPerlPackage {
+  RefUtil = buildPerlPackage rec {
     pname = "Ref-Util";
     version = "0.204";
     src = fetchurl {
@@ -29775,10 +35355,14 @@ with self;
     meta = {
       description = "Utility functions for checking references";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARC/${pname}@${version}";
+      };
     };
   };
 
-  RegexpAssemble = buildPerlPackage {
+  RegexpAssemble = buildPerlPackage rec {
     pname = "Regexp-Assemble";
     version = "0.38";
     src = fetchurl {
@@ -29791,10 +35375,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSAVAGE/${pname}@${version}";
+      };
     };
   };
 
-  RegexpCommon = buildPerlPackage {
+  RegexpCommon = buildPerlPackage rec {
     pname = "Regexp-Common";
     version = "2017060201";
     src = fetchurl {
@@ -29804,10 +35392,14 @@ with self;
     meta = {
       description = "Provide commonly requested regular expressions";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABIGAIL/${pname}@${version}";
+      };
     };
   };
 
-  RegexpCommonnetCIDR = buildPerlPackage {
+  RegexpCommonnetCIDR = buildPerlPackage rec {
     pname = "Regexp-Common-net-CIDR";
     version = "0.03";
     src = fetchurl {
@@ -29821,10 +35413,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  RegexpCommontime = buildPerlPackage {
+  RegexpCommontime = buildPerlPackage rec {
     pname = "Regexp-Common-time";
     version = "0.16";
     src = fetchurl {
@@ -29841,10 +35437,14 @@ with self;
         bsd3
       ];
       maintainers = [ maintainers.artturin ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANWAR/${pname}@${version}";
+      };
     };
   };
 
-  RegexpGrammars = buildPerlModule {
+  RegexpGrammars = buildPerlModule rec {
     pname = "Regexp-Grammars";
     version = "1.058";
     src = fetchurl {
@@ -29857,10 +35457,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCONWAY/${pname}@${version}";
+      };
     };
   };
 
-  RegexpIPv6 = buildPerlPackage {
+  RegexpIPv6 = buildPerlPackage rec {
     pname = "Regexp-IPv6";
     version = "0.03";
     src = fetchurl {
@@ -29873,10 +35477,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
-  RegexpParser = buildPerlPackage {
+  RegexpParser = buildPerlPackage rec {
     pname = "Regexp-Parser";
     version = "0.23";
     src = fetchurl {
@@ -29890,10 +35498,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  RegexpTrie = buildPerlPackage {
+  RegexpTrie = buildPerlPackage rec {
     pname = "Regexp-Trie";
     version = "0.02";
     src = fetchurl {
@@ -29906,10 +35518,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANKOGAI/${pname}@${version}";
+      };
     };
   };
 
-  RESTClient = buildPerlPackage {
+  RESTClient = buildPerlPackage rec {
     pname = "REST-Client";
     version = "281";
     src = fetchurl {
@@ -29924,10 +35540,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AKHUETTEL/${pname}@${version}";
+      };
     };
   };
 
-  RESTUtils = buildPerlModule {
+  RESTUtils = buildPerlModule rec {
     pname = "REST-Utils";
     version = "0.6";
     src = fetchurl {
@@ -29946,10 +35566,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JALDHAR/${pname}@${version}";
+      };
     };
   };
 
-  RpcXML = buildPerlPackage {
+  RpcXML = buildPerlPackage rec {
     pname = "RPC-XML";
     version = "0.82";
     src = fetchurl {
@@ -29966,10 +35590,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "make_method";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJRAY/${pname}@${version}";
+      };
     };
   };
 
-  ReturnMultiLevel = buildPerlPackage {
+  ReturnMultiLevel = buildPerlPackage rec {
     pname = "Return-MultiLevel";
     version = "0.08";
     src = fetchurl {
@@ -29984,10 +35612,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  ReturnValue = buildPerlPackage {
+  ReturnValue = buildPerlPackage rec {
     pname = "Return-Value";
     version = "1.666005";
     src = fetchurl {
@@ -30000,10 +35632,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  RoleBasic = buildPerlModule {
+  RoleBasic = buildPerlModule rec {
     pname = "Role-Basic";
     version = "0.13";
     src = fetchurl {
@@ -30016,10 +35652,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OVID/${pname}@${version}";
+      };
     };
   };
 
-  RoleHasMessage = buildPerlPackage {
+  RoleHasMessage = buildPerlPackage rec {
     pname = "Role-HasMessage";
     version = "0.007";
     src = fetchurl {
@@ -30037,10 +35677,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  RoleHooks = buildPerlPackage {
+  RoleHooks = buildPerlPackage rec {
     pname = "Role-Hooks";
     version = "0.008";
     src = fetchurl {
@@ -30056,10 +35700,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  RoleIdentifiable = buildPerlPackage {
+  RoleIdentifiable = buildPerlPackage rec {
     pname = "Role-Identifiable";
     version = "0.009";
     src = fetchurl {
@@ -30074,10 +35722,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  RoleTiny = buildPerlPackage {
+  RoleTiny = buildPerlPackage rec {
     pname = "Role-Tiny";
     version = "2.002004";
     src = fetchurl {
@@ -30090,10 +35742,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  RPCEPCService = buildPerlModule {
+  RPCEPCService = buildPerlModule rec {
     pname = "RPC-EPC-Service";
     version = "0.0.11";
     src = fetchurl {
@@ -30110,10 +35766,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KIWANAMI/${pname}@${version}";
+      };
     };
   };
 
-  RPM2 = buildPerlModule {
+  RPM2 = buildPerlModule rec {
     pname = "RPM2";
     version = "1.4";
     src = fetchurl {
@@ -30130,10 +35790,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LKUNDRAK/${pname}@${version}";
+      };
     };
   };
 
-  RSSParserLite = buildPerlPackage {
+  RSSParserLite = buildPerlPackage rec {
     pname = "RSS-Parser-Lite";
     version = "0.12";
     src = fetchurl {
@@ -30148,10 +35812,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TFPBL/${pname}@${version}";
+      };
     };
   };
 
-  RTClientREST = buildPerlModule {
+  RTClientREST = buildPerlModule rec {
     pname = "RT-Client-REST";
     version = "0.72";
     src = fetchurl {
@@ -30176,10 +35844,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DJZORT/${pname}@${version}";
+      };
     };
   };
 
-  SafeIsa = buildPerlPackage {
+  SafeIsa = buildPerlPackage rec {
     pname = "Safe-Isa";
     version = "1.000010";
     src = fetchurl {
@@ -30192,10 +35864,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  ScalarListUtils = buildPerlPackage {
+  ScalarListUtils = buildPerlPackage rec {
     pname = "Scalar-List-Utils";
     version = "1.63";
     src = fetchurl {
@@ -30208,10 +35884,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  ScalarString = buildPerlModule {
+  ScalarString = buildPerlModule rec {
     pname = "Scalar-String";
     version = "0.003";
     src = fetchurl {
@@ -30224,10 +35904,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  ScalarType = buildPerlPackage {
+  ScalarType = buildPerlPackage rec {
     pname = "Scalar-Type";
     version = "0.3.2";
     src = fetchurl {
@@ -30244,10 +35928,14 @@ with self;
         artistic1
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  SCGI = buildPerlModule {
+  SCGI = buildPerlModule rec {
     pname = "SCGI";
     version = "0.6";
     src = fetchurl {
@@ -30261,10 +35949,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VIPERCODE/${pname}@${version}";
+      };
     };
   };
 
-  ScopeGuard = buildPerlPackage {
+  ScopeGuard = buildPerlPackage rec {
     pname = "Scope-Guard";
     version = "0.21";
     src = fetchurl {
@@ -30277,10 +35969,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHOCOLATE/${pname}@${version}";
+      };
     };
   };
 
-  ScopeUpper = buildPerlPackage {
+  ScopeUpper = buildPerlPackage rec {
     pname = "Scope-Upper";
     version = "0.34";
     src = fetchurl {
@@ -30294,10 +35990,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VPIT/${pname}@${version}";
+      };
     };
   };
 
-  SDL = buildPerlModule {
+  SDL = buildPerlModule rec {
     pname = "SDL";
     version = "2.548";
     src = fetchurl {
@@ -30339,10 +36039,14 @@ with self;
     meta = {
       description = "SDL bindings to Perl";
       license = with lib.licenses; [ lgpl21Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FROGGS/${pname}@${version}";
+      };
     };
   };
 
-  SeleniumRemoteDriver = buildPerlPackage {
+  SeleniumRemoteDriver = buildPerlPackage rec {
     pname = "Selenium-Remote-Driver";
     version = "1.49";
     src = fetchurl {
@@ -30374,10 +36078,14 @@ with self;
       homepage = "https://github.com/teodesian/Selenium-Remote-Driver";
       description = "Perl Client for Selenium Remote Driver";
       license = lib.licenses.asl20;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TEODESIAN/${pname}@${version}";
+      };
     };
   };
 
-  SerealDecoder = buildPerlPackage {
+  SerealDecoder = buildPerlPackage rec {
     pname = "Sereal-Decoder";
     version = "5.004";
     src = fetchurl {
@@ -30399,10 +36107,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.thoughtpolice ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YVES/${pname}@${version}";
+      };
     };
   };
 
-  SerealEncoder = buildPerlPackage {
+  SerealEncoder = buildPerlPackage rec {
     pname = "Sereal-Encoder";
     version = "5.004";
     src = fetchurl {
@@ -30424,10 +36136,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.thoughtpolice ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YVES/${pname}@${version}";
+      };
     };
   };
 
-  Sereal = buildPerlPackage {
+  Sereal = buildPerlPackage rec {
     pname = "Sereal";
     version = "5.004";
     src = fetchurl {
@@ -30450,10 +36166,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.thoughtpolice ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YVES/${pname}@${version}";
+      };
     };
   };
 
-  DeviceSerialPort = buildPerlPackage {
+  DeviceSerialPort = buildPerlPackage rec {
     pname = "Device-SerialPort";
     version = "1.04";
     src = fetchurl {
@@ -30467,10 +36187,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "modemtest";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "COOK/${pname}@${version}";
+      };
     };
   };
 
-  ServerStarter = buildPerlModule {
+  ServerStarter = buildPerlModule rec {
     pname = "Server-Starter";
     version = "0.35";
     src = fetchurl {
@@ -30491,10 +36215,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "start_server";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZUHO/${pname}@${version}";
+      };
     };
   };
 
-  SessionToken = buildPerlPackage {
+  SessionToken = buildPerlPackage rec {
     pname = "Session-Token";
     version = "1.503";
     src = fetchurl {
@@ -30516,10 +36244,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FRACTAL/${pname}@${version}";
+      };
     };
   };
 
-  SetInfinite = buildPerlPackage {
+  SetInfinite = buildPerlPackage rec {
     pname = "Set-Infinite";
     version = "0.65";
     src = fetchurl {
@@ -30532,10 +36264,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FGLOCK/${pname}@${version}";
+      };
     };
   };
 
-  SetIntSpan = buildPerlPackage {
+  SetIntSpan = buildPerlPackage rec {
     pname = "Set-IntSpan";
     version = "1.19";
     src = fetchurl {
@@ -30549,10 +36285,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SWMCD/${pname}@${version}";
+      };
     };
   };
 
-  SetObject = buildPerlPackage {
+  SetObject = buildPerlPackage rec {
     pname = "Set-Object";
     version = "1.42";
     src = fetchurl {
@@ -30562,10 +36302,14 @@ with self;
     meta = {
       description = "Unordered collections (sets) of Perl Objects";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RURBAN/${pname}@${version}";
+      };
     };
   };
 
-  SetScalar = buildPerlPackage {
+  SetScalar = buildPerlPackage rec {
     pname = "Set-Scalar";
     version = "1.29";
     src = fetchurl {
@@ -30578,10 +36322,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAVIDO/${pname}@${version}";
+      };
     };
   };
 
-  SmartComments = buildPerlPackage {
+  SmartComments = buildPerlPackage rec {
     pname = "Smart-Comments";
     version = "1.06";
     src = fetchurl {
@@ -30596,10 +36344,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  SGMLSpm = buildPerlModule {
+  SGMLSpm = buildPerlModule rec {
     pname = "SGMLSpm";
     version = "1.1";
     src = fetchurl {
@@ -30610,10 +36362,14 @@ with self;
       description = "Library for parsing the output from SGMLS and NSGMLS parsers";
       license = with lib.licenses; [ gpl2Plus ];
       mainProgram = "sgmlspl.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RAAB/${pname}@${version}";
+      };
     };
   };
 
-  SignalMask = buildPerlPackage {
+  SignalMask = buildPerlPackage rec {
     pname = "Signal-Mask";
     version = "0.008";
     src = fetchurl {
@@ -30627,10 +36383,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  SnowballNorwegian = buildPerlModule {
+  SnowballNorwegian = buildPerlModule rec {
     pname = "Snowball-Norwegian";
     version = "1.2";
     src = fetchurl {
@@ -30644,10 +36404,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "stemmer-no.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASKSH/${pname}@${version}";
+      };
     };
   };
 
-  SnowballSwedish = buildPerlModule {
+  SnowballSwedish = buildPerlModule rec {
     pname = "Snowball-Swedish";
     version = "1.2";
     src = fetchurl {
@@ -30661,10 +36425,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "stemmer-se.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASKSH/${pname}@${version}";
+      };
     };
   };
 
-  SOAPLite = buildPerlPackage {
+  SOAPLite = buildPerlPackage rec {
     pname = "SOAP-Lite";
     version = "1.27";
     src = fetchurl {
@@ -30689,10 +36457,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  Socket6 = buildPerlPackage {
+  Socket6 = buildPerlPackage rec {
     pname = "Socket6";
     version = "0.29";
     src = fetchurl {
@@ -30709,10 +36481,14 @@ with self;
     meta = {
       description = "IPv6 related part of the C socket.h defines and structure manipulators";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "UMEMOTO/${pname}@${version}";
+      };
     };
   };
 
-  SoftwareLicense = buildPerlPackage {
+  SoftwareLicense = buildPerlPackage rec {
     pname = "Software-License";
     version = "0.104004";
     src = fetchurl {
@@ -30731,10 +36507,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  SoftwareLicenseCCpack = buildPerlPackage {
+  SoftwareLicenseCCpack = buildPerlPackage rec {
     pname = "Software-License-CCpack";
     version = "1.11";
     src = fetchurl {
@@ -30747,10 +36527,14 @@ with self;
       description = "Software::License pack for Creative Commons' licenses";
       homepage = "https://github.com/SineSwiper/Software-License-CCpack";
       license = with lib.licenses; [ lgpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BBYRD/${pname}@${version}";
+      };
     };
   };
 
-  SortKey = buildPerlPackage {
+  SortKey = buildPerlPackage rec {
     pname = "Sort-Key";
     version = "1.33";
     src = fetchurl {
@@ -30763,10 +36547,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SALVA/${pname}@${version}";
+      };
     };
   };
 
-  SortVersions = buildPerlPackage {
+  SortVersions = buildPerlPackage rec {
     pname = "Sort-Versions";
     version = "1.62";
     src = fetchurl {
@@ -30779,10 +36567,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  Specio = buildPerlPackage {
+  Specio = buildPerlPackage rec {
     pname = "Specio";
     version = "0.48";
     src = fetchurl {
@@ -30806,10 +36598,14 @@ with self;
       description = "Type constraints and coercions for Perl";
       homepage = "https://metacpan.org/release/Specio";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  SpecioLibraryPathTiny = buildPerlPackage {
+  SpecioLibraryPathTiny = buildPerlPackage rec {
     pname = "Specio-Library-Path-Tiny";
     version = "0.05";
     src = fetchurl {
@@ -30828,10 +36624,14 @@ with self;
       description = "Path::Tiny types and coercions for Specio";
       homepage = "https://metacpan.org/release/Specio-Library-Path-Tiny";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  Spiffy = buildPerlPackage {
+  Spiffy = buildPerlPackage rec {
     pname = "Spiffy";
     version = "0.46";
     src = fetchurl {
@@ -30844,10 +36644,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  SpreadsheetCSV = buildPerlPackage {
+  SpreadsheetCSV = buildPerlPackage rec {
     pname = "Spreadsheet-CSV";
     version = "0.20";
     src = fetchurl {
@@ -30867,10 +36671,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DDICK/${pname}@${version}";
+      };
     };
   };
 
-  SpreadsheetParseExcel = buildPerlPackage {
+  SpreadsheetParseExcel = buildPerlPackage rec {
     pname = "Spreadsheet-ParseExcel";
     version = "0.66";
     src = fetchurl {
@@ -30890,10 +36698,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMCNAMARA/${pname}@${version}";
+      };
     };
   };
 
-  SpreadsheetWriteExcel = buildPerlPackage {
+  SpreadsheetWriteExcel = buildPerlPackage rec {
     pname = "Spreadsheet-WriteExcel";
     version = "2.40";
     src = fetchurl {
@@ -30911,10 +36723,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "chartex";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JMCNAMARA/${pname}@${version}";
+      };
     };
   };
 
-  SpreadsheetXLSX = buildPerlPackage {
+  SpreadsheetXLSX = buildPerlPackage rec {
     pname = "Spreadsheet-XLSX";
     version = "0.17";
     src = fetchurl {
@@ -30936,10 +36752,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASB/${pname}@${version}";
+      };
     };
   };
 
-  SQLAbstract = buildPerlPackage {
+  SQLAbstract = buildPerlPackage rec {
     pname = "SQL-Abstract";
     version = "2.000001";
     src = fetchurl {
@@ -30963,10 +36783,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  SQLAbstractClassic = buildPerlPackage {
+  SQLAbstractClassic = buildPerlPackage rec {
     pname = "SQL-Abstract-Classic";
     version = "1.91";
     src = fetchurl {
@@ -30985,10 +36809,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RIBASUSHI/${pname}@${version}";
+      };
     };
   };
 
-  SQLAbstractLimit = buildPerlPackage {
+  SQLAbstractLimit = buildPerlPackage rec {
     pname = "SQL-Abstract-Limit";
     version = "0.143";
     src = fetchurl {
@@ -31009,10 +36837,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASB/${pname}@${version}";
+      };
     };
   };
 
-  SQLAbstractPg = buildPerlPackage {
+  SQLAbstractPg = buildPerlPackage rec {
     pname = "SQL-Abstract-Pg";
     version = "1.0";
     src = fetchurl {
@@ -31025,10 +36857,14 @@ with self;
       description = "PostgreSQL features for SQL::Abstract";
       homepage = "https://mojolicious.org";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SRI/${pname}@${version}";
+      };
     };
   };
 
-  SQLSplitStatement = buildPerlPackage {
+  SQLSplitStatement = buildPerlPackage rec {
     pname = "SQL-SplitStatement";
     version = "1.00023";
     src = fetchurl {
@@ -31051,10 +36887,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "sql-split";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VEESH/${pname}@${version}";
+      };
     };
   };
 
-  SQLStatement = buildPerlPackage {
+  SQLStatement = buildPerlPackage rec {
     pname = "SQL-Statement";
     version = "1.414";
     src = fetchurl {
@@ -31077,10 +36917,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "REHSACK/${pname}@${version}";
+      };
     };
   };
 
-  SQLTokenizer = buildPerlPackage {
+  SQLTokenizer = buildPerlPackage rec {
     pname = "SQL-Tokenizer";
     version = "0.24";
     src = fetchurl {
@@ -31093,10 +36937,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "IZUT/${pname}@${version}";
+      };
     };
   };
 
-  SQLTranslator = buildPerlPackage {
+  SQLTranslator = buildPerlPackage rec {
     pname = "SQL-Translator";
     version = "1.63";
     src = fetchurl {
@@ -31141,10 +36989,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "sqlt";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VEESH/${pname}@${version}";
+      };
     };
   };
 
-  PackageVariant = buildPerlPackage {
+  PackageVariant = buildPerlPackage rec {
     pname = "Package-Variant";
     version = "1.003002";
     src = fetchurl {
@@ -31162,10 +37014,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  SortNaturally = buildPerlPackage {
+  SortNaturally = buildPerlPackage rec {
     pname = "Sort-Naturally";
     version = "1.03";
     src = fetchurl {
@@ -31178,10 +37034,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  Starlet = buildPerlPackage {
+  Starlet = buildPerlPackage rec {
     pname = "Starlet";
     version = "0.31";
     src = fetchurl {
@@ -31205,10 +37065,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZUHO/${pname}@${version}";
+      };
     };
   };
 
-  Starman = buildPerlModule {
+  Starman = buildPerlModule rec {
     pname = "Starman";
     version = "0.4017";
     src = fetchurl {
@@ -31243,10 +37107,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "starman";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  StatisticsBasic = buildPerlPackage {
+  StatisticsBasic = buildPerlPackage rec {
     pname = "Statistics-Basic";
     version = "1.6611";
     src = fetchurl {
@@ -31257,10 +37125,14 @@ with self;
     meta = {
       description = "Collection of very basic statistics modules";
       license = with lib.licenses; [ lgpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JETTERO/${pname}@${version}";
+      };
     };
   };
 
-  StatisticsCaseResampling = buildPerlPackage {
+  StatisticsCaseResampling = buildPerlPackage rec {
     pname = "Statistics-CaseResampling";
     version = "0.15";
     src = fetchurl {
@@ -31273,10 +37145,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMUELLER/${pname}@${version}";
+      };
     };
   };
 
-  StatisticsChiSquare = buildPerlPackage {
+  StatisticsChiSquare = buildPerlPackage rec {
     pname = "Statistics-ChiSquare";
     version = "1.0000";
     src = fetchurl {
@@ -31289,10 +37165,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  StatisticsDescriptive = buildPerlModule {
+  StatisticsDescriptive = buildPerlModule rec {
     pname = "Statistics-Descriptive";
     version = "3.0801";
     src = fetchurl {
@@ -31307,10 +37187,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  StatisticsDistributions = buildPerlPackage {
+  StatisticsDistributions = buildPerlPackage rec {
     pname = "Statistics-Distributions";
     version = "1.02";
     src = fetchurl {
@@ -31323,10 +37207,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKEK/${pname}@${version}";
+      };
     };
   };
 
-  StatisticsTTest = buildPerlPackage {
+  StatisticsTTest = buildPerlPackage rec {
     pname = "Statistics-TTest";
     version = "1.1.0";
     src = fetchurl {
@@ -31343,10 +37231,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YUNFANG/${pname}@${version}";
+      };
     };
   };
 
-  StreamBuffered = buildPerlPackage {
+  StreamBuffered = buildPerlPackage rec {
     pname = "Stream-Buffered";
     version = "0.03";
     src = fetchurl {
@@ -31360,10 +37252,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DOY/${pname}@${version}";
+      };
     };
   };
 
-  strictures = buildPerlPackage {
+  strictures = buildPerlPackage rec {
     pname = "strictures";
     version = "2.000006";
     src = fetchurl {
@@ -31377,10 +37273,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  StringApprox = buildPerlPackage {
+  StringApprox = buildPerlPackage rec {
     pname = "String-Approx";
     version = "3.28";
     src = fetchurl {
@@ -31393,10 +37293,14 @@ with self;
         artistic2
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JHI/${pname}@${version}";
+      };
     };
   };
 
-  StringBinaryInterpolation = buildPerlPackage {
+  StringBinaryInterpolation = buildPerlPackage rec {
     pname = "String-Binary-Interpolation";
     version = "1.0.0";
     src = fetchurl {
@@ -31409,10 +37313,14 @@ with self;
         artistic2
         gpl2Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  StringCamelCase = buildPerlPackage {
+  StringCamelCase = buildPerlPackage rec {
     pname = "String-CamelCase";
     version = "0.04";
     src = fetchurl {
@@ -31425,10 +37333,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HIO/${pname}@${version}";
+      };
     };
   };
 
-  StringCompareConstantTime = buildPerlPackage {
+  StringCompareConstantTime = buildPerlPackage rec {
     pname = "String-Compare-ConstantTime";
     version = "0.321";
     src = fetchurl {
@@ -31441,10 +37353,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FRACTAL/${pname}@${version}";
+      };
     };
   };
 
-  StringCRC32 = buildPerlPackage {
+  StringCRC32 = buildPerlPackage rec {
     pname = "String-CRC32";
     version = "2.100";
     src = fetchurl {
@@ -31454,10 +37370,14 @@ with self;
     meta = {
       description = "Perl interface for cyclic redundancy check generation";
       license = with lib.licenses; [ publicDomain ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEEJO/${pname}@${version}";
+      };
     };
   };
 
-  StringDiff = buildPerlModule {
+  StringDiff = buildPerlModule rec {
     pname = "String-Diff";
     version = "0.07";
     src = fetchurl {
@@ -31488,10 +37408,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YAPPO/${pname}@${version}";
+      };
     };
   };
 
-  StringErrf = buildPerlPackage {
+  StringErrf = buildPerlPackage rec {
     pname = "String-Errf";
     version = "0.009";
     src = fetchurl {
@@ -31510,10 +37434,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  StringEscape = buildPerlPackage {
+  StringEscape = buildPerlPackage rec {
     pname = "String-Escape";
     version = "2010.002";
     src = fetchurl {
@@ -31526,10 +37454,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EVO/${pname}@${version}";
+      };
     };
   };
 
-  StringFlogger = buildPerlPackage {
+  StringFlogger = buildPerlPackage rec {
     pname = "String-Flogger";
     version = "1.101246";
     src = fetchurl {
@@ -31547,10 +37479,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  StringFormat = buildPerlPackage {
+  StringFormat = buildPerlPackage rec {
     pname = "String-Format";
     version = "1.18";
     src = fetchurl {
@@ -31560,10 +37496,14 @@ with self;
     meta = {
       description = "Sprintf-like string formatting capabilities with arbitrary format definitions";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SREZIC/${pname}@${version}";
+      };
     };
   };
 
-  StringFormatter = buildPerlPackage {
+  StringFormatter = buildPerlPackage rec {
     pname = "String-Formatter";
     version = "1.235";
     src = fetchurl {
@@ -31574,10 +37514,14 @@ with self;
     meta = {
       description = "Build sprintf-like functions of your own";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  StringInterpolate = buildPerlPackage {
+  StringInterpolate = buildPerlPackage rec {
     pname = "String-Interpolate";
     version = "0.33";
     src = fetchurl {
@@ -31595,7 +37539,7 @@ with self;
     ];
   };
 
-  StringInterpolateNamed = buildPerlPackage {
+  StringInterpolateNamed = buildPerlPackage rec {
     pname = "String-Interpolate-Named";
     version = "1.03";
     src = fetchurl {
@@ -31608,10 +37552,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  StringMkPasswd = buildPerlPackage {
+  StringMkPasswd = buildPerlPackage rec {
     pname = "String-MkPasswd";
     version = "0.05";
     src = fetchurl {
@@ -31626,10 +37574,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mkpasswd.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CGRAU/${pname}@${version}";
+      };
     };
   };
 
-  StringRandom = buildPerlModule {
+  StringRandom = buildPerlModule rec {
     pname = "String-Random";
     version = "0.32";
     src = fetchurl {
@@ -31642,10 +37594,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  StringRewritePrefix = buildPerlPackage {
+  StringRewritePrefix = buildPerlPackage rec {
     pname = "String-RewritePrefix";
     version = "0.009";
     src = fetchurl {
@@ -31660,10 +37616,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  StringShellQuote = buildPerlPackage {
+  StringShellQuote = buildPerlPackage rec {
     pname = "String-ShellQuote";
     version = "1.04";
     src = fetchurl {
@@ -31678,10 +37638,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "shell-quote";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROSCH/${pname}@${version}";
+      };
     };
   };
 
-  StringSimilarity = buildPerlPackage {
+  StringSimilarity = buildPerlPackage rec {
     pname = "String-Similarity";
     version = "1.04";
     src = fetchurl {
@@ -31692,10 +37656,14 @@ with self;
     meta = {
       description = "Calculate the similarity of two strings";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  ShellCommand = buildPerlPackage {
+  ShellCommand = buildPerlPackage rec {
     pname = "Shell-Command";
     version = "0.06";
     src = fetchurl {
@@ -31708,10 +37676,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FLORA/${pname}@${version}";
+      };
     };
   };
 
-  ShellConfigGenerate = buildPerlPackage {
+  ShellConfigGenerate = buildPerlPackage rec {
     pname = "Shell-Config-Generate";
     version = "0.34";
     src = fetchurl {
@@ -31727,10 +37699,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  ShellGuess = buildPerlPackage {
+  ShellGuess = buildPerlPackage rec {
     pname = "Shell-Guess";
     version = "0.09";
     src = fetchurl {
@@ -31744,10 +37720,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  StringToIdentifierEN = buildPerlPackage {
+  StringToIdentifierEN = buildPerlPackage rec {
     pname = "String-ToIdentifier-EN";
     version = "0.12";
     src = fetchurl {
@@ -31765,10 +37745,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  StringTruncate = buildPerlPackage {
+  StringTruncate = buildPerlPackage rec {
     pname = "String-Truncate";
     version = "1.100603";
     src = fetchurl {
@@ -31783,10 +37767,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  StringTT = buildPerlPackage {
+  StringTT = buildPerlPackage rec {
     pname = "String-TT";
     version = "0.03";
     src = fetchurl {
@@ -31809,10 +37797,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  StringUtil = buildPerlModule {
+  StringUtil = buildPerlModule rec {
     pname = "String-Util";
     version = "1.34";
     src = fetchurl {
@@ -31827,12 +37819,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BAKERSCOT/${pname}@${version}";
+      };
     };
   };
 
   strip-nondeterminism = callPackage ../development/perl-modules/strip-nondeterminism { };
 
-  StructDumb = buildPerlModule {
+  StructDumb = buildPerlModule rec {
     pname = "Struct-Dumb";
     version = "0.14";
     src = fetchurl {
@@ -31846,10 +37842,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  SubExporter = buildPerlPackage {
+  SubExporter = buildPerlPackage rec {
     pname = "Sub-Exporter";
     version = "0.990";
     src = fetchurl {
@@ -31864,10 +37864,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  SubExporterForMethods = buildPerlPackage {
+  SubExporterForMethods = buildPerlPackage rec {
     pname = "Sub-Exporter-ForMethods";
     version = "0.100055";
     src = fetchurl {
@@ -31886,10 +37890,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  SubExporterGlobExporter = buildPerlPackage {
+  SubExporterGlobExporter = buildPerlPackage rec {
     pname = "Sub-Exporter-GlobExporter";
     version = "0.006";
     src = fetchurl {
@@ -31904,10 +37912,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  SubExporterProgressive = buildPerlPackage {
+  SubExporterProgressive = buildPerlPackage rec {
     pname = "Sub-Exporter-Progressive";
     version = "0.001013";
     src = fetchurl {
@@ -31921,10 +37933,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  SubHandlesVia = buildPerlPackage {
+  SubHandlesVia = buildPerlPackage rec {
     pname = "Sub-HandlesVia";
     version = "0.050002";
     src = fetchurl {
@@ -31949,10 +37965,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  SubIdentify = buildPerlPackage {
+  SubIdentify = buildPerlPackage rec {
     pname = "Sub-Identify";
     version = "0.14";
     src = fetchurl {
@@ -31965,10 +37985,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RGARCIA/${pname}@${version}";
+      };
     };
   };
 
-  SubInfo = buildPerlPackage {
+  SubInfo = buildPerlPackage rec {
     pname = "Sub-Info";
     version = "0.002";
     src = fetchurl {
@@ -31982,10 +38006,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  SubInstall = buildPerlPackage {
+  SubInstall = buildPerlPackage rec {
     pname = "Sub-Install";
     version = "0.929";
     src = fetchurl {
@@ -31999,10 +38027,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  SubName = buildPerlPackage {
+  SubName = buildPerlPackage rec {
     pname = "Sub-Name";
     version = "0.27";
     src = fetchurl {
@@ -32020,10 +38052,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  SubOverride = buildPerlPackage {
+  SubOverride = buildPerlPackage rec {
     pname = "Sub-Override";
     version = "0.09";
     src = fetchurl {
@@ -32037,10 +38073,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OVID/${pname}@${version}";
+      };
     };
   };
 
-  SubQuote = buildPerlPackage {
+  SubQuote = buildPerlPackage rec {
     pname = "Sub-Quote";
     version = "2.006008";
     src = fetchurl {
@@ -32054,10 +38094,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  SubStrictDecl = buildPerlModule {
+  SubStrictDecl = buildPerlModule rec {
     pname = "Sub-StrictDecl";
     version = "0.005";
     src = fetchurl {
@@ -32071,10 +38115,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZEFRAM/${pname}@${version}";
+      };
     };
   };
 
-  SubUplevel = buildPerlPackage {
+  SubUplevel = buildPerlPackage rec {
     pname = "Sub-Uplevel";
     version = "0.2800";
     src = fetchurl {
@@ -32088,10 +38136,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  SVNSimple = buildPerlPackage {
+  SVNSimple = buildPerlPackage rec {
     pname = "SVN-Simple";
     version = "0.28";
     src = fetchurl {
@@ -32105,10 +38157,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CLKAO/${pname}@${version}";
+      };
     };
   };
 
-  SafeHole = buildPerlModule {
+  SafeHole = buildPerlModule rec {
     pname = "Safe-Hole";
     version = "0.14";
     src = fetchurl {
@@ -32122,10 +38178,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  Swim = buildPerlPackage {
+  Swim = buildPerlPackage rec {
     pname = "Swim";
     version = "0.1.48";
     src = fetchurl {
@@ -32148,10 +38208,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "swin";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  Switch = buildPerlPackage {
+  Switch = buildPerlPackage rec {
     pname = "Switch";
     version = "2.17";
     src = fetchurl {
@@ -32165,10 +38229,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
-  SymbolGet = buildPerlPackage {
+  SymbolGet = buildPerlPackage rec {
     pname = "Symbol-Get";
     version = "0.10";
     src = fetchurl {
@@ -32187,10 +38255,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FELIPE/${pname}@${version}";
+      };
     };
   };
 
-  SymbolGlobalName = buildPerlPackage {
+  SymbolGlobalName = buildPerlPackage rec {
     pname = "Symbol-Global-Name";
     version = "0.05";
     src = fetchurl {
@@ -32203,10 +38275,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXMV/${pname}@${version}";
+      };
     };
   };
 
-  SymbolUtil = buildPerlModule {
+  SymbolUtil = buildPerlModule rec {
     pname = "Symbol-Util";
     version = "0.0203";
     src = fetchurl {
@@ -32219,10 +38295,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  syntax = buildPerlPackage {
+  syntax = buildPerlPackage rec {
     pname = "syntax";
     version = "0.004";
     src = fetchurl {
@@ -32240,10 +38320,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHAYLON/${pname}@${version}";
+      };
     };
   };
 
-  SyntaxKeywordJunction = buildPerlPackage {
+  SyntaxKeywordJunction = buildPerlPackage rec {
     pname = "Syntax-Keyword-Junction";
     version = "0.003008";
     src = fetchurl {
@@ -32259,10 +38343,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FREW/${pname}@${version}";
+      };
     };
   };
 
-  SyntaxKeywordTry = buildPerlModule {
+  SyntaxKeywordTry = buildPerlModule rec {
     pname = "Syntax-Keyword-Try";
     version = "0.29";
     src = fetchurl {
@@ -32278,10 +38366,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  SysMmap = buildPerlPackage {
+  SysMmap = buildPerlPackage rec {
     pname = "Sys-Mmap";
     version = "0.20";
     src = fetchurl {
@@ -32292,10 +38384,14 @@ with self;
       description = "Use mmap to map in a file as a Perl variable";
       maintainers = with maintainers; [ peterhoeg ];
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  SysMemInfo = buildPerlPackage {
+  SysMemInfo = buildPerlPackage rec {
     pname = "Sys-MemInfo";
     version = "0.99";
     src = fetchurl {
@@ -32306,10 +38402,14 @@ with self;
       description = "Memory information";
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = [ maintainers.pSub ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SCRESTO/${pname}@${version}";
+      };
     };
   };
 
-  SysCPU = buildPerlPackage {
+  SysCPU = buildPerlPackage rec {
     pname = "Sys-CPU";
     version = "0.61";
     src = fetchurl {
@@ -32335,10 +38435,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MZSANFORD/${pname}@${version}";
+      };
     };
   };
 
-  SysCpuAffinity = buildPerlModule {
+  SysCpuAffinity = buildPerlModule rec {
     pname = "Sys-CpuAffinity";
     version = "1.12";
     src = fetchurl {
@@ -32353,10 +38457,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MOB/${pname}@${version}";
+      };
     };
   };
 
-  SysHostnameLong = buildPerlPackage {
+  SysHostnameLong = buildPerlPackage rec {
     pname = "Sys-Hostname-Long";
     version = "1.5";
     src = fetchurl {
@@ -32370,10 +38478,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SCOTT/${pname}@${version}";
+      };
     };
   };
 
-  SysSigAction = buildPerlPackage {
+  SysSigAction = buildPerlPackage rec {
     pname = "Sys-SigAction";
     version = "0.23";
     src = fetchurl {
@@ -32387,10 +38499,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LBAXTER/${pname}@${version}";
+      };
     };
   };
 
-  SysSyslog = buildPerlPackage {
+  SysSyslog = buildPerlPackage rec {
     pname = "Sys-Syslog";
     version = "0.36";
     src = fetchurl {
@@ -32403,10 +38519,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAPER/${pname}@${version}";
+      };
     };
   };
 
-  SystemCommand = buildPerlPackage {
+  SystemCommand = buildPerlPackage rec {
     pname = "System-Command";
     version = "1.122";
     src = fetchurl {
@@ -32426,6 +38546,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
@@ -32456,7 +38580,7 @@ with self;
     };
   };
 
-  TAPParserSourceHandlerpgTAP = buildPerlModule {
+  TAPParserSourceHandlerpgTAP = buildPerlModule rec {
     pname = "TAP-Parser-SourceHandler-pgTAP";
     version = "3.36";
     src = fetchurl {
@@ -32471,10 +38595,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DWHEELER/${pname}@${version}";
+      };
     };
   };
 
-  TaskCatalystTutorial = buildPerlPackage {
+  TaskCatalystTutorial = buildPerlPackage rec {
     pname = "Task-Catalyst-Tutorial";
     version = "0.06";
     src = fetchurl {
@@ -32500,10 +38628,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRAMBERG/${pname}@${version}";
+      };
     };
   };
 
-  TaskFreecellSolverTesting = buildPerlModule {
+  TaskFreecellSolverTesting = buildPerlModule rec {
     pname = "Task-FreecellSolver-Testing";
     version = "0.0.12";
     src = fetchurl {
@@ -32536,10 +38668,14 @@ with self;
       description = "Install the CPAN dependencies of the Freecell Solver test suite";
       homepage = "https://metacpan.org/release/Task-FreecellSolver-Testing";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TaskPlack = buildPerlModule {
+  TaskPlack = buildPerlModule rec {
     pname = "Task-Plack";
     version = "0.28";
     src = fetchurl {
@@ -32580,10 +38716,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  TaskTestRunAllPlugins = buildPerlModule {
+  TaskTestRunAllPlugins = buildPerlModule rec {
     pname = "Task-Test-Run-AllPlugins";
     version = "0.0106";
     src = fetchurl {
@@ -32603,10 +38743,14 @@ with self;
       description = "Specifications for installing all the Test::Run";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TaskWeaken = buildPerlPackage {
+  TaskWeaken = buildPerlPackage rec {
     pname = "Task-Weaken";
     version = "1.06";
     src = fetchurl {
@@ -32620,10 +38764,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  Tcl = buildPerlPackage {
+  Tcl = buildPerlPackage rec {
     pname = "Tcl";
     version = "1.27";
     src = fetchurl {
@@ -32646,10 +38794,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VKON/${pname}@${version}";
+      };
     };
   };
 
-  TclpTk = buildPerlPackage {
+  TclpTk = buildPerlPackage rec {
     pname = "Tcl-pTk";
     version = "1.11";
     src = fetchurl {
@@ -32679,10 +38831,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CAC/${pname}@${version}";
+      };
     };
   };
 
-  TemplatePluginAutoformat = buildPerlPackage {
+  TemplatePluginAutoformat = buildPerlPackage rec {
     pname = "Template-Plugin-Autoformat";
     version = "2.77";
     src = fetchurl {
@@ -32700,10 +38856,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KARMAN/${pname}@${version}";
+      };
     };
   };
 
-  TemplatePluginClass = buildPerlPackage {
+  TemplatePluginClass = buildPerlPackage rec {
     pname = "Template-Plugin-Class";
     version = "0.14";
     src = fetchurl {
@@ -32717,10 +38877,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  TemplatePluginIOAll = buildPerlPackage {
+  TemplatePluginIOAll = buildPerlPackage rec {
     pname = "Template-Plugin-IO-All";
     version = "0.01";
     src = fetchurl {
@@ -32738,10 +38902,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XERN/${pname}@${version}";
+      };
     };
   };
 
-  TemplatePluginJavaScript = buildPerlPackage {
+  TemplatePluginJavaScript = buildPerlPackage rec {
     pname = "Template-Plugin-JavaScript";
     version = "0.02";
     src = fetchurl {
@@ -32755,10 +38923,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  TemplatePluginJSONEscape = buildPerlPackage {
+  TemplatePluginJSONEscape = buildPerlPackage rec {
     pname = "Template-Plugin-JSON-Escape";
     version = "0.02";
     src = fetchurl {
@@ -32772,10 +38944,14 @@ with self;
     meta = {
       description = "Adds a .json vmethod and a json filter";
       license = with lib.licenses; [ bsd0 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NANTO/${pname}@${version}";
+      };
     };
   };
 
-  TemplateTimer = buildPerlPackage {
+  TemplateTimer = buildPerlPackage rec {
     pname = "Template-Timer";
     version = "1.00";
     src = fetchurl {
@@ -32789,10 +38965,14 @@ with self;
         artistic2
         gpl3Only
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  TemplateTiny = buildPerlPackage {
+  TemplateTiny = buildPerlPackage rec {
     pname = "Template-Tiny";
     version = "1.14";
     src = fetchurl {
@@ -32806,10 +38986,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TemplateToolkit = buildPerlPackage {
+  TemplateToolkit = buildPerlPackage rec {
     pname = "Template-Toolkit";
     version = "3.101";
     src = fetchurl {
@@ -32829,10 +39013,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABW/${pname}@${version}";
+      };
     };
   };
 
-  TemplateGD = buildPerlPackage {
+  TemplateGD = buildPerlPackage rec {
     pname = "Template-GD";
     version = "2.66";
     src = fetchurl {
@@ -32849,10 +39037,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABW/${pname}@${version}";
+      };
     };
   };
 
-  TermEncoding = buildPerlPackage {
+  TermEncoding = buildPerlPackage rec {
     pname = "Term-Encoding";
     version = "0.03";
     src = fetchurl {
@@ -32866,10 +39058,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  TermProgressBar = buildPerlPackage {
+  TermProgressBar = buildPerlPackage rec {
     pname = "Term-ProgressBar";
     version = "2.23";
     src = fetchurl {
@@ -32891,10 +39087,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANWAR/${pname}@${version}";
+      };
     };
   };
 
-  TermProgressBarQuiet = buildPerlPackage {
+  TermProgressBarQuiet = buildPerlPackage rec {
     pname = "Term-ProgressBar-Quiet";
     version = "0.31";
     src = fetchurl {
@@ -32912,10 +39112,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LBROCARD/${pname}@${version}";
+      };
     };
   };
 
-  TermProgressBarSimple = buildPerlPackage {
+  TermProgressBarSimple = buildPerlPackage rec {
     pname = "Term-ProgressBar-Simple";
     version = "0.03";
     src = fetchurl {
@@ -32930,6 +39134,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EVDB/${pname}@${version}";
+      };
     };
   };
 
@@ -32937,7 +39145,7 @@ with self;
     let
       cross = stdenv.hostPlatform != stdenv.buildPlatform;
     in
-    buildPerlPackage {
+    buildPerlPackage rec {
       pname = "TermReadKey";
       version = "2.38";
       src = fetchurl {
@@ -32971,7 +39179,7 @@ with self;
       };
     };
 
-  TermReadLineGnu = buildPerlPackage {
+  TermReadLineGnu = buildPerlPackage rec {
     pname = "Term-ReadLine-Gnu";
     version = "1.46";
     src = fetchurl {
@@ -33005,10 +39213,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlsh";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAYASHI/${pname}@${version}";
+      };
     };
   };
 
-  TermReadLineTTYtter = buildPerlPackage {
+  TermReadLineTTYtter = buildPerlPackage rec {
     pname = "Term-ReadLine-TTYtter";
     version = "1.4";
     src = fetchurl {
@@ -33025,6 +39237,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CKAISER/${pname}@${version}";
+      };
     };
   };
 
@@ -33044,10 +39260,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHOENIX/${pname}@${version}";
+      };
     };
   };
 
-  TermShell = buildPerlModule {
+  TermShell = buildPerlModule rec {
     pname = "Term-Shell";
     version = "0.13";
     src = fetchurl {
@@ -33065,10 +39285,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TermShellUI = buildPerlPackage {
+  TermShellUI = buildPerlPackage rec {
     pname = "Term-ShellUI";
     version = "0.92";
     src = fetchurl {
@@ -33078,10 +39302,14 @@ with self;
     meta = {
       description = "Fully-featured shell-like command line environment";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BRONSON/${pname}@${version}";
+      };
     };
   };
 
-  TermSizeAny = buildPerlPackage {
+  TermSizeAny = buildPerlPackage rec {
     pname = "Term-Size-Any";
     version = "0.002";
     src = fetchurl {
@@ -33098,10 +39326,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FERREIRA/${pname}@${version}";
+      };
     };
   };
 
-  TermSizePerl = buildPerlPackage {
+  TermSizePerl = buildPerlPackage rec {
     pname = "Term-Size-Perl";
     version = "0.031";
     src = fetchurl {
@@ -33114,10 +39346,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FERREIRA/${pname}@${version}";
+      };
     };
   };
 
-  TermTable = buildPerlPackage {
+  TermTable = buildPerlPackage rec {
     pname = "Term-Table";
     version = "0.017";
     src = fetchurl {
@@ -33131,10 +39367,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  TermSk = buildPerlPackage {
+  TermSk = buildPerlPackage rec {
     pname = "Term-Sk";
     version = "0.18";
     src = fetchurl {
@@ -33147,10 +39387,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KEICHNER/${pname}@${version}";
+      };
     };
   };
 
-  TermUI = buildPerlPackage {
+  TermUI = buildPerlPackage rec {
     pname = "Term-UI";
     version = "0.50";
     src = fetchurl {
@@ -33164,10 +39408,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BINGOS/${pname}@${version}";
+      };
     };
   };
 
-  TermVT102 = buildPerlPackage {
+  TermVT102 = buildPerlPackage rec {
     pname = "Term-VT102";
     version = "0.91";
     src = fetchurl {
@@ -33177,10 +39425,14 @@ with self;
     meta = {
       description = "Class to emulate a DEC VT102 terminal";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AJWOOD/${pname}@${version}";
+      };
     };
   };
 
-  TermVT102Boundless = buildPerlPackage {
+  TermVT102Boundless = buildPerlPackage rec {
     pname = "Term-VT102-Boundless";
     version = "0.05";
     src = fetchurl {
@@ -33194,10 +39446,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FBARRIOS/${pname}@${version}";
+      };
     };
   };
 
-  TermAnimation = buildPerlPackage {
+  TermAnimation = buildPerlPackage rec {
     pname = "Term-Animation";
     version = "2.6";
     src = fetchurl {
@@ -33211,10 +39467,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KBAUCOM/${pname}@${version}";
+      };
     };
   };
 
-  Test2Harness = buildPerlPackage {
+  Test2Harness = buildPerlPackage rec {
     pname = "Test2-Harness";
     version = "1.000155";
     src = fetchurl {
@@ -33248,10 +39508,14 @@ with self;
       ];
       mainProgram = "yath";
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Test2Harness.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  Test2PluginMemUsage = buildPerlPackage {
+  Test2PluginMemUsage = buildPerlPackage rec {
     pname = "Test2-Plugin-MemUsage";
     version = "0.002003";
     src = fetchurl {
@@ -33265,10 +39529,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  Test2PluginUUID = buildPerlPackage {
+  Test2PluginUUID = buildPerlPackage rec {
     pname = "Test2-Plugin-UUID";
     version = "0.002001";
     src = fetchurl {
@@ -33283,10 +39551,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  Test2PluginNoWarnings = buildPerlPackage {
+  Test2PluginNoWarnings = buildPerlPackage rec {
     pname = "Test2-Plugin-NoWarnings";
     version = "0.09";
     src = fetchurl {
@@ -33302,10 +39574,14 @@ with self;
       description = "Fail if tests warn";
       homepage = "https://metacpan.org/release/Test2-Plugin-NoWarnings";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  Test2Suite = buildPerlPackage {
+  Test2Suite = buildPerlPackage rec {
     pname = "Test2-Suite";
     version = "0.000156";
     src = fetchurl {
@@ -33325,10 +39601,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  Test2ToolsFFI = buildPerlPackage {
+  Test2ToolsFFI = buildPerlPackage rec {
     pname = "Test2-Tools-FFI";
     version = "0.06";
     src = fetchurl {
@@ -33353,10 +39633,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  Test2ToolsMemoryCycle = buildPerlPackage {
+  Test2ToolsMemoryCycle = buildPerlPackage rec {
     pname = "Test2-Tools-MemoryCycle";
     version = "0.01";
     src = fetchurl {
@@ -33376,10 +39660,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ tomasajt ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  TestAbortable = buildPerlPackage {
+  TestAbortable = buildPerlPackage rec {
     pname = "Test-Abortable";
     version = "0.003";
     src = fetchurl {
@@ -33395,10 +39683,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TestAssert = buildPerlModule {
+  TestAssert = buildPerlModule rec {
     pname = "Test-Assert";
     version = "0.0504";
     src = fetchurl {
@@ -33419,10 +39711,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  TestAssertions = buildPerlPackage {
+  TestAssertions = buildPerlPackage rec {
     pname = "Test-Assertions";
     version = "1.054";
     src = fetchurl {
@@ -33433,10 +39729,14 @@ with self;
     meta = {
       description = "Simple set of building blocks for both unit and runtime testing";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BBC/${pname}@${version}";
+      };
     };
   };
 
-  TestAggregate = buildPerlModule {
+  TestAggregate = buildPerlModule rec {
     pname = "Test-Aggregate";
     version = "0.375";
     src = fetchurl {
@@ -33455,10 +39755,14 @@ with self;
         gpl1Plus
       ];
       broken = true; # This module only works with Test::More version < 1.3, but you have 1.302133
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RWSTAUNER/${pname}@${version}";
+      };
     };
   };
 
-  TestBase = buildPerlPackage {
+  TestBase = buildPerlPackage rec {
     pname = "Test-Base";
     version = "0.89";
     src = fetchurl {
@@ -33476,10 +39780,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  TestBits = buildPerlPackage {
+  TestBits = buildPerlPackage rec {
     pname = "Test-Bits";
     version = "0.02";
     src = fetchurl {
@@ -33492,10 +39800,14 @@ with self;
       description = "Provides a bits_is() subroutine for testing binary data";
       homepage = "https://metacpan.org/release/Test-Bits";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  TestCheckDeps = buildPerlPackage {
+  TestCheckDeps = buildPerlPackage rec {
     pname = "Test-CheckDeps";
     version = "0.010";
     src = fetchurl {
@@ -33509,10 +39821,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  TestClass = buildPerlPackage {
+  TestClass = buildPerlPackage rec {
     pname = "Test-Class";
     version = "0.52";
     src = fetchurl {
@@ -33531,10 +39847,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SZABGAB/${pname}@${version}";
+      };
     };
   };
 
-  TestClassMost = buildPerlModule {
+  TestClassMost = buildPerlModule rec {
     pname = "Test-Class-Most";
     version = "0.08";
     src = fetchurl {
@@ -33555,10 +39875,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OVID/${pname}@${version}";
+      };
     };
   };
 
-  TestCleanNamespaces = buildPerlPackage {
+  TestCleanNamespaces = buildPerlPackage rec {
     pname = "Test-CleanNamespaces";
     version = "0.24";
     src = fetchurl {
@@ -33587,10 +39911,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestCmd = buildPerlPackage {
+  TestCmd = buildPerlPackage rec {
     pname = "Test-Cmd";
     version = "1.09";
     src = fetchurl {
@@ -33605,10 +39933,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TestCommand = buildPerlModule {
+  TestCommand = buildPerlModule rec {
     pname = "Test-Command";
     version = "0.11";
     src = fetchurl {
@@ -33622,10 +39954,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DANBOO/${pname}@${version}";
+      };
     };
   };
 
-  TestCompile = buildPerlModule {
+  TestCompile = buildPerlModule rec {
     pname = "Test-Compile";
     version = "3.3.1";
     src = fetchurl {
@@ -33639,10 +39975,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EGILES/${pname}@${version}";
+      };
     };
   };
 
-  TestCPANMeta = buildPerlPackage {
+  TestCPANMeta = buildPerlPackage rec {
     pname = "Test-CPAN-Meta";
     version = "0.25";
     src = fetchurl {
@@ -33652,10 +39992,14 @@ with self;
     meta = {
       description = "Validate your CPAN META.json files";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BARBIE/${pname}@${version}";
+      };
     };
   };
 
-  TestCPANMetaJSON = buildPerlPackage {
+  TestCPANMetaJSON = buildPerlPackage rec {
     pname = "Test-CPAN-Meta-JSON";
     version = "0.16";
     src = fetchurl {
@@ -33666,10 +40010,14 @@ with self;
     meta = {
       description = "Validate your CPAN META.json files";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BARBIE/${pname}@${version}";
+      };
     };
   };
 
-  TestDataSplit = buildPerlModule {
+  TestDataSplit = buildPerlModule rec {
     pname = "Test-Data-Split";
     version = "0.2.2";
     src = fetchurl {
@@ -33687,10 +40035,14 @@ with self;
       description = "Split data-driven tests into several test scripts";
       homepage = "https://metacpan.org/release/Test-Data-Split";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestDeep = buildPerlPackage {
+  TestDeep = buildPerlPackage rec {
     pname = "Test-Deep";
     version = "1.204";
     src = fetchurl {
@@ -33704,10 +40056,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TestDeepJSON = buildPerlModule {
+  TestDeepJSON = buildPerlModule rec {
     pname = "Test-Deep-JSON";
     version = "0.05";
     src = fetchurl {
@@ -33727,10 +40083,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MOTEMEN/${pname}@${version}";
+      };
     };
   };
 
-  TestDeepType = buildPerlPackage {
+  TestDeepType = buildPerlPackage rec {
     pname = "Test-Deep-Type";
     version = "0.008";
     src = fetchurl {
@@ -33752,10 +40112,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestDiagINC = buildPerlPackage {
+  TestDiagINC = buildPerlPackage rec {
     pname = "Test-DiagINC";
     version = "0.010";
     src = fetchurl {
@@ -33767,10 +40131,14 @@ with self;
       homepage = "https://github.com/dagolden/Test-DiagINC";
       description = "List modules and versions loaded if tests fail";
       license = lib.licenses.asl20;
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TestDir = buildPerlPackage {
+  TestDir = buildPerlPackage rec {
     pname = "Test-Dir";
     version = "1.16";
     src = fetchurl {
@@ -33783,10 +40151,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MTHURN/${pname}@${version}";
+      };
     };
   };
 
-  TestDifferences = buildPerlPackage {
+  TestDifferences = buildPerlPackage rec {
     pname = "Test-Differences";
     version = "0.70";
     src = fetchurl {
@@ -33803,10 +40175,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DCANTRELL/${pname}@${version}";
+      };
     };
   };
 
-  TestDistManifest = buildPerlModule {
+  TestDistManifest = buildPerlModule rec {
     pname = "Test-DistManifest";
     version = "1.014";
     src = fetchurl {
@@ -33822,10 +40198,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestEOL = buildPerlPackage {
+  TestEOL = buildPerlPackage rec {
     pname = "Test-EOL";
     version = "2.02";
     src = fetchurl {
@@ -33839,10 +40219,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestException = buildPerlPackage {
+  TestException = buildPerlPackage rec {
     pname = "Test-Exception";
     version = "0.43";
     src = fetchurl {
@@ -33856,10 +40240,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  TestExit = buildPerlPackage {
+  TestExit = buildPerlPackage rec {
     pname = "Test-Exit";
     version = "0.11";
     src = fetchurl {
@@ -33873,10 +40261,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARODLAND/${pname}@${version}";
+      };
     };
   };
 
-  TestExpect = buildPerlPackage {
+  TestExpect = buildPerlPackage rec {
     pname = "Test-Expect";
     version = "0.34";
     src = fetchurl {
@@ -33893,10 +40285,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  TestFailWarnings = buildPerlPackage {
+  TestFailWarnings = buildPerlPackage rec {
     pname = "Test-FailWarnings";
     version = "0.008";
     src = fetchurl {
@@ -33908,10 +40304,14 @@ with self;
       description = "Add test failures if warnings are caught";
       homepage = "https://github.com/dagolden/Test-FailWarnings";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TestFakeHTTPD = buildPerlModule {
+  TestFakeHTTPD = buildPerlModule rec {
     pname = "Test-Fake-HTTPD";
     version = "0.09";
     src = fetchurl {
@@ -33937,10 +40337,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MASAKI/${pname}@${version}";
+      };
     };
   };
 
-  TestFatal = buildPerlPackage {
+  TestFatal = buildPerlPackage rec {
     pname = "Test-Fatal";
     version = "0.017";
     src = fetchurl {
@@ -33955,10 +40359,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TestFile = buildPerlPackage {
+  TestFile = buildPerlPackage rec {
     pname = "Test-File";
     version = "1.993";
     src = fetchurl {
@@ -33969,10 +40377,14 @@ with self;
       description = "Test file attributes";
       homepage = "https://github.com/briandfoy/test-file";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  TestFileContents = buildPerlPackage {
+  TestFileContents = buildPerlPackage rec {
     pname = "Test-File-Contents";
     version = "0.242";
     src = fetchurl {
@@ -33986,10 +40398,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARISTOTLE/${pname}@${version}";
+      };
     };
   };
 
-  TestFileShareDir = buildPerlPackage {
+  TestFileShareDir = buildPerlPackage rec {
     pname = "Test-File-ShareDir";
     version = "1.001002";
     src = fetchurl {
@@ -34011,10 +40427,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KENTNL/${pname}@${version}";
+      };
     };
   };
 
-  TestFilename = buildPerlPackage {
+  TestFilename = buildPerlPackage rec {
     pname = "Test-Filename";
     version = "0.03";
     src = fetchurl {
@@ -34026,10 +40446,14 @@ with self;
       description = "Portable filename comparison";
       homepage = "https://metacpan.org/release/Test-Filename";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TestFork = buildPerlModule {
+  TestFork = buildPerlModule rec {
     pname = "Test-Fork";
     version = "0.02";
     src = fetchurl {
@@ -34042,10 +40466,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHWERN/${pname}@${version}";
+      };
     };
   };
 
-  TestFutureIOImpl = buildPerlModule {
+  TestFutureIOImpl = buildPerlModule rec {
     pname = "Test-Future-IO-Impl";
     version = "0.14";
     src = fetchurl {
@@ -34059,10 +40487,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  TestHarnessStraps = buildPerlModule {
+  TestHarnessStraps = buildPerlModule rec {
     pname = "Test-Harness-Straps";
     version = "0.30";
     src = fetchurl {
@@ -34075,10 +40507,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHWERN/${pname}@${version}";
+      };
     };
   };
 
-  TestHexDifferences = buildPerlPackage {
+  TestHexDifferences = buildPerlPackage rec {
     pname = "Test-HexDifferences";
     version = "1.001";
     src = fetchurl {
@@ -34099,10 +40535,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  TestHexString = buildPerlModule {
+  TestHexString = buildPerlModule rec {
     pname = "Test-HexString";
     version = "0.03";
     src = fetchurl {
@@ -34115,10 +40555,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  TestIdentity = buildPerlModule {
+  TestIdentity = buildPerlModule rec {
     pname = "Test-Identity";
     version = "0.01";
     src = fetchurl {
@@ -34131,10 +40575,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  TestHTTPServerSimple = buildPerlPackage {
+  TestHTTPServerSimple = buildPerlPackage rec {
     pname = "Test-HTTP-Server-Simple";
     version = "0.11";
     src = fetchurl {
@@ -34148,10 +40596,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALEXMV/${pname}@${version}";
+      };
     };
   };
 
-  TestJSON = buildPerlModule {
+  TestJSON = buildPerlModule rec {
     pname = "Test-JSON";
     version = "0.11";
     src = fetchurl {
@@ -34166,10 +40618,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OVID/${pname}@${version}";
+      };
     };
   };
 
-  TestKwalitee = buildPerlPackage {
+  TestKwalitee = buildPerlPackage rec {
     pname = "Test-Kwalitee";
     version = "1.28";
     src = fetchurl {
@@ -34190,10 +40646,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "kwalitee-metrics";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestLWPUserAgent = buildPerlPackage {
+  TestLWPUserAgent = buildPerlPackage rec {
     pname = "Test-LWP-UserAgent";
     version = "0.036";
     src = fetchurl {
@@ -34221,10 +40681,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestLeakTrace = buildPerlPackage {
+  TestLeakTrace = buildPerlPackage rec {
     pname = "Test-LeakTrace";
     version = "0.17";
     src = fetchurl {
@@ -34238,10 +40702,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEEJO/${pname}@${version}";
+      };
     };
   };
 
-  TestLectroTest = buildPerlPackage {
+  TestLectroTest = buildPerlPackage rec {
     pname = "Test-LectroTest";
     version = "0.5001";
     src = fetchurl {
@@ -34254,10 +40722,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TMOERTEL/${pname}@${version}";
+      };
     };
   };
 
-  TestLoadAllModules = buildPerlPackage {
+  TestLoadAllModules = buildPerlPackage rec {
     pname = "Test-LoadAllModules";
     version = "0.022";
     src = fetchurl {
@@ -34274,10 +40746,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KITANO/${pname}@${version}";
+      };
     };
   };
 
-  TestLongString = buildPerlPackage {
+  TestLongString = buildPerlPackage rec {
     pname = "Test-LongString";
     version = "0.17";
     src = fetchurl {
@@ -34290,10 +40766,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RGARCIA/${pname}@${version}";
+      };
     };
   };
 
-  TestMemoryCycle = buildPerlPackage {
+  TestMemoryCycle = buildPerlPackage rec {
     pname = "Test-Memory-Cycle";
     version = "1.06";
     src = fetchurl {
@@ -34307,10 +40787,14 @@ with self;
     meta = {
       description = "Verifies code hasn't left circular references";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  TestMemoryGrowth = buildPerlModule {
+  TestMemoryGrowth = buildPerlModule rec {
     pname = "Test-MemoryGrowth";
     version = "0.04";
     src = fetchurl {
@@ -34324,10 +40808,14 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TestMemoryGrowth.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  TestMetricsAny = buildPerlModule {
+  TestMetricsAny = buildPerlModule rec {
     pname = "Test-Metrics-Any";
     version = "0.01";
     src = fetchurl {
@@ -34341,10 +40829,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  TestMockClass = buildPerlModule {
+  TestMockClass = buildPerlModule rec {
     pname = "Test-Mock-Class";
     version = "0.0303";
     src = fetchurl {
@@ -34364,10 +40856,14 @@ with self;
     meta = {
       description = "Simulating other classes";
       license = with lib.licenses; [ lgpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  TestMockGuard = buildPerlModule {
+  TestMockGuard = buildPerlModule rec {
     pname = "Test-Mock-Guard";
     version = "0.10";
     src = fetchurl {
@@ -34382,10 +40878,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "XAICRON/${pname}@${version}";
+      };
     };
   };
 
-  TestMockHTTPTiny = buildPerlPackage {
+  TestMockHTTPTiny = buildPerlPackage rec {
     pname = "Test-Mock-HTTP-Tiny";
     version = "0.002";
     src = fetchurl {
@@ -34403,10 +40903,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ODYNIEC/${pname}@${version}";
+      };
     };
   };
 
-  TestMockModule = buildPerlModule {
+  TestMockModule = buildPerlModule rec {
     pname = "Test-MockModule";
     version = "0.177.0";
     src = fetchurl {
@@ -34421,10 +40925,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFRANKS/${pname}@${version}";
+      };
     };
   };
 
-  SUPER = buildPerlModule {
+  SUPER = buildPerlModule rec {
     pname = "SUPER";
     version = "1.20190531";
     src = fetchurl {
@@ -34438,10 +40946,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHROMATIC/${pname}@${version}";
+      };
     };
   };
 
-  TestMockObject = buildPerlPackage {
+  TestMockObject = buildPerlPackage rec {
     pname = "Test-MockObject";
     version = "1.20200122";
     src = fetchurl {
@@ -34462,10 +40974,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHROMATIC/${pname}@${version}";
+      };
     };
   };
 
-  TestMockTime = buildPerlPackage {
+  TestMockTime = buildPerlPackage rec {
     pname = "Test-MockTime";
     version = "0.17";
     src = fetchurl {
@@ -34478,10 +40994,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DDICK/${pname}@${version}";
+      };
     };
   };
 
-  TestMockTimeHiRes = buildPerlModule {
+  TestMockTimeHiRes = buildPerlModule rec {
     pname = "Test-MockTime-HiRes";
     version = "0.08";
     src = fetchurl {
@@ -34502,10 +41022,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TARAO/${pname}@${version}";
+      };
     };
   };
 
-  TestMojibake = buildPerlPackage {
+  TestMojibake = buildPerlPackage rec {
     pname = "Test-Mojibake";
     version = "1.3";
     src = fetchurl {
@@ -34520,10 +41044,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scan_mojibake";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYP/${pname}@${version}";
+      };
     };
   };
 
-  TestMoreUTF8 = buildPerlPackage {
+  TestMoreUTF8 = buildPerlPackage rec {
     pname = "Test-More-UTF8";
     version = "0.05";
     src = fetchurl {
@@ -34536,10 +41064,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MONS/${pname}@${version}";
+      };
     };
   };
 
-  TestMost = buildPerlPackage {
+  TestMost = buildPerlPackage rec {
     pname = "Test-Most";
     version = "0.38";
     src = fetchurl {
@@ -34559,10 +41091,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OVID/${pname}@${version}";
+      };
     };
   };
 
-  Testmysqld = buildPerlModule {
+  Testmysqld = buildPerlModule rec {
     pname = "Test-mysqld";
     version = "1.0013";
     src = fetchurl {
@@ -34587,10 +41123,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SONGMU/${pname}@${version}";
+      };
     };
   };
 
-  TestNeeds = buildPerlPackage {
+  TestNeeds = buildPerlPackage rec {
     pname = "Test-Needs";
     version = "0.002010";
     src = fetchurl {
@@ -34603,10 +41143,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  TestNoTabs = buildPerlPackage {
+  TestNoTabs = buildPerlPackage rec {
     pname = "Test-NoTabs";
     version = "2.02";
     src = fetchurl {
@@ -34620,10 +41164,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestNoWarnings = buildPerlPackage {
+  TestNoWarnings = buildPerlPackage rec {
     pname = "Test-NoWarnings";
     version = "1.06";
     src = fetchurl {
@@ -34633,10 +41181,14 @@ with self;
     meta = {
       description = "Make sure you didn't emit any warnings while testing";
       license = with lib.licenses; [ lgpl21Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  TestObject = buildPerlPackage {
+  TestObject = buildPerlPackage rec {
     pname = "Test-Object";
     version = "0.08";
     src = fetchurl {
@@ -34649,10 +41201,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestOutput = buildPerlPackage {
+  TestOutput = buildPerlPackage rec {
     pname = "Test-Output";
     version = "1.034";
     src = fetchurl {
@@ -34663,10 +41219,14 @@ with self;
     meta = {
       description = "Utilities to test STDOUT and STDERR messages";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  TestPAUSEPermissions = buildPerlPackage {
+  TestPAUSEPermissions = buildPerlPackage rec {
     pname = "Test-PAUSE-Permissions";
     version = "0.07";
     src = fetchurl {
@@ -34688,10 +41248,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SKAJI/${pname}@${version}";
+      };
     };
   };
 
-  TestPerlCritic = buildPerlModule {
+  TestPerlCritic = buildPerlModule rec {
     pname = "Test-Perl-Critic";
     version = "1.04";
     src = fetchurl {
@@ -34708,10 +41272,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  TestPerlTidy = buildPerlModule {
+  TestPerlTidy = buildPerlModule rec {
     pname = "Test-PerlTidy";
     version = "20230226";
     src = fetchurl {
@@ -34731,10 +41299,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestPod = buildPerlPackage {
+  TestPod = buildPerlPackage rec {
     pname = "Test-Pod";
     version = "1.52";
     src = fetchurl {
@@ -34748,10 +41320,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestPodCoverage = buildPerlPackage {
+  TestPodCoverage = buildPerlPackage rec {
     pname = "Test-Pod-Coverage";
     version = "1.10";
     src = fetchurl {
@@ -34762,10 +41338,14 @@ with self;
     meta = {
       description = "Check for pod coverage in your distribution";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TestPodLinkCheck = buildPerlModule {
+  TestPodLinkCheck = buildPerlModule rec {
     pname = "Test-Pod-LinkCheck";
     version = "0.008";
     src = fetchurl {
@@ -34788,10 +41368,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "APOCAL/${pname}@${version}";
+      };
     };
   };
 
-  TestPodNo404s = buildPerlModule {
+  TestPodNo404s = buildPerlModule rec {
     pname = "Test-Pod-No404s";
     version = "0.02";
     src = fetchurl {
@@ -34813,10 +41397,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "APOCAL/${pname}@${version}";
+      };
     };
   };
 
-  TestPortabilityFiles = buildPerlPackage {
+  TestPortabilityFiles = buildPerlPackage rec {
     pname = "Test-Portability-Files";
     version = "0.10";
     src = fetchurl {
@@ -34829,10 +41417,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ABRAXXA/${pname}@${version}";
+      };
     };
   };
 
-  TestRefcount = buildPerlModule {
+  TestRefcount = buildPerlModule rec {
     pname = "Test-Refcount";
     version = "0.10";
     src = fetchurl {
@@ -34845,10 +41437,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  TestRequires = buildPerlPackage {
+  TestRequires = buildPerlPackage rec {
     pname = "Test-Requires";
     version = "0.11";
     src = fetchurl {
@@ -34862,10 +41458,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  TestRequiresGit = buildPerlPackage {
+  TestRequiresGit = buildPerlPackage rec {
     pname = "Test-Requires-Git";
     version = "1.008";
     src = fetchurl {
@@ -34879,10 +41479,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOOK/${pname}@${version}";
+      };
     };
   };
 
-  TestRequiresInternet = buildPerlPackage {
+  TestRequiresInternet = buildPerlPackage rec {
     pname = "Test-RequiresInternet";
     version = "0.05";
     src = fetchurl {
@@ -34896,10 +41500,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MALLEN/${pname}@${version}";
+      };
     };
   };
 
-  TestRoo = buildPerlPackage {
+  TestRoo = buildPerlPackage rec {
     pname = "Test-Roo";
     version = "1.004";
     src = fetchurl {
@@ -34917,10 +41525,14 @@ with self;
     meta = {
       description = "Composable, reusable tests with roles and Moo";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TestRoutine = buildPerlPackage {
+  TestRoutine = buildPerlPackage rec {
     pname = "Test-Routine";
     version = "0.031";
     src = fetchurl {
@@ -34942,10 +41554,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TestRun = buildPerlModule {
+  TestRun = buildPerlModule rec {
     pname = "Test-Run";
     version = "0.0305";
     src = fetchurl {
@@ -34964,10 +41580,14 @@ with self;
       description = "Base class to run standard TAP scripts";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunCmdLine = buildPerlModule {
+  TestRunCmdLine = buildPerlModule rec {
     pname = "Test-Run-CmdLine";
     version = "0.0132";
     src = fetchurl {
@@ -34989,10 +41609,14 @@ with self;
       homepage = "http://web-cpan.berlios.de/modules/Test-Run";
       license = with lib.licenses; [ mit ];
       mainProgram = "runprove";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunPluginAlternateInterpreters = buildPerlModule {
+  TestRunPluginAlternateInterpreters = buildPerlModule rec {
     pname = "Test-Run-Plugin-AlternateInterpreters";
     version = "0.0125";
     src = fetchurl {
@@ -35010,10 +41634,14 @@ with self;
       description = "Define different interpreters for different test scripts with Test::Run";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunPluginBreakOnFailure = buildPerlModule {
+  TestRunPluginBreakOnFailure = buildPerlModule rec {
     pname = "Test-Run-Plugin-BreakOnFailure";
     version = "0.0.6";
     src = fetchurl {
@@ -35031,10 +41659,14 @@ with self;
       description = "Stop processing the entire test suite";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunPluginColorFileVerdicts = buildPerlModule {
+  TestRunPluginColorFileVerdicts = buildPerlModule rec {
     pname = "Test-Run-Plugin-ColorFileVerdicts";
     version = "0.0125";
     src = fetchurl {
@@ -35053,10 +41685,14 @@ with self;
       description = "Make the file verdict ('ok', 'NOT OK')";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunPluginColorSummary = buildPerlModule {
+  TestRunPluginColorSummary = buildPerlModule rec {
     pname = "Test-Run-Plugin-ColorSummary";
     version = "0.0203";
     src = fetchurl {
@@ -35074,10 +41710,14 @@ with self;
       description = "Test::Run plugin that";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunPluginTrimDisplayedFilenames = buildPerlModule {
+  TestRunPluginTrimDisplayedFilenames = buildPerlModule rec {
     pname = "Test-Run-Plugin-TrimDisplayedFilenames";
     version = "0.0126";
     src = fetchurl {
@@ -35095,10 +41735,14 @@ with self;
       description = "Trim the first components";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestRunValgrind = buildPerlModule {
+  TestRunValgrind = buildPerlModule rec {
     pname = "Test-RunValgrind";
     version = "0.2.2";
     src = fetchurl {
@@ -35111,10 +41755,14 @@ with self;
       description = "Tests that an external program is valgrind-clean";
       homepage = "https://metacpan.org/release/Test-RunValgrind";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestScript = buildPerlPackage {
+  TestScript = buildPerlPackage rec {
     pname = "Test-Script";
     version = "1.29";
     src = fetchurl {
@@ -35134,10 +41782,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  TestScriptRun = buildPerlPackage {
+  TestScriptRun = buildPerlPackage rec {
     pname = "Test-Script-Run";
     version = "0.08";
     src = fetchurl {
@@ -35154,10 +41806,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SUNNAVY/${pname}@${version}";
+      };
     };
   };
 
-  TestSharedFork = buildPerlPackage {
+  TestSharedFork = buildPerlPackage rec {
     pname = "Test-SharedFork";
     version = "0.35";
     src = fetchurl {
@@ -35172,10 +41828,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  TestSimple13 = buildPerlPackage {
+  TestSimple13 = buildPerlPackage rec {
     pname = "Test-Simple";
     version = "1.302195";
     src = fetchurl {
@@ -35188,10 +41848,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EXODIST/${pname}@${version}";
+      };
     };
   };
 
-  TestSnapshot = buildPerlPackage {
+  TestSnapshot = buildPerlPackage rec {
     pname = "Test-Snapshot";
     version = "0.06";
     src = fetchurl {
@@ -35203,10 +41867,14 @@ with self;
     meta = {
       description = "Test against data stored in automatically-named file";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETJ/${pname}@${version}";
+      };
     };
   };
 
-  TestSpec = buildPerlPackage {
+  TestSpec = buildPerlPackage rec {
     pname = "Test-Spec";
     version = "0.54";
     src = fetchurl {
@@ -35228,10 +41896,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AKZHAN/${pname}@${version}";
+      };
     };
   };
 
-  TestSubCalls = buildPerlPackage {
+  TestSubCalls = buildPerlPackage rec {
     pname = "Test-SubCalls";
     version = "1.10";
     src = fetchurl {
@@ -35245,10 +41917,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestSynopsis = buildPerlPackage {
+  TestSynopsis = buildPerlPackage rec {
     pname = "Test-Synopsis";
     version = "0.17";
     src = fetchurl {
@@ -35262,10 +41938,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZOFFIX/${pname}@${version}";
+      };
     };
   };
 
-  TestTableDriven = buildPerlPackage {
+  TestTableDriven = buildPerlPackage rec {
     pname = "Test-TableDriven";
     version = "0.02";
     src = fetchurl {
@@ -35278,10 +41958,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JROCKWAY/${pname}@${version}";
+      };
     };
   };
 
-  TestTempDirTiny = buildPerlPackage {
+  TestTempDirTiny = buildPerlPackage rec {
     pname = "Test-TempDir-Tiny";
     version = "0.018";
     src = fetchurl {
@@ -35292,10 +41976,14 @@ with self;
       description = "Temporary directories that stick around when tests fail";
       homepage = "https://github.com/dagolden/Test-TempDir-Tiny";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TestTCP = buildPerlPackage {
+  TestTCP = buildPerlPackage rec {
     pname = "Test-TCP";
     version = "2.22";
     src = fetchurl {
@@ -35310,6 +41998,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
@@ -35332,10 +42024,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "FUJIWARA/${pname}@${version}";
+      };
     };
   };
 
-  TestTime = buildPerlPackage {
+  TestTime = buildPerlPackage rec {
     pname = "Test-Time";
     version = "0.092";
     src = fetchurl {
@@ -35349,10 +42045,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANATOFUZ/${pname}@${version}";
+      };
     };
   };
 
-  TestToolbox = buildPerlModule {
+  TestToolbox = buildPerlModule rec {
     pname = "Test-Toolbox";
     version = "0.4";
     src = fetchurl {
@@ -35365,10 +42065,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKO/${pname}@${version}";
+      };
     };
   };
 
-  TestTrailingSpace = buildPerlModule {
+  TestTrailingSpace = buildPerlModule rec {
     pname = "Test-TrailingSpace";
     version = "0.0601";
     src = fetchurl {
@@ -35381,10 +42085,14 @@ with self;
       description = "Test for trailing space in source files";
       homepage = "https://metacpan.org/release/Test-TrailingSpace";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TestUnitLite = buildPerlModule {
+  TestUnitLite = buildPerlModule rec {
     pname = "Test-Unit-Lite";
     version = "0.1202";
     src = fetchurl {
@@ -35397,10 +42105,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DEXTER/${pname}@${version}";
+      };
     };
   };
 
-  TestWarn = buildPerlPackage {
+  TestWarn = buildPerlPackage rec {
     pname = "Test-Warn";
     version = "0.37";
     src = fetchurl {
@@ -35414,10 +42126,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BIGJ/${pname}@${version}";
+      };
     };
   };
 
-  TestWarnings = buildPerlPackage {
+  TestWarnings = buildPerlPackage rec {
     pname = "Test-Warnings";
     version = "0.032";
     src = fetchurl {
@@ -35435,10 +42151,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TestWeaken = buildPerlPackage {
+  TestWeaken = buildPerlPackage rec {
     pname = "Test-Weaken";
     version = "3.022000";
     src = fetchurl {
@@ -35452,10 +42172,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  TestWithoutModule = buildPerlPackage {
+  TestWithoutModule = buildPerlPackage rec {
     pname = "Test-Without-Module";
     version = "0.21";
     src = fetchurl {
@@ -35468,10 +42192,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CORION/${pname}@${version}";
+      };
     };
   };
 
-  TestWWWMechanize = buildPerlPackage {
+  TestWWWMechanize = buildPerlPackage rec {
     pname = "Test-WWW-Mechanize";
     version = "1.60";
     src = fetchurl {
@@ -35488,10 +42216,14 @@ with self;
       description = "Testing-specific WWW::Mechanize subclass";
       homepage = "https://github.com/libwww-perl/WWW-Mechanize";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PETDANCE/${pname}@${version}";
+      };
     };
   };
 
-  TestWWWMechanizeCatalyst = buildPerlPackage {
+  TestWWWMechanizeCatalyst = buildPerlPackage rec {
     pname = "Test-WWW-Mechanize-Catalyst";
     version = "0.62";
     src = fetchurl {
@@ -35516,10 +42248,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSTROUT/${pname}@${version}";
+      };
     };
   };
 
-  TestWWWMechanizeCGI = buildPerlPackage {
+  TestWWWMechanizeCGI = buildPerlPackage rec {
     pname = "Test-WWW-Mechanize-CGI";
     version = "0.1";
     src = fetchurl {
@@ -35537,10 +42273,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRAMBERG/${pname}@${version}";
+      };
     };
   };
 
-  TestWWWMechanizePSGI = buildPerlPackage {
+  TestWWWMechanizePSGI = buildPerlPackage rec {
     pname = "Test-WWW-Mechanize-PSGI";
     version = "0.39";
     src = fetchurl {
@@ -35560,10 +42300,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  TestXPath = buildPerlPackage {
+  TestXPath = buildPerlPackage rec {
     pname = "Test-XPath";
     version = "0.20";
     src = fetchurl {
@@ -35577,10 +42321,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANWAR/${pname}@${version}";
+      };
     };
   };
 
-  TestYAML = buildPerlPackage {
+  TestYAML = buildPerlPackage rec {
     pname = "Test-YAML";
     version = "1.07";
     src = fetchurl {
@@ -35595,10 +42343,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "test-yaml";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TINITA/${pname}@${version}";
+      };
     };
   };
 
-  TextAligner = buildPerlModule {
+  TextAligner = buildPerlModule rec {
     pname = "Text-Aligner";
     version = "0.16";
     src = fetchurl {
@@ -35609,10 +42361,14 @@ with self;
       description = "Module to align text";
       homepage = "https://metacpan.org/release/Text-Aligner";
       license = with lib.licenses; [ isc ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TextAspell = buildPerlPackage {
+  TextAspell = buildPerlPackage rec {
     pname = "Text-Aspell";
     version = "0.09";
     src = fetchurl {
@@ -35629,10 +42385,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HANK/${pname}@${version}";
+      };
     };
   };
 
-  TextAutoformat = buildPerlPackage {
+  TextAutoformat = buildPerlPackage rec {
     pname = "Text-Autoformat";
     version = "1.75";
     src = fetchurl {
@@ -35647,10 +42407,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TextBalanced = buildPerlPackage {
+  TextBalanced = buildPerlPackage rec {
     pname = "Text-Balanced";
     version = "2.06";
     src = fetchurl {
@@ -35663,10 +42427,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHAY/${pname}@${version}";
+      };
     };
   };
 
-  TextBibTeX = buildPerlModule {
+  TextBibTeX = buildPerlModule rec {
     pname = "Text-BibTeX";
     version = "0.89";
     buildInputs = [
@@ -35696,10 +42464,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AMBS/${pname}@${version}";
+      };
     };
   };
 
-  TextBrew = buildPerlPackage {
+  TextBrew = buildPerlPackage rec {
     pname = "Text-Brew";
     version = "0.02";
     src = fetchurl {
@@ -35712,10 +42484,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KCIVEY/${pname}@${version}";
+      };
     };
   };
 
-  TextCharWidth = buildPerlPackage {
+  TextCharWidth = buildPerlPackage rec {
     pname = "Text-CharWidth";
     version = "0.04";
     src = fetchurl {
@@ -35728,10 +42504,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KUBOTA/${pname}@${version}";
+      };
     };
   };
 
-  TextCSV = buildPerlPackage {
+  TextCSV = buildPerlPackage rec {
     pname = "Text-CSV";
     version = "2.03";
     src = fetchurl {
@@ -35744,10 +42524,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ISHIGAKI/${pname}@${version}";
+      };
     };
   };
 
-  TextCSVEncoded = buildPerlPackage {
+  TextCSVEncoded = buildPerlPackage rec {
     pname = "Text-CSV-Encoded";
     version = "0.25";
     src = fetchurl {
@@ -35762,10 +42546,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZARQUON/${pname}@${version}";
+      };
     };
   };
 
-  TextCSV_XS = buildPerlPackage {
+  TextCSV_XS = buildPerlPackage rec {
     pname = "Text-CSV_XS";
     version = "1.52";
     src = fetchurl {
@@ -35779,10 +42567,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HMBRAND/${pname}@${version}";
+      };
     };
   };
 
-  TextDiff = buildPerlPackage {
+  TextDiff = buildPerlPackage rec {
     pname = "Text-Diff";
     version = "1.45";
     src = fetchurl {
@@ -35796,10 +42588,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TextFormat = buildPerlModule {
+  TextFormat = buildPerlModule rec {
     pname = "Text-Format";
     version = "0.62";
     src = fetchurl {
@@ -35814,10 +42610,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ bcdarwin ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TextDiffFormattedHTML = buildPerlPackage {
+  TextDiffFormattedHTML = buildPerlPackage rec {
     pname = "Text-Diff-FormattedHTML";
     version = "0.08";
     src = fetchurl {
@@ -35835,10 +42635,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AMBS/${pname}@${version}";
+      };
     };
   };
 
-  TextFuzzy = buildPerlPackage {
+  TextFuzzy = buildPerlPackage rec {
     pname = "Text-Fuzzy";
     version = "0.29";
     src = fetchurl {
@@ -35851,10 +42655,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BKB/${pname}@${version}";
+      };
     };
   };
 
-  TextGerman = buildPerlPackage {
+  TextGerman = buildPerlPackage rec {
     pname = "Text-German";
     version = "0.06";
     src = fetchurl {
@@ -35867,10 +42675,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ULPFR/${pname}@${version}";
+      };
     };
   };
 
-  TextGlob = buildPerlPackage {
+  TextGlob = buildPerlPackage rec {
     pname = "Text-Glob";
     version = "0.11";
     src = fetchurl {
@@ -35883,10 +42695,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  TextHogan = buildPerlPackage {
+  TextHogan = buildPerlPackage rec {
     pname = "Text-Hogan";
     version = "2.03";
     src = fetchurl {
@@ -35910,10 +42726,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAORU/${pname}@${version}";
+      };
     };
   };
 
-  TextIconv = buildPerlPackage {
+  TextIconv = buildPerlPackage rec {
     pname = "Text-Iconv";
     version = "1.7";
     src = fetchurl {
@@ -35926,10 +42746,14 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from el6
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MPIOTR/${pname}@${version}";
+      };
     };
   };
 
-  TestInDistDir = buildPerlPackage {
+  TestInDistDir = buildPerlPackage rec {
     pname = "Test-InDistDir";
     version = "1.112071";
     src = fetchurl {
@@ -35941,10 +42765,14 @@ with self;
       homepage = "https://github.com/wchristian/Test-InDistDir";
       license = with lib.licenses; [ wtfpl ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MITHALDU/${pname}@${version}";
+      };
     };
   };
 
-  TestInter = buildPerlPackage {
+  TestInter = buildPerlPackage rec {
     pname = "Test-Inter";
     version = "1.10";
     src = fetchurl {
@@ -35962,10 +42790,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SBECK/${pname}@${version}";
+      };
     };
   };
 
-  TextLayout = buildPerlPackage {
+  TextLayout = buildPerlPackage rec {
     pname = "Text-Layout";
     version = "0.037";
     src = fetchurl {
@@ -35983,10 +42815,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JV/${pname}@${version}";
+      };
     };
   };
 
-  TextLevenshteinXS = buildPerlPackage {
+  TextLevenshteinXS = buildPerlPackage rec {
     pname = "Text-LevenshteinXS";
     version = "0.03";
     src = fetchurl {
@@ -35999,10 +42835,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JGOLDBERG/${pname}@${version}";
+      };
     };
   };
 
-  TextLorem = buildPerlPackage {
+  TextLorem = buildPerlPackage rec {
     pname = "Text-Lorem";
     version = "0.34";
     src = fetchurl {
@@ -36017,10 +42857,14 @@ with self;
       ];
       maintainers = [ maintainers.sgo ];
       mainProgram = "lorem";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ADEOLA/${pname}@${version}";
+      };
     };
   };
 
-  TestManifest = buildPerlPackage {
+  TestManifest = buildPerlPackage rec {
     pname = "Test-Manifest";
     version = "2.023";
     src = fetchurl {
@@ -36031,10 +42875,14 @@ with self;
       description = "Interact with a t/test_manifest file";
       homepage = "https://github.com/briandfoy/test-manifest";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  TextMarkdown = buildPerlPackage {
+  TextMarkdown = buildPerlPackage rec {
     pname = "Text-Markdown";
     version = "1.000031";
     src = fetchurl {
@@ -36054,10 +42902,14 @@ with self;
       description = "Convert Markdown syntax to (X)HTML";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "Markdown.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BOBTFISH/${pname}@${version}";
+      };
     };
   };
 
-  TextMarkdownHoedown = buildPerlModule {
+  TextMarkdownHoedown = buildPerlModule rec {
     pname = "Text-Markdown-Hoedown";
     version = "1.03";
     src = fetchurl {
@@ -36072,10 +42924,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOKUHIROM/${pname}@${version}";
+      };
     };
   };
 
-  TestMinimumVersion = buildPerlPackage {
+  TestMinimumVersion = buildPerlPackage rec {
     pname = "Test-MinimumVersion";
     version = "0.101083";
     src = fetchurl {
@@ -36090,10 +42946,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TextMicroTemplate = buildPerlPackage {
+  TextMicroTemplate = buildPerlPackage rec {
     pname = "Text-MicroTemplate";
     version = "0.24";
     src = fetchurl {
@@ -36106,10 +42966,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZUHO/${pname}@${version}";
+      };
     };
   };
 
-  TextMultiMarkdown = buildPerlPackage {
+  TextMultiMarkdown = buildPerlPackage rec {
     pname = "Text-MultiMarkdown";
     version = "1.001";
     src = fetchurl {
@@ -36128,10 +42992,14 @@ with self;
       description = "Convert MultiMarkdown syntax to (X)HTML";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "MultiMarkdown.pl";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  TestNumberDelta = buildPerlPackage {
+  TestNumberDelta = buildPerlPackage rec {
     pname = "Test-Number-Delta";
     version = "1.06";
     src = fetchurl {
@@ -36142,10 +43010,14 @@ with self;
       description = "Compare the difference between numbers against a given tolerance";
       homepage = "https://github.com/dagolden/Test-Number-Delta";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TextParsewords = buildPerlPackage {
+  TextParsewords = buildPerlPackage rec {
     pname = "Text-ParseWords";
     version = "3.31";
     src = fetchurl {
@@ -36158,10 +43030,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TextPasswordPronounceable = buildPerlPackage {
+  TextPasswordPronounceable = buildPerlPackage rec {
     pname = "Text-Password-Pronounceable";
     version = "0.30";
     src = fetchurl {
@@ -36174,10 +43050,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TSIBLEY/${pname}@${version}";
+      };
     };
   };
 
-  TextPatch = buildPerlPackage {
+  TextPatch = buildPerlPackage rec {
     pname = "Text-Patch";
     version = "1.8";
     src = fetchurl {
@@ -36188,10 +43068,14 @@ with self;
     meta = {
       description = "Patches text with given patch";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CADE/${pname}@${version}";
+      };
     };
   };
 
-  TextPDF = buildPerlPackage {
+  TextPDF = buildPerlPackage rec {
     pname = "Text-PDF";
     version = "0.31";
     src = fetchurl {
@@ -36204,10 +43088,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BHALLISSY/${pname}@${version}";
+      };
     };
   };
 
-  TextQuoted = buildPerlPackage {
+  TextQuoted = buildPerlPackage rec {
     pname = "Text-Quoted";
     version = "2.10";
     src = fetchurl {
@@ -36221,10 +43109,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BPS/${pname}@${version}";
+      };
     };
   };
 
-  TextRecordParser = buildPerlPackage {
+  TextRecordParser = buildPerlPackage rec {
     pname = "Text-RecordParser";
     version = "1.6.5";
     src = fetchurl {
@@ -36247,10 +43139,14 @@ with self;
     meta = {
       description = "Read record-oriented files";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KCLARK/${pname}@${version}";
+      };
     };
   };
 
-  TextReflow = buildPerlPackage {
+  TextReflow = buildPerlPackage rec {
     pname = "Text-Reflow";
     version = "1.17";
     src = fetchurl {
@@ -36263,10 +43159,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MWARD/${pname}@${version}";
+      };
     };
   };
 
-  TextReform = buildPerlModule {
+  TextReform = buildPerlModule rec {
     pname = "Text-Reform";
     version = "1.20";
     src = fetchurl {
@@ -36279,10 +43179,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
-  TextRoman = buildPerlPackage {
+  TextRoman = buildPerlPackage rec {
     pname = "Text-Roman";
     version = "3.5";
     src = fetchurl {
@@ -36296,10 +43200,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SYP/${pname}@${version}";
+      };
     };
   };
 
-  TextSimpleTable = buildPerlPackage {
+  TextSimpleTable = buildPerlPackage rec {
     pname = "Text-SimpleTable";
     version = "2.07";
     src = fetchurl {
@@ -36310,10 +43218,14 @@ with self;
     meta = {
       description = "Simple eyecandy ASCII tables";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRAMBERG/${pname}@${version}";
+      };
     };
   };
 
-  TextSoundex = buildPerlPackage {
+  TextSoundex = buildPerlPackage rec {
     pname = "Text-Soundex";
     version = "3.05";
     src = fetchurl {
@@ -36326,10 +43238,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TextSprintfNamed = buildPerlModule {
+  TextSprintfNamed = buildPerlModule rec {
     pname = "Text-Sprintf-Named";
     version = "0.0405";
     src = fetchurl {
@@ -36341,10 +43257,14 @@ with self;
       description = "Sprintf-like function with named conversions";
       homepage = "https://metacpan.org/release/Text-Sprintf-Named";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TextTable = buildPerlModule {
+  TextTable = buildPerlModule rec {
     pname = "Text-Table";
     version = "1.135";
     src = fetchurl {
@@ -36356,10 +43276,14 @@ with self;
       description = "Organize Data in Tables";
       homepage = "https://metacpan.org/release/Text-Table";
       license = with lib.licenses; [ isc ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  TextTabularDisplay = buildPerlPackage {
+  TextTabularDisplay = buildPerlPackage rec {
     pname = "Text-TabularDisplay";
     version = "1.38";
     src = fetchurl {
@@ -36369,10 +43293,14 @@ with self;
     meta = {
       description = "Display text in formatted table output";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DARREN/${pname}@${version}";
+      };
     };
   };
 
-  TextTemplate = buildPerlPackage {
+  TextTemplate = buildPerlPackage rec {
     pname = "Text-Template";
     version = "1.61";
     src = fetchurl {
@@ -36389,10 +43317,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHOUT/${pname}@${version}";
+      };
     };
   };
 
-  TestTrap = buildPerlModule {
+  TestTrap = buildPerlModule rec {
     pname = "Test-Trap";
     version = "0.3.5";
     src = fetchurl {
@@ -36406,10 +43338,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "EBHANSSEN/${pname}@${version}";
+      };
     };
   };
 
-  TestVars = buildPerlModule {
+  TestVars = buildPerlModule rec {
     pname = "Test-Vars";
     version = "0.015";
     src = fetchurl {
@@ -36426,10 +43362,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GFUJI/${pname}@${version}";
+      };
     };
   };
 
-  TestVersion = buildPerlPackage {
+  TestVersion = buildPerlPackage rec {
     pname = "Test-Version";
     version = "2.09";
     src = fetchurl {
@@ -36441,10 +43381,14 @@ with self;
     meta = {
       description = "Check to see that version's in modules are sane";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  TextTrim = buildPerlPackage {
+  TextTrim = buildPerlPackage rec {
     pname = "Text-Trim";
     version = "1.04";
     src = fetchurl {
@@ -36457,6 +43401,10 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJT/${pname}@${version}";
+      };
     };
   };
 
@@ -36484,10 +43432,14 @@ with self;
       description = "Remove accents from a string";
       license = with lib.licenses; [ gpl2Only ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextUnaccent.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDACHARY/${pname}@${version}";
+      };
     };
   };
 
-  TextUnidecode = buildPerlPackage {
+  TextUnidecode = buildPerlPackage rec {
     pname = "Text-Unidecode";
     version = "1.30";
     src = fetchurl {
@@ -36500,10 +43452,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SBURKE/${pname}@${version}";
+      };
     };
   };
 
-  Testutf8 = buildPerlPackage {
+  Testutf8 = buildPerlPackage rec {
     pname = "Test-utf8";
     version = "1.02";
     src = fetchurl {
@@ -36517,10 +43473,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKF/${pname}@${version}";
+      };
     };
   };
 
-  TextNSP = buildPerlPackage {
+  TextNSP = buildPerlPackage rec {
     pname = "Text-NSP";
     version = "1.31";
     src = fetchurl {
@@ -36531,10 +43491,14 @@ with self;
       description = "Extract collocations and Ngrams from text";
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = [ maintainers.bzizou ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TPEDERSE/${pname}@${version}";
+      };
     };
   };
 
-  TextvFileasData = buildPerlPackage {
+  TextvFileasData = buildPerlPackage rec {
     pname = "Text-vFile-asData";
     version = "0.08";
     src = fetchurl {
@@ -36548,10 +43512,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCLAMP/${pname}@${version}";
+      };
     };
   };
 
-  TextWikiFormat = buildPerlModule {
+  TextWikiFormat = buildPerlModule rec {
     pname = "Text-WikiFormat";
     version = "0.81";
     src = fetchurl {
@@ -36565,10 +43533,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CYCLES/${pname}@${version}";
+      };
     };
   };
 
-  TextWordDiff = buildPerlPackage {
+  TextWordDiff = buildPerlPackage rec {
     pname = "Text-WordDiff";
     version = "0.09";
     src = fetchurl {
@@ -36586,10 +43558,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TIMK/${pname}@${version}";
+      };
     };
   };
 
-  TextWrapI18N = buildPerlPackage {
+  TextWrapI18N = buildPerlPackage rec {
     pname = "Text-WrapI18N";
     version = "0.06";
     src = fetchurl {
@@ -36607,10 +43583,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KUBOTA/${pname}@${version}";
+      };
     };
   };
 
-  TextWrapper = buildPerlPackage {
+  TextWrapper = buildPerlPackage rec {
     pname = "Text-Wrapper";
     version = "1.05";
     src = fetchurl {
@@ -36624,10 +43604,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CJM/${pname}@${version}";
+      };
     };
   };
 
-  Throwable = buildPerlPackage {
+  Throwable = buildPerlPackage rec {
     pname = "Throwable";
     version = "1.001";
     src = fetchurl {
@@ -36645,10 +43629,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  TieCacheLRU = buildPerlPackage {
+  TieCacheLRU = buildPerlPackage rec {
     pname = "Tie-Cache-LRU";
     version = "20150301";
     src = fetchurl {
@@ -36665,10 +43653,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHWERN/${pname}@${version}";
+      };
     };
   };
 
-  TieCacheLRUExpires = buildPerlPackage {
+  TieCacheLRUExpires = buildPerlPackage rec {
     pname = "Tie-Cache-LRU-Expires";
     version = "0.55";
     src = fetchurl {
@@ -36679,10 +43671,14 @@ with self;
     meta = {
       description = "Extends Tie::Cache::LRU with expiring";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OESTERHOL/${pname}@${version}";
+      };
     };
   };
 
-  TieCycle = buildPerlPackage {
+  TieCycle = buildPerlPackage rec {
     pname = "Tie-Cycle";
     version = "1.227";
     src = fetchurl {
@@ -36693,10 +43689,14 @@ with self;
       description = "Cycle through a list of values via a scalar";
       homepage = "https://github.com/briandfoy/tie-cycle";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BDFOY/${pname}@${version}";
+      };
     };
   };
 
-  TieEncryptedHash = buildPerlPackage {
+  TieEncryptedHash = buildPerlPackage rec {
     pname = "Tie-EncryptedHash";
     version = "1.24";
     src = fetchurl {
@@ -36715,10 +43715,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VIPUL/${pname}@${version}";
+      };
     };
   };
 
-  TieFile = buildPerlPackage {
+  TieFile = buildPerlPackage rec {
     pname = "Tie-File";
     version = "1.07";
     src = fetchurl {
@@ -36731,10 +43735,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  TieIxHash = buildPerlModule {
+  TieIxHash = buildPerlModule rec {
     pname = "Tie-IxHash";
     version = "1.23";
     src = fetchurl {
@@ -36747,10 +43755,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHORNY/${pname}@${version}";
+      };
     };
   };
 
-  TieHandleOffset = buildPerlPackage {
+  TieHandleOffset = buildPerlPackage rec {
     pname = "Tie-Handle-Offset";
     version = "0.004";
     src = fetchurl {
@@ -36761,10 +43773,14 @@ with self;
       description = "Tied handle that hides the beginning of a file";
       homepage = "https://github.com/dagolden/tie-handle-offset";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  TieHashIndexed = buildPerlPackage {
+  TieHashIndexed = buildPerlPackage rec {
     pname = "Tie-Hash-Indexed";
     version = "0.08";
     src = fetchurl {
@@ -36778,10 +43794,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MHX/${pname}@${version}";
+      };
     };
   };
 
-  TieHashMethod = buildPerlPackage {
+  TieHashMethod = buildPerlPackage rec {
     pname = "Tie-Hash-Method";
     version = "0.02";
     src = fetchurl {
@@ -36791,10 +43811,14 @@ with self;
     meta = {
       description = "Tied hash with specific methods overriden by callbacks";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "YVES/${pname}@${version}";
+      };
     };
   };
 
-  TieRefHash = buildPerlPackage {
+  TieRefHash = buildPerlPackage rec {
     pname = "Tie-RefHash";
     version = "1.40";
     src = fetchurl {
@@ -36807,10 +43831,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TieRegexpHash = buildPerlPackage {
+  TieRegexpHash = buildPerlPackage rec {
     pname = "Tie-RegexpHash";
     version = "0.17";
     src = fetchurl {
@@ -36820,10 +43848,14 @@ with self;
     meta = {
       description = "Use regular expressions as hash keys";
       license = with lib.licenses; [ artistic1 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ALTREUS/${pname}@${version}";
+      };
     };
   };
 
-  TieSimple = buildPerlPackage {
+  TieSimple = buildPerlPackage rec {
     pname = "Tie-Simple";
     version = "1.04";
     src = fetchurl {
@@ -36836,10 +43868,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HANENKAMP/${pname}@${version}";
+      };
     };
   };
 
-  TieSub = buildPerlPackage {
+  TieSub = buildPerlPackage rec {
     pname = "Tie-Sub";
     version = "1.001";
     src = fetchurl {
@@ -36859,10 +43895,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STEFFENW/${pname}@${version}";
+      };
     };
   };
 
-  TieToObject = buildPerlPackage {
+  TieToObject = buildPerlPackage rec {
     pname = "Tie-ToObject";
     version = "0.03";
     src = fetchurl {
@@ -36875,10 +43915,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NUFFIN/${pname}@${version}";
+      };
     };
   };
 
-  TimeDate = buildPerlPackage {
+  TimeDate = buildPerlPackage rec {
     pname = "TimeDate";
     version = "2.33";
     src = fetchurl {
@@ -36891,10 +43935,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ATOOMIC/${pname}@${version}";
+      };
     };
   };
 
-  TimeDuration = buildPerlPackage {
+  TimeDuration = buildPerlPackage rec {
     pname = "Time-Duration";
     version = "1.21";
     src = fetchurl {
@@ -36908,10 +43956,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TimeDurationParse = buildPerlPackage {
+  TimeDurationParse = buildPerlPackage rec {
     pname = "Time-Duration-Parse";
     version = "0.16";
     src = fetchurl {
@@ -36927,10 +43979,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  TimeLocal = buildPerlPackage {
+  TimeLocal = buildPerlPackage rec {
     pname = "Time-Local";
     version = "1.35";
     src = fetchurl {
@@ -36944,10 +44000,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  TimeMoment = buildPerlPackage {
+  TimeMoment = buildPerlPackage rec {
     pname = "Time-Moment";
     version = "0.44";
     src = fetchurl {
@@ -36965,10 +44025,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHANSEN/${pname}@${version}";
+      };
     };
   };
 
-  TimeOut = buildPerlPackage {
+  TimeOut = buildPerlPackage rec {
     pname = "Time-Out";
     version = "0.11";
     src = fetchurl {
@@ -36981,10 +44045,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PATL/${pname}@${version}";
+      };
     };
   };
 
-  TimeParseDate = buildPerlPackage {
+  TimeParseDate = buildPerlPackage rec {
     pname = "Time-ParseDate";
     version = "2015.103";
     src = fetchurl {
@@ -36995,10 +44063,14 @@ with self;
     meta = {
       description = "Parse and format time values";
       license = with lib.licenses; [ publicDomain ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MUIR/${pname}@${version}";
+      };
     };
   };
 
-  TimePeriod = buildPerlPackage {
+  TimePeriod = buildPerlPackage rec {
     pname = "Time-Period";
     version = "1.25";
     src = fetchurl {
@@ -37012,10 +44084,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.winpat ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PBOYD/${pname}@${version}";
+      };
     };
   };
 
-  TimePiece = buildPerlPackage {
+  TimePiece = buildPerlPackage rec {
     pname = "Time-Piece";
     version = "1.3401";
     src = fetchurl {
@@ -37030,12 +44106,16 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ESAYM/${pname}@${version}";
+      };
     };
   };
 
   Tirex = callPackage ../development/perl-modules/Tirex { };
 
-  Tk = buildPerlPackage {
+  Tk = buildPerlPackage rec {
     pname = "Tk";
     version = "804.036";
     src = fetchurl {
@@ -37076,10 +44156,14 @@ with self;
     meta = {
       description = "Tk - a Graphical User Interface Toolkit";
       license = with lib.licenses; [ tcltk ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SREZIC/${pname}@${version}";
+      };
     };
   };
 
-  TkToolBar = buildPerlPackage {
+  TkToolBar = buildPerlPackage rec {
     pname = "Tk-ToolBar";
     version = "0.12";
     src = fetchurl {
@@ -37098,10 +44182,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ASB/${pname}@${version}";
+      };
     };
   };
 
-  TreeDAGNode = buildPerlPackage {
+  TreeDAGNode = buildPerlPackage rec {
     pname = "Tree-DAG_Node";
     version = "1.32";
     src = fetchurl {
@@ -37115,10 +44203,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSAVAGE/${pname}@${version}";
+      };
     };
   };
 
-  TreeSimple = buildPerlPackage {
+  TreeSimple = buildPerlPackage rec {
     pname = "Tree-Simple";
     version = "1.34";
     src = fetchurl {
@@ -37132,10 +44224,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSAVAGE/${pname}@${version}";
+      };
     };
   };
 
-  TreeSimpleVisitorFactory = buildPerlPackage {
+  TreeSimpleVisitorFactory = buildPerlPackage rec {
     pname = "Tree-Simple-VisitorFactory";
     version = "0.16";
     src = fetchurl {
@@ -37150,10 +44246,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RSAVAGE/${pname}@${version}";
+      };
     };
   };
 
-  TryTiny = buildPerlPackage {
+  TryTiny = buildPerlPackage rec {
     pname = "Try-Tiny";
     version = "0.31";
     src = fetchurl {
@@ -37168,10 +44268,14 @@ with self;
       description = "Minimal try/catch with proper preservation of $@";
       homepage = "https://github.com/p5sagit/Try-Tiny";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  TryTinyByClass = buildPerlPackage {
+  TryTinyByClass = buildPerlPackage rec {
     pname = "Try-Tiny-ByClass";
     version = "0.01";
     src = fetchurl {
@@ -37188,10 +44292,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MAUKE/${pname}@${version}";
+      };
     };
   };
 
-  Twiggy = buildPerlPackage {
+  Twiggy = buildPerlPackage rec {
     pname = "Twiggy";
     version = "0.1026";
     src = fetchurl {
@@ -37215,10 +44323,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "twiggy";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  TypeTiny = buildPerlPackage {
+  TypeTiny = buildPerlPackage rec {
     pname = "Type-Tiny";
     version = "2.004000";
     src = fetchurl {
@@ -37234,10 +44346,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  TypeTinyXS = buildPerlPackage {
+  TypeTinyXS = buildPerlPackage rec {
     pname = "Type-Tiny-XS";
     version = "0.025";
     src = fetchurl {
@@ -37251,10 +44367,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TOBYINK/${pname}@${version}";
+      };
     };
   };
 
-  TypesSerialiser = buildPerlPackage {
+  TypesSerialiser = buildPerlPackage rec {
     pname = "Types-Serialiser";
     version = "1.01";
     src = fetchurl {
@@ -37268,10 +44388,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MLEHMANN/${pname}@${version}";
+      };
     };
   };
 
-  UNIVERSALcan = buildPerlPackage {
+  UNIVERSALcan = buildPerlPackage rec {
     pname = "UNIVERSAL-can";
     version = "1.20140328";
     src = fetchurl {
@@ -37285,10 +44409,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHROMATIC/${pname}@${version}";
+      };
     };
   };
 
-  UNIVERSALisa = buildPerlPackage {
+  UNIVERSALisa = buildPerlPackage rec {
     pname = "UNIVERSAL-isa";
     version = "1.20171012";
     src = fetchurl {
@@ -37302,10 +44430,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  UNIVERSALrequire = buildPerlPackage {
+  UNIVERSALrequire = buildPerlPackage rec {
     pname = "UNIVERSAL-require";
     version = "0.19";
     src = fetchurl {
@@ -37318,10 +44450,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEILB/${pname}@${version}";
+      };
     };
   };
 
-  UnicodeCaseFold = buildPerlModule {
+  UnicodeCaseFold = buildPerlModule rec {
     pname = "Unicode-CaseFold";
     version = "1.01";
     src = fetchurl {
@@ -37335,10 +44471,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ARODLAND/${pname}@${version}";
+      };
     };
   };
 
-  UnicodeCheckUTF8 = buildPerlPackage {
+  UnicodeCheckUTF8 = buildPerlPackage rec {
     pname = "Unicode-CheckUTF8";
     version = "1.03";
     src = fetchurl {
@@ -37352,10 +44492,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BRADFITZ/${pname}@${version}";
+      };
     };
   };
 
-  UnicodeLineBreak = buildPerlPackage {
+  UnicodeLineBreak = buildPerlPackage rec {
     pname = "Unicode-LineBreak";
     version = "2019.001";
     src = fetchurl {
@@ -37369,10 +44513,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "NEZUMI/${pname}@${version}";
+      };
     };
   };
 
-  UnicodeString = buildPerlPackage {
+  UnicodeString = buildPerlPackage rec {
     pname = "Unicode-String";
     version = "2.10";
     src = fetchurl {
@@ -37385,10 +44533,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  UnicodeStringprep = buildPerlModule {
+  UnicodeStringprep = buildPerlModule rec {
     pname = "Unicode-Stringprep";
     version = "1.105";
     src = fetchurl {
@@ -37403,10 +44555,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CFAERBER/${pname}@${version}";
+      };
     };
   };
 
-  UnicodeUTF8 = buildPerlPackage {
+  UnicodeUTF8 = buildPerlPackage rec {
     pname = "Unicode-UTF8";
     version = "0.62";
     src = fetchurl {
@@ -37422,10 +44578,14 @@ with self;
         gpl1Plus
       ];
       maintainers = with maintainers; [ sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CHANSEN/${pname}@${version}";
+      };
     };
   };
 
-  UnixGetrusage = buildPerlPackage {
+  UnixGetrusage = buildPerlPackage rec {
     pname = "Unix-Getrusage";
     version = "0.03";
     src = fetchurl {
@@ -37438,10 +44598,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TAFFY/${pname}@${version}";
+      };
     };
   };
 
-  URI = buildPerlPackage {
+  URI = buildPerlPackage rec {
     pname = "URI";
     version = "5.21";
     src = fetchurl {
@@ -37460,10 +44624,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "OALDERS/${pname}@${version}";
+      };
     };
   };
 
-  URIdb = buildPerlModule {
+  URIdb = buildPerlModule rec {
     pname = "URI-db";
     version = "0.21";
     src = fetchurl {
@@ -37478,10 +44646,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DWHEELER/${pname}@${version}";
+      };
     };
   };
 
-  URIFind = buildPerlModule {
+  URIFind = buildPerlModule rec {
     pname = "URI-Find";
     version = "20160806";
     src = fetchurl {
@@ -37497,10 +44669,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "urifind";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSCHWERN/${pname}@${version}";
+      };
     };
   };
 
-  URIFromHash = buildPerlPackage {
+  URIFromHash = buildPerlPackage rec {
     pname = "URI-FromHash";
     version = "0.05";
     src = fetchurl {
@@ -37516,10 +44692,14 @@ with self;
       description = "Build a URI from a set of named parameters";
       homepage = "https://metacpan.org/release/URI-FromHash";
       license = with lib.licenses; [ artistic2 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  UriGoogleChart = buildPerlPackage {
+  UriGoogleChart = buildPerlPackage rec {
     pname = "URI-GoogleChart";
     version = "1.02";
     src = fetchurl {
@@ -37533,10 +44713,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  UserIdentity = buildPerlPackage {
+  UserIdentity = buildPerlPackage rec {
     pname = "User-Identity";
     version = "1.02";
     src = fetchurl {
@@ -37551,10 +44735,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  URIIMAP = buildPerlPackage {
+  URIIMAP = buildPerlPackage rec {
     pname = "URI-imap";
     version = "1.01";
     src = fetchurl {
@@ -37568,10 +44756,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CWEST/${pname}@${version}";
+      };
     };
   };
 
-  URINested = buildPerlModule {
+  URINested = buildPerlModule rec {
     pname = "URI-Nested";
     version = "0.10";
     src = fetchurl {
@@ -37586,10 +44778,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DWHEELER/${pname}@${version}";
+      };
     };
   };
 
-  URISmartURI = buildPerlPackage {
+  URISmartURI = buildPerlPackage rec {
     pname = "URI-SmartURI";
     version = "0.032";
     src = fetchurl {
@@ -37614,10 +44810,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RKITOVER/${pname}@${version}";
+      };
     };
   };
 
-  URITemplate = buildPerlPackage {
+  URITemplate = buildPerlPackage rec {
     pname = "URI-Template";
     version = "0.24";
     src = fetchurl {
@@ -37631,10 +44831,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BRICAS/${pname}@${version}";
+      };
     };
   };
 
-  URIcpan = buildPerlPackage {
+  URIcpan = buildPerlPackage rec {
     pname = "URI-cpan";
     version = "1.009";
     src = fetchurl {
@@ -37652,10 +44856,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RJBS/${pname}@${version}";
+      };
     };
   };
 
-  URIws = buildPerlPackage {
+  URIws = buildPerlPackage rec {
     pname = "URI-ws";
     version = "0.03";
     src = fetchurl {
@@ -37670,10 +44878,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PLICEASE/${pname}@${version}";
+      };
     };
   };
 
-  UUID4Tiny = buildPerlPackage {
+  UUID4Tiny = buildPerlPackage rec {
     pname = "UUID4-Tiny";
     version = "0.003";
     src = fetchurl {
@@ -37698,10 +44910,14 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux; # configure phase fails with "OS unsupported"
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CVLIBRARY/${pname}@${version}";
+      };
     };
   };
 
-  UUIDTiny = buildPerlPackage {
+  UUIDTiny = buildPerlPackage rec {
     pname = "UUID-Tiny";
     version = "1.04";
     src = fetchurl {
@@ -37714,10 +44930,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CAUGUSTIN/${pname}@${version}";
+      };
     };
   };
 
-  UUIDURandom = buildPerlPackage {
+  UUIDURandom = buildPerlPackage rec {
     pname = "UUID-URandom";
     version = "0.001";
     src = fetchurl {
@@ -37729,10 +44949,14 @@ with self;
       description = "UUIDs based on /dev/urandom or the Windows Crypto API";
       homepage = "https://github.com/dagolden/UUID-URandom";
       license = with lib.licenses; [ asl20 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DAGOLDEN/${pname}@${version}";
+      };
     };
   };
 
-  VariableMagic = buildPerlPackage {
+  VariableMagic = buildPerlPackage rec {
     pname = "Variable-Magic";
     version = "0.63";
     src = fetchurl {
@@ -37746,10 +44970,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "VPIT/${pname}@${version}";
+      };
     };
   };
 
-  Version = buildPerlPackage {
+  Version = buildPerlPackage rec {
     pname = "version";
     version = "0.9930";
     src = fetchurl {
@@ -37762,10 +44990,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LEONT/${pname}@${version}";
+      };
     };
   };
 
-  vidir = buildPerlPackage {
+  vidir = buildPerlPackage rec {
     pname = "App-vidir";
     version = "0.052";
     src = fetchurl {
@@ -37781,10 +45013,14 @@ with self;
       ];
       maintainers = [ maintainers.chreekat ];
       mainProgram = "vidir";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "WOLDRICH/${pname}@${version}";
+      };
     };
   };
 
-  VMEC2 = buildPerlModule {
+  VMEC2 = buildPerlModule rec {
     pname = "VM-EC2";
     version = "1.28";
     src = fetchurl {
@@ -37804,10 +45040,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "LDS/${pname}@${version}";
+      };
     };
   };
 
-  VMEC2SecurityCredentialCache = buildPerlPackage {
+  VMEC2SecurityCredentialCache = buildPerlPackage rec {
     pname = "VM-EC2-Security-CredentialCache";
     version = "0.25";
     src = fetchurl {
@@ -37825,10 +45065,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RCONOVER/${pname}@${version}";
+      };
     };
   };
 
-  W3CLinkChecker = buildPerlPackage {
+  W3CLinkChecker = buildPerlPackage rec {
     pname = "W3C-LinkChecker";
     version = "5.0.0";
     src = fetchurl {
@@ -37850,6 +45094,10 @@ with self;
       homepage = "https://validator.w3.org/checklink";
       license = with lib.licenses; [ w3c ];
       mainProgram = "checklink";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DHM/${pname}@${version}";
+      };
     };
   };
 
@@ -37904,10 +45152,14 @@ with self;
     meta = {
       description = "Perl extension interface for libcurl";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SZBALINT/${pname}@${version}";
+      };
     };
   };
 
-  WWWFormUrlEncoded = buildPerlModule {
+  WWWFormUrlEncoded = buildPerlModule rec {
     pname = "WWW-Form-UrlEncoded";
     version = "0.26";
     src = fetchurl {
@@ -37921,10 +45173,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAZEBURO/${pname}@${version}";
+      };
     };
   };
 
-  WWWMechanize = buildPerlPackage {
+  WWWMechanize = buildPerlPackage rec {
     pname = "WWW-Mechanize";
     version = "2.17";
     src = fetchurl {
@@ -37954,10 +45210,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mech-dump";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SIMBABQUE/${pname}@${version}";
+      };
     };
   };
 
-  WWWMechanizeCGI = buildPerlPackage {
+  WWWMechanizeCGI = buildPerlPackage rec {
     pname = "WWW-Mechanize-CGI";
     version = "0.3";
     src = fetchurl {
@@ -37979,10 +45239,14 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.WWWMechanizeCGI.x86_64-darwin
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MRAMBERG/${pname}@${version}";
+      };
     };
   };
 
-  WWWRobotRules = buildPerlPackage {
+  WWWRobotRules = buildPerlPackage rec {
     pname = "WWW-RobotRules";
     version = "6.02";
     src = fetchurl {
@@ -37996,10 +45260,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GAAS/${pname}@${version}";
+      };
     };
   };
 
-  WWWTwilioAPI = buildPerlPackage {
+  WWWTwilioAPI = buildPerlPackage rec {
     pname = "WWW-Twilio-API";
     version = "0.21";
     src = fetchurl {
@@ -38014,12 +45282,16 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SCOTTW/${pname}@${version}";
+      };
     };
   };
 
   WWWYoutubeViewer = callPackage ../development/perl-modules/WWW-YoutubeViewer { };
 
-  Want = buildPerlPackage {
+  Want = buildPerlPackage rec {
     pname = "Want";
     version = "0.29";
     src = fetchurl {
@@ -38032,10 +45304,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ROBIN/${pname}@${version}";
+      };
     };
   };
 
-  Win32ShellQuote = buildPerlPackage {
+  Win32ShellQuote = buildPerlPackage rec {
     pname = "Win32-ShellQuote";
     version = "0.003001";
     src = fetchurl {
@@ -38048,10 +45324,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "HAARG/${pname}@${version}";
+      };
     };
   };
 
-  Workflow = buildPerlPackage {
+  Workflow = buildPerlPackage rec {
     pname = "Workflow";
     version = "1.62";
     src = fetchurl {
@@ -38088,10 +45368,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JONASBN/${pname}@${version}";
+      };
     };
   };
 
-  Wx = buildPerlPackage {
+  Wx = buildPerlPackage rec {
     pname = "Wx";
     version = "0.9932";
     src = fetchurl {
@@ -38128,10 +45412,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MDOOTSON/${pname}@${version}";
+      };
     };
   };
 
-  WxGLCanvas = buildPerlPackage {
+  WxGLCanvas = buildPerlPackage rec {
     pname = "Wx-GLCanvas";
     version = "0.09";
     src = fetchurl {
@@ -38149,10 +45437,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MBARBON/${pname}@${version}";
+      };
     };
   };
 
-  X11IdleTime = buildPerlPackage {
+  X11IdleTime = buildPerlPackage rec {
     pname = "X11-IdleTime";
     version = "0.09";
     src = fetchurl {
@@ -38172,10 +45464,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "AWENDT/${pname}@${version}";
+      };
     };
   };
 
-  X11Protocol = buildPerlPackage {
+  X11Protocol = buildPerlPackage rec {
     pname = "X11-Protocol";
     version = "0.56";
     src = fetchurl {
@@ -38189,10 +45485,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SMCCAM/${pname}@${version}";
+      };
     };
   };
 
-  X11ProtocolOther = buildPerlPackage {
+  X11ProtocolOther = buildPerlPackage rec {
     pname = "X11-Protocol-Other";
     version = "31";
     src = fetchurl {
@@ -38211,10 +45511,14 @@ with self;
         gpl1Plus
         gpl3Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRYDE/${pname}@${version}";
+      };
     };
   };
 
-  X11GUITest = buildPerlPackage {
+  X11GUITest = buildPerlPackage rec {
     pname = "X11-GUITest";
     version = "0.28";
     src = fetchurl {
@@ -38232,10 +45536,14 @@ with self;
     meta = {
       description = "Provides GUI testing/interaction routines";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "CTRONDLP/${pname}@${version}";
+      };
     };
   };
 
-  X11XCB = buildPerlPackage {
+  X11XCB = buildPerlPackage rec {
     pname = "X11-XCB";
     version = "0.20";
     src = fetchurl {
@@ -38269,10 +45577,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZHMYLOVE/${pname}@${version}";
+      };
     };
   };
 
-  XMLCanonicalizeXML = buildPerlPackage {
+  XMLCanonicalizeXML = buildPerlPackage rec {
     pname = "XML-CanonicalizeXML";
     version = "0.10";
     src = fetchurl {
@@ -38287,6 +45599,10 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SJZASADA/${pname}@${version}";
+      };
     };
   };
 
@@ -38319,7 +45635,7 @@ with self;
     };
   };
 
-  XMLDescent = buildPerlModule {
+  XMLDescent = buildPerlModule rec {
     pname = "XML-Descent";
     version = "1.04";
     src = fetchurl {
@@ -38334,10 +45650,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ANDYA/${pname}@${version}";
+      };
     };
   };
 
-  XMLEncoding = buildPerlPackage {
+  XMLEncoding = buildPerlPackage rec {
     pname = "XML-Encoding";
     version = "2.11";
     src = fetchurl {
@@ -38351,10 +45671,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHAY/${pname}@${version}";
+      };
     };
   };
 
-  XMLEntities = buildPerlPackage {
+  XMLEntities = buildPerlPackage rec {
     pname = "XML-Entities";
     version = "1.0002";
     src = fetchurl {
@@ -38372,10 +45696,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SIXTEASE/${pname}@${version}";
+      };
     };
   };
 
-  XMLDOM = buildPerlPackage {
+  XMLDOM = buildPerlPackage rec {
     pname = "XML-DOM";
     version = "1.46";
     src = fetchurl {
@@ -38389,10 +45717,14 @@ with self;
     meta = {
       description = "Interface to XML::DOM toolset";
       license = with lib.licenses; [ gpl2Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TJMATHER/${pname}@${version}";
+      };
     };
   };
 
-  XMLFeedPP = buildPerlPackage {
+  XMLFeedPP = buildPerlPackage rec {
     pname = "XML-FeedPP";
     version = "0.95";
     src = fetchurl {
@@ -38407,10 +45739,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  XMLFilterBufferText = buildPerlPackage {
+  XMLFilterBufferText = buildPerlPackage rec {
     pname = "XML-Filter-BufferText";
     version = "1.01";
     src = fetchurl {
@@ -38424,10 +45760,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "RBERJON/${pname}@${version}";
+      };
     };
   };
 
-  XMLFilterXInclude = buildPerlPackage {
+  XMLFilterXInclude = buildPerlPackage rec {
     pname = "XML-Filter-XInclude";
     version = "1.0";
     src = fetchurl {
@@ -38441,10 +45781,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MSERGEANT/${pname}@${version}";
+      };
     };
   };
 
-  XMLFilterSort = buildPerlPackage {
+  XMLFilterSort = buildPerlPackage rec {
     pname = "XML-Filter-Sort";
     version = "1.01";
     src = fetchurl {
@@ -38466,10 +45810,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "xmlsort";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRANTM/${pname}@${version}";
+      };
     };
   };
 
-  XMLGrove = buildPerlPackage {
+  XMLGrove = buildPerlPackage rec {
     pname = "XML-Grove";
     version = "0.46alpha";
     src = fetchurl {
@@ -38487,10 +45835,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KMACLEOD/${pname}@${version}";
+      };
     };
   };
 
-  XMLHandlerYAWriter = buildPerlPackage {
+  XMLHandlerYAWriter = buildPerlPackage rec {
     pname = "XML-Handler-YAWriter";
     version = "0.23";
     src = fetchurl {
@@ -38502,10 +45854,14 @@ with self;
       description = "Yet another Perl SAX XML Writer";
       license = with lib.licenses; [ gpl1Only ];
       mainProgram = "xmlpretty";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KRAEHE/${pname}@${version}";
+      };
     };
   };
 
-  XMLLibXML = buildPerlPackage {
+  XMLLibXML = buildPerlPackage rec {
     pname = "XML-LibXML";
     version = "2.0210";
     src = fetchurl {
@@ -38535,10 +45891,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  XMLLibXMLSimple = buildPerlPackage {
+  XMLLibXMLSimple = buildPerlPackage rec {
     pname = "XML-LibXML-Simple";
     version = "1.01";
     src = fetchurl {
@@ -38552,10 +45912,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MARKOV/${pname}@${version}";
+      };
     };
   };
 
-  XMLLibXSLT = buildPerlPackage {
+  XMLLibXSLT = buildPerlPackage rec {
     pname = "XML-LibXSLT";
     version = "2.002001";
     src = fetchurl {
@@ -38575,10 +45939,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  XMLMini = buildPerlPackage {
+  XMLMini = buildPerlPackage rec {
     pname = "XML-Mini";
     version = "1.38";
     src = fetchurl {
@@ -38588,10 +45956,14 @@ with self;
     meta = {
       description = "Perl implementation of the XML::Mini XML create/parse interface";
       license = with lib.licenses; [ gpl3Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PDEEGAN/${pname}@${version}";
+      };
     };
   };
 
-  XMLNamespaceSupport = buildPerlPackage {
+  XMLNamespaceSupport = buildPerlPackage rec {
     pname = "XML-NamespaceSupport";
     version = "1.12";
     src = fetchurl {
@@ -38604,10 +45976,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERIGRIN/${pname}@${version}";
+      };
     };
   };
 
-  XMLParser = buildPerlPackage {
+  XMLParser = buildPerlPackage rec {
     pname = "XML-Parser";
     version = "2.46";
     src = fetchurl {
@@ -38633,10 +46009,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  XMLParserLite = buildPerlPackage {
+  XMLParserLite = buildPerlPackage rec {
     pname = "XML-Parser-Lite";
     version = "0.722";
     src = fetchurl {
@@ -38650,10 +46030,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  XMLXPath = buildPerlPackage {
+  XMLXPath = buildPerlPackage rec {
     pname = "XML-XPath";
     version = "1.48";
     src = fetchurl {
@@ -38666,10 +46050,14 @@ with self;
       description = "Parse and evaluate XPath statements";
       license = with lib.licenses; [ artistic2 ];
       mainProgram = "xpath";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MANWAR/${pname}@${version}";
+      };
     };
   };
 
-  XMLXPathEngine = buildPerlPackage {
+  XMLXPathEngine = buildPerlPackage rec {
     pname = "XML-XPathEngine";
     version = "0.14";
     src = fetchurl {
@@ -38682,10 +46070,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIROD/${pname}@${version}";
+      };
     };
   };
 
-  XMLRegExp = buildPerlPackage {
+  XMLRegExp = buildPerlPackage rec {
     pname = "XML-RegExp";
     version = "0.04";
     src = fetchurl {
@@ -38695,10 +46087,14 @@ with self;
     meta = {
       description = "Regular expressions for XML tokens";
       license = with lib.licenses; [ gpl2Plus ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TJMATHER/${pname}@${version}";
+      };
     };
   };
 
-  XMLRPCLite = buildPerlPackage {
+  XMLRPCLite = buildPerlPackage rec {
     pname = "XMLRPC-Lite";
     version = "0.717";
     src = fetchurl {
@@ -38714,10 +46110,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PHRED/${pname}@${version}";
+      };
     };
   };
 
-  XMLRSS = buildPerlModule {
+  XMLRSS = buildPerlModule rec {
     pname = "XML-RSS";
     version = "1.62";
     src = fetchurl {
@@ -38736,10 +46136,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SHLOMIF/${pname}@${version}";
+      };
     };
   };
 
-  XMLRules = buildPerlModule {
+  XMLRules = buildPerlModule rec {
     pname = "XML-Rules";
     version = "1.16";
     src = fetchurl {
@@ -38753,10 +46157,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JENDA/${pname}@${version}";
+      };
     };
   };
 
-  XMLSAX = buildPerlPackage {
+  XMLSAX = buildPerlPackage rec {
     pname = "XML-SAX";
     version = "1.02";
     src = fetchurl {
@@ -38777,10 +46185,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRANTM/${pname}@${version}";
+      };
     };
   };
 
-  XMLSAXBase = buildPerlPackage {
+  XMLSAXBase = buildPerlPackage rec {
     pname = "XML-SAX-Base";
     version = "1.09";
     src = fetchurl {
@@ -38794,10 +46206,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRANTM/${pname}@${version}";
+      };
     };
   };
 
-  XMLSAXExpat = buildPerlPackage {
+  XMLSAXExpat = buildPerlPackage rec {
     pname = "XML-SAX-Expat";
     version = "0.51";
     src = fetchurl {
@@ -38816,10 +46232,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "BJOERN/${pname}@${version}";
+      };
     };
   };
 
-  XMLSAXWriter = buildPerlPackage {
+  XMLSAXWriter = buildPerlPackage rec {
     pname = "XML-SAX-Writer";
     version = "0.57";
     src = fetchurl {
@@ -38838,10 +46258,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERIGRIN/${pname}@${version}";
+      };
     };
   };
 
-  XMLSemanticDiff = buildPerlModule {
+  XMLSemanticDiff = buildPerlModule rec {
     pname = "XML-SemanticDiff";
     version = "1.0007";
     src = fetchurl {
@@ -38855,10 +46279,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PERIGRIN/${pname}@${version}";
+      };
     };
   };
 
-  XMLSimple = buildPerlPackage {
+  XMLSimple = buildPerlPackage rec {
     pname = "XML-Simple";
     version = "2.25";
     src = fetchurl {
@@ -38872,10 +46300,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "GRANTM/${pname}@${version}";
+      };
     };
   };
 
-  XMLTokeParser = buildPerlPackage {
+  XMLTokeParser = buildPerlPackage rec {
     pname = "XML-TokeParser";
     version = "0.05";
     src = fetchurl {
@@ -38889,10 +46321,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PODMASTER/${pname}@${version}";
+      };
     };
   };
 
-  XMLTreePP = buildPerlPackage {
+  XMLTreePP = buildPerlPackage rec {
     pname = "XML-TreePP";
     version = "0.43";
     src = fetchurl {
@@ -38906,10 +46342,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "KAWASAKI/${pname}@${version}";
+      };
     };
   };
 
-  XMLTwig = buildPerlPackage {
+  XMLTwig = buildPerlPackage rec {
     pname = "XML-Twig";
     version = "3.52";
     src = fetchurl {
@@ -38929,10 +46369,14 @@ with self;
         gpl1Plus
       ];
       mainProgram = "xml_grep";
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIROD/${pname}@${version}";
+      };
     };
   };
 
-  XMLValidatorSchema = buildPerlPackage {
+  XMLValidatorSchema = buildPerlPackage rec {
     pname = "XML-Validator-Schema";
     version = "1.10";
     src = fetchurl {
@@ -38950,10 +46394,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "SAMTREGAR/${pname}@${version}";
+      };
     };
   };
 
-  XMLWriter = buildPerlPackage {
+  XMLWriter = buildPerlPackage rec {
     pname = "XML-Writer";
     version = "0.900";
     src = fetchurl {
@@ -38963,10 +46411,14 @@ with self;
     meta = {
       description = "Module for creating a XML document object oriented with on the fly validating towards the given DTD";
       license = with lib.licenses; [ gpl1Only ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "JOSEPHW/${pname}@${version}";
+      };
     };
   };
 
-  XSObjectMagic = buildPerlPackage {
+  XSObjectMagic = buildPerlPackage rec {
     pname = "XS-Object-Magic";
     version = "0.05";
     src = fetchurl {
@@ -38985,10 +46437,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  XSParseKeyword = buildPerlModule {
+  XSParseKeyword = buildPerlModule rec {
     pname = "XS-Parse-Keyword";
     version = "0.46";
     src = fetchurl {
@@ -39007,10 +46463,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  XSParseSublike = buildPerlModule {
+  XSParseSublike = buildPerlModule rec {
     pname = "XS-Parse-Sublike";
     version = "0.29";
     src = fetchurl {
@@ -39026,10 +46486,14 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.zakame ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PEVANS/${pname}@${version}";
+      };
     };
   };
 
-  XXX = buildPerlPackage {
+  XXX = buildPerlPackage rec {
     pname = "XXX";
     version = "0.38";
     src = fetchurl {
@@ -39044,10 +46508,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  YAML = buildPerlPackage {
+  YAML = buildPerlPackage rec {
     pname = "YAML";
     version = "1.30";
     src = fetchurl {
@@ -39068,10 +46536,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TINITA/${pname}@${version}";
+      };
     };
   };
 
-  YAMLOld = buildPerlPackage {
+  YAMLOld = buildPerlPackage rec {
     pname = "YAML-Old";
     version = "1.23";
     src = fetchurl {
@@ -39089,10 +46561,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "INGY/${pname}@${version}";
+      };
     };
   };
 
-  YAMLSyck = buildPerlPackage {
+  YAMLSyck = buildPerlPackage rec {
     pname = "YAML-Syck";
     version = "1.34";
     src = fetchurl {
@@ -39103,10 +46579,14 @@ with self;
       description = "Fast, lightweight YAML loader and dumper";
       homepage = "https://github.com/toddr/YAML-Syck";
       license = with lib.licenses; [ mit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TODDR/${pname}@${version}";
+      };
     };
   };
 
-  YAMLTiny = buildPerlPackage {
+  YAMLTiny = buildPerlPackage rec {
     pname = "YAML-Tiny";
     version = "1.74";
     src = fetchurl {
@@ -39119,10 +46599,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ETHER/${pname}@${version}";
+      };
     };
   };
 
-  YAMLLibYAML = buildPerlPackage {
+  YAMLLibYAML = buildPerlPackage rec {
     pname = "YAML-LibYAML";
     version = "0.89";
     src = fetchurl {
@@ -39135,10 +46619,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TINITA/${pname}@${version}";
+      };
     };
   };
 
-  YAMLPP = buildPerlPackage {
+  YAMLPP = buildPerlPackage rec {
     pname = "YAML-PP";
     version = "0.38.0";
     src = fetchurl {
@@ -39155,10 +46643,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "TINITA/${pname}@${version}";
+      };
     };
   };
 
-  Yancy = buildPerlPackage {
+  Yancy = buildPerlPackage rec {
     pname = "Yancy";
     version = "1.088";
     src = fetchurl {
@@ -39181,10 +46673,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "PREACTION/${pname}@${version}";
+      };
     };
   };
 
-  WebMachine = buildPerlPackage {
+  WebMachine = buildPerlPackage rec {
     pname = "Web-Machine";
     version = "0.17";
     src = fetchurl {
@@ -39213,10 +46709,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "DROLSKY/${pname}@${version}";
+      };
     };
   };
 
-  WebScraper = buildPerlModule {
+  WebScraper = buildPerlModule rec {
     pname = "Web-Scraper";
     version = "0.38";
     src = fetchurl {
@@ -39247,10 +46747,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIYAGAWA/${pname}@${version}";
+      };
     };
   };
 
-  WebServiceLinode = buildPerlModule {
+  WebServiceLinode = buildPerlModule rec {
     pname = "WebService-Linode";
     version = "0.29";
     src = fetchurl {
@@ -39269,10 +46773,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "MIKEGRB/${pname}@${version}";
+      };
     };
   };
 
-  WebServiceValidatorHTMLW3C = buildPerlModule {
+  WebServiceValidatorHTMLW3C = buildPerlModule rec {
     pname = "WebService-Validator-HTML-W3C";
     version = "0.28";
     src = fetchurl {
@@ -39289,10 +46797,14 @@ with self;
         artistic1
         gpl1Plus
       ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "STRUAN/${pname}@${version}";
+      };
     };
   };
 
-  ZonemasterCLI = buildPerlPackage {
+  ZonemasterCLI = buildPerlPackage rec {
     pname = "Zonemaster-CLI";
     version = "6.000003";
     src = fetchurl {
@@ -39316,10 +46828,14 @@ with self;
       description = "Run Zonemaster tests from the command line";
       license = with lib.licenses; [ bsd3 ];
       maintainers = with lib.maintainers; [ qbit ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZNMSTR/${pname}@${version}";
+      };
     };
   };
 
-  ZonemasterEngine = buildPerlPackage {
+  ZonemasterEngine = buildPerlPackage rec {
     pname = "Zonemaster-Engine";
     version = "4.6.1";
     src = fetchurl {
@@ -39356,10 +46872,14 @@ with self;
     meta = {
       description = "Tool to check the quality of a DNS zone";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZNMSTR/${pname}@${version}";
+      };
     };
   };
 
-  ZonemasterLDNS = buildPerlPackage {
+  ZonemasterLDNS = buildPerlPackage rec {
     pname = "Zonemaster-LDNS";
     version = "3.2.0";
     src = fetchurl {
@@ -39385,6 +46905,10 @@ with self;
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];
+      identifiers.purlParts = {
+        type = "cpan";
+        spec = "ZNMSTR/${pname}@${version}";
+      };
     };
   };
 
