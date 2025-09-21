@@ -1,0 +1,93 @@
+diff --git a/include/ttmlir/Dialect/TTNN/Pipelines/TTNNPipelines.h b/include/ttmlir/Dialect/TTNN/Pipelines/TTNNPipelines.h
+index 2e9f5611..06c871f1 100644
+--- a/include/ttmlir/Dialect/TTNN/Pipelines/TTNNPipelines.h
++++ b/include/ttmlir/Dialect/TTNN/Pipelines/TTNNPipelines.h
+@@ -333,15 +333,24 @@ struct TTNNBackendToEmitPyPipelineOptions
+ // Inherit from TTIRToTTNNBackendPipelineOptions and
+ // TTNNBackendToEmitCPipelineOptions to reuse the options.
+ //
+-struct TTIRToEmitCPipelineOptions : public TTIRToTTNNBackendPipelineOptions,
+-                                    public TTNNBackendToEmitCPipelineOptions {};
++struct TTIRToEmitCPipelineOptions : public TTIRToTTNNBackendPipelineOptions {
++  Option<bool> targetDylib{*this, "target-dylib",
++                           llvm::cl::desc("Tailor passes for dylib target."),
++                           llvm::cl::init(false)};
++
++  Option<bool> tuplifyInputIfEmpty{
++      *this, "tuplify-input-if-empty",
++      llvm::cl::desc("Whether to create an empty tuple if no inputs to forward "
++                     "function. This should only be used if the `target-dylib` "
++                     "option is set to `true`"),
++      llvm::cl::init(false)};
++};
+ 
+ // TTIR to EmitPy pipeline options.
+ // Inherit from TTIRToTTNNBackendPipelineOptions and
+ // TTNNBackendToEmitPyPipelineOptions to reuse the options.
+ //
+-struct TTIRToEmitPyPipelineOptions : public TTIRToTTNNBackendPipelineOptions,
+-                                     public TTNNBackendToEmitPyPipelineOptions {
++struct TTIRToEmitPyPipelineOptions : public TTIRToTTNNBackendPipelineOptions {
+ };
+ 
+ //===----------------------------------------------------------------------===//
+@@ -366,11 +375,11 @@ void createTTNNPipelineDeallocPass(
+ void createTTIRToTTNNBackendPipeline(
+     OpPassManager &pm, const TTIRToTTNNBackendPipelineOptions &options);
+ 
+-void createTTNNBackendToEmitCPipeline(
+-    OpPassManager &pm, const TTNNBackendToEmitCPipelineOptions &options);
++template<typename T> void createTTNNBackendToEmitCPipeline(
++    OpPassManager &pm, const T &options);
+ 
+-void createTTNNBackendToEmitPyPipeline(
+-    OpPassManager &pm, const TTNNBackendToEmitPyPipelineOptions &options);
++template<typename T> void createTTNNBackendToEmitPyPipeline(
++    OpPassManager &pm, const T &options);
+ 
+ void createTTIRToEmitCPipeline(OpPassManager &pm,
+                                const TTIRToEmitCPipelineOptions &options);
+diff --git a/lib/Dialect/TTNN/Pipelines/TTNNPipelines.cpp b/lib/Dialect/TTNN/Pipelines/TTNNPipelines.cpp
+index 3bdd1858..e91b54e5 100644
+--- a/lib/Dialect/TTNN/Pipelines/TTNNPipelines.cpp
++++ b/lib/Dialect/TTNN/Pipelines/TTNNPipelines.cpp
+@@ -202,8 +202,8 @@ void createTTIRToTTNNBackendPipeline(
+   ttir::createTTIRToCPUPipeline(pm, linalgToLLVMOptions);
+ }
+ 
+-void createTTNNBackendToEmitCPipeline(
+-    OpPassManager &pm, const TTNNBackendToEmitCPipelineOptions &options) {
++template<typename T> void createTTNNBackendToEmitCPipeline(
++    OpPassManager &pm, const T &options) {
+   pm.addPass(ttcore::createTTCoreUnwrapDeviceModulePass());
+ 
+   if (options.targetDylib) {
+@@ -224,8 +224,8 @@ void createTTNNBackendToEmitCPipeline(
+   pm.addPass(createConvertTTNNToEmitCPass());
+ }
+ 
+-void createTTNNBackendToEmitPyPipeline(
+-    OpPassManager &pm, const TTNNBackendToEmitPyPipelineOptions &options) {
++template<typename T> void createTTNNBackendToEmitPyPipeline(
++    OpPassManager &pm, const T &options) {
+ 
+   pm.addPass(ttcore::createTTCoreUnwrapDeviceModulePass());
+ 
+@@ -280,7 +280,7 @@ void registerTTNNPipelines() {
+       mlir::tt::ttnn::TTNNBackendToEmitCPipelineOptions>(
+       "ttnn-backend-to-emitc-pipeline",
+       "Pipeline lowering TTNN backend to EmitC.",
+-      mlir::tt::ttnn::createTTNNBackendToEmitCPipeline);
++      mlir::tt::ttnn::createTTNNBackendToEmitCPipeline<TTNNBackendToEmitCPipelineOptions>);
+ 
+   // TTNN backend to EmitPy pipeline.
+   //
+@@ -288,7 +288,7 @@ void registerTTNNPipelines() {
+       mlir::tt::ttnn::TTNNBackendToEmitPyPipelineOptions>(
+       "ttnn-backend-to-emitpy-pipeline",
+       "Pipeline lowering TTNN backend to EmitPy.",
+-      mlir::tt::ttnn::createTTNNBackendToEmitPyPipeline);
++      mlir::tt::ttnn::createTTNNBackendToEmitPyPipeline<TTNNBackendToEmitPyPipelineOptions>);
+ 
+   // TTIR to EmitC pipeline.
+   //

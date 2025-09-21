@@ -1,0 +1,21 @@
+From d2e66209e9a5a8b542d32faa6585d99583959f66 Mon Sep 17 00:00:00 2001
+From: Aleksandar Zecevic <azecevic@tenstorrent.com>
+Date: Tue, 23 Sep 2025 02:01:28 +0000
+Subject: [PATCH] fix linking ordering
+
+---
+ runtime/lib/ttnn/utils/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/runtime/lib/ttnn/utils/CMakeLists.txt b/runtime/lib/ttnn/utils/CMakeLists.txt
+index f887b7501a..2ef8e7d3dc 100644
+--- a/runtime/lib/ttnn/utils/CMakeLists.txt
++++ b/runtime/lib/ttnn/utils/CMakeLists.txt
+@@ -17,5 +17,5 @@ target_include_directories(TTRuntimeTTNNUtils PUBLIC
+ )
+ target_include_directories(TTRuntimeTTNNUtils SYSTEM PUBLIC "$<BUILD_INTERFACE:${TTMETAL_INCLUDE_DIRS}>")
+ add_dependencies(TTRuntimeTTNNUtils TTNN_LIBRARY tt-metal FBS_GENERATION)
+-target_link_libraries(TTRuntimeTTNNUtils PUBLIC TTNN_LIBRARY)
++target_link_libraries(TTRuntimeTTNNUtils PUBLIC TTNN_LIBRARY PRIVATE TTRuntimeTypes)
+ target_link_libraries(TTRuntimeTTNNUtils PUBLIC coverage_config)
+
