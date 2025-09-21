@@ -14,6 +14,7 @@
 
   # buildInputs
   libsForQt5,
+  llvmPackages,
   glew,
   vcg,
 }:
@@ -54,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     libsForQt5.qtbase
     vcg
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   dontWrapQtApps = true;
@@ -63,13 +67,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Get io & filter plugins from meshlab, to avoild render, decorate & edit ones
-  postInstall = ''
-    install -D -t $out/${python3Packages.python.sitePackages}/pymeshlab/lib/plugins \
-      ${meshlab}/lib/meshlab/plugins/libio_* \
-      ${meshlab}/lib/meshlab/plugins/libfilter_*
-  '';
+  postInstall =
+    let
+      plugins =
+        if stdenv.hostPlatform.isDarwin then
+          "Applications/meshlab.app/Contents/PlugIns"
+        else
+          "lib/meshlab/plugins";
+      pyPlugins = if stdenv.hostPlatform.isDarwin then "PlugIns" else "lib/plugins";
+    in
+    ''
+      install -D -t $out/${python3Packages.python.sitePackages}/pymeshlab/${pyPlugins} \
+        ${meshlab}/${plugins}/libio_* \
+        ${meshlab}/${plugins}/libfilter_*
+    '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --add-needed ${meshlab}/lib/meshlab/libmeshlab-common.so \
       $out/${python3Packages.python.sitePackages}/pymeshlab/pmeshlab.*.so
