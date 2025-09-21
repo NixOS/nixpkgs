@@ -3267,7 +3267,6 @@ broken-packages:
   - ihaskell-parsec # failure in job https://hydra.nixos.org/build/233244271 at 2023-09-02
   - ihaskell-plot # failure in job https://hydra.nixos.org/build/233255936 at 2023-09-02
   - ihaskell-widgets # failure in job https://hydra.nixos.org/build/265955663 at 2024-07-14
-  - ihp-openai # failure in job https://hydra.nixos.org/build/307610988 at 2025-09-19
   - illuminate # failure in job https://hydra.nixos.org/build/233219478 at 2023-09-02
   - image-type # failure in job https://hydra.nixos.org/build/233251466 at 2023-09-02
   - imagemagick # failure in job https://hydra.nixos.org/build/233598237 at 2023-09-02
