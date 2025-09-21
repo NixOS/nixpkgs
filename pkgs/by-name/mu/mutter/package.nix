@@ -19,7 +19,6 @@
   libadwaita,
   libxcvt,
   libGL,
-  libICE,
   libX11,
   libXcomposite,
   libXcursor,
@@ -27,8 +26,6 @@
   libXext,
   libXfixes,
   libXi,
-  libXtst,
-  libxkbfile,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
@@ -164,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libICE
     libX11
     libXcomposite
     libXcursor
@@ -172,8 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXfixes
     libXi
-    libXtst
-    libxkbfile
     xkeyboard_config
     libxkbcommon
     libxcb
