@@ -1,6 +1,5 @@
 {
   lib,
-  idris2,
   makeBinaryWrapper,
   symlinkJoin,
   idris2-unwrapped,
@@ -8,11 +7,11 @@
   extraPackages ? [ ],
 }:
 let
-  supportLibrariesPath = lib.makeLibraryPath [ idris2.libidris2_support ];
+  supportLibrariesPath = lib.makeLibraryPath [ libidris2_support ];
   supportSharePath = lib.makeSearchPath "share" [ libidris2_support ];
 in
 symlinkJoin {
-  inherit (idris2) version;
+  inherit (idris2-unwrapped) version;
   pname = "idris2-wrapped";
 
   paths = [ idris2-unwrapped ] ++ extraPackages;
@@ -21,10 +20,10 @@ symlinkJoin {
 
   postBuild = ''
     wrapProgram "$out/bin/idris2" \
-      --set CHEZ "${lib.getExe idris2.chez}" \
+      --set CHEZ "${lib.getExe idris2-unwrapped.chez}" \
       --suffix IDRIS2_LIBS ':' "${supportLibrariesPath}" \
       --suffix IDRIS2_DATA ':' "${supportSharePath}" \
-      --suffix IDRIS2_PACKAGE_PATH ':' "$out/idris2-${idris2.version}" \
+      --suffix IDRIS2_PACKAGE_PATH ':' "$out/idris2-${idris2-unwrapped.version}" \
       --suffix LD_LIBRARY_PATH ':' "${supportLibrariesPath}" \
       --suffix DYLD_LIBRARY_PATH ':' "${supportLibrariesPath}"
   '';
@@ -36,7 +35,7 @@ symlinkJoin {
 
   meta = {
     # Manually inherit so that pos works
-    inherit (idris2.meta)
+    inherit (idris2-unwrapped.meta)
       description
       homepage
       changelog
