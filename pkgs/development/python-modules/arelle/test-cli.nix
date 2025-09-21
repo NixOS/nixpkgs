@@ -23,10 +23,8 @@ runCommand "arelle-test-cli${lib.optionalString (!arelle.hasGUI) "-headless"}"
     arelleCmdLine --about --disablePersistentConfig 2>&1 | grep "An open source XBRL platform" > /dev/null
 
     ${lib.optionalString arelle.hasGUI ''
-      # Test executables exist and are accessible
-      if [ -f "${lib.getBin arelle}/bin/arelleGUI" ]; then
-        test -x "${lib.getBin arelle}/bin/arelleGUI"
-      fi
+      # check if the arelleGUI command is available
+      command -v arelleGUI
     ''}
 
     # Create a simple but valid XBRL instance for testing validation functionality
