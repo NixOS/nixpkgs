@@ -11741,7 +11741,6 @@ with pkgs;
 
   meshlab = callPackage ../by-name/me/meshlab/package.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-    llvmPackages = llvmPackages_18;
   };
 
   meshlab-unstable = callPackage ../by-name/me/meshlab-unstable/package.nix {
