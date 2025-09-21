@@ -90,14 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     usrsctp
   ];
 
-  # For subproject
-  env = {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=array-bounds"
-      "-Wno-error=stringop-overflow"
-    ];
-  };
-
   preConfigure = ''
     cp -R --no-preserve=mode,ownership ${finalAttrs.diameter} subprojects/freeDiameter
     cp -R --no-preserve=mode,ownership ${finalAttrs.libtins} subprojects/libtins
