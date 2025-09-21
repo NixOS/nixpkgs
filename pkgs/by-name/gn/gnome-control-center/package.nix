@@ -19,6 +19,7 @@
   gcr_4,
   glibc,
   gnome-bluetooth,
+  gnome-color-manager,
   gnome-desktop,
   gnome-online-accounts,
   gnome-settings-daemon,
@@ -42,7 +43,6 @@
   libsecret,
   libsoup_3,
   libwacom,
-  libXi,
   libxml2,
   libxslt,
   meson,
@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./paths.patch {
+      gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
@@ -138,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libsoup_3
     libwacom
-    libXi
     libxml2
     modemmanager
     mutter # schemas for the keybindings
