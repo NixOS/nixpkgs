@@ -124,14 +124,17 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional cursesUI ncurses
     ++ lib.optional qt5UI qtbase;
 
-  preConfigure = ''
-    substituteInPlace Modules/Platform/UnixPaths.cmake \
-      --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
-      --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
-      --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
-    # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags $cmakeFlags"
-  '';
+  preConfigure =
+    lib.optionalString (stdenv.cc.libc != null) ''
+      substituteInPlace Modules/Platform/UnixPaths.cmake \
+        --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
+        --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
+        --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
+    ''
+    + ''
+      # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
+      configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags $cmakeFlags"
+    '';
 
   # The configuration script is not autoconf-based, although being similar;
   # triples and other interesting info are passed via CMAKE_* environment
