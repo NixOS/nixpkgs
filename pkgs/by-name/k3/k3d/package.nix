@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -53,7 +52,7 @@ buildGoModule rec {
       --replace-fail "TestGetK3sVersion" "SkipGetK3sVersion"
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd k3d \
       --bash <($out/bin/k3d completion bash) \
       --fish <($out/bin/k3d completion fish) \

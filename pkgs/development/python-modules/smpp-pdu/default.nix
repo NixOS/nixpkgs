@@ -2,14 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage {
   pname = "smpp-pdu";
-  version = "0.3-unstable-2022-09-01";
+  version = "unstable-2022-09-02";
   format = "pyproject";
 
   # Upstream was once mozes/smpp.pdu, but it's dead and Python 2 only.
@@ -25,10 +24,6 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "smpp.pdu" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
 
   meta = with lib; {
     description = "Library for parsing Protocol Data Units (PDUs) in SMPP protocol";

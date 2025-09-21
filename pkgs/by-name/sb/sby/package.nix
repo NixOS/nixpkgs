@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.57";
+  version = "0.56";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vhgLP2twPPGsey5lzmt/zUFme4GjIdWgRyWoCHxLxRU=";
+    hash = "sha256-uKndGUoLbG7SBhsOSYyM/v9g33pq7zFFajzvTUYa7NY=";
   };
 
   postPatch = ''

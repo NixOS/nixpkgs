@@ -338,7 +338,12 @@ in
       };
     };
 
-    package = lib.mkPackageOption pkgs "peertube" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.peertube;
+      defaultText = lib.literalExpression "pkgs.peertube";
+      description = "PeerTube package to use.";
+    };
   };
 
   config = lib.mkIf cfg.enable {

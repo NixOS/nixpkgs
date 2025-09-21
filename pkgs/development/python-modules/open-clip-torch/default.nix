@@ -24,17 +24,19 @@
   pandas,
   transformers,
   webdataset,
+
+  stdenv,
 }:
 buildPythonPackage rec {
   pname = "open-clip-torch";
-  version = "3.2.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
     tag = "v${version}";
-    hash = "sha256-k4/u0XtfBmPSVKfEK3wHqJXtKAuUNkUnk1TLG2S6PPs=";
+    hash = "sha256-xDXxhncX0l9qwbV4Gk4rOROH6Qyit/FSTgjrg4Vbk1s=";
   };
 
   build-system = [ pdm-backend ];
@@ -75,12 +77,14 @@ buildPythonPackage rec {
     "test_inference_with_data"
     "test_pretrained_text_encoder"
     "test_training_mt5"
-
     # fails due to type errors
     "test_num_shards"
-
-    # hangs forever
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "test_training"
+    "test_training_coca"
+    "test_training_unfreezing_vit"
+    "test_training_clip_with_jit"
   ];
 
   meta = {

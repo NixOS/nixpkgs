@@ -4,19 +4,17 @@
   fetchFromGitHub,
   nix-update-script,
   jq,
-  git,
-  ripgrep,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.0.12";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qsa4bAk0QUUZCtoEREBd+8s0AwwVr1os5TO7Luo/UrY=";
+    hash = "sha256-5qKSWbc0NPpgvt36T/gRSgm1+o2Pbdw3tgfcGba6YSs=";
   };
 
   patches = [
@@ -25,24 +23,13 @@ buildNpmPackage (finalAttrs: {
     ./add-missing-resolved-integrity-fields.patch
   ];
 
-  npmDepsHash = "sha256-uLKxUD0e9YSEQz4dxsGXYojcYS6noqsWhtmsc20He0k=";
+  npmDepsHash = "sha256-XvJO3ylm/ER5neSubci2w9OCTmqobmmXLbKmdQAqArY=";
 
   nativeBuildInputs = [
     jq
   ];
 
-  buildInputs = [
-    git
-    ripgrep
-  ];
-
   postPatch = ''
-    # Remove @lvce-editor/ripgrep dependency (no network on buildPhase
-    substituteInPlace package.json --replace-fail '"@lvce-editor/ripgrep": "^1.6.0",' ""
-    substituteInPlace packages/core/package.json --replace-fail '"@lvce-editor/ripgrep": "^1.6.0",' ""
-    substituteInPlace packages/core/src/tools/ripGrep.ts \
-      --replace-fail "import { rgPath } from '@lvce-editor/ripgrep';" "const rgPath = 'rg';"
-
     # patches below remove node-pty dependency which causes build fail on Darwin
     # should be conditional on platform but since package-lock.json is patched it changes its hash
     # though seems like this dependency is not really required by the package
@@ -80,7 +67,6 @@ buildNpmPackage (finalAttrs: {
 
     mkdir -p $out/bin $out/share/qwen-code
     cp -r bundle/* $out/share/qwen-code/
-    cp node_modules/tiktoken/tiktoken_bg.wasm $out/share/qwen-code/
     patchShebangs $out/share/qwen-code
     ln -s $out/share/qwen-code/gemini.js $out/bin/qwen
 

@@ -23,7 +23,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.int;
         default = 8082;
         description = "Port for Homepage to bind to.";
       };

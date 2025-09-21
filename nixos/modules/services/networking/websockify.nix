@@ -36,7 +36,7 @@ in
       portMap = mkOption {
         description = "Ports to map by default.";
         default = { };
-        type = types.attrsOf types.port;
+        type = types.attrsOf types.int;
       };
     };
   };

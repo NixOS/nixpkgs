@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-lo9JpsHkvyrEqFnIiGlU2o4rREeQeqWpe9WMwisvw+4=";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd angrr \
       --bash <($out/bin/angrr completion bash) \
       --fish <($out/bin/angrr completion fish) \

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +28,7 @@ buildGoModule rec {
     "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd hostctl \
       --bash <($out/bin/hostctl completion bash) \
       --zsh <($out/bin/hostctl completion zsh)

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxemoji";
-  version = "0.3.1";
+  version = "0.2.0";
   format = "pyproject";
 
   outputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sphinx-contrib";
     repo = "emojicodes";
     tag = "v${version}";
-    hash = "sha256-ss7snuXyT+tahc2GioB7qdGDqZdajEGdbaNt0aWF9ls=";
+    hash = "sha256-TLhjpJpUIoDAe3RZ/7sjTgdW+5s7OpMEd1/w0NyCQ3A=";
   };
 
   nativeBuildInputs = [

@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitLab,
+  fetchFromGitHub,
   breeze-icons,
   gtk3,
   gnome-icon-theme,
@@ -13,14 +13,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "BeautyLine";
-  version = "2.4";
+  version = "0.0.4";
 
-  src = fetchFromGitLab {
-    owner = "garuda-linux";
-    repo = "themes-and-settings/artwork/beautyline";
-    rev = "0df6f5df71c19496f9a873f8a52fbb5e84e95b12";
-    hash = "sha256-SsYW4H1qam7kQJ3E4/vHJJOv2E4Pdk3itGncWa6YTqw=";
+  src = fetchFromGitHub {
+    owner = "gvolpe";
+    repo = pname;
+    rev = version;
+    sparseCheckout = [
+      "BeautyLine-V3"
+    ];
+    hash = "sha256-IkkypAj250+OXbf19TampCnqYsSbJVIjeYlxJoyhpzk=";
   };
+
+  sourceRoot = "${src.name}/BeautyLine-V3";
 
   nativeBuildInputs = [
     jdupes
@@ -58,6 +63,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.gnome-look.org/p/1425426/";
     platforms = platforms.linux;
     license = [ licenses.publicDomain ];
-    maintainers = with maintainers; [ lwb-2021 ];
+    maintainers = with maintainers; [ gvolpe ];
   };
 }

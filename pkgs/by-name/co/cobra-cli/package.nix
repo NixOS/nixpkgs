@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
@@ -40,7 +39,7 @@ buildGoModule rec {
       --prefix PATH : ${go}/bin
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd cobra-cli \
       --bash <($out/bin/cobra-cli completion bash) \
       --fish <($out/bin/cobra-cli completion fish) \

@@ -102,7 +102,7 @@ in
     };
 
     listenPort = lib.mkOption {
-      type = lib.types.port;
+      type = lib.types.int;
       default = 443;
       description = ''
         The port on which kasmweb should listen.

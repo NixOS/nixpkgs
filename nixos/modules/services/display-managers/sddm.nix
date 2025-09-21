@@ -12,11 +12,9 @@ let
   xEnv = config.systemd.services.display-manager.environment;
 
   sddm = cfg.package.override (old: {
-    extraPackages =
-      old.extraPackages or [ ]
-      ++ lib.optionals cfg.wayland.enable [ pkgs.qt6.qtwayland ]
-      ++ lib.optionals (cfg.wayland.compositor == "kwin") [ pkgs.kdePackages.layer-shell-qt ]
-      ++ cfg.extraPackages;
+    withWayland = cfg.wayland.enable;
+    withLayerShellQt = cfg.wayland.compositor == "kwin";
+    extraPackages = old.extraPackages or [ ] ++ cfg.extraPackages;
   });
 
   iniFmt = pkgs.formats.ini { };
@@ -230,7 +228,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs [ "kdePackages" "sddm" ] { };
+      package = mkPackageOption pkgs [ "libsForQt5" "sddm" ] { };
 
       enableHidpi = mkOption {
         type = types.bool;

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "setuptools-odoo";
-  version = "3.3.1";
+  version = "3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "acsone";
     repo = "setuptools-odoo";
     tag = version;
-    hash = "sha256-fTXc3ICJ1VKno1PYBVMhXr5u7awhahLdOuDJ/8czPtA=";
+    hash = "sha256-38YlkDH/PuJ1yvQ43OYmdnRd1SGJULv6fC/+fitLDJ8=";
   };
 
   nativeBuildInputs = [ distutils ];

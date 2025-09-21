@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   unittestCheckHook,
   poetry-core,
 }:
@@ -29,10 +28,6 @@ buildPythonPackage {
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "pyrad" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
 
   meta = {
     description = "Python RADIUS Implementation";

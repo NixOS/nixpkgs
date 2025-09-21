@@ -9,13 +9,12 @@
 
 buildGoModule rec {
   pname = "pg-dump-anon";
-  version = "2.4.1";
-
+  version = "1.3.2";
   src = fetchFromGitLab {
     owner = "dalibo";
     repo = "postgresql_anonymizer";
-    tag = version;
-    hash = "sha256-vAsKTkFx8HLKDdXIQt6fEF3l7EzzvcilGfqNtBa0AMM=";
+    rev = version;
+    hash = "sha256-MGdGvd4P1fFKdd6wnS2V5Tdly6hJlAmSA4TspnO/6Tk=";
   };
 
   sourceRoot = "${src.name}/pg_dump_anon";
@@ -30,11 +29,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ postgresql ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Export databases with data being anonymized with the anonymizer extension";
     homepage = "https://postgresql-anonymizer.readthedocs.io/en/stable/";
-    teams = [ lib.teams.flyingcircus ];
-    license = lib.licenses.postgresql;
+    teams = [ teams.flyingcircus ];
+    license = licenses.postgresql;
     mainProgram = "pg_dump_anon";
   };
 }

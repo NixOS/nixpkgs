@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchurl,
   fetchFromGitHub,
   installShellFiles,
@@ -12,13 +11,13 @@
 
 buildGoModule rec {
   pname = "fastly";
-  version = "12.0.0";
+  version = "11.5.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-Cq4pTp9K6vsQrdWz9kMdX1K1KR26e/qPL55xqiZ5kYM=";
+    hash = "sha256-o2/gwXODAS4eex6q91hxbNx2RHNt5z8eaT3ZXS7D634=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -35,7 +34,7 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
-  vendorHash = "sha256-vjTqT/Gv8FU0HNvYqXIE9OCNRsJ8GbUNXIxXDdhDclc=";
+  vendorHash = "sha256-qoRlUCAnJHt9B1w9R4dBtkvqKhk3hum6OjzraPKAzk0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,7 +68,7 @@ buildGoModule rec {
       --set FASTLY_VICEROY_USE_PATH 1
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     export HOME="$(mktemp -d)"
     installShellCompletion --cmd fastly \
       --bash <($out/bin/fastly --completion-script-bash) \

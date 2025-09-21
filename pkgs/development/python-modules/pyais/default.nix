@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   attrs,
   bitarray,
   buildPythonPackage,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-CLsUVARpyxOshvrHY+NoVi0HSvn1R02jDnMqn0sRGgM=";
   };
 
-  __darwinAllowLocalNetworking = true;
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -40,11 +37,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests the examples which have additional requirements
     "tests/test_examples.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # OSError: [Errno 48] Address already in use
-    "test_full_message_flow"
   ];
 
   meta = with lib; {

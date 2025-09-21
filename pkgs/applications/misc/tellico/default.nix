@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
-    repo = "tellico";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-+ky47wbyGAsBLx9q4ya/Vm9jiqEAbFfhloOytAyUYCQ=";
   };

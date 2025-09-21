@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
-type ImageVariants = dict[str, str]
+type ImageVariants = list[str]
 
 
 class NixOSRebuildError(Exception):
@@ -77,7 +77,7 @@ def _get_hostname(target_host: Remote | None) -> str | None:
 
 @dataclass(frozen=True)
 class Flake:
-    path: str
+    path: Path | str
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
@@ -86,7 +86,11 @@ class Flake:
 
     @override
     def __str__(self) -> str:
-        return f"{self.path}#{self.attr}"
+        if isinstance(self.path, Path):
+            # https://github.com/NixOS/nixpkgs/issues/433726
+            return f"{self.path.absolute()}#{self.attr}"
+        else:
+            return f"{self.path}#{self.attr}"
 
     @classmethod
     def parse(cls, flake_str: str, target_host: Remote | None = None) -> Self:
@@ -97,7 +101,10 @@ class Flake:
             f'nixosConfigurations."{attr or _get_hostname(target_host) or "default"}"'
         )
         path = m.group("path")
-        return cls(path, nixos_attr)
+        if ":" in path:
+            return cls(path, nixos_attr)
+        else:
+            return cls(Path(path), nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
@@ -117,12 +124,6 @@ class Flake:
                     return cls.parse(str(default_path.parent), target_host)
                 else:
                     return None
-
-    def resolve_path_if_exists(self) -> str:
-        try:
-            return str(Path(self.path).resolve(strict=True))
-        except FileNotFoundError:
-            return self.path
 
 
 @dataclass(frozen=True)

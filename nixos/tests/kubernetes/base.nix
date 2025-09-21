@@ -85,8 +85,8 @@ let
               # the future, see link below to find new ones
               # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
               featureGates = {
-                AllowParsingUserUIDFromCertAuth = true;
-                ClusterTrustBundle = false;
+                AnonymousAuthConfigurableEndpoints = true;
+                ConsistentListFromCache = false;
               };
               masterAddress = "${masterName}.${config.networking.domain}";
             };

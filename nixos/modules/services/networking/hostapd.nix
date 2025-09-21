@@ -274,7 +274,7 @@ in
               channel = mkOption {
                 default = 0;
                 example = 11;
-                type = types.ints.unsigned;
+                type = types.int;
                 description = ''
                   The channel to operate on. Use 0 to enable ACS (Automatic Channel Selection).
                   Beware that not every device supports ACS in which case {command}`hostapd`
@@ -571,7 +571,7 @@ in
                     options = {
                       logLevel = mkOption {
                         default = 2;
-                        type = types.ints.between 0 4;
+                        type = types.int;
                         description = ''
                           Levels (minimum value for logged events):
                           0 = verbose debugging
@@ -957,7 +957,7 @@ in
                                 vlanid = mkOption {
                                   default = null;
                                   example = 1;
-                                  type = types.nullOr types.ints.unsigned;
+                                  type = types.nullOr types.int;
                                   description = "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
                                 };
 
@@ -1334,20 +1334,25 @@ in
         # we check if wirelessInterfaces is empty as that means all interfaces implicit
         shouldWarn = wirelessEnabled && (wirelessInterfaces == [ ] || hasInterfaceConflict);
       in
-      lib.optional shouldWarn ''
-        Some wireless interface is configured for both for client and access point mode:
-        this is not allowed. Either specify `networking.wireless.interfaces` and exclude
-        those from `services.hostapd.radios` or make sure to not run the `wpa_supplicant`
-        and `hostapd` services simultaneously.
-      ''
-      ++ lib.optional config.networking.wireless.iwd.enable ''
-        hostapd and iwd do conflict,
-        use `networking.wireless.enable` in combination with `networking.wireless.interfaces` to avoid it.
-      '';
+      if shouldWarn then
+        [
+          ''
+            Some wireless interface is configured for both for client and access point mode:
+            this is not allowed. Either specify `networking.wireless.interfaces` and exclude
+            those from `services.hostapd.radios` or make sure to not run the `wpa_supplicant`
+            and `hostapd` services simultaneously.
+          ''
+        ]
+      else
+        [ ];
     assertions = [
       {
         assertion = cfg.radios != { };
         message = "At least one radio must be configured with hostapd!";
+      }
+      {
+        assertion = !config.networking.wireless.iwd.enable;
+        message = "hostapd and iwd conflict, use `networking.wireless.enable` in combination with `networking.wireless.interfaces`";
       }
     ]
     # Radio warnings

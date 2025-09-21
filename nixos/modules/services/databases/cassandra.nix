@@ -415,7 +415,7 @@ in
     };
 
     jmxPort = mkOption {
-      type = types.port;
+      type = types.int;
       default = 7199;
       description = ''
         Specifies the default port over which Cassandra will be available for

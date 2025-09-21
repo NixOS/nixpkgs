@@ -65,7 +65,7 @@ in
       };
 
       nice = lib.mkOption {
-        type = lib.types.nullOr (lib.types.ints.between (-20) 19);
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Niceness of the compilation tasks.

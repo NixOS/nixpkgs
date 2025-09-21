@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +27,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd abbreviate \
       --bash <($out/bin/abbreviate completion bash) \
       --fish <($out/bin/abbreviate completion fish) \

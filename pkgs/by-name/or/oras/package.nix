@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -32,7 +31,7 @@ buildGoModule (finalAttrs: {
     "-X oras.land/oras/internal/version.GitTreeState=clean"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd oras \
       --bash <($out/bin/oras completion bash) \
       --fish <($out/bin/oras completion fish) \

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
-  stdenv,
 }:
 
 buildGoModule rec {
@@ -27,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd humioctl \
       --bash <($out/bin/humioctl completion bash) \
       --zsh <($out/bin/humioctl completion zsh)

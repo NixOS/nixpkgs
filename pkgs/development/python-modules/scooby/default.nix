@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.10.2";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "banesullivan";
     repo = "scooby";
     tag = "v${version}";
-    hash = "sha256-vOcCs8U8HeBgO86bgS/kqYrNai1IsQ0upQveV06YfoE=";
+    hash = "sha256-ldDmw2TDvXgfu0fMj6dSr2zh9WfYGNpBGZb3MixKq+k=";
   };
 
   build-system = [ setuptools-scm ];
