@@ -6564,6 +6564,8 @@ self: super: with self; {
 
   hebg = callPackage ../development/python-modules/hebg { };
 
+  heif-image-plugin = callPackage ../development/python-modules/heif-image-plugin { };
+
   help2man = callPackage ../development/python-modules/help2man { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
@@ -13137,6 +13139,8 @@ self: super: with self; {
   pyhcl = callPackage ../development/python-modules/pyhcl { };
 
   pyheck = callPackage ../development/python-modules/pyheck { };
+
+  pyheif = callPackage ../development/python-modules/pyheif { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
 
