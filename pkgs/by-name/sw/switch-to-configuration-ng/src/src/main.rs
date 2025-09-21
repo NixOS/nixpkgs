@@ -50,9 +50,20 @@ mod logind_manager {
     include!(concat!(env!("OUT_DIR"), "/logind_manager.rs"));
 }
 
+// Added for machined interface
+mod machined_manager {
+    #![allow(non_upper_case_globals)]
+    #![allow(non_camel_case_types)]
+    #![allow(non_snake_case)]
+    #![allow(unused)]
+    #![allow(clippy::all)]
+    include!(concat!(env!("OUT_DIR"), "/machined_manager.rs"));
+}
+
 use crate::systemd_manager::OrgFreedesktopSystemd1Manager;
 use crate::{
     logind_manager::OrgFreedesktopLogin1Manager,
+    machined_manager::OrgFreedesktopMachine1Manager,
     systemd_manager::{
         OrgFreedesktopSystemd1ManagerJobRemoved, OrgFreedesktopSystemd1ManagerReloading,
     },
@@ -395,6 +406,21 @@ fn parse_systemd_bool(
     }
 }
 
+// Gets a string value from a systemd unit, with a default.
+fn get_unit_str_val<'a>(
+    unit_data: &'a UnitInfo,
+    section_name: &str,
+    key_name: &str,
+    default: &'a str,
+) -> &'a str {
+    unit_data
+        .get(section_name)
+        .and_then(|section| section.get(key_name))
+        .and_then(|values| values.last())
+        .map(|s| s.as_str())
+        .unwrap_or(default)
+}
+
 #[derive(Debug, PartialEq)]
 enum UnitComparison {
     Equal,
@@ -539,6 +565,62 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
     ret
 }
 
+// Compare two .nspawn unit files.
+fn compare_nspawn_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison {
+    let ignored_keys = HashMap::from([("Parameters", ()), ("X-ActivationStrategy", ())]);
+
+    // Fast path for equality
+    if current_unit == new_unit {
+        return UnitComparison::Equal;
+    }
+
+    let mut new_sections = new_unit.clone();
+
+    for (section_name, current_keys) in current_unit {
+        let Some(new_keys) = new_sections.get_mut(section_name) else {
+            // Section exists in current but not in new, so they are unequal.
+            return UnitComparison::UnequalNeedsRestart;
+        };
+
+        for (key, current_value) in current_keys {
+            if ignored_keys.contains_key(key.as_str()) {
+                // Key is ignored, remove from consideration for the new unit as well
+                new_keys.remove(key);
+                continue;
+            }
+
+            let Some(new_value) = new_keys.get(key) else {
+                // Key exists in current but not in new, so unequal.
+                return UnitComparison::UnequalNeedsRestart;
+            };
+
+            if current_value != new_value {
+                // Values for the same key differ.
+                return UnitComparison::UnequalNeedsRestart;
+            }
+
+            // Key and value are equal, remove from consideration.
+            new_keys.remove(key);
+        }
+
+        if new_keys.is_empty() {
+            new_sections.remove(section_name);
+        }
+    }
+
+    // Check if there are any remaining non-ignored keys in the new unit.
+    for keys in new_sections.values() {
+        for key in keys.keys() {
+            if !ignored_keys.contains_key(key.as_str()) {
+                // A new, non-ignored key was introduced.
+                return UnitComparison::UnequalNeedsRestart;
+            }
+        }
+    }
+
+    UnitComparison::Equal
+}
+
 // Called when a unit exists in both the old systemd and the new system and the units differ. This
 // figures out of what units are to be stopped, restarted, reloaded, started, and skipped.
 fn handle_modified_unit(
@@ -586,6 +668,10 @@ fn handle_modified_unit(
         // Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
         // More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
     } else {
+        // Skip the following logic for systemd-nspawn units
+        if unit.starts_with("systemd-nspawn@") {
+            return Ok(());
+        }
         let fallback = parse_unit(new_unit_file, new_base_unit_file)?;
         let new_unit_info = if new_unit_info.is_some() {
             new_unit_info
@@ -727,6 +813,9 @@ fn record_unit(p: impl AsRef<Path>, unit: &str) {
 // The opposite of record_unit, removes a unit name from a file
 fn unrecord_unit(p: impl AsRef<Path>, unit: &str) {
     if ACTION.get() != Some(&Action::DryActivate) {
+        if unit.starts_with("systemd-nspawn@") {
+            return;
+        }
         if let Ok(contents) = std::fs::read_to_string(&p) {
             if let Ok(mut f) = std::fs::File::options()
                 .write(true)
@@ -869,6 +958,25 @@ fn unit_is_active(conn: &LocalConnection, unit: &str) -> Result<bool> {
     Ok(matches!(active_state.as_str(), "active" | "activating"))
 }
 
+// Get a list of running nspawn machine names from machine1
+fn list_running_nspawn_machines(
+    machined_manager: &Proxy<'_, &LocalConnection>,
+) -> Result<HashMap<String, ()>> {
+    let machines = machined_manager
+        .list_machines()
+        .context("Failed to list machines via D-Bus")?;
+    Ok(machines
+        .into_iter()
+        .filter_map(|(name, _, _, _,)| {
+            if name != ".host" {
+                Some((name, ()))
+            } else {
+                None
+            }
+        })
+        .collect())
+}
+
 static ACTION: OnceLock<Action> = OnceLock::new();
 
 #[derive(Debug)]
@@ -896,7 +1004,11 @@ impl std::fmt::Display for Job {
 
 fn new_dbus_proxies(
     conn: &LocalConnection,
-) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
+) -> (
+    Proxy<'_, &LocalConnection>,
+    Proxy<'_, &LocalConnection>,
+    Proxy<'_, &LocalConnection>,
+) {
     (
         conn.with_proxy(
             "org.freedesktop.systemd1",
@@ -906,6 +1018,11 @@ fn new_dbus_proxies(
         conn.with_proxy(
             "org.freedesktop.login1",
             "/org/freedesktop/login1",
+            Duration::from_millis(10000),
+        ),
+        conn.with_proxy(
+            "org.freedesktop.machine1",
+            "/org/freedesktop/machine1",
             Duration::from_millis(10000),
         ),
     )
@@ -946,7 +1063,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     }
 
     let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
-    let (systemd, _) = new_dbus_proxies(&dbus_conn);
+    let (systemd, _, _) = new_dbus_proxies(&dbus_conn);
 
     let nixos_activation_done = Rc::new(RefCell::new(false));
     let _nixos_activation_done = nixos_activation_done.clone();
@@ -1140,7 +1257,7 @@ won't take effect until you reboot the system.
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
-    let (systemd, logind) = new_dbus_proxies(&dbus_conn);
+    let (systemd, logind, machined) = new_dbus_proxies(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
@@ -1180,6 +1297,94 @@ won't take effect until you reboot the system.
             },
         )
         .context("Failed to add systemd JobRemoved match")?;
+
+    // --- Start of nspawn patch logic ---
+
+    // Handle nspawn unit changes
+    let running_containers = list_running_nspawn_machines(&machined)?;
+
+    let current_nspawn_units: Vec<PathBuf> = glob("/etc/systemd/nspawn/*.nspawn")?
+        .filter_map(Result::ok)
+        .collect();
+    let new_nspawn_units: Vec<PathBuf> =
+        glob(toplevel.join("etc/systemd/nspawn/*.nspawn").to_str().unwrap())?
+            .filter_map(Result::ok)
+            .collect();
+
+    let current_units_set: HashMap<PathBuf, ()> = current_nspawn_units
+        .iter()
+        .map(|p| (p.clone(), ()))
+        .collect();
+
+    for new_unit_path in &new_nspawn_units {
+        let Some(file_name) = new_unit_path.file_name().and_then(|s| s.to_str()) else { continue };
+        let container_name = file_name.trim_end_matches(".nspawn");
+        let unit_name = format!("systemd-nspawn@{}.service", container_name);
+
+        let current_unit_path = Path::new("/").join(
+            new_unit_path
+                .strip_prefix(&toplevel)
+                .unwrap_or(new_unit_path),
+        );
+
+        if current_units_set.contains_key(&current_unit_path) {
+            let new_unit_info = parse_unit(new_unit_path, new_unit_path)?;
+            let strategy = get_unit_str_val(&new_unit_info, "Exec", "X-ActivationStrategy", "dynamic");
+
+            if strategy == "none" {
+                continue;
+            }
+
+            let current_unit_info = parse_unit(&current_unit_path, &current_unit_path)?;
+            let changed = compare_nspawn_units(&current_unit_info, &new_unit_info);
+
+            /* Truth table for restarts
+            |Strategy|Changed|Reload|Restart|
+            |--------|-------|------|-------|
+            |Dynamic |0      |Y     |-      |
+            |Dynamic |1      |-     |Y      |
+            |Restart |0      |-     |-      |
+            |Restart |1      |-     |Y      |
+            |Reload  |0      |Y     |-      |
+            |Reload  |1      |Y     |-      |
+            */
+            if strategy != "restart" && (changed == UnitComparison::Equal || strategy == "reload") {
+                if running_containers.contains_key(container_name) {
+                    units_to_reload.insert(unit_name, ());
+                }
+            } else if changed != UnitComparison::Equal {
+                units_to_restart.insert(unit_name, ());
+            }
+        } else {
+            // Unit is new
+            units_to_start.insert(unit_name, ());
+        }
+    }
+
+    // Stop all now removed nspawn containers that are not imperative
+    for current_unit_path in &current_nspawn_units {
+        let is_imperative = if let Ok(target) = std::fs::read_link(current_unit_path) {
+            target
+                .parent()
+                .is_some_and(|p| p.join("data.json").exists())
+        } else {
+            false
+        };
+
+        let new_path_equivalent = toplevel.join(
+            current_unit_path
+                .strip_prefix("/")
+                .unwrap_or(current_unit_path),
+        );
+
+        if !new_path_equivalent.exists() && !is_imperative {
+            let Some(file_name) = current_unit_path.file_name().and_then(|s| s.to_str()) else { continue };
+            let container_name = file_name.trim_end_matches(".nspawn");
+            let unit_name = format!("systemd-nspawn@{}.service", container_name);
+            units_to_stop.insert(unit_name, ());
+        }
+    }
+    // --- End of nspawn patch logic ---
 
     let current_active_units = get_active_units(&systemd)?;
 
@@ -1765,8 +1970,9 @@ won't take effect until you reboot the system.
                     toplevel.join("etc/systemd/system").join(&unit).as_path(),
                     toplevel.join("etc/systemd/system").join(&unit).as_path(),
                 )?;
-                if !parse_systemd_bool(Some(&unit_info), "Unit", "RefuseManualStart", false)
-                    || parse_systemd_bool(Some(&unit_info), "Unit", "X-OnlyManualStart", false)
+                if (!parse_systemd_bool(Some(&unit_info), "Unit", "RefuseManualStart", false)
+                    || parse_systemd_bool(Some(&unit_info), "Unit", "X-OnlyManualStart", false))
+                    && !unit.starts_with("systemd-nspawn@")
                 {
                     units_to_start.insert(unit.clone(), ());
                     record_unit(START_LIST_FILE, &unit);
@@ -1780,28 +1986,50 @@ won't take effect until you reboot the system.
 
     // Reload units that need it. This includes remounting changed mount units.
     if !units_to_reload.is_empty() {
-        let mut units = units_to_reload
+        let (containers, services): (Vec<_>, Vec<_>) = units_to_reload
             .keys()
-            .map(String::as_str)
-            .collect::<Vec<&str>>();
-        units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("reloading the following units: {}", units.join(", "));
+            .partition(|&u| u.starts_with("systemd-nspawn@"));
 
-        for unit in units {
-            match systemd.reload_unit(unit, "replace") {
-                Ok(job_path) => {
-                    submitted_jobs
-                        .borrow_mut()
-                        .insert(job_path.clone(), Job::Reload);
-                }
-                Err(err) => {
-                    eprintln!("Failed to reload {unit}: {err}");
-                    exit_code = 4;
+        if !services.is_empty() {
+            let mut units = services.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
+            units.sort_by_key(|name| name.to_lowercase());
+            eprintln!("reloading the following units: {}", units.join(", "));
+
+            for unit in units {
+                match systemd.reload_unit(unit, "replace") {
+                    Ok(job_path) => {
+                        submitted_jobs
+                            .borrow_mut()
+                            .insert(job_path.clone(), Job::Reload);
+                    }
+                    Err(err) => {
+                        eprintln!("Failed to reload {unit}: {err}");
+                        exit_code = 4;
+                    }
                 }
             }
+            block_on_jobs(&dbus_conn, &submitted_jobs);
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        if !containers.is_empty() {
+            let mut units = containers.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
+            units.sort_by_key(|name| name.to_lowercase());
+            eprintln!("reloading the following units: {}", units.join(", "));
+            for unit in units {
+                match systemd.reload_unit(unit, "replace") {
+                    Ok(job_path) => {
+                        submitted_jobs
+                            .borrow_mut()
+                            .insert(job_path.clone(), Job::Reload);
+                    }
+                    Err(err) => {
+                        eprintln!("Failed to reload {unit}: {err}");
+                        exit_code = 4;
+                    }
+                }
+            }
+            block_on_jobs(&dbus_conn, &submitted_jobs);
+        }
 
         remove_file_if_exists(RELOAD_LIST_FILE)
             .with_context(|| format!("Failed to remove {RELOAD_LIST_FILE}"))?;
