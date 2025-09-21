@@ -1,0 +1,15 @@
+diff --git llvm/tools/llvm-config/CMakeLists.txt llvm/tools/llvm-config/CMakeLists.txt
+index 3a8f40b9c6..4e63f85d81 100644
+--- llvm/tools/llvm-config/CMakeLists.txt
++++ llvm/tools/llvm-config/CMakeLists.txt
+@@ -55,8 +55,8 @@
+ string(REGEX MATCH "-std=[^ ]+" LLVM_C_STD_FLAG ${CMAKE_C_FLAGS})
+ 
+ # Use configure_file to create BuildVariables.inc.
+-set(LLVM_SRC_ROOT ${LLVM_MAIN_SRC_DIR})
+-set(LLVM_OBJ_ROOT ${LLVM_BINARY_DIR})
++set(LLVM_SRC_ROOT "/no-such-path")
++set(LLVM_OBJ_ROOT "/no-such-path")
+ set(LLVM_CPPFLAGS "${LLVM_DEFINITIONS}")
+ set(LLVM_CFLAGS "${LLVM_C_STD_FLAG} ${LLVM_DEFINITIONS}")
+ # The language standard potentially affects the ABI/API of LLVM, so we want

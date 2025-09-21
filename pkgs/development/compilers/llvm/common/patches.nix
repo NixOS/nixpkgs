@@ -45,21 +45,6 @@
       path = ../18;
     }
   ];
-  "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
-    {
-      path = ../18;
-    }
-  ];
-  "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
-    {
-      path = ../18;
-    }
-  ];
-  "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
-    {
-      path = ../18;
-    }
-  ];
   "compiler-rt/X86-support-extension.patch" = [
     {
       path = ../18;
