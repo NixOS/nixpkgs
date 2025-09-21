@@ -2646,6 +2646,7 @@ with pkgs;
   curlWithGnuTls = curl.override {
     gnutlsSupport = true;
     opensslSupport = false;
+    ngtcp2 = ngtcp2-gnutls;
   };
 
   curl-impersonate-ff = curl-impersonate.curl-impersonate-ff;
