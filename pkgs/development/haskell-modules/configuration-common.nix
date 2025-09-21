@@ -635,10 +635,6 @@ with haskellLib;
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
 
-  # Test data missing
-  # https://github.com/FPtje/GLuaFixer/issues/165
-  glualint = dontCheck super.glualint;
-
   # Hackage tarball only includes what is supported by `cabal install git-annex`,
   # but we want e.g. completions as well. See
   # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
