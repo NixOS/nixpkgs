@@ -25536,11 +25536,6 @@
     github = "tfkhdyt";
     githubId = 47195537;
   };
-  tfmoraes = {
-    name = "Thiago Franco de Moraes";
-    github = "tfmoraes";
-    githubId = 351108;
-  };
   tg-x = {
     email = "*@tg-x.net";
     github = "tg-x";
