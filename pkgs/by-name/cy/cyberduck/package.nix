@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       DimitarNestorov
+      iedame
     ];
     platforms = lib.platforms.darwin;
     mainProgram = "cyberduck";
