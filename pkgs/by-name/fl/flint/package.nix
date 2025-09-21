@@ -25,7 +25,7 @@ assert
   -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "flint3";
+  pname = "flint";
   version = "3.3.1";
 
   src = fetchurl {
