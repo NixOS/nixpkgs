@@ -146,6 +146,17 @@
         ++ lib.optional (stdenvNoLibc.hostPlatform != stdenvNoLibc.buildPlatform) [
           "ac_cv_prog_CC=gcc"
         ];
+
+        allowedImpureDLLs = [
+          "ADVAPI32.dll"
+          "PSAPI.DLL"
+          "NETAPI32.dll"
+          "SHELL32.dll"
+          "USER32.dll"
+          "USERENV.dll"
+          "dbghelp.dll"
+          "ntdll.dll"
+        ];
       }
   )
 )
