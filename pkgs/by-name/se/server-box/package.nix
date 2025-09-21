@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.0.1253";
+  version = "1.0.1256";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-UflskghSx9ODQ8q2TI9DRjfmWSxp5wSDYGomUcv/Oy4=";
+    hash = "sha256-V4Y4JoUsca2MmPJd1t+IWrNiIj5oslaj6736rPUT9hM=";
   };
 in
 flutter335.buildFlutterApplication {
@@ -37,7 +37,7 @@ flutter335.buildFlutterApplication {
   desktopItems = [
     (makeDesktopItem {
       name = "server-box";
-      exec = "server-box";
+      exec = "ServerBox";
       icon = "server-box";
       genericName = "ServerBox";
       desktopName = "ServerBox";
@@ -78,9 +78,10 @@ flutter335.buildFlutterApplication {
   meta = {
     description = "Server status & toolbox";
     homepage = "https://github.com/lollipopkit/flutter_server_box";
+    changelog = "https://github.com/lollipopkit/flutter_server_box/releases/tag/${src.tag}";
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ulysseszhan ];
   };
 }
