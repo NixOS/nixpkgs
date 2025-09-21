@@ -91,9 +91,6 @@ extra-packages:
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0
   - language-javascript == 0.7.0.0      # required by purescript
-  - lsp < 2.5                           # 2024-07-08: need for koka
-  - lsp == 2.1.*                        # 2024-02-28: need for dhall-lsp-server
-  - lsp-types == 2.1.*                  # 2024-02-28: need for dhall-lsp-server and koka
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ormolu == 0.5.2.0                   # 2023-08-08: preserve for ghc 9.0
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat

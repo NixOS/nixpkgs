@@ -1746,32 +1746,32 @@ with haskellLib;
       # https://github.com/NixOS/nixpkgs/issues/198495
       (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
-  # Needs matching lsp-types
-  # Allow lens >= 5.3
-  lsp_2_4_0_0 = doDistribute (
-    doJailbreak (
-      super.lsp_2_4_0_0.override {
-        lsp-types = self.lsp-types_2_1_1_0;
-      }
-    )
-  );
-
-  # Needs matching lsp-types;
-  # Lift bound on sorted-list <0.2.2
-  lsp_2_1_0_0 = doDistribute (
-    doJailbreak (
-      super.lsp_2_1_0_0.override {
-        lsp-types = self.lsp-types_2_1_1_0;
-      }
-    )
-  );
-  # Lift bound on lens <5.3
-  lsp-types_2_1_1_0 = doDistribute (doJailbreak super.lsp-types_2_1_1_0);
-
-  # 2025-03-03: dhall-lsp-server-1.1.4 requires lsp-2.1.0.0
-  dhall-lsp-server = super.dhall-lsp-server.override {
-    lsp = self.lsp_2_1_0_0;
-  };
+  dhall-lsp-server =
+    appendPatches
+      [
+        # Add support for lsp >= 2.7
+        (pkgs.fetchpatch {
+          name = "dhall-lsp-server-lsp-2.7.patch";
+          url = "https://github.com/dhall-lang/dhall-haskell/commit/a621e1438df5865d966597e2e1b0bb37e8311447.patch";
+          sha256 = "sha256-7edxNIeIM/trl2SUXybvSzkscvr1kj5+tZF50IeTOgY=";
+          relative = "dhall-lsp-server";
+        })
+        # Fix build with text >= 2.1.2
+        (pkgs.fetchpatch {
+          name = "dhall-lsp-server-text-2.1.2.patch";
+          url = "https://github.com/dhall-lang/dhall-haskell/commit/9f2d4d44be643229784bfc502ab49184ec82bc05.patch";
+          hash = "sha256-cwNH5+7YY8UbA9zHhTRfVaqtIMowZGfFT5Kj+wSlapA=";
+          relative = "dhall-lsp-server";
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          prePatch = ''
+            ${drv.prePatch or ""}
+            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
+          '';
+        }) super.dhall-lsp-server
+      );
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = lib.pipe super.reflex-dom-core [

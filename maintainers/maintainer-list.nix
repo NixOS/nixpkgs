@@ -4261,12 +4261,6 @@
     github = "carlthome";
     githubId = 1595907;
   };
-  cartr = {
-    email = "carter.sande@duodecima.technology";
-    github = "cartr";
-    githubId = 5241813;
-    name = "Carter Sande";
-  };
   casaca = {
     name = "J McNutt";
     email = "jmacasac@hotmail.com";
@@ -11612,7 +11606,7 @@
     name = "jasonxue";
     keys = [
       {
-        fingerprint = "067A 9B58 DAC4 1C31 D688  81A9 EC23 DBDD B617 6861";
+        fingerprint = "D6D8 A0A8 6FAC 3D8E D85C  523D F7BA 32A3 FCB0 260A";
       }
     ];
   };
