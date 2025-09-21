@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.6.4";
+  version = "5.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     tag = "v${version}";
-    hash = "sha256-2F2uatdrZd5p6baYuGj24EmUv045Jk3Pp76Zv6eH5yg=";
+    hash = "sha256-lRoQRCPAwAmZxOg2Lyj9yLv+shZmkIEnEDiWi9p8J9I=";
   };
 
   build-system = [
