@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -15,9 +15,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tWPVhRy7DgsQ+7YYm6h+BhLSLlpvOgBKRXOrWziqqn0=";
+  src = fetchFromGitHub {
+    owner = "pywbem";
+    repo = "nocasedict";
+    tag = version;
+    hash = "sha256-6n0id4WBdrD+rYX9tFuynA6bV1n1LjVy5dj/TgXNkPw=";
   };
 
   build-system = [
@@ -32,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Case-insensitive ordered dictionary for Python";
     homepage = "https://github.com/pywbem/nocasedict";
-    changelog = "https://github.com/pywbem/nocasedict/blob/${version}/docs/changes.rst";
+    changelog = "https://github.com/pywbem/nocasedict/blob/${src.tag}/docs/changes.rst";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ freezeboy ];
   };
