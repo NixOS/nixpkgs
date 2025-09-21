@@ -8,7 +8,7 @@
   fetchFromGitHub,
   fftw,
   fftwFloat,
-  fmt_9,
+  fmt_11,
   glib,
   gsl,
   gtk4,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     deepfilternet
     fftw
     fftwFloat
-    fmt_9
+    fmt_11
     glib
     gsl
     gtk4
