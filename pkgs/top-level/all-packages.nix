@@ -2361,11 +2361,7 @@ with pkgs;
       lua = lua5_4; # Ceph currently requires >= 5.3
 
       # To see which `fmt` version Ceph upstream recommends, check its `src/fmt` submodule.
-      #
-      # Ceph does not currently build with `fmt_11`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
-      # If we want to switch for that before upstream fixes it, use this patch:
-      # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
-      fmt = fmt_9;
+      fmt = fmt_11;
 
       # Remove once Ceph supports arrow-cpp >= 20, see:
       # * https://tracker.ceph.com/issues/71269
