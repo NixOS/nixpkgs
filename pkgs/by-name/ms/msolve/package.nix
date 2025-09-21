@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  flint3,
+  flint,
   gmp,
   mpfr,
   llvmPackages,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    flint3
+    flint
     gmp
     mpfr
   ]

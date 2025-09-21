@@ -21,7 +21,7 @@
   eclib,
   ecm,
   fflas-ffpack,
-  flint3,
+  flint,
   gap,
   giac,
   givaro,
@@ -136,7 +136,7 @@ buildPythonPackage rec {
     eclib
     ecm
     fflas-ffpack
-    flint3
+    flint
     gap
     giac
     givaro

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   gmp,
-  flint3,
+  flint,
   mpfr,
   libmpc,
   withShared ? true,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gmp
-    flint3
+    flint
     mpfr
     libmpc
   ];
