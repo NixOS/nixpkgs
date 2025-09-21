@@ -52,9 +52,6 @@ with haskellLib;
     }))
   ];
 
-  # https://github.com/ivanperez-keera/dunai/issues/427
-  dunai = addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai);
-
   # Make sure that Cabal_* can be built as-is
   Cabal_3_10_3_0 = doDistribute (
     super.Cabal_3_10_3_0.override {
