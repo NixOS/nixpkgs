@@ -16,7 +16,7 @@
   boost183,
   nlohmann_json,
   nanodbc,
-  fmt_9,
+  fmt,
   spdlog,
 }:
 
@@ -52,14 +52,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     # Can potentially be unpinned after:
     # <https://github.com/irods/irods/issues/7248>
     boost183
-    nlohmann_json
+    fmt
     nanodbc
-    # Tracking issue for `fmt_11`:
-    # <https://github.com/irods/irods/issues/8454>
-    fmt_9
-    (spdlog.override {
-      fmt = fmt_9;
-    })
+    nlohmann_json
+    spdlog
   ];
 
   cmakeFlags = finalAttrs.passthru.commonCmakeFlags ++ [
