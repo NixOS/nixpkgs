@@ -2276,6 +2276,7 @@ mapAliases {
   shallot = throw "'shallot' has been removed as it is broken and the upstream repository was removed. Consider using 'mkp224o'"; # Added 2025-03-16
   shell-hist = throw "'shell-hist' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   shipyard = jumppad; # Added 2023-06-06
+  shutter = throw "`shutter` has been removed because it has been broken since at least 2023."; # Added 2025-09-20
   siduck76-st = st-snazzy; # Added 2024-12-24
   sierra-breeze-enhanced = throw "'sierra-breeze-enhanced' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   signald = throw "'signald' has been removed due to lack of upstream maintenance"; # Added 2025-05-17
