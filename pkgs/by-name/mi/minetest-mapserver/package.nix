@@ -19,6 +19,11 @@ buildGoModule rec {
 
   meta = {
     description = "Realtime mapserver for minetest";
+    longDescription = ''
+      Realtime mapserver for minetest.
+
+      maintainer e-mail contact: Isidor Zeuner (gm6k) <nix@quidecco.pl>
+    '';
     mainProgram = "mapserver";
     homepage = "https://github.com/minetest-mapserver/mapserver/blob/master/readme.md";
     changelog = "https://github.com/minetest-mapserver/mapserver/releases/tag/v${version}";

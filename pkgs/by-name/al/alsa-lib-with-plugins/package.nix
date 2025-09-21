@@ -17,6 +17,11 @@ runCommand "${alsa-lib.pname}-${alsa-lib.version}"
   {
     meta = with lib; {
       description = "Wrapper to ease access to ALSA plugins";
+      longDescription = ''
+        Wrapper to ease access to ALSA plugins.
+
+        maintainer e-mail contact: Isidor Zeuner (gm6k) <nix@quidecco.pl>
+      '';
       mainProgram = "aserver";
       platforms = platforms.linux;
     };
