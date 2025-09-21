@@ -4261,12 +4261,6 @@
     github = "carlthome";
     githubId = 1595907;
   };
-  cartr = {
-    email = "carter.sande@duodecima.technology";
-    github = "cartr";
-    githubId = 5241813;
-    name = "Carter Sande";
-  };
   casaca = {
     name = "J McNutt";
     email = "jmacasac@hotmail.com";
