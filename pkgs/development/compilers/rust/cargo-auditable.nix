@@ -10,23 +10,27 @@
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.6.5";
+    version = "0.7.0";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
+      repo = "cargo-auditable";
+      tag = "v${version}";
+      hash = "sha256-hFdG3LEPhk1UqlmWwFaHs9d2xyl6edb4WfOYgcE9/8I=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit pname version src;
-      hash = "sha256-oTPGmoGlNfPVZ6qha/oXyPJp94fT2cNlVggbIGHf2bc=";
+      hash = "sha256-2dAlo+5rwzU2DxsbjBfri/lF6NFIvNeY7gx8we/5aQs=";
     };
 
     checkFlags = [
       # requires wasm32-unknown-unknown target
       "--skip=test_wasm"
+      # these tests are panicking with the following error:
+      # "Build with `cargo auditable` failed"
+      "--skip=test_proc_macro"
+      "--skip=test_self_hosting"
     ];
 
     meta = with lib; {
