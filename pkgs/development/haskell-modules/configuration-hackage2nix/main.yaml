@@ -376,6 +376,7 @@ package-maintainers:
     - amazonka
     - libssh2
     - sitemap
+    - ihp-openai
   ncfavier:
     - Agda
     - irc-client
