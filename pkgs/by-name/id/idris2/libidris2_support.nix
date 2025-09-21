@@ -2,12 +2,13 @@
   stdenv,
   lib,
   gmp,
-  src,
-  version,
+  idris2-src,
+  idris2-version,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  inherit version src;
   pname = "libidris2_support";
+  version = idris2-version;
+  src = idris2-src;
 
   strictDeps = true;
   buildInputs = [ gmp ];
