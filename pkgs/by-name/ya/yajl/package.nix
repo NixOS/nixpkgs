@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vY0tqCkz6PN00Qbip5ViO64L3C06fJ4JjFuIk0TWgCo=";
   };
 
+  patches = [
+    ./yajl-cmake4-compat.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
