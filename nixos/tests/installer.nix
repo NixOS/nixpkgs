@@ -1096,7 +1096,7 @@ let
           ${
             if systemdStage1 then
               ''
-                target.wait_for_text("Enter key for rpool/root")
+                target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
               ''
             else
               ''
