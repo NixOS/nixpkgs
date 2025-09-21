@@ -21,6 +21,7 @@
   curl,
   libtins,
   mongosh,
+  usrsctp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,13 +76,18 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     libmicrohttpd
     libgcrypt
-    lksctp-tools
     libidn
     openssl
     curl
     libtins
     gnutls
     libnghttp2.dev
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    lksctp-tools
+  ]
+  ++ lib.optionals (!stdenv.isLinux) [
+    usrsctp
   ];
 
   # For subproject
