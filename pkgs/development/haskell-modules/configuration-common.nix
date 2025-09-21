@@ -930,7 +930,6 @@ with haskellLib;
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year; # http://hydra.cryp.to/build/497858/log/raw
   aeson-lens = dontCheck super.aeson-lens; # http://hydra.cryp.to/build/496769/log/raw
-  aeson-schema = dontCheck super.aeson-schema; # https://github.com/timjb/aeson-schema/issues/9
   angel = dontCheck super.angel;
   apache-md5 = dontCheck super.apache-md5; # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings; # http://hydra.cryp.to/build/497327/log/raw
