@@ -124,7 +124,7 @@ stdenvNoCC.mkDerivation {
 
     dest=$out/bin
     install -dm755 "$dest"
-    makeWrapper ${jre}/bin/java "$dest"/${binName} \
+    makeWrapper ${lib.getExe jre} "$dest"/${binName} \
       "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ ffmpeg ]} \
       --add-flags "${lib.concatStringsSep " " jvmArgs} net.rptools.maptool.client.LaunchInstructions"
