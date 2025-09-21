@@ -1881,16 +1881,23 @@ builtins.intersectAttrs super {
   extensions = enableSeparateBinOutput super.extensions;
 
   # These test cases access the network
-  hpack = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      "--skip"
-      "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
-      "--skip"
-      "/Hpack.Defaults/ensureFile/downloads file if missing/"
-      "--skip"
-      "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
-    ];
-  }) super.hpack;
+  inherit
+    (lib.mapAttrs (
+      _:
+      overrideCabal (drv: {
+        testFlags = drv.testFlags or [ ] ++ [
+          "--skip"
+          "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+          "--skip"
+          "/Hpack.Defaults/ensureFile/downloads file if missing/"
+          "--skip"
+          "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        ];
+      })
+    ) super)
+    hpack
+    hpack_0_38_1
+    ;
 
   doctest = overrideCabal (drv: {
     testFlags = drv.testFlags or [ ] ++ [

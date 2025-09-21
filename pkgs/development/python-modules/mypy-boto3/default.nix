@@ -334,12 +334,12 @@ rec {
       "sha256-CSfC9Kg73LydRU5aH4kqdc0pJWqEf98ebu6FOBE7oVU=";
 
   mypy-boto3-config =
-    buildMypyBoto3Package "config" "1.40.0"
-      "sha256-eukD7L3JzqvzK5mW9ESu9L62id1EHGhYdy+afYowtAc=";
+    buildMypyBoto3Package "config" "1.40.35"
+      "sha256-MIxmEy+/mlDwWKpHrb0jo8Yu1C7+xP6JRNvUeDmlfZ0=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.40.27"
-      "sha256-s3kpG48q6+oecn9d1gyntSjTlYBu0bWyt7yb5EqNoQs=";
+    buildMypyBoto3Package "connect" "1.40.35"
+      "sha256-uiE7vhxNtCMrxZeH3CbEIv2n5Qs5B3ohx/sg+L7lvpQ=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.40.0"
@@ -721,8 +721,8 @@ rec {
       "sha256-IOj6WGiMgCtbLlZ+AHvSAYZFYLxBiXWUA1VKDPBBe+Y=";
 
   mypy-boto3-kendra-ranking =
-    buildMypyBoto3Package "kendra-ranking" "1.40.0"
-      "sha256-YmPJ9mDsBHBgIDEitoxOPVMJxW4yoLe4gDHCQnaTe/o=";
+    buildMypyBoto3Package "kendra-ranking" "1.40.35"
+      "sha256-k8g4A54sQvehWCgxaV15zE5vVvJLS6hBrLMDEjGlXxs=";
 
   mypy-boto3-keyspaces =
     buildMypyBoto3Package "keyspaces" "1.40.0"
@@ -797,8 +797,8 @@ rec {
       "sha256-pfIQS9as02Gm4mHUc3q3gMKRHz+wT/lRKHWUc2ugt1s=";
 
   mypy-boto3-license-manager-user-subscriptions =
-    buildMypyBoto3Package "license-manager-user-subscriptions" "1.40.0"
-      "sha256-Skch80b9xDgcLwq2CGrS8xEhKZPEMJGT6qB9f0Z5XwY=";
+    buildMypyBoto3Package "license-manager-user-subscriptions" "1.40.35"
+      "sha256-SvXSGmSDMCmseJkD7QYE0SgeTO/AWKK/ROT32KP1RsE=";
 
   mypy-boto3-lightsail =
     buildMypyBoto3Package "lightsail" "1.40.1"
@@ -865,8 +865,8 @@ rec {
       "sha256-L2/TEQbnd60RuCaqpNI/xyQ76AqbIUe5KWwZtSf+2I8=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.40.29"
-      "sha256-doqhKe6dbX/egxdz+t8Fertq/jxgikxobBmE5yzZMWw=";
+    buildMypyBoto3Package "medialive" "1.40.35"
+      "sha256-mepmF0xnhMjGotcn5TEdWFFrCYMBaYv8Ir9lytY+DM0=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.40.15"
@@ -1037,8 +1037,8 @@ rec {
       "sha256-MZ3FLJdyo1RoUFj6baYu4dR9T8/0nCilk5RRZ+0wvQQ=";
 
   mypy-boto3-pinpoint-sms-voice =
-    buildMypyBoto3Package "pinpoint-sms-voice" "1.40.20"
-      "sha256-Tf6s1MXG/2s5y1NdIOoPkB1sEPlIkjtxIOYL4Na8FZg=";
+    buildMypyBoto3Package "pinpoint-sms-voice" "1.40.35"
+      "sha256-RLcjMVTPCHS+aVAy7dBr3yR+o25oIrz8twVAbaA3I+0=";
 
   mypy-boto3-pinpoint-sms-voice-v2 =
     buildMypyBoto3Package "pinpoint-sms-voice-v2" "1.40.14"
@@ -1289,8 +1289,8 @@ rec {
       "sha256-4G2J2xDIM2QJY2XGMKFE1Zyj4P22Y7vWtzvRgW0eU9s=";
 
   mypy-boto3-sqs =
-    buildMypyBoto3Package "sqs" "1.40.17"
-      "sha256-BN6BikMlh5XISgk9QdMZHI2JRG6MQ/6ndPRTuBJKfVY=";
+    buildMypyBoto3Package "sqs" "1.40.35"
+      "sha256-wR+V7nK924T3/s8wADcuAVR/NnNwZLeF8c80GRuH4D8=";
 
   mypy-boto3-ssm =
     buildMypyBoto3Package "ssm" "1.40.0"
