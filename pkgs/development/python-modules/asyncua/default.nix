@@ -8,7 +8,7 @@
   fetchFromGitHub,
   hatchling,
   pyopenssl,
-  pytest-asyncio_0_21,
+  pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.1.6";
+  version = "1.1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     tag = "v${version}";
-    hash = "sha256-GxjEbzPvley0EL7xuZWr1jzR9Lpui1fVL2FOWnRL34Q=";
+    hash = "sha256-0eay/NlWn0I2oF0fTln9/d4y31zGfAj9ph3bWkgd8Nk=";
     fetchSubmodules = true;
   };
 
@@ -39,6 +39,11 @@ buildPythonPackage rec {
     # "test_cli_tools_which_require_sigint"
     substituteInPlace tests/test_tools.py \
       --replace-fail "tools/" "$out/bin/"
+
+    # X.509 common name may become too long when including a real hostname
+    # ValueError: Attribute's length must be >= 1 and <= 64, but it was 76
+    substituteInPlace tests/test_truststore.py tests/test_gen_certificates.py \
+      --replace-fail 'socket.gethostname()' '"fakehost"'
   '';
 
   build-system = [ hatchling ];
@@ -56,29 +61,29 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytest-mock
   ];
 
   pythonImportsCheck = [ "asyncua" ];
 
-  disabledTests = [
-    # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
-    "test_publish"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # dbm.sqlite3.error: SQLite objects created in a thread can only be used in that same thread.
-    # The object was created in thread id 140737220687552 and this is thread id 140737343690560.
-    "test_runTest"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
-    "test_anonymous_rejection"
-    "test_certificate_handling_success"
-    "test_encrypted_private_key_handling_success"
-    "test_encrypted_private_key_handling_success_with_cert_props"
-    "test_encrypted_private_key_handling_failure"
-  ];
+  disabledTestPaths =
+    lib.optionals (pythonAtLeast "3.13") [
+      # dbm.sqlite3.error: SQLite objects created in a thread can only be used in that same thread.
+      # The object was created in thread id 140737220687552 and this is thread id 140737343690560.
+      "tests/test_server.py::test_runTest"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
+      "tests/test_callback_service.py"
+      "tests/test_crypto_connect.py"
+      "tests/test_password.py"
+      "tests/test_sync.py"
+      # Failed: assert Client(opc.tcp://127.0.0.1:49441) != Client(opc.tcp://127.0.0.1:49441)
+      "tests/test_ha_client.py::TestHaClient::test_failover_warm"
+    ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "OPC UA / IEC 62541 Client and Server for Python";
