@@ -385,11 +385,6 @@ with haskellLib;
   HsOpenSSL = appendConfigureFlags [
     "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
   ] super.HsOpenSSL;
-  # Work around compilation failures with gcc >= 14
-  # https://github.com/audreyt/hssyck/issues/5
-  HsSyck = appendConfigureFlags [
-    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
-  ] super.HsSyck;
   # https://github.com/rethab/bindings-dsl/issues/46
   bindings-libcddb = appendConfigureFlags [
     "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
