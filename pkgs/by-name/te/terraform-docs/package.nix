@@ -16,11 +16,18 @@ buildGo124Module rec {
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = "terraform-docs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
   };
 
   vendorHash = "sha256-ynyYpX41LJxGhf5kF2AULj+VKROjsvTjVPBnqG+JGSg=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  env.CGO_ENABLED = 0;
 
   excludedPackages = [ "scripts" ];
 
