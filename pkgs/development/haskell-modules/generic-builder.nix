@@ -10,7 +10,10 @@
   runCommandCC,
   ghcWithHoogle,
   ghcWithPackages,
+  haskellLib,
+  iserv-proxy,
   nodejs,
+  writeShellScriptBin,
 }:
 
 let
@@ -277,6 +280,53 @@ let
     END { print "" }
   '';
 
+  hostTH = {
+    enable =
+      isCross
+      && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+      && !(builtins.elem pname [
+        "iserv-proxy"
+        "libiserv"
+        "network"
+      ]);
+
+    wrapper =
+      let
+        buildProxy = buildHaskellPackages.iserv-proxy + "/bin/iserv-proxy";
+
+        wrapperScript =
+          enableProfiling:
+          let
+            overrides = haskellLib.overrideCabal {
+              enableLibraryProfiling = enableProfiling;
+              enableExecutableProfiling = enableProfiling;
+            };
+            hostInterpreter = overrides iserv-proxy + "/bin/iserv-proxy-interpreter";
+          in
+          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
+            set -euo pipefail
+            PORT=$((5000 + $RANDOM % 5000))
+            (>&2 echo "---> Starting interpreter on port $PORT")
+            ${stdenv.hostPlatform.emulator buildPackages} ${hostInterpreter} tmp $PORT &
+            (>&2 echo "---| interpreter should have started on $PORT")
+            RISERV_PID="$!"
+            ${buildProxy} $@ 127.0.0.1 "$PORT"
+            (>&2 echo "---> killing interpreter...")
+            kill $RISERV_PID
+          '';
+
+        both = buildPackages.symlinkJoin {
+          name = "iserv-wrapper-both";
+          paths = builtins.map wrapperScript [
+            false
+            true
+          ];
+        };
+
+      in
+      "${both}/bin/iserv-wrapper";
+  };
+
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
@@ -293,7 +343,15 @@ let
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
   ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
+  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
+
+  ++ optionals hostTH.enable (
+    map (opt: "--ghc-option=${opt}") [
+      "-fexternal-interpreter"
+      "-pgmi"
+      hostTH.wrapper
+    ]
+  );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
