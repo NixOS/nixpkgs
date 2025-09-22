@@ -9,7 +9,6 @@
   python3,
   udev,
   cctools,
-  apple-sdk_12,
 }:
 
 let
@@ -44,13 +43,9 @@ buildNpmPackage' rec {
     cctools
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_12
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/balena";
