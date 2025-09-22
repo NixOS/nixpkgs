@@ -19,7 +19,6 @@
   sqlite,
   zstd,
   libcap,
-  apple-sdk_13,
   darwinMinVersionHook,
   openssl,
   #, libselinux
@@ -90,10 +89,6 @@ stdenv.mkDerivation rec {
     libcap
     audit
     systemd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
