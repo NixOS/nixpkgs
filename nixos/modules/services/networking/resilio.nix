@@ -139,7 +139,7 @@ in
       };
 
       downloadLimit = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 1024;
         description = ''
@@ -148,7 +148,7 @@ in
       };
 
       uploadLimit = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 1024;
         description = ''

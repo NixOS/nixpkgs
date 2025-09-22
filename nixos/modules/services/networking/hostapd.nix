@@ -274,7 +274,7 @@ in
               channel = mkOption {
                 default = 0;
                 example = 11;
-                type = types.int;
+                type = types.ints.positive;
                 description = ''
                   The channel to operate on. Use 0 to enable ACS (Automatic Channel Selection).
                   Beware that not every device supports ACS in which case {command}`hostapd`
@@ -571,7 +571,7 @@ in
                     options = {
                       logLevel = mkOption {
                         default = 2;
-                        type = types.int;
+                        type = types.ints.between 0 4;
                         description = ''
                           Levels (minimum value for logged events):
                           0 = verbose debugging
@@ -957,7 +957,7 @@ in
                                 vlanid = mkOption {
                                   default = null;
                                   example = 1;
-                                  type = types.nullOr types.int;
+                                  type = types.nullOr types.ints.unsigned;
                                   description = "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
                                 };
 
