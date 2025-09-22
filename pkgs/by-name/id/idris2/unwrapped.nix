@@ -152,6 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
         idris2-unwrapped = finalAttrs.finalPackage;
         extraPackages = f idris2Packages;
       };
+
+    updateScript = ./update.nu;
   };
 
   meta = {
