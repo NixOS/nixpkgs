@@ -38,10 +38,6 @@ buildPythonPackage rec {
       url = "https://github.com/shapely/shapely/commit/56e16e6eb27c54c6c24b9a251c12414e289fb7d0.patch";
       hash = "sha256-JyjPVcJswEozF4C73QotKsPou55H41Ct9oVgkxhDhbk=";
     })
-    (fetchpatch {
-      url = "https://github.com/shapely/shapely/commit/19f807961da0a14ac707e4540c91b8d60d52dd08.patch";
-      hash = "sha256-3NHNiIOf9tbhFS/RAsRw1Yp/Bxy957WpsT+R5Vwp8uU=";
-    })
   ];
 
   nativeBuildInputs = [
