@@ -3,7 +3,6 @@
   stdenv,
   config,
   alsa-lib,
-  apple-sdk_11,
   cmake,
   darwinMinVersionHook,
   dbus,
@@ -144,12 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
     ++ lib.optional x11Support xorg.libX11
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
     ++ lib.optionals ibusSupport [
       # sdl3 only uses some constants of the ibus headers
       # it never actually loads the library
