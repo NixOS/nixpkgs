@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "ludouzi";
     repo = "fooyin";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-549AtdldAPFengQsVXMnZI0mVzUwgKgUKAfR0Ro3s2I=";
+    hash = "sha256-sQ1zsQ/6OHGPkofiKhusCrpW2XnO+PpMvH1M2OG5Huw=";
   };
 
   buildInputs = [
@@ -69,15 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.LANG = "C.UTF-8";
-
-  # Remove after next release
-  patches = [
-    (fetchpatch {
-      name = "multi-track-fix.patch";
-      url = "https://github.com/fooyin/fooyin/commit/cffe88058e96c44e563e927d8a4a903e28246020.patch";
-      hash = "sha256-qNAR3xHZHzI/4RCWKzBbv1mX39xs7KMo/TpaDUYvSvc=";
-    })
-  ];
 
   meta = {
     description = "Customisable music player";
