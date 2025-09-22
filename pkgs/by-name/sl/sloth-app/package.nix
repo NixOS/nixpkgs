@@ -37,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sveinbjorn.org/sloth";
     license = lib.licenses.bsd3;
     mainProgram = "Sloth";
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      iedame
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
