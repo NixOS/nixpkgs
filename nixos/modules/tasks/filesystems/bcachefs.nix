@@ -175,25 +175,6 @@ let
             '';
       };
     };
-
-  assertions = [
-    {
-      assertion =
-        let
-          kernel = config.boot.kernelPackages.kernel;
-        in
-        (
-          kernel.kernelAtLeast "6.7"
-          || (lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
-            lib.kernel.module
-            lib.kernel.yes
-            (lib.kernel.option lib.kernel.yes)
-          ])
-        );
-
-      message = "Linux 6.7-rc1 at minimum or a custom linux kernel with bcachefs support is required";
-    }
-  ];
 in
 
 {
@@ -230,7 +211,24 @@ in
   config = lib.mkIf (config.boot.supportedFilesystems.bcachefs or false) (
     lib.mkMerge [
       {
-        inherit assertions;
+        assertions = [
+          {
+            assertion =
+              let
+                kernel = config.boot.kernelPackages.kernel;
+              in
+              (
+                kernel.kernelAtLeast "6.7"
+                || (lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
+                  lib.kernel.module
+                  lib.kernel.yes
+                  (lib.kernel.option lib.kernel.yes)
+                ])
+              );
+
+            message = "Linux 6.7-rc1 at minimum or a custom linux kernel with bcachefs support is required";
+          }
+        ];
 
         # Bcachefs upstream recommends using the latest kernel
         boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
@@ -248,7 +246,6 @@ in
       }
 
       (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != { })) {
-        inherit assertions;
         boot.initrd.availableKernelModules = [
           "bcachefs"
           "sha256"
