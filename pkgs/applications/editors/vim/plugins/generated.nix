@@ -13184,6 +13184,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  referencer-nvim = buildVimPlugin {
+    pname = "referencer.nvim";
+    version = "2025-09-19";
+    src = fetchFromGitHub {
+      owner = "romus204";
+      repo = "referencer.nvim";
+      rev = "9348bf5761a4ffa762285737a36e05bf1846eb8a";
+      sha256 = "0xjhsxv845lf5y03i6haiq94qkakzw8yb2sw7vsc4z5iqj4lpiqf";
+    };
+    meta.homepage = "https://github.com/romus204/referencer.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   refjump-nvim = buildVimPlugin {
     pname = "refjump.nvim";
     version = "2025-04-04";
