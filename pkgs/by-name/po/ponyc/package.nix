@@ -2,10 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_13,
+  apple-sdk,
   cmake,
   coreutils,
-  darwinMinVersionHook,
   libxml2,
   lto ? true,
   makeWrapper,
@@ -58,9 +57,6 @@ stdenv.mkDerivation rec {
     git
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Keep in sync with `PONY_OSX_PLATFORM`.
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
     cctools.libtool
   ];
 
@@ -76,7 +72,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-darwin-build.patch {
-      apple-sdk = apple-sdk_13;
+      inherit apple-sdk;
     })
   ];
 
