@@ -85,13 +85,13 @@ in
 
           rtc = {
             port_range_start = lib.mkOption {
-              type = lib.types.int;
+              type = lib.types.port;
               default = 50000;
               description = "Start of UDP port range for WebRTC";
             };
 
             port_range_end = lib.mkOption {
-              type = lib.types.int;
+              type = lib.types.port;
               default = 51000;
               description = "End of UDP port range for WebRTC";
             };
