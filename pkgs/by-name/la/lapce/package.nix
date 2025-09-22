@@ -103,7 +103,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lapce/lapce";
     changelog = "https://github.com/lapce/lapce/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ elliot ];
     mainProgram = "lapce";
   };
 }

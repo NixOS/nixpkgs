@@ -1,5 +1,6 @@
 {
   buildGoModule,
+  stdenv,
   lib,
   installShellFiles,
   fetchFromGitHub,
@@ -29,7 +30,7 @@ buildGoModule rec {
   proxyVendor = true; # darwin/linux hash mismatch
   vendorHash = "sha256-G2mRj1IQi8hxVfqpc5JeSyAb3ADlcmCNNZPJGwefx1k=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd deck \
       --bash <($out/bin/deck completion bash) \
       --fish <($out/bin/deck completion fish) \
