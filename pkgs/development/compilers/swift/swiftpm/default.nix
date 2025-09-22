@@ -101,8 +101,10 @@ let
           + lib.optionalString stdenv.hostPlatform.isDarwin ''
             # On Darwin only, Swift uses arm64 as cpu arch.
             if [ -e cmake/modules/SwiftSupport.cmake ]; then
+              # At least in swift-asn1, this has been removed and the module uses the full target triple as the name
+              # (https://github.com/apple/swift-asn1/pull/103)
               substituteInPlace cmake/modules/SwiftSupport.cmake \
-                --replace-fail '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
+                --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
             fi
           '';
 
