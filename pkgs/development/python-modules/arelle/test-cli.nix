@@ -18,7 +18,7 @@ runCommand "arelle-test-cli${lib.optionalString (!arelle.hasGUI) "-headless"}"
     export HOME=$(mktemp -d)
 
     # Test basic CLI commands work with proper assertions
-    arelleCmdLine --version --disablePersistentConfig 2>&1 | grep "Arelle(r) 2.37.59" > /dev/null
+    arelleCmdLine --version --disablePersistentConfig 2>&1 | grep "Arelle(r) ${arelle.version}" > /dev/null
     arelleCmdLine --help --disablePersistentConfig 2>&1 | grep "Usage: arelleCmdLine \[options\]" > /dev/null
     arelleCmdLine --about --disablePersistentConfig 2>&1 | grep "An open source XBRL platform" > /dev/null
 
