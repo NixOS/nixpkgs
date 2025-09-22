@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spral";
-  version = "2025.05.20";
+  version = "2025.09.18";
 
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9QEcAOFB3CtGNqr8LoDaj2vP3KMONlUVooeXECtGsxc=";
+    hash = "sha256-ftyA6zP+VX0fb7e9YKjPCAWYblNyjX/eVeni1tRQIxY=";
   };
 
   # Ignore a failing test on darwin
