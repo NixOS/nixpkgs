@@ -169,7 +169,7 @@ in
                 options.lengthScale
                 "--noise-scale"
                 options.noiseScale
-                "--noise-w"
+                "--noise-w-scale"
                 options.noiseWidth
               ]
               ++ lib.optionals options.streaming [
