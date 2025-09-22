@@ -4,17 +4,20 @@
   dash,
   scdoc,
   fetchFromGitHub,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "app2unit";
-  version = "1.0.3";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
     tag = "v${version}";
-    sha256 = "sha256-7eEVjgs+8k+/NLteSBKgn4gPaPLHC+3Uzlmz6XB0930=";
+    sha256 = "sha256-M2sitlrQNSLthSaDH+R8gUcZ8i+o1ktf2SB/vvjyJEI=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ scdoc ];
 
