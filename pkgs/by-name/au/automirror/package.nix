@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "schlomo";
     repo = "automirror";
     rev = "v${version}";
-    sha256 = "1syyf7dcm8fbyw31cpgmacg80h7pg036dayaaf0svvdsk0hqlsch";
+    hash = "sha256-kGmKIZi67a2BU8qrZgZ490CAHlP1XRYG98uhytpx3us=";
   };
 
   patchPhase = "sed -i s#/usr##g Makefile";

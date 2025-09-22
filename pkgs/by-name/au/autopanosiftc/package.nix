@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/autopano-sift-C-${version}.tar.gz";
-    sha256 = "0dqk8ff82gmy4v5ns5nr9gpzkc1p7c2y8c8fkid102r47wsjk44s";
+    hash = "sha256-mpApNT8kCxBanA4x5AU7N7D570vZFm3LJr4+gZxDEzc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/autopano-sift-C/files/autopano-sift-C-2.5.1-lm.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
-      sha256 = "1bfcr5sps0ip9gl4jprji5jgf9wkczz6d2clsjjlbsy8r3ixi3lv";
+      hash = "sha256-m47Y48jI60Wl1JSJZv5nkyf3ZIkyX0noSzcCfXXJzK0=";
     })
   ];
 

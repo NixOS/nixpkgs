@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/almanah/${lib.versions.majorMinor version}/almanah-${version}.tar.xz";
-    sha256 = "DywW6Gkohf0lrX3Mw/UawrS4h2JOaOfqH2SulHkxlFI=";
+    hash = "sha256-DywW6Gkohf0lrX3Mw/UawrS4h2JOaOfqH2SulHkxlFI=";
   };
 
   nativeBuildInputs = [

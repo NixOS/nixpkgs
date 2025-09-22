@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/acme-crossass/code-0/trunk";
     rev = "323";
-    sha256 = "1dzvip90yf1wg0fhfghn96dwrhg289d06b624px9a2wwy3vp5ryg";
+    hash = "sha256-z+dy9/CcC5X6JcIsA1pC4sHMm0kWPgcdeDw4D9KN+7c=";
   };
 
   sourceRoot = "${src.name}/src";

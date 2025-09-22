@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "spion";
     repo = "adbfs-rootless";
     rev = "fd56381af4dc9ae2f09b904c295686871a46ed0f";
-    sha256 = "atiVjRfqvhTlm8Q+3iTNNPQiNkLIaHDLg5HZDJvpl2Q=";
+    hash = "sha256-atiVjRfqvhTlm8Q+3iTNNPQiNkLIaHDLg5HZDJvpl2Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];

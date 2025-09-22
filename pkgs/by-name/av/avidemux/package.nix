@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
+    hash = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
   };
 
   patches = [

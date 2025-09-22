@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = "Albatross";
     owner = "shimmerproject";
     tag = "v${version}";
-    sha256 = "0mq87n2hxy44nzr567av24n5nqjaljhi1afxrn3mpjqdbkq7lx88";
+    hash = "sha256-CHV68FwNy1uHzd2pEKGkSmJbLBFbHVPyt4T4DoU9CFc=";
   };
 
   dontBuild = true;

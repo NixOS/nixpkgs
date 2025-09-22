@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "avrdudes";
     repo = "avrdude";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-i1q0NQKVd/wiOm1Amop3hW+FWuefFOQCCivuEtEH38k=";
+    hash = "sha256-i1q0NQKVd/wiOm1Amop3hW+FWuefFOQCCivuEtEH38k=";
   };
 
   nativeBuildInputs = [

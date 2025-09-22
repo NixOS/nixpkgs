@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AdaptiveCpp";
     repo = "AdaptiveCpp";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-vXfw8+xn3/DYxUKp3QGdQ8sEbDwyk+8jDCyuvQOXigc=";
+    hash = "sha256-vXfw8+xn3/DYxUKp3QGdQ8sEbDwyk+8jDCyuvQOXigc=";
   };
 
   # do not use old FindCUDA cmake module

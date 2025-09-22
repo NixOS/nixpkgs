@@ -28,7 +28,7 @@ buildGoModule rec {
     owner = "jollheef";
     repo = "appvm";
     tag = "v${version}";
-    sha256 = "sha256-n+YputGiNWSOYbwes/rjz0h3RWZONDTc8+LDc0La/KU=";
+    hash = "sha256-n+YputGiNWSOYbwes/rjz0h3RWZONDTc8+LDc0La/KU=";
   };
 
   vendorHash = "sha256-8eU+Mf5dxL/bAMMShXvj8I1Kdd4ysBTWvgYIXwLStPI=";

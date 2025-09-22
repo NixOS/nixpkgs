@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "~hannes";
     repo = "airwindows-lv2";
     rev = "v${version}";
-    sha256 = "sha256-1GWkdNCn98ttsF2rPLZE0+GJdatgkLewFQyx9Frr2sM=";
+    hash = "sha256-1GWkdNCn98ttsF2rPLZE0+GJdatgkLewFQyx9Frr2sM=";
   };
 
   nativeBuildInputs = [

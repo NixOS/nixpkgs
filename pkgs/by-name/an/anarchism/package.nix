@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "debian";
     repo = "anarchism";
     rev = "debian/${version}";
-    sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
+    hash = "sha256-pcLsUL8ANsi8maAOZINH0VZvYajn+8qVoFWOVTyY1BM=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "http://www.arpoison.net/arpoison-${version}.tar.gz";
-    sha256 = "0krhszx3s0qwfg4rma5a51ak71nnd9xfs2ibggc3hwiz506s2x37";
+    hash = "sha256-Z3ShDSg/cjjYeysK7Xpq1oYzVSiqqJrJcxwDPfrXME8=";
   };
 
   postPatch = "substituteInPlace Makefile --replace gcc cc";

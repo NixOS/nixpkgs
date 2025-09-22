@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/google/agi/releases/download/${version}/agi-${version}-linux.zip";
-    sha256 = "sha256-Yawl6InBYSWNw3clHyGAeC2PVfXEzWmbd6vcYrqAPO0=";
+    hash = "sha256-Yawl6InBYSWNw3clHyGAeC2PVfXEzWmbd6vcYrqAPO0=";
   };
 
   nativeBuildInputs = [

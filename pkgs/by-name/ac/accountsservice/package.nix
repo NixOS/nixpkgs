@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8=";
+    hash = "sha256-rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8=";
   };
 
   patches = [

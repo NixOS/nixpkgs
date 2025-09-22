@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/rbanffy/3270font/releases/download/v${version}/3270_fonts_d916271.zip";
-    sha256 = "sha256-Zi6Lp5+sqfjIaHmnaaemaw3i+hXq9mqIsK/81lTkwfM=";
+    hash = "sha256-Zi6Lp5+sqfjIaHmnaaemaw3i+hXq9mqIsK/81lTkwfM=";
     stripRoot = false;
   };
 

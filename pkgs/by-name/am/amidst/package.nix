@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/toolbox4minecraft/amidst/releases/download/v${version}/amidst-v${
       lib.replaceStrings [ "." ] [ "-" ] version
     }.jar";
-    sha256 = "sha256-oecRjD7JUuvFym8N/hSE5cbAFQojS6yxOuxpwWRlW9M=";
+    hash = "sha256-oecRjD7JUuvFym8N/hSE5cbAFQojS6yxOuxpwWRlW9M=";
   };
 
   dontUnpack = true;

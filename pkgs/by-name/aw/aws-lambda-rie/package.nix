@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "aws";
     repo = "aws-lambda-runtime-interface-emulator";
     rev = "v${version}";
-    sha256 = "sha256-moOCuAq6eliNutP5oZGC33VJZXkuGCEKLdMqIwC+Bo4=";
+    hash = "sha256-moOCuAq6eliNutP5oZGC33VJZXkuGCEKLdMqIwC+Bo4=";
   };
 
   vendorHash = "sha256-+tgB9Z39Oq43PZoF85DG1Z/CGeoXXTKAML7Z6DZ1XvM=";

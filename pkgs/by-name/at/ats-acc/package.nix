@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "sparverius";
     repo = "ats-acc";
     rev = "2d49f4e76d0fe1f857ceb70deba4aed13c306dcb";
-    sha256 = "sha256-Wp39488YNL40GKp4KaJwhi75PsYP+gMtrZqAvs4Q/sw=";
+    hash = "sha256-Wp39488YNL40GKp4KaJwhi75PsYP+gMtrZqAvs4Q/sw=";
   };
 
   postPatch = ''

@@ -12,10 +12,10 @@ let
     {
       name,
       debname,
-      sha256,
+      hash,
     }:
     fetchpatch {
-      inherit sha256 name;
+      inherit hash name;
       url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-7/debian/patches/${debname}";
     };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://audiofile.68k.org/audiofile-${version}.tar.gz";
-    sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
+    hash = "sha256-zcYN8Zqwi/5VNEOVc5uwj1D8Fckto5YvrDNNO/8RaWU=";
   };
 
   outputs = [
@@ -65,62 +65,62 @@ stdenv.mkDerivation rec {
     (fetchDebianPatch {
       name = "CVE-2017-6829.patch";
       debname = "04_clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch";
-      sha256 = "04qxl51i64c53v69q2kx61qdq474f4vapk8rq97cipj7yrar392m";
+      hash = "sha256-VaSRVfZH3shOwhnNqzZx5BDccDB9CpzMHoURE0OhHRM=";
     })
     (fetchDebianPatch {
       name = "CVE-2017-6827+CVE-2017-6828+CVE-2017-6832+CVE-2017-6835+CVE-2017-6837.patch";
       debname = "05_Always-check-the-number-of-coefficients.patch";
-      sha256 = "1ih03kfkabffi6ymp6832q470i28rsds78941vzqlshnqjb2nnxw";
+      hash = "sha256-vFsrlsQWaor/DiSho5vOSERwCBYDmVu9ic4tNd0cAMY=";
     })
     (fetchDebianPatch {
       name = "CVE-2017-6839.patch";
       debname = "06_Check-for-multiplication-overflow-in-MSADPCM-decodeSam.patch";
-      sha256 = "0a8s2z8rljlj03p7l1is9s4fml8vyzvyvfrh1m6xj5a8vbi635d0";
+      hash = "sha256-oJVh4tpIFdlNDTC77ff3G9HqiE46BnruAJJKmtEXGik=";
     })
     (fetchDebianPatch {
       name = "CVE-2017-6830+CVE-2017-6834+CVE-2017-6836+CVE-2017-6838.patch";
       debname = "07_Check-for-multiplication-overflow-in-sfconvert.patch";
-      sha256 = "0rfba8rkasl5ycvc0kqlzinkl3rvyrrjvjhpc45h423wmjk2za2l";
+      hash = "sha256-VKgvpqx8CAILYRfKLXP2Ow86bfwUT8A284VqNTNSy2U=";
     })
     (fetchDebianPatch {
       name = "audiofile-fix-multiplyCheckOverflow-signature.patch";
       debname = "08_Fix-signature-of-multiplyCheckOverflow.-It-returns-a-b.patch";
-      sha256 = "032p5jqp7q7jgc5axdnazz00zm7hd26z6m5j55ifs0sykr5lwldb";
+      hash = "sha256-q1FOS55eA+1iKbJU841o8NQPwP/Ktq4Ke/Lgc7EsVww=";
     })
     (fetchDebianPatch {
       name = "CVE-2017-6831.patch";
       debname = "09_Actually-fail-when-error-occurs-in-parseFormat.patch";
-      sha256 = "0csikmj8cbiy6cigg0rmh67jrr0sgm56dfrnrxnac3m9635nxlac";
+      hash = "sha256-TNFuyzCpDqZszza7Zkp9GuQsj4E1g/ciMz4uhmSdUTM=";
     })
     (fetchDebianPatch {
       name = "CVE-2017-6833.patch";
       debname = "10_Check-for-division-by-zero-in-BlockCodec-runPull.patch";
-      sha256 = "1rlislkjawq98bbcf1dgl741zd508wwsg85r37ca7pfdf6wgl6z7";
+      hash = "sha256-5xv6uHHN3aPYGbmgpzlHoLQfyKGvBcfWQglzJSfVkeY=";
     })
     (fetchDebianPatch {
       name = "CVE-2018-13440.patch";
       debname = "11_CVE-2018-13440.patch";
-      sha256 = "sha256-qDfjiBJ4QXgn8588Ra1X0ViH0jBjtFS/+2zEGIUIhuo=";
+      hash = "sha256-qDfjiBJ4QXgn8588Ra1X0ViH0jBjtFS/+2zEGIUIhuo=";
     })
     (fetchDebianPatch {
       name = "CVE-2018-17095.patch";
       debname = "12_CVE-2018-17095.patch";
-      sha256 = "sha256-FC89EFZuRLcj5x4wZVqUlitEMTRPSZk+qzQpIoVk9xY=";
+      hash = "sha256-FC89EFZuRLcj5x4wZVqUlitEMTRPSZk+qzQpIoVk9xY=";
     })
     (fetchDebianPatch {
       name = "CVE-2022-24599.patch";
       debname = "0013-Fix-CVE-2022-24599.patch";
-      sha256 = "sha256-DHJQ4B6cvKfSlXy66ZC5RNaCMDaygj8dWLZZhJnhw1E=";
+      hash = "sha256-DHJQ4B6cvKfSlXy66ZC5RNaCMDaygj8dWLZZhJnhw1E=";
     })
     (fetchDebianPatch {
       name = "1_CVE-2019-13147.patch";
       debname = "0014-Partial-fix-of-CVE-2019-13147.patch";
-      sha256 = "sha256-clb/XiIZbmttPr2dT9AZsbQ97W6lwifEwMO4l2ZEh0k=";
+      hash = "sha256-clb/XiIZbmttPr2dT9AZsbQ97W6lwifEwMO4l2ZEh0k=";
     })
     (fetchDebianPatch {
       name = "2_CVE-2019-13147.patch";
       debname = "0015-Partial-fix-of-CVE-2019-13147.patch";
-      sha256 = "sha256-JOZIw962ae7ynnjJXGO29i8tuU5Dhk67DmB0o5/vSf4=";
+      hash = "sha256-JOZIw962ae7ynnjJXGO29i8tuU5Dhk67DmB0o5/vSf4=";
     })
   ];
 

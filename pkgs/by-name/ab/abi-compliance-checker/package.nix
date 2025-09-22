@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "lvc";
     repo = "abi-compliance-checker";
     rev = version;
-    sha256 = "1f1f9j2nf9j83sfl2ljadch99v6ha8rq8xm7ax5akc05hjpyckij";
+    hash = "sha256-Mk7mr4QFsKlKV6d2hDNS0OyUIGtKUkGdHkgmZ4VMLrg=";
   };
 
   buildInputs = [
