@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
-type ImageVariants = list[str]
+type ImageVariants = dict[str, str]
 
 
 class NixOSRebuildError(Exception):
