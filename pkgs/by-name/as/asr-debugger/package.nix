@@ -12,12 +12,12 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asr-debugger";
-  version = "v0.1.1";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "LiveSplit";
     repo = "asr-debugger";
-    tag = finalAttrs.version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8rZX2zFfafkdx+eIYGb8GwBhjTBO/FpWf9elXp9Ad0Y=";
   };
 
@@ -53,9 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    description = "A debugger for LiveSplit One's new Auto Splitting Runtime.";
+    description = "Debugger for LiveSplit One's Auto Splitting Runtime.";
     homepage = "https://github.com/LiveSplit/asr-debugger";
-    changelog = "https://github.com/LiveSplit/asr-debugger/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/LiveSplit/asr-debugger/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
