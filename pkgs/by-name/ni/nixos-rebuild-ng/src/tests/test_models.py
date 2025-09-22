@@ -71,11 +71,26 @@ def test_flake_to_attr() -> None:
     )
 
 
-def test_flake__str__(monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+def test_flake__str__() -> None:
     assert str(m.Flake("github:nixos/nixpkgs", "attr")) == "github:nixos/nixpkgs#attr"
     assert str(m.Flake("/etc/nixos", "attr")) == "/etc/nixos#attr"
     assert str(m.Flake(".", "attr")) == ".#attr"
     assert str(m.Flake("", "attr")) == "#attr"
+
+
+def test_flake_resolve_path_if_exists(monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+    assert (
+        m.Flake("github:nixos/nixpkgs", "attr").resolve_path_if_exists()
+        == "github:nixos/nixpkgs"
+    )
+    assert (
+        m.Flake("/an/inexistent/path", "attr").resolve_path_if_exists()
+        == "/an/inexistent/path"
+    )
+    with monkeypatch.context() as patch_context:
+        patch_context.chdir(tmpdir)
+        assert m.Flake(str(tmpdir), "attr").resolve_path_if_exists() == str(tmpdir)
+        assert m.Flake(".", "attr").resolve_path_if_exists() == str(tmpdir)
 
 
 @patch("platform.node", autospec=True)
