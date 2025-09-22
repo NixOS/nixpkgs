@@ -35,12 +35,11 @@
   cctools, # libtool
   sigtool,
   DarwinTools,
-  apple-sdk_13,
   darwinMinVersionHook,
 }:
 
 let
-  apple-sdk_swift = apple-sdk_13; # Use the SDK that was available when Swift shipped.
+  apple-sdk_swift = builtins.throw "Swift 5.8 requires the 13.3 SDK, which has been removed";
 
   deploymentVersion =
     if lib.versionOlder (targetPlatform.darwinMinVersion or "0") "10.15" then
@@ -824,5 +823,6 @@ stdenv.mkDerivation {
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.
+    broken = true; # Needs updated to 5.10.1 to build with the 14.4 SDK.
   };
 }
