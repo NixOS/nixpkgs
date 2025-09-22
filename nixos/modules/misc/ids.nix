@@ -31,7 +31,7 @@ in
       description = ''
         The user IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
     ids.gids = lib.mkOption {
@@ -39,7 +39,7 @@ in
       description = ''
         The group IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
   };
