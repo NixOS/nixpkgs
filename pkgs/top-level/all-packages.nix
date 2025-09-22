@@ -2817,9 +2817,7 @@ with pkgs;
   flannel = callPackage ../tools/networking/flannel { };
   cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix { };
 
-  flatpak-builder = callPackage ../development/tools/flatpak-builder {
-    binutils = binutils-unwrapped;
-  };
+  flatpak-builder = callPackage ../development/tools/flatpak-builder { };
 
   fltrdr = callPackage ../tools/misc/fltrdr {
     icu = icu63;
