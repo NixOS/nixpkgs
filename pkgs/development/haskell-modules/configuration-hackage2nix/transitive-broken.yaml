@@ -50,6 +50,7 @@ dont-distribute-packages:
  - afv
  - agda-server
  - agda-snippets-hakyll
+ - age
  - agentx
  - aip
  - airgql
@@ -896,6 +897,7 @@ dont-distribute-packages:
  - eventful-sql-common
  - eventful-sqlite
  - eventful-test-helpers
+ - eventlog-live-otelcol
  - EventSocket
  - eventsource-geteventstore-store
  - eventsource-store-specs
@@ -2371,6 +2373,7 @@ dont-distribute-packages:
  - music-suite
  - musicbrainz-email
  - musicxml2
+ - musig2
  - mutable-iter
  - MutationOrder
  - mute-unmute
@@ -3043,7 +3046,7 @@ dont-distribute-packages:
  - sandwich-contexts-kubernetes
  - sandwich-contexts-minio
  - sandwich-webdriver
- - sandwich-webdriver_0_4_0_1
+ - sandwich-webdriver_0_4_0_2
  - sarsi
  - sasl
  - sat-micro-hs
@@ -3761,7 +3764,7 @@ dont-distribute-packages:
  - WebCont
  - webcrank-wai
  - webdriver-w3c
- - webdriver_0_13_0_0
+ - webdriver_0_14_0_0
  - webify
  - webserver
  - websnap
