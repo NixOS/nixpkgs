@@ -82,6 +82,9 @@ in
   haddock-library =
     assert super.haddock-library.version == "1.11.0";
     doJailbreak super.haddock-library;
+
+  libiserv = doJailbreak super.libiserv;
+
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
 
   #
