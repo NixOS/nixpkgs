@@ -56,7 +56,8 @@
   };
 }
 // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-  nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
+  # unfortunally nixpkgs pkgsStatic is too often broken including the dependency closure of nix
+  # nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
 
   # Basic smoke tests that needs to pass when upgrading nix.
   # Note that this test does only test the nixVersions.stable attribute.
