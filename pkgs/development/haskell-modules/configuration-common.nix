@@ -690,8 +690,8 @@ with haskellLib;
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
 
-  # Too strict bounds on hspec
-  # https://github.com/illia-shkroba/pfile/issues/2
+  # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
+  # https://github.com/illia-shkroba/pfile/issues/3
   pfile = doJailbreak super.pfile;
 
   # Manually maintained
