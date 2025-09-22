@@ -21,6 +21,8 @@ let
     // {
       description = "value coercible to CLI argument";
     };
+  format = pkgs.formats.yaml { };
+  blueprint-file = format.generate "blueprint.yml" cfg.blueprint;
 in
 {
   imports = [
@@ -47,6 +49,30 @@ in
           id = "8yfsghj438a20ol";
         };
         description = "Settings for Newt module, see [Newt CLI docs](https://github.com/fosrl/newt?tab=readme-ov-file#cli-args) for more information.";
+      };
+      blueprint = lib.mkOption {
+        inherit (format) type;
+        default = { };
+        example = {
+          proxy-resources = {
+            jellyfin = {
+              name = "Jellyfin";
+              protocol = "http";
+              full-domain = "jfn.example.com";
+              tls-server-name = "example.com";
+              targets = [
+                {
+                  site = "glass-black-capped-marmot";
+                  hostname = "localhost";
+                  method = "http";
+                  port = 8096;
+                }
+              ];
+              auth.sso-enabled = true;
+            };
+          };
+        };
+        description = "Blueprint for declarative settings, see [Newt Blueprint docs](https://docs.digpangolin.com/manage/blueprints#blueprints) for more information.";
       };
 
       # provide path to file to keep secrets out of the nix store
@@ -83,7 +109,9 @@ in
       };
       # the flag values will all be overwritten if also defined in the env file
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${lib.cli.toGNUCommandLineShell { } cfg.settings}";
+        ExecStart = "${lib.getExe cfg.package} ${
+          lib.cli.toGNUCommandLineShell { } (cfg.settings // { inherit blueprint-file; })
+        }";
         DynamicUser = true;
         StateDirectory = "newt";
         StateDirectoryMode = "0700";
