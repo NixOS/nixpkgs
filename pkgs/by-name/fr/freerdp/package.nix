@@ -63,13 +63,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.17.0";
+  version = "3.17.1";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = finalAttrs.version;
-    hash = "sha256-86RbzRgC93ZOt3MHRKJIRklEuyCQs6tHff5jk++yFok=";
+    tag = finalAttrs.version;
+    hash = "sha256-KAlxpoGOqvHTqKkb/yMrquSckFfMXgbEfxr2IuLPZFQ=";
   };
 
   postPatch = ''
@@ -191,8 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   passthru.tests = {
-    inherit remmina;
-    inherit gnome-remote-desktop;
+    inherit remmina gnome-remote-desktop;
   };
 
   meta = {
