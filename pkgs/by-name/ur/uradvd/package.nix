@@ -2,18 +2,26 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  gitMinimal,
+  uradvd,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation {
   pname = "uradvd";
-  version = "0-unstable-2025-08-16";
+  version = "r26-1e64364d";
 
   src = fetchFromGitHub {
     owner = "freifunk-gluon";
     repo = "uradvd";
-    rev = "b37524dfb0292c425fd61f5bffb3101fb1979264";
-    hash = "sha256-PyOAt9dTFdHHF7OlHi9BBTjCN2Hmk8BsHkD2rV94ZDM=";
+    rev = "1e64364d323acb8c71285a6fb85d384334e7007d";
+    deepClone = true;
+    hash = "sha256-+MDhBuCPJ/dcKw4/z4PnXXGoNomIz/0QI32XfLR6fK0=";
   };
+
+  nativeBuildInputs = [
+    gitMinimal
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -22,6 +30,12 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Tiny IPv6 Router Advertisement Daemon";

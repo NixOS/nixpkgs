@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.7.0";
-  sha256 = "cf74a77753b629ffebd2e38fb153a21001b2b7a3c365c0ec7332b120b98c7251";
+  version = "24.8.0";
+  sha256 = "1c03b362ebf4740d4758b9a3d3087e3de989f54823650ec80b47090ef414b2e0";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -55,7 +55,8 @@ buildNodejs {
       # to adapt our patch to this newer version, see https://github.com/NixOS/nixpkgs/pull/434742.
       (fetchpatch2 {
         url = "https://github.com/nodejs/node/commit/886e4b3b534a9f3ad2facbc99097419e06615900.patch?full_index=1";
-        hash = "sha256-HFTabl92NPkBwXD0mUGDN+Gzabyi+Ph0kL0FEHHknbk=";
+        hash = "sha256-dg/wVkD3iFS7RNjmvMDGw+ONScEjynlkRXqVxdF45TM=";
+        includes = [ "tools/gyp/pylib/gyp/xcode_emulation.py" ];
         revert = true;
       })
       ./bypass-darwin-xcrun-node16.patch
