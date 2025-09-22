@@ -24,12 +24,12 @@ with py.pkgs;
 buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = "expliot";
-    rev = version;
+    tag = version;
     hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 
@@ -42,10 +42,9 @@ buildPythonApplication rec {
     "zeroconf"
   ];
 
-  nativeBuildInputs = [
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiocoap
     awsiotpythonsdk
     bluepy
@@ -67,13 +66,10 @@ buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "expliot"
-  ];
+  pythonImportsCheck = [ "expliot" ];
 
   meta = with lib; {
     description = "IoT security testing and exploitation framework";
-    mainProgram = "expliot";
     longDescription = ''
       EXPLIoT is a Framework for security testing and exploiting IoT
       products and IoT infrastructure. It provides a set of plugins
@@ -83,7 +79,8 @@ buildPythonApplication rec {
       purpose of the framework i.e. IoT exploitation.
     '';
     homepage = "https://expliot.readthedocs.io/";
-    license = with licenses; [ agpl3Plus ];
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "expliot";
   };
 }
