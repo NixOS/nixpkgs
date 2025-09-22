@@ -893,7 +893,7 @@ with haskellLib;
   matterhorn = doJailbreak super.matterhorn;
 
   # Too strict bounds on transformers and resourcet
-  # https://github.com/alphaHeavy/lzma-conduit/issues/23
+  # https://github.com/alphaHeavy/lzma-conduit/issues/23 krank:ignore-line
   lzma-conduit = doJailbreak super.lzma-conduit;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
