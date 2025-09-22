@@ -24411,6 +24411,12 @@
     name = "sportshead";
     keys = [ { fingerprint = "A6B6 D031 782E BDF7 631A  8E7E A874 DB2C BFD3 CFD0"; } ];
   };
+  spotdemo4 = {
+    email = "me@trev.xyz";
+    github = "spotdemo4";
+    githubId = 3732640;
+    name = "spotdemo4";
+  };
   spreetin = {
     email = "spreetin@protonmail.com";
     name = "David Falk";
