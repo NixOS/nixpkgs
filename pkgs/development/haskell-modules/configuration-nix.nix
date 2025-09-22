@@ -1805,7 +1805,7 @@ builtins.intersectAttrs super {
     }))
   ];
 
-  xmobar = enableSeparateBinOutput super.xmobar;
+  xmobar = super.xmobar;
 
   # These test cases access the network
   hpack_0_38_1 = doDistribute (

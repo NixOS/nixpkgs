@@ -13411,7 +13411,7 @@ with pkgs;
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
 
-  xmobar = haskellPackages.xmobar.bin;
+  xmobar = haskellPackages.xmobar;
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
