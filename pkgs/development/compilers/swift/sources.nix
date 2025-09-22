@@ -18,7 +18,7 @@ let
     swift-docc-render-artifact = "sha256-Ky9l6tzAxQOpcPFq2FeGnFUl8i59TifRBSHNaZg8wfw=";
     swift-driver = "sha256-Xaz9gZuOspDb+PB67d6tXfpcs+kkDCPSkhu+eIfrb0A=";
     swift-experimental-string-processing = "sha256-gv3xY9s6gdv0lpXH8RGfiLAvZWM7xVsUSLcqyb4rSeQ=";
-    swift-format = "";
+    swift-format = "sha256-oYf9Qt0b/6G3+uQaoExQRKzgpi1RPYSSpZLfwhuRmF8=";
     swift-package-manager = "sha256-yL/cPCt7pZ0XqbbxEnrbzM2X3EkU9klon7SzO2Z13SA=";
     swift-syntax = "sha256-OcrOdlnLYpMxH5CGWNGbs5XW3gJaGgKWQqB9YtwmZeY=";
   };

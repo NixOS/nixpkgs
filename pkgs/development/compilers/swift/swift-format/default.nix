@@ -24,16 +24,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ Foundation ];
 
-  configurePhase = generated.configure + ''
-    swiftpmMakeMutable swift-tools-support-core
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${
-      fetchpatch {
-        url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-        hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-        includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-      }
-    }
-  '';
+  configurePhase = generated.configure;
 
   # We only install the swift-format binary, so don't need the other products.
   swiftpmFlags = [ "--product swift-format" ];
