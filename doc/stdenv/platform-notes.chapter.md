@@ -47,6 +47,17 @@ See below for how to use a newer deployment target.
 For example, `std::print` depends on features that are only available on macOS 13.3 or newer.
 To make them available, set the deployment target to 13.3 using `darwinMinVersionHook`.
 
+#### Package fails to build due to missing API availability checks {#sec-darwin-availability-checks}
+
+This is normally a bug in the package or a misconfigured deployment target.
+* If it is using an API from a newer release (e.g., from macOS 26.0 while targeting macOS 14.0), it needs to use an availability check.
+  The code should be patched to use [`__builtin_available`](https://clang.llvm.org/docs/LanguageExtensions.html#objective-c-available).
+  Note that while the linked documentation is for Objective-C, it is applicable to C and C++ except that you use `__builtin_available` in place of `@available`.
+* If the package intends to require the newer platform (i.e., it does not support running on older versions with reduced functionality), use `darwinMinVersionHook` to set the deployment target to the required version.
+  See below for how to use a newer deployment target.
+* If the package actually handles this through some other mechanism (e.g., MoltenVK relies on the running platform’s MSL version), the error can be suppressed.
+  To suppress the error, add `-Wno-error=unguarded-availability` to `env.NIX_CFLAGS_COMPILE`.
+
 #### Package requires a non-default SDK or fails to build due to missing frameworks or symbols {#sec-darwin-troubleshooting-using-sdks}
 
 In some cases, you may have to use a non-default SDK.
