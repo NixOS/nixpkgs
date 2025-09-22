@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-oHxHJ4D/Xg/zAFiI0bMX3Dc05HXIjk+ZHuGY03cwY+c=";
   };
 
+  patches = [ ./0001-Rewrite-let-chains-for-Rust-1.86.patch ];
+
   cargoHash = "sha256-RFlac10XFJXT3Giayy31kZ3Nn1Q+YsPt/zCdkSV0Atk=";
 
   cargoBuildFlags = lib.cli.toGNUCommandLine { } {

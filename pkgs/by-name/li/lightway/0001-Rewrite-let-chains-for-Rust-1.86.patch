@@ -1,0 +1,226 @@
+From 1d32511ac1da9a8d92299a26bf519952c6bf2b7f Mon Sep 17 00:00:00 2001
+From: usertam <code@usertam.dev>
+Date: Fri, 19 Sep 2025 14:44:30 +0800
+Subject: [PATCH] Rewrite let chains for Rust 1.86
+
+For nixpkgs release 25.05, current rustc is 1.86.
+
+Co-authored-by: Mariappan Ramasamy <142216110+kp-mariappan-ramasamy@users.noreply.github.com>
+---
+ lightway-client/src/io/inside/tun.rs      | 16 +++----
+ lightway-client/src/lib.rs                | 24 +++++------
+ lightway-client/src/route_manager.rs      | 14 +++---
+ lightway-core/src/connection.rs           | 52 +++++++++++++----------
+ lightway-server/src/connection_manager.rs | 10 ++---
+ 5 files changed, 61 insertions(+), 55 deletions(-)
+
+diff --git a/lightway-client/src/io/inside/tun.rs b/lightway-client/src/io/inside/tun.rs
+index 0187ab5..888cca4 100644
+--- a/lightway-client/src/io/inside/tun.rs
++++ b/lightway-client/src/io/inside/tun.rs
+@@ -59,10 +59,10 @@ impl<ExtAppState: Send + Sync> InsideIORecv<ExtAppState> for Tun {
+         // Update source IP from server DNS ip to TUN DNS ip
+         if let Some(ip_config) = ip_config {
+             let packet = Ipv4Packet::new(pkt.as_ref());
+-            if let Some(packet) = packet
+-                && packet.get_source() == ip_config.dns_ip
+-            {
+-                ipv4_update_source(pkt.as_mut(), self.dns_ip);
++            if let Some(packet) = packet {
++                if packet.get_source() == ip_config.dns_ip {
++                    ipv4_update_source(pkt.as_mut(), self.dns_ip);
++                }
+             };
+         }
+ 
+@@ -89,10 +89,10 @@ impl<ExtAppState: Send + Sync> InsideIOSendCallback<ConnectionState<ExtAppState>
+         // Update source IP from server DNS ip to TUN DNS ip
+         if let Some(ip_config) = state.ip_config {
+             let packet = Ipv4Packet::new(buf.as_ref());
+-            if let Some(packet) = packet
+-                && packet.get_source() == ip_config.dns_ip
+-            {
+-                ipv4_update_source(buf.as_mut(), self.dns_ip);
++            if let Some(packet) = packet {
++                if packet.get_source() == ip_config.dns_ip {
++                    ipv4_update_source(buf.as_mut(), self.dns_ip);
++                }
+             };
+         }
+ 
+diff --git a/lightway-client/src/lib.rs b/lightway-client/src/lib.rs
+index 6aa5ebb..9b04f6b 100644
+--- a/lightway-client/src/lib.rs
++++ b/lightway-client/src/lib.rs
+@@ -305,15 +305,15 @@ async fn handle_events<A: 'static + Send + EventCallback, ExtAppState: Send + Sy
+                         break; // Connection disconnected.
+                     };
+ 
+-                    if enable_encoding_when_online
+-                        && let Err(e) = conn.lock().unwrap().set_encoding(true)
+-                    {
+-                        tracing::error!("Error encoutered when trying to toggle encoding. {}", e);
++                    if enable_encoding_when_online {
++                        if let Err(e) = conn.lock().unwrap().set_encoding(true) {
++                            tracing::error!("Error encoutered when trying to toggle encoding. {}", e);
++                        }
++                    }
++                } else if matches!(state, State::Disconnected) {
++                    if let Some(disconnected_tx) = disconnected_signal.take() {
++                        let _ = disconnected_tx.send(());
+                     }
+-                } else if matches!(state, State::Disconnected)
+-                    && let Some(disconnected_tx) = disconnected_signal.take()
+-                {
+-                    let _ = disconnected_tx.send(());
+                 }
+             }
+             Event::KeepaliveReply => keepalive.reply_received().await,
+@@ -407,10 +407,10 @@ pub async fn inside_io_task<ExtAppState: Send + Sync>(
+ 
+                 // Update TUN device DNS IP address to server provided DNS address
+                 let packet = Ipv4Packet::new(buf.as_ref());
+-                if let Some(packet) = packet
+-                    && packet.get_destination() == tun_dns_ip
+-                {
+-                    ipv4_update_destination(buf.as_mut(), ip_config.dns_ip);
++                if let Some(packet) = packet {
++                    if packet.get_destination() == tun_dns_ip {
++                        ipv4_update_destination(buf.as_mut(), ip_config.dns_ip);
++                    }
+                 };
+             }
+ 
+diff --git a/lightway-client/src/route_manager.rs b/lightway-client/src/route_manager.rs
+index 8ad6d11..aaae096 100644
+--- a/lightway-client/src/route_manager.rs
++++ b/lightway-client/src/route_manager.rs
+@@ -204,13 +204,13 @@ impl RouteManager {
+             }
+         }
+ 
+-        if let Some(route) = &self.server_route
+-            && let Err(e) = self.route_manager.delete(route)
+-        {
+-            warn!(
+-                "Failed to delete server route during drop: {}, error: {}",
+-                route, e
+-            );
++        if let Some(route) = &self.server_route {
++            if let Err(e) = self.route_manager.delete(route) {
++                warn!(
++                    "Failed to delete server route during drop: {}, error: {}",
++                    route, e
++                );
++            }
+         }
+     }
+ 
+diff --git a/lightway-core/src/connection.rs b/lightway-core/src/connection.rs
+index 4500858..d4cb7bd 100644
+--- a/lightway-core/src/connection.rs
++++ b/lightway-core/src/connection.rs
+@@ -559,10 +559,10 @@ impl<AppState: Send> Connection<AppState> {
+             }
+         }
+ 
+-        if matches!(new_state, State::LinkUp)
+-            && let ConnectionMode::Client { auth_method, .. } = &self.mode
+-        {
+-            self.authenticate(auth_method.clone())?;
++        if matches!(new_state, State::LinkUp) {
++            if let ConnectionMode::Client { auth_method, .. } = &self.mode {
++                self.authenticate(auth_method.clone())?;
++            }
+         };
+         Ok(())
+     }
+@@ -860,11 +860,11 @@ impl<AppState: Send> Connection<AppState> {
+         // This should be enabled only for client for now.
+         // But since we enable PMTU check only on client, there is no direct
+         // check for client/server
+-        if let Some(pmtud) = self.pmtud.as_ref()
+-            && let Some((mps, _)) = pmtud.maximum_packet_sizes()
+-        {
+-            let tcp_mss = mps - (IPV4_HEADER_SIZE + TCP_HEADER_SIZE);
+-            tcp_clamp_mss(pkt.as_mut(), tcp_mss as _);
++        if let Some(pmtud) = self.pmtud.as_ref() {
++            if let Some((mps, _)) = pmtud.maximum_packet_sizes() {
++                let tcp_mss = mps - (IPV4_HEADER_SIZE + TCP_HEADER_SIZE);
++                tcp_clamp_mss(pkt.as_mut(), tcp_mss as _);
++            }
+         }
+ 
+         match self.inside_plugins.do_ingress(pkt) {
+@@ -907,11 +907,16 @@ impl<AppState: Send> Connection<AppState> {
+             return Err(ConnectionError::InvalidState);
+         }
+ 
+-        if let Some(pmtu) = &self.pmtud
+-            && let Some((data_mps, frag_mps)) = pmtu.maximum_packet_sizes()
+-            && pkt.len() > data_mps
+-        {
+-            self.send_fragmented_outside_data(pkt.clone().freeze(), frag_mps, is_encoded)
++        if let Some(pmtu) = &self.pmtud {
++            if let Some((data_mps, frag_mps)) = pmtu.maximum_packet_sizes() {
++                if pkt.len() > data_mps {
++                    self.send_fragmented_outside_data(pkt.clone().freeze(), frag_mps, is_encoded)
++                } else {
++                    self.send_outside_data(pkt, is_encoded)
++                }
++            } else {
++                self.send_outside_data(pkt, is_encoded)
++            }
+         } else {
+             self.send_outside_data(pkt, is_encoded)
+         }
+@@ -1450,15 +1455,16 @@ impl<AppState: Send> Connection<AppState> {
+             return Ok(());
+         }
+ 
+-        if let Ok(inside_mtu) = cfg.mtu.parse()
+-            && self.connection_type.is_datagram()
+-            && self.outside_mtu < dtls_required_outside_mtu(inside_mtu)
+-            && self.pmtud.is_some()
+-        {
+-            return Err(ConnectionError::PathMtuDiscoveryRequired {
+-                inside_mtu,
+-                required_outside_mtu: dtls_required_outside_mtu(inside_mtu),
+-            });
++        if let Ok(inside_mtu) = cfg.mtu.parse() {
++            if self.connection_type.is_datagram()
++                && self.outside_mtu < dtls_required_outside_mtu(inside_mtu)
++                && self.pmtud.is_some()
++            {
++                return Err(ConnectionError::PathMtuDiscoveryRequired {
++                    inside_mtu,
++                    required_outside_mtu: dtls_required_outside_mtu(inside_mtu),
++                });
++            }
+         }
+ 
+         if let ConnectionMode::Client { ip_config_cb, .. } = &self.mode {
+diff --git a/lightway-server/src/connection_manager.rs b/lightway-server/src/connection_manager.rs
+index d55e048..7b49f63 100644
+--- a/lightway-server/src/connection_manager.rs
++++ b/lightway-server/src/connection_manager.rs
+@@ -167,11 +167,11 @@ async fn handle_events(mut stream: EventStream, conn: Weak<Connection>) {
+ #[instrument(level = "trace", skip_all)]
+ async fn handle_stale(conn: Weak<Connection>) {
+     tokio::time::sleep(CONNECTION_STALE_AGE).await;
+-    if let Some(conn) = conn.upgrade()
+-        && !matches!(conn.state(), State::Online)
+-    {
+-        metrics::connection_stale_closed();
+-        let _ = conn.disconnect();
++    if let Some(conn) = conn.upgrade() {
++        if !matches!(conn.state(), State::Online) {
++            metrics::connection_stale_closed();
++            let _ = conn.disconnect();
++        }
+     };
+ }
+ 
+-- 
+2.49.0
+
