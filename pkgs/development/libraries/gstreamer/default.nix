@@ -4,11 +4,11 @@
   callPackage,
   ipu6ep-camera-hal,
   ipu6epmtl-camera-hal,
-  apple-sdk_13,
+  apple-sdk,
 }:
 
 let
-  apple-sdk_gstreamer = apple-sdk_13;
+  apple-sdk_gstreamer = apple-sdk;
 in
 {
   inherit apple-sdk_gstreamer;
