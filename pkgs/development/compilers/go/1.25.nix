@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  apple-sdk_12,
   tzdata,
   replaceVars,
   iana-etc,
@@ -69,10 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    apple-sdk_12
-  ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
