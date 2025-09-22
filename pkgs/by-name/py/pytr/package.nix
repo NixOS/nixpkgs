@@ -2,7 +2,6 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
-  stdenv,
   python3Packages,
   versionCheckHook,
 }:
@@ -39,7 +38,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd pytr \
       --bash <($out/bin/pytr completion bash) \
       --zsh <($out/bin/pytr completion zsh)

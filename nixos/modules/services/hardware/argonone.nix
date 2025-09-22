@@ -11,7 +11,14 @@ in
 {
   options.services.hardware.argonone = {
     enable = lib.mkEnableOption "the driver for Argon One Raspberry Pi case fan and power button";
-    package = lib.mkPackageOption pkgs "argononed" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.argononed;
+      defaultText = lib.literalExpression "pkgs.argononed";
+      description = ''
+        The package implementing the Argon One driver
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {

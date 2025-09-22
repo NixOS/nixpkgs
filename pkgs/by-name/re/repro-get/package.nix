@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -36,7 +35,7 @@ buildGoModule rec {
     "-X github.com/reproducible-containers/${pname}/pkg/version.Version=v${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd repro-get \
       --bash <($out/bin/repro-get completion bash) \
       --fish <($out/bin/repro-get completion fish) \

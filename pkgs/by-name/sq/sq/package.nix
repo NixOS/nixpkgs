@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -34,7 +33,7 @@ buildGoModule rec {
     "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd sq \
       --bash <($out/bin/sq completion bash) \
       --fish <($out/bin/sq completion fish) \

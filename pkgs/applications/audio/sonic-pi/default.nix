@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
-    repo = "sonic-pi";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-JMextQY0jLShWmqRQoVAbqIzDhA1mOzI7vfsG7+jjX0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version;
-    pname = "mix-deps-sonic-pi";
+    pname = "mix-deps-${pname}";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
     hash = "sha256-7wqFI3f0CRVrXK2IUguqHNANwKMmTak/Xh9nr624TXc=";

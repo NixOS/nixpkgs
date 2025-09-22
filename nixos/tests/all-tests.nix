@@ -190,7 +190,6 @@ in
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
   activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-nix-channel = runTest ./activation/nix-channel.nix;
-  activation-nixos-init = runTest ./activation/nixos-init.nix;
   activation-perlless = runTest ./activation/perlless.nix;
   activation-var = runTest ./activation/var.nix;
   actual = runTest ./actual.nix;
@@ -430,7 +429,6 @@ in
   cyrus-imap = runTest ./cyrus-imap.nix;
   dae = runTest ./dae.nix;
   darling-dmg = runTest ./darling-dmg.nix;
-  dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
@@ -1144,7 +1142,6 @@ in
   pam-u2f = runTest ./pam/pam-u2f.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
-  pangolin = runTest ./pangolin.nix;
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
   paperless = runTest ./paperless.nix;
@@ -1586,7 +1583,6 @@ in
   vengi-tools = runTest ./vengi-tools.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
-  victoriatraces = import ./victoriatraces { inherit runTest; };
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };

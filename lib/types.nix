@@ -1247,14 +1247,7 @@ let
               let
                 docsEval = base.extendModules { modules = [ noCheckForDocsModule ]; };
               in
-              if docsEval._module.freeformType ? description then
-                "open ${name} of ${
-                  optionDescriptionPhrase (
-                    class: class == "noun" || class == "composite"
-                  ) docsEval._module.freeformType
-                }"
-              else
-                name;
+              docsEval._module.freeformType.description or name;
           inherit check;
           merge = {
             __functor =

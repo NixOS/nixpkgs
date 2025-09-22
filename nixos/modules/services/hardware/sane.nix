@@ -67,7 +67,12 @@ in
       '';
     };
 
-    hardware.sane.backends-package = lib.mkPackageOption pkgs "sane-backends" { };
+    hardware.sane.backends-package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.sane-backends;
+      defaultText = lib.literalExpression "pkgs.sane-backends";
+      description = "Backends driver package to use.";
+    };
 
     hardware.sane.snapshot = lib.mkOption {
       type = lib.types.bool;

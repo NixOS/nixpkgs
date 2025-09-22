@@ -85,7 +85,6 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css-inline"
     "django-bootstrap3"
-    "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
@@ -106,7 +105,6 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "sentry-sdk"
-    "sepaxml"
     "ua-parser"
     "webauthn"
   ];

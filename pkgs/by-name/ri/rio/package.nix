@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
-    homepage = "https://rioterm.com/";
+    homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       tornax

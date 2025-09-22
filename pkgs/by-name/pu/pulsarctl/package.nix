@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -51,7 +50,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd pulsarctl \
       --bash <($out/bin/pulsarctl completion bash) \
       --fish <($out/bin/pulsarctl completion fish) \

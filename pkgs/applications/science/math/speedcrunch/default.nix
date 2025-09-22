@@ -8,13 +8,13 @@
   qttools,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "speedcrunch";
   version = "unstable-2021-10-09";
 
   src = fetchFromBitbucket {
     owner = "heldercorreia";
-    repo = "speedcrunch";
+    repo = pname;
     rev = "74756f3438149c01e9edc3259b0f411fa319a22f";
     sha256 = "sha256-XxQv+A5SfYXFIRK7yacxGHHne1Q93pwCGeHhchIKizU=";
   };

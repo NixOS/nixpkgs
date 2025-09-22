@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -42,7 +41,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/orchard" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     export HOME="$(mktemp -d)"
     installShellCompletion --cmd orchard \
       --bash <($out/bin/orchard completion bash) \

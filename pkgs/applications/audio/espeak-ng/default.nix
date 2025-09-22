@@ -28,17 +28,16 @@
   sonicSupport ? true,
   speechPlayerSupport ? true,
   ucdSupport ? false,
-  buildPackages,
 }:
 
 let
-  version = "1.52.0.1-unstable-2025-09-09";
+  version = "1.52.0";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
-    rev = "0d451f8c1c6ae837418b823bd9c4cbc574ea9ff5";
-    hash = "sha256-wpPi+YjSLhsEWfE3KEbL4A7o48qtz9fLRZ/u4xGOM2g=";
+    tag = version;
+    hash = "sha256-mmh5QPSVD5YQ0j16R+bEL5vcyWLtTNOJ/irBNzWY3ro=";
   };
 
   ucd-tools = stdenv.mkDerivation {
@@ -60,14 +59,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
-  inherit version src;
+  version = "1.52.0";
+
+  src = fetchFromGitHub {
+    owner = "espeak-ng";
+    repo = "espeak-ng";
+    tag = version;
+    hash = "sha256-mmh5QPSVD5YQ0j16R+bEL5vcyWLtTNOJ/irBNzWY3ro=";
+  };
 
   patches = [
     # https://github.com/espeak-ng/espeak-ng/pull/2274
+    ./libsonic.patch
     (fetchpatch {
-      name = "libsonic.patch";
-      url = "https://github.com/espeak-ng/espeak-ng/commit/83e646e711af608fafa8c01dd812cd29e073f644.patch";
-      hash = "sha256-UHuURyqRy/JVYYJH5EI5J2cpBfCNeTE24sMmheb+D2Q=";
+      name = "espeak-ng-text-to-phonemes-with-terminator.patch";
+      url = "https://github.com/espeak-ng/espeak-ng/commit/2108b1e8ae02f49cc909894a1024efdfde6682fd.patch";
+      hash = "sha256-XjEc1r7F88xZOfeUey0R6Xv6vu4Wy8GtWxXFG2NTf9g=";
     })
   ]
   ++ lib.optionals mbrolaSupport [
@@ -91,10 +98,6 @@ stdenv.mkDerivation rec {
     ronn
     makeWrapper
     which
-  ]
-  # Provide a native espeak-ng when cross compiling so intonations can be built
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    buildPackages.espeak-ng
   ];
 
   buildInputs =
@@ -110,10 +113,6 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "USE_LIBSONIC" sonicSupport)
     (lib.cmakeBool "USE_MBROLA" mbrolaSupport)
     (lib.cmakeBool "USE_SPEECHPLAYER" speechPlayerSupport)
-  ]
-  # Point CMake to the native build’s binary dir when cross compiling
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DNativeBuild_DIR=${buildPackages.espeak-ng}/bin/"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -128,7 +127,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Speech synthesizer that supports more than hundred languages and accents";
     homepage = "https://github.com/espeak-ng/espeak-ng";
-    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${src.rev}/ChangeLog.md";
+    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${src.tag}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aske ];
     platforms = lib.platforms.all;

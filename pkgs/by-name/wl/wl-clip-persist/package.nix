@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-clip-persist";
-  version = "0.5.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Linus789";
     repo = "wl-clip-persist";
     rev = "v${version}";
-    hash = "sha256-MEH8ADsFst/CgTc9QW4x0dBXJ5ssQDVa55qPcsALJRg=";
+    hash = "sha256-dFhHsBazBHVWgPxoRDNwh8Yctt4w64E0RyFaHEC4mvk=";
   };
 
-  cargoHash = "sha256-iQI5Z/gk+EFNQNma+T2/y77F8M+kPuSS2QKO6QV9dm4=";
+  cargoHash = "sha256-x2kNWFfHgzoSSD75Cp3noiq61zlBnmz9twwTAlBBL9w=";
 
   nativeBuildInputs = [ pkg-config ];
 

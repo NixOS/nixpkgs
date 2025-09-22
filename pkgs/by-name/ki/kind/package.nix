@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -38,7 +37,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd kind \
       --bash <($out/bin/kind completion bash) \
       --fish <($out/bin/kind completion fish) \

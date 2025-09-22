@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildPythonApplication,
   colorclass,
   fetchPypi,
@@ -72,7 +71,7 @@ buildPythonApplication rec {
     $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     for shell in bash fish; do
       installShellCompletion --cmd linode-cli \
         --$shell <($out/bin/linode-cli --skip-config completion $shell)

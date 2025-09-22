@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -53,7 +52,7 @@ buildGoModule rec {
         ln -s ''$${bin}/bin/${bin} $out/bin/
       '') bins
     )
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    + ''
       for cmd in crane gcrane; do
         installShellCompletion --cmd "$cmd" \
           --bash <($GOPATH/bin/$cmd completion bash) \

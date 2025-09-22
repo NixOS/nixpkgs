@@ -315,6 +315,13 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  deepin = {
+    members = [ wineee ];
+    scope = "Maintain deepin desktop environment and related packages.";
+    shortName = "DDE";
+    enableFeatureFreezePing = true;
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
@@ -667,7 +674,6 @@ with lib.maintainers;
     members = [
       euank
       frederictobiasc
-      heywoodlh
       marcusramberg
       mic92
       rorosen
@@ -837,12 +843,8 @@ with lib.maintainers;
 
   marketing = {
     members = [
-      djacu
-      flyfloh
-      thilobillerbeck
       tomberek
     ];
-    githubTeams = [ "marketing-team" ];
     scope = "Marketing of Nix/NixOS/nixpkgs.";
     shortName = "Marketing";
     enableFeatureFreezePing = true;

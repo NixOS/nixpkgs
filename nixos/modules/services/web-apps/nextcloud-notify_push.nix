@@ -14,7 +14,12 @@ in
   options.services.nextcloud.notify_push = {
     enable = lib.mkEnableOption "Notify push";
 
-    package = lib.mkPackageOption pkgs "nextcloud-notify_push" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.nextcloud-notify_push;
+      defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
+      description = "Which package to use for notify_push";
+    };
 
     socketPath = lib.mkOption {
       type = lib.types.str;

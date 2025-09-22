@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "25.04.08.0";
+  version = "23.06.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     repo = "prance";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-71M9ufxb0aaSgokThlsTS4ElOJLZntF2TYIErPccQbU=";
+    hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
   };
 
   build-system = [ setuptools-scm ];

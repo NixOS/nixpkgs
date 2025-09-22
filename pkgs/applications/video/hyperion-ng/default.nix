@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hyperion-project";
-    repo = "hyperion.ng";
+    repo = pname;
     rev = version;
     hash = "sha256-nQPtJw9DOKMPGI5trxZxpP+z2PYsbRKqOQEyaGzvmmA=";
     # needed for `dependencies/external/`:

@@ -329,7 +329,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.int;
         default = 53589;
         description = ''
           Port number of the Taskserver.

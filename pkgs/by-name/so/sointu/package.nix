@@ -47,9 +47,7 @@ buildGoModule {
     "cmd/sointu-play"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fork of 4klang that can target 386, amd64 and WebAssembly";

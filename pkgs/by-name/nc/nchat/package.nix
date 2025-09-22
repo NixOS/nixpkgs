@@ -12,17 +12,16 @@
   cmake,
   gperf,
   nix-update-script,
-  withWhatsApp ? (!stdenv.isDarwin), # macOS 12.0+ required
 }:
 
 let
-  version = "5.10.15";
+  version = "5.9.15";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-wA0sLOcCDPi3w1naIx/Q82DJk/tl/LTnrUBbMAPvvFU=";
+    hash = "sha256-I7A6+zhHXE+LSfqnWESsXF1U4Y0Bw1Vt7gZblRqWSMQ=";
   };
 
   libcgowm = buildGoModule {
@@ -30,7 +29,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-u64b9z/B0j3qArMfxJ8QolgDc9k7Q+LqrQRle3nN7eM=";
+    vendorHash = "sha256-rovzblnXfDDyWyYR3G9irFaSopiZSeax+48R/vD/ktY=";
 
     buildPhase = ''
       runHook preBuild
@@ -90,8 +89,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-    (lib.cmakeBool "HAS_WHATSAPP" withWhatsApp)
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   passthru = {

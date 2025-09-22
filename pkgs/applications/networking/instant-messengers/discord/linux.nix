@@ -30,7 +30,6 @@
   libnotify,
   libpulseaudio,
   libuuid,
-  libva,
   libX11,
   libXScrnSaver,
   libXcomposite,
@@ -55,7 +54,6 @@
   pipewire,
   python3,
   runCommand,
-  libunity,
   speechd-minimal,
   wayland,
   branch,
@@ -154,9 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       libnotify
       libX11
       libXcomposite
-      libunity
       libuuid
-      libva
       libXcursor
       libXdamage
       libXext

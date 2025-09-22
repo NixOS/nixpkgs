@@ -10,7 +10,7 @@
   merlin-extend,
   ppxlib,
   cppo,
-  cmdliner,
+  ppx_derivers,
   dune-build-info,
 }:
 
@@ -18,8 +18,8 @@ let
   param =
     if lib.versionAtLeast ppxlib.version "0.36" then
       {
-        version = "3.17.0";
-        hash = "sha256-gsiBnOn9IVt+fixlAeY456kE6+E6taHY6sJnnYz4pes=";
+        version = "3.16.0";
+        hash = "sha256-R7DkOn00jiqFBlirS+xaT7u5/U/z7IocGBZRFVjFNk4=";
       }
     else
       {
@@ -50,8 +50,7 @@ buildDunePackage rec {
     fix
     menhirSdk
     merlin-extend
-  ]
-  ++ lib.optional (lib.versionAtLeast version "3.17") cmdliner;
+  ];
 
   propagatedBuildInputs = [
     ppxlib

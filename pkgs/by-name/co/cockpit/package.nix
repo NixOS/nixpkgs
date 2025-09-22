@@ -37,20 +37,17 @@
   systemd,
   udev,
   xmlto,
-  # Enables lightweight NixOS branding, replacing the default Cockpit icons
-  withBranding ? true,
-  nixos-icons,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "347";
+  version = "346";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-9jVtO97QdFe8pp6JmuftaKyVM/MnRCYCWLPLrtjgbJ8=";
+    hash = "sha256-ZTVcZ1a43cwm8y74XKp9z8tqSK1wxlW9lfoLN/cSFcs=";
     fetchSubmodules = true;
   };
 
@@ -151,17 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # hardcode libexecdir, I am assuming that cockpit only use it to find it's binaries
     printf 'def get_libexecdir() -> str:\n\treturn "%s"' "$out/libexec" >> src/cockpit/packages.py
-
-    # patch paths used as visibility conditions in apps
-    substituteInPlace pkg/*/manifest.json \
-      --replace-warn '"/usr/bin' '"/run/current-system/sw/bin' \
-      --replace-warn '"/usr/sbin' '"/run/current-system/sw/bin' \
-      --replace-warn '"/usr/share' '"/run/current-system/sw/share' \
-      --replace-warn '"/lib/systemd' '"/run/current-system/sw/lib/systemd'
-
-    # replace reference to system python interpreter, used for e.g. sosreport
-    substituteInPlace pkg/lib/python.ts \
-      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
   '';
 
   configureFlags = [
@@ -214,19 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/lib/systemd/*/* \
       --replace-warn /bin /run/current-system/sw/bin
 
-    ${lib.optionalString withBranding ''
-      mkdir -p "$out/share/cockpit/branding/nixos"
-      pushd "$out/share/cockpit/branding/nixos"
-
-      icons="${nixos-icons}/share/icons/hicolor"
-      ln -s "$icons/16x16/apps/nix-snowflake.png" favicon.ico
-      ln -s "$icons/256x256/apps/nix-snowflake.png" logo.png
-      ln -s "$icons/256x256/apps/nix-snowflake.png" apple-touch-icon.png
-      cp "${./branding.css}" branding.css
-
-      popd
-    ''}
-
     runHook postFixup
   '';
 
@@ -246,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     export G_MESSAGES_DEBUG=cockpit-ws,cockpit-wrapper,cockpit-bridge
     export PATH=$PATH:$(pwd)
 
-    make check -j$NIX_BUILD_CORES || true
+    make check  -j$NIX_BUILD_CORES || true
     npm run eslint
     npm run stylelint
   '';
@@ -262,9 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cockpit-project.org/";
     changelog = "https://cockpit-project.org/blog/cockpit-${finalAttrs.version}.html";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
-      lucasew
-      andre4ik3
-    ];
+    maintainers = [ lib.maintainers.lucasew ];
   };
 })

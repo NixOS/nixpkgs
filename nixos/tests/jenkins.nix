@@ -4,10 +4,10 @@
 #   3. jenkins service not started on slave node
 #   4. declarative jobs can be added and removed
 
-{ config, lib, ... }:
+{ pkgs, ... }:
 {
   name = "jenkins";
-  meta = with lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [
       bjornfor
     ];
@@ -60,7 +60,7 @@
         };
 
         specialisation.noJenkinsJobs.configuration = {
-          services.jenkins.jobBuilder.nixJobs = lib.mkForce [ ];
+          services.jenkins.jobBuilder.nixJobs = pkgs.lib.mkForce [ ];
         };
 
         # should have no effect
@@ -89,7 +89,6 @@
   testScript =
     { nodes, ... }:
     let
-      pkgs = config.node.pkgs;
       configWithoutJobs = "${nodes.master.system.build.toplevel}/specialisation/noJenkinsJobs";
       jenkinsPort = nodes.master.services.jenkins.port;
       jenkinsUrl = "http://localhost:${toString jenkinsPort}";

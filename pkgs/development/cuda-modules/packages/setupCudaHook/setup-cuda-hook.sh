@@ -54,13 +54,8 @@ setupCUDAToolkit_ROOT() {
         fi
     done
 
-    # Use array form so semicolon-separated lists are passed safely.
-    if [[ -n "${CUDAToolkit_INCLUDE_DIR-}" ]]; then
-        cmakeFlagsArray+=("-DCUDAToolkit_INCLUDE_DIR=${CUDAToolkit_INCLUDE_DIR}")
-    fi
-    if [[ -n "${CUDAToolkit_ROOT-}" ]]; then
-        cmakeFlagsArray+=("-DCUDAToolkit_ROOT=${CUDAToolkit_ROOT}")
-    fi
+    appendToVar cmakeFlags "-DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR"
+    appendToVar cmakeFlags "-DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
 }
 preConfigureHooks+=(setupCUDAToolkit_ROOT)
 

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "zope-testbrowser";
-  version = "7.0.1";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.testbrowser";
     tag = version;
-    hash = "sha256-GxSH3JBuQ3B4CeHzr58FEYv0gsTlUhlO/0CCHcTdOfg=";
+    hash = "sha256-vGx2ObHgt4hSQe/JKZkD2/GhdtbJEAfggkM209maen4=";
   };
 
   postPatch = ''

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "krunvm";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
   };

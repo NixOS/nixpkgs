@@ -21,7 +21,7 @@ buildKodiAddon rec {
 
   src = fetchFromGitHub {
     owner = "jellyfin";
-    repo = "jellycon";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-dCPbPuUtiMhcECd3Aebs3ZGIM6jn6mmCd0rXS+1TQLs=";
   };
