@@ -3,7 +3,7 @@
   workspaceStateFile = ./workspace-state.json;
   hashes = {
     "swift-argument-parser" = "sha256-qEJ329hqQyQVxtHScD7qPmWW9ZDf9bX+4xgpDlX0w5A=";
-    "swift-asn1" = "sha256-aN6BJOBvUCFn62mPv0nT4Z3edD1bQZ2zT5GubzdXZDw=";
+    "swift-asn1" = "sha256-6NqPGUuM55YOXCMqNsqPm/3smKhSC2UIYHJSwtIiuoc=";
     "swift-certificates" = "sha256-n5dE5J8f7PAVoJkIpiKrrDvB0xIil5VwtzC2mx6vz80=";
     "swift-collections" = "sha256-WNj19mRvDSZNcDzZvmtS+jZxngBooiHekh3IsPZnKUQ=";
     "swift-crypto" = "sha256-lcB497b/T1bHShPrjNjHthrs76pDFpU+4uN0uW4tz+4=";
