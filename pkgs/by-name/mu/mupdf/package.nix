@@ -57,6 +57,14 @@ let
       rev = "13ae6aa2c2f9a7b4266fc2e6116c876237f40477";
       hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
     };
+
+    patches = [ ];
+
+    # cmake 4 compatibility, upstream is dead
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
+    '';
   });
 
 in

@@ -117,12 +117,7 @@ in
     };
 
     ldap = {
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.openldap;
-        defaultText = lib.literalExpression "pkgs.openldap";
-        description = "The OpenLDAP package to use.";
-      };
+      package = lib.mkPackageOption pkgs "openldap" { };
 
       searchUserName = lib.mkOption {
         type = lib.types.str;

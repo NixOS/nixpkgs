@@ -22,6 +22,7 @@
   haskell,
   nix-serve-ng,
   colmena,
+  nix-update,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -126,6 +127,11 @@ let
           colmena = colmena.override {
             nix = self.lix;
             inherit (self) nix-eval-jobs;
+          };
+
+          nix-update = nix-update.override {
+            nix = self.lix;
+            inherit (self) nixpkgs-review;
           };
         };
     };

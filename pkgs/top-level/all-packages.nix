@@ -2646,6 +2646,7 @@ with pkgs;
   curlWithGnuTls = curl.override {
     gnutlsSupport = true;
     opensslSupport = false;
+    ngtcp2 = ngtcp2-gnutls;
   };
 
   curl-impersonate-ff = curl-impersonate.curl-impersonate-ff;
@@ -7490,8 +7491,6 @@ with pkgs;
   geoip = callPackage ../development/libraries/geoip { };
 
   geos = callPackage ../development/libraries/geos { };
-
-  geos_3_9 = callPackage ../development/libraries/geos/3.9.nix { };
 
   gettext = callPackage ../development/libraries/gettext { };
 

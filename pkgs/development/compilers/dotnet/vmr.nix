@@ -1,5 +1,5 @@
 {
-  clangStdenv,
+  llvmPackages_20,
   lib,
   fetchurl,
   dotnetCorePackages,
@@ -8,7 +8,6 @@
   git,
   cmake,
   pkg-config,
-  llvm,
   zlib,
   icu,
   lttng-ust_2_12,
@@ -37,7 +36,10 @@
 }:
 
 let
-  stdenv = if clangStdenv.hostPlatform.isDarwin then swiftPackages.stdenv else clangStdenv;
+  llvmPackages = llvmPackages_20;
+
+  stdenv =
+    if llvmPackages.stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else llvmPackages.stdenv;
 
   inherit (stdenv)
     isLinux
@@ -101,7 +103,7 @@ stdenv.mkDerivation rec {
     # this gets copied into the tree, but we still need the sandbox profile
     bootstrapSdk
     # the propagated build inputs in llvm.dev break swift compilation
-    llvm.out
+    llvmPackages.llvm.out
     zlib
     _icu
     openssl
