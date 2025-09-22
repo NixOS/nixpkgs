@@ -286,6 +286,10 @@ builtins.intersectAttrs super {
     }))
   ];
 
+  # Test suite requires access to an actual serial port
+  # https://github.com/jputcu/serialport/issues/25 krank:ignore-line
+  serialport = dontCheck super.serialport;
+
   # Provides a library and an executable (pretty-derivation)
   nix-derivation = enableSeparateBinOutput super.nix-derivation;
 
