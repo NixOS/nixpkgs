@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_12,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +14,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-4LiG43kPZtsm7SQ/28RaGMpYsDshCaGvc1mouPG3jFM=";
   };
-
-  buildInputs = [
-    apple-sdk_12
-  ];
 
   installPhase = ''
     mkdir -p $out/bin
