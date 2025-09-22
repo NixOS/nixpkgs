@@ -11,6 +11,7 @@
   xz,
   zstd,
   cryptopp,
+  mesa,
   pkg-config,
   makeWrapper,
   versionCheckHook,
@@ -18,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpkedit";
-  version = "4.4.2";
+  version = "5.0.0-beta.1";
 
   src = fetchFromGitHub {
     owner = "craftablescience";
     repo = "VPKEdit";
-    tag = "v${finalAttrs.version}";
+    tag = "v5.0.0.1";
     fetchSubmodules = true;
-    hash = "sha256-bxY190G12djkyfprrNt83+qzya44fnYV6Ij7D8SWelQ=";
+    hash = "sha256-CPL+pPVrkbTIktskRsgHHgarg4edf0s3U2pnJ5/6h8E=";
   };
 
   # The following sources should be updated according to what was available
@@ -34,22 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
   # FetchContent trying to pull stuff over the network.
   #
   #
-  # v4.4.2
+  # v5.0.0.1
   # |
-  # --> src/thirdparty/sourcepp @ 5bb0e05
+  # --> ext/shared/sourcepp @ 6ba306a
   #   |
-  #   --> ext/cryptopp (which is actually cryptopp-cmake) @ d2b07a
+  #   --> ext/cryptopp (which is actually cryptopp-cmake) @ edb9a71
   #   | |
   #   | --> sources cryptopp (the actual one) from latest release tag of https://github.com/weidai11/cryptopp
   #   |
-  #   --> ext/minizip-ng @ fe5fedc
+  #   --> ext/minizip-ng @ 2c0dc5d
   #     |
   #     --> sources zlib from stable branch of https://github.com/zlib-ng/zlib-ng (pinned to latest release tag)
   #     |
-  #     --> sources bzip2 from master branch of https://sourceware.org/git/bzip
+  #     --> sources bzip2 from master branch of https://gitlab.com/bzip2/bzip2
+  #     |   (we would use this here, but bzip2 in our pkgs still uses the sourceware repo)
   #     |
   #     --> sources xz from master branch of https://github.com/tukaani-project/xz
-  #     |   (i used the most recent release tag. slightly newer than what would've been used, but only minor version changes)
   #     |
   #     --> sources zstd from release branch of https://github.com/facebook/zstd (pinned to latest release tag)
 
@@ -73,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   xz-src = fetchgit {
     url = "https://github.com/tukaani-project/xz.git";
-    tag = "v5.8.0";
-    hash = "sha256-oH9aI5norOBIzyybYU3SnHJL8PXJ9lmZRX/RN0e+NXs=";
+    rev = "dd4a1b259936880e04669b43e778828b60619860";
+    hash = "sha256-KRHrjAKPiQw5Z/JjL8+1S08F2e70AQsOR1VFbZ9ke4c=";
   };
 
   zstd-src = fetchgit {
@@ -99,29 +100,27 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     zlib-ng
     zstd
+    mesa
   ];
 
   cmakeFlags = with finalAttrs; [
     (lib.cmakeFeature "CRYPTOPP_SOURCES" "${cryptopp-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZLIB" "${zlib-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BZIP2" "${bzip2-src}")
+    (lib.cmakeFeature "BZIP2_SOURCE_DIR" "${bzip2-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBLZMA" "${xz-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZSTD" "${zstd-src}")
     (lib.cmakeBool "MZ_OPENSSL" true)
   ];
 
   patches = [
-    ./patches/fix-config-and-i18n-paths.patch
     ./patches/fix-installer-cmake.patch
-    ./patches/fix-miniz-cmake-dirs.patch
+    ./patches/fix-minizip-cmake.patch
   ];
 
-  postInstall = ''
-    mkdir -p $out/lib/vpkedit/i18n
-    mv *.qm $out/lib/vpkedit/i18n
-    substituteInPlace $out/share/applications/vpkedit.desktop \
-      --replace-fail "/opt/vpkedit/vpkedit" "vpkedit"
-  '';
+  qtWrapperArgs = [
+    "--set __EGL_VENDOR_LIBRARY_DIRS ${mesa}/share/glvnd/egl_vendor.d"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
