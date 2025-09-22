@@ -152,7 +152,12 @@ in
   options.services.writefreely = {
     enable = lib.mkEnableOption "Writefreely, build a digital writing community";
 
-    package = lib.mkPackageOption pkgs "writefreely" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.writefreely;
+      defaultText = lib.literalExpression "pkgs.writefreely";
+      description = "Writefreely package to use.";
+    };
 
     stateDir = mkOption {
       type = types.path;

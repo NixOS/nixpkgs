@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
   coredns,
@@ -41,14 +40,12 @@ buildGoModule rec {
   subPackages = map (p: "app/" + p) components;
 
   postInstall =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-      lib.concatMapStringsSep "\n" (p: ''
-        installShellCompletion --cmd ${p} \
-          --bash <($out/bin/${p} completion bash) \
-          --fish <($out/bin/${p} completion fish) \
-          --zsh <($out/bin/${p} completion zsh)
-      '') components
-    )
+    lib.concatMapStringsSep "\n" (p: ''
+      installShellCompletion --cmd ${p} \
+        --bash <($out/bin/${p} completion bash) \
+        --fish <($out/bin/${p} completion fish) \
+        --zsh <($out/bin/${p} completion zsh)
+    '') components
     + lib.optionalString isFull ''
       ln -sLf ${coredns}/bin/coredns $out/bin
     '';

@@ -85,7 +85,7 @@ in
     };
     hostPort = mkOption {
       default = 31022;
-      type = types.port;
+      type = types.int;
       example = 22;
       description = ''
         The localhost host port to forward TCP to the guest port.

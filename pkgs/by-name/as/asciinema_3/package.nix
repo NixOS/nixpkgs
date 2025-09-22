@@ -10,17 +10,17 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "asciinema";
-    version = "3.0.0";
+    version = "3.0.0-rc.5";
 
     src = fetchFromGitHub {
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
       rev = "v${self.version}";
-      hash = "sha256-P92EZyg8f/mm66SmXAyPX9f4eMgOP6lyn3Uqhqh+D0I=";
+      hash = "sha256-CxssC3ftnXgxdvRO7CrVgBSVkh7DPjXRNRet4fB2BKc=";
     };
 
-    cargoHash = "sha256-2DQqtCcvSO43+RcMN2/BGqvf+cp/WvzUY4dxVpNcbGU=";
+    cargoHash = "sha256-OsynIQeGjXHD1E9iDH4P7Jksr1APtGZkchzZB0DawIw=";
 
     env.ASCIINEMA_GEN_DIR = "gendir";
 
@@ -34,6 +34,13 @@ let
         --fish gendir/completion/asciinema.fish \
         --zsh gendir/completion/_asciinema
     '';
+
+    checkFlags = [
+      # ---- pty::tests::exec_quick stdout ----
+      # thread 'pty::tests::exec_quick' panicked at src/pty.rs:494:10:
+      # called `Result::unwrap()` on an `Err` value: EBADF: Bad file number
+      "--skip=pty::tests::exec_quick"
+    ];
 
     strictDeps = true;
 

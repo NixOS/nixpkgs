@@ -20,15 +20,15 @@
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nix = nixVersions.nix_2_28;
   common = rec {
-    version = "2.7.0";
+    version = "2.6.4";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-VPUX/68ysFUr1S8JW9I1rU5UcRoyZiCjL+9u2owrs6w=";
+      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
     };
 
     nativeBuildInputs = [
@@ -102,10 +102,7 @@ in
       ];
 
       buildInputs = [
-        nixComponents.nix-main
-        nixComponents.nix-expr
-        nixComponents.nix-cmd
-        nixComponents.nix-flake
+        nix
         gtest
         boost
       ];
@@ -129,10 +126,7 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nixComponents.nix-main
-        nixComponents.nix-expr
-        nixComponents.nix-cmd
-        nixComponents.nix-flake
+        nix
         nixf
         nixt
         llvmPackages.llvm

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -34,7 +33,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     export HOME=$(mktemp -d)
     installShellCompletion --cmd qc \
       --bash <($out/bin/qc completion bash) \

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.8.1";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pyfronius";
     tag = version;
-    hash = "sha256-Q1GMt9K9+wohFogXwGyAhyfSxSsmo+80Kca7F7VhksA=";
+    hash = "sha256-Ns4OpBvj40aQkCBTnKHMTSpyNu5zgfXDtmz1aW3bmEU=";
   };
 
   build-system = [ setuptools ];

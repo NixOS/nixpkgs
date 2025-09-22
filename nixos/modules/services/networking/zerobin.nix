@@ -44,7 +44,7 @@ in
       };
 
       listenPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 8000;
         example = 1357;
         description = ''

@@ -164,8 +164,7 @@ let
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     # "libwebp"
-    "libxml"
-    "libxslt" # depends on libxml, always remove or re-add as a pair
+    "libxslt"
     # "opus"
   ];
 
@@ -812,7 +811,15 @@ let
       // (extraAttrs.gnFlags or { })
     );
 
-    preConfigure = lib.optionalString (!isElectron) ''
+    # TODO: Migrate this to env.RUSTC_BOOTSTRAP next mass-rebuild.
+    # Chromium expects nightly/bleeding edge rustc features to be available.
+    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
+    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
+    # enable those features in our stable builds.
+    preConfigure = ''
+      export RUSTC_BOOTSTRAP=1
+    ''
+    + lib.optionalString (!isElectron) ''
       (
         cd third_party/node
         grep patch update_npm_deps | sh
@@ -833,11 +840,6 @@ let
       runHook postConfigure
     '';
 
-    # Chromium expects nightly/bleeding edge rustc features to be available.
-    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
-    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
-    # enable those features in our stable builds.
-    env.RUSTC_BOOTSTRAP = 1;
     # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).

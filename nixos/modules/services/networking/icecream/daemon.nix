@@ -79,7 +79,7 @@ in
       };
 
       nice = mkOption {
-        type = types.ints.between (-20) 19;
+        type = types.int;
         default = 5;
         description = ''
           The level of niceness to use.

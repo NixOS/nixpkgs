@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
   version = "5.3.1";
 
   src = fetchFromGitHub {
-    owner = "blightmud";
-    repo = "blightmud";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };

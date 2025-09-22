@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   gitMinimal,
@@ -56,7 +55,7 @@ buildGoModule rec {
     unset GOOS GOARCH GOARM
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ko \
       --bash <($out/bin/ko completion bash) \
       --fish <($out/bin/ko completion fish) \

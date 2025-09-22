@@ -37,8 +37,7 @@ buildPythonPackage rec {
     substituteInPlace tests/test_while_loop.py \
       --replace-fail "speed < 0.1" "speed < 0.5" \
       --replace-fail "speed < 0.5" "speed < 1" \
-      --replace-fail "speed < 1" "speed < 20" \
-      --replace-fail "speed < 2" "speed < 20"
+      --replace-fail "speed < 1" "speed < 20"
   '';
 
   build-system = [ hatchling ];

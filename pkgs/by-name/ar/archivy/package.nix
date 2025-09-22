@@ -24,12 +24,12 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "archivy";
-  version = "1.7.7";
+  version = "1.7.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XFzWD4KAW5jt5BwXZvO0iZdJKpzC6dRkxNLv5N8XUfc=";
+    hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
   };
 
   build-system = with py.pkgs; [

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -35,7 +34,7 @@ buildGoModule rec {
       "-X ${t}.gitVersion=v${version}"
     ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     # errors attempting to write config to read-only $HOME
     export HOME=$TMPDIR
 

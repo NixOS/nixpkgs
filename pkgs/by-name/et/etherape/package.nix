@@ -6,6 +6,7 @@
   libtool,
   gtk3,
   libpcap,
+  goocanvas2,
   popt,
   itstool,
   libxml2,
@@ -13,13 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "etherape";
-  version = "0.9.21";
+  version = "0.9.20";
   src = fetchurl {
     url = "mirror://sourceforge/etherape/etherape-${version}.tar.gz";
-    sha256 = "sha256-SckN87uIDTxg36xERMqPxdaLqPNrgg7V+Hc4HJoHF1w=";
+    sha256 = "sha256-9UsQtWOXB1yYofGS4rMIF+ISWBsJKd0DBOFfqOr1n5Y=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     itstool
@@ -30,6 +29,7 @@ stdenv.mkDerivation rec {
     libtool
     gtk3
     libpcap
+    goocanvas2
     popt
   ];
 

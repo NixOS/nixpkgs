@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
       inherit openfortivpn;
     })
     ./support-ppp-2.5.0.patch
-    ./pppd-accept-remote.patch
   ];
 
   strictDeps = true;

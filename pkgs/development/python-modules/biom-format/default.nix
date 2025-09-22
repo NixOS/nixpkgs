@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "biom-format";
-  version = "2.1.17";
+  version = "2.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biocore";
     repo = "biom-format";
     tag = version;
-    hash = "sha256-FjIC21LoqltixBstbbANByjTNxVm/3YCxdWaD9KbOQ0=";
+    hash = "sha256-E/6dIN8tdsu6cBVBW/BOeAQwJB9XRRL3flQZSKqIZlc=";
   };
 
   build-system = [

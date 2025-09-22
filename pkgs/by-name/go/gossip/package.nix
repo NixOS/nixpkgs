@@ -9,7 +9,6 @@
   libGL,
   libxkbcommon,
   makeDesktopItem,
-  copyDesktopItems,
   openssl,
   pkg-config,
   rustPlatform,
@@ -51,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
     rustPlatform.bindgenHook
-    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
@@ -112,7 +110,6 @@ rustPlatform.buildRustPackage rec {
         "InstantMessaging"
       ];
       startupWMClass = "gossip";
-      mimeTypes = [ "x-scheme-handler/nostr" ];
     })
   ];
 

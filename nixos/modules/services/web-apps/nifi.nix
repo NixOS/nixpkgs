@@ -37,7 +37,12 @@ in
     services.nifi = {
       enable = lib.mkEnableOption "Apache NiFi";
 
-      package = lib.mkPackageOption pkgs "nifi" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.nifi;
+        defaultText = lib.literalExpression "pkgs.nifi";
+        description = "Apache NiFi package to use.";
+      };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -69,7 +74,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.int;
         default = if cfg.enableHTTPS then 8443 else 8080;
         defaultText = lib.literalExpression ''
           if config.${opt.enableHTTPS}
@@ -91,7 +96,7 @@ in
       };
 
       proxyPort = lib.mkOption {
-        type = lib.types.nullOr lib.types.port;
+        type = lib.types.nullOr lib.types.int;
         default = if cfg.enableHTTPS then 8443 else null;
         defaultText = lib.literalExpression ''
           if config.${opt.enableHTTPS}

@@ -704,14 +704,14 @@ in
       };
 
       maxClients = mkOption {
-        type = types.ints.positive;
+        type = types.int;
         default = 150;
         example = 8;
         description = "Maximum number of httpd processes (prefork)";
       };
 
       maxRequestsPerChild = mkOption {
-        type = types.ints.unsigned;
+        type = types.int;
         default = 0;
         example = 500;
         description = ''

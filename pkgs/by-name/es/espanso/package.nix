@@ -140,6 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       kimat
+      pyrox0
       n8henrie
     ];
     platforms = platforms.unix;

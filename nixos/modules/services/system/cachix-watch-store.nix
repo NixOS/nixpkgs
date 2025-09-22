@@ -36,13 +36,13 @@ in
     };
 
     compressionLevel = lib.mkOption {
-      type = lib.types.nullOr (lib.types.ints.between 0 16);
+      type = lib.types.nullOr lib.types.int;
       description = "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
     jobs = lib.mkOption {
-      type = lib.types.nullOr lib.types.ints.positive;
+      type = lib.types.nullOr lib.types.int;
       description = "Number of threads used for pushing store paths";
       default = null;
     };

@@ -1,45 +1,51 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libspnav,
-  qt6,
-}:
+  libX11,
 
+  # Qt6 support is close: https://github.com/FreeSpacenav/spnavcfg/issues/43
+  libsForQt5,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spnavcfg";
-  version = "1.3";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spnavcfg";
     tag = "v${finalAttrs.version}";
     fetchLFS = true;
-    hash = "sha256-HYBb1/SgjayJjdA0N8UHPde3y4SugYiWIPP+3Eu3CEI=";
+    hash = "sha256-P3JYhZnaCxzJETwC4g5m4xAGBk28/Va7Z/ybqwacIaA=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/FreeSpacenav/spnavcfg/commit/fd9aa10fb8e19a257398757943b3d8e79906e583.patch";
+      hash = "sha256-XKEyLAFrA4qRU3zkBozblb/fKtLKsaItze0xv1uLnq0=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
-    qt6.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    libsForQt5.qtbase
     libspnav
+    libX11
   ];
 
-  configureFlags = [
-    "--qt6"
-    "--qt-tooldir=${qt6.qtbase}/libexec"
-  ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://spacenav.sourceforge.net/";
     description = "Interactive configuration GUI for space navigator input devices";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
     mainProgram = "spnavcfg";
   };
 })

@@ -10,7 +10,6 @@
   frigate,
   nixosTests,
   fetchpatch,
-  protobuf_21,
 }:
 
 let
@@ -38,11 +37,6 @@ let
           tag = version;
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
-      });
-      onnxruntime = super.onnxruntime.override (old: {
-        onnxruntime = old.onnxruntime.override (old: {
-          protobuf = protobuf_21;
-        });
       });
     };
   };

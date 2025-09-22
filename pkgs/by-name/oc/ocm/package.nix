@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -39,7 +38,7 @@ buildGoModule rec {
     "-skip=^TestCLI$"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ocm \
       --bash <($out/bin/ocm completion bash) \
       --fish <($out/bin/ocm completion fish) \

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -26,7 +25,7 @@ buildGoModule rec {
     "-X github.com/controlplaneio/badrobot/cmd.version=v${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd badrobot \
       --bash <($out/bin/badrobot completion bash) \
       --fish <($out/bin/badrobot completion fish) \

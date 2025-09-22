@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -33,7 +32,7 @@ buildGoModule rec {
 
   checkFlags = [ "-skip=TestCreateContextsWithIgnorePaths" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd kube-linter \
       --bash <($out/bin/kube-linter completion bash) \
       --fish <($out/bin/kube-linter completion fish) \

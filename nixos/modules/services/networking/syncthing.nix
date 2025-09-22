@@ -336,7 +336,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.port;
+                      type = types.nullOr types.int;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.

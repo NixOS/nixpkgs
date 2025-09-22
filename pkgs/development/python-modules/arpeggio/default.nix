@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "arpeggio";
-  version = "2.0.3";
+  version = "2.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Arpeggio";
     inherit version;
-    hash = "sha256-noWtNc/GyThnaBfHrpoQAKfHKjTHHbDGhxNsRg0SuF4=";
+    hash = "sha256-x5CysG4ibS3UaOT7+1t/UGzsZkFgMf3hRBzx3ioLpwA=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

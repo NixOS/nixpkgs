@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "plone-testing";
-  version = "9.0.7";
+  version = "9.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plone";
     repo = "plone.testing";
     tag = version;
-    hash = "sha256-5DaN0o/EaWwdMvmLW12zdNXJ3p6dowALJ10zrhUT3dA=";
+    hash = "sha256-EjKKwLUBhzjtk3stHkdUDsteXQGJcrwdu9EEA4FFK1w=";
   };
 
   build-system = [ setuptools ];

@@ -21,7 +21,14 @@ in
           issued by the `lorri` command.
         '';
       };
-      package = lib.mkPackageOption pkgs "lorri" { };
+      package = lib.mkOption {
+        default = pkgs.lorri;
+        type = lib.types.package;
+        description = ''
+          The lorri package to use.
+        '';
+        defaultText = lib.literalExpression "pkgs.lorri";
+      };
     };
   };
 

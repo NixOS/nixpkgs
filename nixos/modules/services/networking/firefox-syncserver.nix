@@ -101,7 +101,14 @@ in
         {option}`${opt.singleNode.enable}` does this automatically when enabled
       '';
 
-      package = lib.mkPackageOption pkgs "syncstorage-rs" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.syncstorage-rs;
+        defaultText = lib.literalExpression "pkgs.syncstorage-rs";
+        description = ''
+          Package to use.
+        '';
+      };
 
       database.name = lib.mkOption {
         # the mysql module does not allow `-quoting without resorting to shell

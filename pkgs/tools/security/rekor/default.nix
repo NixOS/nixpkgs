@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -53,7 +52,7 @@ let
         ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
       '';
 
-      postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      postInstall = ''
         installShellCompletion --cmd ${pname} \
           --bash <($out/bin/${pname} completion bash) \
           --fish <($out/bin/${pname} completion fish) \

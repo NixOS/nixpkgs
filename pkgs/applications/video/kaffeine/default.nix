@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
-    repo = "kaffeine";
+    repo = pname;
     owner = "Multimedia";
     rev = "v${version}";
     hash = "sha256-AHyUS2vyeuWFLRXdIoy1sbssDgzz7N957vyf5rWiooI=";

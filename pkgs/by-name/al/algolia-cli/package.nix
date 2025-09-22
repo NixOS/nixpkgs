@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -31,7 +30,7 @@ buildGoModule {
     "-X github.com/algolia/cli/pkg/version.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd algolia \
       --bash <($out/bin/algolia completion bash) \
       --fish <($out/bin/algolia completion fish) \

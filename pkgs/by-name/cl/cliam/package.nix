@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -34,7 +33,7 @@ buildGoModule rec {
     mv $GOPATH/bin/{cli,cliam}
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd cliam \
       --bash <($out/bin/cliam completion bash) \
       --fish <($out/bin/cliam completion fish) \

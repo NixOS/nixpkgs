@@ -638,7 +638,7 @@ in
           description = "External address used to access registry from the internet";
         };
         externalPort = mkOption {
-          type = types.port;
+          type = types.int;
           description = "External port used to access registry from the internet";
         };
       };
