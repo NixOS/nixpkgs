@@ -2141,6 +2141,21 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+    )
+    iserv-proxy
+    network
+    ;
 }
 
 // lib.optionalAttrs pkgs.config.allowAliases (

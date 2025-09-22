@@ -10,11 +10,59 @@
   runCommandCC,
   ghcWithHoogle,
   ghcWithPackages,
+  haskellLib,
+  iserv-proxy,
   nodejs,
+  writeShellScriptBin,
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  crossSupport = rec {
+    emulator = stdenv.hostPlatform.emulator buildPackages;
+
+    canProxyTH =
+      # iserv-proxy currently does not build on GHC 9.6
+      lib.versionAtLeast ghc.version "9.8" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+
+    iservWrapper =
+      let
+        wrapperScript =
+          enableProfiling:
+          let
+            overrides = haskellLib.overrideCabal {
+              enableLibraryProfiling = enableProfiling;
+              enableExecutableProfiling = enableProfiling;
+            };
+            buildProxy = lib.getExe' iserv-proxy.build "iserv-proxy";
+            hostProxy = lib.getExe' (overrides iserv-proxy.host) "iserv-proxy-interpreter";
+          in
+          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
+            set -euo pipefail
+            PORT=$((5000 + $RANDOM % 5000))
+            (>&2 echo "---> Starting interpreter on port $PORT")
+            ${emulator} ${hostProxy} tmp $PORT &
+            RISERV_PID="$!"
+            trap "kill $RISERV_PID" EXIT # Needs cleanup when building without sandbox
+            ${buildProxy} $@ 127.0.0.1 "$PORT"
+            (>&2 echo "---> killing interpreter...")
+          '';
+
+        # GHC will add `-prof` to the external interpreter when doing a profiled build.
+        # Since a single derivation can build with both profiling and non-profiling versions
+        # we need both versions made available
+        both = buildPackages.symlinkJoin {
+          name = "iserv-wrapper-both";
+          paths = map wrapperScript [
+            false
+            true
+          ];
+        };
+
+      in
+      "${both}/bin/iserv-wrapper";
+  };
 
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
@@ -205,9 +253,14 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false,
+
+  enableExternalInterpreter ? isCross && crossSupport.canProxyTH,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
+
+# We only use iserv-proxy for the external interpreter
+assert enableExternalInterpreter -> crossSupport.canProxyTH;
 
 # --enable-static does not work on windows. This is a bug in GHC.
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
@@ -298,7 +351,15 @@ let
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
   ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
+  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
+
+  ++ optionals enableExternalInterpreter (
+    map (opt: "--ghc-option=${opt}") [
+      "-fexternal-interpreter"
+      "-pgmi"
+      crossSupport.iservWrapper
+    ]
+  );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
