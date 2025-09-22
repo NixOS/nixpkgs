@@ -41,9 +41,9 @@ let
     ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${lib.boolToString cfg.clientCertRequired}
-    ${lib.optionalString (cfg.sslCert != null) "sslCert=${cfg.sslCert}"}
-    ${lib.optionalString (cfg.sslKey != null) "sslKey=${cfg.sslKey}"}
-    ${lib.optionalString (cfg.sslCa != null) "sslCA=${cfg.sslCa}"}
+    ${lib.optionalString (cfg.tls.certPath != null) "sslCert=${cfg.tls.certPath}"}
+    ${lib.optionalString (cfg.tls.keyPath != null) "sslKey=${cfg.tls.keyPath}"}
+    ${lib.optionalString (cfg.tls.caPath != null) "sslCA=${cfg.tls.caPath}"}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -58,6 +58,12 @@ in
       "murmur"
       "logFile"
     ] "This option has been superseded by services.murmur.logToFile")
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslCa" ] [ "services" "murmur" "tls" "caPath" ])
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslKey" ] [ "services" "murmur" "tls" "keyPath" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "murmur" "sslCert" ]
+      [ "services" "murmur" "tls" "certPath" ]
+    )
   ];
 
   options = {
@@ -237,22 +243,24 @@ in
 
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
-      sslCert = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL certificate.";
-      };
+      tls = {
+        certPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to your TLS certificate.";
+        };
 
-      sslKey = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL key.";
-      };
+        keyPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to your TLS key.";
+        };
 
-      sslCa = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to your SSL CA certificate.";
+        caPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to your TLS CA certificate.";
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -422,14 +430,14 @@ in
         ${lib.optionalString cfg.logToFile ''
           /var/log/murmur/murmurd.log rw,
         ''}
-        ${lib.optionalString (cfg.sslCert != null) ''
-          ${cfg.sslCert} r,
+        ${lib.optionalString (cfg.tls.certPath != null) ''
+          ${cfg.tls.certPath} r,
         ''}
-        ${lib.optionalString (cfg.sslKey != null) ''
-          ${cfg.sslKey} r,
+        ${lib.optionalString (cfg.tls.keyPath != null) ''
+          ${cfg.tls.keyPath} r,
         ''}
-        ${lib.optionalString (cfg.sslCa != null) ''
-          ${cfg.sslCa} r,
+        ${lib.optionalString (cfg.tls.caPath != null) ''
+          ${cfg.tls.caPath} r,
         ''}
         ${lib.optionalString (cfg.dbus != null) ''
           dbus bus=${cfg.dbus},
