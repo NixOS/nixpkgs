@@ -25,6 +25,11 @@ in
       description = ''
         Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
         for supported values.
+
+        ::: {.warning}
+        Since n8n 1.70.0, the configuration file is deprecated.
+        Use `services.n8n.environment` instead.
+        :::
       '';
     };
 
@@ -34,33 +39,62 @@ in
       description = ''
         WEBHOOK_URL for n8n, in case we're running behind a reverse proxy.
         This cannot be set through configuration and must reside in an environment variable.
+
+        ::: {.warning}
+        This option is deprecated. Use `services.n8n.environment.WEBHOOK_URL` instead.
+        :::
+      '';
+    };
+
+    environment = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        WEBHOOK_URL = "https://n8n.example.com/";
+        N8N_PORT = "5678";
+      };
+      description = ''
+        Environment variables to pass to the n8n service.
+        See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
       '';
     };
 
   };
 
   config = lib.mkIf cfg.enable {
-    services.n8n.settings = {
+    warnings =
+      lib.optional (cfg.settings != { }) ''
+        services.n8n.settings is deprecated, please use services.n8n.environment instead.
+      ''
+      ++ lib.optional (cfg.webhookUrl != "") ''
+        services.n8n.webhookUrl is deprecated, please use services.n8n.environment.WEBHOOK_URL instead.
+      '';
+
+    services.n8n.environment = rec {
+      # This folder must be writeable as the application is storing
+      # its data in it, so the StateDirectory is a good choice
+      N8N_USER_FOLDER = lib.mkDefault "/var/lib/n8n";
+      HOME = N8N_USER_FOLDER;
+
       # We use this to open the firewall, so we need to know about the default at eval time
-      port = lib.mkDefault 5678;
+      N8N_PORT = lib.mkDefault "5678";
+
+      # Don't phone home
+      N8N_DIAGNOSTICS_ENABLED = lib.mkDefault "false";
+      N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkDefault "false";
+    }
+    // lib.optionalAttrs (cfg.webhookUrl != "") {
+      WEBHOOK_URL = cfg.webhookUrl;
+    }
+    // lib.optionalAttrs (cfg.settings != { }) {
+      N8N_CONFIG_FILES = "${configFile}";
     };
 
     systemd.services.n8n = {
       description = "N8N service";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = {
-        # This folder must be writeable as the application is storing
-        # its data in it, so the StateDirectory is a good choice
-        N8N_USER_FOLDER = "/var/lib/n8n";
-        HOME = "/var/lib/n8n";
-        N8N_CONFIG_FILES = "${configFile}";
-        WEBHOOK_URL = "${cfg.webhookUrl}";
-
-        # Don't phone home
-        N8N_DIAGNOSTICS_ENABLED = "false";
-        N8N_VERSION_NOTIFICATIONS_ENABLED = "false";
-      };
+      environment = cfg.environment;
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.n8n}/bin/n8n";
@@ -88,7 +122,7 @@ in
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.port ];
+      allowedTCPPorts = [ (lib.toInt cfg.environment.N8N_PORT) ];
     };
   };
 }
