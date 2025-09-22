@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.9.0";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,13 +25,8 @@ buildPythonPackage rec {
     owner = "dipy";
     repo = "dipy";
     tag = version;
-    hash = "sha256-6cpxuk2PL43kjQ+6UGiUHUXC7pC9OlW9kZvGOdEXyzw=";
+    hash = "sha256-vqjd5gd9B630pv6H4MvXnlPwlEhm1o7MbwYD0J7D24o=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy==" "numpy>="
-  '';
 
   build-system = [
     cython
