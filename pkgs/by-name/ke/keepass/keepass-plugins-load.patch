@@ -1,0 +1,1 @@
++			m_pluginManager.LoadAllPlugins("$PATH$/lib/dotnet/keepass", System.IO.SearchOption.TopDirectoryOnly, new string[] {});

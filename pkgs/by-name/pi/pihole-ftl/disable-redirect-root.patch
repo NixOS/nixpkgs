@@ -1,0 +1,45 @@
+From 14311f18ae9427a0baa1e0cb67198580d9d2dc69 Mon Sep 17 00:00:00 2001
+From: averyvigolo <avery@averyv.me>
+Date: Sun, 24 Aug 2025 18:35:37 +0100
+Subject: [PATCH] Only use redirect_root_handler if webhome is set (fixes
+ #2518)
+
+This fixes an infinite redirect on the home page when authentication is enabled.
+The redirects are caused by XHR calls to the API, which receive a 401 response, and
+the error handlers simply reload the page.
+
+If webhome is not set, the default request handler should be used to properly
+handle authentication. So, conditionally enable redirect_root_handler, if
+webhome is not empty or `/`. This fixes the problem, as there's an immediate
+redirect to /login, before any XHR calls.
+
+Remove the initial fix in https://github.com/pi-hole/FTL/pull/2521, as it is no
+longer necessary. That fix involved checking in redirect_root_handler, if the
+redirect destination is the same as the request URI.
+
+Signed-off-by: averyvigolo <avery@averyv.me>
+---
+ src/webserver/webserver.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/src/webserver/webserver.c b/src/webserver/webserver.c
+index e0999d230..c3e32a35c 100644
+--- a/src/webserver/webserver.c
++++ b/src/webserver/webserver.c
+@@ -720,7 +714,14 @@ void http_init(void)
+ 	// prefix should be stripped away by the reverse proxy
+ 	mg_set_request_handler(ctx, "/api", api_handler, NULL);
+ 
+-	mg_set_request_handler(ctx, "/$", redirect_root_handler, NULL);
++	if(strcmp(prefix_webhome, "/") == 0 || strlen(prefix_webhome) == 0)
++	{
++		log_debug(DEBUG_API, "Not redirecting root since webhome is '%s'",
++			  prefix_webhome);
++	} else {
++		// Redirect requests to / to the webhome path.
++		mg_set_request_handler(ctx, "/$", redirect_root_handler, NULL);
++	}
+ 
+ 	if(strcmp(config.webserver.paths.webhome.v.s, "/") == 0 &&
+ 	   config.dns.blocking.mode.v.blocking_mode == MODE_IP)
+

@@ -1,0 +1,17 @@
+<Project>
+  <Target Name="SignAppHost" AfterTargets="_CreateAppHost"
+          Condition="'$(AppHostIntermediatePath)' != ''
+                     and ($(RuntimeIdentifier.StartsWith('osx')) or $(AppHostRuntimeIdentifier.StartsWith('osx')))">
+    <Exec Command='@codesign@ -f -s - "$(AppHostIntermediatePath)" 2>&amp;1'/>
+  </Target>
+  <Target Name="UnsignBundle" BeforeTargets="GenerateSingleFileBundle"
+          Condition="'$(PublishedSingleFileName)' != ''
+                     and ($(RuntimeIdentifier.StartsWith('osx')) or $(AppHostRuntimeIdentifier.StartsWith('osx')))">
+    <Exec Command='@codesign@ --remove-signature "@(FilesToBundle)" 2>&amp;1' Condition="'%(FilesToBundle.RelativePath)' == '$(PublishedSingleFileName)'"/>
+  </Target>
+  <Target Name="SignBundle" AfterTargets="GenerateSingleFileBundle"
+          Condition="'$(PublishedSingleFilePath)' != ''
+                     and ($(RuntimeIdentifier.StartsWith('osx')) or $(AppHostRuntimeIdentifier.StartsWith('osx')))">
+    <Exec Command='@codesign@ -f -s - "$(PublishedSingleFilePath)" 2>&amp;1'/>
+  </Target>
+</Project>

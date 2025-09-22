@@ -1,0 +1,16 @@
+The 4.09.1 tarball appears to have been acidentally generated as a
+development tarball, which causes configure to enable -Werror.  This
+means newer compilers will make the build fail.
+
+diff a/configure b/configure
+--- a/configure
++++ b/configure
+@@ -12360,7 +12360,7 @@ case $ocaml_cv_cc_vendor in #(
+   msvc-*) :
+     outputobj=-Fo; CPP="cl -nologo -EP"; gcc_warnings="" ;; #(
+   *) :
+-    outputobj='-o $(EMPTY)'; case 4.09.1+dev1-2020-03-13 in #(
++    outputobj='-o $(EMPTY)'; case 4.09.1 in #(
+   *+dev*) :
+     gcc_warnings="-Wall -Werror" ;; #(
+   *) :

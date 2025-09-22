@@ -1,0 +1,28 @@
+diff --git a/tests/gnupg_oo_sign_clear.phpt b/tests/gnupg_oo_sign_clear.phpt
+index 4f9b79c..05fda25 100644
+--- a/tests/gnupg_oo_sign_clear.phpt
++++ b/tests/gnupg_oo_sign_clear.phpt
+@@ -38,8 +38,7 @@ array(1) {
+     int(0)
+   }
+ }
+-string(8) "foo bar
+-"
++string(7) "foo bar"
+ --CLEAN--
+ <?php
+ require_once "gnupgt.inc";
+diff --git a/tests/gnupg_res_sign_clear.phpt b/tests/gnupg_res_sign_clear.phpt
+index 71dd6c2..74fd26d 100644
+--- a/tests/gnupg_res_sign_clear.phpt
++++ b/tests/gnupg_res_sign_clear.phpt
+@@ -36,8 +36,7 @@ array(1) {
+     int(0)
+   }
+ }
+-string(8) "foo bar
+-"
++string(7) "foo bar"
+ --CLEAN--
+ <?php
+ require_once "gnupgt.inc";

@@ -1,0 +1,25 @@
+diff --git a/configure b/configure
+index 8fca0b9cb..5d9ee20ac 100755
+--- a/configure
++++ b/configure
+@@ -8239,13 +8239,13 @@ printf '%s\n' "no" >&6; }
+ fi
+ 
+ 
+-if test "$HAVE_COL" != "yes" ; then
+-        if test $host_os != mingw32; then
+-                as_fn_error $? "Couldn't find 'col'" "$LINENO" 5
+-        else
+-                as_fn_error $? "Couldn't find 'col' (install 'util-linux' in Cygwin)" "$LINENO" 5
+-        fi
+-fi
++#if test "$HAVE_COL" != "yes" ; then
++#        if test $host_os != mingw32; then
++#                as_fn_error $? "Couldn't find 'col'" "$LINENO" 5
++#        else
++#                as_fn_error $? "Couldn't find 'col' (install 'util-linux' in Cygwin)" "$LINENO" 5
++#        fi
++#fi
+ 
+ if test $host_os != mingw32; then
+     { printf '%s\n' "$as_me:${as_lineno-$LINENO}: checking for pseudo random number device" >&5

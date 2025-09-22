@@ -1,0 +1,13 @@
+diff --git a/src/InputMethod/Widgets/AddEngineDialog.vala b/src/InputMethod/Widgets/AddEngineDialog.vala
+index 0a7f6013..a16904eb 100644
+--- a/src/InputMethod/Widgets/AddEngineDialog.vala
++++ b/src/InputMethod/Widgets/AddEngineDialog.vala
+@@ -70,8 +70,6 @@ public class Keyboard.InputMethodPage.AddEngineDialog : Granite.Dialog {
+ 
+         get_content_area ().append (frame);
+ 
+-        var install_button = add_button (_("Install Unlisted Engines…"), Gtk.ResponseType.OK);
+-
+         var cancel_button = add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
+ 
+         var add_button = add_button (_("Add Engine"), Gtk.ResponseType.ACCEPT);

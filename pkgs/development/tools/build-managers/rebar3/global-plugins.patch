@@ -1,0 +1,14 @@
+diff --git a/apps/rebar/src/rebar_plugins.erl b/apps/rebar/src/rebar_plugins.erl
+index 469be42e..3a901cbe 100644
+--- a/apps/rebar/src/rebar_plugins.erl
++++ b/apps/rebar/src/rebar_plugins.erl
+@@ -31,7 +31,8 @@ project_plugins_install(State) ->
+ top_level_install(State) ->
+     Profiles = rebar_state:current_profiles(State),
+     lists:foldl(fun(Profile, StateAcc) ->
+-                        Plugins = rebar_state:get(State, {plugins, Profile}, []),
++                        Plugins = rebar_state:get(State, {plugins, Profile}, [])
++                            ++ [list_to_atom(P) || P <- string:lexemes(os:getenv("REBAR_GLOBAL_PLUGINS", ""), " ")],
+                         handle_plugins(Profile, Plugins, StateAcc)
+                 end, State, Profiles).
+ 

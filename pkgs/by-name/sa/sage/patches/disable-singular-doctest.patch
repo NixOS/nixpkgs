@@ -1,0 +1,36 @@
+From d6362714c9acf4cab69f3e2e772ec0bb1dfd39fe Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Mon, 22 Jul 2024 00:37:53 -0500
+Subject: [PATCH] disable singular version doctest to avoid exceeding the stack
+ limit
+
+It works fine interactively, only an issue for Nix builds
+---
+ src/sage/interfaces/singular.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/sage/interfaces/singular.py b/src/sage/interfaces/singular.py
+index c0ab80e0a6..c778acdb0c 100644
+--- a/src/sage/interfaces/singular.py
++++ b/src/sage/interfaces/singular.py
+@@ -1262,7 +1262,7 @@ class Singular(ExtraTabCompletion, Expect):
+ 
+         EXAMPLES::
+ 
+-            sage: singular.version()
++            sage: singular.version() # not tested
+             "Singular ... version 4...
+         """
+         return singular_version()
+@@ -2475,7 +2475,7 @@ def singular_version():
+ 
+     EXAMPLES::
+ 
+-        sage: singular.version()
++        sage: singular.version() # not tested
+         "Singular ... version 4...
+     """
+     return singular.eval('system("--version");')
+-- 
+2.44.1
+

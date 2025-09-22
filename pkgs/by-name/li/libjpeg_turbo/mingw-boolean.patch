@@ -1,0 +1,18 @@
+Ported to updated libjpeg-turbo from
+https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-libjpeg-turbo/jpeg-typedefs.patch
+--- a/src/jmorecfg.h
++++ b/src/jmorecfg.h
+@@ -200,6 +200,13 @@
+  */
+ 
+ #ifndef HAVE_BOOLEAN
++#if defined(_WIN32) && !defined(HAVE_BOOLEAN)
++#ifndef __RPCNDR_H__
++typedef unsigned char boolean;
++#endif
++#define HAVE_BOOLEAN
++#endif
++#if !defined(HAVE_BOOLEAN) && !defined(__RPCNDR_H__)
+ typedef int boolean;
+ #endif
+ #ifndef FALSE                   /* in case these macros already exist */

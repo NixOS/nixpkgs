@@ -1,0 +1,12 @@
+diff --git a/porttime/ptmacosx_mach.c b/porttime/ptmacosx_mach.c
+index 10c3554..712a974 100755
+--- a/porttime/ptmacosx_mach.c
++++ b/porttime/ptmacosx_mach.c
+@@ -12,6 +12,7 @@
+ 
+ #include "porttime.h"
+ #include "sys/time.h"
++#include "sys/qos.h"
+ #include "pthread.h"
+ 
+ #ifndef NSEC_PER_MSEC

@@ -1,0 +1,159 @@
+name: "Unreproducible Package"
+description: "Report a package that does not produce a bit-by-bit reproducible result each time it is built."
+title: "Unreproducible Package: PACKAGENAME"
+labels: ["0.kind: enhancement", "6.topic: reproducible builds"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        Welcome to Nixpkgs. Please replace the **`Unreproducible Package: PACKAGENAME`** template above with the correct package name (As seen in the [NixOS Package Search](https://search.nixos.org/packages)).
+
+        > [!NOTE]
+        > This form is for reporting unreproducible packages. For more information, see the [Reproducible Builds Status](https://reproducible.nixos.org/) page.
+        >
+        > To report a package that fails to build entirely, please use the "Build Failure" form instead.
+
+        ---
+  - type: "input"
+    id: "version"
+    attributes:
+      label: "Nixpkgs Revision"
+      description: "In which commit of Nixpkgs is this package displaying unreproducibility?"
+  - type: "textarea"
+    id: "introduction"
+    attributes:
+      label: "Introduction"
+      description: |
+        This is a generic introduction to build reproducibility.
+        Please replace **PACKAGENAME** below with the canonical package name of the package, as you have done for the title above.
+      value: |
+        Building **PACKAGENAME** multiple times does not yield bit-by-bit identical
+        results, complicating the detection of Continuous Integration (CI) breaches. For
+        more information on this issue, visit [reproducible-builds.org](https://reproducible-builds.org/).
+
+        Fixing bit-by-bit reproducibility also has additional advantages, such as
+        avoiding hard-to-reproduce bugs, making content-addressed storage more effective
+        and reducing rebuilds in such systems.
+    validations:
+      required: true
+  - type: "textarea"
+    id: "how-to-reproduce"
+    attributes:
+      label: "Steps to reproduce"
+      description: |
+        This is a step-by-step instruction set meant for maintainers to debug the package that is failing to reproduce. You should also follow it to gather the `diffoscope` logs that will be needed below.
+        Please replace **PACKAGENAME** below with the canonical package name of the package, as you have done for the introduction and the title above.
+      value: |
+        ### 1. Build the package
+
+        This step will build the package. Specific arguments are passed to the command
+        to keep the build artifacts so we can compare them in case of differences.
+
+        Execute the following command:
+
+        ```
+        nix-build '<nixpkgs>' -A PACKAGENAME && nix-build '<nixpkgs>' -A PACKAGENAME --check --keep-failed
+        ```
+
+        Or using the new command line style:
+
+        ```
+        nix build nixpkgs#PACKAGENAME && nix build nixpkgs#PACKAGENAME --rebuild --keep-failed
+        ```
+
+        ### 2. Compare the build artifacts
+
+        If the previous command completes successfully, no differences were found and
+        there's nothing to do, builds are reproducible.
+        If it terminates with the error message `error: derivation '<X>' may not be
+        deterministic: output '<Y>' differs from '<Z>'`, use `diffoscope` to investigate
+        the discrepancies between the two build outputs. You may need to add the
+        `--exclude-directory-metadata recursive` option to ignore files and directories
+        metadata (*e.g. timestamp*) differences.
+
+        ```
+        nix run nixpkgs#diffoscopeMinimal -- --exclude-directory-metadata recursive <Y> <Z>
+        ```
+
+        ### 3. Examine the build log
+
+        To examine the build log, use:
+
+        ```
+        nix-store --read-log $(nix-instantiate '<nixpkgs>' -A PACKAGENAME)
+        ```
+
+        Or with the new command line style:
+
+        ```
+        nix log $(nix path-info --derivation nixpkgs#PACKAGENAME)
+        ```
+    validations:
+      required: true
+  - type: "textarea"
+    id: "logs"
+    attributes:
+      label: "Diffoscope log"
+      description: |
+        Please copy and paste the relevant `diffoscope` log output, gathered from the steps above.
+        This will be automatically formatted into a monospaced text block, so no need for backticks.
+      render: "console"
+  - type: "textarea"
+    id: "additional-context"
+    attributes:
+      label: "Additional context"
+      description: "Add any other context about the problem here."
+    validations:
+      required: false
+    id: "maintainers"
+    attributes:
+      label: "Notify maintainers"
+      description: |
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+      value: |2
+
+
+        ---
+
+        **Note for maintainers:** Please tag this issue in your pull request description. (i.e. `Resolves #ISSUE`.)
+    validations:
+      required: false
+  - type: "checkboxes"
+    id: "sanity-check"
+    attributes:
+      label: "I assert that this issue is relevant for Nixpkgs"
+      options:
+        - label: "I assert that this is not a [duplicate of any known issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%226.topic%3A+reproducible+builds%22)."
+          required: true
+        - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+  - type: "markdown"
+    attributes:
+      value: |
+        # Thank you for helping improve Nixpkgs!
+
+        ---
+  - type: "textarea"
+    id: "prioritisation"
+    attributes:
+      label: "Is this issue important to you?"
+      description: |
+        **Please do not modify this text area!**
+
+        This template helps Nixpkgs developers know which issues should be prioritised by allowing users to vote with a :+1: reaction.
+        This is not a guarantee that highly-requested issues will be fixed first, but it helps us to figure out what's important to users. Please react on other users' issues if you find them important.
+      value: |
+        Add a :+1: [reaction] to [issues you find important].
+
+        [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+        [issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

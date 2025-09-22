@@ -1,0 +1,41 @@
+From 0e9e686c902935c0f00afdf9d0d45f9635995988 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Sat, 15 Jan 2022 05:00:37 +0100
+Subject: [PATCH] Add dbus-glib dependency to main
+
+It is required through the ipc header and the build will fail without it on Nix:
+
+	In file included from /build/source/src/main/search_sidebar.cc:48:
+	/build/source/src/gui/ipc.h:26:10: fatal error: dbus/dbus-glib.h: No such file or directory
+	   26 | #include <dbus/dbus-glib.h>
+	      |          ^~~~~~~~~~~~~~~~~~
+	compilation terminated.
+---
+ src/main/CMakeLists.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/main/CMakeLists.txt b/src/main/CMakeLists.txt
+index 49b86371..bb8e4bb6 100644
+--- a/src/main/CMakeLists.txt
++++ b/src/main/CMakeLists.txt
+@@ -77,6 +77,17 @@
+   PkgConfig::Biblesync
+   )
+
++IF (DBUS)
++  target_include_directories (main
++    PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
++    PkgConfig::DBus
++    )
++  target_link_libraries(main
++    PRIVATE
++    PkgConfig::DBus
++    )
++ENDIF (DBUS)
++
+ if(WK_FOUND)
+   target_compile_definitions(main
+     PRIVATE
+-- 
+2.34.1
+

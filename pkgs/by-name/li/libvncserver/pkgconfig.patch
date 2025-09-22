@@ -1,0 +1,28 @@
+diff --git a/src/libvncclient/libvncclient.pc.cmakein b/src/libvncclient/libvncclient.pc.cmakein
+index ceeda39d..2516e643 100644
+--- a/src/libvncclient/libvncclient.pc.cmakein
++++ b/src/libvncclient/libvncclient.pc.cmakein
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
+-includedir=@CMAKE_INSTALL_PREFIX@/include
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: LibVNCClient
+ Description: A library for easy implementation of a VNC client.
+diff --git a/src/libvncserver/libvncserver.pc.cmakein b/src/libvncserver/libvncserver.pc.cmakein
+index 33ec6685..57244742 100644
+--- a/src/libvncserver/libvncserver.pc.cmakein
++++ b/src/libvncserver/libvncserver.pc.cmakein
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
+-includedir=@CMAKE_INSTALL_PREFIX@/include
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: LibVNCServer
+ Description: A library for easy implementation of a VNC server.

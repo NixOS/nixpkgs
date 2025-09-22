@@ -1,0 +1,19 @@
+diff --git a/src/main/settings.ts b/src/main/settings.ts
+index 6fad97f..dfc64e3 100644
+--- a/src/main/settings.ts
++++ b/src/main/settings.ts
+@@ -26,8 +26,12 @@ function loadSettings<T extends object = any>(file: string, name: string) {
+ 
+     const store = new SettingsStore(settings);
+     store.addGlobalChangeListener(o => {
+-        mkdirSync(dirname(file), { recursive: true });
+-        writeFileSync(file, JSON.stringify(o, null, 4));
++        try {
++            mkdirSync(dirname(file), { recursive: true });
++            writeFileSync(file, JSON.stringify(o, null, 4));
++        } catch (e) {
++            console.error("Nix: Failed to write settings.", e);
++        }
+     });
+ 
+     return store;

@@ -1,0 +1,12 @@
+diff --git a/ext/tokenizer/Makefile.frag b/ext/tokenizer/Makefile.frag
+index 745cbfce91..07bace6022 100644
+--- a/ext/tokenizer/Makefile.frag
++++ b/ext/tokenizer/Makefile.frag
+@@ -1,5 +1,5 @@
+-$(top_srcdir)/ext/tokenizer/tokenizer_data.c: $(top_srcdir)/Zend/zend_language_parser.y
++$(top_srcdir)/tokenizer_data.c: $(top_srcdir)/../../Zend/zend_language_parser.y
+ 	@if test ! -z "$(PHP)"; then \
+ 		$(PHP) $(srcdir)/tokenizer_data_gen.php; \
+ 	fi;
+-$(builddir)/tokenizer.lo: $(top_srcdir)/Zend/zend_language_parser.c $(top_srcdir)/Zend/zend_language_scanner.c
++$(builddir)/tokenizer.lo: $(top_srcdir)/../../Zend/zend_language_parser.c $(top_srcdir)/../../Zend/zend_language_scanner.c

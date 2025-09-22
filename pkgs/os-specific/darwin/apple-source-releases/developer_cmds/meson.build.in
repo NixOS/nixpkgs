@@ -1,0 +1,92 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/developer_cmds/blob/main/developer_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('developer_cmds', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Binaries
+executable(
+    'asa',
+    install : true,
+    sources : [ 'asa/asa.c' ],
+)
+install_man('asa/asa.1')
+
+executable(
+    'ctags',
+    install : true,
+    sources : [
+        'ctags/C.c',
+        'ctags/ctags.c',
+        'ctags/fortran.c',
+        'ctags/lisp.c',
+        'ctags/print.c',
+        'ctags/tree.c',
+        'ctags/yacc.c',
+    ],
+)
+install_man('ctags/ctags.1')
+
+executable(
+    'indent',
+    install : true,
+    sources : [
+        'indent/args.c',
+        'indent/indent.c',
+        'indent/io.c',
+        'indent/lexi.c',
+        'indent/parse.c',
+        'indent/pr_comment.c',
+    ],
+)
+install_man('indent/indent.1')
+
+install_data(
+    'lorder/lorder.sh',
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'lorder'
+)
+install_man('lorder/lorder.1')
+
+executable(
+    'rpcgen',
+    install : true,
+    sources : [
+        'rpcgen/rpc_clntout.c',
+        'rpcgen/rpc_cout.c',
+        'rpcgen/rpc_hout.c',
+        'rpcgen/rpc_main.c',
+        'rpcgen/rpc_parse.c',
+        'rpcgen/rpc_sample.c',
+        'rpcgen/rpc_scan.c',
+        'rpcgen/rpc_svcout.c',
+        'rpcgen/rpc_tblout.c',
+        'rpcgen/rpc_util.c',
+    ],
+)
+install_man('rpcgen/rpcgen.1')
+
+executable(
+    'unifdef',
+    install : true,
+    sources : [ 'unifdef/unifdef.c' ],
+)
+install_man('unifdef/unifdef.1')
+
+install_data(
+    'unifdef/unifdefall.sh',
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'unifdefall',
+)
+install_symlink(
+    'unifdefall.1',
+    install_dir : get_option('mandir') / 'man1',
+    pointing_to : 'unifdef.1',
+)

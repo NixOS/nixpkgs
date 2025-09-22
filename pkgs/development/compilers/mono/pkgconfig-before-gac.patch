@@ -1,0 +1,65 @@
+diff -Naur mono-4.0.1.old/mcs/tools/xbuild/data/12.0/Microsoft.Common.targets mono-4.0.1/mcs/tools/xbuild/data/12.0/Microsoft.Common.targets
+--- mono-4.0.1.old/mcs/tools/xbuild/data/12.0/Microsoft.Common.targets	2015-04-24 02:26:18.000000000 +0100
++++ mono-4.0.1/mcs/tools/xbuild/data/12.0/Microsoft.Common.targets	2015-05-26 00:52:33.997847464 +0100
+@@ -229,8 +229,8 @@
+ 			$(ReferencePath);
+ 			@(AdditionalReferencePath);
+ 			{HintPathFromItem};
+-			{TargetFrameworkDirectory};
+ 			{PkgConfig};
++			{TargetFrameworkDirectory};
+ 			{GAC};
+ 			{RawFileName};
+ 			$(OutDir)
+diff -Naur mono-4.0.1.old/mcs/tools/xbuild/data/14.0/Microsoft.Common.targets mono-4.0.1/mcs/tools/xbuild/data/14.0/Microsoft.Common.targets
+--- mono-4.0.1.old/mcs/tools/xbuild/data/14.0/Microsoft.Common.targets	2015-04-24 02:26:18.000000000 +0100
++++ mono-4.0.1/mcs/tools/xbuild/data/14.0/Microsoft.Common.targets	2015-05-26 00:52:41.832612748 +0100
+@@ -214,8 +214,8 @@
+ 			$(ReferencePath);
+ 			@(AdditionalReferencePath);
+ 			{HintPathFromItem};
+-			{TargetFrameworkDirectory};
+ 			{PkgConfig};
++			{TargetFrameworkDirectory};
+ 			{GAC};
+ 			{RawFileName};
+ 			$(OutDir)
+diff -Naur mono-4.0.1.old/mcs/tools/xbuild/data/2.0/Microsoft.Common.targets mono-4.0.1/mcs/tools/xbuild/data/2.0/Microsoft.Common.targets
+--- mono-4.0.1.old/mcs/tools/xbuild/data/2.0/Microsoft.Common.targets	2015-04-24 02:26:18.000000000 +0100
++++ mono-4.0.1/mcs/tools/xbuild/data/2.0/Microsoft.Common.targets	2015-05-26 00:52:46.298478961 +0100
+@@ -139,8 +139,8 @@
+ 			$(ReferencePath);
+ 			@(AdditionalReferencePath);
+ 			{HintPathFromItem};
+-			{TargetFrameworkDirectory};
+ 			{PkgConfig};
++			{TargetFrameworkDirectory};
+ 			{GAC};
+ 			{RawFileName};
+ 			$(OutDir)
+diff -Naur mono-4.0.1.old/mcs/tools/xbuild/data/3.5/Microsoft.Common.targets mono-4.0.1/mcs/tools/xbuild/data/3.5/Microsoft.Common.targets
+--- mono-4.0.1.old/mcs/tools/xbuild/data/3.5/Microsoft.Common.targets	2015-04-24 02:26:18.000000000 +0100
++++ mono-4.0.1/mcs/tools/xbuild/data/3.5/Microsoft.Common.targets	2015-05-26 00:52:52.119304583 +0100
+@@ -167,8 +167,8 @@
+ 			$(ReferencePath);
+ 			@(AdditionalReferencePath);
+ 			{HintPathFromItem};
+-			{TargetFrameworkDirectory};
+ 			{PkgConfig};
++			{TargetFrameworkDirectory};
+ 			{GAC};
+ 			{RawFileName};
+ 			$(OutDir)
+diff -Naur mono-4.0.1.old/mcs/tools/xbuild/data/4.0/Microsoft.Common.targets mono-4.0.1/mcs/tools/xbuild/data/4.0/Microsoft.Common.targets
+--- mono-4.0.1.old/mcs/tools/xbuild/data/4.0/Microsoft.Common.targets	2015-04-24 02:26:18.000000000 +0100
++++ mono-4.0.1/mcs/tools/xbuild/data/4.0/Microsoft.Common.targets	2015-05-26 00:52:56.519172776 +0100
+@@ -229,8 +229,8 @@
+ 			$(ReferencePath);
+ 			@(AdditionalReferencePath);
+ 			{HintPathFromItem};
+-			{TargetFrameworkDirectory};
+ 			{PkgConfig};
++			{TargetFrameworkDirectory};
+ 			{GAC};
+ 			{RawFileName};
+ 			$(OutDir)

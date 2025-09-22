@@ -1,0 +1,12 @@
+diff --git a/stubs/dragen/src/host/infra/linux/infra_linux_utils.cpp b/stubs/dragen/src/host/infra/linux/infra_linux_utils.cpp
+index cd02cd4..c26e9cf 100644
+--- a/stubs/dragen/src/host/infra/linux/infra_linux_utils.cpp
++++ b/stubs/dragen/src/host/infra/linux/infra_linux_utils.cpp
+@@ -57,7 +57,6 @@ int GetDmiValue(const std::string& label, std::string& value)
+   FILE* dmiOutput = popen("sudo /usr/sbin/dmidecode -t 2", "r");
+   if (dmiOutput == NULL) {
+     perror("dmidecode popen");
+-    pclose(dmiOutput);
+     return -1;
+   }
+ 

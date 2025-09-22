@@ -1,0 +1,13 @@
+diff --git a/flit_gettext/utils.py b/flit_gettext/utils.py
+index dd1b135..1c8877c 100644
+--- a/flit_gettext/utils.py
++++ b/flit_gettext/utils.py
+@@ -7,7 +7,7 @@ def compile_gettext_translations(config):
+     """Compile gettext translations."""
+     print("\33[1m* Compiling gettext translations...\33[0m")
+ 
+-    msgfmt = shutil.which("msgfmt")
++    msgfmt = shutil.which("msgfmt") or "@msgfmt@"
+ 
+     if msgfmt is None:
+         raise OSError("msgfmt not found, please install gettext or check your PATH.")

@@ -1,0 +1,18 @@
+diff --git a/packages/service/scripts/patch.js b/packages/service/scripts/patch.js
+index 2d01f3a..f26c216 100644
+--- a/packages/service/scripts/patch.js
++++ b/packages/service/scripts/patch.js
+@@ -13,11 +13,7 @@ const vscTsExtPath = path.resolve(__dirname, "../vscode/extensions/typescript-la
+ const tsExtPath = path.resolve(__dirname, "../src/typescript-language-features");
+
+ async function getVscodeSha() {
+-  const { stdout } = await exec("git", ["submodule", "status", "vscode"], {
+-    cwd: path.resolve(__dirname, "../"),
+-  });
+-  const commit = stdout.match(/^\s*([^\s]+)\s/)[1];
+-  return commit;
++  return await fs.readFile('./HEAD', { encoding: 'utf8' });
+ }
+
+ /**
+

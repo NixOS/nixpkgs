@@ -1,0 +1,42 @@
+From 884ef7c843be906d62e4240c2a0e885dcd5a5726 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Sat, 24 Dec 2022 20:30:22 +0100
+Subject: [PATCH 4/4] libbacktrace: Support NIX_DEBUG_INFO_DIRS environment
+ variable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Let’s make debug data lookup work on NixOS just like in gdb.
+---
+ elf.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/elf.c b/elf.c
+index ccffa95..e86950d 100644
+--- a/elf.c
++++ b/elf.c
+@@ -6946,11 +6946,18 @@ elf_add (struct backtrace_state *state, const char *filename, int descriptor,
+ 
+   if (buildid_data != NULL)
+     {
++      const char *debug_directories_immutable;
++      const char *nix_debug = getenv ("NIX_DEBUG_INFO_DIRS");
++      if (nix_debug != NULL)
++        debug_directories_immutable = nix_debug;
++      else
++        debug_directories_immutable = SYSTEM_DEBUG_DIR;
++
+       int d;
+-      char debug_directories[strlen(SYSTEM_DEBUG_DIR) + 1];
++      char debug_directories[strlen(debug_directories_immutable) + 1];
+       char *debug_dir;
+ 
+-      strcpy(debug_directories, SYSTEM_DEBUG_DIR);
++      strcpy(debug_directories, debug_directories_immutable);
+ 
+       debug_dir = strtok (debug_directories, ":");
+       while (debug_dir != NULL)
+-- 
+2.43.1
+

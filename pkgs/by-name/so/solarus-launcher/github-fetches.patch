@@ -1,0 +1,34 @@
+diff --git a/launcher/cmake/addDependencies.cmake b/launcher/cmake/addDependencies.cmake
+index d2927668e..dc8309de2 100644
+--- a/cmake/addDependencies.cmake
++++ b/cmake/addDependencies.cmake
+@@ -20,8 +20,7 @@ include(FetchContent)
+ 
+ # Qlementine-Icons: an SVG icon library made for Qt.
+ FetchContent_Declare(qlementine-icons
+-  GIT_REPOSITORY "https://github.com/oclero/qlementine-icons.git"
+-  GIT_TAG v1.8.0
++  SOURCE_DIR "@qlementine-icons-src@"
+   EXCLUDE_FROM_ALL
+ )
+ FetchContent_MakeAvailable(qlementine-icons)
+@@ -34,8 +33,7 @@ set_target_properties(qlementine-icons
+ 
+ # Qlementine: the QStyle library to have a modern look n' feel.
+ FetchContent_Declare(qlementine
+-  GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
+-  GIT_TAG v1.2.1
++  SOURCE_DIR "@qlementine-src@"
+   EXCLUDE_FROM_ALL
+ )
+ FetchContent_MakeAvailable(qlementine)
+@@ -48,8 +46,7 @@ set_target_properties(qlementine
+ 
+ # QtAppInstanceManager: a library to manage multiple instances of a Qt application.
+ FetchContent_Declare(QtAppInstanceManager
+- GIT_REPOSITORY "https://github.com/oclero/qtappinstancemanager.git"
+- GIT_TAG v1.3.0
++  SOURCE_DIR "@qtappinstancemanager-src@"
+  EXCLUDE_FROM_ALL
+ )
+ FetchContent_MakeAvailable(QtAppInstanceManager)

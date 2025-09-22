@@ -1,0 +1,104 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 19:10:46 +0300
+Subject: [PATCH 11/19] Fix missing includes and silence string format warnings
+
+Based on patch from Gentoo; see
+https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/xar/files/xar-1.8.0.0.498-impl-decls.patch?id=cc91eb0f86043ae92c10cce55b326244bed3f061
+---
+ xar/lib/Makefile.inc.in | 1 +
+ xar/lib/darwinattr.c    | 1 +
+ xar/lib/ea.c            | 3 ++-
+ xar/lib/ext2.c          | 1 +
+ xar/lib/util.c          | 1 +
+ xar/src/xar_internal.h  | 4 ----
+ 6 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/xar/lib/Makefile.inc.in b/xar/lib/Makefile.inc.in
+index c046b25..d5e9003 100644
+--- a/xar/lib/Makefile.inc.in
++++ b/xar/lib/Makefile.inc.in
+@@ -127,6 +127,7 @@ lib_distclean :
+ 
+ CPPFLAGS := -I@objroot@include $(CPPFLAGS)
+ CPPFLAGS := -I@srcroot@include $(CPPFLAGS)
++CPPFLAGS := -I@srcroot@lib $(CPPFLAGS)
+ 
+ #
+ # Build rules.
+diff --git a/xar/lib/darwinattr.c b/xar/lib/darwinattr.c
+index 4938965..18302b0 100644
+--- a/xar/lib/darwinattr.c
++++ b/xar/lib/darwinattr.c
+@@ -37,6 +37,7 @@
+ 
+ #include "config.h"
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <libgen.h>
+diff --git a/xar/lib/ea.c b/xar/lib/ea.c
+index 1bb8e27..fa1d06a 100644
+--- a/xar/lib/ea.c
++++ b/xar/lib/ea.c
+@@ -29,6 +29,7 @@
+ #include "config.h"
+ #include <stdlib.h>
+ #include <stdio.h>
++#include <inttypes.h>  /* for PRId64 */
+ #include <string.h>
+ #include <assert.h>
+ #include <libgen.h>
+@@ -67,7 +68,7 @@ xar_ea_t xar_ea_new(xar_file_t f, const char *name)
+ 	xar_prop_setvalue(XAR_EA(ret)->prop, NULL);
+ 	XAR_PROP(XAR_EA(ret)->prop)->attrs = xar_attr_new();
+ 	XAR_ATTR(XAR_PROP(XAR_EA(ret)->prop)->attrs)->key = strdup("id");
+-	asprintf((char **)&XAR_ATTR(XAR_PROP(XAR_EA(ret)->prop)->attrs)->value, "%lld", XAR_FILE(f)->nexteaid++);
++	asprintf((char **)&XAR_ATTR(XAR_PROP(XAR_EA(ret)->prop)->attrs)->value, "%"PRId64, XAR_FILE(f)->nexteaid++);
+ 
+ 	xar_prop_pset(f, XAR_EA(ret)->prop, "name", name);
+ 	
+diff --git a/xar/lib/ext2.c b/xar/lib/ext2.c
+index 2380846..b4ca1b0 100644
+--- a/xar/lib/ext2.c
++++ b/xar/lib/ext2.c
+@@ -41,6 +41,7 @@
+ #include "asprintf.h"
+ #endif
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <unistd.h>
+ #include "xar.h"
+ #include "arcmod.h"
+diff --git a/xar/lib/util.c b/xar/lib/util.c
+index 1db2daa..ac0b822 100644
+--- a/xar/lib/util.c
++++ b/xar/lib/util.c
+@@ -38,6 +38,7 @@
+ #include "config.h"
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/mount.h>
+diff --git a/xar/src/xar_internal.h b/xar/src/xar_internal.h
+index b78745c..2e6199e 100644
+--- a/xar/src/xar_internal.h
++++ b/xar/src/xar_internal.h
+@@ -8,11 +8,7 @@
+ #ifndef _XAR_INTERNAL_H_
+ #define _XAR_INTERNAL_H_
+ 
+-#ifdef XARSIG_BUILDING_WITH_XAR
+ #include "xar.h"
+-#else
+-#include <xar/xar.h>
+-#endif // XARSIG_BUILDING_WITH_XAR
+ 
+ // Undeprecate these for internal usage
+ xar_t xar_open(const char *file, int32_t flags) API_AVAILABLE(macos(10.4));
+-- 
+2.44.1
+

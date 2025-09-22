@@ -1,0 +1,24 @@
+From 54255deceaaaf118e9daadc3dd9f517c33bdd658 Mon Sep 17 00:00:00 2001
+From: Ilan Joselevich <personal@ilanjoselevich.com>
+Date: Tue, 30 Nov 2021 22:50:43 +0200
+Subject: [PATCH] When creating the autostart entry, do not use an absolute
+
+---
+ src/common/utility_unix.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/common/utility_unix.cpp b/src/common/utility_unix.cpp
+index 887213f09..c66468306 100644
+--- a/src/common/utility_unix.cpp
++++ b/src/common/utility_unix.cpp
+@@ -88,7 +88,7 @@ void setLaunchOnStartup_private(const QString &appName, const QString &guiName,
+         ts << QLatin1String("[Desktop Entry]\n")
+            << QLatin1String("Name=") << guiName << QLatin1Char('\n')
+            << QLatin1String("GenericName=") << QLatin1String("File Synchronizer\n")
+-           << QLatin1String("Exec=\"") << executablePath << "\" --background\n"
++           << QLatin1String("Exec=") << "nextcloud --background\n"
+            << QLatin1String("Terminal=") << "false\n"
+            << QLatin1String("Icon=") << APPLICATION_ICON_NAME << QLatin1Char('\n')
+            << QLatin1String("Categories=") << QLatin1String("Network\n")
+-- 
+2.33.1

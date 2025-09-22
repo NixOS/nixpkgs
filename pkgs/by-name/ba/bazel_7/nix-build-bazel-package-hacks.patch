@@ -1,0 +1,46 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+index 53e6494656..22261cd268 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+@@ -55,6 +55,7 @@ import com.google.devtools.build.skyframe.SkyFunctionException.Transience;
+ import com.google.devtools.build.skyframe.SkyKey;
+ import com.google.devtools.build.skyframe.SkyValue;
+ import java.io.IOException;
++import java.util.Collections;
+ import java.util.Map;
+ import java.util.Optional;
+ import java.util.TreeMap;
+@@ -193,16 +194,11 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+       }
+ 
+       if (shouldUseCachedRepos(env, handler, repoRoot, rule)) {
+-        // Make sure marker file is up-to-date; correctly describes the current repository state
+-        byte[] markerHash = digestWriter.areRepositoryAndMarkerFileConsistent(handler, env);
+-        if (env.valuesMissing()) {
+-          return null;
+-        }
+-        if (markerHash != null) { // repo exist & up-to-date
++        {
++          // Nix hack: Always consider cached dirs as up-to-date
+           return RepositoryDirectoryValue.builder()
+               .setPath(repoRoot)
+-              .setDigest(markerHash)
+-              .setExcludeFromVendoring(excludeRepoFromVendoring)
++              .setDigest(digestWriter.writeMarkerFile(Collections.emptyMap()))
+               .build();
+         }
+       }
+
+
+diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+index 649647c5f2..64d05b530c 100644
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+@@ -165,7 +165,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
+     }
+     builder.command(argv);
+     if (params.getEnv() != null) {
+-      builder.environment().clear();
+       builder.environment().putAll(params.getEnv());
+     }
+ 

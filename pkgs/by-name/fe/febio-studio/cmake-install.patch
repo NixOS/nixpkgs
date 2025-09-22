@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7ad2c68eb2..0e3e978bd9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -449,6 +449,9 @@
+ 	set_property(TARGET ${FBS_BIN_NAME} PROPERTY AUTOGEN_BUILD_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/AutoGen/FEBioStudio_autogen)
+ endif()
+ 
++include(GNUInstallDirs)
++install(TARGETS ${FBS_BIN_NAME} BUNDLE DESTINATION Applications)
++
+ macro(addLib name)
+ 	add_library(${name} ${HDR_${name}} ${SRC_${name}})
+ 	set_property(TARGET ${name} PROPERTY AUTOGEN_BUILD_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/AutoGen/${name}_autogen)

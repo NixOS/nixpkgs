@@ -1,0 +1,21 @@
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index ddc5c9b..d80728a 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -158,16 +158,6 @@ target_link_libraries(${ANTIMONY_APP}
+ 
+ ################################################################################
+ 
+-execute_process(COMMAND git log --pretty=format:'%h' -n 1
+-                OUTPUT_VARIABLE GITREV)
+-execute_process(COMMAND bash -c "git diff --quiet --exit-code || echo +"
+-                OUTPUT_VARIABLE GITDIFF)
+-execute_process(COMMAND git describe --exact-match --tags
+-                OUTPUT_VARIABLE GITTAG
+-                ERROR_QUIET)
+-execute_process(COMMAND git rev-parse --abbrev-ref HEAD
+-                OUTPUT_VARIABLE GITBRANCH)
+-
+ add_definitions(-D'GITREV="${GITREV}${GITDIFF}"'
+                 -D'GITTAG="${GITTAG}"'
+                 -D'GITBRANCH="${GITBRANCH}"')

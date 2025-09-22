@@ -1,0 +1,25 @@
+From e799a7e0a64696e4ef6c088d36e4db09f8323581 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 19 Jan 2020 22:37:04 +0100
+Subject: [PATCH] Fix build for glibc>=2.28
+
+The major/minor macros are defined in <sys/sysmacros.h> now.
+---
+ lib/io.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/io.h b/lib/io.h
+index 8703cc8..e3d0d10 100644
+--- a/lib/io.h
++++ b/lib/io.h
+@@ -33,6 +33,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/mman.h>
++#include <sys/sysmacros.h>
+ 
+ 
+ void read_all(int fd, void *buf, size_t len);
+-- 
+2.23.1
+

@@ -1,0 +1,18 @@
+objdump may be prefixed on cross-compilation, read the path from $OBJDUMP instead
+
+diff --git a/tests/symbols.rs b/tests/symbols.rs
+index 9375619..5f161fc 100644
+--- a/tests/symbols.rs
++++ b/tests/symbols.rs
+@@ -27,7 +27,10 @@ fn symbols() -> anyhow::Result<()> {
+         }
+     };
+ 
+-    let cmd = Command::new("objdump")
++    let cmd = Command::new("bash")
++        .arg("-c")
++        .arg(r#"exec "$OBJDUMP" "$@""#)
++        .arg("--")
+         .arg("-T")
+         .arg(lib)
+         .unwrap();

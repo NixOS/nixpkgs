@@ -1,0 +1,56 @@
+From 742d57ecf15e24f6a5f2133a81b6c70acc8ff03c Mon Sep 17 00:00:00 2001
+From: Jelle van der Waa <jelle@vdwaa.nl>
+Date: Sat, 13 Feb 2016 22:25:19 +0100
+Subject: [PATCH] add function for setting the text selections
+
+---
+ src/vte/vteterminal.h |  4 ++++
+ src/vtegtk.cc         | 20 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/src/vte/vteterminal.h b/src/vte/vteterminal.h
+index 9701320d..a11b4cb7 100644
+--- a/src/vte/vteterminal.h
++++ b/src/vte/vteterminal.h
+@@ -196,6 +196,10 @@ _VTE_PUBLIC
+ void vte_terminal_select_all(VteTerminal *terminal) _VTE_CXX_NOEXCEPT _VTE_GNUC_NONNULL(1);
+ _VTE_PUBLIC
+ void vte_terminal_unselect_all(VteTerminal *terminal) _VTE_CXX_NOEXCEPT _VTE_GNUC_NONNULL(1);
++_VTE_PUBLIC
++void vte_terminal_select_text(VteTerminal *terminal, long start_col, long start_row,
++			      long end_col, long end_row) _VTE_CXX_NOEXCEPT _VTE_GNUC_NONNULL(1);
++
+ 
+ /* By-word selection */
+ _VTE_PUBLIC
+diff --git a/src/vtegtk.cc b/src/vtegtk.cc
+index bdf36eac..d9e9f2ed 100644
+--- a/src/vtegtk.cc
++++ b/src/vtegtk.cc
+@@ -2390,6 +2390,26 @@ vte_terminal_unselect_all(VteTerminal *terminal)
+         IMPL(terminal)->deselect_all();
+ }
+ 
++/**
++ * vte_terminal_select_text:
++ * @terminal: a #VteTerminal
++ * @start_col: the starting column for the selection
++ * @start_row: the starting row for the selection
++ * @end_col: the end column for the selection
++ * @end_row: the end row for the selection
++ *
++ * Sets the current selection region.
++ */
++void
++vte_terminal_select_text(VteTerminal *terminal,
++		         long start_col, long start_row,
++			 long end_col, long end_row) noexcept
++{
++	g_return_if_fail (VTE_IS_TERMINAL (terminal));
++
++        IMPL(terminal)->select_text(start_col, start_row, end_col, end_row);
++}
++
+ /**
+  * vte_terminal_get_cursor_position:
+  * @terminal: a #VteTerminal

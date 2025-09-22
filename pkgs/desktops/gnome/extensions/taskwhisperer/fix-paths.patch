@@ -1,0 +1,99 @@
+diff --git a/taskwhisperer-extension@infinicode.de/metadata.json b/taskwhisperer-extension@infinicode.de/metadata.json
+index 2f1471c..a84bdf4 100644
+--- a/taskwhisperer-extension@infinicode.de/metadata.json
++++ b/taskwhisperer-extension@infinicode.de/metadata.json
+@@ -6,7 +6,8 @@
+     "3.32",
+     "3.36",
+     "3.38",
+-    "40"
++    "40",
++    "41"
+   ],
+   "url": "https://github.com/cinatic/taskwhisperer",
+   "uuid": "taskwhisperer-extension@infinicode.de",
+diff --git a/taskwhisperer-extension@infinicode.de/services/taskService.js b/taskwhisperer-extension@infinicode.de/services/taskService.js
+index df09cdf..df68c60 100644
+--- a/taskwhisperer-extension@infinicode.de/services/taskService.js
++++ b/taskwhisperer-extension@infinicode.de/services/taskService.js
+@@ -63,7 +63,7 @@ var loadTaskData = async ({ taskStatus, project, taskOrder }) => {
+ 
+   await syncTasks()
+ 
+-  const command = ['task', 'rc.json.array=on', statusFilter, projectFilter, 'export'].join(' ')
++  const command = ['@task@', 'rc.json.array=on', statusFilter, projectFilter, 'export'].join(' ')
+ 
+   let { output, error } = await run({ command })
+ 
+@@ -110,7 +110,7 @@ var loadProjectsData = async taskStatus => {
+ 
+   await syncTasks()
+ 
+-  const command = ['task', 'rc.json.array=on', statusFilter, 'export'].join(' ')
++  const command = ['@task@', 'rc.json.array=on', statusFilter, 'export'].join(' ')
+   const { output: allTheTasks } = await run({ command })
+ 
+   let sortedUniqueProjects = []
+@@ -129,7 +129,7 @@ var setTaskDone = async taskID => {
+     return
+   }
+ 
+-  const command = ['task', taskID.toString(), 'done'].join(' ')
++  const command = ['@task@', taskID.toString(), 'done'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -146,7 +146,7 @@ var setTaskUndone = async taskUUID => {
+     return
+   }
+ 
+-  const command = ['task', `uuid:${taskUUID}`, 'modify', 'status:pending'].join(' ')
++  const command = ['@task@', `uuid:${taskUUID}`, 'modify', 'status:pending'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -163,7 +163,7 @@ var startTask = async taskID => {
+     return
+   }
+ 
+-  const command = ['task', taskID.toString(), 'start'].join(' ')
++  const command = ['@task@', taskID.toString(), 'start'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -180,7 +180,7 @@ var stopTask = async taskID => {
+     return
+   }
+ 
+-  const command = ['task', taskID.toString(), 'stop'].join(' ')
++  const command = ['@task@', taskID.toString(), 'stop'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -195,7 +195,7 @@ var stopTask = async taskID => {
+ var createTask = async task => {
+   const params = _convertTaskToParams(task)
+ 
+-  const command = ['task', 'add', ...params].join(' ')
++  const command = ['@task@', 'add', ...params].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -212,7 +212,7 @@ var modifyTask = async (taskUUID, task) => {
+ 
+   const params = _convertTaskToParams(task)
+ 
+-  const command = ['task', `uuid:${taskUUID}`, 'modify', ...params].join(' ')
++  const command = ['@task@', `uuid:${taskUUID}`, 'modify', ...params].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -227,7 +227,7 @@ var syncTasks = async () => {
+     return
+   }
+ 
+-  const command = ['task', 'sync'].join(' ')
++  const command = ['@task@', 'sync'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   _showProcessErrorNotificationIfError(result, 'Sync Tasks')

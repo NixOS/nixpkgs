@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    abbrev (0.1.2)
+    chronic (0.10.2)
+    csv (3.3.5)
+    highline (2.1.0)
+    matrix (0.4.2)
+    rchardet (1.8.0)
+    reckon (0.11.1)
+      abbrev (> 0.1)
+      chronic (>= 0.3.0)
+      csv (> 0.1)
+      highline (~> 2.0)
+      matrix (>= 0.4.2)
+      rchardet (= 1.8.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  reckon
+
+BUNDLED WITH
+   2.6.6

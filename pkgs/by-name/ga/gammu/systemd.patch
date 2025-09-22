@@ -1,0 +1,30 @@
+diff --git a/cmake/templates/gammu.spec.in b/cmake/templates/gammu.spec.in
+index 25c08b3d6..86f72d8c7 100644
+--- a/cmake/templates/gammu.spec.in
++++ b/cmake/templates/gammu.spec.in
+@@ -386,9 +386,9 @@ fi
+ %doc %{_mandir}/man7/gammu-smsd-run.7*
+ %doc %{_mandir}/man7/gammu-smsd-sql.7*
+ %doc %{_mandir}/man7/gammu-smsd-tables.7*
+-%dir %{_libexecdir}/systemd
+-%dir %{_libexecdir}/systemd/system
+-%{_libexecdir}/systemd/system/gammu-smsd.service
++%dir %{_prefix}/systemd
++%dir %{_prefix}/systemd/system
++%{_prefix}/systemd/system/gammu-smsd.service
+ 
+ %files -n libGammu%{so_ver} -f libgammu.lang
+ %defattr(-,root,root,-)
+diff --git a/contrib/CMakeLists.txt b/contrib/CMakeLists.txt
+index 378411086..b871e6525 100644
+--- a/contrib/CMakeLists.txt
++++ b/contrib/CMakeLists.txt
+@@ -100,7 +100,7 @@ if (WITH_SYSTEMD)
+     configure_file( init/gammu-smsd.service init/gammu-smsd.service )
+     install (
+         FILES ${CMAKE_CURRENT_BINARY_DIR}/init/gammu-smsd.service
+-        DESTINATION "${SYSTEMD_SERVICES_INSTALL_DIR}"
++        DESTINATION "${CMAKE_INSTALL_PREFIX}/systemd"
+         COMPONENT "systemd"
+     )
+ endif (WITH_SYSTEMD)

@@ -1,0 +1,17 @@
+diff --git a/packages/flutter_tools/lib/src/build_system/targets/assets.dart b/packages/flutter_tools/lib/src/build_system/targets/assets.dart
+index 5f458bd53e..7a6c59f98d 100644
+--- a/packages/flutter_tools/lib/src/build_system/targets/assets.dart
++++ b/packages/flutter_tools/lib/src/build_system/targets/assets.dart
+@@ -128,7 +128,11 @@ Future<Depfile> copyAssets(
+               break;
+           }
+           if (doCopy) {
+-            await (content.file as File).copy(file.path);
++            // Not using File.copy because it preserves permissions.
++            final sourceFile = content.file as File;
++            final destinationFile = file;
++
++            await destinationFile.writeAsBytes(await sourceFile.readAsBytes(), flush: true);
+           }
+         } else {
+           await file.writeAsBytes(await entry.value.contentsAsBytes());

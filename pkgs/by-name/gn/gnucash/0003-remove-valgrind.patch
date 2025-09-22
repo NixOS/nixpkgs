@@ -1,0 +1,34 @@
+diff --git a/gnucash/CMakeLists.txt b/gnucash/CMakeLists.txt
+index 95ff42cd8f..1c1944a811 100644
+--- a/gnucash/CMakeLists.txt
++++ b/gnucash/CMakeLists.txt
+@@ -169,13 +169,6 @@ set(GNUCASH_BIN_INSTALL_NAME "gnucash")
+ 
+ set(VALGRIND_OUTDIR ${BINDIR_BUILD})
+ 
+-configure_file(gnucash-valgrind.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind @ONLY)
+-
+-file(COPY ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind
+-          DESTINATION ${VALGRIND_OUTDIR}
+-          FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+-)
+-
+ ## Create the environment file
+ 
+ file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/environment.in ENV_STRINGS_IN)
+@@ -259,14 +252,13 @@ file(COPY ${ENV_FILE_OUT}
+   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+ )
+ 
+-install(FILES ${SCRIPT_LIST} ${VALGRIND_OUTDIR}/gnucash-valgrind DESTINATION ${CMAKE_INSTALL_BINDIR})
+ install(FILES ${ENVIRONMENT_FILE_DIR}/environment DESTINATION
+   ${CMAKE_INSTALL_FULL_SYSCONFDIR}/gnucash)
+ 
+ 
+ set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
+     gnucash.cpp gnucash-commands.cpp gnucash-cli.cpp gnucash-core-app.cpp
+-    gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in gnucash-valgrind.in
++    gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in
+     ${gnucash_GRESOURCES}
+     ${gnucash_noinst_HEADERS} ${gnucash_EXTRA_DIST})
+ 

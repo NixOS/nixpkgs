@@ -1,0 +1,77 @@
+diff --git a/helpers/generate-fonts-runner.sh b/helpers/generate-fonts-runner.sh
+index 21267e50f..873b5c664 100755
+--- a/helpers/generate-fonts-runner.sh
++++ b/helpers/generate-fonts-runner.sh
+@@ -25,10 +25,10 @@ mkdir -p "$build_dir"
+ 
+ # Change these to enable/disable formats
+ # Remember to update font/README.md accordingly
+-methods_black=(glyf)
+-methods_color=(cbdt glyf_colr_0 glyf_colr_1 sbix picosvgz untouchedsvgz)
++#methods_black=(glyf)
++#methods_color=(cbdt glyf_colr_0 glyf_colr_1 sbix picosvgz untouchedsvgz)
+ 
+-saturations=(black color)
++#saturations=(black color)
+ for saturation in "${saturations[@]}"; do
+     case "$saturation" in
+     black)
+@@ -43,6 +43,7 @@ for saturation in "${saturations[@]}"; do
+     mkdir -p "$build_dir/$saturation"
+ 
+     for method in "${methods[@]}"; do
++        if [ -z "$method" ]; then continue; fi
+         cat >"$build_dir/$saturation/OpenMoji-$saturation-$method.toml" <<-EOF
+ output_file = "$build_dir/$saturation/OpenMoji-$saturation-$method.ttf"
+ color_format = "$method"
+@@ -55,10 +56,7 @@ default = 400
+ 
+ [master.regular]
+ style_name = "Regular"
+-
+-# To quickly check build reverse comments below
+-srcs = ["/mnt/$saturation/svg/*.svg"]
+-# srcs = ["/mnt/$saturation/svg/1F923.svg", "/mnt/$saturation/svg/1F1E9-1F1F0.svg"]
++srcs = ["$(pwd)/$saturation/svg/*.svg"]
+ 
+ [master.regular.position]
+ wght = 400
+@@ -71,7 +69,7 @@ EOF
+     for method in "${methods[@]}"; do
+         # Generate XML for font
+         sed "s/Color/${saturation^}/;" \
+-            /mnt/data/OpenMoji-Color.ttx \
++            data/OpenMoji-Color.ttx \
+             > "$build_dir/$saturation/OpenMoji-$saturation-$method.ttx"
+ 
+         # Add version to XML
+@@ -89,25 +87,21 @@ EOF
+ 
+         # Compress with WOFF2
+         woff2_compress "$build_dir/fonts/OpenMoji-$saturation-$method/OpenMoji-$saturation-$method.ttf"
+-
+-        # Generate font demo
+-        /mnt/helpers/generate-font-demo.js "OpenMoji-$saturation-$method.woff2" "$build_dir/fonts/OpenMoji-$saturation-$method"
+     done
+ done
+ 
+-for colr_version in 0 1; do
++for colr_version in "${maximumColorVersions[@]}"; do
++    if [ -z "$colr_version" ]; then continue; fi
+     # Make TTF with both COLR and SVG font data in it
+     mkdir -p "$build_dir/fonts/OpenMoji-color-colr${colr_version}_svg"
+ 
+-    maximum_color \
++    maximum_color --build_dir="$build_dir/color" \
+         "$build_dir/fonts/OpenMoji-color-glyf_colr_${colr_version}/OpenMoji-color-glyf_colr_${colr_version}.ttf"\
+         --output_file "$build_dir/fonts/OpenMoji-color-colr${colr_version}_svg/OpenMoji-color-colr${colr_version}_svg.ttf"
+ 
+     woff2_compress "$build_dir/fonts/OpenMoji-color-colr${colr_version}_svg/OpenMoji-color-colr${colr_version}_svg.ttf"
+ 
+-    /mnt/helpers/generate-font-demo.js\
+-        "OpenMoji-color-colr${colr_version}_svg.woff2"\
+-        "$build_dir/fonts/OpenMoji-color-colr${colr_version}_svg"
++    rm -rf "$build_dir/fonts/OpenMoji-color-glyf_colr_${colr_version}"
+ done
+ 
+ echo "Done building fonts!"

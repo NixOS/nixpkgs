@@ -1,0 +1,47 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index cbf1cdb..e819e14 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -41,7 +41,6 @@ hyper = { version = "=1.6", features = ["http1", "http2", "server"] }
+ hyper-util = { version = "=0.1", features = ["server-auto", "tokio"] }
+ itertools = "0.14"
+ log = "0.4"
+-mimalloc = { version = "0.1.43", default-features = false, features = ["local_dynamic_tls"], optional = true }
+ mime_guess = "=2.0"
+ pem = "=3.0"
+ percent-encoding = "=2.3"
+@@ -52,7 +51,6 @@ pyo3-log = "=0.12"
+ rustls-pemfile = "2.2"
+ socket2 = { version = "=0.6", features = ["all"] }
+ sysinfo = "=0.36"
+-tikv-jemallocator = { version = "0.6.0", default-features = false, features = ["disable_initial_exec_tls"], optional = true }
+ tls-listener = { version = "=0.11", features = ["rustls-ring"] }
+ tokio = { version = "1.45", features = ["full"] }
+ tokio-stream = "0.1"
+@@ -62,10 +60,6 @@ tokio-util = { version = "0.7", features = ["codec", "rt"] }
+ [build-dependencies]
+ pyo3-build-config = "=0.25"
+ 
+-[features]
+-jemalloc = ["dep:tikv-jemallocator"]
+-mimalloc = ["dep:mimalloc"]
+-
+ [profile.release]
+ codegen-units = 1
+ debug = false
+diff --git a/src/lib.rs b/src/lib.rs
+index a17a7e5..8ea1a4d 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1,11 +1,3 @@
+-#[cfg(all(feature = "jemalloc", not(feature = "mimalloc")))]
+-#[global_allocator]
+-static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
+-
+-#[cfg(all(feature = "mimalloc", not(feature = "jemalloc")))]
+-#[global_allocator]
+-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+-
+ use pyo3::prelude::*;
+ use std::sync::OnceLock;
+ 

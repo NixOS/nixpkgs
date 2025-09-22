@@ -1,0 +1,13 @@
+diff --git a/Platform/Unix/Process.cpp b/Platform/Unix/Process.cpp
+index 395d4bc..18601ad 100644
+--- a/Platform/Unix/Process.cpp
++++ b/Platform/Unix/Process.cpp
+@@ -52,7 +52,7 @@ namespace VeraCrypt
+ #elif TC_OPENBSD
+ 		const char* defaultDirs[] = {"/sbin", "/bin", "/usr/sbin", "/usr/bin", "/usr/X11R6/bin", "/usr/local/sbin", "/usr/local/bin"};
+ #else
+-		const char* defaultDirs[] = {"/usr/local/sbin", "/usr/local/bin", "/usr/sbin", "/usr/bin", "/sbin", "/bin"};
++		const char* defaultDirs[] = {"/run/wrappers/bin", "/run/current-system/sw/bin", "/nix/var/nix/profiles/default/bin", "/etc/profiles/per-user/$USER", "/usr/local/sbin", "/usr/local/bin", "/usr/sbin", "/usr/bin", "/sbin", "/bin"};
+ #endif
+ 		const size_t defaultDirCount = sizeof(defaultDirs) / sizeof(defaultDirs[0]);
+ 

@@ -1,0 +1,13 @@
+diff --git a/raylib/build.py b/raylib/build.py
+index d6d0823..af2b274 100644
+--- a/raylib/build.py
++++ b/raylib/build.py
+@@ -68,7 +68,7 @@ def check_sdl_pkgconfig_installed():
+ 
+ def get_the_include_path_from_pkgconfig(libname):
+     return subprocess.run(
+-        ['pkg-config', '--variable=includedir', os.environ.get("PKG_CONFIG_LIB_" + libname, 'raylib')], text=True,
++        ['pkg-config', '--variable=includedir', libname], text=True,
+         stdout=subprocess.PIPE).stdout.strip()
+ 
+ 

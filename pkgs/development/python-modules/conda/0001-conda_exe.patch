@@ -1,0 +1,50 @@
+diff --git a/conda/base/context.py b/conda/base/context.py
+index 34a5e6495..ac017f48b 100644
+--- a/conda/base/context.py
++++ b/conda/base/context.py
+@@ -826,7 +826,7 @@ class Context(Configuration):
+ 
+     @property
+     def conda_prefix(self) -> PathType:
+-        return abspath(sys.prefix)
++        return expand("~/.conda")
+ 
+     @property
+     @deprecated(
+@@ -858,25 +858,17 @@ class Context(Configuration):
+         The vars can refer to each other if necessary since the dict is ordered.
+         None means unset it.
+         """
+-        if context.dev:
+-            return {
+-                "CONDA_EXE": sys.executable,
+-                # do not confuse with os.path.join, we are joining paths with ; or : delimiters
+-                "PYTHONPATH": os.pathsep.join(
+-                    (CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", ""))
+-                ),
+-                "_CE_M": "-m",
+-                "_CE_CONDA": "conda",
+-                "CONDA_PYTHON_EXE": sys.executable,
+-            }
+-        else:
+-            exe = "conda.exe" if on_win else "conda"
+-            return {
+-                "CONDA_EXE": os.path.join(sys.prefix, BIN_DIRECTORY, exe),
+-                "_CE_M": None,
+-                "_CE_CONDA": None,
+-                "CONDA_PYTHON_EXE": sys.executable,
+-            }
++        import sys
++        return {
++            "CONDA_EXE": sys.executable,
++            # do not confuse with os.path.join, we are joining paths with ; or : delimiters
++            "PYTHONPATH": os.pathsep.join(
++                [CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", "")] + [path for path in sys.path if "site-packages" in path]
++            ),
++            "_CE_M": "-m",
++            "_CE_CONDA": "conda",
++            "CONDA_PYTHON_EXE": sys.executable,
++        }
+ 
+     @memoizedproperty
+     def channel_alias(self) -> Channel:

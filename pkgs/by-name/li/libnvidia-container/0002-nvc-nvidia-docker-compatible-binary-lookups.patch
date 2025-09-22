@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Fri, 20 Dec 2024 16:37:07 +0100
+Subject: [PATCH] nvc: nvidia-docker-compatible binary lookups
+
+This patch maintains compatibility with NixOS' `virtualisation.docker.enableNvidia` option (which is to be removed soon), while also including the driver package's path, to work with the modern CDI-based approach.
+---
+ src/nvc_info.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/nvc_info.c b/src/nvc_info.c
+index 5eaef61ada5e955ab11c6a4eb8429c50468e3370..cac87500213e961e603494ac842d02522fc46a5e 100644
+--- a/src/nvc_info.c
++++ b/src/nvc_info.c
+@@ -249,10 +249,13 @@ find_binary_paths(struct error *err, struct dxcore_context* dxcore, struct nvc_d
+         char path[PATH_MAX];
+         int rv = -1;
+ 
+-        if ((env = secure_getenv("PATH")) == NULL) {
++        // TODO: Remove this patch once `virtualisation.docker.enableNvidia` is removed from NixOS.
++        // It only exists to maintain compatibility with the old nvidia-docker package.
++        if ((env = "/run/nvidia-docker/bin:/run/nvidia-docker/extras/bin:@driverLink@/bin") == NULL) {
+                 error_setx(err, "environment variable PATH not found");
+                 return (-1);
+         }
++
+         if ((env = ptr = xstrdup(err, env)) == NULL)
+                 return (-1);
+ 

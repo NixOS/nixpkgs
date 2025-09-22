@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/bonabeavis/tree-sitter-sparql",
+  "rev": "d853661ca680d8ff7f8d800182d5782b61d0dd58",
+  "date": "2024-06-26T16:15:19+02:00",
+  "path": "/nix/store/cz22k5dh2fqyfmamdx1mrlwv28shnk1x-tree-sitter-sparql",
+  "sha256": "1xd0hp2m62ggka46cv2px0507yyl9d9cdqhlpglq6y1jqb5p85fh",
+  "hash": "sha256-0BV0y8IyeIPpuxTixlJL1PsDCuhXbGaImu8JU8WFoPU=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

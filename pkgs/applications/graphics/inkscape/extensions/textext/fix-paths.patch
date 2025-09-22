@@ -1,0 +1,19 @@
+--- a/textext/base.py
++++ b/textext/base.py
+@@ -95,7 +95,16 @@ class TexText(inkex.EffectExtension):
+     def __init__(self):
+ 
+         self.config = Settings(directory=defaults.textext_config_path)
++        # config.json is stored in ~/.config/inkscape/extensions/textext for
++        # the next invocation, but since that next invocation could be using
++        # a different latex derivation, make sure we overwrite the executable
++        # paths with updated ones:
++        self.config["pdflatex-executable"] = "@pdflatex@/bin/pdflatex";
++        self.config["lualatex-executable"] = "@lualatex@/bin/lualatex";
+         self.cache = Cache(directory=defaults.textext_config_path)
++        if "requirements_checker" in self.cache.values:
++            self.cache["requirements_checker"]["available_tex_to_pdf_converters"]["pdflatex"] = "@pdflatex@/bin/pdflatex";
++            self.cache["requirements_checker"]["available_tex_to_pdf_converters"]["lualatex"] = "@lualatex@/bin/lualatex";
+         previous_exit_code = self.cache.get("previous_exit_code", None)
+ 
+         if previous_exit_code is None:

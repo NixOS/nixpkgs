@@ -1,0 +1,42 @@
+From 190040ebfcf5395a6ccedede2cc9343d34f0a108 Mon Sep 17 00:00:00 2001
+From: mancha <mancha1 AT zoho DOT com>
+Date: Wed, 11 Feb 2015
+Subject: Info-ZIP UnZip buffer overflow
+
+By carefully crafting a corrupt ZIP archive with "extra fields" that
+purport to have compressed blocks larger than the corresponding
+uncompressed blocks in STORED no-compression mode, an attacker can
+trigger a heap overflow that can result in application crash or
+possibly have other unspecified impact.
+
+This patch ensures that when extra fields use STORED mode, the
+"compressed" and uncompressed block sizes match.
+
+---
+ extract.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+--- a/extract.c
++++ b/extract.c
+@@ -2217,6 +2217,7 @@ static int test_compr_eb(__G__ eb, eb_si
+     ulg eb_ucsize;
+     uch *eb_ucptr;
+     int r;
++    ush method;
+ 
+     if (compr_offset < 4)                /* field is not compressed: */
+         return PK_OK;                    /* do nothing and signal OK */
+@@ -2226,6 +2227,13 @@ static int test_compr_eb(__G__ eb, eb_si
+          eb_size <= (compr_offset + EB_CMPRHEADLEN)))
+         return IZ_EF_TRUNC;               /* no compressed data! */
+ 
++    method = makeword(eb + (EB_HEADSIZE + compr_offset));
++    if ((method == STORED) &&
++        (eb_size - compr_offset - EB_CMPRHEADLEN != eb_ucsize))
++	return PK_ERR;			  /* compressed & uncompressed
++					   * should match in STORED
++					   * method */
++
+     if (
+ #ifdef INT_16BIT
+         (((ulg)(extent)eb_ucsize) != eb_ucsize) ||

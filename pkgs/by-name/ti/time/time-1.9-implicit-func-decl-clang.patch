@@ -1,0 +1,24 @@
+https://lists.gnu.org/archive/html/bug-time/2022-08/msg00001.html
+
+From c8deae54f92d636878097063b411af9fb5262ad3 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Mon, 15 Aug 2022 07:24:24 -0700
+Subject: [PATCH] include string.h for memset()
+
+Fixes implicit function declaration warning e.g.
+
+resuse.c:103:3: error: call to undeclared library function 'memset' with type 'void *(void *, int, unsigned long)'
+
+Upstream-Status: Submitted [https://lists.gnu.org/archive/html/bug-time/2022-08/msg00001.html]
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+--- a/src/resuse.c
++++ b/src/resuse.c
+@@ -22,6 +22,7 @@
+ */ 
+ 
+ #include "config.h"
++#include <string.h>
+ #include <sys/time.h>
+ #include <sys/wait.h>
+ #include <sys/resource.h>
+

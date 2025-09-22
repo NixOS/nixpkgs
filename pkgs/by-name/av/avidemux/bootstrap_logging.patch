@@ -1,0 +1,26 @@
+diff --git a/bootStrap.bash b/bootStrap.bash
+index 646a5e048..6429199ba 100644
+--- a/bootStrap.bash
++++ b/bootStrap.bash
+@@ -4,6 +4,7 @@
+ #
+ # By default we use qt5 now
+ #
++set -e # hard fail if something fails
+ packages_ext=""
+ rebuild=0
+ do_core=1
+@@ -66,10 +67,10 @@ Process()
+         fi
+         cd $BUILDDIR 
+         cmake $COMPILER $PKG $FAKEROOT $QT_FLAVOR -DCMAKE_EDIT_COMMAND=vim $INSTALL_PREFIX $EXTRA $BUILD_QUIRKS $ASAN $DEBUG -G "$BUILDER" $SOURCEDIR || fail cmakeZ
+-        make  $PARAL >& /tmp/log$BUILDDIR || fail "make, result in /tmp/log$BUILDDIR"
+-	if  [ "x$PKG" != "x" ] ; then
++        make  $PARAL
++        if  [ "x$PKG" != "x" ] ; then
+           $FAKEROOT_COMMAND make package DESTDIR=$FAKEROOT_DIR/tmp || fail package
+-	fi
++        fi
+         # we need the make install so that other packcges can be built against this one
+         make install DESTDIR=$FAKEROOT_DIR
+ }

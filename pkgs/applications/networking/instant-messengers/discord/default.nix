@@ -1,0 +1,128 @@
+{
+  branch ? "stable",
+  callPackage,
+  fetchurl,
+  lib,
+  stdenv,
+}:
+let
+  versions =
+    if stdenv.hostPlatform.isLinux then
+      {
+        stable = "0.0.110";
+        ptb = "0.0.160";
+        canary = "0.0.756";
+        development = "0.0.85";
+      }
+    else
+      {
+        stable = "0.0.359";
+        ptb = "0.0.190";
+        canary = "0.0.858";
+        development = "0.0.97";
+      };
+  version = versions.${branch};
+  srcs = rec {
+    x86_64-linux = {
+      stable = fetchurl {
+        url = "https://stable.dl2.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+        hash = "sha256-WwMEtpMlaR5psraDsvTNOb4nPwnGnVif4DgmdE9gCtc=";
+      };
+      ptb = fetchurl {
+        url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
+        hash = "sha256-6Oxy1EYhc7iEXJVjtkOCzfb3deSCdGa5U1UrLLyd6rM=";
+      };
+      canary = fetchurl {
+        url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+        hash = "sha256-jn7s8T04us+9iTcHuM57F4sO10fs98ZjGQa0pF1SFjk=";
+      };
+      development = fetchurl {
+        url = "https://development.dl2.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
+        hash = "sha256-GW5LrPMr0uS5ko+FwKfU++4hhzqBQ6FDYBoM2fxDQcE=";
+      };
+    };
+    x86_64-darwin = {
+      stable = fetchurl {
+        url = "https://stable.dl2.discordapp.net/apps/osx/${version}/Discord.dmg";
+        hash = "sha256-bxKzOPiljJaY78aiX2BklfMHXgwKrLuWEQVmrNk3TdE=";
+      };
+      ptb = fetchurl {
+        url = "https://ptb.dl2.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
+        hash = "sha256-2Y95SW9b6SeZdeTUmIedAQYJ/5WylL4soGAbUSdDyuQ=";
+      };
+      canary = fetchurl {
+        url = "https://canary.dl2.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
+        hash = "sha256-/dVr7ZS6bRccLPz85xxoniZEbkK1qQ3lqedhGuaBIRk=";
+      };
+      development = fetchurl {
+        url = "https://development.dl2.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
+        hash = "sha256-BVTQPr3Oox/mTNE7LTJfYuKhI8PlkJlznKiOffqpECs=";
+      };
+    };
+    aarch64-darwin = x86_64-darwin;
+  };
+  src =
+    srcs.${stdenv.hostPlatform.system}.${branch}
+      or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
+
+  meta = {
+    description = "All-in-one cross-platform voice and text chat for gamers";
+    downloadPage = "https://discordapp.com/download";
+    homepage = "https://discordapp.com/";
+    license = lib.licenses.unfree;
+    mainProgram = "discord";
+    maintainers = with lib.maintainers; [
+      artturin
+      FlameFlag
+      infinidoge
+      jopejoe1
+      Scrumplex
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+  package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
+
+  packages = (
+    builtins.mapAttrs
+      (
+        _: value:
+        callPackage package (
+          value
+          // {
+            inherit src version branch;
+            meta = meta // {
+              mainProgram = value.binaryName;
+            };
+          }
+        )
+      )
+      {
+        stable = {
+          pname = "discord";
+          binaryName = "Discord";
+          desktopName = "Discord";
+        };
+        ptb = rec {
+          pname = "discord-ptb";
+          binaryName = if stdenv.hostPlatform.isLinux then "DiscordPTB" else desktopName;
+          desktopName = "Discord PTB";
+        };
+        canary = rec {
+          pname = "discord-canary";
+          binaryName = if stdenv.hostPlatform.isLinux then "DiscordCanary" else desktopName;
+          desktopName = "Discord Canary";
+        };
+        development = rec {
+          pname = "discord-development";
+          binaryName = if stdenv.hostPlatform.isLinux then "DiscordDevelopment" else desktopName;
+          desktopName = "Discord Development";
+        };
+      }
+  );
+in
+packages.${branch}

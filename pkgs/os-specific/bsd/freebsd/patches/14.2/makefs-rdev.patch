@@ -1,0 +1,30 @@
+The freebsd makefs code is imported directly from netbsd, with minor changes.
+One of these changes is commenting out a piece of code we need in order to
+cross-build filesystem images for openbsd with nix: the ability to copy device
+node information from an mtree. This is especially important in nix because the
+only other way to generate device nodes is to have them be resident on the
+build system's filesystem, which is not possible without root, and openbsd does
+not have a devfs and requires that all device nodes are simply present on the
+root filesystem in order to boot.
+
+Uncomment it.
+
+diff --git a/usr.sbin/makefs/walk.c b/usr.sbin/makefs/walk.c
+index 56e2d19c6f00..c3bf8faac2aa 100644
+--- a/usr.sbin/makefs/walk.c
++++ b/usr.sbin/makefs/walk.c
+@@ -540,12 +540,12 @@ apply_specentry(const char *dir, NODE *specnode, fsnode *dirnode)
+ 		dirnode->inode->st.st_flags = specnode->st_flags;
+ 	}
+ #endif
+-/*	if (specnode->flags & F_DEV) {
++	if (specnode->flags & F_DEV) {
+ 		ASEPRINT("rdev", "%#llx",
+ 		    (unsigned long long)dirnode->inode->st.st_rdev,
+ 		    (unsigned long long)specnode->st_rdev);
+ 		dirnode->inode->st.st_rdev = specnode->st_rdev;
+-	}*/
++	}
+ #undef ASEPRINT
+ 
+ 	dirnode->flags |= FSNODE_F_HASSPEC;

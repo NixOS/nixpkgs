@@ -1,0 +1,41 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6948010..1ee264f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,14 +14,15 @@ if(NOT WIN32 AND NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
+ endif()
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-  glaze
+-  GIT_REPOSITORY https://github.com/stephenberry/glaze.git
+-  GIT_TAG v3.4.2
+-  GIT_SHALLOW TRUE
+-)
+-FetchContent_MakeAvailable(glaze)
++#include(FetchContent)
++#FetchContent_Declare(
++    #glaze
++  #GIT_REPOSITORY https://github.com/stephenberry/glaze.git
++  #GIT_TAG v3.4.2
++  #  GIT_SHALLOW TRUE
++  #)
++#FetchContent_MakeAvailable(glaze)
++#add()
+ 
+ set(MASTER_PROJECT OFF)
+ if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+diff --git a/libtermbench/CMakeLists.txt b/libtermbench/CMakeLists.txt
+index f0ddc75..93f63ed 100644
+--- a/libtermbench/CMakeLists.txt
++++ b/libtermbench/CMakeLists.txt
+@@ -25,6 +25,8 @@ set_target_properties(termbench PROPERTIES
+ 
+ target_include_directories(termbench PUBLIC $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}>
+                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
++
++find_package(glaze REQUIRED)
+ target_link_libraries(termbench PUBLIC glaze::glaze)
+ 
+ install(TARGETS termbench

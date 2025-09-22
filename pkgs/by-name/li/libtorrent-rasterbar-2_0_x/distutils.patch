@@ -1,0 +1,20 @@
+diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+index 2f4de4854..a68d547e6 100644
+--- a/bindings/python/CMakeLists.txt
++++ b/bindings/python/CMakeLists.txt
+@@ -95,8 +95,13 @@ if (python-install-system-dir)
+ else()
+ 	execute_process(
+ 		COMMAND "${Python3_EXECUTABLE}" -c [=[
+-import distutils.sysconfig
+-print(distutils.sysconfig.get_python_lib(prefix='', plat_specific=True))
++try:
++	import distutils.sysconfig
++	print(distutils.sysconfig.get_python_lib(prefix='', plat_specific=True))
++except ModuleNotFoundError:
++	import os, sys
++	version = f"{sys.version_info.major}.{sys.version_info.minor}"
++	print(os.sep.join(["lib", f"python{version}", "site-packages"]))
+ ]=]
+ 		OUTPUT_VARIABLE _PYTHON3_SITE_ARCH
+ 		OUTPUT_STRIP_TRAILING_WHITESPACE

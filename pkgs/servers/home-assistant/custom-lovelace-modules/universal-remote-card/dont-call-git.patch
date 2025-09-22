@@ -1,0 +1,17 @@
+diff --git a/rspack.config.js b/rspack.config.js
+index 30b7568..dc10273 100644
+--- a/rspack.config.js
++++ b/rspack.config.js
+@@ -2,11 +2,7 @@
+ const path = require('path');
+ const { execSync } = require('child_process');
+ 
+-let env =
+-	execSync('git branch --show-current').toString().trim() == 'main'
+-		? 'production'
+-		: 'development';
+-env = 'production';
++let env = 'production';
+ 
+ module.exports = {
+ 	mode: env,
