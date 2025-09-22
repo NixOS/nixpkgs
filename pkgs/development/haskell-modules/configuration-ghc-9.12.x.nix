@@ -79,6 +79,9 @@ with haskellLib;
   #
 
   large-generics = doJailbreak super.large-generics; # base <4.20
+
+  libiserv = doJailbreak super.libiserv;
+
   cpphs = overrideCabal (drv: {
     # jail break manually the conditional dependencies
     postPatch = ''
