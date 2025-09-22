@@ -24,7 +24,6 @@
   zlib,
 
   # runtime deps
-  apple-sdk_14,
   fontconfig,
   freetype,
   gst_all_1,
@@ -131,9 +130,6 @@ rustPlatform.buildRustPackage {
     xorg.libxcb
     udev
     vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
