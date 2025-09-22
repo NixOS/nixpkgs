@@ -859,7 +859,6 @@ builtins.intersectAttrs super {
   # https://github.com/snoyberg/yaml/issues/194
   yaml = lib.pipe super.yaml [
     (disableCabalFlag "no-exe")
-    enableSeparateBinOutput
     (addBuildDepend self.optparse-applicative)
   ];
 
