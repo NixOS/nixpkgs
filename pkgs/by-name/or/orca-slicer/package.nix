@@ -196,6 +196,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
     (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
     "-Wno-dev"
+
+    # cmake 4 compatibility, remove in next update
+    # see: https://github.com/SoftFever/OrcaSlicer/commit/883607e1d4a0b2bb719f2f4bcd9fd72f8c2174fa
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.13")
   ];
 
   # Generate translation files
