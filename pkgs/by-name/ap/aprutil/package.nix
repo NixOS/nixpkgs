@@ -22,12 +22,12 @@ assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apr-util";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/apr/apr-util-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
   };
 
@@ -111,12 +111,12 @@ stdenv.mkDerivation rec {
     inherit sslSupport bdbSupport ldapSupport;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apr.apache.org/";
     description = "Companion library to APR, the Apache Portable Runtime";
     mainProgram = "apu-1-config";
     maintainers = [ ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
-}
+})
