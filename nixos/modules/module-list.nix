@@ -737,6 +737,7 @@
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
   ./services/mail/goeland.nix
+  ./services/mail/hydroxide.nix
   ./services/mail/listmonk.nix
   ./services/mail/maddy.nix
   ./services/mail/mail.nix
