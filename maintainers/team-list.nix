@@ -843,10 +843,15 @@ with lib.maintainers;
 
   marketing = {
     members = [
+      idabzo
+      thilobillerbeck
+      flyfloh
+      djacu
       tomberek
     ];
     scope = "Marketing of Nix/NixOS/nixpkgs.";
     shortName = "Marketing";
+    githubTeams = [ "marketing-team" ];
     enableFeatureFreezePing = true;
   };
 
