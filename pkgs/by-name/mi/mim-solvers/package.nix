@@ -1,6 +1,7 @@
 {
   cmake,
   crocoddyl,
+  ctestCheckHook,
   fetchFromGitHub,
   lib,
   llvmPackages,
@@ -59,7 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
   );
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+  disabledTests = [
+    # Fails with osqp>=1.0.0
+    # See https://github.com/machines-in-motion/mim_solvers/pull/66
+    "py-test-clqr-osqp"
+  ];
   doCheck = true;
+
   pythonImportsCheck = [ "mim_solvers" ];
 
   passthru.updateScript = nix-update-script { };
