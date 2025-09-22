@@ -772,8 +772,8 @@ with haskellLib;
     else
       dontDistribute (markBroken super.fclabels);
 
-  # Bounds on base are too strict.
-  # https://github.com/phadej/regex-applicative-text/issues/13
+  # Bounds on base are too strict. Upstream is no longer maintained:
+  # https://github.com/phadej/regex-applicative-text/issues/13 krank:ignore-line
   regex-applicative-text = doJailbreak super.regex-applicative-text;
 
   # Tests require a Kafka broker running locally
