@@ -153,12 +153,6 @@ self: super: {
   # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
   aeson = dontCheck super.aeson;
 
-  # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
-  # which means that the upstream cabal file isn't allowed to add the flag.
-  inline-c-cpp =
-    (if isDarwin then appendConfigureFlags [ "--ghc-option=-fcompact-unwind" ] else x: x)
-      super.inline-c-cpp;
-
   # 2022-05-31: weeder 2.4.* requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;
   # Unnecessarily strict upper bound on lens
