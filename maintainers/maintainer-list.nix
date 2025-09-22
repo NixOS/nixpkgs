@@ -15295,6 +15295,12 @@
     githubId = 208297;
     name = "Luz";
   };
+  lwb-2021 = {
+    email = "lwb-2021@qq.com";
+    github = "lwb-2021";
+    githubId = 91705377;
+    name = "lwb-2021";
+  };
   lx = {
     email = "alex@adnab.me";
     github = "Alexis211";
