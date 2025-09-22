@@ -1,0 +1,14 @@
+diff --git a/xi.pc.in b/xi.pc.in
+index d97db20..e152d92 100644
+--- a/xi.pc.in
++++ b/xi.pc.in
+@@ -6,7 +6,7 @@ includedir=@includedir@
+ Name: Xi
+ Description: X Input Extension Library
+ Version: @VERSION@
+-Requires: inputproto
+-Requires.private: x11 xext xfixes
++Requires: inputproto xext xfixes
++Requires.private: x11
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -lXi

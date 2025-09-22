@@ -245,9 +245,8 @@ self: super:
       "man"
       "doc"
     ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXfixes
-      xorg.libXext
+    patches = [
+      ./xi-public-requires.patch
     ];
     configureFlags =
       lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
