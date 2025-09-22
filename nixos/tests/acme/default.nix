@@ -1,6 +1,26 @@
-{ runTest }:
+{ lib, runTest }:
 let
   domain = "example.test";
+  nginxBaseModule = {
+    services.nginx = {
+      enable = true;
+      logError = "stderr info";
+      # This tests a number of things at once:
+      #   - Self-signed certs are in place before the webserver startup
+      #   - Nginx is started before acme renewal is attempted
+      #   - useACMEHost behaves as expected
+      #   - acmeFallbackHost behaves as expected
+      virtualHosts.default = {
+        default = true;
+        addSSL = true;
+        useACMEHost = "proxied.example.test";
+        acmeFallbackHost = "localhost:8080";
+      };
+    };
+    specialisation.nullroot.configuration = {
+      services.nginx.virtualHosts."nullroot.${domain}".acmeFallbackHost = "localhost:8081";
+    };
+  };
 in
 {
   http01-builtin = runTest ./http01-builtin.nix;
@@ -11,26 +31,18 @@ in
       inherit domain;
       serverName = "nginx";
       group = "nginx";
-      baseModule = {
-        services.nginx = {
-          enable = true;
-          enableReload = true;
-          logError = "stderr info";
-          # This tests a number of things at once:
-          #   - Self-signed certs are in place before the webserver startup
-          #   - Nginx is started before acme renewal is attempted
-          #   - useACMEHost behaves as expected
-          #   - acmeFallbackHost behaves as expected
-          virtualHosts.default = {
-            default = true;
-            addSSL = true;
-            useACMEHost = "proxied.example.test";
-            acmeFallbackHost = "localhost:8080";
-          };
-        };
-        specialisation.nullroot.configuration = {
-          services.nginx.virtualHosts."nullroot.${domain}".acmeFallbackHost = "localhost:8081";
-        };
+      baseModule = lib.recursiveUpdate nginxBaseModule {
+        services.nginx.enableReload = true;
+      };
+    }
+  );
+  nginx-without-reload = runTest (
+    import ./webserver.nix {
+      inherit domain;
+      serverName = "nginx";
+      group = "nginx";
+      baseModule = lib.recursiveUpdate nginxBaseModule {
+        services.nginx.enableReload = false;
       };
     }
   );
