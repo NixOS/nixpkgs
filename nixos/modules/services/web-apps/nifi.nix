@@ -37,12 +37,7 @@ in
     services.nifi = {
       enable = lib.mkEnableOption "Apache NiFi";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nifi;
-        defaultText = lib.literalExpression "pkgs.nifi";
-        description = "Apache NiFi package to use.";
-      };
+      package = lib.mkPackageOption pkgs "nifi" { };
 
       user = lib.mkOption {
         type = lib.types.str;
