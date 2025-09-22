@@ -118,6 +118,12 @@ class Flake:
                 else:
                     return None
 
+    def resolve_path_if_exists(self) -> str:
+        try:
+            return str(Path(self.path).resolve(strict=True))
+        except FileNotFoundError:
+            return self.path
+
 
 @dataclass(frozen=True)
 class Generation:
