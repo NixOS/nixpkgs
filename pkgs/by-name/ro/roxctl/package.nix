@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -30,7 +31,7 @@ buildGoModule rec {
     "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd roxctl \
       --bash <($out/bin/roxctl completion bash) \
       --fish <($out/bin/roxctl completion fish) \

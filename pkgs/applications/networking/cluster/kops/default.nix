@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -45,7 +46,7 @@ let
 
       doCheck = false;
 
-      postInstall = ''
+      postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd kops \
           --bash <($GOPATH/bin/kops completion bash) \
           --fish <($GOPATH/bin/kops completion fish) \

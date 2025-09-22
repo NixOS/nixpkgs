@@ -56,7 +56,7 @@ in
     (lib.mkRemovedOptionModule [
       "services"
       "murmur"
-      "logfile"
+      "logFile"
     ] "This option has been superseded by services.murmur.logToFile")
   ];
 
