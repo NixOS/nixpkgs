@@ -33,10 +33,10 @@ def test_build_attr_to_attr() -> None:
 @patch("platform.node", autospec=True, return_value=None)
 def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) -> None:
     assert m.Flake.parse("/path/to/flake#attr") == m.Flake(
-        Path("/path/to/flake"), 'nixosConfigurations."attr"'
+        "/path/to/flake", 'nixosConfigurations."attr"'
     )
     assert m.Flake.parse("/path/ to /flake") == m.Flake(
-        Path("/path/ to /flake"), 'nixosConfigurations."default"'
+        "/path/ to /flake", 'nixosConfigurations."default"'
     )
     with patch(
         get_qualified_name(m.run_wrapper, m),
@@ -45,11 +45,11 @@ def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) ->
     ):
         target_host = m.Remote("target@remote", [], None)
         assert m.Flake.parse("/path/to/flake", target_host) == m.Flake(
-            Path("/path/to/flake"), 'nixosConfigurations."remote"'
+            "/path/to/flake", 'nixosConfigurations."remote"'
         )
-    assert m.Flake.parse(".#attr") == m.Flake(Path("."), 'nixosConfigurations."attr"')
-    assert m.Flake.parse("#attr") == m.Flake(Path("."), 'nixosConfigurations."attr"')
-    assert m.Flake.parse(".") == m.Flake(Path("."), 'nixosConfigurations."default"')
+    assert m.Flake.parse(".#attr") == m.Flake(".", 'nixosConfigurations."attr"')
+    assert m.Flake.parse("#attr") == m.Flake("", 'nixosConfigurations."attr"')
+    assert m.Flake.parse(".") == m.Flake(".", 'nixosConfigurations."default"')
     assert m.Flake.parse("path:/to/flake#attr") == m.Flake(
         "path:/to/flake", 'nixosConfigurations."attr"'
     )
@@ -64,7 +64,7 @@ def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) ->
 
 def test_flake_to_attr() -> None:
     assert (
-        m.Flake(Path("/path/to/flake"), "nixosConfigurations.preAttr").to_attr(
+        m.Flake("/path/to/flake", "nixosConfigurations.preAttr").to_attr(
             "attr1", "attr2"
         )
         == "/path/to/flake#nixosConfigurations.preAttr.attr1.attr2"
@@ -73,10 +73,9 @@ def test_flake_to_attr() -> None:
 
 def test_flake__str__(monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
     assert str(m.Flake("github:nixos/nixpkgs", "attr")) == "github:nixos/nixpkgs#attr"
-    assert str(m.Flake(Path("/etc/nixos"), "attr")) == "/etc/nixos#attr"
-    with monkeypatch.context() as patch_context:
-        patch_context.chdir(tmpdir)
-        assert str(m.Flake(Path("."), "attr")) == f"{tmpdir}#attr"
+    assert str(m.Flake("/etc/nixos", "attr")) == "/etc/nixos#attr"
+    assert str(m.Flake(".", "attr")) == ".#attr"
+    assert str(m.Flake("", "attr")) == "#attr"
 
 
 @patch("platform.node", autospec=True)
@@ -87,7 +86,7 @@ def test_flake_from_arg(
 
     # Flake string
     assert m.Flake.from_arg("/path/to/flake#attr", None) == m.Flake(
-        Path("/path/to/flake"), 'nixosConfigurations."attr"'
+        "/path/to/flake", 'nixosConfigurations."attr"'
     )
 
     # False
@@ -97,7 +96,7 @@ def test_flake_from_arg(
     with monkeypatch.context() as patch_context:
         patch_context.chdir(tmpdir)
         assert m.Flake.from_arg(True, None) == m.Flake(
-            Path("."), 'nixosConfigurations."hostname"'
+            ".", 'nixosConfigurations."hostname"'
         )
 
     # None when we do not have /etc/nixos/flake.nix
@@ -122,7 +121,7 @@ def test_flake_from_arg(
         ),
     ):
         assert m.Flake.from_arg(None, None) == m.Flake(
-            Path("/etc/nixos"), 'nixosConfigurations."hostname"'
+            "/etc/nixos", 'nixosConfigurations."hostname"'
         )
 
     with (
@@ -138,7 +137,7 @@ def test_flake_from_arg(
         ),
     ):
         assert m.Flake.from_arg(None, None) == m.Flake(
-            Path("/path/to"), 'nixosConfigurations."hostname"'
+            "/path/to", 'nixosConfigurations."hostname"'
         )
 
     with (
@@ -149,7 +148,7 @@ def test_flake_from_arg(
         ),
     ):
         assert m.Flake.from_arg("/path/to", m.Remote("user@host", [], None)) == m.Flake(
-            Path("/path/to"), 'nixosConfigurations."remote-hostname"'
+            "/path/to", 'nixosConfigurations."remote-hostname"'
         )
 
 

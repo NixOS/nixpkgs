@@ -77,7 +77,7 @@ def _get_hostname(target_host: Remote | None) -> str | None:
 
 @dataclass(frozen=True)
 class Flake:
-    path: Path | str
+    path: str
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
@@ -86,11 +86,7 @@ class Flake:
 
     @override
     def __str__(self) -> str:
-        if isinstance(self.path, Path):
-            # https://github.com/NixOS/nixpkgs/issues/433726
-            return f"{self.path.absolute()}#{self.attr}"
-        else:
-            return f"{self.path}#{self.attr}"
+        return f"{self.path}#{self.attr}"
 
     @classmethod
     def parse(cls, flake_str: str, target_host: Remote | None = None) -> Self:
@@ -101,10 +97,7 @@ class Flake:
             f'nixosConfigurations."{attr or _get_hostname(target_host) or "default"}"'
         )
         path = m.group("path")
-        if ":" in path:
-            return cls(path, nixos_attr)
-        else:
-            return cls(Path(path), nixos_attr)
+        return cls(path, nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
