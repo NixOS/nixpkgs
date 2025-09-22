@@ -390,6 +390,14 @@ with haskellLib;
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # fpr-calc test suite depends on random >= 1.3
+  # see https://github.com/IntersectMBO/lsm-tree/issues/797
+  bloomfilter-blocked =
+    lib.warnIf (lib.versionAtLeast self.random.version "1.3")
+      "haskellPackages.bloomfilter-blocked: dontCheck can potentially be removed"
+      dontCheck
+      super.bloomfilter-blocked;
+
   # support for transformers >= 0.6
   lifted-base = appendPatch (fetchpatch {
     url = "https://github.com/basvandijk/lifted-base/commit/6b61483ec7fd0d5d5d56ccb967860d42740781e8.patch";
