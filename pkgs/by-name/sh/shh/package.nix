@@ -104,6 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       erdnaxe
       kuflierl
+      jk
     ];
   };
 })
