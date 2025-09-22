@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -23,7 +24,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd threatest \
       --bash <($out/bin/threatest completion bash) \
       --fish <($out/bin/threatest completion fish) \

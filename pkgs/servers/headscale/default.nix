@@ -43,7 +43,7 @@ buildGoModule rec {
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd headscale \
       --bash <($out/bin/headscale completion bash) \
       --fish <($out/bin/headscale completion fish) \
