@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withVtk vtk;
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
   cmakeFlags = [
     (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
