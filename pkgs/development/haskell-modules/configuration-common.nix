@@ -841,9 +841,6 @@ with haskellLib;
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
-  # https://github.com/jputcu/serialport/issues/25
-  serialport = dontCheck super.serialport;
-
   # Test suite depends on source code being available
   simple-affine-space = dontCheck super.simple-affine-space;
 
