@@ -517,6 +517,8 @@ builtins.intersectAttrs super {
     addExtraLibraries [ pkgs.libGLU pkgs.libGL ] (super.hsqml.override { qt5 = pkgs.qt5Full; })
   );
   monomer = dontCheck super.monomer;
+  # GLFW init fails in sandbox https://github.com/bsl/GLFW-b/issues/50 krank:ignore-line
+  GLFW-b = dontCheck super.GLFW-b;
 
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
