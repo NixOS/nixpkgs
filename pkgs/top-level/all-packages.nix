@@ -7524,8 +7524,6 @@ with pkgs;
 
   geos = callPackage ../development/libraries/geos { };
 
-  geos_3_9 = callPackage ../development/libraries/geos/3.9.nix { };
-
   gettext = callPackage ../development/libraries/gettext { };
 
   gdalMinimal = gdal.override {
