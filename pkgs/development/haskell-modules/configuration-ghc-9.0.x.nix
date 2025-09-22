@@ -140,10 +140,6 @@ self: super: {
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21141 krank:ignore-line
   reflection = dontCheck super.reflection;
 
-  # Disable tests pending resolution of
-  # https://github.com/Soostone/retry/issues/71
-  retry = dontCheck super.retry;
-
   ghc-api-compat = unmarkBroken super.ghc-api-compat;
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
