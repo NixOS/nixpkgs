@@ -36,10 +36,6 @@ self: super:
 
     double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
-    # "erf table" test fails on Darwin
-    # https://github.com/bos/math-functions/issues/63
-    math-functions = dontCheck super.math-functions;
-
     # darwin doesn't have sub-second resolution
     # https://github.com/hspec/mockery/issues/11
     mockery = overrideCabal (drv: {
