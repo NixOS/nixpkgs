@@ -671,7 +671,8 @@ with haskellLib;
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
-  # https://github.com/serokell/nixfmt/issues/130
+  # No maintenance planned until eventual removal
+  # https://github.com/NixOS/nixfmt/issues/340#issuecomment-3315920564
   nixfmt = doJailbreak super.nixfmt;
 
   # Too strict upper bounds on turtle and text
