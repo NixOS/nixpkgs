@@ -1,7 +1,9 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  callPackage,
 
   # build-system
   setuptools,
@@ -17,16 +19,16 @@
   jinja2,
   gitpython,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "leanblueprint";
-  version = "0.0.10";
+  version = "0.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "leanblueprint";
     owner = "PatrickMassot";
-    rev = "v0.0.10";
-    hash = "sha256-CUYdxEXgTf2vKDiOoeW4RV6tQ6prFhA4qMc0olZtZBM=";
+    tag = "v${version}";
+    hash = "sha256-kikeLc0huJHe4Fq207U8sdRrH26bzpo+IVKjsLnrWgY=";
   };
 
   build-system = [ setuptools ];
@@ -45,8 +47,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "leanblueprint" ];
 
+  passthru.tests.simple-blueprint = callPackage ./tests/simple-blueprint.nix { };
+
   meta = {
-    description = "This plasTeX plugin allowing to write blueprints for Lean 4 projects";
+    description = "A plasTeX plugin allowing to write blueprints for Lean 4 projects";
     homepage = "https://github.com/PatrickMassot/leanblueprint";
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;
