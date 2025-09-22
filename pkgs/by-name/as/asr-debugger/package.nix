@@ -23,12 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ju+IAn2s1u/UwYwECBD7gHCDX3PidcjMiwvXp4SFZnc=";
 
-  nativeBuildInputs = [
-    u-config
-    wayland-protocols
-    wayland
-  ];
-
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon
