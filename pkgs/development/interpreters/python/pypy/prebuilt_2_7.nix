@@ -48,6 +48,11 @@ let
     pythonOnBuildForTarget = throw "${pname} does not support cross compilation";
     pythonOnHostForHost = throw "${pname} does not support cross compilation";
     pythonOnTargetForTarget = throw "${pname} does not support cross compilation";
+
+    pythonABITags = [
+      "none"
+      "pypy${lib.concatStrings (lib.take 2 (lib.splitString "." pythonVersion))}_pp${sourceVersion.major}${sourceVersion.minor}"
+    ];
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
