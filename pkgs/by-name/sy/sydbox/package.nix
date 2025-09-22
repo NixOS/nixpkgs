@@ -8,11 +8,12 @@
   rustPlatform,
   scdoc,
   testers,
+  runCommand,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sydbox";
-  version = "3.37.9";
+  version = "3.38.5";
 
   outputs = [
     "out"
@@ -24,10 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Sydbox";
     repo = "sydbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SG19p7TuN7+TX5tafNBU6R48PzT44WqvGydmpfUo+FU=";
+    hash = "sha256-CJcCgZ/Q4oc7U6USU+iZz+kvxcn4MtXH5b3Cwu+45hQ=";
   };
 
-  cargoHash = "sha256-rxlnlu8RziOhSNbCU8ESL0a+f+594E0q+3gmyQLhPaw=";
+  cargoHash = "sha256-1vePKbans/RhOFYqXW/Vvq9hiwqk3z6IwIBEjf+im/A=";
 
   nativeBuildInputs = [
     mandoc
@@ -71,6 +72,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "syd -V";
     };
+
+    # Generate a Syd profile that allows access to
+    # the Nix store closure of `allowPackages`.
+    # The `nopie` profile is prepended and any
+    # addional `rules` are appended.
+    closureProfile =
+      {
+        allowPackages,
+        rules ? "",
+      }:
+      runCommand "nix-closure.syd-3"
+        {
+          exportReferencesGraph =
+            with builtins;
+            foldl' (
+              acc: p:
+              acc
+              ++ [
+                "graph.${toString (length acc)}"
+                p
+              ]
+            ) [ ] allowPackages;
+        }
+        ''
+          echo include_profile nopie >>$out
+          cat graph.* | sort -u | awk '/nix\/store/ {
+              print "allow/read,exec,ioctl,stat+" $1 "/**"
+              print "allow/lock/read,exec,ioctl+" $1
+            }' >>$out
+          cat << END_OF_RULES >>$out
+          ${rules}
+
+          END_OF_RULES
+        '';
 
     updateScript = nix-update-script { };
   };
