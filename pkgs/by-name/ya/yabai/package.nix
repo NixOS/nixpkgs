@@ -12,27 +12,27 @@
   writeShellScript,
   xxd,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
   version = "7.1.15";
 
-  src =
-    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src = fetchFromGitHub {
+    owner = "koekeishiya";
+    repo = "yabai";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HvaMPmXNlFVOezqWxqXaAUq8E8O2ZkXMQPwkKXCAOcY=";
+  };
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     xxd
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
+  buildInputs = [
     apple-sdk_15
   ];
 
-  dontConfigure = true;
-  dontBuild = stdenv.hostPlatform.isAarch64;
   enableParallelBuilding = true;
 
   installPhase = ''
@@ -41,47 +41,37 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/icons/hicolor/scalable/apps}
 
     cp ./bin/yabai $out/bin/yabai
-    ${lib.optionalString stdenv.hostPlatform.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
+    cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg
     installManPage ./doc/yabai.1
 
     runHook postInstall
   '';
 
   postPatch =
-    lib.optionalString stdenv.hostPlatform.isx86_64 # bash
+    if stdenv.hostPlatform.isx86_64 then
       ''
-        # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
-        # Since multilib doesn't work on darwin i dont know of a better way of handling this.
         substituteInPlace makefile \
-        --replace-fail "-arch arm64e" "" \
-        --replace-fail "-arch arm64" ""
-      '';
+                --replace-fail "-arch arm64e" "" \
+                --replace-fail "-arch arm64" ""
+      ''
+    # bash
+    else if stdenv.hostPlatform.isAarch64 then
+      ''
+        substituteInPlace makefile \
+                --replace-fail "-arch x86_64" ""
+      ''
+    else
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    sources = {
-      # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
-      # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
-      "aarch64-darwin" = fetchzip {
-        url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-QDGt/v5t7g6+y6ijpLRF7YkqF8bISfxk684m7uUg4eM=";
-      };
-      "x86_64-darwin" = fetchFromGitHub {
-        owner = "koekeishiya";
-        repo = "yabai";
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-HvaMPmXNlFVOezqWxqXaAUq8E8O2ZkXMQPwkKXCAOcY=";
-      };
-    };
 
     updateScript = writeShellScript "update-yabai" ''
       NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
-      done
+      ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version
     '';
   };
 
@@ -96,16 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/koekeishiya/yabai";
     changelog = "https://github.com/koekeishiya/yabai/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    platforms = builtins.attrNames finalAttrs.passthru.sources;
+    platforms = lib.platforms.darwin;
     mainProgram = "yabai";
     maintainers = with lib.maintainers; [
       cmacrae
       shardy
       khaneliman
     ];
-    sourceProvenance =
-      with lib.sourceTypes;
-      lib.optionals stdenv.hostPlatform.isx86_64 [ fromSource ]
-      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })
