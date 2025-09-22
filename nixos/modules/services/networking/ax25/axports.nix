@@ -143,6 +143,7 @@ in
         serviceConfig = {
           Type = "exec";
           ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
+          ExecStartPost="${pkgs.bash}/bin/bash -c 'until ip link show ax0 >/dev/null 2>&1; do sleep 0.1; done'";
         };
         postStart = optionalString (portCfg.kissParams != null) ''
           ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
