@@ -4563,7 +4563,6 @@ broken-packages:
   - pan-os-syslog # failure in job https://hydra.nixos.org/build/233244422 at 2023-09-02
   - pandoc-citeproc # failure in job https://hydra.nixos.org/build/233198462 at 2023-09-02
   - pandoc-columns # failure in job https://hydra.nixos.org/build/233234538 at 2023-09-02
-  - pandoc-crossref # failure in job https://hydra.nixos.org/build/307611190 at 2025-09-19
   - pandoc-csv2table # failure in job https://hydra.nixos.org/build/233229925 at 2023-09-02
   - pandoc-dhall-decoder # failure in job https://hydra.nixos.org/build/307611186 at 2025-09-19
   - pandoc-emphasize-code # failure in job https://hydra.nixos.org/build/252733347 at 2024-03-16
