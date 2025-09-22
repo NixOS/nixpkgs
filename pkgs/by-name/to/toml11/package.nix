@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NnM+I43UVcd72Y9h+ysAAc7s5gZ78mjVwIMReTJ7G5M=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "literal-operator-whitespace.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/ToruNiina/toml11/pull/285.patch";
+      hash = "sha256-LZPr/cY6BZXC6/rBIAMCcqEdnhJs1AvbrPjpHF76uKg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
