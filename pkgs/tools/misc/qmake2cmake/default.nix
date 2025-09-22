@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "qmake2cmake";
-  version = "1.0.6";
+  version = "1.0.7";
   format = "setuptools";
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";
-    rev = "v${version}";
-    hash = "sha256-M5XVQ8MXo2Yxg5eZCho2YAGFtB0h++mEAg8NcQVuP/w=";
+    tag = "v${version}";
+    hash = "sha256-Y1HU4bNZY0b1C8HIX43AR24zoIyTEgkVXpnweEBlOYk=";
   };
 
   patches = [
