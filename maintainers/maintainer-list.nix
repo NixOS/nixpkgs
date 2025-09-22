@@ -4199,6 +4199,13 @@
     githubId = 91694;
     name = "Javier Candeira";
   };
+  caniko = {
+    email = "gpg@rotas.mozmail.com";
+    github = "caniko";
+    githubId = 29519599;
+    name = "Can H. Tartanoglu";
+    keys = [ { fingerprint = "DF95 1EC0 9B8F 8094 C616  5589 1D63 6EDE 97DC 0280"; } ];
+  };
   canndrew = {
     email = "shum@canndrew.org";
     github = "canndrew";
