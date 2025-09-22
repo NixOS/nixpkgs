@@ -135,8 +135,9 @@ self: super: {
   ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
   # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
-  # https://github.com/ekmett/reflection/issues/51
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141
+  # due to a GHC bug that has been fixed for GHC >= 9.2.2
+  # https://github.com/ekmett/reflection/issues/51    krank:ignore-line
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141 krank:ignore-line
   reflection = dontCheck super.reflection;
 
   # Disable tests pending resolution of
