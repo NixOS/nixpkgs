@@ -113,7 +113,7 @@ in
       };
 
       listeningPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 0;
         example = 44444;
         description = ''
@@ -166,7 +166,7 @@ in
       };
 
       httpListenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9000;
         description = ''
           HTTP port to bind on.
