@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
   fetchurl,
@@ -8,6 +9,7 @@
   nodejs,
   turbo,
   linkFarm,
+  installShellFiles,
 }:
 
 let
@@ -43,6 +45,7 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     nodejs
     turbo
+    installShellFiles
   ];
 
   npmDeps = fetchNpmDeps {
@@ -93,7 +96,13 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     cp -r cue "$cue"
-  '';
+  ''
+  + (lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd percli \
+      --bash <($out/bin/percli completion bash) \
+      --zsh <($out/bin/percli completion zsh) \
+      --fish <($out/bin/percli completion fish)
+  '');
 
   doInstallCheck = true;
   installCheckPhase = ''
