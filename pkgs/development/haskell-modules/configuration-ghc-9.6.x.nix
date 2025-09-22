@@ -38,7 +38,6 @@ in
   haskeline = null;
   hpc = null;
   integer-gmp = null;
-  libiserv = null;
   mtl = null;
   parsec = null;
   pretty = null;
@@ -58,6 +57,11 @@ in
   transformers = null;
   unix = null;
   xhtml = null;
+
+  # Was only ever released for a few exact versions of ghc
+  libiserv = unmarkBroken (doJailbreak super.libiserv);
+
+  iserv-proxy = addBuildDepends [ self.libiserv ] super.iserv-proxy;
 
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
