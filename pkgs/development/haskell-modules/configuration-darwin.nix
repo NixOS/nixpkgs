@@ -356,18 +356,18 @@ self: super:
     # the latter in the future!
     cabal2nix = overrideCabal (old: {
       postInstall = ''
-        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
         # Note: The `data` output is needed at runtime.
-        remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+        remove-references-to -t ${self.distribution-nixpkgs.out} "''${!outputBin}/bin/hackage2nix"
 
         ${old.postInstall or ""}
       '';
     }) super.cabal2nix;
     cabal2nix-unstable = overrideCabal (old: {
       postInstall = ''
-        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
         # Note: The `data` output is needed at runtime.
-        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "$out/bin/hackage2nix"
+        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "''${!outputBin}/bin/hackage2nix"
 
         ${old.postInstall or ""}
       '';
