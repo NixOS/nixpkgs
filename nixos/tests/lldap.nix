@@ -1,6 +1,7 @@
 { ... }:
 let
   adminPassword = "mySecretPassword";
+  envPassword = "myEnvPassword";
 in
 {
   name = "lldap";
@@ -40,6 +41,35 @@ in
               force_ldap_user_pass_reset = false;
             };
           };
+
+        envBasedPassword.configuration =
+          { ... }:
+          {
+            services.lldap = {
+              environment.LLDAP_LDAP_USER_PASS_FILE = toString (pkgs.writeText "envPasswordFile" envPassword);
+              settings = {
+                ldap_user_pass = lib.mkForce null;
+                force_ldap_user_pass_reset = "always";
+              };
+            };
+          };
+
+        envWithJwtSecret.configuration =
+          { ... }:
+          {
+            services.lldap = {
+              environment = {
+                LLDAP_LDAP_USER_PASS_FILE = toString (pkgs.writeText "envPasswordFile" envPassword);
+                LLDAP_JWT_SECRET_FILE = toString (
+                  pkgs.writeText "jwtSecretFile" "my-super-secret-jwt-key-for-testing"
+                );
+              };
+              settings = {
+                ldap_user_pass = lib.mkForce null;
+                force_ldap_user_pass_reset = "always";
+              };
+            };
+          };
       };
     };
 
@@ -56,6 +86,7 @@ in
       machine.succeed("curl --location --fail http://localhost:17170/")
 
       adminPassword="${adminPassword}"
+      envPassword="${envPassword}"
 
       def try_login(user, password, expect_success=True):
           cmd = f'ldapsearch -H ldap://localhost:3890 -D uid={user},ou=people,dc=example,dc=com -b "ou=people,dc=example,dc=com" -w {password}'
@@ -74,14 +105,26 @@ in
           try_login("admin", "password",    expect_success=True)
           try_login("admin", adminPassword, expect_success=False)
 
-      with subtest("different admin password"):
+      with subtest("different admin password with file setting"):
           machine.succeed('${specializations}/differentAdminPassword/bin/switch-to-configuration test')
           try_login("admin", "password",    expect_success=False)
           try_login("admin", adminPassword, expect_success=True)
 
       with subtest("change admin password has no effect"):
-          machine.succeed('${specializations}/differentAdminPassword/bin/switch-to-configuration test')
+          machine.succeed('${specializations}/changeAdminPassword/bin/switch-to-configuration test')
           try_login("admin", "password",    expect_success=False)
           try_login("admin", adminPassword, expect_success=True)
+
+      with subtest("env based password"):
+          machine.succeed('${specializations}/envBasedPassword/bin/switch-to-configuration test')
+          try_login("admin", "password",    expect_success=False)
+          try_login("admin", adminPassword, expect_success=False)
+          try_login("admin", envPassword,   expect_success=True)
+
+      with subtest("env with jwt secret"):
+          machine.succeed('${specializations}/envWithJwtSecret/bin/switch-to-configuration test')
+          try_login("admin", "password",         expect_success=False)
+          try_login("admin", adminPassword,      expect_success=False)
+          try_login("admin", envPassword, expect_success=True)
     '';
 }
