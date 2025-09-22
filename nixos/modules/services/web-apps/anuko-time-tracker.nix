@@ -225,7 +225,7 @@ in
         };
 
         smtpPort = lib.mkOption {
-          type = lib.types.int;
+          type = lib.types.port;
           description = "MTA port.";
           default = 25;
         };
