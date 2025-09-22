@@ -1,5 +1,6 @@
 {
   lib,
+  fetchFromGitHub,
   fetchFromGitLab,
   python3,
 }:
@@ -14,6 +15,21 @@ let
           inherit version;
           hash = "sha256-cBqMmXXEq8ReXROQarFJ+Vn4EoaRBjRzI6P4msDoKmI=";
         };
+        dependencies = oldAttrs.dependencies ++ [
+          python3.pkgs.attrs
+          python3.pkgs.colorama
+        ];
+        doCheck = false;
+      });
+
+      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+        };
+        build-system = with self; [ setuptools ];
         doCheck = false;
       });
     };
