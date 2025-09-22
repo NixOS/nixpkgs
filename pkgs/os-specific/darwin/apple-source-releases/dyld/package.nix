@@ -6,6 +6,7 @@
   cmake,
   llvmPackages,
   openssl,
+  pkgsBuildHost,
   pkg-config,
   stdenvNoCC,
   fetchurl,
@@ -162,6 +163,7 @@ mkAppleDerivation {
 
   nativeBuildInputs = [
     cmake # CMake is required for Meson to find LLVM as a dependency.
+    (lib.getDev pkgsBuildHost.llvm) # Workaround Meson limitations with LLVM 21.
     pkg-config
   ];
 
