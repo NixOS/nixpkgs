@@ -208,28 +208,9 @@ with haskellLib;
     }
   );
 
-  # Expected test output for these accidentally checks the absolute location of the source directory
-  # https://github.com/dan-t/cabal-cargs/issues/9
-  cabal-cargs = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      "-p"
-      "!/FindCabalFilePure withoutSandbox/"
-      "-p"
-      "!/FromCabalFilePure withoutSandbox/"
-      "-p"
-      "!/FromLibSrcPure withoutSandbox/"
-      "-p"
-      "!/FromExeSrcFilePure withoutSandbox/"
-      "-p"
-      "!/FindCabalFilePure withSandbox/"
-      "-p"
-      "!/FromCabalFilePure withSandbox/"
-      "-p"
-      "!/FromLibSrcPure withSandbox/"
-      "-p"
-      "!/FromExeSrcFilePure withSandbox/"
-    ];
-  }) super.cabal-cargs;
+  # 2025-09-20: Too strict bound on filepath (<1.5)
+  # https://github.com/dan-t/cabal-cargs/issues/10
+  cabal-cargs = doJailbreak super.cabal-cargs;
 
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
@@ -409,6 +390,14 @@ with haskellLib;
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # fpr-calc test suite depends on random >= 1.3
+  # see https://github.com/IntersectMBO/lsm-tree/issues/797
+  bloomfilter-blocked =
+    lib.warnIf (lib.versionAtLeast self.random.version "1.3")
+      "haskellPackages.bloomfilter-blocked: dontCheck can potentially be removed"
+      dontCheck
+      super.bloomfilter-blocked;
+
   # support for transformers >= 0.6
   lifted-base = appendPatch (fetchpatch {
     url = "https://github.com/basvandijk/lifted-base/commit/6b61483ec7fd0d5d5d56ccb967860d42740781e8.patch";
@@ -438,6 +427,10 @@ with haskellLib;
   # 2025-09-03: Allow QuickCheck >= 2.15
   # https://github.com/sw17ch/data-clist/pull/28
   data-clist = doJailbreak super.data-clist;
+
+  # 2025-09-20: Allow QuickCheck >= 2.15
+  # https://github.com/raehik/binrep/issues/14
+  binrep = warnAfterVersion "1.1.0" (doJailbreak super.binrep);
 
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
@@ -518,6 +511,10 @@ with haskellLib;
   ];
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
+
+  # 2025-09-20: Too strict upper bound on base (<4.20)
+  # https://github.com/phadej/regression-simple/issues/13
+  regression-simple = doJailbreak super.regression-simple;
 
   # Fix 32bit struct being used for 64bit syscall on 32bit platforms
   # https://github.com/haskellari/lukko/issues/15
@@ -915,6 +912,10 @@ with haskellLib;
         }
     ))
   ];
+
+  # Too strict bounds on QuickCheck (<2.15), containers (<0.7), hashable (<1.5), pandoc (<3.7)
+  # https://github.com/jaspervdj/patat/issues/194
+  patat = doJailbreak super.patat;
 
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
@@ -2707,6 +2708,9 @@ with haskellLib;
   # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
   hermes-json = doJailbreak super.hermes-json;
 
+  # Allow containers >= 0.7, https://github.com/nomeata/arbtt/issues/181
+  arbtt = doJailbreak super.arbtt;
+
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
   hexstring = overrideCabal (old: {
@@ -3322,17 +3326,22 @@ with haskellLib;
   brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
   brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
 
-  # Floating point precision issues. Test suite is only checked on x86_64.
-  # https://github.com/tweag/monad-bayes/issues/368
-  monad-bayes = dontCheckIf (
-    let
-      inherit (pkgs.stdenv) hostPlatform;
-    in
-    !hostPlatform.isx86_64
-    # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-    # also fails on Hydra
-    || hostPlatform.isDarwin
-  ) super.monad-bayes;
+  monad-bayes =
+    # Floating point precision issues. Test suite is only checked on x86_64.
+    # https://github.com/tweag/monad-bayes/issues/368
+    dontCheckIf
+      (
+        let
+          inherit (pkgs.stdenv) hostPlatform;
+        in
+        !hostPlatform.isx86_64
+        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
+        # also fails on Hydra
+        || hostPlatform.isDarwin
+      )
+      # Too strict bounds on brick (<2.6), vty (<6.3)
+      # https://github.com/tweag/monad-bayes/issues/378
+      (doJailbreak super.monad-bayes);
 
   crucible =
     lib.pipe
@@ -3485,6 +3494,10 @@ with haskellLib;
   # i.e. tests assume existence of .git and also fail for some versions of CVC5,
   # including the current one in nixpkgs.
   liquid-fixpoint = dontCheck super.liquid-fixpoint;
+
+  # 2025-09-20: Too strict upper bound on text (<2.1.3)
+  # https://github.com/mchav/dataframe/issues/61
+  dataframe = doJailbreak (warnAfterVersion "0.3.0.4" super.dataframe);
 
   # 2025-8-26: Too strict bounds on containers and text, see: https://github.com/stackbuilders/inflections-hs/pull/83
   inflections = doJailbreak super.inflections;

@@ -309,7 +309,6 @@ dont-distribute-packages:
  - blockio
  - blogination
  - BlogLiterately-diagrams
- - bloomfilter-blocked
  - bloxorz
  - blubber
  - bluetile
@@ -679,6 +678,7 @@ dont-distribute-packages:
  - datadog-tracing
  - datafix
  - dataflow
+ - dataframe_0_3_0_4
  - datasets
  - date-conversions
  - dbjava
@@ -2957,7 +2957,6 @@ dont-distribute-packages:
  - rfc-psql
  - rfc-redis
  - rfc-servant
- - rhine-bayes
  - rhythm-game-tutorial
  - rib
  - ribosome
@@ -3453,7 +3452,6 @@ dont-distribute-packages:
  - tasklite
  - tasklite-core
  - tasty-bdd
- - tasty-bench-fit
  - tasty-groundhog-converters
  - tasty-integrate
  - tasty-jenkins-xml

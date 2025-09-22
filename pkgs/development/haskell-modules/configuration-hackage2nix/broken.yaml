@@ -231,7 +231,6 @@ broken-packages:
   - arbor-monad-logger # failure in job https://hydra.nixos.org/build/233228659 at 2023-09-02
   - arbor-monad-metric # failure in job https://hydra.nixos.org/build/233236175 at 2023-09-02
   - arbor-postgres # failure in job https://hydra.nixos.org/build/233232935 at 2023-09-02
-  - arbtt # failure in job https://hydra.nixos.org/build/307516851 at 2025-09-19
   - arch-hs # failure in job https://hydra.nixos.org/build/233225768 at 2023-09-02
   - archiver # failure in job https://hydra.nixos.org/build/233245795 at 2023-09-02
   - archlinux # failure in job https://hydra.nixos.org/build/233202430 at 2023-09-02
@@ -485,8 +484,6 @@ broken-packages:
   - bindings-wlc # failure in job https://hydra.nixos.org/build/233332720 at 2023-09-02
   - bindynamic # failure in job https://hydra.nixos.org/build/295091957 at 2025-04-22
   - binembed # failure in job https://hydra.nixos.org/build/233219100 at 2023-09-02
-  - binrep # failure in job https://hydra.nixos.org/build/307517077 at 2025-09-19
-  - binrep-instances # failure in job https://hydra.nixos.org/build/295092045 at 2025-04-22
   - binsm # failure in job https://hydra.nixos.org/build/233232355 at 2023-09-02
   - bio # failure in job https://hydra.nixos.org/build/233225273 at 2023-09-02
   - bio-sequence # failure in job https://hydra.nixos.org/build/233236140 at 2023-09-02
@@ -654,7 +651,6 @@ broken-packages:
   - cabal-auto-expose # failure in job https://hydra.nixos.org/build/233195440 at 2023-09-02
   - cabal-build-programs # failure in job https://hydra.nixos.org/build/257091363 at 2024-04-27
   - cabal-bundle-clib # failure in job https://hydra.nixos.org/build/233199225 at 2023-09-02
-  - cabal-cargs # failure in job https://hydra.nixos.org/build/307517214 at 2025-09-19
   - cabal-constraints # failure in job https://hydra.nixos.org/build/233214316 at 2023-09-02
   - cabal-db # failure in job https://hydra.nixos.org/build/233197235 at 2023-09-02
   - cabal-debian # failure in job https://hydra.nixos.org/build/233255267 at 2023-09-02
@@ -1258,7 +1254,6 @@ broken-packages:
   - database-migrate # failure in job https://hydra.nixos.org/build/233201597 at 2023-09-02
   - database-study # failure in job https://hydra.nixos.org/build/233222466 at 2023-09-02
   - datadog # failure in job https://hydra.nixos.org/build/233191124 at 2023-09-02
-  - dataframe # failure in job https://hydra.nixos.org/build/307517771 at 2025-09-19
   - DataIndex # failure in job https://hydra.nixos.org/build/233254506 at 2023-09-02
   - datalog # failure in job https://hydra.nixos.org/build/233242707 at 2023-09-02
   - datapacker # failure in job https://hydra.nixos.org/build/233206524 at 2023-09-02
@@ -4072,7 +4067,6 @@ broken-packages:
   - mollie-api-haskell # failure in job https://hydra.nixos.org/build/233200867 at 2023-09-02
   - monad-atom # failure in job https://hydra.nixos.org/build/233243367 at 2023-09-02
   - monad-atom-simple # failure in job https://hydra.nixos.org/build/233259038 at 2023-09-02
-  - monad-bayes # failure in job https://hydra.nixos.org/build/307520391 at 2025-09-19
   - monad-branch # failure in job https://hydra.nixos.org/build/233251253 at 2023-09-02
   - monad-choice # failure in job https://hydra.nixos.org/build/233255987 at 2023-09-02
   - monad-fork # failure in job https://hydra.nixos.org/build/233206855 at 2023-09-02
@@ -4653,7 +4647,6 @@ broken-packages:
   - pasta-curves # failure in job https://hydra.nixos.org/build/233196512 at 2023-09-02
   - pastis # failure in job https://hydra.nixos.org/build/233218498 at 2023-09-02
   - pasty # failure in job https://hydra.nixos.org/build/233251812 at 2023-09-02
-  - patat # failure in job https://hydra.nixos.org/build/307611198 at 2025-09-19
   - patches-vector # failure in job https://hydra.nixos.org/build/233244862 at 2023-09-02
   - path-formatting # failure in job https://hydra.nixos.org/build/233199358 at 2023-09-02
   - path-sing # failure in job https://hydra.nixos.org/build/237234354 at 2023-10-21
@@ -5309,7 +5302,6 @@ broken-packages:
   - registry-messagepack # failure in job https://hydra.nixos.org/build/303231364 at 2025-07-27
   - registry-options # failure in job https://hydra.nixos.org/build/295096594 at 2025-04-22
   - regress # failure in job https://hydra.nixos.org/build/233208901 at 2023-09-02
-  - regression-simple # failure in job https://hydra.nixos.org/build/307521504 at 2025-09-19
   - regular # failure in job https://hydra.nixos.org/build/233232656 at 2023-09-02
   - rehoo # failure in job https://hydra.nixos.org/build/233246417 at 2023-09-02
   - rei # failure in job https://hydra.nixos.org/build/233221328 at 2023-09-02
