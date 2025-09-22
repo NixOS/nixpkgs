@@ -4,6 +4,7 @@
   dash,
   scdoc,
   fetchFromGitHub,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "app2unit";
@@ -15,6 +16,8 @@ stdenvNoCC.mkDerivation rec {
     tag = "v${version}";
     sha256 = "sha256-7eEVjgs+8k+/NLteSBKgn4gPaPLHC+3Uzlmz6XB0930=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ scdoc ];
 
