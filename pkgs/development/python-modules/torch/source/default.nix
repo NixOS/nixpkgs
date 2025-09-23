@@ -569,13 +569,13 @@ buildPythonPackage rec {
       cuda_nvml_dev # <nvml.h>
       cuda_nvrtc
       cuda_nvtx # -llibNVToolsExt
-      cusparselt
       libcublas
       libcufft
       libcufile
       libcurand
       libcusolver
       libcusparse
+      libcusparse_lt
     ]
     ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
     ++ lists.optionals useSystemNccl [
