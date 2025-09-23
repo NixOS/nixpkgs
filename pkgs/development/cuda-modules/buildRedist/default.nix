@@ -18,7 +18,6 @@
   setupCudaHook,
   srcOnly,
   stdenv,
-  stdenvNoCC,
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
@@ -250,7 +249,7 @@ extendMkDerivation {
         srcOnly {
           __structuredAttrs = true;
           strictDeps = true;
-          stdenv = stdenvNoCC;
+          stdenv = backendStdenv;
           inherit (finalAttrs) pname version;
           src = fetchurl {
             url = mkRedistUrl finalAttrs.passthru.redistName relative_path;
