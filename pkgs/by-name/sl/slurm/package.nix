@@ -36,7 +36,7 @@
   enableGtk2 ? false,
   gtk2,
   enableNVML ? config.cudaSupport,
-  nvml,
+  cudaPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -113,8 +113,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableNVML [
     (runCommand "collect-nvml" { } ''
       mkdir $out
-      ln -s ${nvml.dev}/include $out/include
-      ln -s ${nvml.lib}/lib/stubs $out/lib
+      ln -s ${lib.getOutput "include" cudaPackages.cuda_nvml_dev}/include $out/include
+      ln -s ${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs $out/lib
     '')
   ];
 
