@@ -1,9 +1,6 @@
 {
   lib,
   stdenvNoCC,
-  makeSetupHook,
-  _7zz,
-  libarchive,
 }:
 
 lib.extendMkDerivation {
@@ -11,7 +8,6 @@ lib.extendMkDerivation {
 
   excludeDrvArgNames = [
     "appName"
-    "sourceRoot"
   ];
 
   extendDrvArgs =
@@ -19,35 +15,23 @@ lib.extendMkDerivation {
     {
       appName ? ".",
       nativeBuildInputs ? [ ],
-      sourceRoot ? ".",
       ...
-    }@attrs:
+    }@args:
     let
-      unpackDmgPkg = makeSetupHook {
-        name = "unpack-dmg-pkg";
-        propagatedBuildInputs = [
-          _7zz
-          libarchive
-        ];
-      } ./unpack-dmg-pkg.sh;
       hasPhase = args: phase: if args ? "${phase}" then false else true;
     in
     {
-      dontMakeSourcesWritable = attrs.dontMakeSourcesWritable or true;
-      dontPatch = attrs.dontPatch or hasPhase attrs "patchPhase";
-      dontConfigure = attrs.dontConfigure or hasPhase attrs "configurePhase";
-      dontBuild = attrs.dontBuild or hasPhase attrs "buildPhase";
-      dontStrip = attrs.dontStrip or hasPhase attrs "stringPhase";
-      dontFixup = attrs.dontFixup or hasPhase attrs "fixupPhase";
-      dontCheck = attrs.dontCheck or hasPhase attrs "checkPhase";
-      doInstallCheck = attrs.doInstallCheck or false;
-
-      sourceRoot = if sourceRoot == "" then "" else "${attrs.pname}/${sourceRoot}";
-
-      nativeBuildInputs = [ unpackDmgPkg ] ++ nativeBuildInputs;
+      dontMakeSourcesWritable = args.dontMakeSourcesWritable or true;
+      dontPatch = args.dontPatch or hasPhase args "patchPhase";
+      dontConfigure = args.dontConfigure or hasPhase args "configurePhase";
+      dontBuild = args.dontBuild or hasPhase args "buildPhase";
+      dontStrip = args.dontStrip or hasPhase args "stringPhase";
+      dontFixup = args.dontFixup or hasPhase args "fixupPhase";
+      dontCheck = args.dontCheck or hasPhase args "checkPhase";
+      doInstallCheck = args.doInstallCheck or false;
 
       installPhase =
-        attrs.installPhase or ''
+        args.installPhase or ''
           runHook preInstall
 
           mkdir -p $out/Applications
@@ -57,12 +41,12 @@ lib.extendMkDerivation {
           runHook postInstall
         '';
 
-      installCheckPhase = attrs.installCheckPhase or null;
+      installCheckPhase = args.installCheckPhase or null;
 
       meta = {
         sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
         platforms = lib.platforms.darwin;
       }
-      // (attrs.meta or { });
+      // (args.meta or { });
     };
 }
