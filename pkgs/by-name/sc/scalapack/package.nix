@@ -8,6 +8,7 @@
   mpi,
   blas,
   lapack,
+  testers,
 }:
 
 assert blas.isILP64 == lapack.isILP64;
@@ -23,7 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
   };
 
-  passthru = { inherit (blas) isILP64; };
+  passthru = {
+    inherit (blas) isILP64;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   __structuredAttrs = true;
 
@@ -93,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "scalapack" ];
     maintainers = with lib.maintainers; [
       costrouc
       markuskowa
