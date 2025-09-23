@@ -28,6 +28,7 @@
   nftables,
   iptables,
   iproute2,
+  openssh,
   catatonit,
   gvproxy,
   aardvark-dns,
@@ -43,7 +44,8 @@ let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
   binPath = lib.makeBinPath (
-    lib.optionals stdenv.hostPlatform.isLinux [
+    [ openssh ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       fuse-overlayfs
       util-linuxMinimal
       iptables
