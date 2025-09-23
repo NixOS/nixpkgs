@@ -1,18 +1,24 @@
-let
-  nixpkgs = (import ./. { });
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
-  inherit (nixpkgs.pkgsCross.x86_64-cygwin)
+let
+  inherit (pkgs)
     bash
     buildEnv
     buildPackages
     cacert
     coreutils
+    cygwin
     lib
     nix
+    openssh
     runCommand
     writeShellScript
     writeText
-    cygwin
     ;
 
   sw = buildEnv {
@@ -22,36 +28,13 @@ let
       bash
       coreutils
       nix
+      openssh
     ];
 
     nativeBuildInputs = [
       ./pkgs/build-support/setup-hooks/make-symlinks-relative.sh
     ];
-
-    postBuild = ''
-      find $out -type l -print0 | while read -r -d "" f; do
-          local symlinkTarget
-          symlinkTarget=$(readlink "$f")
-          if [[ "$symlinkTarget"/ != /nix/store* ]]; then
-              # skip this symlink as it doesn't point to /nix/store
-              continue
-          fi
-
-          if [ ! -e "$symlinkTarget" ]; then
-              echo "the symlink $f is broken, it points to $symlinkTarget (which is missing)"
-          fi
-
-          echo "rewriting symlink $f to be relative to /nix/store"
-          ln -snrf "$symlinkTarget" "$f"
-      done
-    '';
   };
-
-  system = runCommand "cygwin-system" { } ''
-    mkdir "$out"
-    ln -sr "${sw}" "$out"/sw
-    ln -sr "${activate}" "$out"/activate
-  '';
 
   cmd = writeText "cygwin.cmd" (
     lib.replaceString "\n" "\r\n" ''
@@ -63,10 +46,6 @@ let
     ''
   );
 
-  profile = writeText "profile" ''
-    export PATH="${lib.getBin sw}"/bin:$PATH
-  '';
-
   activate = writeShellScript "activate" ''
     (
       export PATH=${
@@ -75,11 +54,10 @@ let
           nix
         ]
       }:/bin
-      rm -rf /etc
-      mkdir -p /etc/ssl/certs
-      ln -fsr "${cacert}"/etc/ssl/certs/ca-bundle.crt /etc/ssl/certs/ca-certificates.crt
-      ln -fsr "${cacert}"/etc/ssl/trust-source /etc/ssl/
-      ln -fsr "${profile}" /etc/profile
+      mkdir -p /run
+      ln -sfn '${lib.getExe bash}' /bin/sh
+      ln -sfn '@out@' /run/current-system
+      ln -sfn /run/current-system/etc /etc
       if [[ -f /nix-path-registration ]]; then
         nix-store --load-db < /nix-path-registration
         rm /nix-path-registration
@@ -88,34 +66,78 @@ let
   '';
 
 in
-(nixpkgs.callPackage nixos/lib/make-system-tarball.nix {
-  # HACK: disable compression
-  compressCommand = "cat";
-  compressionExtension = "";
+{
+  options.system.build.tarball = lib.mkOption {
+    type = lib.types.package;
+    readOnly = true;
+  };
 
-  contents = [
-    {
-      source = lib.getBin cygwin.newlib-cygwin + "/bin/cygwin1.dll";
-      target = "/bin/cygwin1.dll";
-    }
-    {
-      source = cmd;
-      target = "cygwin.cmd";
-    }
-  ];
+  config = {
+    environment.etc."profile".text = ''
+      export PATH=/run/current-system/sw/bin:/bin:$PATH
+    '';
 
-  storeContents = [
-    {
-      object = system;
-      symlink = "none";
-    }
-  ];
+    system.build = {
+      toplevel = runCommand "cygwin-system" { } ''
+        mkdir "$out"
+        ln -sr "${sw}" "$out"/sw
+        cp "${activate}" "$out"/activate
+        substituteInPlace $out/activate --subst-var-by out "$out"
+        ln -sr "${config.system.build.etc}"/etc $out/etc
+      '';
 
-  extraCommands = buildPackages.writeShellScript "extra-commands.sh" ''
-    mkdir -p tmp nix/var/nix/profiles
-    ln -s "$(realpath -s --relative-to=/nix/var/nix/profiles "${system}")" nix/var/nix/profiles/system
-  '';
-})
-// {
-  inherit system;
+      tarball =
+        let
+          system = config.system.build.toplevel;
+        in
+        (pkgs.callPackage nixos/lib/make-system-tarball.nix {
+          # HACK: disable compression
+          compressCommand = "cat";
+          compressionExtension = "";
+
+          contents = [
+            {
+              source = lib.getBin cygwin.newlib-cygwin + "/bin/cygwin1.dll";
+              target = "/bin/cygwin1.dll";
+            }
+            {
+              source = cmd;
+              target = "cygwin.cmd";
+            }
+          ];
+
+          storeContents = [
+            {
+              object = system;
+              symlink = "none";
+            }
+          ];
+
+          extraCommands = buildPackages.writeShellScript "extra-commands.sh" ''
+            chmod -R +w nix
+            mkdir -p tmp nix/var/nix/profiles
+            ln -s "$(realpath -s --relative-to=/nix/var/nix/profiles "${system}")" nix/var/nix/profiles/system
+            find . -type l -print0 | while read -r -d "" f; do
+                symlinkTarget=$(readlink "$f")
+                if [[ "$symlinkTarget"/ != /nix/store* ]]; then
+                    # skip this symlink as it doesn't point to /nix/store
+                    continue
+                fi
+
+                symlinkTarget=''${symlinkTarget#/}
+
+                if [ ! -e "$symlinkTarget" ]; then
+                    echo "the symlink $f is broken, it points to $symlinkTarget (which is missing)"
+                fi
+
+                echo "rewriting symlink $f to be relative to /nix/store"
+                ln -snrf "$symlinkTarget" "$f"
+            done
+          '';
+        })
+        // {
+          inherit system;
+        };
+    };
+  };
 }
