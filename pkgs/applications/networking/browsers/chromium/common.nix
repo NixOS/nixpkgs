@@ -164,7 +164,8 @@ let
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     # "libwebp"
-    "libxslt"
+    "libxml"
+    "libxslt" # depends on libxml, always remove or re-add as a pair
     # "opus"
   ];
 
