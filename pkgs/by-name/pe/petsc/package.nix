@@ -198,11 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withFftw "--with-fftw=1"
   ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
-  hardeningDisable = lib.optionals debug [
-    "fortify"
-    "fortify3"
-  ];
-
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
