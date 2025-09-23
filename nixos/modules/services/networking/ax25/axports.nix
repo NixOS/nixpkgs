@@ -142,8 +142,7 @@ in
         partOf = [ "ax25-axports.target" ];
         serviceConfig = {
           Type = "exec";
-          ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
-          ExecStartPost="${pkgs.bash}/bin/bash -c 'until ip link show ax0 >/dev/null 2>&1; do sleep 0.1; done'";
+          ExecStart = "${portCfg.package}/bin/kissattach -f -l ${portCfg.tty} ${portName}";
         };
         postStart = optionalString (portCfg.kissParams != null) ''
           ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
