@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  propagatedBuildInputs = [ xorgproto ];
+
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
       #!/usr/bin/env nix-shell
