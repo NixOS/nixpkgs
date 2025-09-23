@@ -5,25 +5,46 @@ from pathlib import Path
 import re
 import json
 import waybackpy
+import urllib.request
+import tempfile
+import zipfile
 
-# NAV doesn't provide stable versioned URLs so we put the download link in Wayback Machine to preserve it.
+def check_version(base_path):
+  manifest = (base_path / "META-INF" / "MANIFEST.MF").read_text()
 
-print("Archiving...")
-save_api = waybackpy.WaybackMachineSaveAPI("https://nav.gov.hu/pfile/programFile?path=/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava")
+  return re.search("Implementation-Version: (.+)", manifest).group(1)
 
-url = save_api.save()
+nav_url = "https://nav.gov.hu/pfile/programFile?path=/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava"
 
-print("Prefetching...")
-sha256, unpack_path = subprocess.check_output(["nix-prefetch-url", "--unpack", "--print-path", "--name", "abevjava", url], universal_newlines=True).split("\n")[:2]
+version_path = Path("pkgs/by-name/an/anyk/version.json")
 
-print("Extracting version...")
-manifest = (Path(unpack_path) / "META-INF" / "MANIFEST.MF").read_text()
+current_version = json.loads(version_path.read_text())["version"]
 
-version = re.search("Implementation-Version: (.+)", manifest).group(1)
+print("Checking latest version...")
+# First, check the version of the latest JAR.
+with tempfile.NamedTemporaryFile() as tmp_jar:
+  urllib.request.urlretrieve(nav_url, tmp_jar.name)
 
-print("Writing version.json...")
-(Path(__file__).parent / "version.json").write_text(json.dumps({
-  "url": url,
-  "sha256": sha256,
-  "version": version,
-}, indent=2) + "\n")
+  with zipfile.ZipFile(tmp_jar) as zip:
+    latest_version = check_version(zipfile.Path(zip))
+
+print(f"Latest version is {latest_version}")
+
+if current_version != latest_version:
+  print(f"Latest version is newer than {current_version}, updating...")
+
+  # NAV doesn't provide stable versioned URLs so we put the download link in Wayback Machine to preserve it.
+  print("Archiving...")
+  save_api = waybackpy.WaybackMachineSaveAPI(nav_url)
+
+  url = save_api.save()
+
+  print("Prefetching...")
+  sha256, unpack_path = subprocess.check_output(["nix-prefetch-url", "--unpack", "--print-path", "--name", "abevjava", url], universal_newlines=True).split("\n")[:2]
+
+  print("Writing version.json...")
+  version_path.write_text(json.dumps({
+    "url": url,
+    "sha256": sha256,
+    "version": check_version(Path(unpack_path)),
+  }, indent=2) + "\n")
