@@ -15,5 +15,7 @@ makeScopeWithSplicing' {
     in
     {
       w32api-headers = callPackage ./w32api { };
+
+      newlib-cygwin-headers = callPackage ./newlib-cygwin { };
     };
 }
