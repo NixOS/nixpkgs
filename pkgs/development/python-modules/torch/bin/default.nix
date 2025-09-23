@@ -65,13 +65,13 @@ buildPythonPackage {
       cuda_cupti
       cuda_nvrtc
       cudnn
-      cusparselt
       libcublas
       libcufft
       libcufile
       libcurand
       libcusolver
       libcusparse
+      libcusparse_lt
       nccl
     ]
   );
