@@ -3715,6 +3715,8 @@ self: super: with self; {
 
   dissect-cobaltstrike = callPackage ../development/python-modules/dissect-cobaltstrike { };
 
+  dissect-cramfs = callPackage ../development/python-modules/dissect-cramfs { };
+
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
   dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
