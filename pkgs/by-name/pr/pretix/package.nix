@@ -106,6 +106,7 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "sentry-sdk"
+    "sepaxml"
     "ua-parser"
     "webauthn"
   ];
