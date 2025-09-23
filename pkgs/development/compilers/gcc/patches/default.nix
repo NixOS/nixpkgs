@@ -223,3 +223,11 @@ in
   }
   .${majorVersion} or [ ]
 )
+
+++ optionals targetPlatform.isCygwin [
+  (fetchpatch {
+    name = "cygwin-fix-compilation-with-inhibit_libc.patch";
+    url = "https://inbox.sourceware.org/gcc-patches/20250926170154.2222977-1-corngood@gmail.com/raw";
+    hash = "sha256-mgzMRvgPdhj+Q2VRsFhpE2WQzg0CvWsc5/FRAsSU1Es=";
+  })
+]
