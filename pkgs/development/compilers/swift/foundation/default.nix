@@ -21,18 +21,6 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.swift-corelibs-foundation;
 
-  patches = [
-    # Fix the build with modern Clang.
-    (fetchpatch {
-      url = "https://github.com/swiftlang/swift-corelibs-foundation/commit/76058114e5f5b47e02dd4441a6389858bb599bd6.patch";
-      hash = "sha256-N/hdTGCWMz092xh3AI28v3b+zjQHRmsb1F/2Q2u/jik=";
-    })
-    (fetchpatch {
-      url = "https://github.com/swiftlang/swift-corelibs-foundation/commit/5f3e896e522ff364780e6330df867e20e26269b4.patch";
-      hash = "sha256-AaBWSysNpZ7NV10RGD4TehZqE0k8Sn+TlhlGw1PiRdI=";
-    })
-  ];
-
   outputs = [
     "out"
     "dev"
