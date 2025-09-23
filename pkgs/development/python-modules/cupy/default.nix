@@ -38,9 +38,7 @@ let
     libcurand
     libcusolver
     libcusparse
-
-    # Missing:
-    # cusparselt
+    libcusparse_lt
   ];
   cudatoolkit-joined = symlinkJoin {
     name = "cudatoolkit-joined-${cudaPackages.cudaMajorMinorVersion}";
