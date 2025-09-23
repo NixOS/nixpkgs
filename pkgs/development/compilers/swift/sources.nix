@@ -11,8 +11,8 @@ let
     sourcekit-lsp = "sha256-mMZ8zPkyoht0aSSnStIULWbLjowahdza9DQXboT1D0o=";
     swift = "sha256-UK8yPwHu/sCvcuKKmBMCP9rGRJCZE3ct0ckdNw2BVbE=";
     swift-cmark = "sha256-GK2tFu49Sw8jJWJpxQerVFqsuUJwkAhRloa2/aUTYB8=";
-    swift-corelibs-foundation = "";
-    swift-corelibs-libdispatch = "";
+    swift-corelibs-foundation = "sha256-izYpdCZaf3ktgz/k3pjmHJHH5BebdG7nj8l6vbuk+o0=";
+    swift-corelibs-libdispatch = "sha256-pta3wJj2LJ/lsYAWQpw0wSGLDMO41mN8Zbl78LUCaQo=";
     swift-corelibs-xctest = "sha256-HgnVFYUuefCZKsOjXgt98ebMsLdMl0oXFXy2Pb2iUdw=";
     swift-docc = "sha256-zgGahAanYI95nQZ+3zAYrs0h4APNamPrZfwF81k1si0=";
     swift-docc-render-artifact = "sha256-Ky9l6tzAxQOpcPFq2FeGnFUl8i59TifRBSHNaZg8wfw=";
