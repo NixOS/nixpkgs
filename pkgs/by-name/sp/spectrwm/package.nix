@@ -11,6 +11,10 @@
   xcbutil,
   xcbutilkeysyms,
   xcbutilwm,
+  writeShellScript,
+  curl,
+  jq,
+  nix-update,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = finalAttrs.src.name + (if stdenv.hostPlatform.isDarwin then "/osx" else "/linux");
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.updateScript = writeShellScript "update-spectrwm" ''
+    latestVersion=$(${lib.getExe curl} ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location https://api.github.com/repos/conformal/spectrwm/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '\d+' | paste -sd.)
+    ${lib.getExe nix-update} spectrwm --version=$latestVersion
+  '';
 
   meta = {
     description = "Tiling window manager";
