@@ -15,6 +15,7 @@ let
     replacements = {
       inherit (pkgs) bash;
       inherit (config.system.nixos) distroName;
+      inherit (config.boot.loader) timestampFormat;
       path = lib.makeBinPath [
         pkgs.coreutils
         pkgs.gnused
