@@ -9782,12 +9782,6 @@
     githubId = 95086304;
     name = "Guilherme Lima";
   };
-  GuillaumeDesforges = {
-    email = "aceus02@gmail.com";
-    github = "GuillaumeDesforges";
-    githubId = 1882000;
-    name = "Guillaume Desforges";
-  };
   guillaumekoenig = {
     email = "guillaume.edward.koenig@gmail.com";
     github = "guillaumekoenig";
