@@ -12,14 +12,14 @@
 
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scalapack";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = "scalapack";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   # Required to activate ILP64.
   # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19
-  postPatch = lib.optionalString passthru.isILP64 ''
+  postPatch = lib.optionalString finalAttrs.passthru.isILP64 ''
     sed -i 's/INTSZ = 4/INTSZ = 8/g'   TESTING/EIG/* TESTING/LIN/*
     sed -i 's/INTGSZ = 4/INTGSZ = 8/g' TESTING/EIG/* TESTING/LIN/*
 
@@ -74,10 +74,10 @@ stdenv.mkDerivation rec {
       -DCMAKE_C_FLAGS="${
         lib.concatStringsSep " " [
           "-Wno-implicit-function-declaration"
-          (lib.optionalString passthru.isILP64 "-DInt=long")
+          (lib.optionalString finalAttrs.passthru.isILP64 "-DInt=long")
         ]
       }"
-      ${lib.optionalString passthru.isILP64 ''-DCMAKE_Fortran_FLAGS="-fdefault-integer-8"''}
+      ${lib.optionalString finalAttrs.passthru.isILP64 ''-DCMAKE_Fortran_FLAGS="-fdefault-integer-8"''}
       )
   '';
 
@@ -89,16 +89,16 @@ stdenv.mkDerivation rec {
     # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
     # cmake file will thus look for the library in the dev output instead of out.
     # Use the absolute path to $out instead to fix the issue.
-    substituteInPlace  $dev/lib/cmake/scalapack-${version}/scalapack-targets-release.cmake \
+    substituteInPlace  $dev/lib/cmake/scalapack-${finalAttrs.version}/scalapack-targets-release.cmake \
       --replace "\''${_IMPORT_PREFIX}" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       costrouc
       markuskowa
       gdinh
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     # xslu and xsllt tests fail on x86 darwin
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
-}
+})
