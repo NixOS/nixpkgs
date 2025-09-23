@@ -1,8 +1,8 @@
 {
   lib,
-  python3,
-  python3Packages,
+  python311,
   fetchFromGitHub,
+  file,
   gnupg,
   gawk,
   procps,
@@ -10,7 +10,8 @@
   withManpage ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python311.pkgs;
+buildPythonApplication rec {
   pname = "alot";
   version = "0.11";
   pyproject = true;
@@ -34,35 +35,32 @@ python3Packages.buildPythonApplication rec {
       --replace-fail /usr/share "$out/share"
   '';
 
-  build-system =
-    with python3Packages;
-    [
-      setuptools
-      setuptools-scm
-    ]
-    ++ lib.optional withManpage sphinx;
+  build-system = [
+    setuptools-scm
+  ]
+  ++ lib.optional withManpage sphinx;
 
-  dependencies = with python3Packages; [
+  dependencies = [
     configobj
+    file
     gpgme
     notmuch2
     python-magic
-    standard-mailcap
+    service-identity
     twisted
     urwid
     urwidtrees
   ];
 
   nativeCheckInputs = [
+    future
     gawk
     gnupg
-    notmuch
-    procps
-  ]
-  ++ (with python3Packages; [
-    pytestCheckHook
     mock
-  ]);
+    procps
+    pytestCheckHook
+    notmuch
+  ];
 
   postBuild = lib.optionalString withManpage [
     "make -C docs man"
@@ -78,7 +76,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall =
     let
-      completionPython = python3.withPackages (ps: [ ps.configobj ]);
+      completionPython = python.withPackages (ps: [ ps.configobj ]);
     in
     lib.optionalString withManpage ''
       mkdir -p $out/man

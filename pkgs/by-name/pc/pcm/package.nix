@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcm";
-  version = "202509";
+  version = "202502";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "pcm";
     rev = version;
-    hash = "sha256-RIpyh4JN1/ePoSLQPyB3pgx6ifBcpJK+1d9YQcGZed4=";
+    hash = "sha256-U6V3LX+JlVL9MRFBP3xpYwPQ6Y7pnJ4F/7dpKG3Eyuw=";
   };
 
   nativeBuildInputs = [ cmake ];

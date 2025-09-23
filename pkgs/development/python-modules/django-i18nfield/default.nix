@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-i18nfield";
-  version = "1.11.0";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-i18nfield";
     tag = version;
-    hash = "sha256-0r4ICS8E0OFMrR7IoyiFyXBvAkQjSBb0HtEcb31f4Rw=";
+    hash = "sha256-27PR2jLDXxRSgbJvRxDSBK4sTiqGAhP+XYg/fCg9AzM=";
   };
 
   build-system = [ setuptools ];

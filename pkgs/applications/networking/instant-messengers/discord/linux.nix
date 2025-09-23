@@ -54,7 +54,6 @@
   pipewire,
   python3,
   runCommand,
-  libunity,
   speechd-minimal,
   wayland,
   branch,
@@ -153,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
       libnotify
       libX11
       libXcomposite
-      libunity
       libuuid
       libXcursor
       libXdamage
