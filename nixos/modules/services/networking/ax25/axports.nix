@@ -141,8 +141,10 @@ in
         before = [ "ax25-axports.target" ];
         partOf = [ "ax25-axports.target" ];
         serviceConfig = {
-          Type = "exec";
-          ExecStart = "${portCfg.package}/bin/kissattach -f -l ${portCfg.tty} ${portName}";
+          Type = "oneshot";
+          ExecStart = "${portCfg.package}/bin/kissattach -n -l ${portCfg.tty} ${portName}";
+          RemainAfterExit = true;
+          ExecStop = "${portCfg.package}/bin/kissattach -x -l ${portCfg.tty} ${portName}";
         };
         postStart = optionalString (portCfg.kissParams != null) ''
           ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}

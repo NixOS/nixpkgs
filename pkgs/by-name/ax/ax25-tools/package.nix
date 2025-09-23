@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sarcasticadmin";
     repo = "ax25-tools";
     #tag = "ax25-tools-${finalAttrs.version}";
-    rev = "2e840101ba1b45c37dd14ab979c17f49de0a1294";
-    hash = "sha256-VkA4L3EGWYoNVfMKxLjV5NdJRLHYWsG2vDp2pEXVKRc=";
+    rev = "a76dbadcbea05941eda0c166b35275994fd32792";
+    hash = "sha256-L2tkL/UuP/uf76Q3H9UkEv/pzqTRmbDTwqg3mwTc3u8=";
   };
 
   configureFlags = [
