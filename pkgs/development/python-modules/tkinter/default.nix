@@ -10,6 +10,7 @@
   tk,
   tkinter,
   xvfb-run,
+  libtommath,
 }:
 
 buildPythonPackage {
@@ -49,6 +50,9 @@ buildPythonPackage {
   buildInputs = [
     tcl
     tk
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    libtommath
   ];
 
   env = {
@@ -62,6 +66,13 @@ buildPythonPackage {
       "-I${lib.getDev tcl}/include"
       "-I${lib.getDev tk}/include"
     ];
+  }
+  // lib.optionalAttrs (pythonOlder "3.12") {
+    NIX_CFLAGS_COMPILE = (
+      toString [
+        "-Wno-error=incompatible-pointer-types"
+      ]
+    );
   };
 
   doCheck = false;
