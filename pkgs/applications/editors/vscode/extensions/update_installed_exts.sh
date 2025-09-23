@@ -69,13 +69,13 @@ EOF
 }
 
 # See if we can find our `code` binary somewhere.
-if [ $# -ne 0 ]; then
+if [[ $# -ne 0 ]]; then
     CODE=$1
 else
     CODE=$(command -v code || command -v codium)
 fi
 
-if [ -z "$CODE" ]; then
+if [[ -z "$CODE" ]]; then
     # Not much point continuing.
     fail "VSCode executable not found"
 fi
