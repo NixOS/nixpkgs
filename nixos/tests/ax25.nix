@@ -16,6 +16,7 @@ let
       ax25-tools
       ax25-apps
       socat
+      lsof
     ];
 
     services.ax25.axports."${port}" = {
@@ -46,7 +47,7 @@ let
       after = [ "network.target" ];
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${pkgs.socat}/bin/socat -d -d tcp:192.168.1.1:${toString socatPort} pty,link=${tty},b${toString baud},raw";
+        ExecStart = "${pkgs.socat}/bin/socat -d -d tcp:192.168.1.1:${toString socatPort} pty,link=${tty},b${toString baud},raw,unlink-close=0";
       };
     };
   };

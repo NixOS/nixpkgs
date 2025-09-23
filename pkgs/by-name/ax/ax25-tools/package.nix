@@ -19,10 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
   # src from linux-ax25.in-berlin.de remote has been
   # unreliable, pointing to github mirror from the radiocatalog
   src = fetchFromGitHub {
-    owner = "radiocatalog";
+    #owner = "radiocatalog";
+    owner = "sarcasticadmin";
     repo = "ax25-tools";
-    tag = "ax25-tools-${finalAttrs.version}";
-    hash = "sha256-yoFflC3KU3cKQEENj4MF793TvUdf38C2Q9B7nMuLgMg=";
+    #tag = "ax25-tools-${finalAttrs.version}";
+    rev = "2e840101ba1b45c37dd14ab979c17f49de0a1294";
+    hash = "sha256-VkA4L3EGWYoNVfMKxLjV5NdJRLHYWsG2vDp2pEXVKRc=";
   };
 
   configureFlags = [
